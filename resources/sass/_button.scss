@@ -1,0 +1,20 @@
+.button {
+    padding: 16px 20px;
+    @include same-button-style;
+    outline: none;
+    display: inline-block;
+    &-primary {
+        background: $primary;
+        color: $white;
+        border-color: $primary;
+        @include same-button-style;
+        &:hover {
+            background: $white;
+            color: $deep-black;
+        }
+    }
+    &-discard {
+        border-color: $gray;
+        background: transparent;
+    }
+}

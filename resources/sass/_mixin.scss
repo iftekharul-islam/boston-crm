@@ -1,0 +1,52 @@
+@mixin flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+@mixin inline-flex-center {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+}
+@mixin same-button-style {
+    border-style: solid;
+    border-width: 1px;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 16px;
+    border-radius: 4px;
+    transition: all .3s ease-in;
+}
+@mixin order-table {
+    table {
+        color: white;
+        border-collapse: separate;
+        border-spacing: 0;
+        tr {
+            th,td {
+                color: $light-black;
+            }
+        }
+        thead {
+            th {
+                border-bottom: 1px solid $platinum;
+            }
+        }
+        tbody {
+            tr {
+                td {
+                    border-bottom: 1px solid $platinum;
+                }
+                &:last-of-type {
+                    td {
+                        border-bottom: none;
+                    }
+                }
+            }
+        }
+    }
+}
+@mixin client-table {
+    @include order-table;
+}

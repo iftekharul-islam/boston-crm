@@ -1,0 +1,143 @@
+
+.dashboard-main {
+    min-height: 100vh;
+}
+.dashboard-header {
+    padding: 10px 32px;
+    height: 64px;
+}
+.notification-icon {
+    margin-right: 32px;
+}
+.dashboard-icon {
+    margin-right: 20px;
+}
+.profile {
+    cursor: pointer;
+    &__img {
+        width: 32px;
+        height: 32px;
+        border: 1px solid $gray;
+        border-radius: 4px;
+        @include flex-center;
+        img {
+            width: 28px;
+            border-radius: 4px;
+        }
+    }
+}
+.dashboard-bg {
+    background: $platinum;
+}
+.dashboard-space {
+    padding: 32px 40px;
+}
+.dashboard-boxes {
+    // display: grid;
+    // grid-template-columns: repeat(6, 1fr);
+    // grid-gap: 32px;
+
+    .big-number {
+        font-weight: 700;
+        font-size: 100px;
+        line-height: 100px;
+        @include for-max-1699 {
+            font-size: 80px;
+        }
+        @include for-max-1399 {
+            font-size: 70px;
+        }
+    }
+    .dashboard-small-box {
+        margin-bottom: 32px;
+        .box-space {
+            padding: 32px;
+            border-radius: 8px;
+            @include for-max-1699 {
+                padding: 24px;
+            }
+        }
+        &:nth-child(5),
+        &:nth-child(6) {
+            .big-number {
+                font-size: 48px;
+                color: $green;
+                @include for-max-1699 {
+                    font-size: 36px;
+                }
+                @include for-max-1399 {
+                    font-size: 28px;
+                }
+            }
+        }
+        &:nth-child(1) {
+            .big-number {
+               color: $gold;
+            }
+        }
+        &:nth-child(2) {
+            .big-number {
+               color: $sky-blue;
+            }
+        }
+        &:nth-child(3) {
+            .big-number {
+               color: $brown;
+            }
+        }
+        &:nth-child(4) {
+            .big-number {
+               color: $light-red;
+            }
+        }
+    }
+}
+
+// chart button
+.chart {
+    .chart-box {
+        margin-bottom: 32px;
+     
+        table {
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+        .view-all {
+            padding: 6px 16px;
+            border: 1px solid $gray;
+            color: $gray;
+            border-radius: 4px;
+        }
+        .view {
+            background: $gray;
+            color: $white;
+            padding: 2px 6px;
+            border-radius: 16px;
+        }
+        &-space {
+            padding: 32px;
+            border-radius: 8px;
+            @include for-max-1699 {
+                padding: 24px;
+            }
+        }
+    }
+}
+.chart-btn {
+    border: 1px solid $platinum;
+    border-radius: 4px;
+    padding: 6px 12px;
+    margin-right: 12px;
+    height: 32px;
+    &.active {
+        background: $primary;
+        color: $white;
+        border-color: $primary;
+    }
+    &:last-of-type {
+        margin-right: 0;
+    }
+    @include for-max-1699 {
+        font-size: 14px;
+    }
+}

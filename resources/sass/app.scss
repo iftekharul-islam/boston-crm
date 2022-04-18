@@ -1,0 +1,41 @@
+@import url('https://fonts.googleapis.com/css?family=Nunito');
+
+// Variables
+@import 'variables';
+
+@import "media-queries";
+
+@import 'mixin';
+
+@import 'utilities';
+
+@import 'form';
+
+@import 'button';
+
+@import 'sidebar';
+
+@import 'dashboard';
+
+@import 'order';
+
+@import 'clients';
+
+// Bootstrap
+@import '~bootstrap/scss/bootstrap';
+
+@font-face {
+    font-family: "averta-regular";
+    src: url("averta-regular.ttf");
+    font-weight: 400;
+  }
+  @font-face {
+    font-family: "averta-medium";
+    src: url("averta-medium.ttf");
+    font-weight: 500;
+  }
+  @font-face {
+    font-family: "averta-bold";
+    src: url("averta-bold.ttf");
+    font-weight: bold;
+  }
