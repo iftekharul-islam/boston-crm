@@ -37,6 +37,8 @@ Route::group( [ 'middleware' => [ 'auth:sanctum' ] ], function () {
         [ UserController::class, 'update' ] )->middleware( 'role_permission:update.user' )->name( 'users.update' );
     Route::post( 'users/{id}',
         [ UserController::class, 'destroy' ] )->middleware( 'role_permission:delete.user' )->name( 'users.destroy' );
+		Route::get('profiles', [UserController::class, 'getProfile'])->name('profile');
+		Route::post('profiles', [UserController::class, 'getProfileUpdate'])->name('profile.update');
     //Role Controller
     Route::get( 'roles',
         [ RoleController::class, 'index' ] )->middleware( 'role_permission:view.role' )->name( 'roles.index' );
@@ -54,7 +56,6 @@ Route::group( [ 'middleware' => [ 'auth:sanctum' ] ], function () {
 } );
 Auth::routes();
 Route::redirect('/', '/login');
-Route::get('model-names', [RoleController::class, 'getModels']);
 Route::view( '/order', 'dashboard.order' );
 Route::view( '/order-details', 'dashboard.order-details' )->name( 'order.details' );
 Route::view( '/order-add', 'dashboard.order-add' )->name( 'order.add' );
