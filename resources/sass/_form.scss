@@ -112,6 +112,7 @@ select {
 
 .checkbox-group {
     width: fit-content;
+    position: relative;
     .checkbox-input {
         position: absolute;
         opacity: 0;
