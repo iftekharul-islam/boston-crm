@@ -1,6 +1,12 @@
 
 .login-space {
     padding: 60px;
+    @include for-max-991 {
+        padding: 32px;
+    }
+    @include for-max-767 {
+        padding: 0;
+    }
 }
 .login-row {
     min-height: 100vh;
@@ -9,10 +15,39 @@
         position: relative;
         @include flex-center;
         border-radius: 32px 0px 0px 32px;
+        @include for-max-991 {
+            padding: 20px;
+        }
+        @include for-max-767 {
+            width: 100%;
+            border-radius: 0;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+        }
         .back-btn {
             position: absolute;
-            top: 50px;
-            left: 80px;
+            top: 40px;
+            left: 50px;
+            display: inline-flex;
+            align-items: center;
+            color: $white;
+            @include for-min-w-200-min-h-500 {
+                top: 20px;
+            }
+            @include for-min-w-200-min-h-900 {
+                top: 40px;
+            }
+            @include for-max-991 {
+                left: 20px;
+            }
+            @include for-max-767 {
+                position: initial;
+                margin-bottom: auto;
+            }
+            img {
+                margin-right: 8px;
+            }
         }
         .icons {
             position: absolute;
@@ -61,6 +96,12 @@
         align-items: flex-end;
         padding: 80px 48px;
         z-index: 1;
+        @include for-max-767 {
+            width: 100%;
+            border-radius: 0;
+            align-items: center;
+            justify-content: center;
+        }
         &::after {
             content: '';
             background: linear-gradient(360deg, #2F415E 0%, rgba(47, 65, 94, 0) 100%);
@@ -71,6 +112,10 @@
             left: 0;
             z-index: -1;
             opacity: .85;
+            border-radius: 0px 32px 32px 0px;
+            @include for-max-767 {
+                border-radius: 0;
+            }
         }
         &-box {
             max-width: 360px;
@@ -93,10 +138,12 @@
     @include for-max-991 {
         padding: 20px;
     }
+    @include for-max-767 {
+        margin-bottom: auto;
+        margin-top: 20px;
+    }
 }
 .login-input {
     height: 48px;
     border: 1px solid $light-black !important;
 }
-
-

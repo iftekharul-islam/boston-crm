@@ -243,6 +243,11 @@
         @content;
     }
 }
+@mixin for-min-w-200-min-h-900 {
+    @media (min-width: 200px) and (min-height: 900px) {
+        @content;
+    }
+}
 @mixin for-min-w-700-min-h-500 {
     @media (min-width: 700px) and (min-height: 500px) {
         @content;
