@@ -4,7 +4,7 @@
     <div class="login ">
         <div class="d-flex login-row login-space flex-wrap">
             <div class="left-side col-md-6 bg-light-black">
-                <a href="#" class="back-btn">Back button</a>
+                <a href="/" class="back-btn">Back</a>
                 <div class="login-box">
                     <div class="login-header fs-20 text-light-black mgb-48 fw-bold">{{ __('Login') }}</div>
                     <form method="POST" action="{{ route('login') }}">
@@ -29,7 +29,8 @@
                                 <div class="position-relative">
                                     <input id="password" type="password" class="login-input form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
                                     {{-- eye icon --}}
-                                    <span class="icon-eye icons"><span class="path1"></span><span class="path2"></span></span>
+                                    <span class="icon-eye icons show-password"><span class="path1"></span><span class="path2"></span></span>
+                                    <span class="icon-eye icons hide-password"><span class="path1"></span><span class="path2"></span></span>
                                 </div>
                                 @error('password')
                                     <span class="invalid-feedback" role="alert">
@@ -70,10 +71,28 @@
             <div class="right-side col-md-6">
                 <div class="d-flex right-side-box align-items-center">
                     <img class="mgr-20" src="{{ asset('img/sidebar-logo.png') }}" alt="boston logo">
-                    <p class="mb-0 text-white fw-bold ">Boston Appraisal
-                        Services</p>
+                    <p class="mb-0 text-white fw-bold ">{{ config()->get('app.name') }}</p>
                 </div>
             </div>
         </div>
     </div>
+@endsection
+
+@section('js')
+    <script>
+        $(document).ready(function() {
+            $('.hide-password').hide();
+        });
+
+        $('.show-password').on('click', function () {
+            $('.show-password').hide();
+            $('.hide-password').show();
+            $("#password").attr("type", "text");
+        });
+        $('.hide-password').on('click', function () {
+            $('.show-password').show();
+            $('.hide-password').hide();
+            $("#password").attr("type", "password");
+        });
+    </script>
 @endsection
