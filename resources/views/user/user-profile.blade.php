@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <form action="{{ route('profile.update') }}" method="POST">
+    <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="order-add bg-platinum dashboard-space">
             <div class="order-add-box bg-white">
@@ -17,44 +17,53 @@
                                             <label for=""
                                                    class="d-block mb-2 dashboard-label"> {{ __('messages.profile_view.company_name') }}
                                                 <span class="text-danger require"></span></label>
-                                            <input type="text" class="dashboard-input w-100" name="company_name" value="{{ $company->name ?? '' }}" @if($company->owner_id != $user->id) readonly @endif>
+                                            <input type="text" class="dashboard-input w-100" name="company_name"
+                                                   value="{{ $company->name ?? '' }}"
+                                                   @if($company->owner_id != $user->id) readonly @endif>
                                         </div>
                                         <div class="group">
                                             <label for=""
                                                    class="d-block mb-2 dashboard-label">{{ __('messages.profile_view.name') }}</label>
-                                            <input type="text" class="dashboard-input w-100" name="user_name" value="{{ $user->name ?? '' }}">
+                                            <input type="text" class="dashboard-input w-100" name="user_name"
+                                                   value="{{ $user->name ?? '' }}">
                                         </div>
                                         <div class="group">
                                             <label for=""
                                                    class="d-block mb-2 dashboard-label">{{ __('messages.profile_view.address') }}</label>
-                                            <input type="text" class="dashboard-input w-100" name="address" value="{{ $profile->address ?? '' }}">
+                                            <input type="text" class="dashboard-input w-100" name="address"
+                                                   value="{{ $profile->address ?? '' }}">
                                         </div>
                                         <div class="group">
                                             <label for=""
                                                    class="d-block mb-2 dashboard-label">{{ __('messages.profile_view.city') }}</label>
-                                            <input type="text" class="dashboard-input w-100" name="city" value="{{ $profile->city ?? '' }}">
+                                            <input type="text" class="dashboard-input w-100" name="city"
+                                                   value="{{ $profile->city ?? '' }}">
                                         </div>
                                         <div class="group">
                                             <label for=""
                                                    class="d-block mb-2 dashboard-label">{{ __('messages.profile_view.state') }}</label>
-                                            <input type="text" class="dashboard-input w-100" name="state" value="{{ $profile->state ?? '' }}">
+                                            <input type="text" class="dashboard-input w-100" name="state"
+                                                   value="{{ $profile->state ?? '' }}">
                                         </div>
                                     </div>
                                     <div class="right max-w-424 w-100">
                                         <div class="group">
                                             <label for=""
                                                    class="d-block mb-2 dashboard-label">{{ __('messages.profile_view.zip') }}</label>
-                                            <input type="text" class="dashboard-input w-100" name="zip_code" value="{{ $profile->zip_code ?? '' }}">
+                                            <input type="text" class="dashboard-input w-100" name="zip_code"
+                                                   value="{{ $profile->zip_code ?? '' }}">
                                         </div>
                                         <div class="group">
                                             <label for=""
                                                    class="d-block mb-2 dashboard-label">{{ __('messages.profile_view.phone') }}</label>
-                                            <input type="text" class="dashboard-input w-100" name="phone" value="{{ $profile->phone ?? '' }}">
+                                            <input type="text" class="dashboard-input w-100" name="phone"
+                                                   value="{{ $profile->phone ?? '' }}">
                                         </div>
                                         <div class="group">
                                             <label for=""
                                                    class="d-block mb-2 dashboard-label">{{ __('messages.profile_view.email') }}</label>
-                                            <input type="text" class="dashboard-input w-100" name="email" value="{{ $user->email }}" readonly>
+                                            <input type="text" class="dashboard-input w-100" name="email"
+                                                   value="{{ $user->email }}" readonly>
                                         </div>
                                     </div>
                                 </div>
