@@ -53,6 +53,7 @@ Route::group( [ 'middleware' => [ 'auth:sanctum' ] ], function () {
     Route::post( 'roles/{id}',
         [ RoleController::class, 'destroy' ] )->middleware( 'role_permission:delete.role' )->name( 'roles.destroy' );
     Route::resource('clients', ClientController::class);
+    Route::get('get-clients',[ClientController::class,'getClientsByType']);
 } );
 Auth::routes();
 Route::redirect('/', '/login');
@@ -60,9 +61,6 @@ Route::view( '/order', 'dashboard.order' );
 Route::view( '/order-details', 'dashboard.order-details' )->name( 'order.details' );
 Route::view( '/order-add', 'dashboard.order-add' )->name( 'order.add' );
 Route::view( '/order-add-step2', 'dashboard.order-add-step2' )->name( 'order.add-step2' );
-Route::view( '/clients', 'dashboard.clients' );
-Route::view( '/client-view', 'dashboard.client-view' )->name( 'client.view' );
-Route::view( '/client-add', 'dashboard.client-add' )->name( 'client.add' );
 Route::get( 'get/icons', function () {
     return view( 'icon' );
 } );

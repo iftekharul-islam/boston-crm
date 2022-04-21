@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ClientRequest;
 use App\Services\ClientService;
 use App\Services\CompanyService;
-use App\Services\TestService;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -65,7 +64,7 @@ class ClientController extends Controller
         $request_data = $request->validated();
         $merged_data = array_merge($request_data, ["company_id" => $this->companyService->getAuthUserCompany()->id]);
 
-        $response = $this->clientService->saveClientData($merged_data);
+        $this->clientService->saveClientData($merged_data);
 
         return redirect()->back()->with(['success' => 'Client added successfully']);
     }

@@ -26,6 +26,7 @@ class Client extends Model implements HasMedia
         "fee_for_1004d",
         "can_sign",
         "can_inspect",
-        "instruction"
+        "instruction",
+        "company_id"
     ];
 }
