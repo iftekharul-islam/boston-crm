@@ -18,14 +18,16 @@
         }
 }
 .permission-check {
-    margin-bottom: 24px;
+    margin-bottom: 12px;
     .permission {
         width: 135px;
         margin-right: 16px;
+        margin-bottom: 12px;
         
     }
     .checkbox-group {
         margin-right: 32px;
+        margin-bottom: 12px;
         &:last-of-type {
             margin-right: 0;
         }
@@ -59,4 +61,13 @@
     @include for-max-991 {
         grid-template-columns: 1fr;
     }
+    .permission-check {
+        .checkbox-group {
+            .checkbox-label{
+                &::after {
+                    border: 1px solid $light-black;
+                }
+            }
+        } 
+    } 
 }
