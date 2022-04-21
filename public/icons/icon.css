@@ -25,6 +25,168 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-sms .path1:before {
+  content: "\e93";
+  color: rgb(47, 65, 94);
+  opacity: 0.4;
+}
+.icon-sms .path2:before {
+  content: "\e94";
+  margin-left: -1em;
+  color: rgb(47, 65, 94);
+}
+.icon-clock .path1:before {
+  content: "\e946";
+  color: rgb(47, 65, 94);
+  opacity: 0.4;
+}
+.icon-clock .path2:before {
+  content: "\e947";
+  margin-left: -1em;
+  color: rgb(47, 65, 94);
+}
+.icon-upload .path1:before {
+  content: "\e948";
+  color: rgb(47, 65, 94);
+  opacity: 0.4;
+}
+.icon-upload .path2:before {
+  content: "\e949";
+  margin-left: -1em;
+  color: rgb(47, 65, 94);
+}
+.icon-upload .path3:before {
+  content: "\e94a";
+  margin-left: -1em;
+  color: rgb(47, 65, 94);
+}
+.icon-folder .path1:before {
+  content: "\e949a";
+  color: rgb(47, 65, 94);
+}
+.icon-folder .path2:before {
+  content: "\e949b";
+  margin-left: -1em;
+  color: rgb(47, 65, 94);
+  opacity: 0.4;
+}
+.icon-share .path1:before {
+  content: "\e950a";
+  color: rgb(255, 255, 255);
+  opacity: 0.4;
+}
+.icon-share .path2:before {
+  content: "\e950b";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+  opacity: 0.4;
+}
+.icon-share .path3:before {
+  content: "\e950c";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+  opacity: 0.4;
+}
+.icon-share .path4:before {
+  content: "\e950d";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-share .path5:before {
+  content: "\e950e";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-share .path6:before {
+  content: "\e950f";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-eye-slash .path1:before {
+  content: "\e952";
+  color: rgb(47, 65, 94);
+  opacity: 0.4;
+}
+.icon-eye-slash .path2:before {
+  content: "\e953";
+  margin-left: -1em;
+  color: rgb(47, 65, 94);
+}
+.icon-eye-slash .path3:before {
+  content: "\e954";
+  margin-left: -1em;
+  color: rgb(47, 65, 94);
+  opacity: 0.4;
+}
+.icon-eye-slash .path4:before {
+  content: "\e955";
+  margin-left: -1em;
+  color: rgb(47, 65, 94);
+}
+.icon-eye-slash .path5:before {
+  content: "\e956";
+  margin-left: -1em;
+  color: rgb(47, 65, 94);
+}
+.icon-camera .path1:before {
+  content: "\e957";
+  color: rgb(47, 65, 94);
+  opacity: 0.4;
+}
+.icon-camera .path2:before {
+  content: "\e958";
+  margin-left: -1em;
+  color: rgb(47, 65, 94);
+}
+.icon-camera .path3:before {
+  content: "\e959";
+  margin-left: -1em;
+  color: rgb(47, 65, 94);
+}
+.icon-trash .path1:before {
+  content: "\e964";
+  color: rgb(47, 65, 94);
+}
+.icon-trash .path2:before {
+  content: "\e965";
+  margin-left: -1em;
+  color: rgb(47, 65, 94);
+  opacity: 0.3991;
+}
+.icon-trash .path3:before {
+  content: "\e966";
+  margin-left: -1em;
+  color: rgb(47, 65, 94);
+}
+.icon-trash .path4:before {
+  content: "\e967";
+  margin-left: -1em;
+  color: rgb(47, 65, 94);
+}
+.icon-arrow-down1:before {
+  content: "\e968";
+  color: #7e829b;
+}
+.icon-arrow-right:before {
+  content: "\e969";
+  color: #fff;
+}
+.icon-user-role .path1:before {
+  content: "\e970";
+  color: rgb(255, 255, 255);
+}
+.icon-user-role .path2:before {
+  content: "\e971";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+  opacity: 0.4;
+}
+.icon-user-role .path3:before {
+  content: "\e972";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+
 .icon-send .path1:before {
   content: "\e900";
   color: rgb(255, 255, 255);
