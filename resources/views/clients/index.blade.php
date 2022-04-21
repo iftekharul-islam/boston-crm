@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.home.app')
 @section('content')
-    client index page
+    <clients-list :show-route="'{{ route('clients.show', [""]) }}'" :create-route="'{{ route('clients.create') }}'" :delete-route="'{{ route('clients.destroy', [""]) }}'"></clients-list>
 @endsection

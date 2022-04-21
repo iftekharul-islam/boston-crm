@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\Repositories\ClientRepository;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 
 class ClientService {
     /**
@@ -18,10 +20,12 @@ class ClientService {
     }
 
     /**
-     * @return void
+     * @param string $type
+     * @return array
      */
-    public function getAllClients() {
-        $this->clientRepository->allPagination();
+    public function getClients(string $type,int $pageNumber): array
+    {
+        return $this->clientRepository->getClientsData(strtolower($type),$pageNumber);
     }
 
     /**
@@ -35,21 +39,22 @@ class ClientService {
 
     /**
      * @param int $id
-     *
-     * @return void
+     * @return Model|null
      */
-    public function showClientData( int $id ) {
-        $this->clientRepository->find( $id );
+    public function getClientData( int $id ): ?Model
+    {
+        return $this->clientRepository->find( $id );
     }
+
 
     /**
      * @param array $data
      * @param int   $id
      *
-     * @return void
+     * @return Model
      */
     public function updateClientData( array $data, int $id ) {
-        $this->clientRepository->update( $data, $id );
+        return $this->clientRepository->update( $data, $id );
     }
 
     /**
