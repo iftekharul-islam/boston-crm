@@ -75,7 +75,7 @@
                         <div class="mgb-20">
                             <input type="text" class="dashboard-input w-100 " placeholder="Name here...">
                         </div>
-                            <textarea name="" class="dashboard-textarea w-100" id="" cols="30" rows="2" placeholder="Description here..."></textarea>
+                        <textarea name="" class="dashboard-textarea w-100" id="" cols="30" rows="2" placeholder="Description here..."></textarea>
                     </div>
                     <span class="delete">
                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -130,8 +130,6 @@
             </div>
             </div>
        </div>
-
-
 
         {{-- <table class="table">
             <thead>
