@@ -10,17 +10,16 @@ use Illuminate\Notifications\Notification;
 class CompanyNewUserCreateNotification extends Notification implements ShouldQueue{
     use Queueable;
 
-    protected string $name, $email, $password;
+    protected string $email, $code;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct( $name, $email, $password ) {
-        $this->name     = $name;
+    public function __construct( $email, $code ) {
         $this->email    = $email;
-        $this->password = $password;
+        $this->code = $code;
     }
 
     /**
@@ -43,9 +42,8 @@ class CompanyNewUserCreateNotification extends Notification implements ShouldQue
      */
     public function toMail( mixed $notifiable ): MailMessage {
         return ( new MailMessage )->subject( "New User Invite" )->view( 'emails.invite-new-user', [
-            'name' => $this->name,
             'email' => $this->email,
-            'password' => $this->password,
+            'code' => $this->code,
         ] );
     }
 

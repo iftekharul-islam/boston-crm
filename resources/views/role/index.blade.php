@@ -2,159 +2,99 @@
 
 @section('content')
     <div class="role-permission bg-platinum dashboard-space">
-       <div class="d-flex justify-content-between">
-           <p class="mb-0 text-light-black fs-20 fw-bold">Role manangement</p>
-            <a href="{{ route('roles.create') }}" class="button button-primary" role="button">Role Create</a>
-       </div>
-       {{-- role preview --}}
-       <div class="role-preview">
-        <div class="role-box">
-            <div class="d-flex justify-content-between mb-3">
-                <p class="mb-0 text-light-black fs-20 fw-bold">Executive</p>
-                <div class="d-flex align-items-center">
-                    <span class="delete me-3">
-                        <span class="icon-trash fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></span>                           
-                    </span>
-                    <a href="#" class="edit-btn h-32 inline-flex-center">
-                        Edit
-                        <span class="icon-edit ms-3"><span class="path1"></span><span class="path2"></span></span>
-                    </a>
-                </div>
-            </div>
-            <p class="text-light-black mgb-32">First, you add your personal and professional information using a simple editor.</p>
-            <div class="d-flex permission-check flex-wrap">
-                <p class="mb-0 fw-bold text-light-black permission">User permission</p>
-                <div class="checkbox-group">
-                    <input type="checkbox" class="checkbox-input">
-                    <label for="" class="checkbox-label">View</label>
-                </div>
-                <div class="checkbox-group">
-                    <input type="checkbox" class="checkbox-input">
-                    <label for="" class="checkbox-label">Contact</label>
-                </div>
-                <div class="checkbox-group">
-                    <input type="checkbox" class="checkbox-input">
-                    <label for="" class="checkbox-label">Update</label>
-                </div>
-                <div class="checkbox-group">
-                    <input type="checkbox" class="checkbox-input">
-                    <label for="" class="checkbox-label">Delete</label>
-                </div>
-            </div>
-            <div class="d-flex permission-check flex-wrap">
-                <p class="mb-0 fw-bold text-light-black permission">Order permission</p>
-                <div class="checkbox-group">
-                    <input type="checkbox" class="checkbox-input">
-                    <label for="" class="checkbox-label">View</label>
-                </div>
-                <div class="checkbox-group">
-                    <input type="checkbox" class="checkbox-input">
-                    <label for="" class="checkbox-label">Contact</label>
-                </div>
-                <div class="checkbox-group">
-                    <input type="checkbox" class="checkbox-input">
-                    <label for="" class="checkbox-label">Update</label>
-                </div>
-                <div class="checkbox-group">
-                    <input type="checkbox" class="checkbox-input">
-                    <label for="" class="checkbox-label">Delete</label>
-                </div>
-                
-            </div>
+        <div class="d-flex justify-content-between">
+            <p class="mb-0 text-light-black fs-20 fw-bold">{{ __('messages.role_view.role_management') }}</p>
+            <a href="{{ route('roles.create') }}" class="button button-primary"
+               role="button">{{ __('messages.role_view.role_create') }}</a>
         </div>
-       </div>
-       {{-- role create--}}
-       <div class="role-add mgt-32">
-           <div class="role-box">
-               <div class="d-flex align-items-start justify-content-between">
+        {{-- role preview --}}
+        <div class="role-preview">
+            @foreach($roles ?? [] as $key => $role)
+                @php
+                    $permission_list = $role->permissions()->pluck( 'name' )->toArray();
+                @endphp
+                <div class="role-box">
+                    <div class="d-flex justify-content-between mb-3">
+                        <p class="mb-0 text-light-black fs-20 fw-bold">{{ $role->name }}</p>
+                        <div class="d-flex align-items-center">
+                            @if($role->name !== 'admin')
+                                <span class="delete me-3"
+                                      data-id="{{ $role->id }}"
+                                      data-action="{{ route('roles.destroy',$role->id) }}"
+                                      onclick="deleteConfirmation({{$role->id}})">
+                        <span class="icon-trash fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></span>
+                    </span>
+                                <a href="#" class="edit-btn h-32 inline-flex-center">
+                                    {{ __('messages.edit') }}
+                                    <span class="icon-edit ms-3">
+                                    <span class="path1"></span>
+                                    <span class="path2"></span>
+                                </span>
+                                </a>
+                            @endif
+                        </div>
+                    </div>
+                    {{--                    <p class="text-light-black mgb-32">First, you add your personal and professional information using a--}}
+                    {{--                        simple editor.</p>--}}
+                    @foreach($permissions as $permission)
+                        <div class="d-flex permission-check flex-wrap">
+                            <p class="mb-0 fw-bold text-light-black permission"><span
+                                        class="text-capitalize">{{ $permission }}</span>
+                                {{ __('messages.role_view.permission') }}</p>
+                            @foreach(['view', 'create', 'update', 'delete'] as $permission_type)
+                                <div class="checkbox-group">
+                                    <input type="checkbox" class="checkbox-input"
+                                           @if(in_array($permission_type. '.' . $permission, $permission_list)) checked
+                                           @endif disabled>
+                                    <label for="" class="checkbox-label text-capitalize">{{ $permission_type }}</label>
+                                </div>
+                            @endforeach
+                        </div>
+                    @endforeach
+                </div>
+            @endforeach
+        </div>
+        {{-- role create--}}
+        <div class="role-add mgt-32 new-role d-none">
+            <div class="role-box">
+                <div class="d-flex align-items-start justify-content-between">
                     <div class="max-w-424 mgb-32">
                         <div class="mgb-20">
                             <input type="text" class="dashboard-input w-100 " placeholder="Name here...">
                         </div>
-                        <textarea name="" class="dashboard-textarea w-100" id="" cols="30" rows="2" placeholder="Description here..."></textarea>
+                        <textarea name="" class="dashboard-textarea w-100" id="" cols="30" rows="2"
+                                  placeholder="Description here..."></textarea>
                     </div>
                     <span class="delete">
-                        <span class="icon-trash fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></span>                            
+                        <span class="icon-trash fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></span>
                     </span>
                 </div>
-               <div class="d-flex permission-check flex-wrap">
-                    <p class="mb-0 fw-bold text-light-black permission">User permission</p>
-                    <div class="checkbox-group">
-                        <input type="checkbox" class="checkbox-input">
-                        <label for="" class="checkbox-label">View</label>
-                    </div>
-                    <div class="checkbox-group">
-                        <input type="checkbox" class="checkbox-input">
-                        <label for="" class="checkbox-label">Contact</label>
-                    </div>
-                    <div class="checkbox-group">
-                        <input type="checkbox" class="checkbox-input">
-                        <label for="" class="checkbox-label">Update</label>
-                    </div>
-                    <div class="checkbox-group">
-                        <input type="checkbox" class="checkbox-input">
-                        <label for="" class="checkbox-label">Delete</label>
-                    </div>
-                </div>
-
-            <div class="d-flex permission-check flex-wrap">
-                <p class="mb-0 fw-bold text-light-black permission">Order permission</p>
-                <div class="checkbox-group">
-                    <input type="checkbox" class="checkbox-input">
-                    <label for="" class="checkbox-label">View</label>
-                </div>
-                <div class="checkbox-group">
-                    <input type="checkbox" class="checkbox-input">
-                    <label for="" class="checkbox-label">Contact</label>
-                </div>
-                <div class="checkbox-group">
-                    <input type="checkbox" class="checkbox-input">
-                    <label for="" class="checkbox-label">Update</label>
-                </div>
-                <div class="checkbox-group">
-                    <input type="checkbox" class="checkbox-input">
-                    <label for="" class="checkbox-label">Delete</label>
-                </div>
-            </div>
-            <div class="text-end">
-                <button class="button button-primary h-32 py-1 px-4">Save</button>
-            </div>
-            </div>
-       </div>
-
-        {{-- <table class="table">
-            <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Role Name</th>
-                <th scope="col">Action</th>
-            </tr>
-            </thead>
-            <tbody>
-            @foreach($roles ?? [] as $key => $role)
-                <tr>
-                    <th scope="row">{{ $key + 1 }}</th>
-                    <td>{{ $role->name }}</td>
-                    <td>
-                        @if($role->name !== 'admin')
-                            <div class="d-flex align-items-center">
-                                <a class="mr-2" href="{{ route('roles.edit', $role->id) }}">
-                                    <i class="fa fa-edit"></i></a>
-                                <a class="btn btn-danger btn-flat btn-sm remove-user ms-2" data-id="{{ $role->id }}"
-                                   data-action="{{ route('roles.destroy',$role->id) }}"
-                                   onclick="deleteConfirmation({{$role->id}})"> <i class="fa fa-trash"></i></a>
+                @foreach($permissions as $permission)
+                    <div class="d-flex permission-check flex-wrap">
+                        <p class="mb-0 fw-bold text-light-black permission"><span
+                                    class="text-capitalize">{{ $permission }}</span>
+                            {{ __('messages.role_view.permission') }}</p>
+                        @foreach(['view', 'create', 'update', 'delete'] as $permission_type)
+                            <div class="checkbox-group">
+                                <input type="checkbox" class="checkbox-input">
+                                <label for="" class="checkbox-label text-capitalize">{{ $permission_type }}</label>
                             </div>
-                        @endif
-                    </td>
-                </tr>
-            @endforeach
-            </tbody>
-        </table> --}}
+                        @endforeach
+                    </div>
+                @endforeach
+                <div class="text-end">
+                    <button class="button button-primary h-32 py-1 px-4">{{ __('messages.save') }}</button>
+                </div>
+            </div>
+        </div>
     </div>
 @endsection
 
 @push("scripts")
     <script>
+        function createNewRole() {
+
+        }
         function deleteConfirmation(id) {
             swal({
                 title: "Delete?",

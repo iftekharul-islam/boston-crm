@@ -42,8 +42,9 @@ class RoleController extends Controller
 	 public function index(): Application|Factory|View
 	 {
 			$roles = $this->service->getCompanyAllRoles();
+		    $permissions = $this->getModels();
 			
-			return view( 'role.index', compact( 'roles' ) );
+			return view( 'role.index', compact( 'roles', 'permissions' ) );
 	 }
 	 
 	 /**
@@ -158,7 +159,7 @@ class RoleController extends Controller
 			} );
 			$all_models   = $models->values()->map( function ($model) {
 				 $model_name = strtolower( explode( utf8_encode( "\\" ), $model )[3] ?? '' );
-				 if ( ! in_array( $model_name, [ '', 'companyuser', 'company' ] ) ) {
+				 if ( ! in_array( $model_name, [ '', 'companyuser', 'company', 'userprofile' ] ) ) {
 						return $model_name;
 				 }
 			} )->toArray();
