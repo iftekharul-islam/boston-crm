@@ -15,80 +15,92 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"
+          integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog=="
+          crossorigin="anonymous"/>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
 
     <!-- Styles -->
-    <link rel="stylesheet" href="{{ asset('icons/icon.css') }}">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('icons/icon.css') }}" rel="stylesheet">
+    @stack('css')
+    @yield('css')
 </head>
 <body>
-    <div id="app">
-        {{-- <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-            <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav me-auto">
-
-                    </ul>
-
-                    <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ms-auto">
-                        <!-- Authentication Links -->
-                        @guest
-                            @if (Route::has('login'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                                </li>
-                            @endif
-
-                            @if (Route::has('register'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                                </li>
-                            @endif
-                        @else
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }}
-                                </a>
-
-                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a>
-
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                        @csrf
-                                    </form>
-                                </div>
-                            </li>
-                        @endguest
-                    </ul>
-                </div>
+<div class="dashboard-main d-flex" id="app">
+    @if(auth()->check())
+        @include('layouts.partials.sidebar')
+    @endif
+    <div class="dashboard-main__right flex-grow-1 bg-platinum">
+        <!-- Header -->
+        <header class="dashboard-header d-flex align-items-center justify-content-between bg-white">
+            <div class="dashboard-header__left">
+                <p class="text-light-black text-medium mb-0 fs-20">{{ config()->get('app.name') }}</p>
             </div>
-        </nav> --}}
-        <main class="">
-            @yield('content')
-        </main>
+            @if(auth()->check())
+                <div class="dashboard-header__right d-flex align-items-center">
+                    <div class="d-flex align-items-center">
+                        <a class="notification-icon fs-3 text-light-black d-flex align-items-center"><span
+                                    class="icon-notification"></span></a>
+                        <a class="dashboard-icon text-light-black d-flex align-items-center"><span
+                                    class="icon-dashboard fs-3"><span class="path1"></span><span
+                                        class="path2"></span><span
+                                        class="path3"></span><span class="path4"></span></span></a>
+                    </div>
+                    {{-- dropdown --}}
+                    <div class="dropdown">
+                        <div class="profile d-flex align-items-center " id="dropdownMenuButton1"
+                             data-bs-toggle="dropdown"
+                             aria-expanded="false">
+                            <div class="profile__img me-2">
+                                <img src="{{ asset('img/dummy-profile.png') }}" alt="boston profile">
+                            </div>
+                            <div class="profile__name">
+                                <p class="text-bold text-light-black fs-14 mb-0">{{ Auth::user()->name }}</p>
+                                <p class="text-gray fs-12 mb-0 text-uppercase">{{ $role ?? '' }}</p>
+                            </div>
+                            <span class="icon-arrow-bottom text-light-black mgl-32"></span>
+                        </div>
+                        {{-- dropdown content --}}
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                            <li><a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">{{ __('Logout') }}</a>
+                            </li>
+                        </ul>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                            @csrf
+                        </form>
+                    </div>
+                </div>
+            @else
+                <div class="dashboard-header__right d-flex align-items-center">
+                    <div class="d-flex align-items-center">
+                        <a href="{{ route('login') }}">Login</a>
+                        <a class="ms-3" href="{{ route('register') }}">Registration</a>
+                    </div>
+                </div>
+            @endif
+        </header>
+        @yield('content')
     </div>
-
-
-    <script src="{{ mix('manifest.js') }}"></script>
-    <script src="{{ mix('js/vendor.js') }}"></script>
-    <script src="{{ mix('js/app.js') }}"></script>
-
-    @yield("js")
+</div>
+<script src="{{ mix('manifest.js') }}"></script>
+<script src="{{ mix('js/vendor.js') }}"></script>
+<script src="{{ mix('js/app.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.all.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.crm-select').select2();
+    });
+    sidebarToggle = () => {
+        let sidebarToggle = document.getElementById("sidebar");
+        sidebarToggle.classList.toggle("sidebar-collapse");
+    }
+</script>
+@stack('scripts')
+@yield('scripts')
 </body>
 </html>

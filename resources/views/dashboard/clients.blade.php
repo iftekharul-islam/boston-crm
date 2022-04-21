@@ -1,4 +1,4 @@
-@extends('layouts.home.app')
+@extends('layouts.app')
 @section('content')
     <div class="clients bg-platinum dashboard-space">
         <div class="clients-box clients-box-main bg-white">

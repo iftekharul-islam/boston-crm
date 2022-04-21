@@ -1,4 +1,4 @@
-@extends('layouts.home.app')
+@extends('layouts.app')
 @section('content')
     <div class="order-details bg-platinum dashboard-space">
         <a href="{{ url('/order') }}" class="text-light-black d-inline-flex align-items-center mgb-20">

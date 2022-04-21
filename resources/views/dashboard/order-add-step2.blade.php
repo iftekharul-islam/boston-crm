@@ -1,4 +1,4 @@
-@extends('layouts.home.app')
+@extends('layouts.app')
 @section('content')
     <div class="order-add bg-platinum dashboard-space">
         <div class="order-add-box bg-white">

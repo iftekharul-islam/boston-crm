@@ -1,4 +1,4 @@
-@extends('layouts.home.app')
+@extends('layouts.app')
 
 @section('content')
     <div class="role-permission bg-platinum dashboard-space">
