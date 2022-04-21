@@ -14,6 +14,7 @@
                         <div class="error text-danger">{{ $errors->first('name') }}</div>
                     @endif
                 </div>
+
                 <div class="form-group">
                     <label for="email">User Email</label>
                     <input type="email" class="form-control" name="email" id="email" aria-describedby="roleHelp"
