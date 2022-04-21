@@ -53,7 +53,7 @@ Route::group( [ 'middleware' => [ 'auth:sanctum' ] ], function () {
     Route::post( 'roles/{id}',
         [ RoleController::class, 'destroy' ] )->middleware( 'role_permission:delete.role' )->name( 'roles.destroy' );
     Route::resource('clients', ClientController::class);
-    Route::get('get-clients',[ClientController::class,'getClientsByType']);
+    Route::get('get-clients/{type}',[ClientController::class,'getClientsByType']);
 } );
 Auth::routes();
 Route::redirect('/', '/login');
