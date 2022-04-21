@@ -1452,6 +1452,9 @@ html {
  .bg-platinum {
    background: $platinum;
  }
+ .bg-login-box {
+   background: $login-box;
+ }
 
 // font size
 
@@ -1641,6 +1644,9 @@ html {
   }
   .max-w-500 {
     max-width: 500px;
+  }
+  .max-w-1576 {
+    max-width: 1576px;
   }
 
 
