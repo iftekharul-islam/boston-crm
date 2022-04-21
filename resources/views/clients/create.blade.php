@@ -1,142 +1,217 @@
-@extends('layouts.app')
+@extends('layouts.home.app')
 @section('content')
-    @push('css')
-        <style>
-            label.required::after {
-                content: '*';
-                margin-right: 4px;
-                color: red;
-            }
-        </style>
-    @endpush
-    <div class="add-order">
-        <div class="d-flex align-items-center justify-content-between">
-            <p>Add new Client</p>
-        </div>
-        @if(session()->has('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
-            </div>
-        @endif
+    <div class="clients bg-platinum dashboard-space">
+        <div class="clients-box add-client bg-white">
+            <form id="client-create-form" action="{{ route('clients.store') }}" method="post" enctype="multipart/form-data">
+                @csrf
+                <div class="add-client-form">
+                    <p class="text-light-black fs-20 mgb-16">Add new client</p>
+                    @if(session()->has('success'))
+                        <div class="alert alert-success">
+                            {{ session('success') }}
+                        </div>
+                    @endif
 
-        @foreach ($errors->all() as $error)
-            <div class="alert alert-danger">
-                {{ $error }}
-            </div>
-        @endforeach
-
-        <div class="row">
-            <div class="col-md-8">
-                <div class="form-box">
-                    <h4 class="box-header mb-3">Appraisal details</h4>
-                    <div class="d-flex justify-content-between w-100">
-                        <form id="client-form" action="{{ route('clients.store') }}" method="post" enctype="multipart/form-data">
-                            @csrf
-                            <div class="left max-w-424 w-100 me-3">
-                                <div class="group">
-                                    <label for="" class="d-block mb-2 dashboard-label required">Client Name</label>
-                                    <input type="text" name="name" class="dashboard-input w-100" required placeholder="Enter Client Name">
-                                </div>
-                                <div class="group">
-                                    <label for="" class="d-block mb-2 dashboard-label required">Email</label>
-                                    <input type="text" name="email" id="email" class="dashboard-input w-100" required placeholder="Enter Email">
-                                </div>
-                                <div class="group">
-                                    <label for="" class="d-block mb-2 dashboard-label required">Phone</label>
-                                    <input type="text" name="phone" id="phone" placeholder="Enter phone number" required class="dashboard-input w-100">
-                                </div>
-                                <div class="group">
-                                    <label for="client-type" class="d-block mb-2 dashboard-label required">Client Type</label>
-                                    <div class="position-relative">
-                                        <select name="client_type" id="client-type" class="dashboard-input w-100" required>
-                                            <option value="">Select Client Type</option>
-                                            <option value="amc">AMC</option>
-                                            <option value="lender">Lender</option>
-                                        </select>
-                                        <img src="bottom-arrow.png" alt="" class="bottom-arrow">
+                    @foreach ($errors->all() as $error)
+                        <div class="alert alert-danger">
+                            {{ $error }}
+                        </div>
+                    @endforeach
+                    <div class="row">
+                        <div class="col-lg-8 left mb-3">
+                            <div class="d-flex box justify-content-between left__wrap">
+                                <div class="left-side max-w-424 w-100 me-3">
+                                    <div class="group">
+                                        <label for="name" class="d-block mb-2 dashboard-label">Client name <span
+                                                    class="text-danger require"></span></label>
+                                        <input type="text" id="name" name="name" class="dashboard-input w-100" required>
+                                    </div>
+                                    <div class="group">
+                                        <label for="client-type" class="d-block mb-2 dashboard-label">Client type <span
+                                                    class="text-danger require"></span></label>
+                                        <div class="position-relative">
+                                            <select name="client_type" id="client-type" class="dashboard-input w-100" required>
+                                                <option value="">Select a type</option>
+                                                <option value="amc">Amc</option>
+                                                <option value="lender">Lender</option>
+                                            </select>
+                                            <span class="icon-arrow-down bottom-arrow-icon"></span>
+                                        </div>
+                                    </div>
+                                    {{--                                    <div class="group">--}}
+                                    {{--                                        <label for="" class="d-block mb-2 dashboard-label">Client URL <span--}}
+                                    {{--                                                    class="text-danger require"></span></label>--}}
+                                    {{--                                        <input type="text" class="dashboard-input w-100">--}}
+                                    {{--                                    </div>--}}
+                                    <div class="group">
+                                        <label for="email" class="d-block mb-2 dashboard-label">Email address <span
+                                                    class="text-danger require"></span></label>
+                                        <input type="email" id="email" name="email" class="dashboard-input w-100" required>
+                                    </div>
+                                    <div class="group">
+                                        <label for="phone" class="d-block mb-2 dashboard-label">Phone no <span
+                                                    class="text-danger require"></span></label>
+                                        <input type="text" name="phone" id="phone" class="dashboard-input w-100"
+                                               required>
                                     </div>
                                 </div>
-                                <div class="group">
-                                    <label for="address" class="d-block mb-2 dashboard-label address-label">Address</label>
-                                    <input type="text" name="address" id="address" placeholder="Enter address" class="dashboard-input w-100">
-                                </div>
-                                <div class="group">
-                                    <label for="city" class="d-block mb-2 dashboard-label city-label">City</label>
-                                    <input type="text" name="city" id="city" placeholder="Enter city" class="dashboard-input w-100">
-                                </div>
-                                <div class="group">
-                                    <label for="state" class="d-block mb-2 dashboard-label state-label">State</label>
-                                    <input type="text" name="state" id="state" placeholder="Enter state" class="dashboard-input w-100">
-                                </div>
-                                <div class="group">
-                                    <label for="zip" class="d-block mb-2 dashboard-label zip-label">Zip</label>
-                                    <input type="text" name="zip" id="zip" placeholder="Enter zip" class="dashboard-input w-100">
-                                </div>
-                                <div class="group">
-                                    <label for="country" class="d-block mb-2 dashboard-label country-label">Country</label>
-                                    <input type="text" name="country" id="country" placeholder="Enter Country" class="dashboard-input w-100">
-                                </div>
-                                <div class="group">
-                                    <label for="deducts-technology-fee" class="d-block mb-2 dashboard-label deducts-technology-fee-label">Deducts Technology Fee ?</label>
-                                    <div class="position-relative">
-                                        <select name="deducts_technology_fee" id="deducts-technology-fee" class="dashboard-input w-100">
-                                            <option value="1">Yes</option>
-                                            <option value="0">No</option>
-                                        </select>
-                                        <img src="bottom-arrow.png" alt="" class="bottom-arrow">
+                                {{-- right side --}}
+                                <div class="right-side max-w-424 w-100">
+                                    <div class="group">
+                                        <label for="address" class="d-block mb-2 dashboard-label address-label">Address
+                                            <span
+                                                    class="text-danger"></span></label>
+                                        <textarea name="address" class="dashboard-textarea w-100" id="address" cols="30"
+                                                  rows="2"></textarea>
                                     </div>
-                                </div>
-                                <div class="group">
-                                    <label for="fee-for-1004UAD" class="d-block mb-2 dashboard-label fee-for-1004UAD-label">Technology Fee For Full Appraisal Like 1004UAD</label>
-                                    <input type="text" name="fee_for_1004uad" id="fee-for-1004UAD" placeholder="Enter Amount" class="dashboard-input w-100">
-                                </div>
-                                <div class="group">
-                                    <label for="fee-for-1004D" class="d-block mb-2 dashboard-label fee-for-1004D-label">Technology Fee For Partial Appraisal Like 1004D</label>
-                                    <input type="text" name="fee_for_1004d" id="fee-for-1004D" placeholder="Enter Amount" class="dashboard-input w-100">
-                                </div>
-                                <div class="group">
-                                    <label for="can-sign" class="d-block mb-2 dashboard-label can-sign-label">Trainee Can Sign<span class="text-danger">*</span></label>
-                                    <div class="position-relative">
-                                        <select name="can_sign" id="can-sign" class="dashboard-input w-100">
-                                            <option value="1">Yes</option>
-                                            <option value="0">No</option>
-                                        </select>
-                                        <img src="bottom-arrow.png" alt="" class="bottom-arrow">
+                                    <div class="group">
+                                        <label for="city" class="d-block mb-2 dashboard-label city-label">City <span
+                                                    class="text-danger"></span></label>
+                                        <input type="text" id="city" name="city" class="dashboard-input w-100">
                                     </div>
-                                </div>
-                                <div class="group">
-                                    <label for="can-inspect" class="d-block mb-2 dashboard-label can-inspect-label">Trainee Can Inspect<span class="text-danger">*</span></label>
-                                    <div class="position-relative">
-                                        <select name="can_inspect" id="can-inspect" class="dashboard-input w-100">
-                                            <option value="1">Yes</option>
-                                            <option value="0">No</option>
-                                        </select>
-                                        <img src="bottom-arrow.png" alt="" class="bottom-arrow">
+                                    <div class="group">
+                                        <label for="state" class="d-block mb-2 dashboard-label state-label">State <span
+                                                    class="text-danger"></span></label>
+                                        <input type="text" name="state" id="state" class="dashboard-input w-100">
                                     </div>
+                                    <div class="group">
+                                        <label for="zip" class="d-block mb-2 dashboard-label zip-label">Zip code <span
+                                                    class="text-danger"></span></label>
+                                        <input type="text" id="zip" name="zip" class="dashboard-input w-100">
+                                    </div>
+                                    <div class="group">
+                                        <label for="country" class="d-block mb-2 dashboard-label country-label">Country
+                                            <span
+                                                    class="text-danger"></span></label>
+                                        <input type="text" name="country" id="country" class="dashboard-input w-100">
+                                    </div>
+                                    {{--                                    <div class="group">--}}
+                                    {{--                                        <label for="" class="d-block mb-2 dashboard-label">Fax no <span--}}
+                                    {{--                                                    class="text-danger require"></span></label>--}}
+                                    {{--                                        <input type="text" class="dashboard-input w-100">--}}
+                                    {{--                                    </div>--}}
                                 </div>
-                                <div class="group">
-                                    <label for="instruction" class="d-block mb-2 dashboard-label">Client Instruction AS PDF FIle</label>
-                                    <input type="file" name="instruction" id="instruction" class="dashboard-input w-100" />
-                                </div>
-
-                                <button type="submit" class="btn btn-primary" id="submit">Create Client</button>
                             </div>
-                        </form>
+                        </div>
+                        <div class="col-lg-4 right mb-3">
+                            <div class="box">
+                                <div class="max-w-424 w-100">
+                                    <div class="group">
+                                        <label for="fee-for-1004UAD"
+                                               class="d-block mb-2 dashboard-label fee-for-1004UAD-label">Technology fee
+                                            for full
+                                            appraisal like 1004UAD</label>
+                                        <input type="text" name="fee_for_1004uad" id="fee-for-1004UAD"
+                                               class="dashboard-input w-100">
+                                    </div>
+                                    <div class="group">
+                                        <label for="fee-for-1004D"
+                                               class="d-block mb-2 dashboard-label fee-for-1004D-label">Technology fee
+                                            for full
+                                            appraisal like 1004D</label>
+                                        <input type="text" name="fee_for_1004d" id="fee-for-1004D"
+                                               class="dashboard-input w-100">
+                                    </div>
+                                    <div class="group">
+                                        <label for="deducts-technology-fee"
+                                               class="d-block mb-2 dashboard-label deducts-technology-fee-label">Deduction
+                                            of tech fee during
+                                            payment </label>
+                                        <div class="position-relative">
+                                            <select name="deducts_technology_fee" id="deducts-technology-fee"
+                                                    class="dashboard-input w-100">
+                                                <option value="">Choose an option</option>
+                                                <option value="1">Yes</option>
+                                                <option value="0">No</option>
+                                            </select>
+                                            <span class="icon-arrow-down bottom-arrow-icon"></span>
+                                        </div>
+                                    </div>
+                                    <div class="group">
+                                        <label for="can-sign" class="d-block mb-2 dashboard-label can-sign-label">Trainee
+                                            can sign </label>
+                                        <div class="position-relative">
+                                            <select name="can_sign" id="can-sign" class="dashboard-input w-100">
+                                                <option value="">Select an option</option>
+                                                <option value="1">Yes</option>
+                                                <option value="0">N/A</option>
+                                            </select>
+                                            <span class="icon-arrow-down bottom-arrow-icon"></span>
+                                        </div>
+                                    </div>
+                                    <div class="group">
+                                        <label for="can-inspect" class="d-block mb-2 dashboard-label can-inspect-label">Trainee
+                                            can inspect </label>
+                                        <div class="position-relative">
+                                            <select name="can_inspect" id="can-inspect" class="dashboard-input w-100">
+                                                <option value="">Select an option</option>
+                                                <option value="1">Yes</option>
+                                                <option value="0">N/A</option>
+                                            </select>
+                                            <span class="icon-arrow-down bottom-arrow-icon"></span>
+                                        </div>
+                                    </div>
+                                    <div class="group">
+                                        <label for="instruction" class="d-block mb-2 dashboard-label can-inspect">Trainee
+                                            can inspect </label>
+                                        <div class="position-relative file-upload">
+                                            <input type="file" name="instruction" id="instruction">
+                                            <label for="">Upload <img src="/img/upload.png"
+                                                                      alt="boston profile"></label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
+                <div class="add-client__bottom d-flex justify-content-end mgt-32 p-3">
+                    <button class="button button-discard me-3">Discard <span class="icon-close-circle ms-3"><span
+                                    class="path1"></span><span class="path2"></span></span></button>
+                    <button class="button button-primary" type="submit">Add client</button>
+                </div>
+            </form>
         </div>
     </div>
 @endsection
 @push('scripts')
     <script type="text/javascript">
-        $('#client-type').on('change',function(e){
+        $(document).ready(function() {
+            $("#client-create-form").validate({
+                errorClass: "text-danger",
+                messages : {
+                    name: "Name is required",
+                    client_type : "Client type is required",
+                    email: "Email is required",
+                    phone: "Phone No is required",
+                    address: "Address is required",
+                    zip: "Zip code is required",
+                    state: "State is required",
+                    country: "Country is required",
+                    city: "City is required",
+                    fee_for_1004uad: "Technology fee for full appraisal(1004UAD) is required",
+                    fee_for_1004d: "Technology fee for full appraisal(1004D) is required",
+                    deducts_technology_fee: "Deduction of tech fee is required",
+                    can_sign: "Trainee can sign field is required",
+                    can_inspect: "Trainee can inspect field is required"
+                }
+            });
+        });
+        $('#client-type').on('change', function (e) {
             e.preventDefault();
             let clientType = $(this).val();
-            if(clientType === 'lender'){
-                $(".address-label, .city-label, .state-label, .country-label, .zip-label").addClass('required');
-            }else{
-                $(".deducts-technology-fee-label, .fee-for-1004UAD-label, .fee-for-1004D-label, .can-sign-label .can-inspect")
+            if (clientType === 'lender') {
+                $(".address-label, .city-label, .state-label, .country-label, .zip-label").addClass('require');
+                $("#address,#city,#state,#country,#zip").prop('required', true);
+
+                $(".deducts-technology-fee-label, .fee-for-1004UAD-label, .fee-for-1004D-label, .can-sign-label, .can-inspect-label").removeClass('require');
+                $("#deducts-technology-fee, #fee-for-1004UAD, #fee-for-1004D-label ,#can-sign, #can-inspect").prop('required', false);
+            } else {
+                $(".deducts-technology-fee-label, .fee-for-1004UAD-label, .fee-for-1004D-label, .can-sign-label, .can-inspect-label").addClass('require');
+                $("#deducts-technology-fee, #fee-for-1004UAD, #fee-for-1004D-label ,#can-sign, #can-inspect").prop('required', true);
+
+                $(".address-label, .city-label, .state-label, .country-label, .zip-label").removeClass('require');
+                $("#address,#city,#state,#country,#zip").prop('required', false);
             }
         });
     </script>
