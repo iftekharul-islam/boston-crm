@@ -64,6 +64,7 @@
                     <input type="checkbox" class="checkbox-input">
                     <label for="" class="checkbox-label">Delete</label>
                 </div>
+                
             </div>
         </div>
        </div>
