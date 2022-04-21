@@ -14,12 +14,18 @@
                                 <div class="d-flex justify-content-between w-100">
                                     <div class="left max-w-424 w-100 me-3">
                                         <div class="group">
-                                            <label for=""
+                                            <label for="companyName"
                                                    class="d-block mb-2 dashboard-label"> {{ __('messages.profile_view.company_name') }}
                                                 <span class="text-danger require"></span></label>
-                                            <input type="text" class="dashboard-input w-100" name="company_name"
+                                            <input type="text"
+                                                   id="companyName"
+                                                   class="dashboard-input w-100 @error('company_name') is-invalid @enderror"
+                                                   name="company_name"
                                                    value="{{ $company->name ?? '' }}"
-                                                   @if($company->owner_id != $user->id) readonly @endif>
+                                                   required
+                                                   @if($company->owner_id != $user->id) readonly @endif
+                                                   autocomplete="company_name"
+                                                   autofocus>
                                         </div>
                                         <div class="group">
                                             <label for=""

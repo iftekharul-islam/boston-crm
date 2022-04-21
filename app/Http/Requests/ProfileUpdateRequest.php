@@ -9,16 +9,30 @@ use Psr\Container\NotFoundExceptionInterface;
 
 class ProfileUpdateRequest extends FormRequest
 {
-	public function rules(): array {
+	/**
+	 * @return string[]
+	 * @throws ContainerExceptionInterface
+	 * @throws NotFoundExceptionInterface
+	 */
+	#[ArrayShape( [
+		'company_name' => "string",
+		'user_name'         => "string",
+		'address'      => "string",
+		'city'         => "string",
+		'state'        => "string",
+		'zip_code'     => "string",
+		'phone'        => "string",
+		'image'        => "string"
+	] )] public function rules(): array {
 		return [
 			'company_name' => 'required|string',
-			'name'         => 'required|string',
-			'address'      => 'nullable|string',
-			'city'         => 'nullable|string',
-			'state'        => 'nullable|string',
-			'zip_code'     => 'nullable|string',
-			'phone'        => 'nullable|phone:auto',
-			'image'        => 'nullable|mimes:jpeg,jpg,png|max:' . config()->get('constants.image_file_size.max'),
+			'user_name'         => 'required|string',
+//			'address'      => 'nullable|string',
+//			'city'         => 'nullable|string',
+//			'state'        => 'nullable|string',
+//			'zip_code'     => 'nullable|string',
+//			'phone'        => 'nullable|string',
+//			'image'        => 'nullable|mimes:jpeg,jpg,png|max:' . config()->get('constants.image_file_size.max'),
 		];
 	}
 }

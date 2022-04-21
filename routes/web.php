@@ -38,7 +38,7 @@ Route::group( [ 'middleware' => [ 'auth:sanctum' ] ], function () {
     Route::post( 'users/{id}',
         [ UserController::class, 'destroy' ] )->middleware( 'role_permission:delete.user' )->name( 'users.destroy' );
 		Route::get('profiles', [UserController::class, 'getProfile'])->name('profile');
-		Route::post('profiles', [UserController::class, 'getProfileUpdate'])->name('profile.update');
+		Route::post('profiles', [UserController::class, 'updateProfile'])->name('profile.update');
     //Role Controller
     Route::get( 'roles',
         [ RoleController::class, 'index' ] )->middleware( 'role_permission:view.role' )->name( 'roles.index' );

@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProfileUpdateRequest;
 use App\Http\Requests\UserCreateRequest;
 use App\Http\Requests\UserUpdateRequest;
+use App\Models\Company;
 use App\Models\CompanyUser;
 use App\Repositories\UserProfileRepository;
 use App\Repositories\UserRepository;
@@ -152,7 +154,31 @@ class UserController extends Controller
 		return view('user.user-profile', compact('profile', 'company', 'user'));
 	}
 	
-	public function updateProfile() {
-	
+	/**
+	 * @param ProfileUpdateRequest $request
+	 *
+	 * @return RedirectResponse
+	 */
+	public function updateProfile(ProfileUpdateRequest $request): RedirectResponse {
+		$user    = auth()->user();
+		$company = $this->service->getAuthUserCompany();
+		DB::transaction(function () use ($request, $user, $company) {
+			if ( $company->owner_id === $user->id ) {
+				Company::where('id', $company->id)->update([ 'name' => $request->get('company_name') ]);
+			}
+			$user->update([ 'name' => $request->get('user_name') ]);
+			$profile = $this->profileRepository->updateProfile(attributes: [
+				'address'  => $request->get('address'),
+				'city'     => $request->get('city'),
+				'state'    => $request->get('state'),
+				'zip_code' => $request->get('zip_code'),
+				'phone'    => $request->get('phone'),
+			], user_id: $user->id);
+			if ( $request->has('image') ) {
+				$this->profileRepository->updateProfileImage(profile_id: $profile->id, image: $request->file('image'));
+			}
+		});
+		
+		return redirect()->route('profile');
 	}
 }
