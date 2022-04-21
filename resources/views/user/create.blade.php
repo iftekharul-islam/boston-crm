@@ -25,6 +25,7 @@
                         <small id="roleHelp" class="form-text text-muted">Please avoid duplicate email</small>
                     @endif
                 </div>
+
                 <div class="form-group mb-2">
                     <label for="userRole">User Role</label>
                     <select class="crm-select form-control" name="role" id="userRole" required>
