@@ -30,7 +30,7 @@
                                     <input id="password" type="password" class="login-input form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
                                     {{-- eye icon --}}
                                     <span class="icon-eye icons show-password"><span class="path1"></span><span class="path2"></span></span>
-                                    <span class="icon-eye icons hide-password"><span class="path1"></span><span class="path2"></span></span>
+                                    <span class="icon-eye-slash icons hide-password"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span></span>
                                 </div>
                                 @error('password')
                                     <span class="invalid-feedback" role="alert">
