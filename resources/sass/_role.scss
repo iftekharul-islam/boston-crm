@@ -1,0 +1,62 @@
+
+
+.role-preview {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 32px;
+    @include for-max-991 {
+        grid-template-columns: 1fr;
+    }
+}
+.role-box {
+        background: $white;
+        border-radius: 8px;
+        padding: 40px;
+        .dashboard-input,
+        .dashboard-textarea {
+            border-color: $gray;
+        }
+}
+.permission-check {
+    margin-bottom: 24px;
+    .permission {
+        width: 135px;
+        margin-right: 16px;
+        
+    }
+    .checkbox-group {
+        margin-right: 32px;
+        &:last-of-type {
+            margin-right: 0;
+        }
+    }
+    .checkbox-group {
+        .checkbox-input {
+            &:checked {
+                ~.checkbox-label {
+                    &::after {
+                        background: $primary;
+                    }
+                }
+            }
+        }
+        .checkbox-label {
+            padding-left: 36px;
+            font-weight: 400;
+            &::after {
+                border: 1px solid $platinum;
+            }
+        }
+    }
+}
+.delete {
+    cursor: pointer;
+}
+.role-add {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 32px;
+    @include for-max-991 {
+        grid-template-columns: 1fr;
+    }
+}

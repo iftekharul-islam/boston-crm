@@ -3,6 +3,7 @@
     @include same-button-style;
     outline: none;
     display: inline-block;
+    text-align: center;
     &-primary {
         background: $primary;
         color: $white;
@@ -12,6 +13,11 @@
             background: $white;
             color: $deep-black;
         }
+    }
+    &-transparent {
+        background: transparent;
+        border-color: $platinum;
+        color: $light-black;
     }
     &-discard {
         border-color: $gray;
