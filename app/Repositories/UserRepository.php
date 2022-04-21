@@ -21,18 +21,6 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
 	 }
 	 
 	 /**
-		* Get all user by emails
-		*
-		* @param $user_emails
-		*
-		* @return Collection
-		*/
-	 public function findWithEmail($user_emails): Collection
-	 {
-			return $this->query->whereIn( 'email', $user_emails )->get();
-	 }
-	 
-	 /**
 		* Get user by email
 		*
 		* @param $email
@@ -41,6 +29,6 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
 		*/
 	 public function findByEmail($email): Model|Builder|null
 	 {
-			return $this->query->where( 'email', $email )->first();
+			return $this->query->with('userProfile')->where( 'email', $email )->first();
 	 }
 }

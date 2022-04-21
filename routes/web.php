@@ -67,7 +67,8 @@ Route::get( 'get/icons', function () {
     return view( 'icon' );
 } );
 Route::get( 'email/verify/{id}/{hash}', [ VerificationController::class, 'verify' ] )->name( 'verification.verify' );
-Route::get( 'accept-new-user/{email}', [ UserController::class, 'acceptInviteUser' ] )->name( 'accept.new.user' );
+Route::get( 'accept-new-user/{code}', [ UserController::class, 'acceptInviteUser' ] )->name( 'accept.new.user' );
+Route::post('invite-user-update', [UserController::class, 'inviteUserUpdate'])->name('update.invite.user.profile');
 Route::get( "{slug}", [ WebApiController::class, 'home' ] )->where( 'slug', ".*" );
 
 //vue routes

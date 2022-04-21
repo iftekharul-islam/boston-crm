@@ -27,12 +27,12 @@ class ProfileUpdateRequest extends FormRequest
 		return [
 			'company_name' => 'required|string',
 			'user_name'         => 'required|string',
-//			'address'      => 'nullable|string',
-//			'city'         => 'nullable|string',
-//			'state'        => 'nullable|string',
-//			'zip_code'     => 'nullable|string',
-//			'phone'        => 'nullable|string',
-//			'image'        => 'nullable|mimes:jpeg,jpg,png|max:' . config()->get('constants.image_file_size.max'),
+			'address'      => 'nullable|string',
+			'city'         => 'nullable|string',
+			'state'        => 'nullable|string',
+			'zip_code'     => 'nullable|string',
+			'phone'        => 'nullable|string',
+			'image'        => 'nullable|mimes:jpeg,jpg,png|max:' . config()->get('constants.image_file_size.max'),
 		];
 	}
 }

@@ -7,15 +7,6 @@
                 @csrf
 
                 <div class="form-group">
-                    <label for="name">User Name</label>
-                    <input type="text" class="form-control" name="name" id="name" aria-describedby="roleHelp"
-                           placeholder="Enter user name" value="{{ old('name') }}">
-                    @if($errors->has('name'))
-                        <div class="error text-danger">{{ $errors->first('name') }}</div>
-                    @endif
-                </div>
-
-                <div class="form-group">
                     <label for="email">User Email</label>
                     <input type="email" class="form-control" name="email" id="email" aria-describedby="roleHelp"
                            placeholder="Enter user email" value="{{ old('email') }}">

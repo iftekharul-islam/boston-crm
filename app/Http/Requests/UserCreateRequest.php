@@ -11,9 +11,8 @@ class UserCreateRequest extends FormRequest {
      *
      * @return array
      */
-    #[ArrayShape( [ 'name' => "string", 'email' => "string", 'role' => "string" ] )] public function rules(): array {
+    #[ArrayShape( [ 'email' => "string", 'role' => "string" ] )] public function rules(): array {
         return [
-            'name'  => 'required',
             'email' => 'required|email|unique:users,email',
             'role'  => 'required|exists:roles,id',
         ];

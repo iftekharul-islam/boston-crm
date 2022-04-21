@@ -4,6 +4,7 @@ return [
 	'action'         => 'Action',
 	'status'         => 'Status',
 	'save'           => 'Save',
+	'edit'           => 'Edit',
 	'registration'   => [
 		'',
 	],
@@ -43,5 +44,10 @@ return [
 		'zip'          => 'Zip Code',
 		'phone'        => 'Phone',
 		'email'        => 'Email',
+	],
+	'role_view'      => [
+		'role_management' => 'Role Management',
+		'role_create'     => 'Role Create',
+		'permission'      => 'permission',
 	],
 ];
