@@ -122,6 +122,23 @@
                                             <input type="text" class="dashboard-input w-100" name="email"
                                                    value="{{ $user->email }}" readonly>
                                         </div>
+                                        <div class="group ">
+                                            <label for="" class="d-block mb-3 dashboard-label fw-bold">User photo</label>
+                                            <div id='img_preview' class="img__preview">
+                                                <img id="blah" align='middle' src="{{ asset('img/user.png') }}" alt="your image"
+                                                     class="img-fluid" title=''/>
+                                                <div class="upload-img">
+                                                    <input type="file" id="inputGroupFile01" class="imgInp custom-file-input"
+                                                           aria-describedby="inputGroupFileAddon01" name="image">
+                                                    <span class="icon-camera"><span class="path1"></span><span class="path2"></span><span
+                                                                class="path3"></span></span>
+                                                </div>
+                                            </div>
+                                            <div class="custom-file">
+                                                <label class="custom-file-label text-light-black mt-2 d-block"
+                                                       for="inputGroupFile01"></label>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -136,4 +153,28 @@
             </div>
         </div>
     </form>
+@endsection
+
+@section('js')
+    <script>
+        $("#inputGroupFile01").change(function (event) {
+            readURL(this);
+        });
+
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                var filename = $("#inputGroupFile01").val();
+                filename = filename.substring(filename.lastIndexOf('\\') + 1);
+                reader.onload = function (e) {
+                    $('#blah').attr('src', e.target.result);
+                    $('#blah').hide();
+                    $('#blah').fadeIn(500);
+                    $('.custom-file-label').text(filename);
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+            $(".alert").removeClass("loading").hide();
+        }
+    </script>
 @endsection
