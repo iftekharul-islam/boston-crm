@@ -34,12 +34,13 @@
         @include('layouts.partials.sidebar')
     @endif
     <div class="dashboard-main__right flex-grow-1 bg-platinum">
+        @if(auth()->check())
         <!-- Header -->
         <header class="dashboard-header d-flex align-items-center justify-content-between bg-white">
             <div class="dashboard-header__left">
                 <p class="text-light-black text-medium mb-0 fs-20">{{ config()->get('app.name') }}</p>
             </div>
-            @if(auth()->check())
+
                 <div class="dashboard-header__right d-flex align-items-center">
                     <div class="d-flex align-items-center">
                         <a class="notification-icon fs-3 text-light-black d-flex align-items-center"><span
@@ -74,15 +75,9 @@
                         </form>
                     </div>
                 </div>
-            @else
-                <div class="dashboard-header__right d-flex align-items-center">
-                    <div class="d-flex align-items-center">
-                        <a href="{{ route('login') }}">Login</a>
-                        <a class="ms-3" href="{{ route('register') }}">Registration</a>
-                    </div>
-                </div>
-            @endif
+
         </header>
+        @endif
         @yield('content')
     </div>
 </div>
