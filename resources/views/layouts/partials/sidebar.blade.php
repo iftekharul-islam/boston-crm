@@ -17,20 +17,20 @@
              </div>
              <span class="icon-arrow-down ms-auto"></span>
         </a>
-        <a href="{{ url('/order') }}" class="list-item d-flex align-items-center  text-white {{ (request()->is('order')) ? 'active' : '' }}">
-            <div class="d-inline-flex align-items-center">
-                <span class="icon-order me-3 fs-3"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span>
-               <span class="items-text">  {{ __('messages.dashboard_view.orders') }} </span>
-             </div>
-             <span class="icon-arrow-down ms-auto"></span>
-        </a>
-        <a href="{{ url('/calls') }}" class="list-item d-flex align-items-center  text-white {{ (request()->is('calls')) ? 'active' : '' }}">
-            <div class="d-inline-flex align-items-center">
-                <span class="icon-call me-3 fs-3"><span class="path1"></span><span class="path2"></span></span>
-                <span class="items-text"> {{ __('messages.dashboard_view.calls') }} </span>
-             </div>
-             <span class="icon-arrow-down ms-auto"></span>
-        </a>
+{{--        <a href="{{ url('/order') }}" class="list-item d-flex align-items-center  text-white {{ (request()->is('order')) ? 'active' : '' }}">--}}
+{{--            <div class="d-inline-flex align-items-center">--}}
+{{--                <span class="icon-order me-3 fs-3"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span>--}}
+{{--               <span class="items-text">  {{ __('messages.dashboard_view.orders') }} </span>--}}
+{{--             </div>--}}
+{{--             <span class="icon-arrow-down ms-auto"></span>--}}
+{{--        </a>--}}
+{{--        <a href="{{ url('/calls') }}" class="list-item d-flex align-items-center  text-white {{ (request()->is('calls')) ? 'active' : '' }}">--}}
+{{--            <div class="d-inline-flex align-items-center">--}}
+{{--                <span class="icon-call me-3 fs-3"><span class="path1"></span><span class="path2"></span></span>--}}
+{{--                <span class="items-text"> {{ __('messages.dashboard_view.calls') }} </span>--}}
+{{--             </div>--}}
+{{--             <span class="icon-arrow-down ms-auto"></span>--}}
+{{--        </a>--}}
         <a href="{{ url('/clients') }}" class="list-item d-flex align-items-center  text-white">
             <div class="d-inline-flex align-items-center">
                 <span class="icon-client me-3 fs-3"><span class="path1"></span><span class="path2"></span></span>
@@ -52,40 +52,40 @@
              </div>
              <span class="icon-arrow-down ms-auto"></span>
         </a>
-         <a href="{{ url('/invoice') }}" class="list-item d-flex align-items-center  text-white">
-            <div class="d-inline-flex align-items-center">
-                <span class="icon-invoice me-3 fs-3"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></span>
-                <span class="items-text"> {{ __('messages.dashboard_view.invoices') }} </span>
-             </div>
-             <span class="icon-arrow-down ms-auto"></span>
-        </a>
-         <a href="{{ url('/marketing') }}" class="list-item d-flex align-items-center  text-white">
-            <div class="d-inline-flex align-items-center">
-                <span class="icon-ranking me-3 fs-3"></span>
-                <span class="items-text"> {{ __('messages.dashboard_view.marketing') }} </span>
-             </div>
-             <span class="icon-arrow-down ms-auto"></span>
-        </a>
-         <a href="{{ url('/knowledge-base') }}" class="list-item d-flex align-items-center  text-white">
-            <div class="d-inline-flex align-items-center">
-                <span class="icon-note me-3 fs-3"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></span>
-                <span class="items-text"> {{ __('messages.dashboard_view.knowledge_base') }} </span>
-             </div>
-             <span class="icon-arrow-down ms-auto"></span>
-        </a>
-         <a href="{{ route('profile') }}" class="list-item d-flex align-items-center  text-white">
-            <div class="d-inline-flex align-items-center">
-                <span class="icon-profile-circle me-3 fs-3"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span>
-                <span class="items-text"> {{ __('messages.dashboard_view.my_profile') }} </span>
-             </div>
-             <span class="icon-arrow-down ms-auto"></span>
-        </a>
-         <a href="{{ url('/chats') }}" class="list-item d-flex align-items-center  text-white">
-            <div class="d-inline-flex align-items-center">
-                <span class="icon-messages me-3 fs-3"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span>
-                <span class="items-text"> {{ __('messages.dashboard_view.chat') }} </span>
-             </div>
-             <span class="icon-arrow-down ms-auto"></span>
-        </a>
+{{--         <a href="{{ url('/invoice') }}" class="list-item d-flex align-items-center  text-white">--}}
+{{--            <div class="d-inline-flex align-items-center">--}}
+{{--                <span class="icon-invoice me-3 fs-3"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></span>--}}
+{{--                <span class="items-text"> {{ __('messages.dashboard_view.invoices') }} </span>--}}
+{{--             </div>--}}
+{{--             <span class="icon-arrow-down ms-auto"></span>--}}
+{{--        </a>--}}
+{{--         <a href="{{ url('/marketing') }}" class="list-item d-flex align-items-center  text-white">--}}
+{{--            <div class="d-inline-flex align-items-center">--}}
+{{--                <span class="icon-ranking me-3 fs-3"></span>--}}
+{{--                <span class="items-text"> {{ __('messages.dashboard_view.marketing') }} </span>--}}
+{{--             </div>--}}
+{{--             <span class="icon-arrow-down ms-auto"></span>--}}
+{{--        </a>--}}
+{{--         <a href="{{ url('/knowledge-base') }}" class="list-item d-flex align-items-center  text-white">--}}
+{{--            <div class="d-inline-flex align-items-center">--}}
+{{--                <span class="icon-note me-3 fs-3"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></span>--}}
+{{--                <span class="items-text"> {{ __('messages.dashboard_view.knowledge_base') }} </span>--}}
+{{--             </div>--}}
+{{--             <span class="icon-arrow-down ms-auto"></span>--}}
+{{--        </a>--}}
+{{--         <a href="{{ route('profile') }}" class="list-item d-flex align-items-center  text-white">--}}
+{{--            <div class="d-inline-flex align-items-center">--}}
+{{--                <span class="icon-profile-circle me-3 fs-3"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span>--}}
+{{--                <span class="items-text"> {{ __('messages.dashboard_view.my_profile') }} </span>--}}
+{{--             </div>--}}
+{{--             <span class="icon-arrow-down ms-auto"></span>--}}
+{{--        </a>--}}
+{{--         <a href="{{ url('/chats') }}" class="list-item d-flex align-items-center  text-white">--}}
+{{--            <div class="d-inline-flex align-items-center">--}}
+{{--                <span class="icon-messages me-3 fs-3"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span>--}}
+{{--                <span class="items-text"> {{ __('messages.dashboard_view.chat') }} </span>--}}
+{{--             </div>--}}
+{{--             <span class="icon-arrow-down ms-auto"></span>--}}
+{{--        </a>--}}
     </div>
 </div>
