@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\Helper;
 use App\Http\Requests\RoleCreateRequest;
 use App\Http\Requests\RoleUpdateRequest;
 use App\Services\CompanyService;
@@ -14,10 +13,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
-use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
 class RoleController extends Controller
@@ -41,8 +38,8 @@ class RoleController extends Controller
 		*/
 	 public function index(): Application|Factory|View
 	 {
-			$roles = $this->service->getCompanyAllRoles();
-		    $permissions = $this->getModels();
+			$roles       = $this->service->getCompanyAllRoles();
+			$permissions = $this->getModels();
 			
 			return view( 'role.index', compact( 'roles', 'permissions' ) );
 	 }
@@ -64,17 +61,17 @@ class RoleController extends Controller
 		*
 		* @param RoleCreateRequest $request
 		*
-		* @return RedirectResponse
+		* @return JsonResponse
 		*/
-	 public function store(RoleCreateRequest $request): RedirectResponse
+	 public function store(RoleCreateRequest $request): JsonResponse
 	 {
 			$user    = auth()->user();
 			$company = $user->companies()->first();
 			DB::transaction( function () use ($request, $company) {
-				 $this->service->createRole( $request->get( 'name' ) )->getPermissions( $request->get( 'permissions' ) )->attachSelectedPermissions()->setCompany( $company )->attachRole();
+				 $this->service->createRole( name: $request->get( 'name' ),
+					 description: $request->get( 'description' ) )->getPermissions( $request->get( 'permissions' ) )->attachSelectedPermissions()->setCompany( $company )->attachRole();
 			} );
-			
-			return redirect()->route( 'roles.index' );
+			return response()->json( [ 'success' => true, 'message' => 'Successfully create role' ] );
 	 }
 	 
 	 /**
@@ -157,9 +154,10 @@ class RoleController extends Controller
 				 
 				 return $valid;
 			} );
-			$all_models   = $models->values()->map( function ($model) {
+			$ignore_model = [ '', 'companyuser', 'company', 'userprofile', 'userinvite' ];
+			$all_models   = $models->values()->map( function ($model) use ($ignore_model) {
 				 $model_name = strtolower( explode( utf8_encode( "\\" ), $model )[3] ?? '' );
-				 if ( ! in_array( $model_name, [ '', 'companyuser', 'company', 'userprofile' ] ) ) {
+				 if ( ! in_array( $model_name, $ignore_model ) ) {
 						return $model_name;
 				 }
 			} )->toArray();
