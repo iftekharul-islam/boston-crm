@@ -288,13 +288,11 @@
 }
 .icon-edit .path1:before {
   content: "\e917";
-  color: rgb(47, 65, 94);
   opacity: 0.4;
 }
 .icon-edit .path2:before {
   content: "\e918";
   margin-left: -1em;
-  color: rgb(47, 65, 94);
 }
 .icon-arrow-bottom:before {
   content: "\e919";
