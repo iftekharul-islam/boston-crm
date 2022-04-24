@@ -72,35 +72,29 @@
 }
 .icon-share .path1:before {
   content: "\e950a";
-  color: rgb(255, 255, 255);
   opacity: 0.4;
 }
 .icon-share .path2:before {
   content: "\e950b";
   margin-left: -1em;
-  color: rgb(255, 255, 255);
   opacity: 0.4;
 }
 .icon-share .path3:before {
   content: "\e950c";
   margin-left: -1em;
-  color: rgb(255, 255, 255);
   opacity: 0.4;
 }
 .icon-share .path4:before {
   content: "\e950d";
   margin-left: -1em;
-  color: rgb(255, 255, 255);
 }
 .icon-share .path5:before {
   content: "\e950e";
   margin-left: -1em;
-  color: rgb(255, 255, 255);
 }
 .icon-share .path6:before {
   content: "\e950f";
   margin-left: -1em;
-  color: rgb(255, 255, 255);
 }
 .icon-eye-slash .path1:before {
   content: "\e952";
@@ -288,7 +282,6 @@
 }
 .icon-plus:before {
   content: "\e915";
-  color: #2f415e;
 }
 .icon-arrow-down:before {
   content: "\e916";
