@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use App\Actions\Fortify\PasswordValidationRules;
 use Illuminate\Foundation\Http\FormRequest;
 use JetBrains\PhpStorm\ArrayShape;
+use Laravel\Fortify\Rules\Password;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
@@ -40,4 +41,17 @@ class InviteUserUpdateRequest extends FormRequest
 			'image'    => 'nullable|mimes:jpeg,jpg,png|max:' . config()->get('constants.image_file_size.max'),
 		];
 	}
+	 
+	 /**
+		* Make password 6 digit minimum
+		*
+		* @return array
+		*/
+	 protected function passwordRules(): array {
+			return [
+				'required',
+				'string',
+				( new Password )->length( 6 ),
+			];
+	 }
 }

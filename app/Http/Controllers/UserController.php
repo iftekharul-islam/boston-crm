@@ -139,9 +139,9 @@ class UserController extends Controller
 	 * @return Application|Factory|View
 	 */
 	public function acceptInviteUser($code): Application|Factory|View {
-		$email = UserInvite::query()->where('code', $code)->first()->pluck('email');
-		if ( $email ) {
-			$user    = $this->repository->findByEmail(email: $email);
+		$invite_user = UserInvite::query()->where('code', $code)->first();
+		if ( $invite_user ) {
+			$user    = $this->repository->findByEmail(email: $invite_user->email);
 			$company = $user->companies()->first();
 			
 			return view('auth.invite-user-registration', compact('user', 'company'));
@@ -169,7 +169,7 @@ class UserController extends Controller
 				'state'    => $request->get('state'),
 				'zip_code' => $request->get('zip_code'),
 				'phone'    => $request->get('phone'),
-			], user_id: $user->id)->activeUser(company_id: $company->id, user_id: $user->id);
+			], user_id: $user->id)->activeUser(company_id: $company->id, user_id: $user->id)->deleteInvite(email: $user->email);
 
 		});
 		
