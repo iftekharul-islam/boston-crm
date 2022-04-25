@@ -7,7 +7,7 @@
             <a href="#" class="back-btn text-white"><img class="mgr-8" src="{{ asset('img/arrow-left.png') }}" alt="boston logo"> Back</a>
             <div class="login-box">
                 <div class="login-header fs-20 text-light-black mgb-48 fw-bold">{{ __('Register') }}</div>
-                <form method="POST" action="{{ route('register') }}">
+                <form method="POST" action="{{ route('register') }}" id="registrationForm">
                     @csrf
                     <div class="group mgb-40">
                         <label for="name" class="d-block text-light-black">{{ __('Name') }}</label>
@@ -56,12 +56,6 @@
                             @enderror
                         </div>
                     </div>
-                    {{-- <div class="row mb-3">--}}
-                    {{-- <label for="password-confirm" class="d-block text-light-black">{{ __('Confirm Password') }}</label>--}}
-                    {{-- <div class="">--}}
-                    {{-- <input id="password-confirm" type="password" class="login-input form-control" name="password_confirmation" required autocomplete="new-password">--}}
-                    {{-- </div>--}}
-                    {{-- </div>--}}
                    <div class="d-flex mgt-40">
                         <a href="{{ route('login') }}" class="button button-transparent w-100">Login</a>
                         <button type="submit" class="button button-primary w-100 mgl-24">
@@ -82,4 +76,42 @@
     </div>
 </div>
 
+@endsection
+
+@section('js')
+    <script>
+        $('#registrationForm').validate({ // initialize the plugin
+            rules: {
+                name: {
+                  required: true,
+                },
+                email: {
+                    required: true,
+                    email: true,
+                },
+                company_name: {
+                    required: true,
+                },
+                password: {
+                    required: true,
+                    minlength: 6
+
+                },
+            },
+            messages: {
+                name: {
+                    required: "Your name is required",
+                },
+                email: {
+                    required: "Email is required",
+                },
+                company_name: {
+                    required: "Company Name is required",
+                },
+                password: {
+                    required: "Password is required",
+                },
+            }
+        });
+    </script>
 @endsection

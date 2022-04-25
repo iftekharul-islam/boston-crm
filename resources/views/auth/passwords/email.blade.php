@@ -6,7 +6,7 @@
 <div class="login ">
     <div class="d-flex login-row login-space flex-wrap">
         <div class="left-side col-md-6 bg-light-black">
-            <a href="#" class="back-btn text-white"><img class="mgr-8" src="{{ asset('img/arrow-left.png') }}" alt="boston logo"> Back</a>
+            <a href="{{ route('login') }}" class="back-btn text-white"><img class="mgr-8" src="{{ asset('img/arrow-left.png') }}" alt="boston logo"> Back</a>
             <div class="login-box" id="loginBox">
                 <div class="login-header fs-20 text-light-black mgb-32 fw-bold">{{ __('Reset Password') }}</div>
                 <p class="text-light-black mgb-32" style="max-width: 372px">You can set a recovery recovery email to be able to reset your password & restore access to your Boston Appraisal account.</p>

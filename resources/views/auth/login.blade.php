@@ -4,18 +4,21 @@
     <div class="login ">
         <div class="d-flex login-row login-space flex-wrap">
             <div class="left-side col-md-6 bg-light-black">
-                <a href="#" class="back-btn text-white"><img class="mgr-8" src="{{ asset('img/arrow-left.png') }}" alt="boston logo"> Back</a>
+                <a href="#" class="back-btn text-white"><img class="mgr-8" src="{{ asset('img/arrow-left.png') }}"
+                                                             alt="boston logo"> Back</a>
                 <div class="login-box">
                     <div class="login-header fs-20 text-light-black mgb-48 fw-bold">{{ __('Login') }}</div>
-                    <form method="POST" action="{{ route('login') }}">
+                    <form method="POST" action="{{ route('login') }}" id="loginForm">
                         @csrf
                         <div class="group mgb-40">
                             <label for="email" class="d-block text-light-black">{{ __('Email Address') }}</label>
                             <div class="">
-                                <input id="email" type="email" class="login-input form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}"  autocomplete="email" autofocus>
+                                <input id="email" type="email"
+                                       class="login-input form-control @error('email') is-invalid @enderror"
+                                       name="email" value="{{ old('email') }}" autocomplete="email" autofocus>
 
                                 @error('email')
-                                    <span class="invalid-feedback" role="alert">
+                                <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
@@ -27,13 +30,18 @@
 
                             <div class="">
                                 <div class="position-relative">
-                                    <input id="password" type="password" class="login-input form-control @error('password') is-invalid @enderror" name="password" autocomplete="current-password">
+                                    <input id="password" type="password"
+                                           class="login-input form-control @error('password') is-invalid @enderror"
+                                           name="password" autocomplete="password" autofocus>
                                     {{-- eye icon --}}
-                                    <span class="icon-eye icons show-password"><span class="path1"></span><span class="path2"></span></span>
-                                    <span class="icon-eye-slash icons hide-password"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span></span>
+                                    <span class="icon-eye icons show-password"><span class="path1"></span><span
+                                                class="path2"></span></span>
+                                    <span class="icon-eye-slash icons hide-password"><span class="path1"></span><span
+                                                class="path2"></span><span class="path3"></span><span
+                                                class="path4"></span><span class="path5"></span></span>
                                 </div>
                                 @error('password')
-                                    <span class="invalid-feedback" role="alert">
+                                <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
@@ -43,7 +51,8 @@
                         <div class="group mgb-40">
                             <div class="">
                                 <div class="checkbox-group">
-                                    <input class="checkbox-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
+                                    <input class="checkbox-input" type="checkbox" name="remember"
+                                           id="remember" {{ old('remember') ? 'checked' : '' }}>
 
                                     <label class="checkbox-label" for="remember">
                                         {{ __('Remember Me') }}
@@ -80,8 +89,29 @@
 
 @section('js')
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             $('.hide-password').hide();
+            $('#loginForm').validate({ // initialize the plugin
+                rules: {
+                    email: {
+                        required: true,
+                        email: true,
+                    },
+                    password: {
+                        required: true,
+                        minlength: 6
+
+                    },
+                },
+                messages: {
+                    email: {
+                        required: "Email is required",
+                    },
+                    password: {
+                        required: "Password is required",
+                    },
+                }
+            });
         });
 
         $('.show-password').on('click', function () {
