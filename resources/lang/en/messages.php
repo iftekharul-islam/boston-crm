@@ -18,7 +18,7 @@ return [
 	'user_view'      => [
 		'user_name'   => 'User Name',
 		'user_email'  => 'User Email',
-		'user_create' => 'User Create',
+		'user_create' => 'Add user',
 		'join_date'   => 'Join Date',
 		'role'        => 'Role',
 	],

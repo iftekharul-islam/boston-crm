@@ -146,6 +146,8 @@
 .login-input {
     height: 48px;
     border: 1px solid $light-black !important;
+    border-radius: 4px;
+    padding: 4px 16px;
     &:focus {
         outline: none;
         box-shadow: 0 0 0 0.25rem rgb(25 183 162 / 25%);
