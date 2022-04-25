@@ -1344,7 +1344,7 @@ html {
     border-color: $gray;
   }
   .primary-border {
-    border-color: $primary;
+    border-color: $primary !important;
   }
 
   .br-1 {
@@ -1444,7 +1444,9 @@ html {
   .text-accepted {
     color: $accepted;
   }
-
+  .text-due {
+    color: $due;
+  }
  // background
  .bg-light-black {
    background: $light-black;
@@ -1642,6 +1644,9 @@ html {
   .max-w-200 {
     max-width: 200px;
   }
+  .max-w-420 {
+    max-width: 420px;
+  }
   .max-w-500 {
     max-width: 500px;
   }
@@ -1670,13 +1675,19 @@ html {
     font-family: "averta-bold";
   }
   // font weight
-  .text-normal {
+  .text-normal,
+  .text-400 {
     font-weight: 400;
   }
-  .text-medium {
+  .text-medium,
+  .text-500 {
     font-weight: 500;
   }
-  .text-bold {
+  .text-600 {
+    font-weight: 600;
+  }
+  .text-bold,
+  .text-700 {
     font-weight: 700;
   }
   // 
@@ -1685,5 +1696,8 @@ html {
   }
   .inline-flex-center {
     @include inline-flex-center;
+  }
+  .underline {
+    text-decoration: underline !important;
   }
   /*# sourceMappingURL=utilities.css.map */

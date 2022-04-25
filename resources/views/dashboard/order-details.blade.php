@@ -11,181 +11,242 @@
             {{-- top bar --}}
             <div class="order-details-top d-flex flex-wrap align-items-start justify-content-between mgb-32">
                 <div class="left">
-                    <h2 class="fs-20 mgb-26">Order name:<span class="text-primary fw-bold">1453 Dorchester Ave, Boston, Ma 02122</span> </h2>
+                    <div class="d-flex list__group">
+                        <p class="mb-0 left-side">Order name</p>
+                        <span>:</span>
+                        <p class="right-side mb-0 fs-20 text-primary fw-bold">1453 Dorchester Ave, Boston, Ma 02122</p>
+                    </div>
                     <div class="d-flex list__group">
                         <p class="mb-0 left-side">Property address</p>
-                        <span></span>
-                        <p class="mb-0 right-side">1453 Dorchester Ave, Boston, Ma 02122</p>
+                        <span>:</span>
+                        <p class="mb-0 right-side text-600">1453 Dorchester Ave, Boston, Ma 02122</p>
+                    </div>
+                    <div class="d-flex list__group">
+                        <p class="mb-0 left-side">Due date</p>
+                        <span>:</span>
+                        <p class="mb-0 right-side text-600"><span class="text-due mx-0">Expire in 12 days</span></p>
+                    </div>
+                    <div class="d-flex list__group">
+                        <p class="mb-0 left-side">Order no</p>
+                        <span>:</span>
+                        <p class="mb-0 right-side text-600">145302122</p>
+                    </div>
+                    <div class="d-flex list__group">
+                        <p class="mb-0 left-side">Order receive date</p>
+                        <span>:</span>
+                        <p class="mb-0 right-side text-600">25 Jan 2022</p>
                     </div>
                 </div>
                 <div class="right d-flex align-items-center">
                     <p class="mb-0 text-light-black">Current status</p>
                     <div class="right-scedule position-relative mx-4">
                         <select name="" id="" class="w-100 dashboard-input">
-                            <option value="">Hello</option>
+                            <option value="">Not done</option>
                             <option value="">Hello</option>
                         </select>
                         <span class="icon-arrow-down bottom-arrow-icon"></span>
                     </div>
                     <div class="">
+                        <a href="" class="right-edit text-light-black">Schedule <span class="icon-calendar ms-3"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span></span></a>
+                    </div>
+                    <div class="mx-4">
                         <a href="" class="right-edit text-light-black">Edit order <span class="icon-edit ms-3"><span class="path1"></span><span class="path2"></span></span></a>
+                    </div>
+                    <div class="">
+                        <a href="" class="right-edit button-142 primary-border bg-primary text-white">Share order <span class="icon-share fs-20 ms-3"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span></span></a>
                     </div>
                 </div>
             </div>
             {{-- details --}}
             <div class="order-details-list row">
                 <div class="left col-lg-4">
-                    <div class="list__group">
-                        <p class="mb-0 left-side">Appraiser fee  </p>
-                        <span>:</span>
-                        <p class="right-side mb-0">$300.00</p>
-                    </div>
-                    <div class="list__group">
-                        <p class="mb-0 left-side">Appraiser fee (5%) </p>
-                        <span>:</span>
-                        <p class="right-side mb-0">$150.00</p>
-                    </div>
-                    <div class="list__group">
-                        <p class="mb-0 left-side">Order no</p>
-                        <span>:</span>
-                        <p class="right-side mb-0">451263582</p>
-                    </div>
-                    <div class="list__group">
-                        <p class="mb-0 left-side">Client order no </p>
-                        <span>:</span>
-                        <p class="right-side mb-0">Amrock</p>
-                    </div>
-                    <div class="list__group">
-                        <p class="mb-0 left-side">Order receive date</p>
-                        <span>:</span>
-                        <p class="right-side mb-0">25 Jan 2022</p>
-                    </div>
-                    <div class="list__group">
-                        <p class="mb-0 left-side">Appraiser type</p>
-                        <span>:</span>
-                        <p class="right-side mb-0">1004 Single family</p>
-                    </div>
-                    <div class="list__group">
-                        <p class="mb-0 left-side">Appraiser name</p>
-                        <span>:</span>
-                        <p class="right-side mb-0">Amrock</p>
-                    </div>
-                    <div class="list__group">
-                        <p class="mb-0 left-side">Loan order</p>
-                        <span>:</span>
-                        <p class="right-side mb-0">Amrock</p>
-                    </div>
-                    <div class="list__group">
-                        <p class="mb-0 left-side">Loan type </p>
-                        <span>:</span>
-                        <p class="right-side mb-0">Amrock</p>
-                    </div>
-                    <div class="list__group">
-                        <p class="mb-0 left-side">FHA case</p>
-                        <span>:</span>
-                        <p class="right-side mb-0">Amrock</p>
-                    </div>
-                    <div class="list__group">
-                        <p class="mb-0 left-side">Contact name</p>
-                        <span>:</span>
-                        <p class="right-side mb-0">Amrock</p>
-                    </div>
-                    <div class="list__group">
-                        <p class="mb-0 left-side">Phone</p>
-                        <span>:</span>
-                        <p class="right-side mb-0">Amrock</p>
-                    </div>
-                    <div class="list__group">
-                        <p class="mb-0 left-side">Email</p>
-                        <span>:</span>
-                        <p class="right-side mb-0">Amrock</p>
-                    </div>
-                    <div class="list__group">
-                        <p class="mb-0 left-side">Address</p>
-                        <span>:</span>
-                        <p class="right-side mb-0">Amrock</p>
-                    </div>
-                </div>
-                <div class="middle col-lg-4">
-                    <div class="list__group">
-                        <p class="mb-0 left-side">Company name  </p>
-                        <span>:</span>
-                        <p class="right-side mb-0">EStreet Appraisal Management
-                            Company, LLC</p>
-                    </div>
-                    <div class="list__group">
-                        <p class="mb-0 left-side">Contact name  </p>
-                        <span>:</span>
-                        <p class="right-side mb-0">$300.00</p>
-                    </div>
-                    <div class="list__group">
-                        <p class="mb-0 left-side">Company address  </p>
-                        <span>:</span>
-                        <p class="right-side mb-0">	6021 Wallace Rd Ext#202; Wexford
-                            Pennsylvania 15090</p>
-                    </div>
-                    <div class="list__group">
-                        <p class="mb-0 left-side">Lender/ Bank name  </p>
-                        <span>:</span>
-                        <p class="right-side mb-0">$300.00</p>
-                    </div>
-                    <div class="list__group">
-                        <p class="mb-0 left-side">Lender address  </p>
-                        <span>:</span>
-                        <p class="right-side mb-0">$300.00</p>
-                    </div>
-                    <div class="list__group">
-                        <p class="mb-0 left-side">Phone  </p>
-                        <span>:</span>
-                        <p class="right-side mb-0">$300.00</p>
-                    </div>
-                    <div class="list__group">
-                        <p class="mb-0 left-side">Email  </p>
-                        <span>:</span>
-                        <p class="right-side mb-0">$300.00</p>
-                    </div>
-
-                    <a href="" class="text-primary mgb-32 d-inline-block">Lender requirements</a>
-                    <div class="group">
-                        <label for="" class="d-block mb-2 dashboard-label">Assigned to </label>
-                        <div class="position-relative">
-                            <select name="" id="" class="dashboard-input w-100">
-                                <option value="">Loan</option>
-                                <option value="">Loan</option>
-                                <option value="">Loan</option>
-                            </select>
-                            <span class="icon-arrow-down bottom-arrow-icon"></span>
+                    {{-- contact --}}
+                    <div class="details-contact">
+                        <h4 class="details-header">Contact</h4>
+                        <div class="list__group">
+                            <p class="mb-0 left-side">Contact name</p>
+                            <span>:</span>
+                            <p class="right-side mb-0">Amrock</p>
+                        </div>
+                        <div class="list__group">
+                            <p class="mb-0 left-side">Phone</p>
+                            <span>:</span>
+                            <p class="right-side mb-0">Amrock</p>
+                        </div>
+                        <div class="list__group">
+                            <p class="mb-0 left-side">Email</p>
+                            <span>:</span>
+                            <p class="right-side mb-0">Amrock</p>
+                        </div>
+                        <div class="list__group">
+                            <p class="mb-0 left-side">Address</p>
+                            <span>:</span>
+                            <p class="right-side mb-0">Amrock</p>
                         </div>
                     </div>
+                    {{-- Appraisal details --}}
+                    <div class="details-contact mgt-32">
+                        <h4 class="details-header">Appraisal details</h4>
+
+                        <div class="list__group">
+                            <p class="mb-0 left-side">Appraiser type</p>
+                            <span>:</span>
+                            <p class="right-side mb-0">1004 Single family</p>
+                        </div>
+                        <div class="list__group">
+                            <p class="mb-0 left-side">Appraiser name</p>
+                            <span>:</span>
+                            <p class="right-side mb-0">Amrock</p>
+                        </div>
+                        <div class="list__group">
+                            <p class="mb-0 left-side">Order no</p>
+                            <span>:</span>
+                            <p class="right-side mb-0">451263582</p>
+                        </div>
+                        <div class="list__group">
+                            <p class="mb-0 left-side">Loan order</p>
+                            <span>:</span>
+                            <p class="right-side mb-0">Amrock</p>
+                        </div>
+                        <div class="list__group">
+                            <p class="mb-0 left-side">Loan type </p>
+                            <span>:</span>
+                            <p class="right-side mb-0">Amrock</p>
+                        </div>
+                        <div class="list__group">
+                            <p class="mb-0 left-side">Client order no </p>
+                            <span>:</span>
+                            <p class="right-side mb-0">Amrock</p>
+                        </div>
+                        <div class="list__group">
+                            <p class="mb-0 left-side">Order receive date</p>
+                            <span>:</span>
+                            <p class="right-side mb-0">25 Jan 2022</p>
+                        </div>
+                        <div class="list__group">
+                            <p class="mb-0 left-side">FHA case</p>
+                            <span>:</span>
+                            <p class="right-side mb-0">Amrock</p>
+                        </div>
+                        <div class="list__group">
+                            <p class="mb-0 left-side">Appraiser fee  </p>
+                            <span>:</span>
+                            <p class="right-side mb-0">$300.00</p>
+                        </div>
+                        <div class="list__group">
+                            <p class="mb-0 left-side">Appraiser fee (5%) </p>
+                            <span>:</span>
+                            <p class="right-side mb-0">$150.00</p>
+                        </div>
+                    </div>
+                    
                 </div>
+                {{-- col --}}
+                <div class="middle col-lg-4">
+                    {{-- contact --}}
+                    <div class="details-contact middle-details-contact">
+                        <h4 class="details-header">Borrower</h4>
+                        <div class="list__group">
+                            <p class="mb-0 left-side">Borrower name</p>
+                            <span>:</span>
+                            <p class="right-side mb-0">Amrock</p>
+                        </div>
+                        <div class="list__group">
+                            <p class="mb-0 left-side">Co-borrower name</p>
+                            <span>:</span>
+                            <p class="right-side mb-0">Amrock</p>
+                        </div>
+                        <div class="list__group">
+                            <p class="mb-0 left-side">Phone</p>
+                            <span>:</span>
+                            <p class="right-side mb-0">Amrock</p>
+                        </div>
+                        <div class="list__group">
+                            <p class="mb-0 left-side">Email</p>
+                            <span>:</span>
+                            <p class="right-side mb-0">Amrock</p>
+                        </div>
+                    </div>
+                    <div class="max-w-420">
+                        <div class="group">
+                            <label for="" class="d-block mb-2 dashboard-label">Type </label>
+                            <div class="position-relative">
+                                <select name="" id="" class="dashboard-input w-100">
+                                    <option value="">AMC</option>
+                                    <option value="">Loan</option>
+                                    <option value="">Loan</option>
+                                </select>
+                                <span class="icon-arrow-down bottom-arrow-icon"></span>
+                            </div>
+                        </div>
+                        <div class="group">
+                            <label for="" class="d-block mb-2 dashboard-label">Assigned to </label>
+                            <div class="position-relative">
+                                <select name="" id="" class="dashboard-input w-100">
+                                    <option value="">Select one</option>
+                                    <option value="">Loan</option>
+                                    <option value="">Loan</option>
+                                </select>
+                                <span class="icon-arrow-down bottom-arrow-icon"></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                {{-- col --}}
                 <div class="right col-lg-4">
-                    <div class="list__group">
-                        <p class="mb-0 left-side">Appraiser fee  </p>
-                        <span>:</span>
-                        <p class="right-side mb-0">$300.00</p>
+                    {{-- contact --}}
+                    <div class="details-contact">
+                        <h4 class="details-header">Company name</h4>
+                        <div class="list__group">
+                            <p class="mb-0 left-side">Borrower name</p>
+                            <span>:</span>
+                            <p class="right-side mb-0">EStreet Appraisal Management
+                                Company, LLC</p>
+                        </div>
+                        <div class="list__group">
+                            <p class="mb-0 left-side">Contact name</p>
+                            <span>:</span>
+                            <p class="right-side mb-0">Amrock</p>
+                        </div>
+                        <div class="list__group">
+                            <p class="mb-0 left-side">Company address</p>
+                            <span>:</span>
+                            <p class="right-side mb-0">	6021 Wallace Rd Ext#202; Wexford
+                                Pennsylvania 15090</p>
+                        </div>
+                        <div class="list__group">
+                            <p class="mb-0 left-side">Lender/ Bank name</p>
+                            <span>:</span>
+                            <p class="right-side mb-0">	6021 Wallace Rd Ext#202; Wexford
+                                Pennsylvania 15090</p>
+                        </div>
+                        <div class="list__group">
+                            <p class="mb-0 left-side">Lender address</p>
+                            <span>:</span>
+                            <p class="right-side mb-0">	6021 Wallace Rd Ext#202; Wexford
+                                Pennsylvania 15090</p>
+                        </div>
+                        <div class="list__group">
+                            <p class="mb-0 left-side">Phone</p>
+                            <span>:</span>
+                            <p class="right-side mb-0">Amrock</p>
+                        </div>
+                        <div class="list__group">
+                            <p class="mb-0 left-side">Email</p>
+                            <span>:</span>
+                            <p class="right-side mb-0">Amrock</p>
+                        </div>
                     </div>
-                    <div class="list__group">
-                        <p class="mb-0 left-side">Appraiser fee (5%) </p>
-                        <span>:</span>
-                        <p class="right-side mb-0">$150.00</p>
-                    </div>
-                    <div class="list__group">
-                        <p class="mb-0 left-side">Order no</p>
-                        <span>:</span>
-                        <p class="right-side mb-0">451263582</p>
-                    </div>
-                    <div class="list__group">
-                        <p class="mb-0 left-side">Client order no </p>
-                        <span>:</span>
-                        <p class="right-side mb-0">Amrock</p>
-                    </div>
+                    <a href="" class="text-primary mgb-32 d-inline-block">Lender requirements</a>
+                    
                 </div>
             </div>
             {{-- call log --}}
             <div class="col-log bg-platinum pd-20 br-8">
                 <h4 class="box-header mb-3">Call log</h4>
                 <div class="table-responsive">
-                    <table class="table table-hover">
+                    <table class="table table-hover mb-0">
                         <thead>
                             <tr>
                                 <th scope="col">SL</th>
@@ -235,8 +296,65 @@
                     </table>
                 </div>
             </div>
-            {{-- order tabs --}}
-            <div class="d-flex order-tabs">
+
+            {{-- order map --}}
+            <div class="order-map">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <h4 class="box-header mb-3">Issues/ Queries/ tickets</h4>
+                        <div class="d-flex">
+                            <textarea name="" id="" rows="2" class="flex-grow-1 bdr-1 gray-border br-4 h-64 mgr-14"></textarea>
+                            <button class="bg-primary w-64 bdr-1 primary-border br-4 text-white inline-flex-center">Post</button>
+                        </div>
+                        {{--  --}}
+                       <div class=" queries-row mgt-24" >
+                            <div class="queries-box position-relative pending">
+                                <span class="badges pending-badges">Pending</span>
+                                <p class="text-gray text-end mgb-12">Today 12:10am</p>
+                                <p class="text-light-black">He made payment but didnt get confirmation yet</p>
+                                <div class="d-flex justify-content-between">
+                                    <p class="text-gray mb-0">Assigned to : <span class="text-light-black">Technical team</span></p>
+                                    <a href="#" class="share-box">
+                                        <span class="icon-eye"><span class="path1"></span><span class="path2"></span></span>                                  
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="queries-box position-relative pending" >
+                                <span class="badges pending-badges">Pending</span>
+                                <p class="text-gray text-end mgb-12">Today 12:10am</p>
+                                <p class="text-light-black">He made payment but didnt get confirmation yet</p>
+                                <div class="d-flex justify-content-between">
+                                    <p class="text-gray mb-0">Assigned to : <span class="text-light-black">Technical team</span></p>
+                                    <a href="#" class="share-box">
+                                        <span class="icon-eye"><span class="path1"></span><span class="path2"></span></span>                                   
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="queries-box position-relative solved">
+                                <span class="badges solved-badges">Pending</span>
+                                <p class="text-gray text-end mgb-12">Today 12:10am</p>
+                                <p class="text-light-black">He made payment but didnt get confirmation yet</p>
+                                <div class="d-flex justify-content-between">
+                                    <p class="text-gray mb-0">Assigned to : <span class="text-light-black">Technical team</span></p>
+                                    <a href="#" class="share-box">
+                                        <span class="icon-eye"><span class="path1"></span><span class="path2"></span></span>                                  
+                                    </a>
+                                </div>
+                            </div>
+                       </div>
+
+                        
+                    </div>
+                    <div class="col-lg-6">
+                        <h4 class="box-header mb-3">Order messages</h4>
+                        <div class="map">
+                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d423286.2817730339!2d-118.69260188474334!3d34.02015975940636!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80c2c75ddc27da13%3A0xe22fdf6f254608f4!2sLos%20Angeles%2C%20CA%2C%20USA!5e0!3m2!1sen!2sbd!4v1650253099882!5m2!1sen!2sbd" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+             {{-- order tabs --}}
+             <div class="d-flex order-tabs">
                 {{-- tabs button --}}
                 <div class="order-tabs-menu nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                   <button class="nav-link " id="v-pills-order-tab" data-bs-toggle="pill" data-bs-target="#v-pills-order" type="button" role="tab" aria-controls="v-pills-order" aria-selected="true">Orders <span class="icon-arrow-down ms-auto"></span></button>
@@ -310,42 +428,6 @@
                   <div class="tab-pane fade" id="v-pills-revision" role="tabpanel" aria-labelledby="v-pills-revision-tab">...</div>
                 </div>
             </div>
-
-            {{-- order map --}}
-            <div class="order-map">
-                <div class="row">
-                    <div class="col-lg-6">
-                        <h4 class="box-header mb-3">Order messages</h4>
-                        <div class="d-flex flex-wrap order-map-checkbox mb-3">
-                            <div class="group checkbox-group dark-checkbox position-relative">
-                                <input type="checkbox" class=" checkbox-input w-100">
-                                <label for="" class="checkbox-label">Email alert</label>
-                            </div>
-                            <div class="group checkbox-group dark-checkbox position-relative">
-                                <input type="checkbox" class=" checkbox-input w-100">
-                                <label for="" class="checkbox-label">Call log</label>
-                            </div>
-                            <div class="group checkbox-group dark-checkbox position-relative">
-                                <input type="checkbox" class=" checkbox-input w-100">
-                                <label for="" class="checkbox-label">Email to borrower</label>
-                            </div>
-                            <div class="group checkbox-group dark-checkbox position-relative">
-                                <input type="checkbox" class=" checkbox-input w-100">
-                                <label for="" class="checkbox-label">Show to client</label>
-                            </div>
-
-                        </div>
-                        {{-- chat box --}}
-                        <h2 class="text-center ">Chat here</h2>
-                    </div>
-                    <div class="col-lg-6">
-                        <h4 class="box-header mb-3">Order messages</h4>
-                        <div class="map">
-                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d423286.2817730339!2d-118.69260188474334!3d34.02015975940636!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80c2c75ddc27da13%3A0xe22fdf6f254608f4!2sLos%20Angeles%2C%20CA%2C%20USA!5e0!3m2!1sen!2sbd!4v1650253099882!5m2!1sen!2sbd" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                        </div>
-                    </div>
-                </div>
-            </div>
             {{-- document  --}}
             <div class="document">
                 <div class="row mb-2">
@@ -406,13 +488,13 @@
                 </div>
             </div>
             {{-- invoice --}}
-            <div class="invoice invoice-border">
+            <div class="invoice">
                 <div class="row">
-                    <div class="col-lg-6">
+                    <div class="col-lg-6 pe-3">
                         <div class="invoice-table mgb-48">
                             <div class="d-flex justify-content-between">
                                 <h4 class="box-header mb-0">Invoices</h4>
-                                <a href="#" class="text-light-black underline"><span class="icon-plus me-2"></span> Create invoice</a>
+                                <a href="#" class="text-primary add-border"><span class="icon-plus me-2"></span> Create invoice</a>
                             </div>
                             <div class="table-responsive">
                                 <table class="table table-hover mb-0">
@@ -435,70 +517,38 @@
                                 </table>
                             </div>
                         </div>
-
-                        <div class="comments-table mgb-48">
-                            <div class="d-flex justify-content-between">
-                                <h4 class="box-header mb-0">Comments</h4>
-                            </div>
-                            <div class="table-responsive">
-                                <table class="table table-hover mb-0">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">SL</th>
-                                            <th scope="col">Date & time</th>
-                                            <th scope="col">Status</th>
-                                            <th scope="col">Action</th>
-                                            <th scope="col">Comment</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>01, Jan, 2022</td>
-                                            <td>On hold</td>
-                                            <td>Hold</td>
-                                            <td>
-                                                <a href="" class="max-w-200 d-inline-block text-accepted">
-                                                    Waiting fo...
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                        <div class="comments-table">
-                            <div class="d-flex justify-content-between">
-                                <h4 class="box-header mb-0">Re-Schedule / Delete History</h4>
-                            </div>
-                            <div class="table-responsive">
-                                <table class="table table-hover mb-0">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">SL</th>
-                                            <th scope="col">Date & time</th>
-                                            <th scope="col">Status</th>
-                                            <th scope="col">Reason</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>01, Jan, 2022</td>
-                                            <td>	Schedule Removed</td>
-                                            <td><a href="#" class="max-w-200 d-inline-block text-accepted">
-                                                Initially appointment
-                                                12/04/2020 at 12:00 pm. Orde...</a></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
                     </div>
+                    <div class="col-lg-6 ps-3">
+                        <h4 class="box-header mb-3">Order messages</h4>
+                        <div class="d-flex flex-wrap order-map-checkbox mb-3">
+                            <div class="group checkbox-group dark-checkbox position-relative">
+                                <input type="checkbox" class=" checkbox-input w-100">
+                                <label for="" class="checkbox-label">Email alert</label>
+                            </div>
+                            <div class="group checkbox-group dark-checkbox position-relative">
+                                <input type="checkbox" class=" checkbox-input w-100">
+                                <label for="" class="checkbox-label">Call log</label>
+                            </div>
+                            <div class="group checkbox-group dark-checkbox position-relative">
+                                <input type="checkbox" class=" checkbox-input w-100">
+                                <label for="" class="checkbox-label">Email to borrower</label>
+                            </div>
+                            <div class="group checkbox-group dark-checkbox position-relative">
+                                <input type="checkbox" class=" checkbox-input w-100">
+                                <label for="" class="checkbox-label">Show to client</label>
+                            </div>
+                        </div>
+                        {{-- chat box --}}
+                        <h2 class="text-center ">Chat here</h2>
+                       
+                    </div>
+                </div>
+            </div>
+            {{-- queries section --}}
+            <div class="queries-section mgt-24">
+                <div class="row">
                     <div class="col-lg-6">
-                        <h4 class="box-header mgb-20">Invoices</h4>
+                        <h4 class="box-header mgb-20">Activity feed</h4>
                         <div class="feed">
                             <p class="feed-list text-light-black">Order Added - Nowid - 08-20-2020 10:00 AM</p>
                             <p class="feed-list text-light-black">Called the Borrower - Ryan - 08-20-2020 11:00 AM</p>
@@ -508,63 +558,7 @@
                             <p class="feed-list text-light-black">Called the Borrower - Ryan - 08-20-2020 11:00 AM</p>
                         </div>
                     </div>
-                </div>
-            </div>
-            {{-- queries section --}}
-            <div class="queries-section mgt-24">
-                <div class="row">
                     <div class="col-lg-6">
-                        <h4 class="box-header mgb-20">Invoices</h4>
-                        <a href="#" class="bdr-1 gray-border br-4 px-4 py-2 inline-flex-center text-light-black">Schedule now</a>
-                    </div>
-                    <div class="col-lg-6">
-                        <h4 class="box-header mgb-20">Invoices</h4>
-                        <div class="d-flex">
-                            <textarea name="" id="" rows="2" class="flex-grow-1 bdr-1 gray-border br-4 h-64 mgr-14"></textarea>
-                            <button class="bg-primary w-64 bdr-1 primary-border br-4 text-white inline-flex-center">Post</button>
-                        </div>
-                        {{--  --}}
-                       <div class=" queries-row mgt-24" >
-                            <div class="queries-box position-relative pending">
-                                <span class="badges pending-badges">Pending</span>
-                                <p class="text-gray text-end mgb-12">Today 12:10am</p>
-                                <p class="text-light-black">He made payment but didnt get confirmation yet</p>
-                                <div class="d-flex justify-content-between">
-                                    <p class="text-gray mb-0">Assigned to : <span class="text-light-black">Technical team</span></p>
-                                    <a href="#" class="share-box">
-                                        <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M8.9569 0.833252H4.9319C4.59023 0.833252 4.3069 1.11659 4.3069 1.45825C4.3069 1.79992 4.59023 2.08325 4.9319 2.08325H7.44857L1.01523 8.51659C0.773568 8.75825 0.773568 9.15825 1.01523 9.39992C1.14023 9.52492 1.29857 9.58325 1.4569 9.58325C1.61523 9.58325 1.77357 9.52492 1.89857 9.39992L8.3319 2.96659V5.48325C8.3319 5.82492 8.61524 6.10825 8.9569 6.10825C9.29857 6.10825 9.5819 5.82492 9.5819 5.48325V1.45825C9.5819 1.11659 9.29857 0.833252 8.9569 0.833252Z" fill="#F97373"/>
-                                        </svg>                                    
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="queries-box position-relative pending" >
-                                <span class="badges pending-badges">Pending</span>
-                                <p class="text-gray text-end mgb-12">Today 12:10am</p>
-                                <p class="text-light-black">He made payment but didnt get confirmation yet</p>
-                                <div class="d-flex justify-content-between">
-                                    <p class="text-gray mb-0">Assigned to : <span class="text-light-black">Technical team</span></p>
-                                    <a href="#" class="share-box">
-                                        <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M8.9569 0.833252H4.9319C4.59023 0.833252 4.3069 1.11659 4.3069 1.45825C4.3069 1.79992 4.59023 2.08325 4.9319 2.08325H7.44857L1.01523 8.51659C0.773568 8.75825 0.773568 9.15825 1.01523 9.39992C1.14023 9.52492 1.29857 9.58325 1.4569 9.58325C1.61523 9.58325 1.77357 9.52492 1.89857 9.39992L8.3319 2.96659V5.48325C8.3319 5.82492 8.61524 6.10825 8.9569 6.10825C9.29857 6.10825 9.5819 5.82492 9.5819 5.48325V1.45825C9.5819 1.11659 9.29857 0.833252 8.9569 0.833252Z" fill="#F97373"/>
-                                        </svg>                                    
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="queries-box position-relative solved">
-                                <span class="badges solved-badges">Pending</span>
-                                <p class="text-gray text-end mgb-12">Today 12:10am</p>
-                                <p class="text-light-black">He made payment but didnt get confirmation yet</p>
-                                <div class="d-flex justify-content-between">
-                                    <p class="text-gray mb-0">Assigned to : <span class="text-light-black">Technical team</span></p>
-                                    <a href="#" class="share-box">
-                                        <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M8.9569 0.833252H4.9319C4.59023 0.833252 4.3069 1.11659 4.3069 1.45825C4.3069 1.79992 4.59023 2.08325 4.9319 2.08325H7.44857L1.01523 8.51659C0.773568 8.75825 0.773568 9.15825 1.01523 9.39992C1.14023 9.52492 1.29857 9.58325 1.4569 9.58325C1.61523 9.58325 1.77357 9.52492 1.89857 9.39992L8.3319 2.96659V5.48325C8.3319 5.82492 8.61524 6.10825 8.9569 6.10825C9.29857 6.10825 9.5819 5.82492 9.5819 5.48325V1.45825C9.5819 1.11659 9.29857 0.833252 8.9569 0.833252Z" fill="#F97373"/>
-                                        </svg>                                    
-                                    </a>
-                                </div>
-                            </div>
-                       </div>
                     </div>
                 </div>
             </div>
