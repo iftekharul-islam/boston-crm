@@ -35,11 +35,11 @@
     @endif
     <div class="dashboard-main__right flex-grow-1 bg-platinum">
         @if(auth()->check())
-        <!-- Header -->
-        <header class="dashboard-header d-flex align-items-center justify-content-between bg-white">
-            <div class="dashboard-header__left">
-                <p class="text-light-black text-medium mb-0 fs-20">{{ config()->get('app.name') }}</p>
-            </div>
+            <!-- Header -->
+            <header class="dashboard-header d-flex align-items-center justify-content-between bg-white">
+                <div class="dashboard-header__left">
+                    <p class="text-light-black text-medium mb-0 fs-20">{{ config()->get('app.name') }}</p>
+                </div>
 
                 <div class="dashboard-header__right d-flex align-items-center">
                     <div class="d-flex align-items-center">
@@ -76,7 +76,7 @@
                     </div>
                 </div>
 
-        </header>
+            </header>
         @endif
         @yield('content')
     </div>
@@ -96,7 +96,7 @@
         sidebarToggle.classList.toggle("sidebar-collapse");
     }
 </script>
-@stack('scripts')
-@yield('scripts')
+@stack('js')
+@yield('js')
 </body>
 </html>

@@ -46,7 +46,7 @@
     </div>
 @endsection
 
-@section('scripts')
+@section('js')
     <script>
         function deleteConfirmation(id) {
             swal({

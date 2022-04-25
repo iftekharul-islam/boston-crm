@@ -1,8 +1,5 @@
 @extends('layouts.app')
-{{--@section('crm-init')--}}
-{{--    <a href="{{ route('roles.index') }}">Role</a>--}}
-{{--    <init-app></init-app>--}}
-{{--@endsection--}}
+
 @section('content')
 <div class="bg-secondary">
     <span class="hello-icon">hello icon</span>

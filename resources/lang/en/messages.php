@@ -5,6 +5,7 @@ return [
 	'status'         => 'Status',
 	'save'           => 'Save',
 	'edit'           => 'Edit',
+	'update'         => 'Update',
 	'registration'   => [
 		'',
 	],

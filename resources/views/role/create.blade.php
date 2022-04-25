@@ -22,7 +22,8 @@
                         <div class="d-flex">
                             @foreach(['view', 'create', 'update', 'delete'] as $permission_name)
                                 <div class="form-group form-check">
-                                    <input type="checkbox" name="permissions[]" data-name="{{ $permission_name . '.' . $permission }}"
+                                    <input type="checkbox" name="permissions[]"
+                                           data-name="{{ $permission_name . '.' . $permission }}"
                                            data-model-name="{{ $permission }}"
                                            class="form-check-input check-data" value="{{ $permission_name . '.' . $permission }}"
                                            id="permission-{{ $permission_name. '-' . $permission }}">
