@@ -71,6 +71,7 @@ class RoleController extends Controller
 				 $this->service->createRole( name: $request->get( 'name' ),
 					 description: $request->get( 'description' ) )->getPermissions( $request->get( 'permissions' ) )->attachSelectedPermissions()->setCompany( $company )->attachRole();
 			} );
+			
 			return response()->json( [ 'success' => true, 'message' => 'Successfully create role' ] );
 	 }
 	 
@@ -107,16 +108,17 @@ class RoleController extends Controller
 		* @param RoleUpdateRequest $request
 		* @param int               $id
 		*
-		* @return RedirectResponse
+		* @return JsonResponse
 		*/
-	 public function update(RoleUpdateRequest $request, int $id): RedirectResponse
+	 public function update(RoleUpdateRequest $request, int $id): JsonResponse
 	 {
 			$role = $this->service->getRoleById( $id );
 			DB::transaction( function () use ($request, $role) {
-				 $this->service->setRole( $role )->updateRole( $request->get( 'name' ) )->getPermissions( $request->get( 'permissions' ) )->attachSelectedPermissions();
+				 $this->service->setRole( $role )->updateRole( name: $request->get( 'name' ),
+					 description: $request->get( 'description' ) )->getPermissions( $request->get( 'permissions', [] ) )->attachSelectedPermissions();
 			} );
 			
-			return redirect()->route( 'roles.index' );
+			return response()->json( [ 'success' => true, 'message' => 'Successfully create role' ] );
 	 }
 	 
 	 /**

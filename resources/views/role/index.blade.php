@@ -66,10 +66,12 @@
                                       data-id="{{ $role->id }}"
                                       data-action="{{ route('roles.destroy',$role->id) }}"
                                       onclick="deleteConfirmation({{$role->id}})">
-                                    <span class="icon-trash fs-20"><span class="path1"></span><span class="path2"></span><span
-                                    class="path3"></span><span class="path4"></span></span>
+                                    <span class="icon-trash fs-20"><span class="path1"></span><span
+                                                class="path2"></span><span
+                                                class="path3"></span><span class="path4"></span></span>
                                 </span>
-                                <button class="edit-btn h-32 inline-flex-center" onclick="editRoleView({{ $role->id }});">
+                                <button class="edit-btn h-32 inline-flex-center"
+                                        onclick="editRoleView({{ $role->id }});">
                                     {{ __('messages.edit') }}
                                     <span class="icon-edit ms-3">
                                     <span class="path1"></span>
@@ -98,44 +100,44 @@
                         </div>
                     @endforeach
                 </div>
-                <form id="updateRole">
-                    <div class="role-box role-edit-{{ $role->id }} d-none">
-                        <div class="d-flex align-items-start justify-content-between">
-                            <div class="max-w-424 mgb-32">
-                                <div class="mgb-20">
-                                    <input type="text" id="updateName" class="dashboard-input w-100" value="{{ $role->name }}"
-                                           placeholder="Name here...">
-                                    <p class="text-danger updateNameErrorMsg"></p>
-                                </div>
-                                <textarea id="updateDescription" class="dashboard-textarea w-100" id="" cols="30" rows="2"
-                                          placeholder="Description here..."> {{ $role->description }} </textarea>
-                                <p class="text-danger updateDescriptionErrorMsg"></p>
+                <div class="role-box role-edit-{{ $role->id }} d-none">
+                    <div class="d-flex align-items-start justify-content-between">
+                        <div class="max-w-424 mgb-32">
+                            <div class="mgb-20">
+                                <input type="text" id="updateName{{ $role->id }}" class="dashboard-input w-100"
+                                       value="{{ $role->name }}"
+                                       placeholder="Name here...">
+                                <p class="text-danger updateNameErrorMsg{{ $role->id }}"></p>
                             </div>
-                        </div>
-                        @foreach($permissions as $permission)
-                            <div class="d-flex permission-check flex-wrap">
-                                <p class="mb-0 fw-bold text-light-black permission"><span
-                                            class="text-capitalize">{{ $permission }}</span>
-                                    {{ __('messages.role_view.permission') }}</p>
-                                @foreach(['view', 'create', 'update', 'delete'] as $permission_type)
-                                    <div class="checkbox-group">
-                                        <input type="checkbox" class="checkbox-input edit-data-{{ $role->id }}"
-                                               name="update_permission_{{ $role->id }}"
-                                               data-name="{{ $permission_type . '.' . $permission }}"
-                                               data-model-name="{{ $permission }}"
-                                               value="{{ $permission_type . '.' . $permission }}"
-                                               @if(in_array($permission_type. '.' . $permission, $permission_list)) checked
-                                                @endif>
-                                        <label for="" class="checkbox-label text-capitalize">{{ $permission_type }}</label>
-                                    </div>
-                                @endforeach
-                            </div>
-                        @endforeach
-                        <div class="text-end">
-                            <button class="button button-primary h-32 py-1 px-4">{{ __('messages.update') }}</button>
+                            <textarea id="updateDescription{{ $role->id }}" class="dashboard-textarea w-100" id="" cols="30"
+                                      rows="2"
+                                      placeholder="Description here..."> {{ $role->description }} </textarea>
+                            <p class="text-danger updateDescriptionErrorMsg{{ $role->id }}"></p>
                         </div>
                     </div>
-                </form>
+                    @foreach($permissions as $permission)
+                        <div class="d-flex permission-check flex-wrap">
+                            <p class="mb-0 fw-bold text-light-black permission"><span
+                                        class="text-capitalize">{{ $permission }}</span>
+                                {{ __('messages.role_view.permission') }}</p>
+                            @foreach(['view', 'create', 'update', 'delete'] as $permission_type)
+                                <div class="checkbox-group">
+                                    <input type="checkbox" class="checkbox-input check-data edit-data-{{ $role->id }}"
+                                           name="update_permission_{{ $role->id }}"
+                                           data-name="{{ $permission_type . '.' . $permission }}"
+                                           data-model-name="{{ $permission }}"
+                                           value="{{ $permission_type . '.' . $permission }}"
+                                           @if(in_array($permission_type. '.' . $permission, $permission_list)) checked @endif>
+                                    <label for=""
+                                           class="checkbox-label text-capitalize">{{ $permission_type }}</label>
+                                </div>
+                            @endforeach
+                        </div>
+                    @endforeach
+                    <div class="text-end">
+                        <button type="button" class="button button-primary h-32 py-1 px-4" onclick="updateRole({{ $role->id }})">{{ __('messages.update') }}</button>
+                    </div>
+                </div>
             @endforeach
         </div>
     </div>
@@ -182,21 +184,23 @@
                 },
             });
         });
-        $('.updateRole').on('submit', function (e) {
-            $('.updateNameErrorMsg').text('');
-            $('.updateDescriptionErrorMsg').text('');
-            e.preventDefault();
 
-            let role_name = $('#updateName').val();
-            let role_description = $('#updateDescription').val();
+        function updateRole(role_id) {
+            $('.updateNameErrorMsg' + role_id).text('');
+            $('.updateDescriptionErrorMsg' + role_id).text('');
+
+            let role_name = $('#updateName' + role_id).val();
+            let role_description = $('#updateDescription' + role_id).val();
             let role_permissions = [];
-            $("input:checkbox[name='update_permission']:checked").each(function () {
+            $("input:checkbox[name='update_permission_" + role_id +  "']:checked").each(function () {
                 role_permissions.push($(this).val());
             });
+            let url = '{{ route("roles.update", ":id") }}';
+            url = url.replace(':id', role_id);
 
             $.ajax({
-                url: "{{ route('roles.store') }}",
-                type: "POST",
+                url: url,
+                type: "PUT",
                 data: {
                     "_token": "{{ csrf_token() }}",
                     name: role_name,
@@ -208,11 +212,11 @@
                 },
                 error: function (response) {
                     let errors = response.responseJSON.errors;
-                    $('.createNameErrorMsg').text(errors.name);
-                    $('.createDescriptionErrorMsg').text(errors.description);
+                    $('.updateNameErrorMsg' + role_id).text(errors.name);
+                    $('.updateDescriptionErrorMsg' + role_id).text(errors.description);
                 },
             });
-        });
+        }
 
         function deleteConfirmation(id) {
             swal({

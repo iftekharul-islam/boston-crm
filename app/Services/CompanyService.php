@@ -130,9 +130,9 @@ class CompanyService
 	 public function createRole($name = 'admin', $description = ''): CompanyService
 	 {
 			$this->role = Role::query()->create( [
-				'name' => $name,
+				'name'        => $name,
 				'description' => $description,
-				'guard_name' => 'web'
+				'guard_name'  => 'web',
 			] );
 			
 			return $this;
@@ -140,12 +140,13 @@ class CompanyService
 	 
 	 /**
 		* @param string $name
+		* @param string $description
 		*
 		* @return $this
 		*/
-	 public function updateRole(string $name): CompanyService
+	 public function updateRole(string $name, string $description = ''): CompanyService
 	 {
-			$this->role->update( [ 'name' => $name ] );
+			$this->role->update( [ 'name' => $name, 'description' => $description ] );
 			
 			return $this;
 	 }
