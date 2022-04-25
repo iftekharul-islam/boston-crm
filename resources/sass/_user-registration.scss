@@ -48,3 +48,24 @@
         border-radius: 0px 0px 8px 8px;
     }
 }
+
+.role-name {
+    width: 80px;
+    margin-right: 16px;
+}
+.modal {
+    .user-dialog {
+        max-width: 364px;
+    }
+    .user-content {
+        border-radius: 4px;
+        padding: 20px 16px;
+    }
+    .dashboard-input,
+    select {
+        border: 1px solid $gray;
+    }
+}
+.user-modal {
+    background: #2f415ebf;
+}

@@ -139,23 +139,19 @@
 }
 .icon-trash .path1:before {
   content: "\e964";
-  color: rgb(47, 65, 94);
 }
 .icon-trash .path2:before {
   content: "\e965";
   margin-left: -1em;
-  color: rgb(47, 65, 94);
   opacity: 0.3991;
 }
 .icon-trash .path3:before {
   content: "\e966";
   margin-left: -1em;
-  color: rgb(47, 65, 94);
 }
 .icon-trash .path4:before {
   content: "\e967";
   margin-left: -1em;
-  color: rgb(47, 65, 94);
 }
 .icon-arrow-down1:before {
   content: "\e968";
