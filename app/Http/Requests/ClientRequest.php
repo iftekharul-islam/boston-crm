@@ -13,8 +13,8 @@ class ClientRequest extends FormRequest {
     public function rules(): array {
         return [
             "name"                   => "required",
-            "email"                  => "required",
-            "phone"                  => "required",
+            "email"                  => "required|unique:clients,email",
+            "phone"                  => "required|unique:clients",
             "client_type"            => "required",
             "address"                => "required_if:client_type,==,lender",
             "city"                   => "required_if:client_type,==,lender",

@@ -9,6 +9,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\OrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,8 +53,13 @@ Route::group( [ 'middleware' => [ 'auth:sanctum' ] ], function () {
         [ RoleController::class, 'update' ] )->middleware( 'role_permission:update.role' )->name( 'roles.update' );
     Route::post( 'roles/{id}',
         [ RoleController::class, 'destroy' ] )->middleware( 'role_permission:delete.role' )->name( 'roles.destroy' );
+
+    //client
     Route::resource('clients', ClientController::class);
     Route::get('get-clients/{type}',[ClientController::class,'getClientsByType']);
+
+    //order
+    Route::resource('orders',OrderController::class);
 } );
 Auth::routes();
 Route::redirect('/', '/login');
