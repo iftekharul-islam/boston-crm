@@ -38,11 +38,11 @@
             <td>{{ client.city }}</td>
             <td>{{ client.address }}</td>
             <td>
-              <a class="eye-btn text-light-black" @click.prevent="showClientDetails(client.id)">
-                <span class="icon-eye"><span class="path1"></span><span class="path2"></span></span>
+              <a class="eye-btn text-light-black cursor-pointer me-3" @click.prevent="showClientDetails(client.id)">
+                <span class="icon-eye fs-20"><span class="path1"></span><span class="path2"></span></span>
               </a>
-              <a class="eye-btn text-light-black" @click.prevent="deleteClient(client.id)">
-                <span class="icon-eye"><span class="path1"></span><span class="path2"></span></span>
+              <a class="eye-btn text-light-black cursor-pointer" @click.prevent="deleteClient(client.id)">
+                <span class="icon-trash fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></span>
               </a>
             </td>
           </tr>
