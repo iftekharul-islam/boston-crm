@@ -65,13 +65,23 @@
     padding: 3px 16px;
     color: #9B9EB4;
     border-radius: 4px;
+    &:focus {
+        outline: none;
+        box-shadow: 0 0 0 0.25rem rgb(25 183 162 / 25%);
+        border: 1px solid $primary;
+    }
 }
 .dashboard-textarea {
     background: $white;
     border: 1px solid $white;
-    padding: 3px 16px;
+    padding: 8px 16px 3px 16px;
     color: #9B9EB4;
     border-radius: 4px;
+    &:focus {
+        outline: none;
+        box-shadow: 0 0 0 0.25rem rgb(25 183 162 / 25%);
+        border: 1px solid $primary;
+    }
 }
 select::-ms-expand {
     display: none;

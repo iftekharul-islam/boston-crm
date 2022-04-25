@@ -12,7 +12,7 @@
                         <div class="group mgb-40">
                             <label for="email" class="d-block text-light-black">{{ __('Email Address') }}</label>
                             <div class="">
-                                <input id="email" type="email" class="login-input form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
+                                <input id="email" type="email" class="login-input form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}"  autocomplete="email" autofocus>
 
                                 @error('email')
                                     <span class="invalid-feedback" role="alert">
@@ -27,7 +27,7 @@
 
                             <div class="">
                                 <div class="position-relative">
-                                    <input id="password" type="password" class="login-input form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
+                                    <input id="password" type="password" class="login-input form-control @error('password') is-invalid @enderror" name="password" autocomplete="current-password">
                                     {{-- eye icon --}}
                                     <span class="icon-eye icons show-password"><span class="path1"></span><span class="path2"></span></span>
                                     <span class="icon-eye-slash icons hide-password"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span></span>

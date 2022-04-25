@@ -146,4 +146,24 @@
 .login-input {
     height: 48px;
     border: 1px solid $light-black !important;
+    &:focus {
+        outline: none;
+        box-shadow: 0 0 0 0.25rem rgb(25 183 162 / 25%);
+        border: 1px solid $primary !important;
+    }
+}
+
+.is-invalid {
+    border: 1px solid $due !important;
+    background: $danger-light !important;
+    &:focus {
+        border: 1px solid $danger !important;
+    }
+}
+.invalid-feedback {
+    color: $due !important;
+    font-size: 16px !important;
+    strong {
+        font-weight: normal;
+    }
 }
