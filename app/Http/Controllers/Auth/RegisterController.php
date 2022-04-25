@@ -5,20 +5,17 @@ namespace App\Http\Controllers\Auth;
 use App\Actions\Fortify\PasswordValidationRules;
 use App\Events\UserCreatedEvent;
 use App\Events\UserMailVerificationEvent;
-use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Notifications\NewUserCreateNotification;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
 use App\Repositories\CompanyRepository;
-use App\Transformers\UserTransformer;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Fortify\Rules\Password;
-use League\Fractal\Serializer\ArraySerializer;
 
 class RegisterController extends Controller {
     use PasswordValidationRules;
