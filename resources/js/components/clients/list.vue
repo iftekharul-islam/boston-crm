@@ -11,6 +11,7 @@
           </template>
         </div>
         <div class="right d-flex">
+          <img v-if="loading" height="50px" width="50px" style="margin-right: 200px;" src="/img/loader.gif" class="flex-center"  alt="">
           <input type="text" placeholder="Search ..." class="px-3 bdr-1 br-4 gray-border me-3">
           <a :href="this.createRoute" class="button button-primary">Add clients</a>
         </div>
@@ -88,6 +89,7 @@ export default {
       isActive: false,
       currentType: 'all',
       page: 1,
+      loading: false
     }
   },
   created() {
@@ -97,15 +99,17 @@ export default {
     getType(type) {
       this.currentType = type
       this.isActive = type
+      this.page = 1
       this.getClients()
     },
     getClients(page = 1) {
-      get('get-clients/' + this.currentType + '?page=' + page)
-          .then(res => {
-            console.log(res.data)
-          }).catch(err => {
-            console.log(err)
-      })
+      // get('get-clients/' + this.currentType + '?page=' + page)
+      //     .then(res => {
+      //       console.log(res.data)
+      //     }).catch(err => {
+      //       console.log(err)
+      // })
+      this.loading = true;
       axios.get('get-clients/' + this.currentType + '?page=' + page)
           .then(res => {
             this.clients = res.data.data.clients
@@ -115,21 +119,20 @@ export default {
             this.types[2].count = res.data.data.lender
           }).catch(err => {
         console.log(err)
-      })
+      }).finally(() => this.loading = false);
     },
     showClientDetails(clientId){
       window.location.href = this.showRoute + '/' + clientId
     },
     deleteClient(clientId){
       this.$swal({
-        title: 'Are you sure you want to delete the client?',
-        text: 'You can\'t revert your action',
-        type: 'warning',
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
         showCancelButton: true,
-        confirmButtonText: 'Yes Delete it!',
-        cancelButtonText: 'No, Keep it!',
-        showCloseButton: true,
-        showLoaderOnConfirm: true
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
       }).then((result) => {
         if(result.value) {
           axios.delete(this.deleteRoute + '/' + clientId)
@@ -142,8 +145,6 @@ export default {
           setTimeout(function (){
             location.reload()
           },2000);
-        } else {
-          this.$swal('Cancelled', 'Your data is still intact', 'info')
         }
       })
     }

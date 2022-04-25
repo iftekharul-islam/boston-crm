@@ -98,18 +98,18 @@
                                 <div class="max-w-424 w-100">
                                     <div class="group">
                                         <label for="fee-for-1004UAD"
-                                               class="d-block mb-2 dashboard-label fee-for-1004UAD-label">Technology fee
+                                               class="d-block mb-2 dashboard-label fee-for-1004uad-label">Technology fee
                                             for full
                                             appraisal like 1004UAD</label>
-                                        <input type="text" name="fee_for_1004uad" id="fee-for-1004UAD"
+                                        <input type="text" name="fee_for_1004uad" id="fee-for-1004uad"
                                                class="dashboard-input w-100">
                                     </div>
                                     <div class="group">
-                                        <label for="fee-for-1004D"
-                                               class="d-block mb-2 dashboard-label fee-for-1004D-label">Technology fee
+                                        <label for="fee-for-1004d"
+                                               class="d-block mb-2 dashboard-label fee-for-1004d-label">Technology fee
                                             for full
                                             appraisal like 1004D</label>
-                                        <input type="text" name="fee_for_1004d" id="fee-for-1004D"
+                                        <input type="text" name="fee_for_1004d" id="fee-for-1004d"
                                                class="dashboard-input w-100">
                                     </div>
                                     <div class="group">
@@ -183,7 +183,7 @@
                     name: "Name is required",
                     client_type : "Client type is required",
                     email: "Email is required",
-                    phone: "Phone No is required",
+                    phone: "Phone Number is required",
                     address: "Address is required",
                     zip: "Zip code is required",
                     state: "State is required",
@@ -201,14 +201,16 @@
             e.preventDefault();
             let clientType = $(this).val();
             if (clientType === 'lender') {
+                $("#client-create-form").data('validator').resetForm();
                 $(".address-label, .city-label, .state-label, .country-label, .zip-label").addClass('require');
                 $("#address,#city,#state,#country,#zip").prop('required', true);
 
-                $(".deducts-technology-fee-label, .fee-for-1004UAD-label, .fee-for-1004D-label, .can-sign-label, .can-inspect-label").removeClass('require');
-                $("#deducts-technology-fee, #fee-for-1004UAD, #fee-for-1004D-label ,#can-sign, #can-inspect").prop('required', false);
+                $(".deducts-technology-fee-label, .fee-for-1004uad-label, .fee-for-1004d-label, .can-sign-label, .can-inspect-label").removeClass('require');
+                $("#deducts-technology-fee, #fee-for-1004uad, #fee-for-1004d ,#can-sign, #can-inspect").prop('required', false);
             } else {
-                $(".deducts-technology-fee-label, .fee-for-1004UAD-label, .fee-for-1004D-label, .can-sign-label, .can-inspect-label").addClass('require');
-                $("#deducts-technology-fee, #fee-for-1004UAD, #fee-for-1004D-label ,#can-sign, #can-inspect").prop('required', true);
+                $("#client-create-form").data('validator').resetForm();
+                $(".deducts-technology-fee-label, .fee-for-1004uad-label, .fee-for-1004d-label, .can-sign-label, .can-inspect-label").addClass('require');
+                $("#deducts-technology-fee, #fee-for-1004uad, #fee-for-1004d ,#can-sign, #can-inspect").prop('required', true);
 
                 $(".address-label, .city-label, .state-label, .country-label, .zip-label").removeClass('require');
                 $("#address,#city,#state,#country,#zip").prop('required', false);
