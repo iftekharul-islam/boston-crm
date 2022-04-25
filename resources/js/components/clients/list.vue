@@ -50,13 +50,15 @@
         </table>
       </div>
       <div class="pagination justify-content-center mgt-32">
-        <pagination v-model="page" :records="parseInt(this.clients.total)" :per-page="this.clients.per_page"
+        <pagination v-model="page" :options="{chunk: 5,theme : 'bootstrap4'}" :records="parseInt(this.clients.total)" :per-page="this.clients.per_page"
                     @paginate="getClients"/>
       </div>
     </div>
   </div>
 </template>
 <script>
+import {get} from "../../http/axios.method";
+
 export default {
   props: {
     showRoute: String,
@@ -98,6 +100,12 @@ export default {
       this.getClients()
     },
     getClients(page = 1) {
+      get('get-clients/' + this.currentType + '?page=' + page)
+          .then(res => {
+            console.log(res.data)
+          }).catch(err => {
+            console.log(err)
+      })
       axios.get('get-clients/' + this.currentType + '?page=' + page)
           .then(res => {
             this.clients = res.data.data.clients
