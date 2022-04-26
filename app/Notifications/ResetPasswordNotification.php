@@ -11,7 +11,7 @@ use Psr\Container\NotFoundExceptionInterface;
 class ResetPasswordNotification extends Notification {
 	use Queueable;
 	
-	public $url;
+	public string $url;
 	
 	/**
 	 * Create a new notification instance.

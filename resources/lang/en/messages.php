@@ -47,7 +47,7 @@ return [
 		'email'        => 'Email',
 	],
 	'role_view'      => [
-		'role_management' => 'Role Management',
+		'role_management' => 'Role management',
 		'role_create'     => 'Role Create',
 		'permission'      => 'permission',
 	],

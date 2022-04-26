@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Spatie\Permission\Models\Role;
 
-class RoleController extends Controller
+class RoleController extends BaseController
 {
 	 protected CompanyService $service;
 	 
@@ -28,6 +28,7 @@ class RoleController extends Controller
 		*/
 	 public function __construct(CompanyService $company_service)
 	 {
+			parent::__construct();
 			$this->service = $company_service;
 	 }
 	 

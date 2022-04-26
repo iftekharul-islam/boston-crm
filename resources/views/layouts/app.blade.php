@@ -60,7 +60,7 @@
                             </div>
                             <div class="profile__name">
                                 <p class="text-bold text-light-black fs-14 mb-0">{{ Auth::user()->name }}</p>
-                                <p class="text-gray fs-12 mb-0 text-uppercase">{{ $role->name ?? '' }}</p>
+                                <p class="text-gray fs-12 mb-0 text-uppercase">{{ $user_role ?? '' }}</p>
                             </div>
                             <span class="icon-arrow-bottom text-light-black mgl-32"></span>
                         </div>
