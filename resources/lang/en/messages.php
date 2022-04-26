@@ -6,6 +6,9 @@ return [
 	'save'           => 'Save',
 	'edit'           => 'Edit',
 	'update'         => 'Update',
+	'close'          => 'Close',
+	'active'         => 'Active',
+	'inactive'       => 'Inactive',
 	'registration'   => [
 		'',
 	],
@@ -21,6 +24,12 @@ return [
 		'user_create' => 'Add user',
 		'join_date'   => 'Join Date',
 		'role'        => 'Role',
+		'percentage'  => 'Percentage',
+		'phone'       => 'Phone',
+		'address'     => 'Address',
+		'add_user'    => 'Add user',
+		'role_name'   => 'Role name',
+		'invite'      => 'Invite',
 	],
 	'dashboard_view' => [
 		'dashboard'      => 'Dashboard',

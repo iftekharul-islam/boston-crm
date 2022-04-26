@@ -33,7 +33,7 @@
             @foreach(['view', 'create', 'update', 'delete'] as $permission_type)
                 <div class="checkbox-group">
                     <input type="checkbox" class="checkbox-input" style="cursor: default;"
-                           @if(in_array($permission_type. '.' . $permission, $permission_list)) checked
+                           @if(in_array($permission_type. '.' . $permission, $permission_list) || $role->name === 'admin') checked
                            @endif disabled>
                     <label for="" class="checkbox-label text-capitalize">{{ $permission_type }}</label>
                 </div>

@@ -60,8 +60,9 @@ class UserController extends BaseController
 			$company_users = $this->service->getCompanyAllUsers();
 			$company       = $company_users['company'];
 			$users         = $company_users['users'];
+			$roles         = $this->service->getCompanyAllRoles();
 			
-			return view( 'user.index', compact( 'users', 'company' ) );
+			return view( 'user.index', compact( 'users', 'company', 'roles' ) );
 	 }
 	 
 	 /**
@@ -81,9 +82,9 @@ class UserController extends BaseController
 		*
 		* @param UserCreateRequest $request
 		*
-		* @return RedirectResponse
+		* @return JsonResponse
 		*/
-	 #[NoReturn] public function store(UserCreateRequest $request): RedirectResponse
+	 public function store(UserCreateRequest $request): JsonResponse
 	 {
 			$company = $this->service->getAuthUserCompany();
 			DB::transaction( function () use ($request, $company) {
@@ -94,7 +95,7 @@ class UserController extends BaseController
 					 code: $code )->sendMailToUser( code: $code );
 			} );
 			
-			return redirect()->route( 'users.index' );
+			return response()->json(['success' => true]);
 	 }
 	 
 	 /**
@@ -116,16 +117,16 @@ class UserController extends BaseController
 		* @param UserUpdateRequest $request
 		* @param int               $id
 		*
-		* @return RedirectResponse
+		* @return JsonResponse
 		*/
-	 public function update(UserUpdateRequest $request, int $id): RedirectResponse
+	 public function update(UserUpdateRequest $request, int $id): JsonResponse
 	 {
 			$user    = $this->repository->find( $id );
 			$company = $user->companies()->first();
 			CompanyUser::query()->where( 'company_id', $company->id )->where( 'user_id',
-				$user->id )->first()->update( [ 'role_id', $request->get( 'role' ) ] );
+				$user->id )->first()->update( [ 'role_id' => $request->get( 'role' ) ] );
 			
-			return redirect()->route( 'users.index' );
+			return response()->json( [ 'success' => true ] );
 	 }
 	 
 	 /**
@@ -138,6 +139,28 @@ class UserController extends BaseController
 	 public function destroy(int $id): JsonResponse
 	 {
 			return response()->json( [ 'success' => $this->repository->delete( $id ) ] );
+	 }
+	 
+	 /**
+		* Company user status change.
+		*
+		* @param int $id
+		*
+		* @return JsonResponse
+		*/
+	 public function statusChange(int $id): JsonResponse
+	 {
+			$user = $this->repository->find( $id );
+			if ( $user ) {
+				 $company      = $user->companies()->first();
+				 $company_user = CompanyUser::query()->where( 'company_id', $company->id )->where( 'user_id',
+					 $user->id )->first();
+				 $company_user->update( [ 'status' => ! $company_user->status ] );
+				 
+				 return response()->json( [ 'success' => true ] );
+			}
+			
+			return response()->json( [ 'success' => false ], 404 );
 	 }
 	 
 	 /**
