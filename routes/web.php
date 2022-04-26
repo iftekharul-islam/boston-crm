@@ -32,6 +32,7 @@ Route::group( [ 'middleware' => [ 'auth:sanctum' ] ], function () {
         [ UserController::class, 'create' ] )->middleware( 'role_permission:create.user' )->name( 'users.create' );
     Route::post( 'users',
         [ UserController::class, 'store' ] )->middleware( 'role_permission:create.user' )->name( 'users.store' );
+		Route::post('user-status-change/{id}', [ UserController::class, 'statusChange' ])->middleware( 'role_permission:update.user' )->name( 'users.status.change' );
     Route::get( 'users/{id}/edit',
         [ UserController::class, 'edit' ] )->middleware( 'role_permission:update.user' )->name( 'users.edit' );
     Route::put( 'users/{id}',

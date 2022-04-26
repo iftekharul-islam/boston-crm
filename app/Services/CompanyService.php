@@ -253,7 +253,7 @@ class CompanyService
 			
 			return [
 				'company' => $user_company,
-				'users'   => $user_company->users()->paginate( 10 ),
+				'users'   => $user_company->users()->with('userProfile')->paginate( 10 ),
 			];
 	 }
 	 

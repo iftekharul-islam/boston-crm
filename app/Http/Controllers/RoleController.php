@@ -70,7 +70,7 @@ class RoleController extends BaseController
 			$company = $user->companies()->first();
 			DB::transaction( function () use ($request, $company) {
 				 $this->service->createRole( name: $request->get( 'name' ),
-					 description: $request->get( 'description' ) )->getPermissions( $request->get( 'permissions' ) )->attachSelectedPermissions()->setCompany( $company )->attachRole();
+					 description: $request->get( 'description' ) )->getPermissions( $request->get( 'permissions', [] ) )->attachSelectedPermissions()->setCompany( $company )->attachRole();
 			} );
 			
 			return response()->json( [ 'success' => true, 'message' => 'Successfully create role' ] );
