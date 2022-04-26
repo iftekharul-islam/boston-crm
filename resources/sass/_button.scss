@@ -23,6 +23,12 @@
         border-color: $gray;
         background: transparent;
     }
+    &-yellow {
+        background: $yellow;
+        color: #0F393B;
+        border-radius: 32px;
+        border-color: $yellow;
+    }
 }
 
 
