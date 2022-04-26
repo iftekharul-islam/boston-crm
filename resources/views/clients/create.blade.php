@@ -152,12 +152,10 @@
                                         </div>
                                     </div>
                                     <div class="group">
-                                        <label for="instruction" class="d-block mb-2 dashboard-label can-inspect">Trainee
-                                            can inspect </label>
+                                        <label for="instruction" class="d-block mb-2 dashboard-label can-inspect">Instruction</label>
                                         <div class="position-relative file-upload">
                                             <input type="file" name="instruction" id="instruction">
-                                            <label for="">Upload <img src="/img/upload.png"
-                                                                      alt="boston profile"></label>
+                                            <label for="">Upload <img src="{{ asset('/img/upload.png') }}" alt="boston profile"></label>
                                         </div>
                                     </div>
                                 </div>
@@ -176,7 +174,7 @@
 @endsection
 @push('scripts')
     <script type="text/javascript">
-        $(document).ready(function() {
+        $(function() {
             $("#client-create-form").validate({
                 errorClass: "text-danger",
                 messages : {
@@ -216,5 +214,9 @@
                 $("#address,#city,#state,#country,#zip").prop('required', false);
             }
         });
+        setInterval(function() {
+            $("div.alert-success").hide();
+            $("div.alert-error").hide();
+        }, 3000);
     </script>
 @endpush

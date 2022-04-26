@@ -115,7 +115,7 @@
                             <div class="personal-info__group">
                                 <p class="mb-0 left-side">Client instruction</p>
                                 <span>:</span>
-                                <p class="right-side">  <img src="{{ $client->getFirstMediaPath() }}" alt="boston profile" class="me-1"> instruction.pdf</p>
+                                <p class="right-side"><a target="_blank" href="{{ $client->getMedia('clients')[0]->getFullUrl() }}">Instruction File</a></p>
                             </div>
 {{--                            <div class="personal-info__group">--}}
 {{--                                <p class="mb-0 left-side">Technology fee</p>--}}

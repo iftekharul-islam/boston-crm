@@ -102,7 +102,7 @@
         sidebarToggle.classList.toggle("sidebar-collapse");
     }
 </script>
-@stack('js')
+@stack('scripts')
 @yield('js')
 </body>
 </html>

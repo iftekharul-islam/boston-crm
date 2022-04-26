@@ -30,24 +30,73 @@ class ClientRepository extends BaseRepository
         return $result;
     }
 
+
     /**
      * @param string $type
      * @param int $pageNumber
      * @return array
      */
-    public function getClientsData(string $type,int $pageNumber): array
+    public function getClientsData(string $type, int $pageNumber, string $searchKey): array
     {
-        $data = [];
-        $data['all'] = $this->model->count();
-        $data['amc'] = $this->model->where('client_type', 'amc')->count();
-        $data['lender'] = $this->model->where('client_type', 'lender')->count();
+        if ($searchKey == '') {
+            $data = [];
+            $data['all'] = $this->model->count();
+            $data['amc'] = $this->model->where('client_type', 'amc')->count();
+            $data['lender'] = $this->model->where('client_type', 'lender')->count();
 
-        if ($type == 'all') {
-            $data['clients'] = $this->model->paginate(10,['*'], 'page', $pageNumber);
-            $data['pageNumber'] = $pageNumber;
+            if ($type == 'all') {
+                $data['clients'] = $this->model->paginate(10, ['*'], 'page', $pageNumber);
+                $data['pageNumber'] = $pageNumber;
+            } else {
+                $data['clients'] = $this->model->where('client_type', $type)->paginate(10, ['*'], 'page', $pageNumber);
+            }
         } else {
-            $data['clients'] = $this->model->where('client_type', $type)->paginate(10,['*'], 'page', $pageNumber);
+            $data = [];
+//            dd($searchKey);
+            $data['all'] = $this->model
+                ->where(function ($query) use($searchKey){
+                    $query->where('name', 'like', '%' . $searchKey . '%')
+                        ->orWhere('email','like','%' . $searchKey . '%')
+                        ->orWhere('phone','like','%' . $searchKey . '%');
+                })
+                ->count();
+            $data['amc'] = $this->model
+                ->where('client_type', 'amc')
+                ->where(function ($query) use($searchKey){
+                    $query->where('name', 'like', '%' . $searchKey . '%')
+                        ->orWhere('email','like','%' . $searchKey . '%')
+                        ->orWhere('phone','like','%' . $searchKey . '%');
+                })
+                ->count();
+            $data['lender'] = $this->model
+                ->where('client_type', 'lender')
+                ->where(function ($query) use($searchKey){
+                    $query->where('name', 'like', '%' . $searchKey . '%')
+                        ->orWhere('email','like','%' . $searchKey . '%')
+                        ->orWhere('phone','like','%' . $searchKey . '%');
+                })
+                ->count();
+
+            if ($type == 'all') {
+                $data['clients'] = $this->model
+                    ->where(function ($query) use($searchKey){
+                        $query->where('name', 'like', '%' . $searchKey . '%')
+                            ->orWhere('email','like','%' . $searchKey . '%')
+                            ->orWhere('phone','like','%' . $searchKey . '%');
+                    })
+                    ->paginate(10, ['*'], 'page', $pageNumber);
+                $data['pageNumber'] = $pageNumber;
+            } else {
+                $data['clients'] = $this->model->where('client_type', $type)
+                    ->where(function ($query) use($searchKey){
+                        $query->where('name', 'like', '%' . $searchKey . '%')
+                            ->orWhere('email','like','%' . $searchKey . '%')
+                            ->orWhere('phone','like','%' . $searchKey . '%');
+                    })
+                    ->paginate(10, ['*'], 'page', $pageNumber);
+            }
         }
+
 
         return $data;
     }
