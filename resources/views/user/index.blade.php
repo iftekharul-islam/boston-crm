@@ -33,7 +33,15 @@
                     <td>012562546521</td>
                     <td>{{ $user->pivot->join_date }}</td>
                     <td>16 River St - Unit 16 Quincy...</td>
-                    <td>{{ $user->pivot->status ? 'Active' : 'Inactive' }}</td>
+                    <td>
+                        <div class="switch">
+                            <input class="switch-input" type="checkbox" id="switch" />
+                            <label class="switch-label" for="switch"></label>
+                            <span class="active-switch switch-status">Active</span>
+                            <span class="inactive-switch switch-status">Inactive</span>
+                        </div>
+                        {{-- {{ $user->pivot->status ? 'Active' : 'Inactive' }} --}}
+                    </td>
                     <td>
                         <div class="d-flex align-items-center">
                             <a class="me-3 text-light-black cursor-pointer" href="{{ route('users.edit', $user->id) }}">
