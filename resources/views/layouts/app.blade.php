@@ -51,23 +51,28 @@
                                         class="path3"></span><span class="path4"></span></span></a>
                     </div>
                     {{-- dropdown --}}
-                    <div class="dropdown">
-                        <div class="profile d-flex align-items-center " id="dropdownMenuButton1"
+                    <div class="dropdown profile-drop">
+                        <div class="profile d-flex align-items-center justify-content-between" id="dropdownMenuButton1"
                              data-bs-toggle="dropdown"
                              aria-expanded="false">
-                            <div class="profile__img me-2">
-                                <img src="{{ asset('img/dummy-profile.png') }}" alt="boston profile">
-                            </div>
-                            <div class="profile__name">
-                                <p class="text-bold text-light-black fs-14 mb-0">{{ Auth::user()->name }}</p>
-                                <p class="text-gray fs-12 mb-0 text-uppercase">{{ $role->name ?? '' }}</p>
-                            </div>
+                           <div class="d-flex align-items-center">
+                                <div class="profile__img me-2">
+                                    <img src="{{ asset('img/dummy-profile.png') }}" alt="boston profile">
+                                </div>
+                                <div class="profile__name">
+                                    <p class="text-bold text-light-black fs-14 mb-0 fw-bold name">{{ Auth::user()->name }}</p>
+                                    <p class="text-gray fs-12 mb-0 text-uppercase">{{ $role->name ?? '' }}</p>
+                                </div>
+                           </div>
                             <span class="icon-arrow-bottom text-light-black mgl-32"></span>
                         </div>
                         {{-- dropdown content --}}
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                            <li><a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">{{ __('Logout') }}</a>
+                        <ul class="dropdown-menu profile-dropdown p-0" aria-labelledby="dropdownMenuButton1">
+                            <li><a class="dropdown-item text-light-black" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                <svg class="me-3" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path opacity="0.4" d="M13.2402 2C13.7102 2 14.1002 2.38 14.1002 2.86V21.15C14.1002 21.62 13.7202 22.01 13.2402 22.01C7.35023 22.01 3.24023 17.9 3.24023 12.01C3.24023 6.12 7.36023 2 13.2402 2Z" fill="#2F415E"/>
+                                    <path d="M20.5409 11.54L17.7009 8.69C17.4109 8.4 16.9309 8.4 16.6409 8.69C16.3509 8.98 16.3509 9.46 16.6409 9.75L18.2009 11.31H8.63086C8.22086 11.31 7.88086 11.65 7.88086 12.06C7.88086 12.47 8.22086 12.81 8.63086 12.81H18.2009L16.6409 14.37C16.3509 14.66 16.3509 15.14 16.6409 15.43C16.7909 15.58 16.9809 15.65 17.1709 15.65C17.3609 15.65 17.5509 15.58 17.7009 15.43L20.5409 12.58C20.8309 12.3 20.8309 11.83 20.5409 11.54Z" fill="#2F415E"/>
+                                    </svg> {{ __('Logout') }}</a>
                             </li>
                         </ul>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
