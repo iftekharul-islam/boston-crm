@@ -17,7 +17,7 @@ class BaseController extends Controller
 						$company         = $user->companies()->first();
 						$this->user_role = $user->getUserRole( $user->id, $company->id );
 				 }
-				 View::share( 'user_role', $this->user_role );
+				 View::share( 'user_role', $this->user_role ?? '' );
 				
 				 return $next($request);
 			});
