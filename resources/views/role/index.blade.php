@@ -8,136 +8,15 @@
                     role="button">{{ __('messages.role_view.role_create') }}</button>
         </div>
         {{-- role create--}}
-        <form id="createRole" class="mb-4">
-            <div class="role-add mgt-32 new-role">
-                <div class="role-box">
-                    <div class="d-flex align-items-start justify-content-between">
-                        <div class="max-w-424 mgb-32">
-                            <div class="mgb-20">
-                                <input type="text" id="createName" class="dashboard-input w-100"
-                                       placeholder="Name here...">
-                                <p class="text-danger createNameErrorMsg"></p>
-                            </div>
-                            <textarea id="createDescription" class="dashboard-textarea w-100" id="" cols="30" rows="2"
-                                      placeholder="Description here..."></textarea>
-                            <p class="text-danger createDescriptionErrorMsg"></p>
-                        </div>
-                        <span class="delete" onclick="showNewRoleCreate();">
-                            <span class="icon-trash fs-20"><span class="path1"></span><span class="path2"></span><span
-                                        class="path3"></span><span class="path4"></span>
-                            </span>
-                        </span>
-                    </div>
-                    @foreach($permissions as $permission)
-                        <div class="d-flex permission-check flex-wrap">
-                            <p class="mb-0 fw-bold text-light-black permission"><span
-                                        class="text-capitalize">{{ $permission }}</span>
-                                {{ __('messages.role_view.permission') }}</p>
-                            @foreach(['view', 'create', 'update', 'delete'] as $permission_type)
-                                <div class="checkbox-group">
-                                    <input type="checkbox" class="checkbox-input check-data"
-                                           name="create_permission"
-                                           data-name="{{ $permission_type . '.' . $permission }}"
-                                           data-model-name="{{ $permission }}"
-                                           value="{{ $permission_type . '.' . $permission }}">
-                                    <label for="" class="checkbox-label text-capitalize">{{ $permission_type }}</label>
-                                </div>
-                            @endforeach
-                        </div>
-                    @endforeach
-                    <div class="text-end">
-                        <button class="button button-primary h-32 py-1 px-4">{{ __('messages.save') }}</button>
-                    </div>
-                </div>
-            </div>
-        </form>
+        @include('role._create-role')
         {{-- role preview --}}
         <div class="role-preview">
             @foreach($roles ?? [] as $key => $role)
                 @php
                     $permission_list = $role->permissions()->pluck( 'name' )->toArray();
                 @endphp
-                <div class="role-box view-role-{{ $role->id }}">
-                    <div class="d-flex justify-content-between mb-3">
-                        <p class="mb-0 text-light-black fs-20 fw-bold">{{ $role->name }}</p>
-                        <div class="d-flex align-items-center">
-                            @if($role->name !== 'admin')
-                                <span class="delete me-3"
-                                      data-id="{{ $role->id }}"
-                                      data-action="{{ route('roles.destroy',$role->id) }}"
-                                      onclick="deleteConfirmation({{$role->id}})">
-                                    <span class="icon-trash fs-20"><span class="path1"></span><span
-                                                class="path2"></span><span
-                                                class="path3"></span><span class="path4"></span></span>
-                                </span>
-                                <button class="edit-btn h-32 inline-flex-center"
-                                        onclick="editRoleView({{ $role->id }});">
-                                    {{ __('messages.edit') }}
-                                    <span class="icon-edit ms-3">
-                                    <span class="path1"></span>
-                                    <span class="path2"></span>
-                                </span>
-                                </button>
-                            @endif
-                        </div>
-                    </div>
-                    <p class="text-light-black mgb-32">
-                        {{ $role->description ?? '' }}
-                    </p>
-                    @foreach($permissions as $permission)
-                        <div class="d-flex permission-check flex-wrap">
-                            <p class="mb-0 fw-bold text-light-black permission"><span
-                                        class="text-capitalize">{{ $permission }}</span>
-                                {{ __('messages.role_view.permission') }}</p>
-                            @foreach(['view', 'create', 'update', 'delete'] as $permission_type)
-                                <div class="checkbox-group">
-                                    <input type="checkbox" class="checkbox-input"
-                                           @if(in_array($permission_type. '.' . $permission, $permission_list)) checked
-                                           @endif disabled>
-                                    <label for="" class="checkbox-label text-capitalize">{{ $permission_type }}</label>
-                                </div>
-                            @endforeach
-                        </div>
-                    @endforeach
-                </div>
-                <div class="role-box role-edit-{{ $role->id }} d-none">
-                    <div class="d-flex align-items-start justify-content-between">
-                        <div class="max-w-424 mgb-32">
-                            <div class="mgb-20">
-                                <input type="text" id="updateName{{ $role->id }}" class="dashboard-input w-100"
-                                       value="{{ $role->name }}"
-                                       placeholder="Name here...">
-                                <p class="text-danger updateNameErrorMsg{{ $role->id }}"></p>
-                            </div>
-                            <textarea id="updateDescription{{ $role->id }}" class="dashboard-textarea w-100" id="" cols="30"
-                                      rows="2"
-                                      placeholder="Description here..."> {{ $role->description }} </textarea>
-                            <p class="text-danger updateDescriptionErrorMsg{{ $role->id }}"></p>
-                        </div>
-                    </div>
-                    @foreach($permissions as $permission)
-                        <div class="d-flex permission-check flex-wrap">
-                            <p class="mb-0 fw-bold text-light-black permission"><span
-                                        class="text-capitalize">{{ $permission }}</span>
-                                {{ __('messages.role_view.permission') }}</p>
-                            @foreach(['view', 'create', 'update', 'delete'] as $permission_type)
-                                <div class="checkbox-group">
-                                    <input type="checkbox" class="checkbox-input check-data edit-data-{{ $role->id }}"
-                                           name="update_permission_{{ $role->id }}"
-                                           data-name="{{ $permission_type . '.' . $permission }}"
-                                           data-model-name="{{ $permission }}"
-                                           value="{{ $permission_type . '.' . $permission }}"
-                                           @if(in_array($permission_type. '.' . $permission, $permission_list)) checked @endif>
-                                    <label for=""
-                                           class="checkbox-label text-capitalize">{{ $permission_type }}</label>
-                                </div>
-                            @endforeach
-                        </div>
-                    @endforeach
-                    <div class="text-end">
-                        <button type="button" class="button button-primary h-32 py-1 px-4" onclick="updateRole({{ $role->id }})">{{ __('messages.update') }}</button>
-                    </div>
-                </div>
+                @include('role._view-role')
+                @include('role._edit-role')
             @endforeach
         </div>
     </div>
@@ -185,6 +64,11 @@
             });
         });
 
+        /**
+         * Role update by id.
+         *
+         * @param role_id
+         */
         function updateRole(role_id) {
             $('.updateNameErrorMsg' + role_id).text('');
             $('.updateDescriptionErrorMsg' + role_id).text('');
@@ -192,7 +76,7 @@
             let role_name = $('#updateName' + role_id).val();
             let role_description = $('#updateDescription' + role_id).val();
             let role_permissions = [];
-            $("input:checkbox[name='update_permission_" + role_id +  "']:checked").each(function () {
+            $("input:checkbox[name='update_permission_" + role_id + "']:checked").each(function () {
                 role_permissions.push($(this).val());
             });
             let url = '{{ route("roles.update", ":id") }}';
@@ -218,6 +102,11 @@
             });
         }
 
+        /**
+         * Delete role by id.
+         *
+         * @param id
+         */
         function deleteConfirmation(id) {
             swal({
                 title: "Delete?",

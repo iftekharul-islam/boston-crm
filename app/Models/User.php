@@ -76,17 +76,17 @@ class User extends Authenticatable
 		$this->notify(new VerifyEmail());
 	}
 	
-	/**
-	 * Send Password reset notification.
-	 *
-	 * @param $token
-	 *
-	 * @return void
-	 */
-	public function sendPasswordResetNotification($token): void {
-		$url = Config::get('app.api_url') . '/reset-password?token=' . $token . '&email=' . $this->email;
-		$this->notify(new ResetPasswordNotification($url));
-	}
+//	/**
+//	 * Send Password reset notification.
+//	 *
+//	 * @param $token
+//	 *
+//	 * @return void
+//	 */
+//	public function sendPasswordResetNotification($token): void {
+//		$url = Config::get('app.url') . '/reset-password?token=' . $token . '&email=' . $this->email;
+//		$this->notify(new ResetPasswordNotification($url));
+//	}
 	
 	/**
 	 * @return HasOne
