@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="login ">
+<div class="login register">
     <div class="d-flex login-row login-space flex-wrap">
         <div class="left-side col-md-6 bg-light-black">
             <a href="#" class="back-btn text-white"><img class="mgr-8" src="{{ asset('img/arrow-left.png') }}" alt="boston logo"> Back</a>
@@ -10,7 +10,7 @@
                 <form method="POST" action="{{ route('register') }}" id="registrationForm">
                     @csrf
                     <div class="group mgb-40">
-                        <label for="name" class="d-block text-light-black">{{ __('Name') }}</label>
+                        <label for="name" class="d-block text-light-black mb-2">{{ __('Name') }}</label>
                         <div class="">
                             <input id="name" type="text" class="login-input form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}"  autocomplete="name" autofocus>
                             @error('name')
@@ -22,7 +22,7 @@
                     </div>
             
                     <div class="group mgb-40">
-                        <label for="email" class="d-block text-light-black">{{ __('Email Address') }}</label>
+                        <label for="email" class="d-block text-light-black mb-2">{{ __('Email Address') }}</label>
                         <div class="">
                             <input id="email" type="email" class="login-input form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" autocomplete="email">
                             @error('email')
@@ -34,7 +34,7 @@
                     </div>
 
                     <div class="group mgb-40">
-                        <label for="companyName" class="d-block text-light-black">{{ __('Company Name') }}</label>
+                        <label for="companyName" class="d-block text-light-black mb-2">{{ __('Company Name') }}</label>
                         <div class="">
                             <input id="companyName" type="text" class="login-input form-control @error('company_name') is-invalid @enderror" name="company_name" autocomplete="company-name">           
                             @error('company_name')
@@ -46,7 +46,7 @@
                     </div>
             
                     <div class="group">
-                        <label for="password" class="d-block text-light-black">{{ __('Password') }}</label>
+                        <label for="password" class="d-block text-light-black mb-2">{{ __('Password') }}</label>
                         <div class="">
                             <input id="password" type="password" class="login-input form-control @error('password') is-invalid @enderror" name="password" autocomplete="new-password">
                             @error('password')

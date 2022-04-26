@@ -93,7 +93,7 @@
                                 <td>$7,365</td>
                                 <td>$5,000</td>
                                 <td>
-                                    <router-link to="/" class="view">View</router-link>
+                                    <router-link to="/" class="view cursor-pointer">View</router-link>
                                 </td>
                             </tr>
                             <tr>
@@ -104,7 +104,7 @@
                                 <td>$7,365</td>
                                 <td>$5,000</td>
                                 <td>
-                                    <router-link to="/" class="view">View</router-link>
+                                    <router-link to="/" class="view cursor-pointer">View</router-link>
                                 </td>
                             </tr>
                             <tr>
@@ -115,7 +115,7 @@
                                 <td>$7,365</td>
                                 <td>$5,000</td>
                                 <td>
-                                    <router-link to="/" class="view">View</router-link>
+                                    <router-link to="/" class="view cursor-pointer">View</router-link>
                                 </td>
                             </tr>
                             </tbody>

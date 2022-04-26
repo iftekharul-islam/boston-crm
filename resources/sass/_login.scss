@@ -154,17 +154,32 @@
     }
 }
 
-.is-invalid {
+.is-invalid,
+input.error {
     border: 1px solid $due !important;
     background: $danger-light !important;
     &:focus {
         border: 1px solid $danger !important;
+        box-shadow: 0 0 0 0.25rem rgb(244 53 38 / 25%);
     }
+}
+label.error {
+    margin-top: 12px;
 }
 .invalid-feedback {
     color: $due !important;
     font-size: 16px !important;
     strong {
         font-weight: normal;
+    }
+}
+
+.register {
+    .login-row {
+        .left-side {
+            .back-btn {
+                top: 20px;
+            }
+        }
     }
 }

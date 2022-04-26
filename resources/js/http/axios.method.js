@@ -1,6 +1,7 @@
 import axios from "axios";
 
-export const baseUrl = process.env.VUE_APP_BOOKMEETING_BASE_API;
+// export const baseUrl = process.env.VUE_APP_BOOKMEETING_BASE_API;
+export const baseUrl = window.origin + '/';
 
 export const globalHeaders = {
     headers: {
@@ -49,7 +50,7 @@ export const sendRequest = (method_type, url, data = {}, config=null) => {
     return result;
 }
 export const get = ( url, config = null) => {
-
+    console.log(baseUrl + url, 'url')
     return axios.get(baseUrl + url, createConfig(config))
         .then(response => {
             return successData(response.data);

@@ -43,10 +43,10 @@ class ClientRepository extends BaseRepository
         $data['lender'] = $this->model->where('client_type', 'lender')->count();
 
         if ($type == 'all') {
-            $data['clients'] = $this->model->paginate(1,['*'], 'page', $pageNumber);
+            $data['clients'] = $this->model->paginate(10,['*'], 'page', $pageNumber);
             $data['pageNumber'] = $pageNumber;
         } else {
-            $data['clients'] = $this->model->where('client_type', $type)->paginate(1,['*'], 'page', $pageNumber);
+            $data['clients'] = $this->model->where('client_type', $type)->paginate(10,['*'], 'page', $pageNumber);
         }
 
         return $data;
