@@ -48,7 +48,17 @@
                     <div class="group">
                         <label for="password" class="d-block text-light-black mb-2">{{ __('Password') }}</label>
                         <div class="">
-                            <input id="password" type="password" class="login-input form-control @error('password') is-invalid @enderror" name="password" autocomplete="new-password">
+                            <div class="position-relative">
+                                <input id="password" type="password"
+                                       class="login-input form-control @error('password') is-invalid @enderror"
+                                       name="password" autocomplete="password" autofocus>
+                                {{-- eye icon --}}
+                                <span class="icon-eye icons show-password"><span class="path1"></span><span
+                                            class="path2"></span></span>
+                                <span class="icon-eye-slash icons hide-password"><span class="path1"></span><span
+                                            class="path2"></span><span class="path3"></span><span
+                                            class="path4"></span><span class="path5"></span></span>
+                            </div>
                             @error('password')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -80,6 +90,19 @@
 
 @section('js')
     <script>
+        $(document).ready(function () {
+            $('.hide-password').hide();
+        });
+        $('.show-password').on('click', function () {
+            $('.show-password').hide();
+            $('.hide-password').show();
+            $("#password").attr("type", "text");
+        });
+        $('.hide-password').on('click', function () {
+            $('.show-password').show();
+            $('.hide-password').hide();
+            $("#password").attr("type", "password");
+        });
         $('#registrationForm').validate({ // initialize the plugin
             rules: {
                 name: {
