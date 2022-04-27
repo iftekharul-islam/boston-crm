@@ -12,7 +12,7 @@
         </div>
         <div class="right d-flex">
           <img v-if="loading" height="50px" width="50px" style="margin-right: 200px;" src="/img/loader.gif" class="flex-center"  alt="">
-          <input type="text" v-model="searchText" placeholder="Search by client name" @keyup="searchClients" class="px-3 bdr-1 br-4 gray-border me-3">
+          <input type="text" v-model="searchText" placeholder="Search ..." @keyup="searchClients" class="px-3 bdr-1 br-4 gray-border me-3">
           <a :href="this.createRoute" class="button button-primary">Add clients</a>
         </div>
       </div>
@@ -107,12 +107,6 @@ export default {
       this.getClients()
     },
     getClients(page = 1) {
-      // get('get-clients/' + this.currentType + '?page=' + page)
-      //     .then(res => {
-      //       console.log(res.data)
-      //     }).catch(err => {
-      //       console.log(err)
-      // })
       this.loading = true;
       axios.get('get-clients/' + this.currentType + '?page=' + page + '&searchKey=' + (this.searchText).trim())
           .then(res => {
