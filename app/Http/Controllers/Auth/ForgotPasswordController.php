@@ -32,7 +32,7 @@ class ForgotPasswordController extends Controller
 			$request->validate( [
 				'email' => 'required|email|exists:users',
 			], [
-				'email.exists' => 'There is no account associated with the email you provided. Please enter a valid email address',
+				'email.exists' => 'There is no account associated with the email you provided. Please enter a valid email address.',
 			] );
 	 }
 }
