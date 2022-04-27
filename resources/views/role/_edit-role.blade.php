@@ -1,4 +1,5 @@
 <div class="role-box role-edit-{{ $role->id }} d-none">
+    <h2>{{ __('messages.role_view.update_role') }}</h2>
     <div class="d-flex align-items-start justify-content-between">
         <div class="max-w-424 mgb-32">
             <div class="mgb-20">
@@ -20,7 +21,8 @@
                 {{ __('messages.role_view.permission') }}</p>
             @foreach(['view', 'create', 'update', 'delete'] as $permission_type)
                 <div class="checkbox-group">
-                    <input type="checkbox" class="checkbox-input check-data edit-data-{{ $role->id }}"
+                    <input type="checkbox" class="checkbox-input check-data-{{ $role->id }} edit-data-{{ $role->id }}"
+                           onclick="editRoleCheck({{ $role->id }});"
                            name="update_permission_{{ $role->id }}"
                            data-name="{{ $permission_type . '.' . $permission }}"
                            data-model-name="{{ $permission }}"
