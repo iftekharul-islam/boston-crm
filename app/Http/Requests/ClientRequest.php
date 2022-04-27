@@ -11,10 +11,11 @@ class ClientRequest extends FormRequest {
      * @return array
      */
     public function rules(): array {
+        $id = (int)request()->route('client');
         return [
             "name"                   => "required",
-            "email"                  => "required|unique:clients,email",
-            "phone"                  => "required|unique:clients",
+            "email"                  => "required|unique:clients,email,".$id,
+            "phone"                  => "required|unique:clients,phone,".$id,
             "client_type"            => "required",
             "address"                => "required_if:client_type,==,lender",
             "city"                   => "required_if:client_type,==,lender",
