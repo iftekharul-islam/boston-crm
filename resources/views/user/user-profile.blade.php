@@ -125,7 +125,7 @@
                                         <div class="group ">
                                             <label for="" class="d-block mb-3 dashboard-label fw-bold">User photo</label>
                                             <div id='img_preview' class="img__preview">
-                                                <img id="blah" align='middle' src="{{ asset('img/user.png') }}" alt="your image"
+                                                <img id="blah" align='middle' src="{{ $user->getMedia('profiles')[0] ?? false ? asset($user->getMedia('profiles')[0]->getUrl()) : asset('img/user.png') }}" alt="{{ $user->getMedia('profiles')[0]->name ?? '' }}"
                                                      class="img-fluid" title=''/>
                                                 <div class="upload-img">
                                                     <input type="file" id="inputGroupFile01" class="imgInp custom-file-input"

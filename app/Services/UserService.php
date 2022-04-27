@@ -2,14 +2,18 @@
 
 namespace App\Services;
 
+use App\Models\Company;
 use App\Models\CompanyUser;
 use App\Models\UserInvite;
 use App\Repositories\UserProfileRepository;
 use App\Repositories\UserRepository;
+use App\Traits\FileHandler;
 use Carbon\Carbon;
 
 class UserService
 {
+	 use FileHandler;
+	 
 	 protected object $user;
 	 protected object $profile;
 	 protected UserRepository $repository;
@@ -68,13 +72,20 @@ class UserService
 			return $this;
 	 }
 	 
-	 public function updateProfileImage($image)
+	 /**
+		* @param $request
+		* @param $image
+		* @param $user
+		*
+		* @return $this
+		*/
+	 public function profileImage($request, $image, $user): static
 	 {
-			if ($image) {
-			
+			if ( $request->hasFile( 'image' ) ) {
+				 $this->uploadProfileImage( file: $image, model: $user, folder: 'profiles' );
 			}
-			return $this;
 			
+			return $this;
 	 }
 	 
 	 /**
@@ -84,7 +95,44 @@ class UserService
 		*/
 	 public function deleteInvite(string $email): static
 	 {
-			UserInvite::query()->where('email', $email)->delete();
+			UserInvite::query()->where( 'email', $email )->delete();
+			
+			return $this;
+	 }
+	 
+	 /**
+		* @param object $company
+		* @param object $user
+		* @param string $company_name
+		*
+		* @return UserService
+		*/
+	 public function updateCompanyName(object $company, object $user, string $company_name): static
+	 {
+			if ( $company->owner_id === $user->id ) {
+				 Company::where( 'id', $company->id )->update( [ 'name' => $company_name ] );
+			}
+			
+			return $this;
+	 }
+	 
+	 public function updateUserName(object $user, string $user_name)
+	 {
+			$user->update( [ 'name' => $user_name ] );
+			
+			return $this;
+	 }
+	 
+	 /**
+		* @param $attributes
+		* @param $user_id
+		*
+		* @return UserService
+		*/
+	 public function updateProfileInformation($attributes, $user_id): static
+	 {
+			$this->profileRepository->updateProfile( attributes: $attributes, user_id: $user_id );
+			
 			return $this;
 	 }
 }
