@@ -64,6 +64,11 @@
             });
         });
 
+        function editRoleView(role_id) {
+            $('.role-edit-' + role_id).removeClass('d-none');
+            $('.view-role-' + role_id).addClass('d-none');
+        }
+
         /**
          * Role update by id.
          *
@@ -123,7 +128,7 @@
 
                     $.ajax({
                         type: 'POST',
-                        url: "{{url('/roles')}}/" + id,
+                        url: "{{ url('/roles') }}/" + id,
                         data: {_token: CSRF_TOKEN},
                         dataType: 'JSON',
                         success: function (results) {
@@ -151,28 +156,57 @@
             })
         }
 
-        $(document).on("click", ".check-data", function () {
-            let all_siblings = $(".check-data");
-            let self = $(this);
+        /**
+         * New role checkbox active or inactive
+         */
+        function newCreateRoleCheck() {
+            $(document).on("click", ".check-data", function () {
+                let all_siblings = $(".check-data");
+                let self = $(this);
+                selectedCheckActiveOrInactive(all_siblings, self)
+            });
+        }
+
+        /**
+         *
+         * @param role_id
+         */
+        function editRoleCheck(role_id) {
+            $(document).on("click", ".check-data-" + role_id, function () {
+                let all_siblings = $(".check-data-" + role_id);
+                let self = $(this);
+                selectedCheckActiveOrInactive(all_siblings, self)
+            });
+        }
+
+        /**
+         *
+         * @param all_siblings
+         * @param self
+         */
+        function selectedCheckActiveOrInactive(all_siblings, self) {
             let name = self.data('name');
             let model_name = self.data('model-name');
+            let model_list = ["create." + model_name, "update." + model_name, "delete." + model_name];
             let view_select;
             if (name.includes('.' + model_name)) {
-                view_select = checkView(name, self);
-                if (view_select) {
+                view_select = checkView(name, self, all_siblings, model_list);
+                if (view_select && $(self).is(':checked')) {
                     enableCheck(all_siblings, "view." + model_name);
                 }
             }
-        });
+        }
 
         /**
          * Check if data select on view.
          *
          * @param name
          * @param self
+         * @param all_siblings
+         * @param model_name
          * @returns {boolean}
          */
-        function checkView(name, self) {
+        function checkView(name, self, all_siblings, model_name) {
             if (name.includes('view')) {
                 $(self).prop('checked', $(self).is(":checked"));
 
@@ -195,13 +229,9 @@
                 let name = $(item).data('name');
                 if (name === viewName) {
                     $(item).prop('checked', true);
+                    $(item).prop('disabled', true);
                 }
             });
-        }
-
-        function editRoleView(role_id) {
-            $('.role-edit-' + role_id).removeClass('d-none');
-            $('.view-role-' + role_id).addClass('d-none');
         }
     </script>
 @endpush

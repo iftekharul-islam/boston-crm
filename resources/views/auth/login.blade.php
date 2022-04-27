@@ -31,7 +31,7 @@
                             <div class="">
                                 <div class="position-relative">
                                     <input id="password" type="password"
-                                           class="login-input form-control @error('password') is-invalid @enderror"
+                                           class="login-input form-control @error('email') is-invalid @enderror"
                                            name="password" autocomplete="password" autofocus>
                                     {{-- eye icon --}}
                                     <span class="icon-eye icons show-password"><span class="path1"></span><span
