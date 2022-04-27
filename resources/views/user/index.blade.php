@@ -252,6 +252,7 @@
 
                 } else {
                     e.dismiss;
+                    location.reload();
                 }
 
             }, function (dismiss) {
