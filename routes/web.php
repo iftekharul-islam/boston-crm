@@ -76,6 +76,3 @@ Route::get( 'email/verify/{id}/{hash}', [ VerificationController::class, 'verify
 Route::get( 'accept-new-user/{code}', [ UserController::class, 'acceptInviteUser' ] )->name( 'accept.new.user' );
 Route::post('invite-user-update/{id}', [UserController::class, 'inviteUserUpdate'])->name('update.invite.user.profile');
 //Route::get( "{slug}", [ WebApiController::class, 'home' ] )->where( 'slug', ".*" );
-
-//vue routes
-//Route::get("{slug}", [WebApiController::class, 'home'])->where('slug', ".*");
