@@ -61,7 +61,7 @@
                                 {{-- right side --}}
                                 <div class="right-side max-w-424 w-100">
                                     <div class="group">
-                                        <label for="address" class="d-block mb-2 dashboard-label">Address</label>
+                                        <label for="address" class="d-block mb-2 dashboard-label address-label">Address</label>
                                         <input type="text" id="address" name="address" class="dashboard-input w-100">
                                     </div>
                                     <div class="group">
@@ -164,7 +164,7 @@
                     </div>
                 </div>
                 <div class="add-client__bottom d-flex justify-content-end mgt-32 p-3">
-                    <button class="button button-discard me-3 d-flex align-items-center" type="reset">Discard <span
+                    <button class="button button-discard me-3 d-flex align-items-center" id="discard" type="button">Discard <span
                                 class="icon-close-circle ms-3"><span
                                     class="path1"></span><span class="path2"></span></span></button>
                     <button class="button button-primary" type="submit">Add client</button>
@@ -173,7 +173,7 @@
         </div>
     </div>
 @endsection
-@push('js')
+@push('scripts')
     <script type="text/javascript">
         $(function () {
             $("#client-create-form").validate({
@@ -334,5 +334,39 @@
             $("div.alert-success").hide();
             $("div.alert-danger").hide();
         }, 3000);
+        $('#client-type').on('change', function (e) {
+            e.preventDefault();
+            let clientType = $(this).val();
+            if (clientType === 'lender') {
+                $("#client-create-form").data('validator').resetForm();
+
+                $(".address-label, .city-label, .state-label, .country-label, .zip-label").addClass('require');
+
+                $(".deducts-technology-fee-label, .fee-for-1004uad-label, .fee-for-1004d-label, .can-sign-label, .can-inspect-label").removeClass('require');
+            } else {
+                $("#client-create-form").data('validator').resetForm();
+
+                $(".deducts-technology-fee-label, .fee-for-1004uad-label, .fee-for-1004d-label, .can-sign-label, .can-inspect-label").addClass('require');
+
+                $(".address-label, .city-label, .state-label, .country-label, .zip-label").removeClass('require');
+
+            }
+        });
+        $("#discard").on("click",function (e){
+           e.preventDefault();
+            swal({
+                title: "Are you sure you want to discard ?",
+                text: "Changes will be lost!",
+                type: "warning",
+                showCancelButton: !0,
+                confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "No, cancel!",
+                reverseButtons: !0
+            }).then(res => {
+                if(res.value){
+                    window.location.href = "{{ url('/clients') }}";
+                }
+            })
+        });
     </script>
 @endpush
