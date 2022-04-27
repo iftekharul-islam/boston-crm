@@ -25,11 +25,11 @@
 @push("js")
     <script>
         $(document).ready(function () {
-            $('.new-role').hide();
+            $('.new-role').addClass('d-none');
         });
 
         function showNewRoleCreate() {
-            $('.new-role').toggle();
+            $('.new-role').removeClass('d-none');
         }
 
         $('#createRole').on('submit', function (e) {
@@ -64,6 +64,10 @@
             });
         });
 
+        /**
+         *
+         * @param role_id
+         */
         function editRoleView(role_id) {
             $('.role-edit-' + role_id).removeClass('d-none');
             $('.view-role-' + role_id).addClass('d-none');
