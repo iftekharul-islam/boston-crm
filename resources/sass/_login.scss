@@ -155,7 +155,8 @@
 }
 
 .is-invalid,
-input.error {
+input.error,
+select.error {
     border: 1px solid $due !important;
     background: $danger-light !important;
     &:focus {

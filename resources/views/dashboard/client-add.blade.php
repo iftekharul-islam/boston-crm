@@ -132,7 +132,7 @@
                 </div>
            </div>
            <div class="add-client__bottom d-flex justify-content-end mgt-32 p-3">
-            <button class="button button-discard me-3">Discard <span class="icon-close-circle ms-3"><span class="path1"></span><span class="path2"></span></span></button>
+            <button class="button button-discard me-3 d-flex align-items-center">Discard <span class="icon-close-circle ms-3"><span class="path1"></span><span class="path2"></span></span></button>
             <button class="button button-primary">Add client</button>
         </div>
         </div>
