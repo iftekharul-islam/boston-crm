@@ -36,7 +36,7 @@
                             <div class="personal-info__group">
                                 <p class="mb-0 left-side">Client name</p>
                                 <span>:</span>
-                                <p class="right-side">Amrock</p>
+                                <p class="right-side">{{ $client->name }}</p>
                             </div>
                             {{--                            <div class="personal-info__group">--}}
                             {{--                                <p class="mb-0 left-side">Client URL</p>--}}
