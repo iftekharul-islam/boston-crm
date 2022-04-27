@@ -5,13 +5,13 @@
             {{-- clients top bar --}}
             <div class="clients-top d-flex flex-wrap justify-content-between">
                 <div class="left d-flex">
-                    <button class="clients-top-btn px-3 h-32 active">All <span class="ms-3">(45)</span></button>
-                    <button class="clients-top-btn px-3 h-32">AMC <span class="ms-3">(45)</span></button>
-                    <button class="clients-top-btn px-3 h-32">Lender <span class="ms-3">(45)</span></button>
+                    <button class="clients-top-btn px-3 h-40 active">All <span class="ms-3">(45)</span></button>
+                    <button class="clients-top-btn px-3 h-40">AMC <span class="ms-3">(45)</span></button>
+                    <button class="clients-top-btn px-3 h-40">Lender <span class="ms-3">(45)</span></button>
                 </div>
                 <div class="right d-flex">
-                    <input type="text" placeholder="Search ..." class="px-3 bdr-1 br-4 gray-border me-3">
-                    <a href="{{ route('client.add')}}" class="button button-primary">Add clients</a>
+                    <input type="text" placeholder="Search ..." class="px-3 bdr-1 br-4 gray-border me-3 h-40">
+                    <a href="{{ route('client.add')}}" class="button button-primary h-40 py-2 d-flex align-items-center">Add clients</a>
                 </div>
             </div>
             {{-- table --}}

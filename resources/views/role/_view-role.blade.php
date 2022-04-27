@@ -14,10 +14,7 @@
                 <button class="edit-btn h-32 inline-flex-center"
                         onclick="editRoleView({{ $role->id }});">
                     {{ __('messages.edit') }}
-                    <span class="icon-edit ms-3">
-                                    <span class="path1"></span>
-                                    <span class="path2"></span>
-                                </span>
+                    <span class="icon-edit ms-3"><span class="path1"></span><span class="path2"></span></span>
                 </button>
             @endif
         </div>

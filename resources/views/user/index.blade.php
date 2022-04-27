@@ -20,7 +20,7 @@
                         <th scope="col">{{ __('messages.user_view.join_date') }}</th>
                         <th scope="col">{{ __('messages.user_view.address') }}</th>
                         <th scope="col">{{ __('messages.status') }}</th>
-                        <th scope="col">{{ __('messages.action') }}</th>
+                        <th scope="col"></th>
                     </tr>
                     </thead>
                     <tbody>

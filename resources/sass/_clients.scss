@@ -138,6 +138,7 @@
         height: 100%;
         width: 100%;
         opacity: 0;
+        cursor: pointer;
     }
     label {
         border: 1px solid $gray;
@@ -180,6 +181,7 @@
             border-radius: 50% !important;
             border: 1px solid rgba(126, 130, 155, 0.25) !important;
             color: $gray !important;
+            padding-top: 2px;
             &.active {
                 background: $light-black;
                 border-color: $light-black !important;
