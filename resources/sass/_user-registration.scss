@@ -67,7 +67,7 @@
     }
 }
 .user-modal {
-    background: #2f415ebf;
+    background: $modal-bg;
 }
 
 .switch {
@@ -160,7 +160,7 @@
 }
 // user preview modal
 .user-prev {
-    background: #2f415ebf;
+    background: $modal-bg;
     &__dialog {
         max-width: 880px !important;
     }
