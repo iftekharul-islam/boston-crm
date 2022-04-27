@@ -233,7 +233,7 @@
                 let name = $(item).data('name');
                 if (name === viewName) {
                     $(item).prop('checked', true);
-                    $(item).prop('disabled', true);
+                    // $(item).prop('disabled', true);
                 }
             });
         }

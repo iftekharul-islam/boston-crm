@@ -42,14 +42,4 @@ class UserProfileRepository extends BaseRepository
 	public function updateProfile(array $attributes, int $user_id): Builder|Model {
 		return $this->query->updateOrCreate([ 'user_id' => $user_id ], $attributes);
 	}
-	
-	/**
-	 * @param $profile_id
-	 * @param $image
-	 *
-	 * @return mixed
-	 */
-	public function updateProfileImage($profile_id, $image): mixed {
-		return $this->query->find($profile_id)->addMedia($image)->toMediaCollection('profile');
-	}
 }

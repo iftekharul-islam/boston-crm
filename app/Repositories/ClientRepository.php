@@ -29,13 +29,14 @@ class ClientRepository extends BaseRepository
         }
         return $result;
     }
-
-
-    /**
-     * @param string $type
-     * @param int $pageNumber
-     * @return array
-     */
+	 
+	 /**
+		* @param string $type
+		* @param int    $pageNumber
+		* @param string $searchKey
+		*
+		* @return array
+		*/
     public function getClientsData(string $type, int $pageNumber, string $searchKey): array
     {
         if ($searchKey == '') {
