@@ -2,7 +2,7 @@
     <div class="d-flex justify-content-between mb-3">
         <p class="mb-0 text-light-black fs-20 fw-bold text-capitalize">{{ $role->name }}</p>
         <div class="d-flex align-items-center">
-            @if($role->name !== 'admin')
+            @if(! in_array($role->name, ['super admin', 'admin']))
                 <span class="delete me-3"
                       data-id="{{ $role->id }}"
                       data-action="{{ route('roles.destroy',$role->id) }}"
@@ -14,10 +14,7 @@
                 <button class="edit-btn h-32 inline-flex-center"
                         onclick="editRoleView({{ $role->id }});">
                     {{ __('messages.edit') }}
-                    <span class="icon-edit ms-3">
-                                    <span class="path1"></span>
-                                    <span class="path2"></span>
-                                </span>
+                    <span class="icon-edit ms-3"><span class="path1"></span><span class="path2"></span></span>
                 </button>
             @endif
         </div>

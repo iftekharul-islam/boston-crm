@@ -20,7 +20,7 @@
                         <th scope="col">{{ __('messages.user_view.join_date') }}</th>
                         <th scope="col">{{ __('messages.user_view.address') }}</th>
                         <th scope="col">{{ __('messages.status') }}</th>
-                        <th scope="col">{{ __('messages.action') }}</th>
+                        <th scope="col"></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -32,17 +32,17 @@
                         <tr>
                             <td>{{ $user->name }}</td>
                             <td>{{ $user->email }}</td>
-                            <td>
-                                <div class="role-view-{{ $user->id }}">
+                            <td class="role-results-td">
+                                <div class="role-results role-view-{{ $user->id }}">
                                     <span class="role-name"> {{ $role_name }}</span>
                                     @if($company->owner_id !== $user->id)
-                                        <span class="icon-edit fs-20" onclick="roleUpdateOpen({{ $user->id }});"><span
+                                        <span class="icon-edit fs-20 cursor-pointer" onclick="roleUpdateOpen({{ $user->id }});"><span
                                                     class="path1"></span><span class="path2"></span></span>
                                     @endif
                                 </div>
-                                <div class="role-update-{{ $user->id }} d-none">
-                                    <div class="group">
-                                        <div class="position-relative">
+                                <div class="role-results role-update-{{ $user->id }} d-none">
+                                    <div class="group role-results-group">
+                                        <div class="position-relative select-box">
                                             <select name="role_id" id="userRole{{ $user->id }}"
                                                     class="login-input w-100">
                                                 @foreach($roles as $role)
@@ -55,12 +55,18 @@
                                             </select>
                                             <span class="icon-arrow-down bottom-arrow-icon"></span>
                                         </div>
-                                        <span class="icon-close-circle fs-20"
+                                        {{-- <div class="d-flex align-items-center"> --}}
+                                            <span class="icon-close-circle fs-28 mx-2 cursor-pointer"
                                               onclick="roleUpdateClose({{ $user->id }});"><span
                                                     class="path1"></span><span class="path2"></span></span>
-                                        <span class="icon-edit fs-20" onclick="roleUpdate({{ $user->id }});"><span
-                                                    class="path1"></span><span
-                                                    class="path2"></span></span>
+
+                                            <span class="cursor-pointer fs-20" onclick="roleUpdate({{ $user->id }});">
+                                                <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <rect width="22" height="22" rx="11" fill="#34A851"/>
+                                                    <path d="M9.42745 14.3411C9.18842 14.3411 8.94939 14.253 8.76068 14.0643L6.87362 12.1772C6.50879 11.8124 6.50879 11.2086 6.87362 10.8437C7.23845 10.4789 7.84231 10.4789 8.20715 10.8437L9.42745 12.064L13.7929 7.69862C14.1577 7.33379 14.7615 7.33379 15.1264 7.69862C15.4912 8.06346 15.4912 8.66731 15.1264 9.03215L10.0942 14.0643C9.91808 14.253 9.66648 14.3411 9.42745 14.3411Z" fill="white"/>
+                                                    </svg>                                                                                                    
+                                            </span>
+                                        {{-- </div> --}}
                                     </div>
                                 </div>
                             </td>
@@ -252,6 +258,7 @@
 
                 } else {
                     e.dismiss;
+                    location.reload();
                 }
 
             }, function (dismiss) {

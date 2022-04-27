@@ -15,6 +15,10 @@
         .dashboard-input,
         .dashboard-textarea {
             border-color: $gray;
+            color: $light-black;
+            &::placeholder {
+                color: $gray;
+            }
         }
 }
 .permission-check {
@@ -38,6 +42,7 @@
                 ~.checkbox-label {
                     &::after {
                         background: $primary;
+                        border-color: $primary;
                     }
                 }
             }

@@ -95,7 +95,7 @@ class UserController extends BaseController
 					 code: $code )->sendMailToUser( code: $code );
 			} );
 			
-			return response()->json(['success' => true]);
+			return response()->json( [ 'success' => true ] );
 	 }
 	 
 	 /**
@@ -202,7 +202,8 @@ class UserController extends BaseController
 					 'zip_code' => $request->get( 'zip_code' ),
 					 'phone'    => $request->get( 'phone' ),
 				 ], user_id: $user->id )->activeUser( company_id: $company->id,
-					 user_id: $user->id )->deleteInvite( email: $user->email );
+					 user_id: $user->id )->profileImage( request: $request, image: $request->file( 'image' ),
+					 user: $user )->deleteInvite( email: $user->email );
 			} );
 			
 			return redirect()->route( 'login' );
@@ -230,20 +231,15 @@ class UserController extends BaseController
 			$user    = auth()->user();
 			$company = $this->service->getAuthUserCompany();
 			DB::transaction( function () use ($request, $user, $company) {
-				 if ( $company->owner_id === $user->id ) {
-						Company::where( 'id', $company->id )->update( [ 'name' => $request->get( 'company_name' ) ] );
-				 }
-				 $user->update( [ 'name' => $request->get( 'user_name' ) ] );
-				 $profile = $this->profileRepository->updateProfile( attributes: [
-					 'address'  => $request->get( 'address' ),
-					 'city'     => $request->get( 'city' ),
-					 'state'    => $request->get( 'state' ),
-					 'zip_code' => $request->get( 'zip_code' ),
-					 'phone'    => $request->get( 'phone' ),
-				 ], user_id: $user->id );
-				 if ( $request->has( 'image' ) ) {
-						$this->profileRepository->updateProfileImage( profile_id: $profile->id, image: $request->file( 'image' ) );
-				 }
+				 $this->userService->updateCompanyName( company: $company, user: $user,
+					 company_name: $request->get( 'company_name' ) )->updateUserName( user: $user,
+						 user_name: $request->get( 'user_name' ) )->updateProfileInformation( attributes: [
+						 'address'  => $request->get( 'address' ),
+						 'city'     => $request->get( 'city' ),
+						 'state'    => $request->get( 'state' ),
+						 'zip_code' => $request->get( 'zip_code' ),
+						 'phone'    => $request->get( 'phone' ),
+					 ], user_id: $user->id )->profileImage( request: $request, image: $request->file( 'image' ), user: $user );
 			} );
 			
 			return redirect()->route( 'profile' );

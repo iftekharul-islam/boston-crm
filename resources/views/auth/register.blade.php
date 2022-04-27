@@ -4,7 +4,7 @@
 <div class="login register">
     <div class="d-flex login-row login-space flex-wrap">
         <div class="left-side col-md-6 bg-light-black">
-            <a href="#" class="back-btn text-white"><img class="mgr-8" src="{{ asset('img/arrow-left.png') }}" alt="boston logo"> Back</a>
+            <a href="/" class="back-btn text-white"><img class="mgr-8" src="{{ asset('img/arrow-left.png') }}" alt="boston logo"> Back</a>
             <div class="login-box">
                 <div class="login-header fs-20 text-light-black mgb-48 fw-bold">{{ __('Register') }}</div>
                 <form method="POST" action="{{ route('register') }}" id="registrationForm">
@@ -24,7 +24,7 @@
                     <div class="group mgb-40">
                         <label for="email" class="d-block text-light-black mb-2">{{ __('Email Address') }}</label>
                         <div class="">
-                            <input id="email" type="email" class="login-input form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" autocomplete="email">
+                            <input id="email" type="text" class="login-input form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" autocomplete="email">
                             @error('email')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -92,6 +92,14 @@
     <script>
         $(document).ready(function () {
             $('.hide-password').hide();
+            if ($(".invalid-feedback")){
+                setTimeout(function(){
+                    $(".invalid-feedback").addClass('d-none');
+                }, 6000);
+            }
+            $("input[type=text]").blur(function () {
+                $(this).val($(this).val().trim());
+            });
         });
         $('.show-password').on('click', function () {
             $('.show-password').hide();
@@ -106,7 +114,10 @@
         $('#registrationForm').validate({ // initialize the plugin
             rules: {
                 name: {
-                  required: true,
+                    required: true,
+                    normalizer: function(value) {
+                        return value.trim();
+                    }
                 },
                 email: {
                     required: true,
@@ -114,11 +125,13 @@
                 },
                 company_name: {
                     required: true,
+                    normalizer: function(value) {
+                        return value.trim();
+                    }
                 },
                 password: {
                     required: true,
-                    minlength: 6
-
+                    minlength: 6,
                 },
             },
             messages: {

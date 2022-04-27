@@ -29,6 +29,17 @@
         border-radius: 32px;
         border-color: $yellow;
     }
+    &-danger {
+        background: $due;
+        box-shadow: 0px 4px 15px rgba(251, 97, 127, 0.25), 0px 4px 15px rgba(251, 97, 127, 0.25);
+        color: $white;
+        border-color: $due;
+    }
+    &-white {
+        background: $white;
+        color: $light-black;
+        border-color: $gray;
+    }
 }
 
 

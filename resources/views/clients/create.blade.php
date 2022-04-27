@@ -6,7 +6,7 @@
                   enctype="multipart/form-data">
                 @csrf
                 <div class="add-client-form">
-                    <p class="text-light-black fs-20 mgb-16">Add new client</p>
+                    <p class="text-light-black fs-20 mgb-16 fw-bold">Add new client</p>
                     @if(session()->has('success'))
                         <div class="alert alert-success">
                             {{ session('success') }}
@@ -164,7 +164,7 @@
                     </div>
                 </div>
                 <div class="add-client__bottom d-flex justify-content-end mgt-32 p-3">
-                    <button class="button button-discard me-3" id="discard" type="button">Discard <span
+                    <button class="button button-discard me-3 d-flex align-items-center" id="discard" type="button">Discard <span
                                 class="icon-close-circle ms-3"><span
                                     class="path1"></span><span class="path2"></span></span></button>
                     <button class="button button-primary" type="submit">Add client</button>

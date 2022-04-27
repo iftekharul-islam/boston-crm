@@ -4,16 +4,39 @@
       <div class="clients-top d-flex flex-wrap justify-content-between">
         <div class="left d-flex">
           <template v-for="(type, index) in types">
-            <button class="clients-top-btn px-3 h-32" :class="{'active': isActive === type.type}"
+            <button class="clients-top-btn px-3 h-40" :class="{'active': isActive === type.type}"
                     @click="getType(type.type)">
               {{ type.type }} <span class="ms-3">{{ type.count }}</span>
             </button>
           </template>
         </div>
         <div class="right d-flex">
-          <img v-if="loading" height="50px" width="50px" style="margin-right: 200px;" src="/img/loader.gif" class="flex-center"  alt="">
-          <input type="text" v-model="searchText" placeholder="Search ..." @keyup="searchClients" class="px-3 bdr-1 br-4 gray-border me-3">
-          <a :href="this.createRoute" class="button button-primary">Add clients</a>
+          <!-- Loader -->
+          <div v-if="loading" class="loader">
+            <!-- about -->
+              <div class="about">
+                <a class="bg_links social portfolio" href="https://www.rafaelalucas.com" target="_blank">
+                    <span class="icon"></span>
+                </a>
+                <a class="bg_links social dribbble" href="https://dribbble.com/rafaelalucas" target="_blank">
+                    <span class="icon"></span>
+                </a>
+                <a class="bg_links social linkedin" href="https://www.linkedin.com/in/rafaelalucas/" target="_blank">
+                    <span class="icon"></span>
+                </a>
+                <a class="bg_links logo"></a>
+              </div>
+              <!-- end about -->
+
+              <div class="content">
+                <div class="loading">
+              <p>loading</p>
+                    <span></span>
+                </div>
+              </div>
+          </div>
+          <input type="text" v-model="searchText" placeholder="Search ..." @keyup="searchClients" class="px-3 bdr-1 br-4 gray-border me-3 h-40">
+          <a :href="this.createRoute" class="button button-primary h-40 py-2 d-flex align-items-center">Add clients</a>
         </div>
       </div>
       <div class="clients-table mt-3">

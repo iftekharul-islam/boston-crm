@@ -15,12 +15,12 @@
                         {{ session('status') }}
                     </div>
                 @endif
-                <form method="POST" action="{{ route('password.email') }}">
+                <form method="POST" action="{{ route('password.email') }}" id="resetForm">
                     @csrf
                     <div class="row mb-3">
                         <label for="email" class="d-block text-light-black mb-2">{{ __('Email Address') }}</label>
                         <div class="">
-                            <input id="email" type="email" class="login-input form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" autocomplete="email" autofocus>
+                            <input id="email" type="text" class="login-input form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" autocomplete="email" autofocus>
 
                             @error('email')
                                 <span class="invalid-feedback" role="alert">
@@ -44,10 +44,37 @@
         <div class="right-side col-md-6">
             <div class="d-flex right-side-box align-items-center">
                 <img class="mgr-20" src="{{ asset('img/sidebar-logo.png') }}" alt="boston logo">
-                <p class="mb-0 text-white fw-bold ">Boston Appraisal
-                    Services</p>
+                <p class="mb-0 text-white fw-bold ">{{ config()->get('app.name') }}</p>
             </div>
         </div>
     </div>
 </div>
+@endsection
+
+@section('js')
+    <script>
+        $(document).ready(function () {
+            if ($(".invalid-feedback")){
+                setTimeout(function(){
+                    $(".invalid-feedback").addClass('d-none');
+                }, 6000);
+            }
+            $("input[type=text]").blur(function () {
+                $(this).val($(this).val().trim());
+            });
+        });
+        $('#resetForm').validate({ // initialize the plugin
+            rules: {
+                email: {
+                    required: true,
+                    email: true,
+                },
+            },
+            messages: {
+                email: {
+                    required: "Email is required",
+                },
+            }
+        });
+    </script>
 @endsection

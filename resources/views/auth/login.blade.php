@@ -31,7 +31,7 @@
                             <div class="">
                                 <div class="position-relative">
                                     <input id="password" type="password"
-                                           class="login-input form-control @error('password') is-invalid @enderror"
+                                           class="login-input form-control @error('email') is-invalid @enderror"
                                            name="password" autocomplete="password" autofocus>
                                     {{-- eye icon --}}
                                     <span class="icon-eye icons show-password"><span class="path1"></span><span
@@ -91,27 +91,35 @@
     <script>
         $(document).ready(function () {
             $('.hide-password').hide();
-            $('#loginForm').validate({ // initialize the plugin
-                rules: {
-                    email: {
-                        required: true,
-                        email: true,
-                    },
-                    password: {
-                        required: true,
-                        minlength: 6
-
-                    },
-                },
-                messages: {
-                    email: {
-                        required: "Email is required",
-                    },
-                    password: {
-                        required: "Password is required",
-                    },
-                }
+            if ($(".invalid-feedback")){
+                setTimeout(function(){
+                    $(".invalid-feedback").addClass('d-none');
+                }, 6000);
+            }
+            $("input[type=text]").blur(function () {
+                $(this).val($(this).val().trim());
             });
+        });
+        $('#loginForm').validate({ // initialize the plugin
+            rules: {
+                email: {
+                    required: true,
+                    email: true,
+                },
+                password: {
+                    required: true,
+                    minlength: 6
+
+                },
+            },
+            messages: {
+                email: {
+                    required: "Email is required",
+                },
+                password: {
+                    required: "Password is required",
+                },
+            }
         });
 
         $('.show-password').on('click', function () {
