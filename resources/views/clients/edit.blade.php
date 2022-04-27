@@ -175,9 +175,9 @@
         </div>
     </div>
 @endsection
-@push('scripts')
+@push('js')
     <script type="text/javascript">
-        $(document).ready(function() {
+        $(function() {
             $("#client-create-form").validate({
                 errorClass: "text-danger",
                 messages : {
