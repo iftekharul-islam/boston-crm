@@ -91,27 +91,35 @@
     <script>
         $(document).ready(function () {
             $('.hide-password').hide();
-            $('#loginForm').validate({ // initialize the plugin
-                rules: {
-                    email: {
-                        required: true,
-                        email: true,
-                    },
-                    password: {
-                        required: true,
-                        minlength: 6
-
-                    },
-                },
-                messages: {
-                    email: {
-                        required: "Email is required",
-                    },
-                    password: {
-                        required: "Password is required",
-                    },
-                }
+            if ($(".invalid-feedback")){
+                setTimeout(function(){
+                    $(".invalid-feedback").addClass('d-none');
+                }, 6000);
+            }
+            $("input[type=text]").blur(function () {
+                $(this).val($(this).val().trim());
             });
+        });
+        $('#loginForm').validate({ // initialize the plugin
+            rules: {
+                email: {
+                    required: true,
+                    email: true,
+                },
+                password: {
+                    required: true,
+                    minlength: 6
+
+                },
+            },
+            messages: {
+                email: {
+                    required: "Email is required",
+                },
+                password: {
+                    required: "Password is required",
+                },
+            }
         });
 
         $('.show-password').on('click', function () {

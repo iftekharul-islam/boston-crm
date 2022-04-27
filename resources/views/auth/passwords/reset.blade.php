@@ -8,7 +8,7 @@
                 <div class="card-header">{{ __('Reset Password') }}</div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route('password.update') }}">
+                    <form method="POST" action="{{ route('password.update') }}" id="resetForm">
                         @csrf
 
                         <input type="hidden" name="token" value="{{ $token }}">
@@ -17,7 +17,7 @@
                             <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}</label>
 
                             <div class="col-md-6">
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ $email ?? old('email') }}" required autocomplete="email" autofocus>
+                                <input id="email" type="text" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ $email ?? old('email') }}" required autocomplete="email" autofocus readonly>
 
                                 @error('email')
                                     <span class="invalid-feedback" role="alert">
@@ -62,4 +62,49 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('js')
+    <script>
+        $(document).ready(function () {
+            if ($(".invalid-feedback")){
+                setTimeout(function(){
+                    $(".invalid-feedback").addClass('d-none');
+                }, 6000);
+            }
+            $("input[type=text]").blur(function () {
+                $(this).val($(this).val().trim());
+            });
+        });
+
+        $('#resetForm').validate({ // initialize the plugin
+            rules: {
+                email: {
+                    required: true,
+                    email: true,
+                },
+                password: {
+                    required: true,
+                    minlength: 6
+
+                },
+                password_confirmation : {
+                    minlength : 6,
+                    equalTo : "#password"
+                }
+            },
+            messages: {
+                email: {
+                    required: "Email is required",
+                },
+                password: {
+                    required: "Password is required",
+                },
+                password_confirmation: {
+                    required: "Confirm password is required",
+                    equalTo: "Password did not match"
+                }
+            }
+        });
+    </script>
 @endsection
