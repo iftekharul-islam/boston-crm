@@ -102,9 +102,9 @@ class ClientController extends BaseController
      *
      * @return RedirectResponse
      */
-    public function update(ClientRequest $request, Client $client): RedirectResponse
+    public function update(ClientRequest $request, int $id): RedirectResponse
     {
-        $response = $this->clientService->updateClientData($request->validated(), $client->id);
+        $response = $this->clientService->updateClientData($request->validated(), $id);
         if ($response) {
             return redirect()->back()->with(['success' => 'Client updated successfully']);
         }

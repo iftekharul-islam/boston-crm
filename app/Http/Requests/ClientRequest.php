@@ -8,13 +8,19 @@ class ClientRequest extends FormRequest {
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array
+     * @return \Illuminate\Routing\Route|object|string
      */
+    public function authorize()
+    {
+        return (int)$this->route('id');
+    }
+
+
     public function rules(): array {
         return [
             "name"                   => "required",
-            "email"                  => "required|unique:clients,email,".$this->client->id,
-            "phone"                  => "required|unique:clients,phone,".$this->client->id,
+            "email"                  => "required|unique:clients,email,".$this->id,
+            "phone"                  => "required|unique:clients,phone,".$this->id,
             "client_type"            => "required",
             "address"                => "required_if:client_type,==,lender",
             "city"                   => "required_if:client_type,==,lender",
