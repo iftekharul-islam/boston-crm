@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ClientRequest;
+use App\Models\Client;
 use App\Services\ClientService;
 use App\Services\CompanyService;
 use Illuminate\Contracts\Foundation\Application;
@@ -101,9 +102,9 @@ class ClientController extends BaseController
      *
      * @return RedirectResponse
      */
-    public function update(ClientRequest $request, int $id): RedirectResponse
+    public function update(ClientRequest $request, Client $client): RedirectResponse
     {
-        $response = $this->clientService->updateClientData($request->validated(), $id);
+        $response = $this->clientService->updateClientData($request->validated(), $client->id);
         if ($response) {
             return redirect()->back()->with(['success' => 'Client updated successfully']);
         }
