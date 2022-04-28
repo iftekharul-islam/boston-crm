@@ -33,7 +33,7 @@
         {{--             </div>--}}
         {{--             <span class="icon-arrow-down ms-auto"></span>--}}
         {{--        </a>--}}
-        @if(in_array('view.client', $permissions) || $is_owner)
+        @if(in_array('view.client', $permissions) || $is_owner || $user_role == 'admin')
             <a href="{{ url('/clients') }}"
                class="list-item d-flex align-items-center  text-white {{ (request()->is('clients*')) ? 'active' : '' }}">
                 <div class="d-inline-flex align-items-center">
@@ -43,7 +43,7 @@
                 <span class="icon-arrow-down ms-auto"></span>
             </a>
         @endif
-        @if(in_array('view.user', $permissions) || $is_owner)
+        @if(in_array('view.user', $permissions) || $is_owner || $user_role == 'admin')
             <a href="{{ route('users.index') }}"
                class="list-item d-flex align-items-center  text-white {{ (request()->is('users*')) ? 'active' : '' }}">
                 <div class="d-inline-flex align-items-center">
@@ -53,7 +53,7 @@
                 <span class="icon-arrow-down ms-auto"></span>
             </a>
         @endif
-        @if(in_array('view.role', $permissions) || $is_owner)
+        @if(in_array('view.role', $permissions) || $is_owner || $user_role == 'admin')
             <a href="{{ route('roles.index') }}"
                class="list-item d-flex align-items-center  text-white {{ (request()->is('roles*')) ? 'active' : '' }}">
                 <div class="d-inline-flex align-items-center">

@@ -4,7 +4,7 @@
     <div class="role-permission bg-platinum dashboard-space">
         <div class="d-flex justify-content-between">
             <p class="mb-0 text-light-black fs-20 fw-bold">{{ __('messages.role_view.role_management') }}</p>
-            @if(in_array('create.role', $permissions))
+            @if(in_array('create.role', $permissions) || $is_owner || $user_role == 'admin')
                 <button class="button button-primary" onclick="showNewRoleCreate();"
                         role="button">{{ __('messages.role_view.role_create') }}</button>
             @endif
@@ -26,7 +26,7 @@
 
 @push("js")
     <script>
-        $(document).ready(function () {
+        $(function () {
             $('.new-role').addClass('d-none');
         });
 
