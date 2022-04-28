@@ -47,14 +47,14 @@
         </a>
         <a href="{{ route('roles.index') }}" class="list-item d-flex align-items-center  text-white {{ (request()->is('roles*')) ? 'active' : '' }}">
             <div class="d-inline-flex align-items-center">
-                <span class="icon-user me-3 fs-3"><span class="path1"></span><span class="path2"></span></span>
+                <span class="icon-user-role me-3 fs-3"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span>
                 <span class="items-text"> {{ __('messages.dashboard_view.roles') }} </span>
              </div>
              <span class="icon-arrow-down ms-auto"></span>
         </a>
          <a href="{{ route('orders.index') }}" class="list-item d-flex align-items-center  text-white {{ (request()->is('orders*')) ? 'active' : '' }}">
             <div class="d-inline-flex align-items-center">
-                <span class="icon-invoice me-3 fs-3"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></span>
+                <span class="icon-order me-3 fs-3"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span>
                 <span class="items-text"> {{ __('messages.dashboard_view.orders') }} </span>
              </div>
              <span class="icon-arrow-down ms-auto"></span>
