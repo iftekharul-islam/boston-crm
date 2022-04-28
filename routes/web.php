@@ -66,7 +66,7 @@ Route::group( [ 'middleware' => [ 'auth:sanctum' ] ], function () {
 		 [ ClientController::class, 'store' ] )->middleware( 'role_permission:create.client' )->name( 'clients.store' );
 	 Route::get( 'clients/{id}',
 		 [ ClientController::class, 'show' ] )->middleware( 'role_permission:view.client' )->name( 'clients.show' );
-	 Route::post( 'clients/{id}/edit',
+	 Route::get( 'clients/{id}/edit',
 		 [ ClientController::class, 'edit' ] )->middleware( 'role_permission:update.client' )->name( 'clients.edit' );
 	 Route::put( 'clients/{id}',
 		 [ ClientController::class, 'update' ] )->middleware( 'role_permission:update.client' )->name( 'clients.update' );
