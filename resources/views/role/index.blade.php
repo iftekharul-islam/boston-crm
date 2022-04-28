@@ -4,8 +4,10 @@
     <div class="role-permission bg-platinum dashboard-space">
         <div class="d-flex justify-content-between">
             <p class="mb-0 text-light-black fs-20 fw-bold">{{ __('messages.role_view.role_management') }}</p>
-            <button class="button button-primary" onclick="showNewRoleCreate();"
-                    role="button">{{ __('messages.role_view.role_create') }}</button>
+            @if(in_array('create.role', $permissions))
+                <button class="button button-primary" onclick="showNewRoleCreate();"
+                        role="button">{{ __('messages.role_view.role_create') }}</button>
+            @endif
         </div>
         {{-- role create--}}
         @include('role._create-role')
