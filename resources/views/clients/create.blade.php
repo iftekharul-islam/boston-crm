@@ -339,12 +339,14 @@
             let clientType = $(this).val();
             if (clientType === 'lender') {
                 $("#client-create-form").data('validator').resetForm();
+                $(document).find('.dashboard-input').removeClass('error');
 
                 $(".address-label, .city-label, .state-label, .country-label, .zip-label").addClass('require');
 
                 $(".deducts-technology-fee-label, .fee-for-1004uad-label, .fee-for-1004d-label, .can-sign-label, .can-inspect-label").removeClass('require');
             } else {
                 $("#client-create-form").data('validator').resetForm();
+                $(document).find('.dashboard-input').removeClass('error');
 
                 $(".deducts-technology-fee-label, .fee-for-1004uad-label, .fee-for-1004d-label, .can-sign-label, .can-inspect-label").addClass('require');
 
