@@ -6,7 +6,6 @@ use App\Http\Requests\InviteUserUpdateRequest;
 use App\Http\Requests\ProfileUpdateRequest;
 use App\Http\Requests\UserCreateRequest;
 use App\Http\Requests\UserUpdateRequest;
-use App\Models\Company;
 use App\Models\CompanyUser;
 use App\Models\UserInvite;
 use App\Repositories\UserProfileRepository;
@@ -20,9 +19,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Str;
-use JetBrains\PhpStorm\NoReturn;
 
 class UserController extends BaseController
 {
