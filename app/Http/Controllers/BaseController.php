@@ -9,7 +9,7 @@ use Spatie\Permission\Models\Role;
 class BaseController extends Controller
 {
 	 protected string $user_role;
-	 protected bool $isOwner;
+	 protected bool $isOwner = false;
 	 protected array $permissions = [];
 	 
 	 public function __construct()
