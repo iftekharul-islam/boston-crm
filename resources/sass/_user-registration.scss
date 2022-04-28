@@ -3,6 +3,7 @@
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     padding: 32px;
+    padding-top: 0;
     grid-gap: 24px;
     @include for-max-991 {
         grid-template-columns: 1fr 1fr;

@@ -3,11 +3,21 @@
 @section('content')
     <div class="user-registration bg-login-box">
         <div class=" max-w-1576 mx-auto">
-            <h4 class="light-black fs-34 mgb-20 fw-bold">{{ $company->name }} has invited you to join team</h4>
+            <div class="user-registration-logo d-flex align-items-center mgb-48">
+                <img src="{{ asset('img/boston-black.png') }}" alt="logo" class="img-fluid">
+                <div class="mgl-20">
+                    <h4 class="fs-34 fw-bold mgb-12">Boston Appraisal Services</h4>
+                    <a href="/" class="text-light-black mb-0">www.bostonappraisal.com</a>
+                </div>
+            </div>
+            <h4 class="text-light-black fs-20 mb-3 text-600">{{ $company->name }} has invited you to join team</h4>
             <form action="{{ route('update.invite.user.profile', $user->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
-                <div class="user-registration__box bg-white br-8">
+                <div class="user-registration__box bg-white br-8 pdt-32">
+                    <div class="pdl-32">
+                        <p class="fs-20 text-600 text-light-black mb-3">Fillup this form </p>
+                    </div>
                     <div class="box-row">
                         <div class="bg-platinum h-100 pd-32 br-8">
                             <div class="group">

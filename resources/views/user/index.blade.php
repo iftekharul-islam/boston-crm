@@ -35,8 +35,9 @@
                             <td class="role-results-td">
                                 <div class="role-results role-view-{{ $user->id }}">
                                     <span class="role-name"> {{ $role_name }}</span>
-                                    @if($company->owner_id !== $user->id)
-                                        <span class="icon-edit fs-20 cursor-pointer" onclick="roleUpdateOpen({{ $user->id }});"><span
+                                    @if($company->owner_id !== $user->id && in_array('update.user', $permissions))
+                                        <span class="icon-edit fs-20 cursor-pointer"
+                                              onclick="roleUpdateOpen({{ $user->id }});"><span
                                                     class="path1"></span><span class="path2"></span></span>
                                     @endif
                                 </div>
@@ -56,14 +57,16 @@
                                             <span class="icon-arrow-down bottom-arrow-icon"></span>
                                         </div>
                                         {{-- <div class="d-flex align-items-center"> --}}
-                                            <span class="icon-close-circle fs-28 mx-2 cursor-pointer"
+                                        <span class="icon-close-circle fs-28 mx-2 cursor-pointer"
                                               onclick="roleUpdateClose({{ $user->id }});"><span
                                                     class="path1"></span><span class="path2"></span></span>
 
-                                            <span class="cursor-pointer fs-20" onclick="roleUpdate({{ $user->id }});">
-                                                <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <span class="cursor-pointer fs-20" onclick="roleUpdate({{ $user->id }});">
+                                                <svg width="22" height="22" viewBox="0 0 22 22" fill="none"
+                                                     xmlns="http://www.w3.org/2000/svg">
                                                     <rect width="22" height="22" rx="11" fill="#34A851"/>
-                                                    <path d="M9.42745 14.3411C9.18842 14.3411 8.94939 14.253 8.76068 14.0643L6.87362 12.1772C6.50879 11.8124 6.50879 11.2086 6.87362 10.8437C7.23845 10.4789 7.84231 10.4789 8.20715 10.8437L9.42745 12.064L13.7929 7.69862C14.1577 7.33379 14.7615 7.33379 15.1264 7.69862C15.4912 8.06346 15.4912 8.66731 15.1264 9.03215L10.0942 14.0643C9.91808 14.253 9.66648 14.3411 9.42745 14.3411Z" fill="white"/>
+                                                    <path d="M9.42745 14.3411C9.18842 14.3411 8.94939 14.253 8.76068 14.0643L6.87362 12.1772C6.50879 11.8124 6.50879 11.2086 6.87362 10.8437C7.23845 10.4789 7.84231 10.4789 8.20715 10.8437L9.42745 12.064L13.7929 7.69862C14.1577 7.33379 14.7615 7.33379 15.1264 7.69862C15.4912 8.06346 15.4912 8.66731 15.1264 9.03215L10.0942 14.0643C9.91808 14.253 9.66648 14.3411 9.42745 14.3411Z"
+                                                          fill="white"/>
                                                     </svg>                                                                                                    
                                             </span>
                                         {{-- </div> --}}
@@ -74,8 +77,11 @@
                                 @if($company->owner_id !== $user->id)
                                     <span class="role-name">
                                         50%
-                                    </span><span class="icon-edit fs-20"><span
-                                                class="path1"></span><span class="path2"></span></span>
+                                    </span>
+                                    @if($company->owner_id !== $user->id && in_array('update.user', $permissions))
+                                        <span class="icon-edit fs-20"><span
+                                                    class="path1"></span><span class="path2"></span></span>
+                                    @endif
                                 @endif
                             </td>
                             <td>{{ $profile->phone ?? '' }}</td>
@@ -86,7 +92,8 @@
                                     <div class="switch">
                                         <input class="switch-input" type="checkbox" id="switch{{ $user->id }}"
                                                onclick="userStatusChange({{ $user->id }})"
-                                               @if($user->pivot->status) checked @endif/>
+                                               @if($user->pivot->status) checked @endif
+                                        @if(! in_array('update.user', $permissions)) disabled @endif/>
                                         <label class="switch-label" for="switch{{ $user->id }}"></label>
                                         <span class="active-switch switch-status">{{ __('messages.active') }}</span>
                                         <span class="inactive-switch switch-status">{{ __('messages.inactive') }}</span>
@@ -99,7 +106,7 @@
                                        onclick="profileModalOpen({{ $user }}, {{ $user->userProfile }});">
                                         <span class="icon-eye fs-20"><span class="path1"></span><span
                                                     class="path2"></span></span></a>
-                                    @if($company->owner_id !== $user->id)
+                                    @if($company->owner_id !== $user->id && in_array('delete.user', $permissions))
                                         <a class="cursor-pointer text-light-black" data-id="{{ $user->id }}"
                                            data-action="{{ route('users.destroy',$user->id) }}"
                                            onclick="deleteConfirmation({{$user->id}})"> <span
@@ -175,7 +182,7 @@
             $('#roleErrorMsg').text('');
             let role_id = $('#role option:selected').val();
             let email = $('#email').val();
-            if(email.length === 0 || role_id.length === 0) {
+            if (email.length === 0 || role_id.length === 0) {
                 $('#emailErrorMsg').text('Email is required');
                 $('#roleErrorMsg').text('Role is required');
                 return;
