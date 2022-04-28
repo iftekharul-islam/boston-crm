@@ -173,7 +173,7 @@
         </div>
     </div>
 @endsection
-@push('scripts')
+@push('js')
     <script type="text/javascript">
         $(function () {
             $("#client-create-form").validate({

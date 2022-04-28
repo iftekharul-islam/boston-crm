@@ -193,7 +193,6 @@
             let model_name = self.data('model-name');
             let model_list = ["create." + model_name, "update." + model_name, "delete." + model_name];
             let view_select;
-            console.log(name)
             if (name.includes('.' + model_name)) {
                 view_select = checkView(name, self, all_siblings, model_list);
                 if (view_select && $(self).is(':checked')) {
