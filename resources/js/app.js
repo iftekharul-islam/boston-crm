@@ -24,6 +24,7 @@ import 'sweetalert2/dist/sweetalert2.min.css';
 Vue.use(VueSweetalert2);
 Vue.component('pagination', Pagination);
 Vue.component('clients-list', require('./components/clients/list').default);
+Vue.component('order-create', require('./components/orders/OrderCreate').default)
 
 
 Vue.config.productionTip = false

@@ -74,7 +74,21 @@ Route::group( [ 'middleware' => [ 'auth:sanctum' ] ], function () {
 		 [ ClientController::class, 'destroy' ] )->middleware( 'role_permission:delete.client' )->name( 'clients.destroy' );
 	 Route::get( 'get-clients/{type}', [ ClientController::class, 'getClientsByType' ] );
 	 //order
-	 Route::resource( 'orders', OrderController::class );
+//	 Route::resource( 'orders', OrderController::class );
+	 Route::get( 'orders',
+		 [ OrderController::class, 'index' ] )->middleware( 'role_permission:view.order' )->name( 'orders.index' );
+	 Route::get( 'orders/create',
+		 [ OrderController::class, 'create' ] )->middleware( 'role_permission:create.order' )->name( 'orders.create' );
+	 Route::post( 'orders',
+		 [ OrderController::class, 'store' ] )->middleware( 'role_permission:create.order' )->name( 'orders.store' );
+	 Route::get( 'orders/{id}',
+		 [ OrderController::class, 'show' ] )->middleware( 'role_permission:view.order' )->name( 'orders.show' );
+	 Route::get( 'orders/{id}/edit',
+		 [ OrderController::class, 'edit' ] )->middleware( 'role_permission:update.order' )->name( 'orders.edit' );
+	 Route::put( 'orders/{id}',
+		 [ OrderController::class, 'update' ] )->middleware( 'role_permission:update.order' )->name( 'orders.update' );
+	 Route::delete( 'orders/{id}',
+		 [ OrderController::class, 'destroy' ] )->middleware( 'role_permission:delete.order' )->name( 'orders.destroy' );
 } );
 Auth::routes();
 Route::redirect( '/', '/login' );

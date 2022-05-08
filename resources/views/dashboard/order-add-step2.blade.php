@@ -14,7 +14,7 @@
                 <div class="row mgb-32">
                     <div class="col-md-12 ">
                         <div class="form-box">
-                            <h4 class="box-header mb-3">Brower info</h4>
+                            <h4 class="box-header mb-3">Borrower info</h4>
         
                             <div class="d-flex justify-content-between w-100">
                                 <div class="left max-w-424 w-100 me-3">
