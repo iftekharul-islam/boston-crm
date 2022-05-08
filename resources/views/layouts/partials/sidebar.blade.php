@@ -64,13 +64,17 @@
                 <span class="icon-arrow-down ms-auto"></span>
             </a>
         @endif
-        {{--         <a href="{{ route('orders.index') }}" class="list-item d-flex align-items-center  text-white {{ (request()->is('orders*')) ? 'active' : '' }}">--}}
-        {{--            <div class="d-inline-flex align-items-center">--}}
-        {{--                <span class="icon-order me-3 fs-3"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span>--}}
-        {{--                <span class="items-text"> {{ __('messages.dashboard_view.orders') }} </span>--}}
-        {{--             </div>--}}
-        {{--             <span class="icon-arrow-down ms-auto"></span>--}}
-        {{--        </a>--}}
+        @if(in_array('view.order', $permissions) || $is_owner || $user_role == 'admin')
+            <a href="{{ route('orders.index') }}"
+               class="list-item d-flex align-items-center  text-white {{ (request()->is('orders*')) ? 'active' : '' }}">
+                <div class="d-inline-flex align-items-center">
+                <span class="icon-order me-3 fs-3"><span class="path1"></span><span class="path2"></span><span
+                            class="path3"></span></span>
+                    <span class="items-text"> {{ __('messages.dashboard_view.orders') }} </span>
+                </div>
+                <span class="icon-arrow-down ms-auto"></span>
+            </a>
+        @endif
         {{--         <a href="{{ url('/marketing') }}" class="list-item d-flex align-items-center  text-white">--}}
         {{--            <div class="d-inline-flex align-items-center">--}}
         {{--                <span class="icon-ranking me-3 fs-3"></span>--}}
