@@ -75,7 +75,7 @@
       </div>
       <div class="pagination justify-content-center mgt-32">
 
-        <pagination v-model="page" :edgeNavigation="false" :options="{chunk: 5,theme : 'bootstrap4',texts:{ count: '',first: '',last: '' }}" :records="parseInt(this.clients.total)" :per-page="this.clients.per_page"
+        <pagination v-model="page" :edgeNavigation="false" :options="{chunk: 3,theme : 'bootstrap4',texts:{ count: '',first: '',last: '' }}" :records="parseInt(this.clients.total)" :per-page="this.clients.per_page"
                     @paginate="getClients"/>
       </div>
     </div>

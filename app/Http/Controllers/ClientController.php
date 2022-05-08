@@ -41,10 +41,11 @@ class ClientController extends BaseController
      */
     public function getClientsByType($type): JsonResponse
     {
-        $pageNumber = request()->query('page');
-        $searchKey = request()->query('searchKey') ?? '';
+        $page_number = request()->query('page');
+        $search_key = request()->query('searchKey') ?? '';
+        $company_id = $this->companyService->getAuthUserCompany()->id;
 
-        $clients = $this->clientService->getClients($type, $pageNumber,$searchKey);
+        $clients = $this->clientService->getClients($type, $page_number,$search_key,$company_id);
 
 
         return response()->json([

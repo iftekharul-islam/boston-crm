@@ -23,11 +23,14 @@ class ClientService
 
     /**
      * @param string $type
+     * @param int $page_number
+     * @param string $search_key
+     * @param int $company_id
      * @return array
      */
-    public function getClients(string $type, int $pageNumber,string $searchKey): array
+    public function getClients(string $type, int $page_number,string $search_key,int $company_id): array
     {
-        return $this->clientRepository->getClientsData(strtolower($type), $pageNumber,$searchKey);
+        return $this->clientRepository->getClientsData(strtolower($type), $page_number,$search_key,$company_id);
     }
 
     /**
