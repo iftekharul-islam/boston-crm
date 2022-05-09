@@ -29,4 +29,28 @@ class Client extends Model implements HasMedia
         "instruction",
         "company_id"
     ];
+
+    public function scopeFilterByCompany($query,$company_id)
+    {
+        return $query->where('company_id',$company_id);
+    }
+
+    public function scopeSearchFilters($query,$search_key)
+    {
+        return $query->where(function ($q) use($search_key){
+            $q->where('name', 'like', '%' . $search_key . '%')
+            ->orWhere('email','like','%' . $search_key . '%')
+            ->orWhere('phone','like','%' . $search_key . '%');
+        });
+    }
+
+    public function scopeAmc($query)
+    {
+        return $query->where('client_type','amc');
+    }
+
+    public function scopeLender($query)
+    {
+        return $query->where('client_type','lender');
+    }
 }
