@@ -142,6 +142,7 @@
                                                 <label class="custom-file-label text-light-black mt-2 d-block"
                                                        for="inputGroupFile01"></label>
                                             </div>
+                                            <p class="image-error text-danger"></p>
                                         </div>
                                     </div>
                                 </div>
@@ -161,7 +162,15 @@
 
 @section('js')
     <script>
+        const MAX_FILE_SIZE = 1 * 1024 * 1024; // 5MB
+
         $("#inputGroupFile01").change(function (event) {
+            $('.image-error').text("");
+            let fileSize = this.files[0].size;
+            if (fileSize > MAX_FILE_SIZE) {
+                $('.image-error').text("File must not exceed 1 MB!");
+                return;
+            }
             readURL(this);
         });
 
