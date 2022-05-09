@@ -176,8 +176,8 @@
 
         function readURL(input) {
             if (input.files && input.files[0]) {
-                var reader = new FileReader();
-                var filename = $("#inputGroupFile01").val();
+                let reader = new FileReader();
+                let filename = $("#inputGroupFile01").val();
                 filename = filename.substring(filename.lastIndexOf('\\') + 1);
                 reader.onload = function (e) {
                     $('#blah').attr('src', e.target.result).hide().fadeIn(500);
