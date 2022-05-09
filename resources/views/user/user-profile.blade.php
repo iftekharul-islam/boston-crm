@@ -127,9 +127,13 @@
                                             <div id='img_preview' class="img__preview">
                                                 <img id="blah" align='middle' src="{{ $user->getMedia('profiles')[0] ?? false ? asset($user->getMedia('profiles')[0]->getUrl()) : asset('img/user.png') }}" alt="{{ $user->getMedia('profiles')[0]->name ?? '' }}"
                                                      class="img-fluid" title=''/>
-                                                <div class="upload-img">
-                                                    <input type="file" id="inputGroupFile01" class="imgInp custom-file-input"
-                                                           aria-describedby="inputGroupFileAddon01" name="image">
+                                                <div class="upload-img cursor-pointer">
+                                                    <input type="file"
+                                                           id="inputGroupFile01"
+                                                           class="imgInp custom-file-input"
+                                                           aria-describedby="inputGroupFileAddon01"
+                                                           name="image"
+                                                           accept="image/png, image/jpeg">
                                                     <span class="icon-camera"><span class="path1"></span><span class="path2"></span><span
                                                                 class="path3"></span></span>
                                                 </div>
@@ -138,6 +142,7 @@
                                                 <label class="custom-file-label text-light-black mt-2 d-block"
                                                        for="inputGroupFile01"></label>
                                             </div>
+                                            <p class="image-error text-danger"></p>
                                         </div>
                                     </div>
                                 </div>
@@ -157,19 +162,25 @@
 
 @section('js')
     <script>
+        const MAX_FILE_SIZE = 1024 * 1024; // 5MB
+
         $("#inputGroupFile01").change(function (event) {
+            $('.image-error').text("");
+            let fileSize = this.files[0].size;
+            if (fileSize > MAX_FILE_SIZE) {
+                $('.image-error').text("File must not exceed 1 MB!");
+                return;
+            }
             readURL(this);
         });
 
         function readURL(input) {
             if (input.files && input.files[0]) {
-                var reader = new FileReader();
-                var filename = $("#inputGroupFile01").val();
+                let reader = new FileReader();
+                let filename = $("#inputGroupFile01").val();
                 filename = filename.substring(filename.lastIndexOf('\\') + 1);
                 reader.onload = function (e) {
-                    $('#blah').attr('src', e.target.result);
-                    $('#blah').hide();
-                    $('#blah').fadeIn(500);
+                    $('#blah').attr('src', e.target.result).hide().fadeIn(500);
                     $('.custom-file-label').text(filename);
                 }
                 reader.readAsDataURL(input.files[0]);
