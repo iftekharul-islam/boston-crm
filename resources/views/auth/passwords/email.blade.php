@@ -8,8 +8,8 @@
         <div class="left-side col-md-6 bg-light-black">
             <a href="{{ route('login') }}" class="back-btn text-white"><img class="mgr-8" src="{{ asset('img/arrow-left.png') }}" alt="boston logo"> Back</a>
             <div class="login-box" id="loginBox">
-                <div class="login-header fs-20 text-light-black mgb-32 fw-bold">{{ __('Reset Password') }}</div>
-                <p class="text-light-black mgb-32" style="max-width: 372px">You can set a recovery recovery email to be able to reset your password & restore access to your Boston Appraisal account.</p>
+                <div class="login-header fs-20 text-light-black mgb-32 fw-bold">{{ __('Reset password') }}</div>
+                <p class="text-light-black mgb-32" style="max-width: 372px">You can set a recovery email to be able to reset your password & restore access to your Boston Appraisal account.</p>
                 @if (session('status'))
                     <div class="alert alert-success" role="alert">
                         {{ session('status') }}
