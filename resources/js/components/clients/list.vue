@@ -161,7 +161,7 @@ export default {
               }).catch(err => {
             console.log(err)
           })
-          this.$swal('Deleted', 'You successfully deleted this file', 'success')
+          this.$swal('Deleted', 'You successfully deleted this client', 'success')
           setTimeout(function (){
             location.reload()
           },2000);
@@ -171,9 +171,4 @@ export default {
   }
 }
 </script>
-<style scoped>
-.customIcon {
-  height: 5px !important;
-}
-</style>
 

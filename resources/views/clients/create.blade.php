@@ -153,7 +153,7 @@
                                     <div class="group">
                                         <label for="instruction" class="d-block mb-2 dashboard-label">Instruction</label>
                                         <div class="position-relative file-upload">
-                                            <input type="file" name="instruction" id="instruction">
+                                            <input type="file" accept=".xls,.xlsx,.pdf,.doc,.docx" name="instruction" id="instruction">
                                             <label for="">Upload <img src="{{ asset('/img/upload.png') }}"
                                                                       alt="boston profile"></label>
                                         </div>
