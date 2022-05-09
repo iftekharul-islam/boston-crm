@@ -35,7 +35,7 @@
                             <td class="role-results-td">
                                 <div class="role-results role-view-{{ $user->id }}">
                                     <span class="role-name"> {{ $role_name }}</span>
-                                    @if($company->owner_id !== $user->id && in_array('update.user', $permissions))
+                                    @if($company->owner_id !== $user->id && in_array('update.user', $user_permissions))
                                         <span class="icon-edit fs-20 cursor-pointer"
                                               onclick="roleUpdateOpen({{ $user->id }});"><span
                                                     class="path1"></span><span class="path2"></span></span>
@@ -78,7 +78,7 @@
                                     <span class="role-name">
                                         50%
                                     </span>
-                                    @if($company->owner_id !== $user->id && in_array('update.user', $permissions))
+                                    @if($company->owner_id !== $user->id && in_array('update.user', $user_permissions))
                                         <span class="icon-edit fs-20"><span
                                                     class="path1"></span><span class="path2"></span></span>
                                     @endif
@@ -93,7 +93,7 @@
                                         <input class="switch-input" type="checkbox" id="switch{{ $user->id }}"
                                                onclick="userStatusChange({{ $user->id }})"
                                                @if($user->pivot->status) checked @endif
-                                        @if(! in_array('update.user', $permissions)) disabled @endif/>
+                                        @if(! in_array('update.user', $user_permissions)) disabled @endif/>
                                         <label class="switch-label" for="switch{{ $user->id }}"></label>
                                         <span class="active-switch switch-status">{{ __('messages.active') }}</span>
                                         <span class="inactive-switch switch-status">{{ __('messages.inactive') }}</span>
@@ -106,7 +106,7 @@
                                        onclick="profileModalOpen({{ $user }}, {{ $user->userProfile }});">
                                         <span class="icon-eye fs-20"><span class="path1"></span><span
                                                     class="path2"></span></span></a>
-                                    @if($company->owner_id !== $user->id && in_array('delete.user', $permissions))
+                                    @if($company->owner_id !== $user->id && in_array('delete.user', $user_permissions))
                                         <a class="cursor-pointer text-light-black" data-id="{{ $user->id }}"
                                            data-action="{{ route('users.destroy',$user->id) }}"
                                            onclick="deleteConfirmation({{$user->id}})"> <span

@@ -10,7 +10,7 @@ class BaseController extends Controller
 {
 	 protected string $user_role;
 	 protected bool $isOwner = false;
-	 protected array $permissions = [];
+	 protected array $userPermissions = [];
 	 
 	 public function __construct()
 	 {
@@ -24,7 +24,7 @@ class BaseController extends Controller
 							 return $query->get( [ 'name' ] );
 						} )->where( 'name', $this->user_role )->first();
 						if ( $role ) {
-							 $this->permissions = $role->permissions->map( function ($permission) {
+							 $this->userPermissions = $role->permissions->map( function ($permission) {
 									return $permission->name;
 							 } )->toArray();
 						}
@@ -32,7 +32,7 @@ class BaseController extends Controller
 				 View::share( [
 					 'user_role'   => $this->user_role ?? '',
 					 'is_owner'    => $this->isOwner,
-					 'permissions' => $this->permissions,
+					 'user_permissions' => $this->userPermissions,
 				 ] );
 				 
 				 return $next( $request );

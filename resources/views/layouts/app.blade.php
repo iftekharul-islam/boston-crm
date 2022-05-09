@@ -34,6 +34,7 @@
         @include('layouts.partials.sidebar')
     @endif
     <div class="dashboard-main__right flex-grow-1 bg-platinum">
+        <div>{{ print_r($user_permissions) }}</div>
         @if(auth()->check())
             <!-- Header -->
             <header class="dashboard-header d-flex align-items-center justify-content-between bg-white">
