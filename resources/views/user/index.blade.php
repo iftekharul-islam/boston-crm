@@ -117,6 +117,8 @@
                                 </div>
                             </td>
                         </tr>
+                        <!-- User profile Modal -->
+                        @include('user._user-profile-modal')
                     @endforeach
                     </tbody>
                 </table>
@@ -129,9 +131,6 @@
         </div>
         {{-- create user modal --}}
         @include('user._invite-user-modal')
-
-        <!-- User profile Modal -->
-        @include('user._user-profile-modal')
     </div>
 
 @endsection
@@ -214,11 +213,11 @@
          * @param user_profile
          */
         function profileModalOpen(user, user_profile) {
-            $("#userProfile").modal('show');
+            $("#userProfile" + user.id).modal('show');
         }
 
-        function profileModalClose() {
-            $("#userProfile").modal('hide');
+        function profileModalClose(id) {
+            $("#userProfile" + id).modal('hide');
         }
 
         /**

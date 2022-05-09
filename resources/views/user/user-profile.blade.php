@@ -127,9 +127,13 @@
                                             <div id='img_preview' class="img__preview">
                                                 <img id="blah" align='middle' src="{{ $user->getMedia('profiles')[0] ?? false ? asset($user->getMedia('profiles')[0]->getUrl()) : asset('img/user.png') }}" alt="{{ $user->getMedia('profiles')[0]->name ?? '' }}"
                                                      class="img-fluid" title=''/>
-                                                <div class="upload-img">
-                                                    <input type="file" id="inputGroupFile01" class="imgInp custom-file-input"
-                                                           aria-describedby="inputGroupFileAddon01" name="image">
+                                                <div class="upload-img cursor-pointer">
+                                                    <input type="file"
+                                                           id="inputGroupFile01"
+                                                           class="imgInp custom-file-input"
+                                                           aria-describedby="inputGroupFileAddon01"
+                                                           name="image"
+                                                           accept="image/png, image/jpeg">
                                                     <span class="icon-camera"><span class="path1"></span><span class="path2"></span><span
                                                                 class="path3"></span></span>
                                                 </div>

@@ -57,7 +57,8 @@
                              aria-expanded="false">
                            <div class="d-flex align-items-center">
                                 <div class="profile__img me-2">
-                                    <img src="{{ asset('img/dummy-profile.png') }}" alt="boston profile">
+                                    <img src="{{ auth()->user()->getMedia('profiles')[0] ?? false ? asset(auth()->user()->getMedia('profiles')[0]->getUrl()) : asset('img/dummy-profile.png') }}"
+                                         alt="{{ auth()->user()->name }}">
                                 </div>
                                 <div class="profile__name">
                                     <p class="text-bold text-light-black fs-14 mb-0 fw-bold name">{{ Auth::user()->name }}</p>

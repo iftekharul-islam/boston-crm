@@ -41,7 +41,7 @@ trait FileHandler
 		 UploadedFile $file,
 		 object $model,
 		 string $folder = 'download',
-		 string $storage_location = 'local'
+		 string $storage_location = 'public'
 	 ): void {
 			Media::query()->where( 'model_id', $model->id )->first()?->delete();
 			$model->addMedia( $file )->toMediaCollection( $folder, $storage_location );
