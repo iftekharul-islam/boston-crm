@@ -180,9 +180,7 @@
                 var filename = $("#inputGroupFile01").val();
                 filename = filename.substring(filename.lastIndexOf('\\') + 1);
                 reader.onload = function (e) {
-                    $('#blah').attr('src', e.target.result);
-                    $('#blah').hide();
-                    $('#blah').fadeIn(500);
+                    $('#blah').attr('src', e.target.result).hide().fadeIn(500);
                     $('.custom-file-label').text(filename);
                 }
                 reader.readAsDataURL(input.files[0]);
