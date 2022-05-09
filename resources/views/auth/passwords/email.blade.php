@@ -8,8 +8,8 @@
         <div class="left-side col-md-6 bg-light-black">
             <a href="{{ route('login') }}" class="back-btn text-white"><img class="mgr-8" src="{{ asset('img/arrow-left.png') }}" alt="boston logo"> Back</a>
             <div class="login-box" id="loginBox">
-                <div class="login-header fs-20 text-light-black mgb-32 fw-bold">{{ __('Reset Password') }}</div>
-                <p class="text-light-black mgb-32" style="max-width: 372px">You can set a recovery recovery email to be able to reset your password & restore access to your Boston Appraisal account.</p>
+                <div class="login-header fs-20 text-light-black mgb-32 fw-bold">{{ __('Reset password') }}</div>
+                <p class="text-light-black mgb-32" style="max-width: 372px">You can set a recovery email to be able to reset your password & restore access to your Boston Appraisal account.</p>
                 @if (session('status'))
                     <div class="alert alert-success" role="alert">
                         {{ session('status') }}
@@ -18,7 +18,7 @@
                 <form method="POST" action="{{ route('password.email') }}" id="resetForm">
                     @csrf
                     <div class="row mb-3">
-                        <label for="email" class="d-block text-light-black mb-2">{{ __('Email Address') }}</label>
+                        <label for="email" class="d-block text-light-black mb-2">{{ __('Email address') }}</label>
                         <div class="">
                             <input id="email" type="text" class="login-input form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" autocomplete="email" autofocus>
 
