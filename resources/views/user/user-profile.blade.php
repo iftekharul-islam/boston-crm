@@ -162,7 +162,7 @@
 
 @section('js')
     <script>
-        const MAX_FILE_SIZE = 1 * 1024 * 1024; // 5MB
+        const MAX_FILE_SIZE = 1024 * 1024; // 5MB
 
         $("#inputGroupFile01").change(function (event) {
             $('.image-error').text("");
