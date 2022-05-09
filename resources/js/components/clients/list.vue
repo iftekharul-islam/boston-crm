@@ -145,19 +145,19 @@ export default {
       window.location.href = this.showRoute + '/' + clientId
     },
     deleteClient(clientId){
-      this.$swal({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
+      swal({
+        title: "Are you sure want to delete this client?",
+        text: "Please ensure and then confirm!",
+        type: "warning",
+        showCancelButton: !0,
+        confirmButtonText: "Yes, delete",
+        cancelButtonText: "No, cancel!",
+        reverseButtons: !0
       }).then((result) => {
         if(result.value) {
           axios.delete(this.deleteRoute + '/' + clientId)
               .then(res => {
-                console.log(res)
+                //console.log(res)
               }).catch(err => {
             console.log(err)
           })
@@ -171,3 +171,9 @@ export default {
   }
 }
 </script>
+<style scoped>
+.customIcon {
+  height: 5px !important;
+}
+</style>
+

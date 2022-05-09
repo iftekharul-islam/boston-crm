@@ -50,8 +50,7 @@ class OrderController extends BaseController
 		*/
 	 public function show($id)
 	 {
-			dd(2);
-			return view( 'orders.show', compact( 'order' ) );
+			return view( 'order.show' );
 	 }
 	 
 	 /**
