@@ -91,6 +91,8 @@ Route::group( [ 'middleware' => [ 'auth:sanctum' ] ], function () {
 		 [ OrderController::class, 'destroy' ] )->middleware( 'role_permission:delete.order' )->name( 'orders.destroy' );
 } );
 Auth::routes();
+Route::get('/file-import',[ClientController::class,'importClient'])->name('import-client');
+Route::post('/import',[ClientController::class,'import'])->name('import');
 Route::redirect( '/', '/login' );
 Route::view( '/404', 'dashboard.error' );
 Route::view( '/order', 'dashboard.order' );

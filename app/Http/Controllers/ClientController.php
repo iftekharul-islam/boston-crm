@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Http\Requests\ClientRequest;
-use App\Models\Client;
 use App\Services\ClientService;
 use App\Services\CompanyService;
 use Illuminate\Contracts\Foundation\Application;
@@ -12,7 +12,8 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Session;
-use PHPUnit\Exception;
+use App\Imports\ImportAmc;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ClientController extends BaseController
 {
@@ -126,4 +127,17 @@ class ClientController extends BaseController
             'success' => true,
         ]);
     }
+
+    /**
+     * @return Factory|View|Application
+     */
+    public function importClient(): Factory|View|Application
+    {
+        return view('clients.import-client');
+    }
+
+    public function import(Request $request){
+        Excel::import(new ImportAmc, $request->file('file'));
+    }
+
 }

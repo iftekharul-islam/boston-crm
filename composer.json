@@ -8,7 +8,7 @@
   ],
   "license": "MIT",
   "require": {
-    "php": "8.0",
+    "php": "8.*",
     "fruitcake/laravel-cors": "^2.0",
     "guzzlehttp/guzzle": "^7.0.1",
     "laravel/fortify": "^1.12",
@@ -16,6 +16,7 @@
     "laravel/sanctum": "^2.11",
     "laravel/tinker": "^2.5",
     "laravel/ui": "^3.4",
+    "maatwebsite/excel": "^3.1",
     "owen-it/laravel-auditing": "^13.0",
     "spatie/laravel-fractal": "^6.0",
     "spatie/laravel-medialibrary": "^9.0.0",
