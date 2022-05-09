@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+
     <div class="role-permission bg-platinum dashboard-space">
         <div class="d-flex justify-content-between">
             <p class="mb-0 text-light-black fs-20 fw-bold">{{ __('messages.role_view.role_management') }}</p>
@@ -22,11 +23,43 @@
             @endforeach
         </div>
     </div>
+    <div class="loader">
+        <!-- about -->
+        <div class="about">
+            <a class="bg_links social portfolio" href="https://www.rafaelalucas.com" target="_blank">
+                <span class="icon"></span>
+            </a>
+            <a class="bg_links social dribbble" href="https://dribbble.com/rafaelalucas" target="_blank">
+                <span class="icon"></span>
+            </a>
+            <a class="bg_links social linkedin" href="https://www.linkedin.com/in/rafaelalucas/" target="_blank">
+                <span class="icon"></span>
+            </a>
+            <a class="bg_links logo"></a>
+        </div>
+        <!-- end about -->
+
+        <div class="content">
+            <div class="loading">
+                <p>loading</p>
+                <span></span>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @push("js")
     <script>
         $(function () {
+            document.onreadystatechange = function () {
+                let state = document.readyState
+                if (state === 'complete') {
+                    setTimeout(function () {
+                        document.getElementById('interactive');
+                        $('.loader').hide();
+                    }, 1000);
+                }
+            }
             $('.new-role').addClass('d-none');
         });
 
