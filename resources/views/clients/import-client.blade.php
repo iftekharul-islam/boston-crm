@@ -11,7 +11,7 @@
 <body>
 <div class="container mt-5 text-center">
     <h2 class="mb-4">
-        Laravel 8 Import Export Excel & CSV File - <a href="https://techvblogs.com/blog/laravel-import-export-excel-csv-file?ref=repo" target="_blank">TechvBlogs</a>
+        Import Client Excel & CSV File
     </h2>
     <form action="{{ route('import') }}" method="POST" enctype="multipart/form-data">
         @csrf
@@ -21,7 +21,7 @@
                 <label class="custom-file-label" for="customFile">Choose file</label>
             </div>
         </div>
-        <button class="btn btn-primary">Import Users</button>
+        <button class="btn btn-primary">Import Clients</button>
     </form>
 </div>
 </body>

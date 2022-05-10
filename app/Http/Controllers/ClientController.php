@@ -13,6 +13,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Session;
 use App\Imports\ImportAmc;
+use App\Imports\ImportLender;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ClientController extends BaseController
@@ -137,7 +138,15 @@ class ClientController extends BaseController
     }
 
     public function import(Request $request){
-        Excel::import(new ImportAmc, $request->file('file'));
+//        config(['excel.import.startRow' = 2]);
+        $file = $request->file('file');
+        $file_name = $file->getClientOriginalName();
+
+        if(str_contains($file_name,'amc')){
+            Excel::import(new ImportAmc, $request->file('file'));
+        }else{
+            Excel::import(new ImportLender, $request->file('file'));
+        }
     }
 
 }
