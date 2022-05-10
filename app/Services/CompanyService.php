@@ -130,7 +130,7 @@ class CompanyService
 	 public function createRole($name = 'admin', $description = ''): CompanyService
 	 {
 			$this->role = Role::query()->create( [
-				'name'        => $name,
+				'name'        => strtolower( $name ),
 				'description' => $description,
 				'guard_name'  => 'web',
 			] );
@@ -146,7 +146,7 @@ class CompanyService
 		*/
 	 public function updateRole(string $name, string $description = ''): CompanyService
 	 {
-			$this->role->update( [ 'name' => $name, 'description' => $description ] );
+			$this->role->update( [ 'name' => strtolower( $name ), 'description' => $description ] );
 			
 			return $this;
 	 }
@@ -253,7 +253,7 @@ class CompanyService
 			
 			return [
 				'company' => $user_company,
-				'users'   => $user_company->users()->with('userProfile')->paginate( 10 ),
+				'users'   => $user_company->users()->with( 'userProfile' )->paginate( 10 ),
 			];
 	 }
 	 
