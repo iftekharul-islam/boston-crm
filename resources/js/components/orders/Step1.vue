@@ -82,7 +82,7 @@
       <div class="col-md-4">
         <div class="form-box h-100 d-flex flex-column">
           <div>
-            <h4 class="box-header mb-3">Appraisal details</h4>
+            <h4 class="box-header mb-3">Provided services</h4>
             <div class="row">
               <div class="col-6">
                 <div class="group">
