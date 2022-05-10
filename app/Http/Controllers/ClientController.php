@@ -130,22 +130,28 @@ class ClientController extends BaseController
     }
 
     /**
-     * @return Factory|View|Application
+     * @param Request $request
+     * @return View|Factory|Application
      */
-    public function importClient(): Factory|View|Application
+    public function importClient(Request $request): View|Factory|Application
     {
+        if($request->isMethod('post')){
+            $file = $request->file('file');
+            $this->importFile($file);
+        }
         return view('clients.import-client');
     }
 
-    public function import(Request $request){
-//        config(['excel.import.startRow' = 2]);
-        $file = $request->file('file');
+    /**
+     * @param $file
+     * @return void
+     */
+    public function importFile($file){
         $file_name = $file->getClientOriginalName();
-
         if(str_contains($file_name,'amc')){
-            Excel::import(new ImportAmc, $request->file('file'));
+            Excel::import(new ImportAmc, $file);
         }else{
-            Excel::import(new ImportLender, $request->file('file'));
+            Excel::import(new ImportLender, $file);
         }
     }
 
