@@ -213,15 +213,19 @@
 <script>
 export default {
   name: "Step1",
+  props: {
+    systemOrderNo: String,
+    orderListUrl: String,
+  },
   data() {
     return {
       stepActive: false,
       clientOrderNo: '',
+      systemOrder: '',
       loanNo: '',
       loanType: '',
       receiveDate: '',
       technologyFee: '',
-      systemOrder: '',
       fhaCaseNo: '',
       appraiserName: '',
       dueDate: '',
@@ -232,6 +236,9 @@ export default {
       state: '',
       city: ''
     }
+  },
+  created() {
+    this.systemOrder = this.systemOrderNo;
   },
   methods: {
     stepChangeActive() {

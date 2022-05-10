@@ -5,11 +5,15 @@
         <div class="d-flex align-items-center justify-content-between">
           <p>Add new order</p>
           <div class="step">
-            <button class="step-btn pointer" :class="{'active': step === 1}" @click="changeStep(1)">Step 1</button>
+            <button class="step-btn pointer"
+                    :class="{'active': step === 1}"
+                    @click="changeStep(1)">Step 1</button>
             <button class="step-btn" :class="{'active': step === 2}" @click="changeStep(2)">Step 2</button>
           </div>
         </div>
-        <Step1 v-show="step === 1" :step-change-active="stepChangeActiveStatus"/>
+        <Step1 v-show="step === 1"
+               :step-change-active="stepChangeActiveStatus"
+               :order-list-url="orderList" :system-order-no="systemOrderNo"/>
         <Step2 v-show="step === 2"/>
       </div>
       <div class="add-client__bottom d-flex justify-content-end  p-3">
@@ -35,6 +39,7 @@ export default {
   name: "OrderCreate",
   props: {
     orderList: String,
+    systemOrderNo: String,
   },
   components: {
     Step1,

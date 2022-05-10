@@ -28,7 +28,9 @@ class OrderController extends BaseController
 		*/
 	 public function create(): Application|Factory|View
 	 {
-			return view('order.create');
+			$system_order_no = 'BAS-' . uniqid();
+			
+			return view( 'order.create', compact( 'system_order_no' ) );
 	 }
 	 
 	 /**

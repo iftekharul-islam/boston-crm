@@ -94,7 +94,11 @@
                                     <img id="blah" align='middle' src="{{ asset('img/user.png') }}" alt="your image"
                                          class="img-fluid" title=''/>
                                     <div class="upload-img">
-                                        <input type="file" id="inputGroupFile01" class="imgInp custom-file-input" name="image"
+                                        <input type="file"
+                                               id="inputGroupFile01"
+                                               class="imgInp custom-file-input"
+                                               name="image"
+                                               accept="image/png, image/jpeg"
                                                aria-describedby="inputGroupFileAddon01">
                                         <span class="icon-camera"><span class="path1"></span><span class="path2"></span><span
                                                     class="path3"></span></span>
@@ -104,6 +108,7 @@
                                     <label class="custom-file-label text-light-black mt-2 d-block"
                                            for="inputGroupFile01"></label>
                                 </div>
+                                <p class="image-error text-danger"></p>
                             </div>
                         </div>
                         <div class="bg-platinum h-100 pd-32 br-8">
@@ -136,6 +141,12 @@
 @section('js')
     <script>
         $("#inputGroupFile01").change(function (event) {
+            $('.image-error').text("");
+            let fileSize = this.files[0].size;
+            if (fileSize > MAX_FILE_SIZE) {
+                $('.image-error').text("File must not exceed 1 MB!");
+                return;
+            }
             readURL(this);
         });
 
