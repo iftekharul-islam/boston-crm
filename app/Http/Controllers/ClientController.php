@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Http\Requests\ClientRequest;
-use App\Models\Client;
 use App\Services\ClientService;
 use App\Services\CompanyService;
 use Illuminate\Contracts\Foundation\Application;
@@ -12,7 +12,9 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Session;
-use PHPUnit\Exception;
+use App\Imports\ImportAmc;
+use App\Imports\ImportLender;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ClientController extends BaseController
 {
@@ -126,4 +128,28 @@ class ClientController extends BaseController
             'success' => true,
         ]);
     }
+
+    /**
+     * @param Request $request
+     * @return View|Factory|Application
+     */
+    public function importClient(Request $request): View|Factory|Application
+    {
+        if($request->isMethod('post')){
+            $file = $request->file('file');
+            $file_name = $file->getClientOriginalName();
+            str_contains($file_name,'amc') ? $this->importFile(new ImportAmc,$file) : $this->importFile(new ImportLender,$file);
+        }
+        return view('clients.import-client');
+    }
+
+    /**
+     * @param $file
+     * @return void
+     */
+    public function importFile($dependency,$file): void
+    {
+        Excel::import($dependency, $file);
+    }
+
 }
