@@ -1,5 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-    <order-create :order-list='"{{ route('orders.index') }}"'></order-create>
+{{--    {{ dd($system_order_no) }}--}}
+    <order-create :order-list="'{{ route('orders.index') }}'" :system-order-no="'{{ $system_order_no }}'"></order-create>
 @endsection
