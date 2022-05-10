@@ -47,18 +47,15 @@
 }
 .icon-upload .path1:before {
   content: "\e948";
-  color: rgb(47, 65, 94);
   opacity: 0.4;
 }
 .icon-upload .path2:before {
   content: "\e949";
   margin-left: -1em;
-  color: rgb(47, 65, 94);
 }
 .icon-upload .path3:before {
   content: "\e94a";
   margin-left: -1em;
-  color: rgb(47, 65, 94);
 }
 .icon-folder .path1:before {
   content: "\e949a";
