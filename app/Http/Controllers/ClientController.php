@@ -137,7 +137,8 @@ class ClientController extends BaseController
     {
         if($request->isMethod('post')){
             $file = $request->file('file');
-            $this->importFile($file);
+            $file_name = $file->getClientOriginalName();
+            str_contains($file_name,'amc') ? $this->importFile(new ImportAmc,$file) : $this->importFile(new ImportLender,$file);
         }
         return view('clients.import-client');
     }
@@ -146,13 +147,9 @@ class ClientController extends BaseController
      * @param $file
      * @return void
      */
-    public function importFile($file){
-        $file_name = $file->getClientOriginalName();
-        if(str_contains($file_name,'amc')){
-            Excel::import(new ImportAmc, $file);
-        }else{
-            Excel::import(new ImportLender, $file);
-        }
+    public function importFile($dependency,$file): void
+    {
+        Excel::import($dependency, $file);
     }
 
 }
