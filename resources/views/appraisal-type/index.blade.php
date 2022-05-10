@@ -30,7 +30,7 @@
                                     @endif
                                     @if($is_owner || in_array('delete.appraisaltype', $user_permissions))
                                         <a class="cursor-pointer text-light-black" data-id="{{ $appraisal_type->id }}"
-                                           data-action="{{ route('users.destroy',$appraisal_type->id) }}"
+                                           data-action="{{ route('appraisal-types.destroy',$appraisal_type->id) }}"
                                            onclick="deleteConfirmation({{$appraisal_type->id}})"> <span
                                                     class="icon-trash fs-20"><span class="path1"></span><span
                                                         class="path2"></span><span class="path3"></span><span

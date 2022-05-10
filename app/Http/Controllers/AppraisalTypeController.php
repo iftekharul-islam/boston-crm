@@ -7,6 +7,7 @@ use App\Repositories\AppraisalTypeRepository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 
 class AppraisalTypeController extends BaseController
@@ -98,12 +99,10 @@ class AppraisalTypeController extends BaseController
 		*
 		* @param int $id
 		*
-		* @return RedirectResponse
+		* @return JsonResponse
 		*/
-	 public function destroy(int $id): RedirectResponse
+	 public function destroy(int $id): JsonResponse
 	 {
-			$this->repository->delete( $id );
-			
-			return redirect()->route( 'appraisal-types.index' );
+			return response()->json( [ 'success' => $this->repository->delete( $id ) ] );
 	 }
 }

@@ -103,7 +103,7 @@ Route::group( [ 'middleware' => [ 'auth:sanctum' ] ], function () {
 		 [ AppraisalTypeController::class, 'edit' ] )->middleware( 'role_permission:update.appraisaltype' )->name( 'appraisal-types.edit' );
 	 Route::put( 'appraisal-types/{id}',
 		 [ AppraisalTypeController::class, 'update' ] )->middleware( 'role_permission:update.appraisaltype' )->name( 'appraisal-types.update' );
-	 Route::delete( 'appraisal-types/{id}',
+	 Route::post( 'appraisal-types/{id}',
 		 [ AppraisalTypeController::class, 'destroy' ] )->middleware( 'role_permission:delete.appraisaltype' )->name( 'appraisal-types.destroy' );
 } );
 Auth::routes();
