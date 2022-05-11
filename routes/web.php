@@ -11,6 +11,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\AppraisalTypeController;
+use App\Http\Controllers\LoanTypeController;
 use App\Http\Controllers\IconController;
 
 /*
@@ -105,6 +106,21 @@ Route::group( [ 'middleware' => [ 'auth:sanctum' ] ], function () {
 		 [ AppraisalTypeController::class, 'update' ] )->middleware( 'role_permission:update.appraisaltype' )->name( 'appraisal-types.update' );
 	 Route::post( 'appraisal-types/{id}',
 		 [ AppraisalTypeController::class, 'destroy' ] )->middleware( 'role_permission:delete.appraisaltype' )->name( 'appraisal-types.destroy' );
+	 //Loan Type
+	 Route::get( 'loan-types',
+		 [ LoanTypeController::class, 'index' ] )->middleware( 'role_permission:view.loantype' )->name( 'loan-types.index' );
+	 Route::get( 'loan-types/create',
+		 [ LoanTypeController::class, 'create' ] )->middleware( 'role_permission:create.loantype' )->name( 'loan-types.create' );
+	 Route::post( 'loan-types',
+		 [ LoanTypeController::class, 'store' ] )->middleware( 'role_permission:create.loantype' )->name( 'loan-types.store' );
+	 Route::get( 'loan-types/{id}',
+		 [ LoanTypeController::class, 'show' ] )->middleware( 'role_permission:view.loantype' )->name( 'loan-types.show' );
+	 Route::get( 'loan-types/{id}/edit',
+		 [ LoanTypeController::class, 'edit' ] )->middleware( 'role_permission:update.loantype' )->name( 'loan-types.edit' );
+	 Route::put( 'loan-types/{id}',
+		 [ LoanTypeController::class, 'update' ] )->middleware( 'role_permission:update.loantype' )->name( 'loan-types.update' );
+	 Route::post( 'loan-types/{id}',
+		 [ LoanTypeController::class, 'destroy' ] )->middleware( 'role_permission:delete.loantype' )->name( 'loan-types.destroy' );
 } );
 Auth::routes();
 Route::any('/import-client',[ClientController::class,'importClient'])->name('import-client');

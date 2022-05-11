@@ -41,4 +41,12 @@ class Company extends Model implements Auditable
 	 {
 			return $this->hasMany( AppraisalType::class );
 	 }
+	 
+	 /**
+		* @return HasMany
+		*/
+	 public function loanTypes(): HasMany
+	 {
+			return $this->hasMany( LoanType::class );
+	 }
 }
