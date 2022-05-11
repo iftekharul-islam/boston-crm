@@ -9,322 +9,13 @@
             Back to order list</a>
         <div class="order-details-box-main row">
 
-            <div class="order-details__left col-md-6">
-                {{-- Basic Information --}}
-                <div class="order-details-box bg-white">
-                    <div class="box-header">
-                        <p class="fw-bold text-light-black fs-20 mb-0">Basic Information</p>
-                        <a href="" class="d-inline-flex edit align-items-center fw-bold">Edit <span class="icon-edit ms-3"><span class="path1"></span><span class="path2"></span></span></a>
-                    </div>
-                    <div class="box-body">
-                        <div class="list__group">
-                            <p class="mb-0 left-side">Property address  </p>
-                            <span>:</span>
-                            <p class="right-side mb-0 text-primary fw-bold fs-20">1453 Dorchester Ave, Boston, Ma 02122</p>
-                        </div>
-                        <div class="list__group">
-                            <p class="mb-0 left-side">Due date</p>
-                            <span>:</span>
-                            <p class="right-side mb-0">25 Jun 2022</p>
-                        </div>
-                        <div class="list__group">
-                            <p class="mb-0 left-side">Order no</p>
-                            <span>:</span>
-                            <p class="right-side mb-0">25 Jun 2022</p>
-                        </div>
-                        <div class="list__group">
-                            <p class="mb-0 left-side">Order receive date</p>
-                            <span>:</span>
-                            <p class="right-side mb-0">25 Jun 2022</p>
-                        </div>
-                    </div>
-                </div>
-                 {{-- Borrower --}}
-                 <div class="order-details-box bg-white">
-                    <div class="box-header">
-                        <p class="fw-bold text-light-black fs-20 mb-0">Borrower</p>
-                        <a href="" class="d-inline-flex edit align-items-center fw-bold">Edit <span class="icon-edit ms-3"><span class="path1"></span><span class="path2"></span></span></a>
-                    </div>
-                    <div class="box-body">
-                        <div class="list__group">
-                            <p class="mb-0 left-side">Borrower name</p>
-                            <span>:</span>
-                            <p class="right-side mb-0">John Doe</p>
-                        </div>
-                        <div class="list__group">
-                            <p class="mb-0 left-side">Co-borrower name</p>
-                            <span>:</span>
-                            <p class="right-side mb-0">25 Jun 2022</p>
-                        </div>
-                        <div class="list__group">
-                            <p class="mb-0 left-side">Phone</p>
-                            <span>:</span>
-                            <p class="right-side mb-0">25 Jun 2022</p>
-                        </div>
-                        <div class="list__group">
-                            <p class="mb-0 left-side">Email</p>
-                            <span>:</span>
-                            <p class="right-side mb-0">25 Jun 2022</p>
-                        </div>
-                    </div>
-                </div>
-                 {{-- Contact --}}
-                 <div class="order-details-box bg-white">
-                    <div class="box-header">
-                        <p class="fw-bold text-light-black fs-20 mb-0">Contact</p>
-                        <a href="" class="d-inline-flex edit align-items-center fw-bold">Edit <span class="icon-edit ms-3"><span class="path1"></span><span class="path2"></span></span></a>
-                    </div>
-                    <div class="box-body">
-                        <div class="list__group">
-                            <p class="mb-0 left-side">Contact name</p>
-                            <span>:</span>
-                            <p class="right-side mb-0">John Doe</p>
-                        </div>
-                        <div class="list__group">
-                            <p class="mb-0 left-side">Phone</p>
-                            <span>:</span>
-                            <p class="right-side mb-0">25 Jun 2022</p>
-                        </div>
-                        <div class="list__group">
-                            <p class="mb-0 left-side">Email</p>
-                            <span>:</span>
-                            <p class="right-side mb-0">25 Jun 2022</p>
-                        </div>
-                        <div class="list__group">
-                            <p class="mb-0 left-side">Address</p>
-                            <span>:</span>
-                            <p class="right-side mb-0">1453 Dorchester Ave, Boston, 
-                                Ma 02122</p>
-                        </div>
-                    </div>
-                </div>
-                   {{-- Inspection --}}
-                <div class="order-details-box bg-white">
-                    <div class="box-header">
-                        <p class="fw-bold text-light-black fs-20 mb-0">Inspection</p>
-                        <a href="" class="d-inline-flex edit align-items-center fw-bold">Edit <span class="icon-edit ms-3"><span class="path1"></span><span class="path2"></span></span></a>
-                    </div>
-                    <div class="box-body">
-                        <div class="list__group">
-                            <p class="mb-0 left-side">Appraiser II</p>
-                            <span>:</span>
-                            <p class="right-side mb-0">John Doe</p>
-                        </div>
-                        <div class="list__group">
-                            <p class="mb-0 left-side">Inspection date</p>
-                            <span>:</span>
-                            <p class="right-side mb-0">25 Jun 2022</p>
-                        </div>
-                        <div class="list__group">
-                            <p class="mb-0 left-side">Notes</p>
-                            <span>:</span>
-                            <p class="right-side mb-0 line-1">Amar sonar bangla ami tomai valoabashi, chirodin tomar akash chirodin tomar akash chirodin tomar akash</p>
-                        </div>
-                    </div>
-                </div>
-                 {{-- Issues --}}
-                 <div class="order-details-box bg-white">
-                    <div class="box-header">
-                        <p class="fw-bold text-light-black fs-20 mb-0">Issues/ Queries/ Tickets</p>
-                        <a href="" class="d-inline-flex edit add-call align-items-center fw-bold">Add issue</a>
-                    </div>
-                    <div class="box-body">
-                        <div class="queries-row" >
-                            <div class="queries-box position-relative pending">
-                                <span class="badges pending-badges">Pending</span>
-                                <p class="text-gray text-end mgb-12">Today 12:10am</p>
-                                <p class="text-light-black">He made payment but didnt get confirmation yet</p>
-                                <div class="d-flex justify-content-between mgb-12">
-                                    <a href="#" class="text-gray mb-0 underline">Assigned to : <span class="text-light-black text-600">Technical team</span></a>
-                                    <a href="#" class="share-box">
-                                        <span class="icon-eye"><span class="path1"></span><span class="path2"></span></span>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="queries-box position-relative pending" >
-                                <span class="badges pending-badges">Pending</span>
-                                <p class="text-gray text-end mgb-12">Today 12:10am</p>
-                                <p class="text-light-black">He made payment but didnt get confirmation yet</p>
-                                <div class="d-flex justify-content-between mgb-12">
-                                    <a href="#" class="text-gray mb-0">Assigned to : <span class="text-light-black text-600">Technical team</span></a>
-                                    <a href="#" class="share-box">
-                                        <span class="icon-eye"><span class="path1"></span><span class="path2"></span></span>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="queries-box position-relative solved">
-                                <span class="badges solved-badges">Pending</span>
-                                <p class="text-gray text-end mgb-12">Today 12:10am</p>
-                                <p class="text-light-black">He made payment but didnt get confirmation yet</p>
-                                <div class="d-flex justify-content-between mgb-12">
-                                    <a href="#" class="text-gray mb-0">Assigned to : <span class="text-light-black text-600">Technical team</span></a>
-                                    <a href="#" class="share-box">
-                                        <span class="icon-eye"><span class="path1"></span><span class="path2"></span></span>
-                                    </a>
-                                </div>
-                                <div class="solution">
-                                    <p class="mb-1 fs-14 ">Solution:</p>
-                                    <p class="mb-0 fs-14">Amar sonar bangla ami tomai valobashi.
-                                        Chirodin tomar akash tomar batash amar prane
-                                        bajai bashi sonar bangla ami tomai valobashi.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="order-details__right col-md-6">
-                  {{-- Appraisal Details --}}
-                  <div class="order-details-box bg-white">
-                    <div class="box-header">
-                        <p class="fw-bold text-light-black fs-20 mb-0">Appraisal Details</p>
-                        <a href="" class="d-inline-flex edit align-items-center fw-bold">Edit <span class="icon-edit ms-3"><span class="path1"></span><span class="path2"></span></span></a>
-                    </div>
-                    <div class="box-body">
-                        <div class="list__group">
-                            <p class="mb-0 left-side">Appraisal Type</p>
-                            <span>:</span>
-                            <p class="right-side mb-0">John Doe</p>
-                        </div>
-                        <div class="list__group">
-                            <p class="mb-0 left-side">Appraiser Name</p>
-                            <span>:</span>
-                            <p class="right-side mb-0">25 Jun 2022</p>
-                        </div>
-                        <div class="list__group">
-                            <p class="mb-0 left-side">Client Order #</p>
-                            <span>:</span>
-                            <p class="right-side mb-0">25 Jun 2022</p>
-                        </div>
-                        <div class="list__group">
-                            <p class="mb-0 left-side">Loan #</p>
-                            <span>:</span>
-                            <p class="right-side mb-0">1453 Dorchester Ave, Boston, 
-                                Ma 02122</p>
-                        </div>
-                        <div class="list__group">
-                            <p class="mb-0 left-side">Loan Type </p>
-                            <span>:</span>
-                            <p class="right-side mb-0">1453 Dorchester Ave, Boston, 
-                                Ma 02122</p>
-                        </div>
-                        <div class="list__group">
-                            <p class="mb-0 left-side">FHA Case</p>
-                            <span>:</span>
-                            <p class="right-side mb-0">1453 Dorchester Ave, Boston, 
-                                Ma 02122</p>
-                        </div>
-                        <div class="list__group">
-                            <p class="mb-0 left-side">Appraisal Fee </p>
-                            <span>:</span>
-                            <p class="right-side mb-0">1453 Dorchester Ave, Boston, 
-                                Ma 02122</p>
-                        </div>
-                    </div>
-                </div>
-                {{-- Client --}}
-                <div class="order-details-box bg-white">
-                    <div class="box-header">
-                        <p class="fw-bold text-light-black fs-20 mb-0">Client</p>
-                        <a href="" class="d-inline-flex edit align-items-center fw-bold">Edit <span class="icon-edit ms-3"><span class="path1"></span><span class="path2"></span></span></a>
-                    </div>
-                    <div class="box-body">
-                        <div class="list mb-3">
-                            <div class="list__group mb-3">
-                                <p class="mb-0 left-side">AMC name</p>
-                                <span>:</span>
-                                <p class="right-side mb-0">EStreet Appraisal Management
-                                    Company, LLC</p>
-                            </div>
-                            <a href="#" class="underline text-primary text-600">AMC requirements</a>
-                        </div>
-                        <div class="list__group">
-                            <p class="mb-0 left-side">Lender/ Bank name</p>
-                            <span>:</span>
-                            <p class="right-side mb-0">NEWREZ LLC</p>
-                        </div>
-                        <div class="list">
-                            <div class="list__group mb-3">
-                                <p class="mb-0 left-side">AMC name</p>
-                                <span>:</span>
-                                <p class="right-side mb-0">EStreet Appraisal Management
-                                    Company, LLC</p>
-                            </div>
-                            <a href="#" class="underline text-primary text-600">AMC requirements</a>
-                        </div>
-                    </div>
-                </div>
-                {{-- Call log --}}
-                <div class="order-details-box bg-white">
-                    <div class="box-header">
-                        <p class="fw-bold text-light-black fs-20 mb-0">Call log</p>
-                        <a href="" class="d-inline-flex edit add-call align-items-center fw-bold">Add call log</a>
-                    </div>
-                    <div class="box-body">
-                        <div class="col-log">
-                            <div class="table-responsive">
-                                <table class="table table-hover">
-                                    <thead>
-                                    <tr>
-                                        <th scope="col">SL</th>
-                                        <th scope="col">Caller name</th>
-                                        <th scope="col">Call date & time</th>
-                                        <th scope="col">Message</th>
-                                        <th scope="col"></th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>1.</td>
-                                        <td>Sandy Rock</td>
-                                        <td>12.02.2022  3:45 pm</td>
-                                        <td>I have called and left a message</td>
-                                        <td><router-link to="/" class="message">
-                                                <span class="icon-messages2"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span></span>
-                                            </router-link></td>
-                                    </tr>
-                                    <tr>
-                                        <td>1.</td>
-                                        <td>Sandy Rock</td>
-                                        <td>12.02.2022  3:45 pm</td>
-                                        <td>I have called and left a message</td>
-                                        <td><router-link to="/" class="message">
-                                                <span class="icon-messages2"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span></span>
-                                            </router-link></td>
-                                    </tr>
-                                    <tr>
-                                        <td>1.</td>
-                                        <td>Sandy Rock</td>
-                                        <td>12.02.2022  3:45 pm</td>
-                                        <td>I have called and left a message</td>
-                                        <td><router-link to="/" class="message">
-                                                <span class="icon-messages2"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span></span>
-                                            </router-link></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {{-- Map --}}
-                <div class="order-details-box bg-white">
-                    <div class="box-header">
-                        <p class="fw-bold text-light-black fs-20 mb-0">Map</p>
-                        <a href="" class="d-inline-flex edit align-items-center fw-bold">Edit <span class="icon-edit ms-3"><span class="path1"></span><span class="path2"></span></span></a>
-                    </div>
-                    <div class="box-body">
-                        <div class="map">
-                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d423286.2817730339!2d-118.69260188474334!3d34.02015975940636!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80c2c75ddc27da13%3A0xe22fdf6f254608f4!2sLos%20Angeles%2C%20CA%2C%20USA!5e0!3m2!1sen!2sbd!4v1650253099882!5m2!1sen!2sbd" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                        </div>
-                    </div>
-                </div>
-                 
-            </div>
+            <basic-info></basic-info>
+            <appraisal-details></appraisal-details>
+
         </div>
         <div class="row">
             <div class="order-details__left col-md-8">
-                  {{-- Workflow --}}
+                   Workflow
                   <div class="order-details-box bg-white h-100">
                     <div class="box-header">
                         <p class="fw-bold text-light-black fs-20 mb-0">Workflow</p>
@@ -332,7 +23,7 @@
                     </div>
                     <div class="box-body">
                         <div class="workflow-content">
-                            {{-- step list --}}
+                             step list
                             <div class="list">
                                 <div class="item complete">
                                     <span class="ball">
@@ -369,9 +60,9 @@
                                     <p class="mb-0">Order Creation</p>
                                 </div>
                             </div>
-                            {{-- step item --}}
+                             step item
                             <div class="step-item pe-3">
-                                {{-- Inspection --}}
+                                 Inspection
                                 <div class="inspection-item">
                                     <div class="top-bar">
                                         <button class="item active">Assign</button>
@@ -411,11 +102,11 @@
                 </div>
             </div>
             <div class="order-details__right col-md-4">
-                 {{-- Appraisal Details --}}
+                  Appraisal Details
                  <div class="order-details-box bg-white h-100">
                     <div class="box-header">
                         <p class="fw-bold text-light-black fs-20 mb-0">History</p>
-                        
+
                     </div>
                     <div class="box-body">
                         <p class="mb-3 text-light-black">Order Created by: <span class="text-600 text-light-black">Toushi</span></p>
@@ -433,7 +124,7 @@
         <div class="mgt-32">
             <div class="row ">
                 <div class="col-12">
-                    {{-- Files --}}
+                     Files
                     <div class="order-details-box bg-white">
                         <div class="box-header">
                             <p class="fw-bold text-light-black fs-20 mb-0">Files</p>
@@ -445,7 +136,7 @@
                             </div>
                         </div>
                         <div class="box-body">
-                            {{-- document  --}}
+                             document
                             <div class="document">
                                 <div class="row">
                                     <div class="col-sm-6 col-md-4 col-lg-3">
@@ -503,7 +194,7 @@
         </div>
         <div>
             <div class="note-grid">
-                      {{-- Invoice --}}
+                       Invoice
                 <div class="order-details-box bg-white">
                     <div class="box-header">
                         <p class="fw-bold text-light-black fs-20 mb-0">Activity log</p>
@@ -534,14 +225,14 @@
                         </div>
                     </div>
                 </div>
-                {{-- Note --}}
+                 Note
                 <div class="order-details-box bg-white">
                     <div class="box-header">
                         <p class="fw-bold text-light-black fs-20 mb-0">Notes</p>
                     </div>
                     <div class="box-body">
                        <div class="note-chat">
-                           {{-- item chat --}}
+                            item chat
                             <div class="chat-item">
                                 <div class="chat-name d-flex align-items-center">
                                     <img src="/img/dummy-profile.png" alt="boston chat image" class="img-fluid">
@@ -550,12 +241,12 @@
                                         <span class="text-gray">Section 1</span>
                                     </div>
                                 </div>
-                                {{-- chat --}}
+                                 chat
                                 <div class="d-inline-block message">
                                     <p class="mb-0 ">Kmon achen vaiya?</p>
                                 </div>
                             </div>
-                            {{-- item chat --}}
+                             item chat
                             <div class="chat-item">
                                 <div class="chat-name d-flex align-items-center">
                                     <img src="/img/dummy-profile.png" alt="boston chat image" class="img-fluid">
@@ -564,12 +255,12 @@
                                         <span class="text-gray">Section 1</span>
                                     </div>
                                 </div>
-                                {{-- chat --}}
+                                 chat
                                 <div class="d-inline-block message">
                                     <p class="mb-0 ">Valo nai re vai . ki korbo kichui bujtachina , valo lagena dunia dari. jai hok tor ki obostha</p>
                                 </div>
                             </div>
-                            {{-- item chat --}}
+                             item chat
                             <div class="chat-item">
                                 <div class="chat-name d-flex align-items-center">
                                     <img src="/img/dummy-profile.png" alt="boston chat image" class="img-fluid">
@@ -578,7 +269,7 @@
                                         <span class="text-gray">Section 1</span>
                                     </div>
                                 </div>
-                                {{-- chat --}}
+                                 chat
                                 <div class="d-inline-block message">
                                     <p class="mb-0 ">Kmon achen vaiya?</p>
                                 </div>
@@ -586,7 +277,7 @@
                        </div>
                     </div>
                 </div>
-            {{-- Activity log --}}
+             Activity log
             <div class="order-details-box bg-white">
                 <div class="box-header">
                     <p class="fw-bold text-light-black fs-20 mb-0">Activity log</p>
@@ -607,3 +298,9 @@
 
     </div>
 @endsection
+<script>
+    import BasicInfo from "../../js/components/orders/details/basicInfo";
+    export default {
+        components: {BasicInfo}
+    }
+</script>

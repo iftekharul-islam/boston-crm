@@ -31,7 +31,7 @@ class ClientController extends BaseController
     /**
      * @return Application|Factory|View
      */
-    public function index()
+    public function index(): View|Factory|Application
     {
         return view('clients.index');
     }
@@ -144,6 +144,7 @@ class ClientController extends BaseController
     }
 
     /**
+     * @param $dependency
      * @param $file
      * @return void
      */
