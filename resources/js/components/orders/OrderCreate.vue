@@ -6,9 +6,8 @@
           <p>Add new order</p>
           <div class="step">
             <button class="step-btn pointer"
-                    :class="{'active': step === 1}"
-                    @click="changeStep(1)">Step 1</button>
-            <button class="step-btn" :class="{'active': step === 2}" @click="changeStep(2)">Step 2</button>
+                    :class="{'active': step === 1}">Step 1</button>
+            <button class="step-btn" :class="{'active': step === 2}">Step 2</button>
           </div>
         </div>
         <Step1 v-show="step === 1"
@@ -40,6 +39,9 @@ export default {
   props: {
     orderList: String,
     systemOrderNo: String,
+    appraisalUsers: [],
+    appraisalTypes: [],
+    loanTypes: [],
   },
   components: {
     Step1,
@@ -52,7 +54,7 @@ export default {
     }
   },
   created() {
-
+    console.table([this.appraisalUsers, [1,1]])
   },
   methods: {
     stepChangeActiveStatus(value) {
