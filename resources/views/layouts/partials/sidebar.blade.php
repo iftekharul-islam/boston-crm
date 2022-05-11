@@ -34,7 +34,7 @@
         {{--             <span class="icon-arrow-down ms-auto"></span>--}}
         {{--        </a>--}}
         @if(in_array('view.client', $user_permissions) || $is_owner || $user_role == 'admin')
-            <a href="{{ url('/clients') }}"
+            <a href="{{ route('clients.index') }}"
                class="list-item d-flex align-items-center  text-white {{ (request()->is('clients*')) ? 'active' : '' }}">
                 <div class="d-inline-flex align-items-center">
                     <span class="icon-client me-3 fs-3"><span class="path1"></span><span class="path2"></span></span>
@@ -103,6 +103,16 @@
                 <span class="icon-profile-circle me-3 fs-3"><span class="path1"></span><span class="path2"></span><span
                             class="path3"></span></span>
                     <span class="items-text"> Appraisal Types </span>
+                </div>
+                <span class="icon-arrow-down ms-auto"></span>
+            </a>
+        @endif
+        @if(in_array('view.loantype', $user_permissions) || $is_owner || $user_role == 'admin')
+            <a href="{{ route('loan-types.index') }}" class="list-item d-flex align-items-center  text-white">
+                <div class="d-inline-flex align-items-center">
+                <span class="icon-profile-circle me-3 fs-3"><span class="path1"></span><span class="path2"></span><span
+                            class="path3"></span></span>
+                    <span class="items-text"> Loan Types </span>
                 </div>
                 <span class="icon-arrow-down ms-auto"></span>
             </a>

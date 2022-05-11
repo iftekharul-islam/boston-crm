@@ -324,7 +324,7 @@
         </div>
         <div class="row">
             <div class="order-details__left col-md-8">
-                  {{-- Workflow --}}
+                   Workflow
                   <div class="order-details-box bg-white h-100">
                     <div class="box-header">
                         <p class="fw-bold text-light-black fs-20 mb-0">Workflow</p>
@@ -332,7 +332,7 @@
                     </div>
                     <div class="box-body">
                         <div class="workflow-content">
-                            {{-- step list --}}
+                             step list
                             <div class="list">
                                 <div class="item complete">
                                     <span class="ball">
@@ -369,9 +369,9 @@
                                     <p class="mb-0">Order Creation</p>
                                 </div>
                             </div>
-                            {{-- step item --}}
+                             step item
                             <div class="step-item pe-3">
-                                {{-- Inspection --}}
+                                 Inspection
                                 <div class="inspection-item">
                                     <div class="top-bar">
                                         <button class="item active">Assign</button>
@@ -411,11 +411,11 @@
                 </div>
             </div>
             <div class="order-details__right col-md-4">
-                 {{-- Appraisal Details --}}
+                  Appraisal Details
                  <div class="order-details-box bg-white h-100">
                     <div class="box-header">
                         <p class="fw-bold text-light-black fs-20 mb-0">History</p>
-                        
+
                     </div>
                     <div class="box-body">
                         <p class="mb-3 text-light-black">Order Created by: <span class="text-600 text-light-black">Toushi</span></p>
@@ -433,7 +433,7 @@
         <div class="mgt-32">
             <div class="row ">
                 <div class="col-12">
-                    {{-- Files --}}
+                     Files
                     <div class="order-details-box bg-white">
                         <div class="box-header">
                             <p class="fw-bold text-light-black fs-20 mb-0">Files</p>
@@ -445,7 +445,7 @@
                             </div>
                         </div>
                         <div class="box-body">
-                            {{-- document  --}}
+                             document
                             <div class="document">
                                 <div class="row">
                                     <div class="col-sm-6 col-md-4 col-lg-3">
@@ -503,7 +503,7 @@
         </div>
         <div>
             <div class="note-grid">
-                      {{-- Invoice --}}
+                       Invoice
                 <div class="order-details-box bg-white">
                     <div class="box-header">
                         <p class="fw-bold text-light-black fs-20 mb-0">Activity log</p>
@@ -534,14 +534,14 @@
                         </div>
                     </div>
                 </div>
-                {{-- Note --}}
+                 Note
                 <div class="order-details-box bg-white">
                     <div class="box-header">
                         <p class="fw-bold text-light-black fs-20 mb-0">Notes</p>
                     </div>
                     <div class="box-body">
                        <div class="note-chat">
-                           {{-- item chat --}}
+                            item chat
                             <div class="chat-item">
                                 <div class="chat-name d-flex align-items-center">
                                     <img src="/img/dummy-profile.png" alt="boston chat image" class="img-fluid">
@@ -550,12 +550,12 @@
                                         <span class="text-gray">Section 1</span>
                                     </div>
                                 </div>
-                                {{-- chat --}}
+                                 chat
                                 <div class="d-inline-block message">
                                     <p class="mb-0 ">Kmon achen vaiya?</p>
                                 </div>
                             </div>
-                            {{-- item chat --}}
+                             item chat
                             <div class="chat-item">
                                 <div class="chat-name d-flex align-items-center">
                                     <img src="/img/dummy-profile.png" alt="boston chat image" class="img-fluid">
@@ -564,12 +564,12 @@
                                         <span class="text-gray">Section 1</span>
                                     </div>
                                 </div>
-                                {{-- chat --}}
+                                 chat
                                 <div class="d-inline-block message">
                                     <p class="mb-0 ">Valo nai re vai . ki korbo kichui bujtachina , valo lagena dunia dari. jai hok tor ki obostha</p>
                                 </div>
                             </div>
-                            {{-- item chat --}}
+                             item chat
                             <div class="chat-item">
                                 <div class="chat-name d-flex align-items-center">
                                     <img src="/img/dummy-profile.png" alt="boston chat image" class="img-fluid">
@@ -578,7 +578,7 @@
                                         <span class="text-gray">Section 1</span>
                                     </div>
                                 </div>
-                                {{-- chat --}}
+                                 chat
                                 <div class="d-inline-block message">
                                     <p class="mb-0 ">Kmon achen vaiya?</p>
                                 </div>
@@ -586,7 +586,7 @@
                        </div>
                     </div>
                 </div>
-            {{-- Activity log --}}
+             Activity log
             <div class="order-details-box bg-white">
                 <div class="box-header">
                     <p class="fw-bold text-light-black fs-20 mb-0">Activity log</p>
@@ -611,17 +611,17 @@
                   <h4 class="text-600 fs-20 mgb-24">Edit Basic Information</h4>
 
                   <div class="group">
-                      <label for="" class="d-block mb-2 dashboard-label">Email <span class="require"></span></label> 
-                      <input type="email" name="email" id="email" class="dashboard-input w-100"> 
+                      <label for="" class="d-block mb-2 dashboard-label">Email <span class="require"></span></label>
+                      <input type="email" name="email" id="email" class="dashboard-input w-100">
                   </div>
                   <div class="group">
-                      <label for="role" class="d-block text-light-black mb-2">Zip code <span class="require"></span></label> 
+                      <label for="role" class="d-block text-light-black mb-2">Zip code <span class="require"></span></label>
                       <div class="position-relative">
                           <select name="role" id="role" class="dashboard-input w-100">
-                              <option value="">Please select role</option> 
-                              <option value="3" class="text-capitalize"> admin</option> 
-                               <option value="4" class="text-capitalize"> inkasd</option> 
-                          </select> 
+                              <option value="">Please select role</option>
+                              <option value="3" class="text-capitalize"> admin</option>
+                               <option value="4" class="text-capitalize"> inkasd</option>
+                          </select>
                           <span class="icon-arrow-down bottom-arrow-icon"></span>
                       </div>
                     </div>
@@ -633,11 +633,11 @@
                        </div>
                     </div>
                     <div class="group">
-                        <label for="" class="d-block mb-2 dashboard-label">Lender address <span class="require"></span></label> 
+                        <label for="" class="d-block mb-2 dashboard-label">Lender address <span class="require"></span></label>
                         <textarea name="textarea" class="dashboard-input dashboard-textarea w-100"> </textarea>
                     </div>
                     <div class="group">
-                        <label for="" class="d-block mb-2 dashboard-label">Lender address <span class="require"></span></label> 
+                        <label for="" class="d-block mb-2 dashboard-label">Lender address <span class="require"></span></label>
                         <div class="link-group d-flex">
                             <input type="text" class="dashboard-input w-100 me-3">
                             <button class="link-btn py-2 h-40 button button-primary">Copy</button>
@@ -662,3 +662,9 @@
           </div>
     </div>
 @endsection
+<script>
+    import BasicInfo from "../../js/components/orders/details/basicInfo";
+    export default {
+        components: {BasicInfo}
+    }
+</script>

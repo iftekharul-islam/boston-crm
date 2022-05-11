@@ -19,7 +19,7 @@ class OrderController extends BaseController
 	 public function __construct(OrderService $order_service, OrderRepository $order_repository)
 	 {
 			parent::__construct();
-			$this->service = $order_service;
+			$this->service    = $order_service;
 			$this->repository = $order_repository;
 	 }
 	 
@@ -41,9 +41,11 @@ class OrderController extends BaseController
 	 public function create(): Application|Factory|View
 	 {
 			$system_order_no = 'BAS-' . uniqid();
-			$appraisal_users = $this->repository->getUserByRoleWise(role: 'appraiser');
+			$appraisal_users = $this->repository->getUserByRoleWise( role: 'appraiser' );
+			$appraisal_types = $this->repository->getAppraisalTypes();
+			$loan_types      = $this->repository->getLoanTypes();
 			
-			return view( 'order.create', compact( 'system_order_no', 'appraisal_users' ) );
+			return view( 'order.create', compact( 'system_order_no', 'appraisal_users', 'appraisal_types', 'loan_types' ) );
 	 }
 	 
 	 /**

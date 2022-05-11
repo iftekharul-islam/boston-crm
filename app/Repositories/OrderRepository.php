@@ -2,7 +2,9 @@
 
 namespace App\Repositories;
 
+use App\Models\AppraisalType;
 use App\Models\CompanyUser;
+use App\Models\LoanType;
 use App\Models\Order;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
@@ -45,9 +47,9 @@ class OrderRepository extends BaseRepository
 		*/
 	 #[NoReturn] public function getCompanyUsers(object $role): Collection|array
 	 {
-			$company          = $this->getAuthUserCompany();
+			$this->company          = $this->getAuthUserCompany();
 			$company_user_ids = CompanyUser::query()?->where( [
-				[ 'company_id', '=', $company->id ],
+				[ 'company_id', '=', $this->company->id ],
 				[ 'role_id', $role->id ],
 			] )->pluck( 'user_id' );
 			
@@ -70,5 +72,21 @@ class OrderRepository extends BaseRepository
 	 public function getRoleByName(string $name): Model|Builder|null
 	 {
 			return Role::query()->where( 'name', $name )->first();
+	 }
+	 
+	 /**
+		* @return Builder[]|Collection
+		*/
+	 public function getAppraisalTypes(): Collection|array
+	 {
+			return AppraisalType::query()->where('company_id', $this->company->id)->get();
+	 }
+	 
+	 /**
+		* @return Builder[]|Collection
+		*/
+	 public function getLoanTypes(): Collection|array
+	 {
+			return LoanType::query()->where('company_id', $this->company->id)->get();
 	 }
 }
