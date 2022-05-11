@@ -25,6 +25,8 @@ Vue.use(VueSweetalert2);
 Vue.component('pagination', Pagination);
 Vue.component('clients-list', require('./components/clients/list').default);
 Vue.component('order-create', require('./components/orders/OrderCreate').default)
+Vue.component('basic-info', require('./components/orders/details/basicInfo').default)
+Vue.component('appraisal-details', require('./components/orders/details/appraisalDetails').default)
 
 
 Vue.config.productionTip = false
