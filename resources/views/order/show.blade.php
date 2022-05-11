@@ -9,9 +9,318 @@
             Back to order list</a>
         <div class="order-details-box-main row">
 
-            <basic-info></basic-info>
-            <appraisal-details></appraisal-details>
-
+            <div class="order-details__left col-md-6">
+                {{-- Basic Information --}}
+                <div class="order-details-box bg-white">
+                    <div class="box-header">
+                        <p class="fw-bold text-light-black fs-20 mb-0">Basic Information</p>
+                        <a data-bs-toggle="modal" data-bs-target="#exampleModal" class="d-inline-flex edit align-items-center fw-bold cursor-pointer">Edit <span class="icon-edit ms-3"><span class="path1"></span><span class="path2"></span></span></a>
+                    </div>
+                    <div class="box-body">
+                        <div class="list__group">
+                            <p class="mb-0 left-side">Property address  </p>
+                            <span>:</span>
+                            <p class="right-side mb-0 text-primary fw-bold fs-20">1453 Dorchester Ave, Boston, Ma 02122</p>
+                        </div>
+                        <div class="list__group">
+                            <p class="mb-0 left-side">Due date</p>
+                            <span>:</span>
+                            <p class="right-side mb-0">25 Jun 2022</p>
+                        </div>
+                        <div class="list__group">
+                            <p class="mb-0 left-side">Order no</p>
+                            <span>:</span>
+                            <p class="right-side mb-0">25 Jun 2022</p>
+                        </div>
+                        <div class="list__group">
+                            <p class="mb-0 left-side">Order receive date</p>
+                            <span>:</span>
+                            <p class="right-side mb-0">25 Jun 2022</p>
+                        </div>
+                    </div>
+                </div>
+                 {{-- Borrower --}}
+                 <div class="order-details-box bg-white">
+                    <div class="box-header">
+                        <p class="fw-bold text-light-black fs-20 mb-0">Borrower</p>
+                        <a href="" class="d-inline-flex edit align-items-center fw-bold">Edit <span class="icon-edit ms-3"><span class="path1"></span><span class="path2"></span></span></a>
+                    </div>
+                    <div class="box-body">
+                        <div class="list__group">
+                            <p class="mb-0 left-side">Borrower name</p>
+                            <span>:</span>
+                            <p class="right-side mb-0">John Doe</p>
+                        </div>
+                        <div class="list__group">
+                            <p class="mb-0 left-side">Co-borrower name</p>
+                            <span>:</span>
+                            <p class="right-side mb-0">25 Jun 2022</p>
+                        </div>
+                        <div class="list__group">
+                            <p class="mb-0 left-side">Phone</p>
+                            <span>:</span>
+                            <p class="right-side mb-0">25 Jun 2022</p>
+                        </div>
+                        <div class="list__group">
+                            <p class="mb-0 left-side">Email</p>
+                            <span>:</span>
+                            <p class="right-side mb-0">25 Jun 2022</p>
+                        </div>
+                    </div>
+                </div>
+                 {{-- Contact --}}
+                 <div class="order-details-box bg-white">
+                    <div class="box-header">
+                        <p class="fw-bold text-light-black fs-20 mb-0">Contact</p>
+                        <a href="" class="d-inline-flex edit align-items-center fw-bold">Edit <span class="icon-edit ms-3"><span class="path1"></span><span class="path2"></span></span></a>
+                    </div>
+                    <div class="box-body">
+                        <div class="list__group">
+                            <p class="mb-0 left-side">Contact name</p>
+                            <span>:</span>
+                            <p class="right-side mb-0">John Doe</p>
+                        </div>
+                        <div class="list__group">
+                            <p class="mb-0 left-side">Phone</p>
+                            <span>:</span>
+                            <p class="right-side mb-0">25 Jun 2022</p>
+                        </div>
+                        <div class="list__group">
+                            <p class="mb-0 left-side">Email</p>
+                            <span>:</span>
+                            <p class="right-side mb-0">25 Jun 2022</p>
+                        </div>
+                        <div class="list__group">
+                            <p class="mb-0 left-side">Address</p>
+                            <span>:</span>
+                            <p class="right-side mb-0">1453 Dorchester Ave, Boston, 
+                                Ma 02122</p>
+                        </div>
+                    </div>
+                </div>
+                   {{-- Inspection --}}
+                <div class="order-details-box bg-white">
+                    <div class="box-header">
+                        <p class="fw-bold text-light-black fs-20 mb-0">Inspection</p>
+                        <a href="" class="d-inline-flex edit align-items-center fw-bold">Edit <span class="icon-edit ms-3"><span class="path1"></span><span class="path2"></span></span></a>
+                    </div>
+                    <div class="box-body">
+                        <div class="list__group">
+                            <p class="mb-0 left-side">Appraiser II</p>
+                            <span>:</span>
+                            <p class="right-side mb-0">John Doe</p>
+                        </div>
+                        <div class="list__group">
+                            <p class="mb-0 left-side">Inspection date</p>
+                            <span>:</span>
+                            <p class="right-side mb-0">25 Jun 2022</p>
+                        </div>
+                        <div class="list__group">
+                            <p class="mb-0 left-side">Notes</p>
+                            <span>:</span>
+                            <p class="right-side mb-0 line-1">Amar sonar bangla ami tomai valoabashi, chirodin tomar akash chirodin tomar akash chirodin tomar akash</p>
+                        </div>
+                    </div>
+                </div>
+                 {{-- Issues --}}
+                 <div class="order-details-box bg-white">
+                    <div class="box-header">
+                        <p class="fw-bold text-light-black fs-20 mb-0">Issues/ Queries/ Tickets</p>
+                        <a href="" class="d-inline-flex edit add-call align-items-center fw-bold">Add issue</a>
+                    </div>
+                    <div class="box-body">
+                        <div class="queries-row" >
+                            <div class="queries-box position-relative pending">
+                                <span class="badges pending-badges">Pending</span>
+                                <p class="text-gray text-end mgb-12">Today 12:10am</p>
+                                <p class="text-light-black">He made payment but didnt get confirmation yet</p>
+                                <div class="d-flex justify-content-between mgb-12">
+                                    <a href="#" class="text-gray mb-0 underline">Assigned to : <span class="text-light-black text-600">Technical team</span></a>
+                                    <a href="#" class="share-box">
+                                        <span class="icon-eye"><span class="path1"></span><span class="path2"></span></span>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="queries-box position-relative pending" >
+                                <span class="badges pending-badges">Pending</span>
+                                <p class="text-gray text-end mgb-12">Today 12:10am</p>
+                                <p class="text-light-black">He made payment but didnt get confirmation yet</p>
+                                <div class="d-flex justify-content-between mgb-12">
+                                    <a href="#" class="text-gray mb-0">Assigned to : <span class="text-light-black text-600">Technical team</span></a>
+                                    <a href="#" class="share-box">
+                                        <span class="icon-eye"><span class="path1"></span><span class="path2"></span></span>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="queries-box position-relative solved">
+                                <span class="badges solved-badges">Pending</span>
+                                <p class="text-gray text-end mgb-12">Today 12:10am</p>
+                                <p class="text-light-black">He made payment but didnt get confirmation yet</p>
+                                <div class="d-flex justify-content-between mgb-12">
+                                    <a href="#" class="text-gray mb-0">Assigned to : <span class="text-light-black text-600">Technical team</span></a>
+                                    <a href="#" class="share-box">
+                                        <span class="icon-eye"><span class="path1"></span><span class="path2"></span></span>
+                                    </a>
+                                </div>
+                                <div class="solution">
+                                    <p class="mb-1 fs-14 ">Solution:</p>
+                                    <p class="mb-0 fs-14">Amar sonar bangla ami tomai valobashi.
+                                        Chirodin tomar akash tomar batash amar prane
+                                        bajai bashi sonar bangla ami tomai valobashi.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="order-details__right col-md-6">
+                  {{-- Appraisal Details --}}
+                  <div class="order-details-box bg-white">
+                    <div class="box-header">
+                        <p class="fw-bold text-light-black fs-20 mb-0">Appraisal Details</p>
+                        <a href="" class="d-inline-flex edit align-items-center fw-bold">Edit <span class="icon-edit ms-3"><span class="path1"></span><span class="path2"></span></span></a>
+                    </div>
+                    <div class="box-body">
+                        <div class="list__group">
+                            <p class="mb-0 left-side">Appraisal Type</p>
+                            <span>:</span>
+                            <p class="right-side mb-0">John Doe</p>
+                        </div>
+                        <div class="list__group">
+                            <p class="mb-0 left-side">Appraiser Name</p>
+                            <span>:</span>
+                            <p class="right-side mb-0">25 Jun 2022</p>
+                        </div>
+                        <div class="list__group">
+                            <p class="mb-0 left-side">Client Order #</p>
+                            <span>:</span>
+                            <p class="right-side mb-0">25 Jun 2022</p>
+                        </div>
+                        <div class="list__group">
+                            <p class="mb-0 left-side">Loan #</p>
+                            <span>:</span>
+                            <p class="right-side mb-0">1453 Dorchester Ave, Boston, 
+                                Ma 02122</p>
+                        </div>
+                        <div class="list__group">
+                            <p class="mb-0 left-side">Loan Type </p>
+                            <span>:</span>
+                            <p class="right-side mb-0">1453 Dorchester Ave, Boston, 
+                                Ma 02122</p>
+                        </div>
+                        <div class="list__group">
+                            <p class="mb-0 left-side">FHA Case</p>
+                            <span>:</span>
+                            <p class="right-side mb-0">1453 Dorchester Ave, Boston, 
+                                Ma 02122</p>
+                        </div>
+                        <div class="list__group">
+                            <p class="mb-0 left-side">Appraisal Fee </p>
+                            <span>:</span>
+                            <p class="right-side mb-0">1453 Dorchester Ave, Boston, 
+                                Ma 02122</p>
+                        </div>
+                    </div>
+                </div>
+                {{-- Client --}}
+                <div class="order-details-box bg-white">
+                    <div class="box-header">
+                        <p class="fw-bold text-light-black fs-20 mb-0">Client</p>
+                        <a href="" class="d-inline-flex edit align-items-center fw-bold">Edit <span class="icon-edit ms-3"><span class="path1"></span><span class="path2"></span></span></a>
+                    </div>
+                    <div class="box-body">
+                        <div class="list mb-3">
+                            <div class="list__group mb-3">
+                                <p class="mb-0 left-side">AMC name</p>
+                                <span>:</span>
+                                <p class="right-side mb-0">EStreet Appraisal Management
+                                    Company, LLC</p>
+                            </div>
+                            <a href="#" class="underline text-primary text-600">AMC requirements</a>
+                        </div>
+                        <div class="list__group">
+                            <p class="mb-0 left-side">Lender/ Bank name</p>
+                            <span>:</span>
+                            <p class="right-side mb-0">NEWREZ LLC</p>
+                        </div>
+                        <div class="list">
+                            <div class="list__group mb-3">
+                                <p class="mb-0 left-side">AMC name</p>
+                                <span>:</span>
+                                <p class="right-side mb-0">EStreet Appraisal Management
+                                    Company, LLC</p>
+                            </div>
+                            <a href="#" class="underline text-primary text-600">AMC requirements</a>
+                        </div>
+                    </div>
+                </div>
+                {{-- Call log --}}
+                <div class="order-details-box bg-white">
+                    <div class="box-header">
+                        <p class="fw-bold text-light-black fs-20 mb-0">Call log</p>
+                        <a href="" class="d-inline-flex edit add-call align-items-center fw-bold">Add call log</a>
+                    </div>
+                    <div class="box-body">
+                        <div class="col-log">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">SL</th>
+                                        <th scope="col">Caller name</th>
+                                        <th scope="col">Call date & time</th>
+                                        <th scope="col">Message</th>
+                                        <th scope="col"></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>1.</td>
+                                        <td>Sandy Rock</td>
+                                        <td>12.02.2022  3:45 pm</td>
+                                        <td>I have called and left a message</td>
+                                        <td><router-link to="/" class="message">
+                                                <span class="icon-messages2"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span></span>
+                                            </router-link></td>
+                                    </tr>
+                                    <tr>
+                                        <td>1.</td>
+                                        <td>Sandy Rock</td>
+                                        <td>12.02.2022  3:45 pm</td>
+                                        <td>I have called and left a message</td>
+                                        <td><router-link to="/" class="message">
+                                                <span class="icon-messages2"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span></span>
+                                            </router-link></td>
+                                    </tr>
+                                    <tr>
+                                        <td>1.</td>
+                                        <td>Sandy Rock</td>
+                                        <td>12.02.2022  3:45 pm</td>
+                                        <td>I have called and left a message</td>
+                                        <td><router-link to="/" class="message">
+                                                <span class="icon-messages2"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span></span>
+                                            </router-link></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{-- Map --}}
+                <div class="order-details-box bg-white">
+                    <div class="box-header">
+                        <p class="fw-bold text-light-black fs-20 mb-0">Map</p>
+                        <a href="" class="d-inline-flex edit align-items-center fw-bold">Edit <span class="icon-edit ms-3"><span class="path1"></span><span class="path2"></span></span></a>
+                    </div>
+                    <div class="box-body">
+                        <div class="map">
+                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d423286.2817730339!2d-118.69260188474334!3d34.02015975940636!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80c2c75ddc27da13%3A0xe22fdf6f254608f4!2sLos%20Angeles%2C%20CA%2C%20USA!5e0!3m2!1sen!2sbd!4v1650253099882!5m2!1sen!2sbd" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        </div>
+                    </div>
+                </div>
+                 
+            </div>
         </div>
         <div class="row">
             <div class="order-details__left col-md-8">
@@ -294,8 +603,63 @@
             </div>
             </div>
         </div>
+        {{-- modal --}}
+        <div class="modal order-details-modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-body">
+                  <h4 class="text-600 fs-20 mgb-24">Edit Basic Information</h4>
 
-
+                  <div class="group">
+                      <label for="" class="d-block mb-2 dashboard-label">Email <span class="require"></span></label>
+                      <input type="email" name="email" id="email" class="dashboard-input w-100">
+                  </div>
+                  <div class="group">
+                      <label for="role" class="d-block text-light-black mb-2">Zip code <span class="require"></span></label>
+                      <div class="position-relative">
+                          <select name="role" id="role" class="dashboard-input w-100">
+                              <option value="">Please select role</option>
+                              <option value="3" class="text-capitalize"> admin</option>
+                               <option value="4" class="text-capitalize"> inkasd</option>
+                          </select>
+                          <span class="icon-arrow-down bottom-arrow-icon"></span>
+                      </div>
+                    </div>
+                    <div class="group">
+                        <label for="" class="d-block mb-2 dashboard-label">Received date  <span class="text-danger require"></span></label>
+                       <div class="position-relative">
+                         <input type="date" class="dashboard-input w-100">
+                         <span class="icon-calendar icon"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span class="path7"></span><span class="path8"></span></span>
+                       </div>
+                    </div>
+                    <div class="group">
+                        <label for="" class="d-block mb-2 dashboard-label">Lender address <span class="require"></span></label>
+                        <textarea name="textarea" class="dashboard-input dashboard-textarea w-100"> </textarea>
+                    </div>
+                    <div class="group">
+                        <label for="" class="d-block mb-2 dashboard-label">Lender address <span class="require"></span></label>
+                        <div class="link-group d-flex">
+                            <input type="text" class="dashboard-input w-100 me-3">
+                            <button class="link-btn py-2 h-40 button button-primary">Copy</button>
+                        </div>
+                    </div>
+                    <div class="group">
+                        <label for="" class="d-block mb-2 dashboard-label">Email address <span class="text-danger require"></span></label>
+                        <input type="text" class="dashboard-input w-100">
+                        <div class=" mgt-12">
+                            <button class="add-more ">
+                                <span class="icon-plus"></span>  Add more
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="button button-transparent" data-bs-dismiss="modal">Close</button>
+                  <button type="button" class="button button-primary px-5">Save</button>
+                </div>
+              </div>
+            </div>
+          </div>
     </div>
 @endsection
 <script>
