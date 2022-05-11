@@ -28,7 +28,7 @@ Vue.component('order-create', require('./components/orders/OrderCreate').default
 Vue.component('basic-info', require('./components/orders/details/basicInfo').default)
 Vue.component('appraisal-details', require('./components/orders/details/appraisalDetails').default)
 
-
+axios.defaults.baseURL = window.origin;
 Vue.config.productionTip = false
 /**
  * Next, we will create a fresh Vue application instance and attach it to

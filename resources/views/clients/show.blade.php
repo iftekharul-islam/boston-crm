@@ -115,7 +115,7 @@
                             <div class="personal-info__group">
                                 <p class="mb-0 left-side">Client instruction</p>
                                 <span>:</span>
-                                <p class="right-side"><a @if(isset($client->getMedia('clients')[0])) target="_blank" @endif style="color: dimgray;cursor: default" href="{{ isset($client->getMedia('clients')[0]) ? $client->getMedia('clients')[0]->getFullUrl() : '#' }}"> @if(isset($client->getMedia('clients')[0])) Instruction File @else No File @endif</a></p>
+                                <p class="right-side"><a @if(isset($client->getMedia('clients')[0])) target="_blank" @else style="color: dimgray !important;cursor: default !important;" @endif href="{{ isset($client->getMedia('clients')[0]) ? $client->getMedia('clients')[0]->getFullUrl() : '#' }}"> @if(isset($client->getMedia('clients')[0])) Instruction File @else No File @endif</a></p>
                             </div>
 {{--                            <div class="personal-info__group">--}}
 {{--                                <p class="mb-0 left-side">Technology fee</p>--}}
