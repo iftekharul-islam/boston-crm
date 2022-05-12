@@ -163,7 +163,13 @@
                                     }
                                 );
                             }
-                        }
+                        },
+                        error: function (results) {
+                            swal("Error!", results.responseJSON.message, "error").then(function () {
+                                    location.reload();
+                                }
+                            );
+                        },
                     });
 
                 } else {
