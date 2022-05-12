@@ -167,7 +167,7 @@
                     </div>
                 </div>
                 <div class="add-client__bottom d-flex justify-content-end mgt-32 p-3">
-                    <button class="button button-discard me-3 d-flex align-items-center">Discard <span class="icon-close-circle ms-3"><span
+                    <button class="button button-discard me-3 d-flex align-items-center" id="discard" type="button">Discard <span class="icon-close-circle ms-3"><span
                                     class="path1"></span><span class="path2"></span></span></button>
                     <button class="button button-primary" type="submit">Update client</button>
                 </div>
@@ -222,6 +222,22 @@
                 $(".address-label, .city-label, .state-label, .country-label, .zip-label").removeClass('require');
                 $("#address,#city,#state,#country,#zip").prop('required', false);
             }
+        });
+        $("#discard").on("click",function (e){
+            e.preventDefault();
+            swal({
+                title: "Are you sure you want to discard ?",
+                text: "Changes will be lost!",
+                type: "warning",
+                showCancelButton: !0,
+                confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "No, cancel!",
+                reverseButtons: !0
+            }).then(res => {
+                if(res.value){
+                    window.location.href = "{{ url('/clients') }}";
+                }
+            })
         });
     </script>
 @endpush
