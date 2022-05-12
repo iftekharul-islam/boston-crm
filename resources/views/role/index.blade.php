@@ -41,7 +41,7 @@
                 if (state === 'complete') {
                     setTimeout(function () {
                         document.getElementById('interactive');
-                        $('.loader').hide();
+                        $('.loader').addClass('d-none');
                     }, 1000);
                 }
             }
