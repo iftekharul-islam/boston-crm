@@ -10,6 +10,9 @@ use App\Http\Controllers\ClientController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\AppraisalTypeController;
+use App\Http\Controllers\LoanTypeController;
+use App\Http\Controllers\IconController;
 
 /*
 |--------------------------------------------------------------------------
@@ -74,7 +77,6 @@ Route::group( [ 'middleware' => [ 'auth:sanctum' ] ], function () {
 		 [ ClientController::class, 'destroy' ] )->middleware( 'role_permission:delete.client' )->name( 'clients.destroy' );
 	 Route::get( 'get-clients/{type}', [ ClientController::class, 'getClientsByType' ] );
 	 //order
-//	 Route::resource( 'orders', OrderController::class );
 	 Route::get( 'orders',
 		 [ OrderController::class, 'index' ] )->middleware( 'role_permission:view.order' )->name( 'orders.index' );
 	 Route::get( 'orders/create',
@@ -89,6 +91,36 @@ Route::group( [ 'middleware' => [ 'auth:sanctum' ] ], function () {
 		 [ OrderController::class, 'update' ] )->middleware( 'role_permission:update.order' )->name( 'orders.update' );
 	 Route::delete( 'orders/{id}',
 		 [ OrderController::class, 'destroy' ] )->middleware( 'role_permission:delete.order' )->name( 'orders.destroy' );
+	 //Appraisal Type
+	 Route::get( 'appraisal-types',
+		 [ AppraisalTypeController::class, 'index' ] )->middleware( 'role_permission:view.appraisaltype' )->name( 'appraisal-types.index' );
+	 Route::get( 'appraisal-types/create',
+		 [ AppraisalTypeController::class, 'create' ] )->middleware( 'role_permission:create.appraisaltype' )->name( 'appraisal-types.create' );
+	 Route::post( 'appraisal-types',
+		 [ AppraisalTypeController::class, 'store' ] )->middleware( 'role_permission:create.appraisaltype' )->name( 'appraisal-types.store' );
+	 Route::get( 'appraisal-types/{id}',
+		 [ AppraisalTypeController::class, 'show' ] )->middleware( 'role_permission:view.appraisaltype' )->name( 'appraisal-types.show' );
+	 Route::get( 'appraisal-types/{id}/edit',
+		 [ AppraisalTypeController::class, 'edit' ] )->middleware( 'role_permission:update.appraisaltype' )->name( 'appraisal-types.edit' );
+	 Route::put( 'appraisal-types/{id}',
+		 [ AppraisalTypeController::class, 'update' ] )->middleware( 'role_permission:update.appraisaltype' )->name( 'appraisal-types.update' );
+	 Route::post( 'appraisal-types/{id}',
+		 [ AppraisalTypeController::class, 'destroy' ] )->middleware( 'role_permission:delete.appraisaltype' )->name( 'appraisal-types.destroy' );
+	 //Loan Type
+	 Route::get( 'loan-types',
+		 [ LoanTypeController::class, 'index' ] )->middleware( 'role_permission:view.loantype' )->name( 'loan-types.index' );
+	 Route::get( 'loan-types/create',
+		 [ LoanTypeController::class, 'create' ] )->middleware( 'role_permission:create.loantype' )->name( 'loan-types.create' );
+	 Route::post( 'loan-types',
+		 [ LoanTypeController::class, 'store' ] )->middleware( 'role_permission:create.loantype' )->name( 'loan-types.store' );
+	 Route::get( 'loan-types/{id}',
+		 [ LoanTypeController::class, 'show' ] )->middleware( 'role_permission:view.loantype' )->name( 'loan-types.show' );
+	 Route::get( 'loan-types/{id}/edit',
+		 [ LoanTypeController::class, 'edit' ] )->middleware( 'role_permission:update.loantype' )->name( 'loan-types.edit' );
+	 Route::put( 'loan-types/{id}',
+		 [ LoanTypeController::class, 'update' ] )->middleware( 'role_permission:update.loantype' )->name( 'loan-types.update' );
+	 Route::post( 'loan-types/{id}',
+		 [ LoanTypeController::class, 'destroy' ] )->middleware( 'role_permission:delete.loantype' )->name( 'loan-types.destroy' );
 } );
 Auth::routes();
 Route::any('/import-client',[ClientController::class,'importClient'])->name('import-client');
@@ -98,9 +130,7 @@ Route::view( '/order', 'dashboard.order' );
 Route::view( '/order-details', 'dashboard.order-details' )->name( 'order.details' );
 Route::view( '/order-add', 'dashboard.order-add' )->name( 'order.add' );
 Route::view( '/order-add-step2', 'dashboard.order-add-step2' )->name( 'order.add-step2' );
-Route::get( 'get/icons', function () {
-	 return view( 'icon' );
-} );
+Route::get( 'get/icons', [IconController::class, 'index'])->name('get.icon');
 Route::get( 'email/verify/{id}/{hash}', [ VerificationController::class, 'verify' ] )->name( 'verification.verify' );
 Route::get( 'accept-new-user/{code}', [ UserController::class, 'acceptInviteUser' ] )->name( 'accept.new.user' );
 Route::post( 'invite-user-update/{id}',

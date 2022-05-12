@@ -10,9 +10,7 @@
                         role="button">{{ __('messages.role_view.role_create') }}</button>
             @endif
         </div>
-        role create
         @include('role._create-role')
-        role preview
         <div class="role-preview">
             @foreach($roles ?? [] as $key => $role)
                 @php
@@ -24,21 +22,6 @@
         </div>
     </div>
     <div class="loader">
-        <!-- about -->
-        <div class="about">
-            <a class="bg_links social portfolio" href="https://www.rafaelalucas.com" target="_blank">
-                <span class="icon"></span>
-            </a>
-            <a class="bg_links social dribbble" href="https://dribbble.com/rafaelalucas" target="_blank">
-                <span class="icon"></span>
-            </a>
-            <a class="bg_links social linkedin" href="https://www.linkedin.com/in/rafaelalucas/" target="_blank">
-                <span class="icon"></span>
-            </a>
-            <a class="bg_links logo"></a>
-        </div>
-        <!-- end about -->
-
         <div class="content">
             <div class="loading">
                 <p>loading</p>

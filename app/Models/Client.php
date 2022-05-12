@@ -4,12 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use OwenIt\Auditing\Contracts\Auditable;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\HasMedia;
 
-class Client extends Model implements HasMedia
+class Client extends Model implements HasMedia, Auditable
 {
     use SoftDeletes,InteractsWithMedia;
+		use \OwenIt\Auditing\Auditable;
 
     protected $fillable = [
         "name",

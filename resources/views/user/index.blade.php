@@ -177,13 +177,20 @@
         }
 
         function inviteUser() {
+            $('.email-error').removeClass('is-invalid');
+            $('.role-error').removeClass('is-invalid');
             $('#emailErrorMsg').text('');
             $('#roleErrorMsg').text('');
             let role_id = $('#role option:selected').val();
             let email = $('#email').val();
-            if (email.length === 0 || role_id.length === 0) {
-                $('#emailErrorMsg').text('Email is required');
+            if (role_id.length === 0) {
+                $('.role-error').addClass('is-invalid');
                 $('#roleErrorMsg').text('Role is required');
+                return;
+            }
+            if (email.length === 0) {
+                $('.email-error').addClass('is-invalid');
+                $('#emailErrorMsg').text('Email is required');
                 return;
             }
             let url = '{{ route("users.store") }}';
@@ -201,8 +208,15 @@
                 },
                 error: function (response) {
                     let errors = response.responseJSON.errors;
-                    $('#emailErrorMsg').text(errors.email);
-                    $('#roleErrorMsg').text(errors.role);
+                    if (errors.email.length) {
+                        $('.email-error').addClass('is-invalid');
+                        $('#emailErrorMsg').text(errors.email);
+                    }
+                    if (errors.role.length) {
+                        $('.role-error').addClass('is-invalid');
+                        $('#roleErrorMsg').text(errors.role);
+                    }
+
                 },
             });
         }
