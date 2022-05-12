@@ -20,7 +20,6 @@ class BaseController extends Controller
 						$user            = Auth::user();
 						$active_user = CompanyUser::query()->where( 'user_id', $user->id )->where( 'status', 1 )->first();
 						if ( ! $active_user ) {
-//							 Auth::logout();
 							 auth()->guard('web')->logout();
 							 return redirect()->route( 'login' )->with( 'inactive-user',
 								 'Your account has been deactivated. Please contact with admin.' );
