@@ -28,6 +28,17 @@
                     </a>
                 </div>
             </div>
+            @if(session()->has('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+            @endif
+
+            @if (session()->has('error'))
+                <div class="alert alert-danger">
+                    {{ session('error') }}
+                </div>
+            @endif
             <div class="tab-content" id="pills-tabContent">
                 {{-- personal info --}}
                 <div class="tab-pane fade show active" id="pills-personal-info" role="tabpanel" aria-labelledby="pills-personal-info-tab">
@@ -145,3 +156,9 @@
         </div>
     </div>
 @endsection
+<script>
+    setInterval(function () {
+        $("div.alert-success").hide();
+        $("div.alert-danger").hide();
+    }, 3000);
+</script>

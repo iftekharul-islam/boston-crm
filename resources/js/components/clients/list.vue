@@ -13,24 +13,9 @@
         <div class="right d-flex">
           <!-- Loader -->
           <div v-if="loading" class="loader">
-            <!-- about -->
-              <div class="about">
-                <a class="bg_links social portfolio" href="https://www.rafaelalucas.com" target="_blank">
-                    <span class="icon"></span>
-                </a>
-                <a class="bg_links social dribbble" href="https://dribbble.com/rafaelalucas" target="_blank">
-                    <span class="icon"></span>
-                </a>
-                <a class="bg_links social linkedin" href="https://www.linkedin.com/in/rafaelalucas/" target="_blank">
-                    <span class="icon"></span>
-                </a>
-                <a class="bg_links logo"></a>
-              </div>
-              <!-- end about -->
-
               <div class="content">
                 <div class="loading">
-              <p>loading</p>
+                    <p>loading</p>
                     <span></span>
                 </div>
               </div>
@@ -86,7 +71,10 @@ export default {
   props: {
     showRoute: String,
     createRoute: String,
-    deleteRoute: String
+    deleteRoute: String,
+    permissions: Array,
+    role: String,
+    isOwner: Boolean
   },
   data() {
     return {
@@ -117,9 +105,13 @@ export default {
   },
   created() {
     this.getType('All')
+
   },
   methods: {
-    searchClients: function() {
+    checkClientPermission(){
+
+    },
+    searchClients() {
       this.getClients()
     },
     getType(type) {
@@ -130,7 +122,6 @@ export default {
     },
     getClients(page = 1) {
       this.loading = true;
-      console.log('called')
       axios.get(window.origin + '/get-clients/' + this.currentType + '?page=' + page + '&searchKey=' + (this.searchText).trim())
           .then(res => {
             this.clients = res.data.data.clients
@@ -158,14 +149,13 @@ export default {
         if(result.value) {
           axios.delete(this.deleteRoute + '/' + clientId)
               .then(res => {
-                //console.log(res)
+                this.$swal('Deleted', 'You successfully deleted this client', 'success')
+                setTimeout(function (){
+                  location.reload()
+                },2000);
               }).catch(err => {
             console.log(err)
           })
-          this.$swal('Deleted', 'You successfully deleted this client', 'success')
-          setTimeout(function (){
-            location.reload()
-          },2000);
         }
       })
     }

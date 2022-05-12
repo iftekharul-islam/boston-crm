@@ -13,11 +13,11 @@
                         </div>
                     @endif
 
-                    @foreach ($errors->all() as $error)
+                    @if (session()->has('error'))
                         <div class="alert alert-danger">
-                            {{ $error }}
+                            {{ session('error') }}
                         </div>
-                    @endforeach
+                    @endif
                     <div class="row">
                         <div class="col-lg-8 left mb-3">
                             <div class="d-flex box justify-content-between left__wrap">
@@ -153,7 +153,8 @@
                                     <div class="group">
                                         <label for="instruction" class="d-block mb-2 dashboard-label">Instruction</label>
                                         <div class="position-relative file-upload">
-                                            <input type="file" accept=".xls,.xlsx,.pdf,.doc,.docx" name="instruction" id="instruction">
+                                            <input type="file" accept="application/octet-stream,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint,
+                                                text/plain, application/pdf" name="instruction" id="instruction">
                                             <label for="">Upload <img src="{{ asset('/img/upload.png') }}"
                                                                       alt="boston profile"></label>
                                         </div>

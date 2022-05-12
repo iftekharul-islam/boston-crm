@@ -35,12 +35,11 @@ class ClientService
 
     /**
      * @param array $data
-     *
-     * @return void
+     * @return Model
      */
-    public function saveClientData(array $data)
+    public function saveClientData(array $data): Model
     {
-        $this->clientRepository->create($data);
+        return $this->clientRepository->create($data);
     }
 
     /**

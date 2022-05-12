@@ -72,10 +72,11 @@ class ClientController extends BaseController
     {
         $request_data = $request->validated();
         $merged_data = array_merge($request_data, ["company_id" => $this->companyService->getAuthUserCompany()->id]);
-        $this->clientService->saveClientData($merged_data);
+        $client = $this->clientService->saveClientData($merged_data);
 
-        Session::flash('success', 'Client added successfully');
-        return redirect()->back();
+        return redirect()
+            ->to('/clients/' . $client->id)
+            ->with(["success" => 'Client added successfully']);
     }
 
     /**
@@ -107,12 +108,11 @@ class ClientController extends BaseController
      */
     public function update(ClientRequest $request, int $id): RedirectResponse
     {
-        $response = $this->clientService->updateClientData($request->validated(), $id);
-        if ($response) {
-            return redirect()->back()->with(['success' => 'Client updated successfully']);
-        }
+        $client = $this->clientService->updateClientData($request->validated(), $id);
 
-        return redirect()->back()->with(['error' => 'Something went wrong']);
+        return redirect()
+            ->to('/clients/' . $client->id)
+            ->with(['success' => 'Client updated successfully']);
     }
 
     /**
