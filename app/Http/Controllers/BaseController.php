@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CompanyUser;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
 use Spatie\Permission\Models\Role;
@@ -17,6 +18,13 @@ class BaseController extends Controller
 			$this->middleware( function ($request, $next) {
 				 if ( Auth::check() ) {
 						$user            = Auth::user();
+						$active_user = CompanyUser::query()->where( 'user_id', $user->id )->where( 'status', 1 )->first();
+						if ( ! $active_user ) {
+//							 Auth::logout();
+							 auth()->guard('web')->logout();
+							 return redirect()->route( 'login' )->with( 'inactive-user',
+								 'Your account has been deactivated. Please contact with admin.' );
+						}
 						$company         = $user->companies()->first();
 						$this->isOwner   = $user->id === $company->owner_id;
 						$this->user_role = $user->getUserRole( $user->id, $company->id );
