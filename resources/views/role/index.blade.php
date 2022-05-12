@@ -10,9 +10,7 @@
                         role="button">{{ __('messages.role_view.role_create') }}</button>
             @endif
         </div>
-{{--        role create--}}
         @include('role._create-role')
-{{--        role preview--}}
         <div class="role-preview">
             @foreach($roles ?? [] as $key => $role)
                 @php

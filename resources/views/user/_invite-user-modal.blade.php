@@ -9,7 +9,7 @@
                     <label for="role"
                            class="d-block text-light-black mb-2">{{ __('messages.user_view.role_name') }}</label>
                     <div class="position-relative">
-                        <select name="role" id="role" class="login-input w-100">
+                        <select name="role" id="role" class="login-input w-100 role-error">
                             <option value="">Please select role</option>
                             @foreach($roles as $role)
                                 <option value="{{ $role->id }}"
@@ -24,7 +24,7 @@
                 </div>
                 <div class="group">
                     <label for="" class="d-block mb-2 dashboard-label">{{ __('messages.email') }}</label>
-                    <input type="email" name="email" id="email" class="login-input w-100">
+                    <input type="email" name="email" id="email" class="login-input w-100 email-error">
                     <span id="emailErrorMsg" class="error"></span>
                 </div>
             </div>
