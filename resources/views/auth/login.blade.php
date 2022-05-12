@@ -4,9 +4,10 @@
     <div class="login ">
         <div class="d-flex login-row login-space flex-wrap">
             <div class="left-side col-md-6 bg-light-black">
-{{--                <a href="#" class="back-btn text-white"><img class="mgr-8" src="{{ asset('img/arrow-left.png') }}"--}}
-{{--                                                             alt="boston logo"> Back</a>--}}
                 <div class="login-box">
+                    @if(Session::has('inactive-user'))
+                        <p class="text-danger">{{Session::get('inactive-user')}}</p>
+                    @endif
                     <div class="login-header fs-20 text-light-black mgb-48 fw-bold">{{ __('Login') }}</div>
                     <form method="POST" action="{{ route('login') }}" id="loginForm">
                         @csrf
