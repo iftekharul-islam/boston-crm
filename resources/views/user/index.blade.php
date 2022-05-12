@@ -208,8 +208,15 @@
                 },
                 error: function (response) {
                     let errors = response.responseJSON.errors;
-                    $('#emailErrorMsg').text(errors.email);
-                    $('#roleErrorMsg').text(errors.role);
+                    if (errors.email.length) {
+                        $('.email-error').addClass('is-invalid');
+                        $('#emailErrorMsg').text(errors.email);
+                    }
+                    if (errors.role.length) {
+                        $('.role-error').addClass('is-invalid');
+                        $('#roleErrorMsg').text(errors.role);
+                    }
+
                 },
             });
         }
