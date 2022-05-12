@@ -216,7 +216,6 @@
           <path d="M18.33 7.75H1.5C1.09 7.75 0.75 7.41 0.75 7C0.75 6.59 1.09 6.25 1.5 6.25H18.33C18.74 6.25 19.08 6.59 19.08 7C19.08 7.41 18.74 7.75 18.33 7.75Z" fill="white"/>
         </svg>
       </button>
-      <button class="button button-primary"> Add order </button>
     </div>
   </div>
 </template>
