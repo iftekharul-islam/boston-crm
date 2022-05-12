@@ -223,5 +223,21 @@
                 $("#address,#city,#state,#country,#zip").prop('required', false);
             }
         });
+        $("#discard").on("click",function (e){
+            e.preventDefault();
+            swal({
+                title: "Are you sure you want to discard ?",
+                text: "Changes will be lost!",
+                type: "warning",
+                showCancelButton: !0,
+                confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "No, cancel!",
+                reverseButtons: !0
+            }).then(res => {
+                if(res.value){
+                    window.location.href = "{{ url('/clients') }}";
+                }
+            })
+        });
     </script>
 @endpush
