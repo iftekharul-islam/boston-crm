@@ -140,6 +140,8 @@
 
 @section('js')
     <script>
+        const MAX_FILE_SIZE = 1024 * 1024; // 1MB
+
         $("#inputGroupFile01").change(function (event) {
             $('.image-error').text("");
             let fileSize = this.files[0].size;
@@ -156,7 +158,6 @@
                 var filename = $("#inputGroupFile01").val();
                 filename = filename.substring(filename.lastIndexOf('\\') + 1);
                 reader.onload = function (e) {
-                    debugger;
                     $('#blah').attr('src', e.target.result);
                     $('#blah').hide();
                     $('#blah').fadeIn(500);

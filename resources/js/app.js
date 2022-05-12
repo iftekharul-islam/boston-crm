@@ -50,7 +50,7 @@ Vue.component('invoice', require('./components/orders/details/invoice').default)
 Vue.component('notes', require('./components/orders/details/notes').default)
 Vue.component('activity-log', require('./components/orders/details/activityLog').default)
 
-
+axios.defaults.baseURL = window.origin;
 Vue.config.productionTip = false
 /**
  * Next, we will create a fresh Vue application instance and attach it to

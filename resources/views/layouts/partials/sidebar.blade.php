@@ -97,13 +97,33 @@
             </div>
             <span class="icon-arrow-down ms-auto"></span>
         </a>
-{{--        <a href="{{ url('/chats') }}" class="list-item d-flex align-items-center  text-white">--}}
-{{--            <div class="d-inline-flex align-items-center">--}}
-{{--                <span class="icon-messages me-3 fs-3"><span class="path1"></span><span class="path2"></span><span--}}
-{{--                            class="path3"></span></span>--}}
-{{--                <span class="items-text"> {{ __('messages.dashboard_view.chat') }} </span>--}}
-{{--            </div>--}}
-{{--            <span class="icon-arrow-down ms-auto"></span>--}}
-{{--        </a>--}}
+        @if(in_array('view.appraisaltype', $user_permissions) || $is_owner || $user_role == 'admin')
+            <a href="{{ route('appraisal-types.index') }}" class="list-item d-flex align-items-center  text-white">
+                <div class="d-inline-flex align-items-center">
+                <span class="icon-profile-circle me-3 fs-3"><span class="path1"></span><span class="path2"></span><span
+                            class="path3"></span></span>
+                    <span class="items-text"> Appraisal Types </span>
+                </div>
+                <span class="icon-arrow-down ms-auto"></span>
+            </a>
+        @endif
+        @if(in_array('view.loantype', $user_permissions) || $is_owner || $user_role == 'admin')
+            <a href="{{ route('loan-types.index') }}" class="list-item d-flex align-items-center  text-white">
+                <div class="d-inline-flex align-items-center">
+                <span class="icon-profile-circle me-3 fs-3"><span class="path1"></span><span class="path2"></span><span
+                            class="path3"></span></span>
+                    <span class="items-text"> Loan Types </span>
+                </div>
+                <span class="icon-arrow-down ms-auto"></span>
+            </a>
+        @endif
+        {{--        <a href="{{ url('/chats') }}" class="list-item d-flex align-items-center  text-white">--}}
+        {{--            <div class="d-inline-flex align-items-center">--}}
+        {{--                <span class="icon-messages me-3 fs-3"><span class="path1"></span><span class="path2"></span><span--}}
+        {{--                            class="path3"></span></span>--}}
+        {{--                <span class="items-text"> {{ __('messages.dashboard_view.chat') }} </span>--}}
+        {{--            </div>--}}
+        {{--            <span class="icon-arrow-down ms-auto"></span>--}}
+        {{--        </a>--}}
     </div>
 </div>

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Repositories\OrderRepository;
+use App\Services\OrderService;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -11,6 +13,16 @@ use Illuminate\Http\Response;
 
 class OrderController extends BaseController
 {
+	 protected OrderService $service;
+	 protected OrderRepository $repository;
+	 
+	 public function __construct(OrderService $order_service, OrderRepository $order_repository)
+	 {
+			parent::__construct();
+			$this->service    = $order_service;
+			$this->repository = $order_repository;
+	 }
+	 
 	 /**
 		* Display a listing of the resource.
 		*
@@ -29,8 +41,11 @@ class OrderController extends BaseController
 	 public function create(): Application|Factory|View
 	 {
 			$system_order_no = 'BAS-' . uniqid();
+			$appraisal_users = $this->repository->getUserByRoleWise( role: 'appraiser' );
+			$appraisal_types = $this->repository->getAppraisalTypes();
+			$loan_types      = $this->repository->getLoanTypes();
 			
-			return view( 'order.create', compact( 'system_order_no' ) );
+			return view( 'order.create', compact( 'system_order_no', 'appraisal_users', 'appraisal_types', 'loan_types' ) );
 	 }
 	 
 	 /**

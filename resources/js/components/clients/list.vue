@@ -130,7 +130,8 @@ export default {
     },
     getClients(page = 1) {
       this.loading = true;
-      axios.get('get-clients/' + this.currentType + '?page=' + page + '&searchKey=' + (this.searchText).trim())
+      console.log('called')
+      axios.get(window.origin + '/get-clients/' + this.currentType + '?page=' + page + '&searchKey=' + (this.searchText).trim())
           .then(res => {
             this.clients = res.data.data.clients
             this.all = res.data.data.all
