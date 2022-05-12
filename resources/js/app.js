@@ -10,6 +10,11 @@ window.Vue = require('vue').default
 import Pagination from 'vue-pagination-2'
 import VueSweetalert2 from 'vue-sweetalert2'
 import 'sweetalert2/dist/sweetalert2.min.css';
+import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
+
+// Import Bootstrap an BootstrapVue CSS files (order is important)
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 /**
  * The following block of code may be used to automatically register your
@@ -21,7 +26,11 @@ import 'sweetalert2/dist/sweetalert2.min.css';
 
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
-Vue.use(VueSweetalert2);
+Vue.use(VueSweetalert2);// Make BootstrapVue available throughout your project
+Vue.use(BootstrapVue)
+// Optionally install the BootstrapVue icon components plugin
+Vue.use(IconsPlugin)
+
 Vue.component('pagination', Pagination);
 Vue.component('clients-list', require('./components/clients/list').default);
 Vue.component('order-create', require('./components/orders/OrderCreate').default)
