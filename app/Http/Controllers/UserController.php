@@ -239,6 +239,6 @@ class UserController extends BaseController
 					 ], user_id: $user->id )->profileImage( request: $request, image: $request->file( 'image' ), user: $user );
 			} );
 			
-			return redirect()->route( 'profile' );
+			return redirect()->route( 'profile' )->with('success', 'Profile Update successfully.');
 	 }
 }

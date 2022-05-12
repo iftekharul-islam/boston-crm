@@ -5,8 +5,10 @@
         <div class="clients-box user-box clients-box-main bg-white">
             <div class="clients-top d-flex flex-wrap justify-content-between">
                 <p class="mb-0 text-light-black fs-20 text-600">User management</p>
-                <button data-bs-toggle="modal" data-bs-target="#userInviteModal" class="button button-primary"
-                        role="button">{{ __('messages.user_view.user_create') }}</button>
+                @if(in_array('create.user', $user_permissions))
+                    <button data-bs-toggle="modal" data-bs-target="#userInviteModal" class="button button-primary"
+                            role="button">{{ __('messages.user_view.user_create') }}</button>
+                @endif
             </div>
             <div class="clients-table user-table mt-4">
                 <table class="table">
@@ -93,7 +95,7 @@
                                         <input class="switch-input" type="checkbox" id="switch{{ $user->id }}"
                                                onclick="userStatusChange({{ $user->id }})"
                                                @if($user->pivot->status) checked @endif
-                                        @if(! in_array('update.user', $user_permissions)) disabled @endif/>
+                                               @if(! in_array('update.user', $user_permissions)) disabled @endif/>
                                         <label class="switch-label" for="switch{{ $user->id }}"></label>
                                         <span class="active-switch switch-status">{{ __('messages.active') }}</span>
                                         <span class="inactive-switch switch-status">{{ __('messages.inactive') }}</span>

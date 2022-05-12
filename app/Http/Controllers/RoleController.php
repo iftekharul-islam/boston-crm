@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\RoleCreateRequest;
 use App\Http\Requests\RoleUpdateRequest;
+use App\Models\CompanyUser;
 use App\Services\CompanyService;
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Foundation\Application;
@@ -77,17 +78,6 @@ class RoleController extends BaseController
 	 }
 	 
 	 /**
-		* Display the specified resource.
-		*
-		* @param int $id
-		*
-		* @return Response
-		*/
-	 public function show(int $id)
-	 {
-	 }
-	 
-	 /**
 		* Show the form for editing the specified resource.
 		*
 		* @param int $id
@@ -132,6 +122,11 @@ class RoleController extends BaseController
 	 public function destroy(int $id): JsonResponse
 	 {
 			$role = Role::query()->findOrFail( $id );
+			
+			$role_user_exists = CompanyUser::query()->where('role_id', $role->id)->exists();
+			if ($role_user_exists) {
+				 return response()->json( [ 'success' => false, 'message' => 'Role has active users. You have to remove role from those users first.' ] );
+			}
 			
 			return response()->json( [ 'success' => $role->delete() ] );
 	 }

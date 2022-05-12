@@ -1,6 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
+    @if(Session::has('success'))
+        <h3 class="text-success text-center mt-2 success-msg">{{Session::get('success')}}</h3>
+    @endif
     <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="order-add bg-platinum dashboard-space">
@@ -41,7 +44,7 @@
                                                    name="user_name"
                                                    value="{{ $user->name ?? '' }}">
                                             @error('user_name')
-                                                <span class="invalid-feedback" role="alert">
+                                            <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
                                                 </span>
                                             @enderror
@@ -54,7 +57,7 @@
                                                    class="dashboard-input w-100 @error('address') is-invalid @enderror" name="address"
                                                    value="{{ $profile->address ?? '' }}">
                                             @error('address')
-                                                <span class="invalid-feedback" role="alert">
+                                            <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
                                                 </span>
                                             @enderror
@@ -68,7 +71,7 @@
                                                    name="city"
                                                    value="{{ $profile->city ?? '' }}">
                                             @error('city')
-                                                <span class="invalid-feedback" role="alert">
+                                            <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
                                                 </span>
                                             @enderror
@@ -82,7 +85,7 @@
                                                    name="state"
                                                    value="{{ $profile->state ?? '' }}">
                                             @error('state')
-                                                <span class="invalid-feedback" role="alert">
+                                            <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
                                                 </span>
                                             @enderror
@@ -98,7 +101,7 @@
                                                    name="zip_code"
                                                    value="{{ $profile->zip_code ?? '' }}">
                                             @error('zip_code')
-                                                <span class="invalid-feedback" role="alert">
+                                            <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
                                                 </span>
                                             @enderror
@@ -163,6 +166,13 @@
 @section('js')
     <script>
         const MAX_FILE_SIZE = 1024 * 1024; // 1MB
+        $(document).ready(function () {
+            if ($(".success-msg")){
+                setTimeout(function(){
+                    $(".success-msg").fadeOut().addClass('d-none');
+                }, 6000);
+            }
+        });
 
         $("#inputGroupFile01").change(function (event) {
             $('.image-error').text("");
