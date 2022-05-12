@@ -35,13 +35,13 @@ class Client extends Model implements HasMedia
         return $query->where('company_id',$company_id);
     }
 
-    public function scopeSearchFilters($query,$search_key)
+    public function scopeSearchFilters($query,$search_key,$company_id)
     {
-        return $query->where(function ($q) use($search_key){
+        return $query->where(function ($q) use($search_key,$company_id){
             $q->where('name', 'like', '%' . $search_key . '%')
             ->orWhere('email','like','%' . $search_key . '%')
             ->orWhere('phone','like','%' . $search_key . '%');
-        });
+        })->where('company_id',$company_id);
     }
 
     public function scopeAmc($query)

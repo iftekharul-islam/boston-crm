@@ -35,8 +35,8 @@ class ClientRepository extends BaseRepository
         if ($search_key == '') {
             $data = [];
             $data['all'] = $this->model->filterByCompany($company_id)->count();
-            $data['amc'] = $this->model->filterByCompany($company_id)->where('client_type', 'amc')->count();
-            $data['lender'] =$this->model->filterByCompany($company_id)->where('client_type', 'lender')->count();
+            $data['amc'] = $this->model->filterByCompany($company_id)->amc()->count();
+            $data['lender'] =$this->model->filterByCompany($company_id)->lender()->count();
 
             if ($type == 'all') {
                 $data['clients'] = $this->model->filterByCompany($company_id)->paginate(10, ['*'], 'page', $page_number);
@@ -47,14 +47,14 @@ class ClientRepository extends BaseRepository
         } else {
             $data = [];
 
-            $data['all'] = $this->model->searchFilters($search_key)->filterByCompany($company_id)->count();
-            $data['amc'] = $this->model->searchFilters($search_key)->filterByCompany($company_id)->amc()->count();
-            $data['lender'] = $this->model->searchFilters($search_key)->filterByCompany($company_id)->lender()->count();
+            $data['all'] = $this->model->searchFilters($search_key,$company_id)->count();
+            $data['amc'] = $this->model->searchFilters($search_key,$company_id)->amc()->count();
+            $data['lender'] = $this->model->searchFilters($search_key,$company_id)->lender()->count();
             if ($type == 'all') {
-                $data['clients'] = $this->model->searchFilters($search_key)->filterByCompany($company_id)->paginate(10, ['*'], 'page', $page_number);
+                $data['clients'] = $this->model->searchFilters($search_key,$company_id)->paginate(10, ['*'], 'page', $page_number);
                 $data['pageNumber'] = $page_number;
             } else {
-                $data['clients'] = $this->model->searchFilters($search_key)->filterByCompany($company_id)->where('client_type', $type)->get();
+                $data['clients'] = $this->model->searchFilters($search_key,$company_id)->where('client_type', $type)->paginate(10, ['*'], 'page', $page_number);
             }
         }
         return $data;
