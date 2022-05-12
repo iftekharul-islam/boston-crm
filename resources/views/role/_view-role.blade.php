@@ -3,7 +3,7 @@
         <p class="mb-0 text-light-black fs-20 fw-bold text-capitalize">{{ $role->name }}</p>
         <div class="d-flex align-items-center">
             @if(! in_array($role->name, ['super admin', 'admin']))
-                @if(in_array('delete.role', $permissions) || $is_owner || $user_role == 'admin')
+                @if(in_array('delete.role', $user_permissions) || $is_owner || $user_role == 'admin')
                     <span class="delete me-3"
                           data-id="{{ $role->id }}"
                           data-action="{{ route('roles.destroy',$role->id) }}"
@@ -13,7 +13,7 @@
                                                 class="path3"></span><span class="path4"></span></span>
                                 </span>
                 @endif
-                @if(in_array('update.role', $permissions) || $is_owner || $user_role == 'admin')
+                @if(in_array('update.role', $user_permissions) || $is_owner || $user_role == 'admin')
                     <button class="edit-btn h-32 inline-flex-center"
                             onclick="editRoleView({{ $role->id }});">
                         {{ __('messages.edit') }}
