@@ -28,6 +28,18 @@ Vue.component('order-create', require('./components/orders/OrderCreate').default
 Vue.component('basic-info', require('./components/orders/details/basicInfo').default)
 Vue.component('appraisal-details', require('./components/orders/details/appraisalDetails').default)
 Vue.component('workflow', require('./components/orders/details/workflow').default)
+Vue.component('client-info', require('./components/orders/details/clientInfo').default)
+Vue.component('call-log', require('./components/orders/details/callLog').default)
+Vue.component('borrower', require('./components/orders/details/borrower').default)
+Vue.component('contact', require('./components/orders/details/contact').default)
+Vue.component('inspection', require('./components/orders/details/inspection').default)
+Vue.component('issues', require('./components/orders/details/issues').default)
+Vue.component('history', require('./components/orders/details/history').default)
+Vue.component('map-view', require('./components/orders/details/mapView').default)
+Vue.component('files', require('./components/orders/details/files').default)
+Vue.component('invoice', require('./components/orders/details/invoice').default)
+Vue.component('notes', require('./components/orders/details/notes').default)
+Vue.component('activity-log', require('./components/orders/details/activityLog').default)
 
 
 Vue.config.productionTip = false

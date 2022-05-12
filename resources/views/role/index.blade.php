@@ -50,16 +50,13 @@
 
 @push("js")
     <script>
+        $(window).on('load', function(){
+            setTimeout(removeLoader, 500); //wait for page load PLUS two seconds.
+        });
+        function removeLoader(){
+            $( ".loader" ).remove();
+        }
         $(function () {
-            document.onreadystatechange = function () {
-                let state = document.readyState
-                if (state === 'complete') {
-                    setTimeout(function () {
-                        document.getElementById('interactive');
-                        $('.loader').hide();
-                    }, 1000);
-                }
-            }
             $('.new-role').addClass('d-none');
         });
 
