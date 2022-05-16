@@ -2,11 +2,12 @@
   <div class="order-details-box bg-white">
     <div class="box-header">
       <p class="fw-bold text-light-black fs-20 mb-0">Basic Information</p>
-      <a href="#" v-b-modal.basic-info class="d-inline-flex edit align-items-center fw-bold">Edit <span class="icon-edit ms-3"><span class="path1"></span><span class="path2"></span></span></a>
+      <a href="#" v-b-modal.basic-info class="d-inline-flex edit align-items-center fw-bold">Edit <span
+          class="icon-edit ms-3"><span class="path1"></span><span class="path2"></span></span></a>
     </div>
     <div class="box-body">
       <div class="list__group">
-        <p class="mb-0 left-side">Property address  </p>
+        <p class="mb-0 left-side">Property address </p>
         <span>:</span>
         <p class="right-side mb-0 text-primary fw-bold fs-20">1453 Dorchester Ave, Boston, Ma 02122</p>
       </div>
@@ -27,54 +28,61 @@
       </div>
     </div>
     <b-modal id="basic-info" size="lg" title="Edit Basic Information">
-        <div class="modal-body">
-          <div class="row">
-            <div class="col-md-6">
-              <div class="group">
-                <label for="" class="d-block mb-2 dashboard-label">Search Address <span class="require"></span></label>
-                <input type="email" name="email" id="email" class="dashboard-input w-100">
-              </div>
-              <div class="group">
-                <label for="" class="d-block mb-2 dashboard-label">Street Name <span class="require"></span></label>
-                <input type="email" name="email" id="email" class="dashboard-input w-100">
-              </div>
-              <div class="group">
-                <label for="" class="d-block mb-2 dashboard-label">City Name <span class="require"></span></label>
-                <input type="email" name="email" id="email" class="dashboard-input w-100">
-              </div>
-              <div class="group">
-                <label for="" class="d-block mb-2 dashboard-label">State Name <span class="require"></span></label>
-                <input type="email" name="email" id="email" class="dashboard-input w-100">
-              </div>
-              <div class="group">
-                <label for="" class="d-block mb-2 dashboard-label">Zip <span class="require"></span></label>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="group">
+              <label for="" class="d-block mb-2 dashboard-label">Search Address <span class="require"></span></label>
+              <input type="email" name="email" id="email" class="dashboard-input w-100">
+            </div>
+            <div class="group">
+              <label for="" class="d-block mb-2 dashboard-label">Street Name <span class="require"></span></label>
+              <input type="email" name="email" id="email" class="dashboard-input w-100">
+            </div>
+            <div class="group">
+              <label for="" class="d-block mb-2 dashboard-label">City Name <span class="require"></span></label>
+              <input type="email" name="email" id="email" class="dashboard-input w-100">
+            </div>
+            <div class="group">
+              <label for="" class="d-block mb-2 dashboard-label">State Name <span class="require"></span></label>
+              <input type="email" name="email" id="email" class="dashboard-input w-100">
+            </div>
+            <div class="group">
+              <label for="" class="d-block mb-2 dashboard-label">Zip <span class="require"></span></label>
+              <input type="text" class="dashboard-input w-100">
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="group">
+              <label for="" class="d-block mb-2 dashboard-label">Email <span class="require"></span></label>
+              <input type="email" name="email" id="email" class="dashboard-input w-100">
+            </div>
+            <div class="group">
+              <label for="" class="d-block mb-2 dashboard-label">Email <span class="require"></span></label>
+              <input type="email" name="email" id="email" class="dashboard-input w-100">
+            </div>
+            <div class="group">
+              <label for="" class="d-block mb-2 dashboard-label">Received date <span class="text-danger require"></span></label>
+              <div class="position-relative">
                 <input type="text" class="dashboard-input w-100">
+                <span class="icon-calendar icon" @focus="clickCalender"><span class="path1"></span><span
+                    class="path2"></span><span class="path3"></span><span class="path4"></span><span
+                    class="path5"></span><span class="path6"></span><span class="path7"></span><span
+                    class="path8"></span></span>
+                <v-date-picker v-if="showCalender" mode="date" v-model="date"/>
               </div>
             </div>
-            <div class="col-md-6">
-              <div class="group">
-                <label for="" class="d-block mb-2 dashboard-label">Email <span class="require"></span></label>
-                <input type="email" name="email" id="email" class="dashboard-input w-100">
-              </div>
-              <div class="group">
-                <label for="" class="d-block mb-2 dashboard-label">Email <span class="require"></span></label>
-                <input type="email" name="email" id="email" class="dashboard-input w-100">
-              </div>
-              <div class="group">
-                <label for="" class="d-block mb-2 dashboard-label">Email <span class="require"></span></label>
-                <input type="email" name="email" id="email" class="dashboard-input w-100">
-              </div>
-              <div class="group">
-                <label for="" class="d-block mb-2 dashboard-label">Email <span class="require"></span></label>
-                <input type="email" name="email" id="email" class="dashboard-input w-100">
-              </div>
-              <div class="group">
-                <label for="" class="d-block mb-2 dashboard-label">Email <span class="require"></span></label>
-                <input type="email" name="email" id="email" class="dashboard-input w-100">
-              </div>
+            <div class="group">
+              <label for="" class="d-block mb-2 dashboard-label">Email <span class="require"></span></label>
+              <input type="email" name="email" id="email" class="dashboard-input w-100">
+            </div>
+            <div class="group">
+              <label for="" class="d-block mb-2 dashboard-label">Email <span class="require"></span></label>
+              <input type="email" name="email" id="email" class="dashboard-input w-100">
             </div>
           </div>
         </div>
+      </div>
       <div slot="modal-footer">
         <b-button variant="secondary">Close</b-button>
         <b-button variant="primary">Save</b-button>
@@ -83,11 +91,18 @@
   </div>
 </template>
 <script>
-  export default {
-    data(){
-      return{
-        showModal: false
-      }
+export default {
+  data() {
+    return {
+      showModal: false,
+      showCalender: false,
+      date: new Date()
+    }
+  },
+  methods: {
+    clickCalender(){
+      this.showCalender = true
     }
   }
+}
 </script>
