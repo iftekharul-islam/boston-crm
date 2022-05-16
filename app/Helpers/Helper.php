@@ -68,7 +68,7 @@ class Helper
 		*/
 	 public static function subStrWords(string $text, int $max_char, string $end = '...'): string
 	 {
-			if (! $text) {
+			if ( ! $text ) {
 				 return $text;
 			}
 			if ( strlen( $text ) > $max_char || $text == '' ) {
@@ -90,5 +90,21 @@ class Helper
 			}
 			
 			return $text;
+	 }
+	 
+	 /**
+		* @param object $clients
+		*
+		* @return array
+		*/
+	 public static function getClientsGroupBy(object $clients): array
+	 {
+			$amc_clients    = collect();
+			$lender_clients = collect();
+			foreach ( $clients as $client ) {
+				 $client->client_type === 'amc' ? $amc_clients[] = $client : $lender_clients[] = $client;
+			}
+			
+			return [ $amc_clients, $lender_clients ];
 	 }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Helper;
 use App\Models\Order;
 use App\Repositories\OrderRepository;
 use App\Services\OrderService;
@@ -44,8 +45,13 @@ class OrderController extends BaseController
 			$appraisal_users = $this->repository->getUserByRoleWise( role: 'appraiser' );
 			$appraisal_types = $this->repository->getAppraisalTypes();
 			$loan_types      = $this->repository->getLoanTypes();
+			$client_users    = Helper::getClientsGroupBy( $this->repository->getClients() );
+			$amc_clients     = $client_users[0];
+			$lender_clients  = $client_users[1];
 			
-			return view( 'order.create', compact( 'system_order_no', 'appraisal_users', 'appraisal_types', 'loan_types' ) );
+			return view( 'order.create',
+				compact( 'system_order_no', 'appraisal_users', 'appraisal_types', 'loan_types', 'amc_clients',
+					'lender_clients' ) );
 	 }
 	 
 	 /**

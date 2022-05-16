@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\AppraisalType;
+use App\Models\Client;
 use App\Models\CompanyUser;
 use App\Models\LoanType;
 use App\Models\Order;
@@ -88,5 +89,13 @@ class OrderRepository extends BaseRepository
 	 public function getLoanTypes(): Collection|array
 	 {
 			return LoanType::query()->where('company_id', $this->company->id)->get();
+	 }
+	 
+	 /**
+		* @return Builder[]|Collection
+		*/
+	 public function getClients(): Collection|array
+	 {
+			return Client::query()->where('company_id', $this->company->id)->get();
 	 }
 }

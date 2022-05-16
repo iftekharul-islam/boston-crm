@@ -20,9 +20,11 @@
                 <label for="" class="d-block mb-2 dashboard-label">Loan type </label>
                 <div class="position-relative">
                   <select name="" id="" class="dashboard-input w-100" v-model="loanType">
-                    <option value="">Loan</option>
-                    <option value="">Loan</option>
-                    <option value="">Loan</option>
+                    <option value="">Please Select Loan Type</option>
+                    <option v-for="loan_type in loanTypes" :key="loan_type.id" :value="loan_type.id">{{
+                        loan_type.name
+                      }}
+                    </option>
                   </select>
                   <span class="icon-arrow-down bottom-arrow-icon"></span>
                 </div>
@@ -57,9 +59,11 @@
                     class="text-danger require"></span></label>
                 <div class="position-relative">
                   <select name="" id="" class="dashboard-input w-100" v-model="appraiserName">
-                    <option value="">Loan</option>
-                    <option value="">Loan</option>
-                    <option value="">Loan</option>
+                    <option value="">Please select appraisal user name</option>
+                    <option v-for="appraisal_user in appraisalUsers" :key="appraisal_user.id"
+                            :value="appraisal_user.id">
+                      {{ appraisal_user.name }}
+                    </option>
                   </select>
                   <span class="icon-arrow-down bottom-arrow-icon"></span>
                 </div>
@@ -125,32 +129,26 @@
           <div class="group">
             <label for="" class="d-block mb-2 dashboard-label">AMC name <span
                 class="text-danger require"></span></label>
-            <div class="dropdown order-dropdown">
-              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
-                      data-bs-toggle="dropdown" aria-expanded="false">
-                Choose an AMC
-              </button>
-              <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                <li><a class="dropdown-item" href="#"><span class="icon-plus me-1"></span> Add new</a></li>
-                <li><a class="dropdown-item" href="#">AMC</a></li>
-                <li><a class="dropdown-item" href="#">Another action</a></li>
-                <li><a class="dropdown-item" href="#">Something else here</a></li>
-              </ul>
+            <div class="position-relative">
+              <select name="" id="" class="dashboard-input w-100" v-model="amcClient">
+                <option value="">Please select amc client</option>
+                <option v-for="amc_client in amcClients" :key="amc_client.id" :value="amc_client.id">
+                  {{ amc_client.name }}
+                </option>
+              </select>
+              <span class="icon-arrow-down bottom-arrow-icon"></span>
             </div>
           </div>
           <div class="group">
             <label for="" class="d-block mb-2 dashboard-label">Lender <span class="text-danger require"></span></label>
-            <div class="dropdown order-dropdown">
-              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
-                      data-bs-toggle="dropdown" aria-expanded="false">
-                Choose an AMC
-              </button>
-              <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                <li><a class="dropdown-item" href="#"><span class="icon-plus me-1"></span> Add new</a></li>
-                <li><a class="dropdown-item" href="#">AMC</a></li>
-                <li><a class="dropdown-item" href="#">Another action</a></li>
-                <li><a class="dropdown-item" href="#">Something else here</a></li>
-              </ul>
+            <div class="position-relative">
+              <select name="" id="" class="dashboard-input w-100" v-model="amcClient">
+                <option value="">Please select lender client</option>
+                <option v-for="lender_client in lenderClients" :key="lender_client.id" :value="lender_client.id">
+                  {{ lender_client.name }}
+                </option>
+              </select>
+              <span class="icon-arrow-down bottom-arrow-icon"></span>
             </div>
           </div>
         </div>
@@ -208,12 +206,17 @@
       </div>
     </div>
     <div class="add-client__bottom d-flex justify-content-end  p-3">
-      <button class="button button-discard me-3 d-flex align-items-center">Discard <span class="icon-close-circle ms-3"><span class="path1"></span><span class="path2"></span></span></button>
+      <button class="button button-discard me-3 d-flex align-items-center">Discard <span class="icon-close-circle ms-3"><span
+          class="path1"></span><span class="path2"></span></span></button>
       <button class="button button-primary">
         Next
         <svg class="ms-4" width="20" height="14" viewBox="0 0 20 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12.4291 13.82C12.2391 13.82 12.0491 13.75 11.8991 13.6C11.6091 13.31 11.6091 12.83 11.8991 12.54L17.4391 7L11.8991 1.46C11.6091 1.17 11.6091 0.689995 11.8991 0.399995C12.1891 0.109995 12.6691 0.109995 12.9591 0.399995L19.0291 6.47C19.3191 6.76 19.3191 7.24 19.0291 7.52999L12.9591 13.6C12.8091 13.75 12.6191 13.82 12.4291 13.82Z" fill="white"/>
-          <path d="M18.33 7.75H1.5C1.09 7.75 0.75 7.41 0.75 7C0.75 6.59 1.09 6.25 1.5 6.25H18.33C18.74 6.25 19.08 6.59 19.08 7C19.08 7.41 18.74 7.75 18.33 7.75Z" fill="white"/>
+          <path
+              d="M12.4291 13.82C12.2391 13.82 12.0491 13.75 11.8991 13.6C11.6091 13.31 11.6091 12.83 11.8991 12.54L17.4391 7L11.8991 1.46C11.6091 1.17 11.6091 0.689995 11.8991 0.399995C12.1891 0.109995 12.6691 0.109995 12.9591 0.399995L19.0291 6.47C19.3191 6.76 19.3191 7.24 19.0291 7.52999L12.9591 13.6C12.8091 13.75 12.6191 13.82 12.4291 13.82Z"
+              fill="white"/>
+          <path
+              d="M18.33 7.75H1.5C1.09 7.75 0.75 7.41 0.75 7C0.75 6.59 1.09 6.25 1.5 6.25H18.33C18.74 6.25 19.08 6.59 19.08 7C19.08 7.41 18.74 7.75 18.33 7.75Z"
+              fill="white"/>
         </svg>
       </button>
     </div>
@@ -226,6 +229,13 @@ export default {
   props: {
     systemOrderNo: String,
     orderListUrl: String,
+    appraisalUsers: [],
+    appraisalTypes: [],
+    loanTypes: [],
+    amcClients: [],
+    lenderClients: [],
+    amcClient: ''
+
   },
   data() {
     return {
