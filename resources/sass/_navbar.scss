@@ -35,5 +35,11 @@
         white-space: nowrap;
         max-width: 56px;
     }
+    .role {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 56px;
+    }
 }
     

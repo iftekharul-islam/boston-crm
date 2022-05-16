@@ -63,7 +63,7 @@
                                               onclick="roleUpdateClose({{ $user->id }});"><span
                                                     class="path1"></span><span class="path2"></span></span>
 
-                                        <span class="cursor-pointer fs-20" onclick="roleUpdate({{ $user->id }});">
+                                        <span class="cursor-pointer fs-20 role-update" onclick="roleUpdate({{ $user->id }});">
                                                 <svg width="22" height="22" viewBox="0 0 22 22" fill="none"
                                                      xmlns="http://www.w3.org/2000/svg">
                                                     <rect width="22" height="22" rx="11" fill="#34A851"/>

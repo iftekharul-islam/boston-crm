@@ -152,10 +152,15 @@
             flex-grow: 1;
             select {
                 height: 31px;
+                padding-right: 32px;
             }
             .bottom-arrow-icon {
                 top: 9px;
             }
+            
+        }
+        .role-update {
+            margin-bottom: 5px;
         }
     }
 }

@@ -20,6 +20,7 @@
         border: 1px solid $gray;
         border-radius: 4px;
         @include flex-center;
+        overflow: hidden;
         img {
             width: 28px;
             border-radius: 4px;
