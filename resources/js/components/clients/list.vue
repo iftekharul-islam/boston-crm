@@ -47,7 +47,7 @@
             <td>{{ client.city }}</td>
             <td>{{ client.address }}</td>
             <td>
-              <a v-if="canUpdate" class="eye-btn text-light-black cursor-pointer me-3" @click.prevent="showClientDetails(client.id)">
+              <a v-if="canView" class="eye-btn text-light-black cursor-pointer me-3" @click.prevent="showClientDetails(client.id)">
                 <span class="icon-eye fs-20"><span class="path1"></span><span class="path2"></span></span>
               </a>
               <a v-if="canDelete" class="eye-btn text-light-black cursor-pointer" @click.prevent="deleteClient(client.id)">
@@ -105,7 +105,8 @@ export default {
       searchText: '',
       canCreate: false,
       canUpdate: false,
-      canDelete: false
+      canDelete: false,
+      canView: false,
     }
   },
   created() {
@@ -120,14 +121,17 @@ export default {
       let permissions = that.permissions
       if(that.role === 'admin' || that.isOwner ){
         that.canCreate = true
+        that.canView = true
         that.canUpdate = true
         that.canDelete = true
       }
       Object.keys(permissions).map(function(key, index) {
-        console.log(permissions[key])
         switch (permissions[key]) {
           case 'create.client':
             that.canCreate = true
+            break
+          case 'view.client':
+            that.canView = true
             break
           case 'update.client':
             that.canUpdate = true
