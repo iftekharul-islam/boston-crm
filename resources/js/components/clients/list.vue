@@ -21,7 +21,7 @@
               </div>
           </div>
           <input type="text" v-model="searchText" placeholder="Search ..." @keyup="searchClients" class="px-3 bdr-1 br-4 gray-border me-3 h-40">
-          <a :href="this.createRoute" class="button button-primary h-40 py-2 d-flex align-items-center">Add clients</a>
+          <a v-if="canCreate" :href="createRoute" class="button button-primary h-40 py-2 d-flex align-items-center">Add clients</a>
         </div>
       </div>
       <div class="clients-table mt-3">
@@ -47,10 +47,10 @@
             <td>{{ client.city }}</td>
             <td>{{ client.address }}</td>
             <td>
-              <a class="eye-btn text-light-black cursor-pointer me-3" @click.prevent="showClientDetails(client.id)">
+              <a v-if="canUpdate" class="eye-btn text-light-black cursor-pointer me-3" @click.prevent="showClientDetails(client.id)">
                 <span class="icon-eye fs-20"><span class="path1"></span><span class="path2"></span></span>
               </a>
-              <a class="eye-btn text-light-black cursor-pointer" @click.prevent="deleteClient(client.id)">
+              <a v-if="canDelete" class="eye-btn text-light-black cursor-pointer" @click.prevent="deleteClient(client.id)">
                 <span class="icon-trash fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></span>
               </a>
             </td>
@@ -59,7 +59,6 @@
         </table>
       </div>
       <div class="pagination justify-content-center mgt-32">
-
         <pagination v-model="page" :edgeNavigation="false" :options="{chunk: 3,theme : 'bootstrap4',texts:{ count: '',first: '',last: '' }}" :records="parseInt(this.clients.total)" :per-page="this.clients.per_page"
                     @paginate="getClients"/>
       </div>
@@ -74,7 +73,10 @@ export default {
     deleteRoute: String,
     permissions: Array,
     role: String,
-    isOwner: Boolean
+    isOwner: {
+      default: false,
+      type: Boolean
+    }
   },
   data() {
     return {
@@ -100,16 +102,41 @@ export default {
       currentType: 'all',
       page: 1,
       loading: false,
-      searchText: ''
+      searchText: '',
+      canCreate: false,
+      canUpdate: false,
+      canDelete: false
     }
   },
   created() {
     this.getType('All')
-
+  },
+  mounted(){
+    this.checkClientPermission()
   },
   methods: {
     checkClientPermission(){
-
+      let that = this;
+      let permissions = that.permissions
+      if(that.role === 'admin' || that.isOwner ){
+        that.canCreate = true
+        that.canUpdate = true
+        that.canDelete = true
+      }
+      Object.keys(permissions).map(function(key, index) {
+        console.log(permissions[key])
+        switch (permissions[key]) {
+          case 'create.client':
+            that.canCreate = true
+            break
+          case 'update.client':
+            that.canUpdate = true
+            break
+          case 'delete.client':
+            that.canDelete = true
+            break
+        }
+      });
     },
     searchClients() {
       this.getClients()
