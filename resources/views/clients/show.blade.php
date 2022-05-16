@@ -25,12 +25,14 @@
                         <button class="nav-link" id="pills-message-tab" data-bs-toggle="pill" data-bs-target="#pills-message" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Notes & message</button>
                     </li>
                 </ul>
+                @if(in_array('update.client', $user_permissions))
                 <div class="edit">
                     <a href="{{ route('clients.edit',$client->id) }}" class="edit-btn h-32 inline-flex-center mb-3">
                         Edit
                         <span class="icon-edit ms-3"><span class="path1"></span><span class="path2"></span></span>
                     </a>
                 </div>
+                @endif
             </div>
             @if(session()->has('success'))
                 <div class="alert alert-success">
