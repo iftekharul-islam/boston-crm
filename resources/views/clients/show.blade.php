@@ -1,6 +1,10 @@
 @extends('layouts.app')
 @section('content')
     <div class="clients client-view bg-platinum dashboard-space">
+        <a href="/clients" class="text-light-black d-inline-flex align-items-center mgb-24"> <svg class="me-2" width="20" height="14" viewBox="0 0 20 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M7.57086 0.180005C7.76086 0.180005 7.95086 0.250005 8.10086 0.400004C8.39086 0.690004 8.39086 1.17 8.10086 1.46L2.56086 7L8.10086 12.54C8.39086 12.83 8.39086 13.31 8.10086 13.6C7.81086 13.89 7.33086 13.89 7.04086 13.6L0.970859 7.53C0.680859 7.24 0.680859 6.76 0.970859 6.47L7.04086 0.400004C7.19086 0.250005 7.38086 0.180005 7.57086 0.180005Z" fill="#2F415E"/>
+            <path d="M1.67 6.25L18.5 6.25C18.91 6.25 19.25 6.59 19.25 7C19.25 7.41 18.91 7.75 18.5 7.75L1.67 7.75C1.26 7.75 0.92 7.41 0.92 7C0.92 6.59 1.26 6.25 1.67 6.25Z" fill="#2F415E"/>
+            </svg>  Back to client list</a>
         <div class="clients-box client-view-box bg-white">
             <div class="d-flex justify-content-between">
                 {{-- tabs button --}}
