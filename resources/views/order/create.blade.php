@@ -6,6 +6,8 @@
             :system-order-no="'{{ $system_order_no }}'"
             :appraisal-users="{{ $appraisal_users }}"
             :appraisal-types="{{ $appraisal_types }}"
-            :loan-types="{{ $loan_types }}">
+            :loan-types="{{ $loan_types }}"
+            :amc-clients="{{ $amc_clients }}"
+            :lender-clients="{{ $lender_clients }}">
     </order-create>
 @endsection

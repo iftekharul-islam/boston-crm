@@ -12,7 +12,13 @@
         </div>
         <Step1 v-show="step === 1"
                :step-change-active="stepChangeActiveStatus"
-               :order-list-url="orderList" :system-order-no="systemOrderNo"/>
+               :order-list-url="orderList"
+               :system-order-no="systemOrderNo"
+               :appraisal-users="appraisalUsers"
+               :appraisal-types="appraisalTypes"
+               :loan-types="loanTypes"
+               :amc-clients="amcClients"
+               :lender-clients="lenderClients"/>
         <Step2 v-show="step === 2"/>
       </div>
     </div>
@@ -31,6 +37,8 @@ export default {
     appraisalUsers: [],
     appraisalTypes: [],
     loanTypes: [],
+    amcClients: [],
+    lenderClients: [],
   },
   components: {
     Step1,
