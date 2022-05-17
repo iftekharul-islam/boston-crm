@@ -25,7 +25,7 @@ class ChangeBorrowerInfoTable extends Migration
      */
     public function down()
     {
-        Schema::table('borrower_info', function (Blueprint $table){
+        Schema::table('borrower_infos', function (Blueprint $table){
            $table->dropColumn('contact_email');
         });
     }
