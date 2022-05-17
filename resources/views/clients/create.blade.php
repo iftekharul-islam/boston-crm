@@ -12,12 +12,11 @@
                             {{ session('success') }}
                         </div>
                     @endif
-
-                    @if (session()->has('error'))
+                    @foreach ($errors->all() as $error)
                         <div class="alert alert-danger">
-                            {{ session('error') }}
+                            {{ $error }}
                         </div>
-                    @endif
+                    @endforeach
                     <div class="row">
                         <div class="col-lg-8 left mb-3">
                             <div class="d-flex box justify-content-between left__wrap">

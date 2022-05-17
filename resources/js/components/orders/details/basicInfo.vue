@@ -54,37 +54,54 @@
           </div>
           <div class="col-md-6">
             <div class="group">
-              <label for="" class="d-block mb-2 dashboard-label">Email <span class="require"></span></label>
+              <label for="" class="d-block mb-2 dashboard-label">Unit # <span class="require"></span></label>
               <input type="email" name="email" id="email" class="dashboard-input w-100">
             </div>
             <div class="group">
-              <label for="" class="d-block mb-2 dashboard-label">Email <span class="require"></span></label>
+              <label for="" class="d-block mb-2 dashboard-label">Country <span class="require"></span></label>
               <input type="email" name="email" id="email" class="dashboard-input w-100">
             </div>
             <div class="group">
-              <label for="" class="d-block mb-2 dashboard-label">Received date <span class="text-danger require"></span></label>
-              <div class="position-relative">
-                <input type="text" class="dashboard-input w-100">
-                <span class="icon-calendar icon" @focus="clickCalender"><span class="path1"></span><span
-                    class="path2"></span><span class="path3"></span><span class="path4"></span><span
-                    class="path5"></span><span class="path6"></span><span class="path7"></span><span
-                    class="path8"></span></span>
-                <v-date-picker v-if="showCalender" mode="date" v-model="date"/>
-              </div>
+              <label for="" class="d-block mb-2 dashboard-label">Due date </label>
+              <v-date-picker v-model="dueDate">
+                <template class="position-relative" v-slot="{ inputValue, inputEvents }">
+                  <input
+                      class="dashboard-input w-100"
+                      :value="inputValue"
+                      v-on="inputEvents"
+                  />
+<!--                  <span class="icon-calendar icon"><span class="path1"></span><span-->
+<!--                      class="path2"></span><span class="path3"></span><span class="path4"></span><span-->
+<!--                      class="path5"></span><span class="path6"></span><span class="path7"></span><span-->
+<!--                      class="path8"></span></span>-->
+                </template>
+              </v-date-picker>
             </div>
             <div class="group">
-              <label for="" class="d-block mb-2 dashboard-label">Email <span class="require"></span></label>
+              <label for="" class="d-block mb-2 dashboard-label">Order No</label>
               <input type="email" name="email" id="email" class="dashboard-input w-100">
             </div>
             <div class="group">
-              <label for="" class="d-block mb-2 dashboard-label">Email <span class="require"></span></label>
-              <input type="email" name="email" id="email" class="dashboard-input w-100">
+              <label for="" class="d-block mb-2 dashboard-label">Order Receive Date</label>
+              <v-date-picker v-model="receiveDate">
+                <template class="position-relative" v-slot="{ inputValue, inputEvents }">
+                  <input
+                      class="dashboard-input w-100"
+                      :value="inputValue"
+                      v-on="inputEvents"
+                  />
+<!--                  <span class="icon-calendar icon"><span class="path1"></span><span-->
+<!--                      class="path2"></span><span class="path3"></span><span class="path4"></span><span-->
+<!--                      class="path5"></span><span class="path6"></span><span class="path7"></span><span-->
+<!--                      class="path8"></span></span>-->
+                </template>
+              </v-date-picker>
             </div>
           </div>
         </div>
       </div>
       <div slot="modal-footer">
-        <b-button variant="secondary">Close</b-button>
+        <b-button variant="secondary" @click="$bvModal.hide('basic-info')">Close</b-button>
         <b-button variant="primary">Save</b-button>
       </div>
     </b-modal>
@@ -95,13 +112,20 @@ export default {
   data() {
     return {
       showModal: false,
-      showCalender: false,
-      date: new Date()
+      dueDate: new Date(),
+      receiveDate: new Date(),
     }
+  },
+  created() {
+    axios.get('clients')
   },
   methods: {
     clickCalender(){
       this.showCalender = true
+      console.log(this.showCalender)
+    },
+    getBasicInfoData(){
+
     }
   }
 }
