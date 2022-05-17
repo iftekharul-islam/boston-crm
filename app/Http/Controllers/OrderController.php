@@ -85,7 +85,7 @@ class OrderController extends BaseController
 		*/
 	 public function edit(Order $order)
 	 {
-			//
+
 	 }
 	 
 	 /**
@@ -112,4 +112,9 @@ class OrderController extends BaseController
 	 {
 			//
 	 }
+
+     public function getBasicInfo()
+     {
+
+     }
 }
