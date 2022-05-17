@@ -8,7 +8,7 @@
       <div class="list__group">
         <p class="mb-0 left-side">Property address  </p>
         <span>:</span>
-        <p class="right-side mb-0 text-primary fw-bold fs-20">1453 Dorchester Ave, Boston, Ma 02122</p>
+        <p class="right-side mb-0 primary-text fw-bold fs-20">1453 Dorchester Ave, Boston, Ma 02122</p>
       </div>
       <div class="list__group">
         <p class="mb-0 left-side">Due date</p>

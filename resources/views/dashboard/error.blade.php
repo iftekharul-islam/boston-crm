@@ -40,7 +40,7 @@
             <div class="col-md-6">
                 <div class="mgb-40">
                     <h1 class="fs-64 fw-bold text-due mb-3">Sorry, Page Not Found</h1>
-                    <h2 class="fs-34 mgb-48 fw-bold text-primary">We can’t find the page your are looking for.</h2>
+                    <h2 class="fs-34 mgb-48 fw-bold primary-text">We can’t find the page your are looking for.</h2>
                     <div class="mgb-40">
                         <p class="text-light-black mb-3 fw-bold">What could have caused this?</p>
                         <p class="text-light-black mb-0">Well, we might have removed the page when we redesigned our website.
