@@ -11,6 +11,7 @@
                 <label for="" class="d-block mb-2 dashboard-label">Client order no <span
                     class="text-danger require"></span></label>
                 <input type="text" class="dashboard-input w-100" v-model="clientOrderNo">
+                <span v-text="clientOrderError"></span>
               </div>
               <div class="group">
                 <label for="" class="d-block mb-2 dashboard-label">Loan no</label>
@@ -21,9 +22,8 @@
                 <div class="position-relative">
                   <select name="" id="" class="dashboard-input w-100" v-model="loanType">
                     <option value="">Please Select Loan Type</option>
-                    <option v-for="loan_type in loanTypes" :key="loan_type.id" :value="loan_type.id">{{
-                        loan_type.name
-                      }}
+                    <option v-for="loan_type in loanTypes" :key="loan_type.id" :value="loan_type.id">
+                      {{ loan_type.name }}
                     </option>
                   </select>
                   <span class="icon-arrow-down bottom-arrow-icon"></span>
@@ -48,7 +48,7 @@
             <div class="right max-w-424 w-100">
               <div class="group">
                 <label for="" class="d-block mb-2 dashboard-label">System order </label>
-                <input type="text" class="dashboard-input w-100" v-model="systemOrder">
+                <input type="text" class="dashboard-input w-100" v-model="systemOrder" readonly>
               </div>
               <div class="group">
                 <label for="" class="d-block mb-2 dashboard-label">FHA case no</label>
@@ -234,7 +234,6 @@ export default {
     loanTypes: [],
     amcClients: [],
     lenderClients: [],
-    amcClient: ''
 
   },
   data() {
@@ -250,11 +249,13 @@ export default {
       appraiserName: '',
       dueDate: '',
       appraiserType: '',
+      amcClient: '',
       fee: [],
       note: '',
       searchAddress: '',
       state: '',
-      city: ''
+      city: '',
+
     }
   },
   created() {
