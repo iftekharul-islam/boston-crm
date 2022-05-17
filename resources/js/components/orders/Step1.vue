@@ -10,8 +10,8 @@
               <div class="group">
                 <label for="" class="d-block mb-2 dashboard-label">Client order no <span
                     class="text-danger require"></span></label>
-                <input type="text" class="dashboard-input w-100" v-model="clientOrderNo">
-                <span v-text="clientOrderError"></span>
+                <input type="text" class="dashboard-input w-100" :class="{}" v-model="clientOrderNo">
+                <span class="invalid-feedback" v-text="clientOrderErrorMsg"></span>
               </div>
               <div class="group">
                 <label for="" class="d-block mb-2 dashboard-label">Loan no</label>
@@ -43,6 +43,7 @@
                 <label for="" class="d-block mb-2 dashboard-label">Technology fee <span
                     class="text-danger require"></span></label>
                 <input type="text" class="dashboard-input w-100" v-model="technologyFee">
+                <span class=""></span>
               </div>
             </div>
             <div class="right max-w-424 w-100">
@@ -51,8 +52,10 @@
                 <input type="text" class="dashboard-input w-100" v-model="systemOrder" readonly>
               </div>
               <div class="group">
-                <label for="" class="d-block mb-2 dashboard-label">FHA case no</label>
+                <label for="" class="d-block mb-2 dashboard-label">FHA case no <span
+                    class="text-danger require" v-if="loanType"></span></label>
                 <input type="text" class="dashboard-input w-100" v-model="fhaCaseNo">
+                <span class="text-danger" v-text="fahCaseNoErrorMsg"></span>
               </div>
               <div class="group">
                 <label for="" class="d-block mb-2 dashboard-label">Appraiser name <span
@@ -208,7 +211,7 @@
     <div class="add-client__bottom d-flex justify-content-end  p-3">
       <button class="button button-discard me-3 d-flex align-items-center">Discard <span class="icon-close-circle ms-3"><span
           class="path1"></span><span class="path2"></span></span></button>
-      <button class="button button-primary">
+      <button class="button button-primary" @click="nextStep">
         Next
         <svg class="ms-4" width="20" height="14" viewBox="0 0 20 14" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path
@@ -255,6 +258,9 @@ export default {
       searchAddress: '',
       state: '',
       city: '',
+      //All Msg Property
+      clientOrderErrorMsg: '',
+      fahCaseNoErrorMsg: '',
 
     }
   },
@@ -264,6 +270,26 @@ export default {
   methods: {
     stepChangeActive() {
       this.$emit('step-change-active', this.stepActive);
+    },
+
+    nextStep() {
+      this.resetAllErrorMsg();
+      if (this.validateData()) {
+        this.stepActive = true;
+        this.stepChangeActive();
+      }
+    },
+    validateData() {
+      let errorCount = 0;
+      if (this.clientOrderNo.length === 0) {
+        errorCount++;
+        this.clientOrderErrorMsg = 'Client Order No Required';
+      }
+      return ! errorCount >= 0;
+    },
+    resetAllErrorMsg() {
+      this.clientOrderErrorMsg = '';
+      this.fahCaseNoErrorMsg = '';
     },
     addFee() {
 
