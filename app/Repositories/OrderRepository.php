@@ -33,12 +33,14 @@ class OrderRepository extends BaseRepository
 		*/
 	 public function getUserByRoleWise(string $role): Collection|\Illuminate\Support\Collection|array
 	 {
+            $this->company          = $this->getAuthUserCompany();
 			$role = $this->getRoleByName( $role );
 			if ( $role ) {
 				 $this->users = $this->getCompanyUsers( $role );
 			}
-			
-			return $this->users;
+
+
+         return $this->users;
 	 }
 	 
 	 /**
@@ -48,7 +50,6 @@ class OrderRepository extends BaseRepository
 		*/
 	 #[NoReturn] public function getCompanyUsers(object $role): Collection|array
 	 {
-			$this->company          = $this->getAuthUserCompany();
 			$company_user_ids = CompanyUser::query()?->where( [
 				[ 'company_id', '=', $this->company->id ],
 				[ 'role_id', $role->id ],
