@@ -100,4 +100,9 @@ class OrderRepository extends BaseRepository
 	 {
 			return Client::query()->where('company_id', $this->company->id)->get();
 	 }
+
+     public function getBasicInfo() : Collection|array
+     {
+
+     }
 }

@@ -13,7 +13,7 @@
     <h2 class="mb-4">
         Import Client Excel & CSV File
     </h2>
-    <form action="{{ route('import') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('import-client') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="form-group mb-4">
             <div class="custom-file text-left">
