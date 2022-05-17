@@ -2,7 +2,7 @@
   <div class="order-details-box bg-white">
     <div class="box-header">
       <p class="fw-bold text-light-black fs-20 mb-0">Issues/ Queries/ Tickets</p>
-      <a href="" class="d-inline-flex edit add-call align-items-center fw-bold">Add issue</a>
+      <a v-b-modal.issue-info class="d-inline-flex edit add-call align-items-center fw-bold cursor-pointer">Add issue</a>
     </div>
     <div class="box-body">
       <div class="queries-row" >
@@ -47,5 +47,39 @@
         </div>
       </div>
     </div>
+     <!-- modal -->
+     <b-modal id="issue-info" class="brrower-modal" size="lg" title="Add Issue">
+        <div class="modal-body brrower-modal-body">
+          <div class="row">
+            <div class="col-12">
+              <div class="group">
+                <label for="" class="d-block mb-2 dashboard-label">Subject name</label>
+                <input type="text"  class="dashboard-input w-100">
+              </div>
+               <div class="group">
+                    <label for="client-type" class="d-block mb-2 dashboard-label">Client type <span
+                                class="text-danger require"></span></label>
+                    <div class="position-relative">
+                        <select name="client_type" id="client-type" class="dashboard-input w-100">
+                            <option value="">Select a type</option>
+                            <option value="amc" selected>Amc</option>
+                            <option value="lender">Lender</option>
+                        </select>
+                        <span class="icon-arrow-down bottom-arrow-icon"></span>
+                    </div>
+                </div>
+                <div class="group">
+                  <label class="d-block mb-2 dashboard-label address-label">Queries or Issues</label>
+                  <textarea name="address" class="dashboard-textarea w-100" cols="30"
+                            rows="2"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+      <div slot="modal-footer mgt-44">
+        <button class="button button-transparent">Close</button>
+        <button class="button button-primary">Save</button>
+      </div>
+    </b-modal>
   </div>
 </template>

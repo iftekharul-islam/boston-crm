@@ -91,7 +91,11 @@ Route::group( [ 'middleware' => [ 'auth:sanctum' ] ], function () {
 		 [ OrderController::class, 'update' ] )->middleware( 'role_permission:update.order' )->name( 'orders.update' );
 	 Route::delete( 'orders/{id}',
 		 [ OrderController::class, 'destroy' ] )->middleware( 'role_permission:delete.order' )->name( 'orders.destroy' );
-	 //Appraisal Type
+
+     //order details
+
+    Route::get('/get-basic-info',[OrderController::class,'getBasicInfo'])->middleware('role_permission:view.order')->name('order.details.basic.info');
+     //Appraisal Type
 	 Route::get( 'appraisal-types',
 		 [ AppraisalTypeController::class, 'index' ] )->middleware( 'role_permission:view.appraisaltype' )->name( 'appraisal-types.index' );
 	 Route::get( 'appraisal-types/create',
@@ -123,6 +127,7 @@ Route::group( [ 'middleware' => [ 'auth:sanctum' ] ], function () {
 		 [ LoanTypeController::class, 'destroy' ] )->middleware( 'role_permission:delete.loantype' )->name( 'loan-types.destroy' );
 } );
 Auth::routes();
+
 Route::any('/import-client',[ClientController::class,'importClient'])->name('import-client');
 Route::redirect( '/', '/login' );
 Route::view( '/404', 'dashboard.error' );
