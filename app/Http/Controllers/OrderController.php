@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Helper;
+use App\Models\AppraisalDetail;
 use App\Models\Order;
 use App\Repositories\OrderRepository;
 use App\Services\OrderService;
@@ -11,6 +12,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Carbon\Carbon;
 
 class OrderController extends BaseController
 {
@@ -113,8 +115,28 @@ class OrderController extends BaseController
         //
     }
 
-    public function getBasicInfo()
+    public function getBasicInfo($order_id)
     {
+        
+    }
 
+    public function saveOrderData(){
+//        Order::create([
+//            "amc_id" => 3,
+//            "lender_id" => 2,
+//            "status" => 1
+//        ]);
+        AppraisalDetail::create([
+           "order_id" => 1,
+           "client_order_no" => "CLIORD1",
+           "system_order_no" => "BAS-1212",
+           "appraiser_type_id" => 1,
+            "loan_type_id" => 1,
+            "loan_no" => "LoanNumber",
+            "fha_case_no" => "FHACN12",
+            "received_date" => Carbon::parse('05/18/2022')->format('Y-m-d'),
+            "due_date" => Carbon::parse('05/20/2022')->format('Y-m-d'),
+
+        ]);
     }
 }

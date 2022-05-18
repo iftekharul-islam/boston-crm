@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\AppraisalDetail;
 use App\Models\AppraisalType;
 use App\Models\Client;
 use App\Models\CompanyUser;
@@ -100,8 +101,12 @@ class OrderRepository extends BaseRepository
 			return Client::query()->where('company_id', $this->company->id)->get();
 	 }
 
-     public function getBasicInfo() : Collection|array
+    /**
+     * @param $order_id
+     * @return Builder[]|Collection
+     */
+     public function getBasicInfo($order_id) : Collection|array
      {
-
+        return AppraisalDetail::query()->where('order_id',$order_id)->first();
      }
 }
