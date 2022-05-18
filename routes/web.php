@@ -13,6 +13,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\AppraisalTypeController;
 use App\Http\Controllers\LoanTypeController;
 use App\Http\Controllers\IconController;
+use App\Http\Controllers\MarketingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -93,8 +94,8 @@ Route::group( [ 'middleware' => [ 'auth:sanctum' ] ], function () {
 		 [ OrderController::class, 'destroy' ] )->middleware( 'role_permission:delete.order' )->name( 'orders.destroy' );
 
      //order details
-
-    Route::get('/get-basic-info',[OrderController::class,'getBasicInfo'])->middleware('role_permission:view.order')->name('order.details.basic.info');
+    Route::get('save-order-data',[OrderController::class,'saveOrderData']);
+    Route::get('/get-basic-info/{id}',[OrderController::class,'getBasicInfo'])->middleware('role_permission:view.order')->name('order.details.basic.info');
      //Appraisal Type
 	 Route::get( 'appraisal-types',
 		 [ AppraisalTypeController::class, 'index' ] )->middleware( 'role_permission:view.appraisaltype' )->name( 'appraisal-types.index' );
@@ -125,6 +126,10 @@ Route::group( [ 'middleware' => [ 'auth:sanctum' ] ], function () {
 		 [ LoanTypeController::class, 'update' ] )->middleware( 'role_permission:update.loantype' )->name( 'loan-types.update' );
 	 Route::post( 'loan-types/{id}',
 		 [ LoanTypeController::class, 'destroy' ] )->middleware( 'role_permission:delete.loantype' )->name( 'loan-types.destroy' );
+
+     //Marketing
+    Route::get( 'marketing',
+        [ MarketingController::class, 'index' ] )->middleware( 'role_permission:view.marketing' )->name( 'marketing.index' );
 } );
 Auth::routes();
 
