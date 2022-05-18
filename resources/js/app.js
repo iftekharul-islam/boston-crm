@@ -18,6 +18,7 @@ import DatePicker from 'v-calendar/lib/components/date-picker.umd'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import 'vue-select/dist/vue-select.css';
+import VeeValidate from 'vee-validate';
 
 /**
  * The following block of code may be used to automatically register your
@@ -29,11 +30,17 @@ import 'vue-select/dist/vue-select.css';
 
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
-Vue.use(VueSweetalert2);// Make BootstrapVue available throughout your project
+Vue.use(VueSweetalert2); // Make BootstrapVue available throughout your project
 Vue.use(BootstrapVue)
-// Optionally install the BootstrapVue icon components plugin
+    // Optionally install the BootstrapVue icon components plugin
 Vue.use(IconsPlugin)
-// Use v-calendar & v-date-picker components
+    // Use v-calendar & v-date-picker components
+
+// validation Term
+Vue.use(VeeValidate, {
+    validity: false
+});
+
 
 Vue.component('v-select', vSelect)
 Vue.component('VCalendar', Calendar)
@@ -59,11 +66,11 @@ Vue.component('activity-log', require('./components/orders/details/activityLog')
 
 axios.defaults.baseURL = window.origin;
 Vue.config.productionTip = false
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
+    /**
+     * Next, we will create a fresh Vue application instance and attach it to
+     * the page. Then, you may begin adding components to this application
+     * or customize the JavaScript scaffolding to fit your unique needs.
+     */
 
 const app = new Vue({
     el: '#app',

@@ -8,10 +8,9 @@
           <div class="d-flex justify-content-between w-100">
             <div class="left max-w-424 w-100 me-3">
               <div class="group">
-                <label for="" class="d-block mb-2 dashboard-label">Client order no <span
-                    class="text-danger require"></span></label>
-                <input type="text" class="dashboard-input w-100" :class="{}" v-model="clientOrderNo">
-                <span class="invalid-feedback" v-text="clientOrderErrorMsg"></span>
+                <label for="" class="d-block mb-2 dashboard-label">Client order no <span class="text-danger require"></span></label>
+                <input v-validate="'required'" type="text" name="clientOrderNo" class="dashboard-input w-100" :class="{}" v-model="clientOrderNo">
+                <span class="invalid-feedback" v-if="errors.has('clientOrderNo')">{{ errors.first('clientOrderNo') }}</span>
               </div>
               <div class="group">
                 <label for="" class="d-block mb-2 dashboard-label">Loan no</label>
@@ -273,6 +272,11 @@ export default {
     },
 
     nextStep() {
+      this.$validator.validateAll().then(valid => {
+        console.log(valid);
+          if (!valid) {
+          }
+      });
       this.resetAllErrorMsg();
       if (this.validateData()) {
         this.stepActive = true;

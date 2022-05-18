@@ -39,7 +39,7 @@ class OrderController extends BaseController
      *
      * @return Application|Factory|View
      */
-    public function create(): Application|Factory|View
+    public function create() : Application|Factory|View
     {
         $system_order_no = 'BAS-' . uniqid();
         $appraisal_users = $this->repository->getUserByRoleWise(role: 'appraiser');
@@ -49,6 +49,7 @@ class OrderController extends BaseController
         $amc_clients = $client_users[0];
         $lender_clients = $client_users[1];
 
+    
         return view('order.create',
             compact('system_order_no', 'appraisal_users', 'appraisal_types', 'loan_types', 'amc_clients',
                 'lender_clients'));
