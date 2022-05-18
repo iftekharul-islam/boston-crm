@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Helpers\Helper;
 use App\Models\AppraisalDetail;
+use App\Models\BorrowerInfo;
+use App\Models\ContactInfo;
 use App\Models\Order;
+use App\Models\ProvidedService;
 use App\Repositories\OrderRepository;
 use App\Services\OrderService;
 use Illuminate\Contracts\Foundation\Application;
@@ -117,7 +120,7 @@ class OrderController extends BaseController
 
     public function getBasicInfo($order_id)
     {
-        
+
     }
 
     public function saveOrderData(){
@@ -126,17 +129,37 @@ class OrderController extends BaseController
 //            "lender_id" => 2,
 //            "status" => 1
 //        ]);
-        AppraisalDetail::create([
-           "order_id" => 1,
-           "client_order_no" => "CLIORD1",
-           "system_order_no" => "BAS-1212",
-           "appraiser_type_id" => 1,
-            "loan_type_id" => 1,
-            "loan_no" => "LoanNumber",
-            "fha_case_no" => "FHACN12",
-            "received_date" => Carbon::parse('05/18/2022')->format('Y-m-d'),
-            "due_date" => Carbon::parse('05/20/2022')->format('Y-m-d'),
-
-        ]);
+//        AppraisalDetail::create([
+//           "order_id" => 1,
+//           "client_order_no" => "CLIORD1",
+//           "system_order_no" => "BAS-1212",
+//           "appraiser_type_id" => 1,
+//            "loan_type_id" => 1,
+//            "loan_no" => "LoanNumber",
+//            "fha_case_no" => "FHACN12",
+//            "received_date" => Carbon::parse('05/18/2022')->format('Y-m-d'),
+//            "due_date" => Carbon::parse('05/20/2022')->format('Y-m-d'),
+//            "technology_fee" => 1000
+//        ]);
+//        ProvidedService::create([
+//            "order_id" => 1,
+//            "appraiser_type_fee" => json_encode([
+//                ['type' => "test", 'fee' => '100'],['type' => "test", 'fee' => '100']
+//            ]),
+//            "total_fee" => 200,
+//            "note" => "Test"
+//        ]);
+//        BorrowerInfo::create([
+//            "order_id" => 1,
+//            "borrower_name" => "Borrower",
+//            "co_borrower_name" => "Co Borrower",
+//            "contact_email" => json_encode(["contact"=>"01988812097","email"=>"test@gmail.com"])
+//        ]);
+//        ContactInfo::create([
+//           "order_id" => 1,
+//            "is_borrower" => 1,
+//            "contact"=> "new york",
+//            "contact_email" => json_encode(["contact"=>"01988812097","email"=>"test@gmail.com"])
+//        ]);
     }
 }

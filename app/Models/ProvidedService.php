@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class ProvidedService extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+      "order_id","appraiser_type_fee","total_fee","note"
+    ];
 }
