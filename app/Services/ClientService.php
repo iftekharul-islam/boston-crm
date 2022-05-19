@@ -58,18 +58,17 @@ class ClientService
      *
      * @return Model
      */
-    public function updateClientData(array $data, int $id)
+    public function updateClientData(array $data, int $id): Model
     {
         return $this->clientRepository->update($data, $id);
     }
 
     /**
      * @param int $id
-     *
-     * @return void
+     * @return bool|null
      */
-    public function deleteClientData(int $id)
+    public function deleteClientData(int $id): ?bool
     {
-        $this->clientRepository->delete($id);
+        return $this->clientRepository->delete($id);
     }
 }

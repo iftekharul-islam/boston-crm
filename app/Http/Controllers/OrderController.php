@@ -7,15 +7,22 @@ use App\Models\AppraisalDetail;
 use App\Models\BorrowerInfo;
 use App\Models\ContactInfo;
 use App\Models\Order;
+use App\Models\PropertyInfo;
 use App\Models\ProvidedService;
 use App\Repositories\OrderRepository;
 use App\Services\OrderService;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Carbon\Carbon;
+use Illuminate\Support\Js;
+use Psy\Util\Json;
+use Ramsey\Collection\Collection;
 
 class OrderController extends BaseController
 {
@@ -118,12 +125,83 @@ class OrderController extends BaseController
         //
     }
 
-    public function getBasicInfo($order_id)
+    /**
+     * @param $order_id
+     * @return JsonResponse
+     */
+    public function getBasicInfo($order_id): JsonResponse
     {
-
+        $appraisal_details = $this->repository->getAppraisalDetails($order_id);
+        $property_info = $this->repository->getPropertyInfo($order_id);
+        return response()->json(["appraisalDetails" => $appraisal_details, "propertyInfo" => $property_info]);
     }
 
-    public function saveOrderData(){
+    /**
+     * @param Request $request
+     * @param $order_id
+     * @return JsonResponse
+     */
+    public function updateBasicInfo(Request $request, $order_id): JsonResponse
+    {
+        $this->repository->updatePropertyInfo($order_id, $request->all());
+        return response()->json(["message" => "Basic info updated successfully !"]);
+    }
+
+
+    /**
+     * @param $order_id
+     * @return JsonResponse
+     */
+    public function getAppraisalInfo($order_id): JsonResponse
+    {
+        $appraisal_details = $this->repository->getAppraisalDetails($order_id);
+        $provided_service = $this->repository->getProvidedService($order_id);
+        $appraisal_users = $this->repository->getUserByRoleWise(role: 'appraiser');
+        $appraisal_types = $this->repository->getAppraisalTypes();
+        $loan_types = $this->repository->getLoanTypes();
+
+        return response()->json([
+            "appraisalDetails" => $appraisal_details,
+            "providedService" => $provided_service,
+            "appraiserTypes" => $appraisal_types,
+            "loanTypes" => $loan_types,
+            "appraisers" => $appraisal_users
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param $order_id
+     * @return JsonResponse
+     */
+    public function updateAppraisalInfo(Request $request,$order_id) : JsonResponse
+    {
+        $this->repository->updateAppraisalDetails($order_id,$request->all());
+        return response()->json(["message" => "Appraisal info updated successfully"]);
+    }
+
+    /**
+     * @param $order_id
+     * @return JsonResponse
+     */
+    public function getBorrowerInfo($order_id): JsonResponse
+    {
+        $borrower = $this->repository->getBorrowerDetails($order_id);
+        return response()->json(["borrower" => $borrower]);
+    }
+
+    /**
+     * @param $order_id
+     * @return JsonResponse
+     */
+    public function getContactInfo($order_id): JsonResponse
+    {
+        $contact = $this->repository->getContactDetails($order_id);
+        return response()->json(["contact" => $contact]);
+    }
+
+    public function saveOrderData()
+    {
 //        Order::create([
 //            "amc_id" => 3,
 //            "lender_id" => 2,
@@ -160,6 +238,18 @@ class OrderController extends BaseController
 //            "is_borrower" => 1,
 //            "contact"=> "new york",
 //            "contact_email" => json_encode(["contact"=>"01988812097","email"=>"test@gmail.com"])
+//        ]);
+//        PropertyInfo::create([
+//            "order_id" => 1,
+//            "search_address" => "Mirpur",
+//            "street_name" => "2",
+//            "city_name" => "Dhaka",
+//            "state_name" => "Dhaka",
+//            "zip" => "1207",
+//            "unit_no" => "F-2A",
+//            "country"=> "Bangladesh",
+//            "latitude" => 23.21211,
+//            "longitude" => 21.23333
 //        ]);
     }
 }

@@ -4,16 +4,17 @@
     <div class="order-details-box bg-white h-100">
       <div class="box-header">
         <p class="fw-bold text-light-black fs-20 mb-0">Workflow</p>
-        <a href="" class="d-inline-flex edit align-items-center fw-bold">Edit <span class="icon-edit ms-3"><span class="path1"></span><span class="path2"></span></span></a>
+        <a href="" class="d-inline-flex edit align-items-center fw-bold">Edit <span class="icon-edit ms-3"><span
+            class="path1"></span><span class="path2"></span></span></a>
       </div>
       <div class="box-body">
         <div class="workflow-content">
-          step list
+<!--          step list-->
           <div class="list">
             <div class="item complete">
-                                    <span class="ball">
-                                        <img src="/img/current.png" alt="current step boston">
-                                    </span>
+                <span class="ball">
+                    <img src="/img/current.png" alt="current step boston">
+                </span>
               <p class="mb-0">Order Creation</p>
             </div>
             <div class="item current">
@@ -27,25 +28,25 @@
               <p class="mb-0">Order Creation</p>
             </div>
             <div class="item">
-                                    <span class="ball">
-                                        <img src="/img/current.png" alt="current step boston">
-                                    </span>
+              <span class="ball">
+                  <img src="/img/current.png" alt="current step boston">
+              </span>
               <p class="mb-0">Order Creation</p>
             </div>
             <div class="item">
-                                    <span class="ball">
-                                        <img src="/img/current.png" alt="current step boston">
-                                    </span>
+              <span class="ball">
+                  <img src="/img/current.png" alt="current step boston">
+              </span>
               <p class="mb-0">Order Creation</p>
             </div>
             <div class="item">
-                                    <span class="ball">
-                                        <img src="/img/current.png" alt="current step boston">
-                                    </span>
+                  <span class="ball">
+                      <img src="/img/current.png" alt="current step boston">
+                  </span>
               <p class="mb-0">Order Creation</p>
             </div>
           </div>
-          step item
+<!--          step item-->
           <div class="step-item pe-3">
             Inspection
             <div class="inspection-item">
@@ -88,11 +89,9 @@
   </div>
 </template>
 <script>
-  export default {
-    data(){
-      return{
-
-      }
-    }
+export default {
+  data() {
+    return {}
   }
+}
 </script>

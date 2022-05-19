@@ -27,5 +27,83 @@
           Ma 02122</p>
       </div>
     </div>
+    <!-- modal -->
+    <b-modal id="contact-info" class="brrower-modal" size="lg" title="Edit Borrower">
+      <div class="modal-body brrower-modal-body">
+        <div class="row">
+          <div class="col-12">
+            <div class="group">
+              <label for="" class="d-block mb-2 dashboard-label">Borrower name <span class="require"></span></label>
+              <input type="text" v-model=""  class="dashboard-input w-100">
+            </div>
+            <div class="group">
+              <label for="" class="d-block mb-2 dashboard-label">Co-borrower name <span class="require"></span></label>
+              <input type="text" v-model="" class="dashboard-input w-100">
+            </div>
+            <div class="group">
+              <label for="" class="d-block mb-2 dashboard-label">Phone <span class="text-danger require"></span></label>
+              <input type="text" v-model="contact" class="dashboard-input w-100">
+              <div class=" mgt-20">
+                <button class="add-more ">
+                  <span class="icon-plus" @click="addContact"></span> Add more
+                </button>
+              </div>
+            </div>
+            <div class="group">
+              <label for="" class="d-block mb-2 dashboard-label">Email <span class="text-danger require"></span></label>
+              <input type="text" v-model="email" class="dashboard-input w-100">
+              <div class=" mgt-20">
+                <button class="add-more ">
+                  <span class="icon-plus" @click="addEmail"></span> Add more
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div slot="modal-footer mgt-44">
+        <button class="button button-transparent" @click="$bvModal.hide('contact-info')">Close</button>
+        <button class="button button-primary" @click="updateContactInfo">Save</button>
+      </div>
+    </b-modal>
   </div>
 </template>
+<script>
+  export default {
+    props:{
+      orderId: String
+    },
+    data(){
+      return{
+        is_borrower: '',
+        contact:'',
+        email:'',
+      }
+    },
+    created() {
+      this.getContactInfo()
+    },
+    methods:{
+      getContactInfo(){
+        axios.get('get-contact-info/' + this.orderId)
+            .then(res => {
+              this.is_borrower = res.data.contact.is_borrower
+              this.contact = res.data.contact.contact
+
+            }).catch(err => {
+          console.log(err)
+        })
+      },
+      updateContactInfo(){
+
+      },
+      addEmail(){
+
+      },
+      addContact(){
+
+      }
+    }
+
+  }
+</script>
