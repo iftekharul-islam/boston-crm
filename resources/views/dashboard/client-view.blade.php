@@ -6,7 +6,7 @@
                 {{-- tabs button --}}
                 <ul class="nav nav-pills mb-3 clients-tabs" id="pills-tab" role="tablist">
                     <li class="nav-item mb-3" role="presentation">
-                    <button class="nav-link active" id="pills-personal-info-tab" data-bs-toggle="pill" data-bs-target="#pills-personal-info" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Personal info</button>
+                    <button class="nav-link active" id="pills-personal-info-tab" data-bs-toggle="pill" data-bs-target="#pills-personal-info" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Details info</button>
                     </li>
                     <li class="nav-item mb-3" role="presentation">
                     <button class="nav-link" id="pills-order-tab" data-bs-toggle="pill" data-bs-target="#pills-order" type="button" role="tab" aria-controls="pills-order" aria-selected="false">Orders</button>
