@@ -22,8 +22,6 @@ class CreatePropertyInfosTable extends Migration
             $table->string('state_name');
             $table->string('zip');
             $table->string('country');
-            $table->float('latitude');
-            $table->float('longitude');
             $table->timestamps();
 
             $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
