@@ -189,4 +189,25 @@ class OrderRepository extends BaseRepository
         return ContactInfo::query()->where('order_id',$order_id)->first();
     }
 
+    /**
+     * @param $order_id
+     * @return Builder|Model
+     */
+    public function getClientDetails($order_id): Builder|Model
+    {
+
+        return Order::with('amc')->first();
+//        $order = Order::with([
+//            'amc','lender' => function($query){
+//                return $query->select('id','name');
+//            }])->where('id',$order_id)->first();
+//        dd(['order_details' => $order]);
+//        return Order::query()->where('id',$order_id)->with([
+//            'amc'=> function($query){
+//                return $query->select('id','name');
+//            },'lender' => function($query){
+//                return $query->select('id','name');
+//            }])->first();
+    }
+
 }

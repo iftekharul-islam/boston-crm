@@ -68,3 +68,28 @@
     </b-modal>
   </div>
 </template>
+<script>
+  export default {
+    props:{
+      orderId: String
+    },
+    data(){
+      return{
+
+      }
+    },
+    created(){
+      this.getClientInfo()
+    },
+    methods:{
+      getClientInfo(){
+        axios.get('get-clients-info/' + this.orderId)
+            .then(res => {
+              console.log(res.data)
+            }).catch(err => {
+              console.log(err)
+        })
+      }
+    }
+  }
+</script>

@@ -34,11 +34,11 @@
           <div class="col-12">
             <div class="group">
               <label for="" class="d-block mb-2 dashboard-label">Borrower name <span class="require"></span></label>
-              <input type="text" v-model=""  class="dashboard-input w-100">
+              <input type="text" v-model="borrower_name"  class="dashboard-input w-100">
             </div>
             <div class="group">
               <label for="" class="d-block mb-2 dashboard-label">Co-borrower name <span class="require"></span></label>
-              <input type="text" v-model="" class="dashboard-input w-100">
+              <input type="text" v-model="co_borrower_name" class="dashboard-input w-100">
             </div>
             <div class="group">
               <label for="" class="d-block mb-2 dashboard-label">Phone <span class="text-danger require"></span></label>
@@ -76,6 +76,8 @@
     data(){
       return{
         is_borrower: '',
+        borrower_name: '',
+        co_borrower_name: '',
         contact:'',
         email:'',
       }
@@ -85,14 +87,14 @@
     },
     methods:{
       getContactInfo(){
-        axios.get('get-contact-info/' + this.orderId)
-            .then(res => {
-              this.is_borrower = res.data.contact.is_borrower
-              this.contact = res.data.contact.contact
-
-            }).catch(err => {
-          console.log(err)
-        })
+        // axios.get('get-contact-info/' + this.orderId)
+        //     .then(res => {
+        //       this.is_borrower = res.data.contact.is_borrower
+        //       this.contact = res.data.contact.contact
+        //
+        //     }).catch(err => {
+        //   console.log(err)
+        // })
       },
       updateContactInfo(){
 

@@ -200,6 +200,17 @@ class OrderController extends BaseController
         return response()->json(["contact" => $contact]);
     }
 
+    /**
+     * @param $order_id
+     * @return JsonResponse
+     */
+    public function getClientsInfo($order_id): JsonResponse
+    {
+        $clients = $this->repository->getClientDetails($order_id);
+        dd($clients);
+        return response()->json(["clients" => $clients]);
+    }
+
     public function saveOrderData()
     {
 //        Order::create([

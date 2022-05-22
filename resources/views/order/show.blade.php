@@ -19,7 +19,7 @@
                 Contact
                 <contact :order-id="'{{ $order_id }}'"></contact>
                 Inspection
-                <inspection></inspection>
+                <inspection :order-id="'{{ $order_id }}'"></inspection>
                 Issues
                 <issues></issues>
             </div>
@@ -27,7 +27,7 @@
                 Appraisal Details
                 <appraisal-details :order-id="'{{ $order_id }}'"></appraisal-details>
                 Client
-                <client-info></client-info>
+                <client-info :order-id="'{{ $order_id }}'"></client-info>
                 Call log
                 <call-log></call-log>
                 Map
