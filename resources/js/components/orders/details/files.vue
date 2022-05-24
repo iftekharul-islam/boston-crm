@@ -1,7 +1,7 @@
 <template>
   <div class="row ">
     <div class="col-12">
-      Files
+      <!-- Files -->
       <div class="order-details-box bg-white">
         <div class="box-header">
           <p class="fw-bold text-light-black fs-20 mb-0">Files</p>
@@ -13,7 +13,7 @@
           </div>
         </div>
         <div class="box-body">
-          document
+          <!-- document -->
           <div class="document">
             <div class="row">
               <div class="col-sm-6 col-md-4 col-lg-3">

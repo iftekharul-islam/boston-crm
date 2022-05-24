@@ -3,7 +3,7 @@
     <div class="order-add-box bg-white">
       <div class="order-add-box__form">
         <div class="d-flex align-items-center justify-content-between">
-          <p>Add new order</p>
+          <p class="fw-bold">Add new order</p>
           <div class="step">
             <button class="step-btn pointer"
                     :class="{'active': step === 1}">Step 1</button>

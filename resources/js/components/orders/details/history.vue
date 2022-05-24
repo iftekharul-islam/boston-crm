@@ -1,6 +1,6 @@
 <template>
   <div class="order-details__right col-md-4">
-    History
+    <!-- History -->
     <div class="order-details-box bg-white h-100">
       <div class="box-header">
         <p class="fw-bold text-light-black fs-20 mb-0">History</p>

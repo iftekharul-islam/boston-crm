@@ -1,6 +1,6 @@
 <template>
   <div class="order-details__left col-md-8">
-    Workflow
+    <!-- Workflow -->
     <div class="order-details-box bg-white h-100">
       <div class="box-header">
         <p class="fw-bold text-light-black fs-20 mb-0">Workflow</p>
@@ -48,7 +48,7 @@
           </div>
 <!--          step item-->
           <div class="step-item pe-3">
-            Inspection
+            <!-- Inspection -->
             <div class="inspection-item">
               <div class="top-bar">
                 <button class="item active">Assign</button>

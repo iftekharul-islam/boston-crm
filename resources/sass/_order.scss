@@ -210,7 +210,7 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 20px 32px;
+        padding: 12px 32px;
         .edit {
             background: $white;
             width: 88px;
@@ -723,6 +723,26 @@ select {
     display: flex;
     align-items: flex-start;
     margin-bottom: 32px;
+    &:nth-child(odd) {
+        .message {
+            background: $chat-2;
+        }
+    }
+    &:nth-child(even) {
+        .message {
+            background: $chat-3;
+        }
+    }
+    &:nth-child(3n+4 ) {
+        .message {
+            background: $chat-4;
+        }
+    }
+    &:nth-child(5n+5) {
+        .message {
+            background: $chat-5;
+        }
+    }
     &:last-of-type {
         margin-bottom: 0;
     }
@@ -738,6 +758,20 @@ select {
 .note-chat {
     max-height: 400px;
     overflow: auto;
+        &::-webkit-scrollbar-track {
+        background-color: #F5F5F5;
+        border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar {
+        width: 10px;
+        background-color: #F5F5F5;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        background: #9697A0;
+    }
 }
 //  modal
 
@@ -791,12 +825,18 @@ select {
         box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.08);
     }
 }
-#brrower-info {
+#borrower-info {
     .modal-dialog {
         max-width: 456px;
     }
 }
 #issue-info {
+    .modal-dialog {
+        max-width: 456px;
+    }
+    
+}
+#contact-info {
     .modal-dialog {
         max-width: 456px;
     }
@@ -814,5 +854,23 @@ select {
             display: inline-flex;
             align-items: center;
         }
+    }
+}
+
+.order-details-header {
+    .due {
+        display: inline-block;
+        color: $due;
+        border: 1px solid $due;
+        background: $due-shade;
+        padding: 3px 16px;
+        border-radius: 26px;
+    }
+}
+.current-status-group {
+    select {
+        width: 132px;
+        height: 40px;
+        border: 1px solid $gray !important;
     }
 }
