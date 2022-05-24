@@ -1,5 +1,6 @@
 @extends('layouts.app')
 @section('content')
+    @php $order_id = request()->route('id') @endphp
     <div class="order-details bg-platinum dashboard-space">
         <a href="{{ url('/order') }}" class="text-light-black d-inline-flex align-items-center mgb-20">
             <svg class="me-2" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -8,8 +9,7 @@
                 <path d="M3.67 11.25L20.5 11.25C20.91 11.25 21.25 11.59 21.25 12C21.25 12.41 20.91 12.75 20.5 12.75L3.67 12.75C3.26 12.75 2.92 12.41 2.92 12C2.92 11.59 3.26 11.25 3.67 11.25Z"
                       fill="#2F415E"/>
             </svg>
-            Back to order list</a>
-        @php $order_id = request()->route('id') @endphp
+            Back to order list</a> <a href="{{ url('/public-order/'. $order_id) }}" class="btn btn-xs btn-info pull-right">Share Order</a>
         <div class="order-details-box-main row">
             <div class="order-details__left col-md-6">
                 Basic Information
@@ -39,7 +39,7 @@
             <history></history>
         </div>
         <div class="mgt-32">
-            <files></files>
+            <files :order-id="'{{ $order_id }}'" :file-types="{{ json_encode($order_types) }}"></files>
         </div>
 
         <div class="note-grid">

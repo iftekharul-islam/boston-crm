@@ -85,7 +85,8 @@ class OrderController extends BaseController
      */
     public function show($id)
     {
-        return view('order.show');
+        $order_types = $this->repository->getOrderTypes($id);
+        return view('order.show',compact('order_types'));
     }
 
     /**
@@ -207,8 +208,24 @@ class OrderController extends BaseController
     public function getClientsInfo($order_id): JsonResponse
     {
         $clients = $this->repository->getClientDetails($order_id);
-        dd($clients);
         return response()->json(["clients" => $clients]);
+    }
+
+
+    public function publicOrder($order_id)
+    {
+        $order = AppraisalDetail::where('order_id',$order_id)->select("system_order_no")->first();
+        $order_types = $this->repository->getOrderTypes($order_id);
+        return view('order.public-order',compact('order','order_types'));
+    }
+
+    public function uploadOrderFiles(Request $request,$order_id)
+    {
+        $this->repository->saveOrderFiles($request->all(),$order_id);
+        return redirect()
+            ->to('public-order/'. $order_id)
+            ->with(['success'=>'Order file uploaded successfully']);
+
     }
 
     public function saveOrderData()

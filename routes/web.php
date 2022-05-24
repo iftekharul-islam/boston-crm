@@ -156,4 +156,6 @@ Route::get( 'email/verify/{id}/{hash}', [ VerificationController::class, 'verify
 Route::get( 'accept-new-user/{code}', [ UserController::class, 'acceptInviteUser' ] )->name( 'accept.new.user' );
 Route::post( 'invite-user-update/{id}',
 	[ UserController::class, 'inviteUserUpdate' ] )->name( 'update.invite.user.profile' );
+Route::get('/public-order/{id}',[OrderController::class,'publicOrder'])->name('public.order');
+Route::post('/upload-order-files/{id}',[OrderController::class,'uploadOrderFiles'])->name('order.file.upload');
 //Route::get( "{slug}", [ WebApiController::class, 'home' ] )->where( 'slug', ".*" );
