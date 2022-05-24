@@ -105,8 +105,7 @@
                                     <div class="group">
                                         <label for="fee-for-1004d"
                                                class="d-block mb-2 dashboard-label fee-for-1004d-label">Technology fee
-                                            for full
-                                            appraisal like 1004D</label>
+                                            for appraisal like 1004D</label>
                                         <input type="text" name="fee_for_1004d" id="fee-for-1004d"
                                                class="dashboard-input w-100">
                                     </div>
@@ -307,7 +306,7 @@
                         required : "Technology fee for full appraisal(1004UAD) is required"
                     },
                     fee_for_1004d: {
-                        required : "Technology fee for full appraisal(1004D) is required"
+                        required : "Technology fee for appraisal(1004D) is required"
                     },
                     deducts_technology_fee: {
                         required : "Deduction of tech fee is required"

@@ -39,7 +39,7 @@ class OrderController extends BaseController
      *
      * @return Application|Factory|View
      */
-    public function create() : Application|Factory|View
+    public function create() // : Application|Factory|View
     {
         $system_order_no = 'BAS-' . uniqid();
         $appraisal_users = $this->repository->getUserByRoleWise(role: 'appraiser');
