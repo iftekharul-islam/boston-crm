@@ -17,12 +17,9 @@ class CreateAppraisalDetailsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('order_id');
             $table->unsignedBigInteger('appraiser_id');
-            $table->string('client_order_no');
             $table->string('loan_no');
-            $table->string('loan_type');
-            $table->timestamp('received_date');
-            $table->timestamp('due_date');
-            $table->string('technology_type');
+            $table->string('loan_type');            
+            $table->string('technology_fee');
             $table->string('fha_case_no');
             $table->timestamps();
 

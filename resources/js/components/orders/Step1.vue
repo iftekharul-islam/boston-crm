@@ -55,13 +55,10 @@
               </div>
               <div class="right max-w-424 w-100">
 
-                <ValidationProvider name="System order" rules="required" v-slot="{ errors }">
-                  <div class="group" :class="{ 'invalid-form' : errors[0] }">
-                    <label for="" class="d-block mb-2 dashboard-label">System order </label>
-                    <input type="text" class="dashboard-input w-100" v-model="step1.systemOrder" readonly>
-                    <span class="error-message">{{ errors[0] }}</span>
-                  </div>
-                </ValidationProvider>
+              <div class="group">
+                <label for="" class="d-block mb-2 dashboard-label">System order </label>
+                <input type="text" class="dashboard-input w-100" v-model="step1.systemOrder" readonly>
+              </div>
 
                 <ValidationProvider name="Loan type" rules="required" v-slot="{ errors }">
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
@@ -287,8 +284,6 @@
         </div>
       </div>
       <div class="add-client__bottom d-flex justify-content-end  p-3">
-        <button class="button button-discard me-3 d-flex align-items-center">Discard <span class="icon-close-circle ms-3"><span
-            class="path1"></span><span class="path2"></span></span></button>
         <button class="button button-primary" @click="nextStep">
           Next
           <svg class="ms-4" width="20" height="14" viewBox="0 0 20 14" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -374,12 +369,13 @@ export default {
     },
 
     nextStep() {
-      // this.$refs.orderForm.validate().then( (response) => {
-         
-      // });
+      this.$refs.orderForm.validate().then( (status) => {
+          if (status) {
+              this.stepActive = true;
+              this.stepChangeActive();
+          }
+      });
 
-      this.stepActive = true;
-      this.stepChangeActive();
     },
     validateData() {
       let errorCount = 0;

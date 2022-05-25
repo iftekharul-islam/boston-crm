@@ -14,7 +14,7 @@
                     <div class="d-flex list__group">
                         <p class="mb-0 left-side">Order name</p>
                         <span>:</span>
-                        <p class="right-side mb-0 fs-20 text-primary fw-bold">1453 Dorchester Ave, Boston, Ma 02122</p>
+                        <p class="right-side mb-0 fs-20 primary-text fw-bold">1453 Dorchester Ave, Boston, Ma 02122</p>
                     </div>
                     <div class="d-flex list__group">
                         <p class="mb-0 left-side">Property address</p>
@@ -238,7 +238,7 @@
                             <p class="right-side mb-0">Amrock</p>
                         </div>
                     </div>
-                    <a href="" class="text-primary mgb-32 d-inline-block">Lender requirements</a>
+                    <a href="" class="primary-text mgb-32 d-inline-block">Lender requirements</a>
                     
                 </div>
             </div>
@@ -494,7 +494,7 @@
                         <div class="invoice-table mgb-48">
                             <div class="d-flex justify-content-between">
                                 <h4 class="box-header mb-0">Invoices</h4>
-                                <a href="#" class="text-primary add-border"><span class="icon-plus me-2"></span> Create invoice</a>
+                                <a href="#" class="primary-text add-border"><span class="icon-plus me-2"></span> Create invoice</a>
                             </div>
                             <div class="table-responsive">
                                 <table class="table table-hover mb-0">

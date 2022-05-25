@@ -779,6 +779,46 @@ select {
 }
 
 //  modal
+.modal {
+    .modal-content {
+        padding: 32px 16px;
+        border: 1px solid rgba(25, 183, 162, 0.5);
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.08);
+    }
+    .modal-header {
+        border-bottom: 0;
+        padding: 0;
+    }
+    .modal-body {
+        padding: 0;
+    }
+    .modal-footer {
+        padding: 0;
+        border-top: 0;
+        margin-top: 48px;
+        .btn-primary {
+            padding: 10px 50px;
+            background: $primary;
+            border-color: $primary;
+        }
+        .btn-secondary {
+            background: transparent;
+            padding: 10px 50px;
+            color: $gray;
+            border: none;
+        }
+    }
+    .close {
+        display: none;
+    }
+    .modal-title {
+        margin-bottom: 24px;
+    }
+    .dashboard-textarea {
+        border-color: $gray;
+    }
+}
+
 .order-details-modal {
     .modal-dialog {
         max-width: 912px;
@@ -786,6 +826,33 @@ select {
     .modal-body {
         border: 1px solid rgba(25, 183, 162, 0.5);
         box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.08);
+    }
+}
+
+#brrower-info {
+    .modal-dialog {
+        max-width: 456px;
+    }
+}
+
+#issue-info {
+    .modal-dialog {
+        max-width: 456px;
+    }
+}
+
+#client-info {
+    .modal-dialog {
+        @include for-min-1200 {
+            max-width: 912px;
+        }
+    }
+    .file-upload {
+        label {
+            height: 40px;
+            display: inline-flex;
+            align-items: center;
+        }
     }
 }
 

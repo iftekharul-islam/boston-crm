@@ -166,7 +166,7 @@
       </div>
     </div>
     <div class="add-client__bottom d-flex justify-content-end  p-3">
-      <button class="button button-discard me-3 d-flex align-items-center">Discard <span class="icon-close-circle ms-3"><span class="path1"></span><span class="path2"></span></span></button>
+      <a href="/orders/create" class="button button-discard me-3 d-flex align-items-center">Discard <span class="icon-close-circle ms-3"><span class="path1"></span><span class="path2"></span></span></a>
       <button class="button button-primary" @click="addNewOrder"> Add order </button>
     </div>
     </ValidationObserver>

@@ -2,14 +2,37 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use Carbon\Carbon;
+use App\Models\User;
+use App\Models\Order;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class OrderApiController extends Controller
 {
     public function store(Request $get) {
-        $step1 = $get->step1;
+
+        // return $get;
+
+        // $validate = Validator::make($get->all(), [
+        //     "step.clientOrderNo" => "required",
+        //     "step.amcClient" => "required",
+        //     "steplender" => "required",
+        // ]);
+
+        // if ($validate->fails()) {
+        //     return response()->json([
+        //         'error' => true,
+        //         'message' => 'Check required fields',
+        //         'errors' => $validate->errors()
+        //     ]);
+        // }
+
+        $step = $get->step1;
         $step2 = $get->step2;
+        $company = $get->company;        
 
         $amcClient = $step['amcClient'];
         $appraiserName = $step['appraiserName'];
@@ -45,5 +68,19 @@ class OrderApiController extends Controller
         $contact_number_s = $step2['contact_number_s'];
         $email_address = $step2['email_address'];
         $email_address_s = $step2['email_address_s'];
+
+        $user = User::find($get->user_id);
+
+        $order = new Order;
+        $order->amc_id = $amcClient;
+        $order->lender_id = $lender;
+        $order->company_id = $company['id'];
+        $order->status = 1;
+        $order->created_by = $user->id;
+        $order->created_at = Carbon::now();
+        $order->save();
+
+        return $order;
+
     }
 }

@@ -63,7 +63,7 @@
                                 <div class="left max-w-424 w-100 me-3">
                                     <div class="group checkbox-group position-relative">
                                         <input type="checkbox" class=" checkbox-input w-100">
-                                        <label for="" class="checkbox-label text-primary">Set borrower as contact</label>
+                                        <label for="" class="checkbox-label primary-text">Set borrower as contact</label>
                                     </div>
                                     <div class="group">
                                         <label for="" class="d-block mb-2 dashboard-label">Contact <span class="text-danger require"></span></label>

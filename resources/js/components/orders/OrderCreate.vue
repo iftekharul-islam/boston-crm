@@ -37,8 +37,10 @@ export default {
     appraisalUsers: [],
     appraisalTypes: [],
     loanTypes: [],
+    company: [],
     amcClients: [],
     lenderClients: [],
+    user_id: null
   },
   components: {
     Step1,
@@ -53,6 +55,7 @@ export default {
     }
   },
   created() {
+      console.log(this.user_id);
       this.$root.$on("updateStepData", (res) => {
           if (res.step == 1) {
             this.step1Data = res.data;
@@ -63,7 +66,7 @@ export default {
       
       this.$root.$on("submitOrder", (res) => {
           console.log("adding data");
-          this.$boston.apiPost('store/order', {data : {'step1' : this.step1Data, 'step2' : this.step2Data}}).then(res => {
+          this.$boston.apiPost('store/order', {'step1' : this.step1Data, 'step2' : this.step2Data, 'company': this.company, 'user_id': this.user_id }).then(res => {
               console.log(res);
           });
       });

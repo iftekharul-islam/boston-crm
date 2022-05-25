@@ -27,13 +27,11 @@
 
 .icon-sms .path1:before {
   content: "\e93";
-  color: rgb(47, 65, 94);
   opacity: 0.4;
 }
 .icon-sms .path2:before {
   content: "\e94";
   margin-left: -1em;
-  color: rgb(47, 65, 94);
 }
 .icon-clock .path1:before {
   content: "\e946";
@@ -152,7 +150,6 @@
 }
 .icon-arrow-down1:before {
   content: "\e968";
-  color: #7e829b;
 }
 .icon-arrow-right:before {
   content: "\e969";
@@ -160,18 +157,15 @@
 }
 .icon-user-role .path1:before {
   content: "\e970";
-  color: rgb(255, 255, 255);
 }
 .icon-user-role .path2:before {
   content: "\e971";
   margin-left: -1em;
-  color: rgb(255, 255, 255);
   opacity: 0.4;
 }
 .icon-user-role .path3:before {
   content: "\e972";
   margin-left: -1em;
-  color: rgb(255, 255, 255);
 }
 
 .icon-send .path1:before {
@@ -438,13 +432,11 @@
 }
 .icon-user .path1:before {
   content: "\e939";
-  color: rgb(255, 255, 255);
   opacity: 0.4;
 }
 .icon-user .path2:before {
   content: "\e93a";
   margin-left: -1em;
-  color: rgb(255, 255, 255);
 }
 .icon-client .path1:before {
   content: "\e93b";
@@ -454,17 +446,14 @@
 .icon-client .path2:before {
   content: "\e93c";
   margin-left: -1em;
-  color: rgb(255, 255, 255);
 }
 .icon-call .path1:before {
   content: "\e93d";
-  color: rgb(255, 255, 255);
   opacity: 0.4;
 }
 .icon-call .path2:before {
   content: "\e93e";
   margin-left: -1em;
-  color: rgb(255, 255, 255);
 }
 .icon-order .path1:before {
   content: "\e93f";

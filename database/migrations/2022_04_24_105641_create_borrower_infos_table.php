@@ -18,6 +18,7 @@ class CreateBorrowerInfosTable extends Migration
             $table->unsignedBigInteger('order_id');
             $table->string('borrower_name');
             $table->string('co_borrower_name');
+            $table->json('contact_email')->nullable();
             $table->timestamps();
 
             $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
