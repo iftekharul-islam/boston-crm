@@ -156,8 +156,7 @@ Route::view( '/order-add-step2', 'dashboard.order-add-step2' )->name( 'order.add
 Route::get( 'get/icons', [IconController::class, 'index'])->name('get.icon');
 Route::get( 'email/verify/{id}/{hash}', [ VerificationController::class, 'verify' ] )->name( 'verification.verify' );
 Route::get( 'accept-new-user/{code}', [ UserController::class, 'acceptInviteUser' ] )->name( 'accept.new.user' );
-Route::post( 'invite-user-update/{id}',
-	[ UserController::class, 'inviteUserUpdate' ] )->name( 'update.invite.user.profile' );
+Route::post( 'invite-user-update/{id}', [ UserController::class, 'inviteUserUpdate' ] )->name( 'update.invite.user.profile' );
 Route::get('/public-order/{id}',[OrderController::class,'publicOrder'])->name('public.order');
 Route::post('/upload-order-files/{id}',[OrderController::class,'uploadOrderFiles'])->name('order.file.upload');
 //Route::get( "{slug}", [ WebApiController::class, 'home' ] )->where( 'slug', ".*" );

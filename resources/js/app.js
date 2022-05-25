@@ -64,6 +64,7 @@ Vue.component('files', require('./components/orders/details/files').default)
 Vue.component('invoice', require('./components/orders/details/invoice').default)
 Vue.component('notes', require('./components/orders/details/notes').default)
 Vue.component('activity-log', require('./components/orders/details/activityLog').default)
+Vue.component('order-list', require('./components/orders/list').default)
 
 axios.defaults.baseURL = window.origin;
 Vue.config.productionTip = false

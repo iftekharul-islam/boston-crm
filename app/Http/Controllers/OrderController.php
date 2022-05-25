@@ -43,9 +43,10 @@ class OrderController extends BaseController
      *
      * @return Application|Factory|View
      */
-    public function index(): View|Factory|Application
+    public function index() : View|Factory|Application
     {
-        return view('order.index');
+        $orderData = Order::take(20)->get();
+        return view('order.index', compact('orderData'));
     }
 
     /**
