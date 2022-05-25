@@ -171,8 +171,9 @@
                     <button class="button-primary px-4 inline-flex-center h-32 mb-2">View daily report</button>
                 </div>
             </div>
+
             {{-- table --}}
-            <div class="order-table">
+            {{-- <div class="order-table">
                 <table class="table">
                     <thead>
                     <tr>
@@ -267,7 +268,8 @@
             </div>
             <div class="pagination justify-content-center mgt-32">
                 <h2 class="text-center"> Pagination here</h2>
-            </div>
+            </div> --}}
+            <order-list :data="{{ $orderData }}"></order-list>
         </div>
     </div>
 @endsection
