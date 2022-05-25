@@ -198,6 +198,11 @@ export default {
         email2: null
       }
   }),
+  created(){
+    this.$root.$on('orderSubmitConfirm', (status) => {
+        this.removeDataValue();
+    });
+  },
   methods: {
     addEmail2() {
         this.$refs.addEmail2form.validate().then((status) => {
@@ -282,6 +287,16 @@ export default {
           });
           this.$root.$emit("submitOrder");
       });
+    },
+    removeDataValue() {
+        let newData = [];
+        for (let i in this.step2) {
+          newData.i = null;
+          if (i == "borrower_contact_s" || i == "borrower_email_s" || i == "contact_number_s" || i == "email_address_s") {
+              newData.i = [];
+          }
+        }
+        this.step2 = newData;
     }
   },
   watch: {

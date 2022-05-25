@@ -10,6 +10,16 @@
             <button @click="gotoStep(2)" class="step-btn" :class="{'active': step === 2}">Step 2</button>
           </div>
         </div>
+        <div class="alert alert-danger alertBlocks" v-if="submitResult.error">
+            <template v-for="eItem in submitResult.message">
+              <span v-for="erItem, ei in eItem" :key="ei">
+                * {{ erItem }}
+              </span>
+            </template>
+        </div>
+        <div class="alert alert-success" v-if="submitResult.submitStatus">
+            {{ submitResult.message }}
+        </div>
         <Step1 v-show="step === 1"
                @step-change-active="stepChangeActiveStatus"
                :order-list-url="orderList"
@@ -52,10 +62,14 @@ export default {
       stepChangeActive: false,
       step1Data: [],
       step2Data: [],
+      submitResult: {
+          error: false,
+          submitStatus: false,
+          message: []
+      }
     }
   },
   created() {
-      console.log(this.user_id);
       this.$root.$on("updateStepData", (res) => {
           if (res.step == 1) {
             this.step1Data = res.data;
@@ -65,9 +79,18 @@ export default {
       });
       
       this.$root.$on("submitOrder", (res) => {
-          console.log("adding data");
           this.$boston.apiPost('store/order', {'step1' : this.step1Data, 'step2' : this.step2Data, 'company': this.company, 'user_id': this.user_id }).then(res => {
-              console.log(res);
+              this.submitResult.error = res.error;
+              this.submitResult.submitStatus = false;
+              this.submitResult.message = res.messages;
+
+              if (res.error == false) {
+                this.submitResult.message = res.message;
+                this.submitResult.submitStatus = true;
+                this.$root.$emit('orderSubmitConfirm', true);
+                this.stepChangeActive = false;
+                this.step = 1;
+              }
           });
       });
   },
@@ -101,5 +124,8 @@ export default {
 </script>
 
 <style scoped>
-
+.alertBlocks span{
+    display: block;
+    margin-bottom: 5px;
+}
 </style>

@@ -46,10 +46,8 @@
                                                required>
                                     </div>
                                     <div class="group">
-                                        <label for="phone" class="d-block mb-2 dashboard-label">Phone no <span
-                                                    class="text-danger require"></span></label>
-                                        <input type="text" name="phone" id="phone" class="dashboard-input w-100"
-                                               required>
+                                        <label for="phone" class="d-block mb-2 dashboard-label">Phone no <span class="text-danger require"></span></label>
+                                        <input type="text" name="phone" id="phone" class="dashboard-input w-100" required>
                                     </div>
                                 </div>
                                 {{-- right side --}}
