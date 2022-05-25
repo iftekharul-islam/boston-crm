@@ -21,6 +21,5 @@ Route::middleware(['auth:sanctum'])->group(function () {
     })->name('dashboard');
     // More routes here
 });
-
-
 Route::post('store/order', [OrderApiController::class, 'store']);
+

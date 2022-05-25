@@ -323,7 +323,7 @@ export default {
         loanNo: '',
         loanType: '',
         receiveDate: '',
-        technologyFee: '',
+        technologyFee: 10,
         fhaCaseNo: '',
         appraiserName: '',
         dueDate: '',
@@ -359,6 +359,9 @@ export default {
   },
   created() {
     this.systemOrder = this.systemOrderNo;
+    this.$root.$on('orderSubmitConfirm', (status) => {
+        this.removeDataValue();
+    });
   },
   methods: {
     stepChangeActive() {
@@ -462,6 +465,21 @@ export default {
         } else {
           this.checkProviderBalance();
         }
+    },
+    removeDataValue() {
+        let newData = [];
+        for (let i in this.step1) {
+          newData.i = null;
+          if (i == "technologyFee") {
+              newData.i = 10;
+          }
+          if (i == "fee") {
+            newData.i = [];
+          }
+        }
+        this.step1 = newData;
+        this.providerTypes.extra = [];
+        this.providerTypes.totalAmount = 0;
     }
   },
   watch: {
