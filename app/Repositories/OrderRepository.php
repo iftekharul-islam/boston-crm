@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\ActivityLog;
 use App\Models\AppraisalDetail;
 use App\Models\AppraisalType;
 use App\Models\BorrowerInfo;
@@ -50,9 +51,22 @@ class OrderRepository extends BaseRepository
         return $this->users;
     }
 
-    public function getOrderTypes($order_id)
+    /**
+     * @param $order_id
+     * @return mixed
+     */
+    public function getOrderTypes($order_id): mixed
     {
         return $this->model->find($order_id)->order_types;
+    }
+
+    /**
+     * @param $order_id
+     * @return mixed
+     */
+    public function getOrderDueDate($order_id): mixed
+    {
+        return $this->model->where('id',$order_id)->select('due_date')->first();
     }
 
     /**
@@ -222,4 +236,21 @@ class OrderRepository extends BaseRepository
             });
     }
 
+    /**
+     * @param $data
+     * @return mixed
+     */
+    public function addActivity($data): mixed
+    {
+        return ActivityLog::create($data);
+    }
+
+    /**
+     * @param $order_id
+     * @return Builder|Model
+     */
+    public function getActivityLogData($order_id): Builder|Model
+    {
+        return ActivityLog::query()->where('order_id',$order_id)->first();
+    }
 }
