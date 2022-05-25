@@ -12,7 +12,7 @@ class AppraisalType extends Model implements Auditable
 	 use SoftDeletes;
 	 use \OwenIt\Auditing\Auditable;
 	 
-	 protected $fillable = ['company_id', 'form_type', 'modified_form'];
+	 protected $fillable = ['company_id', 'form_type', 'modified_form', 'condo_type'];
 	 
 	 /**
 		* @return BelongsTo

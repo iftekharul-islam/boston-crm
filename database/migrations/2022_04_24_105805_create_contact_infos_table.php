@@ -18,6 +18,7 @@ class CreateContactInfosTable extends Migration
             $table->unsignedBigInteger('order_id');
             $table->boolean('is_borrower');
             $table->text('contact');
+            $table->json('contact_email')->nullable();
             $table->timestamps();
 
             $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');

@@ -19,6 +19,14 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import 'vue-select/dist/vue-select.css';
 
+import { ValidationProvider } from "vee-validate/dist/vee-validate.full.esm";
+import { ValidationObserver } from 'vee-validate';
+Vue.component('ValidationProvider', ValidationProvider);
+Vue.component('ValidationObserver', ValidationObserver);
+
+import storage from "./store/index";
+import * as boston from "./helper/boston";
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -29,11 +37,11 @@ import 'vue-select/dist/vue-select.css';
 
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
-Vue.use(VueSweetalert2);// Make BootstrapVue available throughout your project
+Vue.use(VueSweetalert2); // Make BootstrapVue available throughout your project
 Vue.use(BootstrapVue)
-// Optionally install the BootstrapVue icon components plugin
+    // Optionally install the BootstrapVue icon components plugin
 Vue.use(IconsPlugin)
-// Use v-calendar & v-date-picker components
+    // Use v-calendar & v-date-picker components
 
 Vue.component('v-select', vSelect)
 Vue.component('VCalendar', Calendar)
@@ -59,6 +67,7 @@ Vue.component('activity-log', require('./components/orders/details/activityLog')
 
 axios.defaults.baseURL = window.origin;
 Vue.config.productionTip = false
+Vue.prototype.$boston = boston;
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -67,4 +76,5 @@ Vue.config.productionTip = false
 
 const app = new Vue({
     el: '#app',
+    store: storage
 });

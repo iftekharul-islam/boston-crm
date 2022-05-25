@@ -28,7 +28,6 @@ class AppraisalTypeController extends BaseController
 	 public function index(): View|Factory|Application
 	 {
 			$appraisal_types = $this->repository->allPagination();
-			
 			return view( 'appraisal-type.index', compact( 'appraisal_types' ) );
 	 }
 	 
@@ -55,7 +54,9 @@ class AppraisalTypeController extends BaseController
 				'company_id'    => auth()->user()->companies()->first()->id,
 				'form_type'     => $request->form_type,
 				'modified_form' => $request->modified_form,
+				'condo_type' => $request->condo_type ? 1 : 0,
 			];
+			
 			$this->repository->create( $appraisal_type_data );
 			
 			return redirect()->route( 'appraisal-types.index' );
@@ -88,6 +89,7 @@ class AppraisalTypeController extends BaseController
 			$appraisal_type_data = [
 				'form_type'     => $request->form_type,
 				'modified_form' => $request->modified_form,
+				'condo_type' => $request->condo_type ? 1 : 0,
 			];
 			$this->repository->update( attributes: $appraisal_type_data, id: $id );
 			

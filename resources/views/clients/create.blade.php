@@ -87,21 +87,13 @@
                                                class="dashboard-input w-100">
                                     </div>
                                     <div class="group">
-                                        <label for="fee-for-1004d"
-                                               class="d-block mb-2 dashboard-label fee-for-1004d-label">Technology fee
-                                            for
-                                            appraisal like 1004D</label>
-                                        <input type="number" name="fee_for_1004d" id="fee-for-1004d"
-                                               class="dashboard-input w-100">
+                                        <label for="fee-for-1004d" class="d-block mb-2 dashboard-label fee-for-1004d-label">Technology fee for appraisal like 1004D</label>
+                                        <input type="number" name="fee_for_1004d" id="fee-for-1004d" class="dashboard-input w-100">
                                     </div>
                                     <div class="group">
-                                        <label for="deducts-technology-fee"
-                                               class="d-block mb-2 dashboard-label deducts-technology-fee-label">Deduction
-                                            of tech fee during
-                                            payment </label>
+                                        <label for="deducts-technology-fee" class="d-block mb-2 dashboard-label deducts-technology-fee-label">Deduction of tech fee during payment </label>
                                         <div class="position-relative">
-                                            <select name="deducts_technology_fee" id="deducts-technology-fee"
-                                                    class="dashboard-input w-100">
+                                            <select name="deducts_technology_fee" id="deducts-technology-fee" class="dashboard-input w-100">
                                                 <option value="">Choose an option</option>
                                                 <option value="1">Yes</option>
                                                 <option value="0">No</option>
@@ -110,8 +102,7 @@
                                         </div>
                                     </div>
                                     <div class="group">
-                                        <label for="can-sign" class="d-block mb-2 dashboard-label can-sign-label">Trainee
-                                            can sign </label>
+                                        <label for="can-sign" class="d-block mb-2 dashboard-label can-sign-label">Trainee can sign </label>
                                         <div class="position-relative">
                                             <select name="can_sign" id="can-sign" class="dashboard-input w-100">
                                                 <option value="">Choose an option</option>
@@ -282,7 +273,7 @@
                         required : "Technology fee for full appraisal(1004UAD) is required"
                     },
                     fee_for_1004d: {
-                        required : "Technology fee for full appraisal(1004D) is required"
+                        required : "Technology fee for appraisal(1004D) is required"
                     },
                     deducts_technology_fee: {
                         required : "Deduction of tech fee is required"
