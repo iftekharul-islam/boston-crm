@@ -66,14 +66,15 @@
         </div>
       </div>
     </div>
-    <b-modal id="upload-files" size="lg" title="Edit Basic Information">
+    <b-modal id="upload-files" size="lg" title="Uploads Order Files">
       <div class="modal-body">
+        <b-alert v-if="showMessage" show variant="success"><a href="#" class="alert-link">{{ message }}</a></b-alert>
         <div class="row">
           <div class="col-md-6">
             <div class="group">
               <label for="" class="d-block mb-2 dashboard-label">Select file type <span class="require"></span></label>
               <b-form-select
-                  v-model="fileData.fileType"
+                  v-model="file_type"
                   :options="fileTypes"
                   class="dashboard-input w-100">
                 <template #first>
@@ -83,7 +84,7 @@
             </div>
             <div class="group">
               <label for="" class="d-block mb-2 dashboard-label">Select file <span class="require"></span></label>
-              <b-form-file multiple v-model="fileData.files"></b-form-file>
+              <b-form-file multiple v-model="files"></b-form-file>
             </div>
           </div>
         </div>
@@ -103,15 +104,29 @@
     },
     data(){
       return{
-        fileData:{
-          fileType: '',
-          files: ''
-        },
+        file_type: '',
+        files: [],
+        message: '',
+        showMessage: false
       }
     },
     methods:{
       saveOrderFiles(){
-        console.log(this.fileTypes);
+        let that = this
+        const data = new FormData();
+        data.append('file_type', that.file_type)
+        data.append('files', that.files)
+
+        axios.post('upload-order-files/'+ this.orderId,data)
+            .then(res => {
+              that.message = res.data.message
+              that.showMessage = true
+              setTimeout(function(){
+                that.$bvModal.hide('upload-files')
+              }, 2000);
+            }).catch(err => {
+              console.log(err)
+        })
       }
     }
   }
