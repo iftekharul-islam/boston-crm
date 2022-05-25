@@ -4,13 +4,9 @@
       <p class="fw-bold text-light-black fs-20 mb-0">Activity log</p>
     </div>
     <div class="box-body">
-      <p class="fs-14 mgb-20">Order Added - Nowid - 08-20-2020 10:00 AM</p>
-      <p class="fs-14 mgb-20">Order Added - Nowid - 08-20-2020 10:00 AM</p>
-      <p class="fs-14 mgb-20">Order Added - Nowid - 08-20-2020 10:00 AM</p>
-      <p class="fs-14 mgb-20">Order Added - Nowid - 08-20-2020 10:00 AM</p>
-      <p class="fs-14 mgb-20">Order Added - Nowid - 08-20-2020 10:00 AM</p>
-      <p class="fs-14 mgb-20">Order Added - Nowid - 08-20-2020 10:00 AM</p>
-      <p class="fs-14 mgb-20">Order Added - Nowid - 08-20-2020 10:00 AM</p>
+      <template v-for="activityLog in activityLogs">
+        <p class="fs-14 mgb-20">{{ activityLog.activity_text + ' - ' + activityLog.user.name + ' - ' + activityLog.created_at }}</p>
+      </template>
     </div>
   </div>
 </template>
@@ -21,7 +17,7 @@
     },
     data(){
       return{
-        activityLog: ''
+        activityLogs: '',
       }
     },
     created() {
@@ -31,8 +27,7 @@
       getActivityLog(){
         axios.get('get-activity-log/'+ this.orderId)
             .then(res => {
-              this.activityLog = res.data.activityLog
-              console.log(this.activityLog)
+              this.activityLogs = res.data.activityLog
             }).catch(err => {
           console.log(err)
         })

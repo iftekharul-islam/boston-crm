@@ -249,8 +249,10 @@ class OrderRepository extends BaseRepository
      * @param $order_id
      * @return Builder|Model
      */
-    public function getActivityLogData($order_id): Builder|Model
+    public function getActivityLogData($order_id): Builder|Collection
     {
-        return ActivityLog::query()->where('order_id',$order_id)->first();
+        return ActivityLog::query()->where('order_id',$order_id)->with([
+            'user' => function($query){ $query->select('id','name'); }
+        ])->get();
     }
 }
