@@ -12,14 +12,14 @@
         </div>
         <div class="right d-flex">
           <!-- Loader -->
-          <div v-if="loading" class="loader">
-              <div class="content">
-                <div class="loading">
-                    <p>loading</p>
-                    <span></span>
-                </div>
-              </div>
-          </div>
+<!--          <div v-if="loading" class="loader">-->
+<!--              <div class="content">-->
+<!--                <div class="loading">-->
+<!--                    <p>loading</p>-->
+<!--                    <span></span>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--          </div>-->
           <input type="text" v-model="searchText" placeholder="Search ..." @keyup="searchClients" class="px-3 bdr-1 br-4 gray-border me-3 h-40">
           <a v-if="canCreate" :href="createRoute" class="button button-primary h-40 py-2 d-flex align-items-center">Add clients</a>
         </div>
@@ -101,7 +101,6 @@ export default {
       isActive: false,
       currentType: 'all',
       page: 1,
-      loading: false,
       searchText: '',
       canCreate: false,
       canUpdate: false,
@@ -152,7 +151,7 @@ export default {
       this.getClients()
     },
     getClients(page = 1) {
-      this.loading = true;
+      // this.loading = true;
       axios.get(window.origin + '/get-clients/' + this.currentType + '?page=' + page + '&searchKey=' + (this.searchText).trim())
           .then(res => {
             this.clients = res.data.data.clients
@@ -162,7 +161,7 @@ export default {
             this.types[2].count = res.data.data.lender
           }).catch(err => {
         console.log(err)
-      }).finally(() => this.loading = false);
+      })
     },
     showClientDetails(clientId){
       window.location.href = this.showRoute + '/' + clientId

@@ -32,19 +32,19 @@
         <div class="row">
           <div class="col-md-6">
             <div class="group">
-              <label for="" class="d-block mb-2 dashboard-label">Search Address <span class="require"></span></label>
+              <label for="" class="d-block mb-2 dashboard-label">Search address <span class="require"></span></label>
               <input type="text" v-model="info.search_address" class="dashboard-input w-100">
             </div>
             <div class="group">
-              <label for="" class="d-block mb-2 dashboard-label">Street Name <span class="require"></span></label>
+              <label for="" class="d-block mb-2 dashboard-label">Street name <span class="require"></span></label>
               <input type="text" v-model="info.street_name" class="dashboard-input w-100">
             </div>
             <div class="group">
-              <label for="" class="d-block mb-2 dashboard-label">City Name <span class="require"></span></label>
+              <label for="" class="d-block mb-2 dashboard-label">City name <span class="require"></span></label>
               <input type="text" v-model="info.city_name" class="dashboard-input w-100">
             </div>
             <div class="group">
-              <label for="" class="d-block mb-2 dashboard-label">State Name <span class="require"></span></label>
+              <label for="" class="d-block mb-2 dashboard-label">State name <span class="require"></span></label>
               <input type="text" v-model="info.state_name" class="dashboard-input w-100">
             </div>
             <div class="group">
@@ -58,7 +58,7 @@
               <input type="text" v-model="info.unit_no" class="dashboard-input w-100">
             </div>
             <div class="group">
-              <label for="" class="d-block mb-2 dashboard-label">Country <span class="require"></span></label>
+              <label for="" class="d-block mb-2 dashboard-label">County <span class="require"></span></label>
               <input type="text" v-model="info.country" class="dashboard-input w-100">
             </div>
             <div class="group">
@@ -74,11 +74,11 @@
               </v-date-picker>
             </div>
             <div class="group">
-              <label for="" class="d-block mb-2 dashboard-label">Order No</label>
+              <label for="" class="d-block mb-2 dashboard-label">Order no</label>
               <input type="text" v-model="info.client_order_no" class="dashboard-input w-100">
             </div>
             <div class="group">
-              <label for="" class="d-block mb-2 dashboard-label">Order Receive Date</label>
+              <label for="" class="d-block mb-2 dashboard-label">Order receive date</label>
               <v-date-picker v-model="info.received_date">
                 <template class="position-relative" v-slot="{ inputValue, inputEvents }">
                   <input

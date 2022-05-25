@@ -22,11 +22,6 @@
                             <div class="d-flex box justify-content-between left__wrap">
                                 <div class="left-side max-w-424 w-100 me-3">
                                     <div class="group">
-                                        <label for="name" class="d-block mb-2 dashboard-label">Client name <span
-                                                    class="text-danger require"></span></label>
-                                        <input type="text" id="name" name="name" class="dashboard-input w-100" required>
-                                    </div>
-                                    <div class="group">
                                         <label for="client-type" class="d-block mb-2 dashboard-label">Client type <span
                                                     class="text-danger require"></span></label>
                                         <div class="position-relative">
@@ -39,11 +34,11 @@
                                             <span class="icon-arrow-down bottom-arrow-icon"></span>
                                         </div>
                                     </div>
-                                    {{--                                    <div class="group">--}}
-                                    {{--                                        <label for="" class="d-block mb-2 dashboard-label">Client URL <span--}}
-                                    {{--                                                    class="text-danger require"></span></label>--}}
-                                    {{--                                        <input type="text" class="dashboard-input w-100">--}}
-                                    {{--                                    </div>--}}
+                                    <div class="group">
+                                        <label for="name" class="d-block mb-2 dashboard-label">Client name <span
+                                                    class="text-danger require"></span></label>
+                                        <input type="text" id="name" name="name" class="dashboard-input w-100" required>
+                                    </div>
                                     <div class="group">
                                         <label for="email" class="d-block mb-2 dashboard-label">Email address <span
                                                     class="text-danger require"></span></label>
@@ -77,17 +72,6 @@
                                                     class="text-danger"></span></label>
                                         <input type="text" id="zip" name="zip" class="dashboard-input w-100">
                                     </div>
-                                    <div class="group">
-                                        <label for="country" class="d-block mb-2 dashboard-label country-label">Country
-                                            <span
-                                                    class="text-danger"></span></label>
-                                        <input type="text" name="country" id="country" class="dashboard-input w-100">
-                                    </div>
-                                    {{--                                    <div class="group">--}}
-                                    {{--                                        <label for="" class="d-block mb-2 dashboard-label">Fax no <span--}}
-                                    {{--                                                    class="text-danger require"></span></label>--}}
-                                    {{--                                        <input type="text" class="dashboard-input w-100">--}}
-                                    {{--                                    </div>--}}
                                 </div>
                             </div>
                         </div>
@@ -97,26 +81,19 @@
                                     <div class="group">
                                         <label for="fee-for-1004UAD"
                                                class="d-block mb-2 dashboard-label fee-for-1004uad-label">Technology fee
-                                            for full
+                                            for
                                             appraisal like 1004UAD</label>
-                                        <input type="text" name="fee_for_1004uad" id="fee-for-1004uad"
+                                        <input type="number" name="fee_for_1004uad" id="fee-for-1004uad"
                                                class="dashboard-input w-100">
                                     </div>
                                     <div class="group">
-                                        <label for="fee-for-1004d"
-                                               class="d-block mb-2 dashboard-label fee-for-1004d-label">Technology fee
-                                            for appraisal like 1004D</label>
-                                        <input type="text" name="fee_for_1004d" id="fee-for-1004d"
-                                               class="dashboard-input w-100">
+                                        <label for="fee-for-1004d" class="d-block mb-2 dashboard-label fee-for-1004d-label">Technology fee for appraisal like 1004D</label>
+                                        <input type="number" name="fee_for_1004d" id="fee-for-1004d" class="dashboard-input w-100">
                                     </div>
                                     <div class="group">
-                                        <label for="deducts-technology-fee"
-                                               class="d-block mb-2 dashboard-label deducts-technology-fee-label">Deduction
-                                            of tech fee during
-                                            payment </label>
+                                        <label for="deducts-technology-fee" class="d-block mb-2 dashboard-label deducts-technology-fee-label">Deduction of tech fee during payment </label>
                                         <div class="position-relative">
-                                            <select name="deducts_technology_fee" id="deducts-technology-fee"
-                                                    class="dashboard-input w-100">
+                                            <select name="deducts_technology_fee" id="deducts-technology-fee" class="dashboard-input w-100">
                                                 <option value="">Choose an option</option>
                                                 <option value="1">Yes</option>
                                                 <option value="0">No</option>
@@ -125,8 +102,7 @@
                                         </div>
                                     </div>
                                     <div class="group">
-                                        <label for="can-sign" class="d-block mb-2 dashboard-label can-sign-label">Trainee
-                                            can sign </label>
+                                        <label for="can-sign" class="d-block mb-2 dashboard-label can-sign-label">Trainee can sign </label>
                                         <div class="position-relative">
                                             <select name="can_sign" id="can-sign" class="dashboard-input w-100">
                                                 <option value="">Choose an option</option>
@@ -149,12 +125,13 @@
                                         </div>
                                     </div>
                                     <div class="group">
-                                        <label for="instruction" class="d-block mb-2 dashboard-label">Instruction</label>
+                                        <label for="instruction" class="d-block mb-2 dashboard-label">Requirement File</label>
                                         <div class="position-relative file-upload">
                                             <input type="file" accept="application/octet-stream,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint,
                                                 text/plain, application/pdf" name="instruction" id="instruction">
                                             <label for="">Upload <img src="{{ asset('/img/upload.png') }}"
                                                                       alt="boston profile"></label>
+                                            <span class="text-success" id="file-name"></span>
                                         </div>
                                     </div>
                                 </div>
@@ -191,9 +168,10 @@
                     },
                     phone: {
                         required: true,
+                        phoneUS: true,
                         normalizer: function (value) {
                             return value.trim();
-                        }
+                        },
                     },
                     email: {
                         required: true,
@@ -219,14 +197,6 @@
                         }
                     },
                     state: {
-                        required: function () {
-                            return $("#client-type").val() === 'lender'
-                        },
-                        normalizer: function (value) {
-                            return value.trim();
-                        }
-                    },
-                    country: {
                         required: function () {
                             return $("#client-type").val() === 'lender'
                         },
@@ -296,9 +266,6 @@
                     state: {
                         required : "State is required"
                     },
-                    country: {
-                        required : "Country is required"
-                    },
                     city: {
                         required: "City is required"
                     },
@@ -333,6 +300,10 @@
             $("div.alert-success").hide();
             $("div.alert-danger").hide();
         }, 3000);
+        $('#instruction').on('change',function() {
+            let file = $('#instruction')[0].files[0].name;
+            $('#file-name').text(file);
+        });
         $('#client-type').on('change', function (e) {
             e.preventDefault();
             let clientType = $(this).val();
@@ -340,7 +311,7 @@
                 $("#client-create-form").data('validator').resetForm();
                 $(document).find('.dashboard-input').removeClass('error');
 
-                $(".address-label, .city-label, .state-label, .country-label, .zip-label").addClass('require');
+                $(".address-label, .city-label, .state-label, .zip-label").addClass('require');
 
                 $(".deducts-technology-fee-label, .fee-for-1004uad-label, .fee-for-1004d-label, .can-sign-label, .can-inspect-label").removeClass('require');
             } else {
@@ -349,7 +320,7 @@
 
                 $(".deducts-technology-fee-label, .fee-for-1004uad-label, .fee-for-1004d-label, .can-sign-label, .can-inspect-label").addClass('require');
 
-                $(".address-label, .city-label, .state-label, .country-label, .zip-label").removeClass('require');
+                $(".address-label, .city-label, .state-label, .zip-label").removeClass('require');
 
             }
         });
@@ -369,5 +340,6 @@
                 }
             })
         });
+
     </script>
 @endpush

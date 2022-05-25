@@ -226,6 +226,9 @@ class OrderController extends BaseController
     public function uploadOrderFiles(Request $request,$order_id)
     {
         $this->repository->saveOrderFiles($request->all(),$order_id);
+        if($request->ajax()){
+            return response()->json(["message" => "Order file uploaded successfully"]);
+        }
         return redirect()
             ->to('public-order/'. $order_id)
             ->with(['success'=>'Order file uploaded successfully']);

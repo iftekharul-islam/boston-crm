@@ -2,7 +2,7 @@
   <div class="order-details-box bg-white">
     <div class="box-header">
       <p class="fw-bold text-light-black fs-20 mb-0">Contact</p>
-      <a href="" class="d-inline-flex edit align-items-center fw-bold">Edit <span class="icon-edit ms-3"><span class="path1"></span><span class="path2"></span></span></a>
+      <a v-b-modal.contact-info class="d-inline-flex edit align-items-center fw-bold cursor-pointer">Edit <span class="icon-edit ms-3"><span class="path1"></span><span class="path2"></span></span></a>
     </div>
     <div class="box-body">
       <div class="list__group">
@@ -28,20 +28,16 @@
       </div>
     </div>
     <!-- modal -->
-    <b-modal id="contact-info" class="brrower-modal" size="lg" title="Edit Borrower">
+    <b-modal id="contact-info" class="brrower-modal" size="lg" title="Edit Contact">
       <div class="modal-body brrower-modal-body">
         <div class="row">
           <div class="col-12">
             <div class="group">
-              <label for="" class="d-block mb-2 dashboard-label">Borrower name <span class="require"></span></label>
-              <input type="text" v-model="borrower_name"  class="dashboard-input w-100">
-            </div>
-            <div class="group">
-              <label for="" class="d-block mb-2 dashboard-label">Co-borrower name <span class="require"></span></label>
+              <label for="" class="d-block mb-2 dashboard-label">Contact name</label>
               <input type="text" v-model="co_borrower_name" class="dashboard-input w-100">
             </div>
             <div class="group">
-              <label for="" class="d-block mb-2 dashboard-label">Phone <span class="text-danger require"></span></label>
+              <label for="" class="d-block mb-2 dashboard-label">Phone </label>
               <input type="text" v-model="contact" class="dashboard-input w-100">
               <div class=" mgt-20">
                 <button class="add-more ">
@@ -50,7 +46,7 @@
               </div>
             </div>
             <div class="group">
-              <label for="" class="d-block mb-2 dashboard-label">Email <span class="text-danger require"></span></label>
+              <label for="" class="d-block mb-2 dashboard-label">Email </label>
               <input type="text" v-model="email" class="dashboard-input w-100">
               <div class=" mgt-20">
                 <button class="add-more ">
