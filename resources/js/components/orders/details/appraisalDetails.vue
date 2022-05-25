@@ -42,7 +42,7 @@
       </div>
     </div>
     <!-- modal -->
-     <b-modal id="appraisal-info" size="lg" title="Edit Basic Information">
+     <b-modal id="appraisal-info" size="lg" title="Edit appraisal Information">
         <div class="modal-body">
           <div class="row">
             <div class="col-md-6">

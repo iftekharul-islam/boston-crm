@@ -50,7 +50,7 @@
                 <input type="text"  class="dashboard-input w-100">
               </div>
               <div class="group">
-                <label for="" class="d-block mb-2 dashboard-label">AMC name</label>
+                <label for="" class="d-block mb-2 dashboard-label">Lender address</label>
                 <textarea class="dashboard-textarea w-100" cols="5"> </textarea>
                 <a href="#" class="primary-text fw-bold my-3 d-inline-block underline">AMC requirements 1</a>
                 <div class="position-relative file-upload">
