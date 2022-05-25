@@ -14,7 +14,11 @@
         <div class="order-details-header d-flex mgb-20">
             <div class="left d-flex align-items-center">
                 <h4 class="fs-24 fw-bold text-light-black mb-0 mgr-20">Order details</h4>
-                <span class="due">Due in 12 days</span>
+                @if($diff_in_days > 0)
+                    <span class="due">Due in {{ $diff_in_days }} days</span>
+                @else
+                    <span class="due">Already Overdue</span>
+                @endif
             </div>
             <div class="right d-flex align-items-center ms-auto">
                 <div class="current-status-group d-flex align-items-center mgr-20">
@@ -70,7 +74,7 @@
              {{-- Note --}}
              <notes></notes>
             {{-- Activity log --}}
-            <activity-log></activity-log>
+            <activity-log :order-id="'{{ $order_id }}'"></activity-log>
             {{-- <div class="row">
                 <div class="col-md-12">
                    

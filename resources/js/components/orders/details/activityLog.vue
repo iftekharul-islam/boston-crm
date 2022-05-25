@@ -14,3 +14,29 @@
     </div>
   </div>
 </template>
+<script>
+  export default {
+    props:{
+      orderId: String
+    },
+    data(){
+      return{
+        activityLog: ''
+      }
+    },
+    created() {
+      this.getActivityLog()
+    },
+    methods:{
+      getActivityLog(){
+        axios.get('get-activity-log/'+ this.orderId)
+            .then(res => {
+              this.activityLog = res.data.activityLog
+              console.log(this.activityLog)
+            }).catch(err => {
+          console.log(err)
+        })
+      }
+    }
+  }
+</script>
