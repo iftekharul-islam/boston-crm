@@ -55,9 +55,4 @@ class Client extends Model implements HasMedia, Auditable
     {
         return $query->where('client_type','lender');
     }
-
-    public function orders()
-    {
-        return $this->hasMany(Order::class);
-    }
 }

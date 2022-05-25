@@ -18,7 +18,6 @@ class ClientRequest extends FormRequest
 				"address"                => "required_if:client_type,==,lender",
 				"city"                   => "required_if:client_type,==,lender",
 				"state"                  => "required_if:client_type,==,lender",
-				"country"                => "required_if:client_type,==,lender",
 				"zip"                    => "required_if:client_type,==,lender",
 				"deducts_technology_fee" => "required_if:client_type,==,amc",
 				"fee_for_1004uad"        => "required_if:client_type,==,amc",

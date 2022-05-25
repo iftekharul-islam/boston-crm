@@ -50,6 +50,11 @@ class OrderRepository extends BaseRepository
         return $this->users;
     }
 
+    public function getOrderTypes($order_id)
+    {
+        return $this->model->find($order_id)->order_types;
+    }
+
     /**
      * @param object $role
      *
@@ -195,19 +200,26 @@ class OrderRepository extends BaseRepository
      */
     public function getClientDetails($order_id): Builder|Model
     {
+        return Order::query()->where('id',$order_id)->with([
+            'amc'=> function($query){
+                return $query->select('id','name');
+            },'lender' => function($query){
+                return $query->select('id','name');
+            }])->first();
+    }
 
-        return Order::with('amc')->first();
-//        $order = Order::with([
-//            'amc','lender' => function($query){
-//                return $query->select('id','name');
-//            }])->where('id',$order_id)->first();
-//        dd(['order_details' => $order]);
-//        return Order::query()->where('id',$order_id)->with([
-//            'amc'=> function($query){
-//                return $query->select('id','name');
-//            },'lender' => function($query){
-//                return $query->select('id','name');
-//            }])->first();
+    /**
+     * @param $data
+     * @param $order_id
+     * @return mixed
+     */
+    public function saveOrderFiles($data,$order_id): mixed
+    {
+        return $this->model->find($order_id)
+            ->addAllMediaFromRequest($data['files'])
+            ->each(function ($fileAdder) use ($data){
+                $fileAdder->toMediaCollection($data['file_type']);
+            });
     }
 
 }
