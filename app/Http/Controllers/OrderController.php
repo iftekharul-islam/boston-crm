@@ -54,9 +54,9 @@ class OrderController extends BaseController
      *
      * @return Application|Factory|View
      */
-    public function create() // : Application|Factory|View
+    public function create(): View|Factory|Application
     {
-        $system_order_no = 'BAS-' . uniqid();
+        $system_order_no = $this->generateSystemOrderNo();
         $appraisal_users = $this->repository->getUserByRoleWise(role: 'appraiser');
         $appraisal_types = $this->repository->getAppraisalTypes();
         $loan_types = $this->repository->getLoanTypes();
@@ -262,6 +262,20 @@ class OrderController extends BaseController
         return response()->json(["activityLog" => $activity_log]);
     }
 
+    /**
+     * @return int|string
+     */
+    public function generateSystemOrderNo(): int|string
+    {
+        $string_format = "BAS-000001";
+        $check_last_string = Order::latest()->first();
+        if($check_last_string){
+            $system_order_no = ++$check_last_string->system_order_no;
+        }else{
+            $system_order_no = $string_format;
+        }
+        return $system_order_no;
+    }
     public function saveOrderData()
     {
 //        Order::create([
@@ -273,14 +287,14 @@ class OrderController extends BaseController
 //            "received_date" => Carbon::parse('05/18/2022')->format('Y-m-d'),
 //            "due_date" => Carbon::parse('05/30/2022')->format('Y-m-d'),
 //        ]);
-        AppraisalDetail::create([
-           "order_id" => 1,
-           "appraiser_id" => 1,
-            "loan_type" => 1,
-            "loan_no" => "LoanNumber",
-            "fha_case_no" => "FHACN12",
-            "technology_fee" => 1000
-        ]);
+//        AppraisalDetail::create([
+//           "order_id" => 1,
+//           "appraiser_id" => 1,
+//            "loan_type" => 1,
+//            "loan_no" => "LoanNumber",
+//            "fha_case_no" => "FHACN12",
+//            "technology_fee" => 1000
+//        ]);
 //        ProvidedService::create([
 //            "order_id" => 1,
 //            "appraiser_type_fee" => json_encode([

@@ -17,6 +17,8 @@ class CreateProvidedServicesTable extends Migration
             $table->id();
             $table->unsignedBigInteger('order_id');
             $table->text('note')->nullable();
+            $table->double('total_fee',10,2)->nullable();
+            $table->json('appraiser_type_fee')->nullable();
             $table->timestamps();
 
             $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');

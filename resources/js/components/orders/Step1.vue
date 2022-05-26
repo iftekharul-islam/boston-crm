@@ -358,7 +358,7 @@ export default {
     }
   },
   created() {
-    this.systemOrder = this.systemOrderNo;
+    this.step1.systemOrder = this.systemOrderNo;
     this.$root.$on('orderSubmitConfirm', (status) => {
         this.removeDataValue();
     });
