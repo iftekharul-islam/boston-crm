@@ -358,7 +358,7 @@ export default {
     }
   },
   created() {
-    this.systemOrder = this.systemOrderNo;
+    this.step1.systemOrder = this.systemOrderNo;
     this.$root.$on('orderSubmitConfirm', (status) => {
         this.removeDataValue();
     });
@@ -414,12 +414,10 @@ export default {
                   fee: newFee
               });
             }
-
             this.providerTypes.default.type = null;
             this.providerTypes.default.fee = null;
             this.providerTypes.error.type = false;
             this.providerTypes.error.fee = false;
-
             this.checkProviderBalance();
         } else {
             if (this.providerTypes.default.type == null){
@@ -429,6 +427,7 @@ export default {
                 this.providerTypes.error.fee = true;
             }
         }
+        this.$root.$emit("updateProviderData", this.providerTypes);
     },
 
     checkProviderBalance() {
@@ -469,23 +468,24 @@ export default {
     removeDataValue() {
         let newData = [];
         for (let i in this.step1) {
-          newData.i = null;
           if (i == "technologyFee") {
-              newData.i = 10;
-          }
-          if (i == "fee") {
-            newData.i = [];
+              newData[i] = 10;
+          } else if (i == "fee") {
+              newData[i] = [];
+          } else {
+              newData[i] = null;
           }
         }
         this.step1 = newData;
         this.providerTypes.extra = [];
         this.providerTypes.totalAmount = 0;
+        this.$refs.orderForm.reset();
     }
   },
   watch: {
     providerTypes: {
       handler(val) {
-          // this.checkProviderValidation(val);
+          
       },
       deep:true
     },
@@ -493,7 +493,7 @@ export default {
       handler(val) {
         this.$root.$emit("updateStepData", {
           step: 1,
-          data: val
+          data: { providerType: this.providerTypes, ...val}
         });
       },
       deep: true

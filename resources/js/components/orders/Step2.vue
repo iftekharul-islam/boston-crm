@@ -297,6 +297,7 @@ export default {
           }
         }
         this.step2 = newData;
+        this.$refs.addContactForm.reset();
     }
   },
   watch: {

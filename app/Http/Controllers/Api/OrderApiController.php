@@ -23,6 +23,8 @@ class OrderApiController extends Controller
         $step2 = $get->step2;
         $company = $get->company;
 
+        $providedData = $get->providedData;
+
         $errorChecking = $this->getErrorMessage($get);
         $error = $errorChecking['error'];
         $errorMessage = $errorChecking['message'];
@@ -52,7 +54,7 @@ class OrderApiController extends Controller
             $order->received_date = $dueDate;
             $order->due_date = $receiveDate;
             $order->client_order_no = $clientOrderNo;
-            $order->system_order_no = "BAS-".uniqid();
+            $order->system_order_no = $systemOrder ?? systemOrderNumber();
             $order->created_at = Carbon::now();
             $order->save();
 
@@ -75,7 +77,7 @@ class OrderApiController extends Controller
 
             // Create Provider Types
             $appraiserType = $step['appraiserType'];
-            $fee = $step['fee'];
+            $fee = $get->providedData['extra'];
             $note = $step['note'];
 
             $providerType = new ProvidedService;
@@ -160,6 +162,7 @@ class OrderApiController extends Controller
         $step = $get->step1;
         $step2 = $get->step2;
         $company = $get->company;
+        $providedData = $get->providedData;
 
         $error = false;
         $errorMessage = [
@@ -170,6 +173,11 @@ class OrderApiController extends Controller
         if (!isset($company['id'])) {
             $error = true;
             array_push($errorMessage['step1'], 'Company Information Missing');
+        }
+        
+        if (!isset($providedData['extra']) && count($providedData['extra']) == 0) {
+            $error = true;
+            array_push($errorMessage['step1'], 'Please add provider services data');
         }
 
         $array_filter = [

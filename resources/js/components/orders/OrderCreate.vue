@@ -62,6 +62,7 @@ export default {
       stepChangeActive: false,
       step1Data: [],
       step2Data: [],
+      providedData: [],
       submitResult: {
           error: false,
           submitStatus: false,
@@ -78,8 +79,12 @@ export default {
           }
       });
       
+      this.$root.$on("updateProviderData", (res) => {
+          this.providedData = res;
+      });
+      
       this.$root.$on("submitOrder", (res) => {
-          this.$boston.apiPost('store/order', {'step1' : this.step1Data, 'step2' : this.step2Data, 'company': this.company, 'user_id': this.user_id }).then(res => {
+          this.$boston.apiPost('store/order', {'step1' : this.step1Data, 'step2' : this.step2Data, 'company': this.company, 'providedData' : this.providedData, 'user_id': this.user_id }).then(res => {
               this.submitResult.error = res.error;
               this.submitResult.submitStatus = false;
               this.submitResult.message = res.messages;
@@ -91,6 +96,7 @@ export default {
                 this.stepChangeActive = false;
                 this.step = 1;
               }
+              $("html, body").animate({ scrollTop: 0 }, "slow");
           });
       });
   },

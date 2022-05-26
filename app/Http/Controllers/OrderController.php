@@ -54,17 +54,15 @@ class OrderController extends BaseController
      */
     public function create() // : Application|Factory|View
     {
-        $system_order_no = 'BAS-' . uniqid();
+        $system_order_no = systemOrderNumber();
         $appraisal_users = $this->repository->getUserByRoleWise(role: 'appraiser');
         $appraisal_types = $this->repository->getAppraisalTypes();
         $loan_types = $this->repository->getLoanTypes();
         $client_users = Helper::getClientsGroupBy($this->repository->getClients());
         $amc_clients = $client_users[0];
         $lender_clients = $client_users[1];
-        $company = auth()->user()->companies()->first();
-        
+        $company = auth()->user()->companies()->first();        
         $userID = auth()->user()->id;
-
     
         return view('order.create',
             compact('system_order_no', 'userID', 'company', 'appraisal_users', 'appraisal_types', 'loan_types', 'amc_clients',
