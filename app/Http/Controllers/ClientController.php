@@ -71,7 +71,7 @@ class ClientController extends BaseController
     public function store(ClientRequest $request): RedirectResponse
     {
         $request_data = $request->validated();
-        $merged_data = array_merge($request_data, ["company_id" => $this->companyService->getAuthUserCompany()->id]);
+        $merged_data = array_merge($request_data, ["company_id" => $this->companyService->getAuthUserCompany()->id,"created_by" => auth()->user()->id]);
         $client = $this->clientService->saveClientData($merged_data);
 
         return redirect()

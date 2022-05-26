@@ -16,13 +16,12 @@ return new class extends Migration
         Schema::create('clients', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('email')->nullable();
-            $table->string('phone')->nullable();
-            $table->enum('client_type',['amc','lender'])->comment('can be of two types');
+            $table->json('email')->nullable();
+            $table->json('phone')->nullable();
+            $table->enum('client_type',['amc','lender','both'])->comment('can be of two types');
             $table->string('address')->nullable();
             $table->string('city')->nullable();
             $table->string('state')->nullable();
-            $table->string('country')->nullable();
             $table->string('zip')->nullable();
             $table->string('deducts_technology_fee')->nullable();
             $table->string('fee_for_1004uad')->nullable();
@@ -30,9 +29,13 @@ return new class extends Migration
             $table->tinyInteger('can_sign')->nullable();
             $table->tinyInteger('can_inspect')->nullable();
             $table->string('instruction')->nullable();
-            $table->integer('company_id');
+            $table->unsignedBigInteger('company_id');
+            $table->unsignedBigInteger('created_by');
             $table->softDeletes();
             $table->timestamps();
+
+            $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
+            $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

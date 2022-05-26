@@ -41,8 +41,8 @@
 
           <tr v-for="client in clients.data">
             <td><b>{{ client.name }} </b></td>
-            <td>{{ client.email }}</td>
-            <td>{{ client.phone }}</td>
+            <td><span class="d-flex mb-1" v-for="email in JSON.parse(client.email)">{{ email }}</span></td>
+            <td><span class="d-flex mb-1" v-for="phone in JSON.parse(client.phone)">{{ phone }}</span</td>
             <td>{{ client.client_type }}</td>
             <td>{{ client.city }}</td>
             <td>{{ client.address }}</td>
