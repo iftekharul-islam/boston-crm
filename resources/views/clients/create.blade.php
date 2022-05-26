@@ -30,6 +30,7 @@
                                                 <option value="">Select a type</option>
                                                 <option value="amc">Amc</option>
                                                 <option value="lender">Lender</option>
+                                                <option value="both">Both</option>
                                             </select>
                                             <span class="icon-arrow-down bottom-arrow-icon"></span>
                                         </div>
@@ -42,12 +43,19 @@
                                     <div class="group">
                                         <label for="email" class="d-block mb-2 dashboard-label">Email address <span
                                                     class="text-danger require"></span></label>
-                                        <input type="email" id="email" name="email" class="dashboard-input w-100"
-                                               required>
+                                        <input type="email" id="email" name="email[]" class="dashboard-input w-100 mb-2 email" required>
+                                        <div id="email-append"></div>
+                                        <div class="text-end">
+                                            <button id="add-email" class="button button-transparent">+ Add More</button>
+                                        </div>
                                     </div>
                                     <div class="group">
                                         <label for="phone" class="d-block mb-2 dashboard-label">Phone no <span class="text-danger require"></span></label>
-                                        <input type="text" name="phone" id="phone" class="dashboard-input w-100" required>
+                                        <input type="text" name="phone[]" id="phone" class="dashboard-input w-100 mb-2" required>
+                                        <div id="phone-append"></div>
+                                        <div class="text-end">
+                                            <button id="add-phone" class="button button-transparent">+ Add More</button>
+                                        </div>
                                     </div>
                                 </div>
                                 {{-- right side --}}
@@ -149,7 +157,20 @@
 @endsection
 @push('js')
     <script type="text/javascript">
+        let emailCount = 1;
+        let phoneCount = 1;
+        $('#add-email').on('click',function(e){
+            e.preventDefault();
+            $('#email-append').append('<input type="email" name="email[]" class="dashboard-input w-100 mb-2">');
+            emailCount++;
+        });
+        $('#add-phone').on('click',function(e){
+            e.preventDefault();
+            $('#phone-append').append('<input type="text" name="phone[]" class="dashboard-input w-100 mb-2">');
+            phoneCount++;
+        })
         $(function () {
+            let clientType = $("#client-type").val();
             $("#client-create-form").validate({
                 rules: {
                     name: {
@@ -180,7 +201,7 @@
                     },
                     address: {
                         required: function () {
-                            return $("#client-type").val() === 'lender'
+                            return clientType !== 'amc'
                         },
                         normalizer: function (value) {
                             return value.trim();
@@ -188,7 +209,7 @@
                     },
                     zip: {
                         required: function () {
-                            return $("#client-type").val() === 'lender'
+                            return clientType !== 'amc'
                         },
                         normalizer: function (value) {
                             return value.trim();
@@ -196,7 +217,7 @@
                     },
                     state: {
                         required: function () {
-                            return $("#client-type").val() === 'lender'
+                            return clientType !== 'amc'
                         },
                         normalizer: function (value) {
                             return value.trim();
@@ -204,7 +225,7 @@
                     },
                     city: {
                         required: function () {
-                            return $("#client-type").val() === 'lender'
+                            return clientType !== 'amc'
                         },
                         normalizer: function (value) {
                             return value.trim();
@@ -212,7 +233,7 @@
                     },
                     fee_for_1004uad: {
                         required: function () {
-                            return $("#client-type").val() === 'amc'
+                            return clientType !== 'lender'
                         },
                         normalizer: function (value) {
                             return value.trim();
@@ -220,7 +241,7 @@
                     },
                     fee_for_1004d: {
                         required: function () {
-                            return $("#client-type").val() === 'amc'
+                            return clientType !== 'lender'
                         },
                         normalizer: function (value) {
                             return value.trim();
@@ -228,17 +249,17 @@
                     },
                     deducts_technology_fee: {
                         required: function () {
-                            return $("#client-type").val() === 'amc'
+                            return clientType !== 'lender'
                         }
                     },
                     can_sign: {
                         required: function () {
-                            return $("#client-type").val() === 'amc'
+                            return clientType !== 'lender'
                         }
                     },
                     can_inspect: {
                         required: function () {
-                            return $("#client-type").val() === 'amc'
+                            return clientType !== 'lender'
                         }
                     },
                 },
@@ -306,15 +327,17 @@
             e.preventDefault();
             let clientType = $(this).val();
             if (clientType === 'lender') {
-                $("#client-create-form").data('validator').resetForm();
-                $(document).find('.dashboard-input').removeClass('error');
+                removeError();
 
                 $(".address-label, .city-label, .state-label, .zip-label").addClass('require');
 
                 $(".deducts-technology-fee-label, .fee-for-1004uad-label, .fee-for-1004d-label, .can-sign-label, .can-inspect-label").removeClass('require');
+            }else if(clientType === 'both'){
+                removeError();
+
+                $(".address-label, .city-label, .state-label, .zip-label,.deducts-technology-fee-label, .fee-for-1004uad-label, .fee-for-1004d-label, .can-sign-label, .can-inspect-label").addClass('require');
             } else {
-                $("#client-create-form").data('validator').resetForm();
-                $(document).find('.dashboard-input').removeClass('error');
+                removeError();
 
                 $(".deducts-technology-fee-label, .fee-for-1004uad-label, .fee-for-1004d-label, .can-sign-label, .can-inspect-label").addClass('require');
 
@@ -322,6 +345,10 @@
 
             }
         });
+        function removeError(){
+            $("#client-create-form").data('validator').resetForm();
+            $(document).find('.dashboard-input').removeClass('error');
+        }
         $("#discard").on("click",function (e){
            e.preventDefault();
             swal({

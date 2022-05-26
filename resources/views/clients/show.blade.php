@@ -55,11 +55,6 @@
                                 <span>:</span>
                                 <p class="right-side">{{ $client->name }}</p>
                             </div>
-                            {{--                            <div class="personal-info__group">--}}
-                            {{--                                <p class="mb-0 left-side">Client URL</p>--}}
-                            {{--                                <span>:</span>--}}
-                            {{--                                <p title="https://www.mytitlesourceconnection.com/Vendor/" class="right-side">https://www.mytitlesourceconnection.com/Vendor/...</p>--}}
-                            {{--                            </div>--}}
                             <div class="personal-info__group">
                                 <p class="mb-0 left-side">Address</p>
                                 <span>:</span>
@@ -88,17 +83,20 @@
                             <div class="personal-info__group">
                                 <p class="mb-0 left-side">Phone no</p>
                                 <span>:</span>
-                                <p class="right-side">{{ $client->phone }}</p>
+                                <div class="right-side">
+                                @foreach(json_decode($client->phone) as $phone)
+                                   <p class="mb-0">{{ $phone }}</p>
+                                @endforeach
+                                </div>
                             </div>
-                            {{--                            <div class="personal-info__group">--}}
-                            {{--                                <p class="mb-0 left-side">Fax no</p>--}}
-                            {{--                                <span>:</span>--}}
-                            {{--                                <p class="right-side">Amrock</p>--}}
-                            {{--                            </div>--}}
                             <div class="personal-info__group">
                                 <p class="mb-0 left-side">Email address</p>
                                 <span>:</span>
-                                <p class="right-side">{{ $client->email }}</p>
+                                <div class="right-side">
+                                @foreach(json_decode($client->email) as $email)
+                                    <p class="right-side">{{ $email }}</p>
+                                @endforeach
+                                </div>
                             </div>
                         </div>
                         <div class="col-lg-6 mb-3 right">
@@ -130,34 +128,24 @@
                                 <p class="right-side">{{ $client->can_inspect == 1 ? 'Yes' : 'N/A'  }}</p>
                             </div>
                             <div class="personal-info__group">
+                                <p class="mb-0 left-side">Created By</p>
+                                <span>:</span>
+                                <p class="right-side">{{ $client->user->name  }}</p>
+                            </div>
+                            <div class="personal-info__group">
+                                <p class="mb-0 left-side">Created At</p>
+                                <span>:</span>
+                                <p class="right-side">{{ date('d M Y H:i A',strtotime($client->created_at))  }}</p>
+                            </div>
+                            <div class="personal-info__group">
                                 <p class="mb-0 left-side">Client instruction</p>
                                 <span>:</span>
                                 <p class="right-side"><a @if(isset($client->getMedia('clients')[0])) target="_blank" @else style="color: dimgray !important;cursor: default !important;" @endif href="{{ isset($client->getMedia('clients')[0]) ? $client->getMedia('clients')[0]->getFullUrl() : '#' }}"> @if(isset($client->getMedia('clients')[0])) Instruction File @else No File @endif</a></p>
                             </div>
-{{--                            <div class="personal-info__group">--}}
-{{--                                <p class="mb-0 left-side">Technology fee</p>--}}
-{{--                                <span>:</span>--}}
-{{--                                <p class="right-side">$123</p>--}}
-{{--                            </div>--}}
+
                         </div>
                     </div>
                 </div>
-                {{-- order --}}
-{{--                <div class="tab-pane fade" id="pills-order" role="tabpanel" aria-labelledby="pills-order-tab">--}}
-{{--                    Order--}}
-{{--                </div>--}}
-{{--                --}}{{-- Invoice --}}
-{{--                <div class="tab-pane fade" id="pills-invoice" role="tabpanel" aria-labelledby="pills-invoice-tab">--}}
-{{--                    Invoice--}}
-{{--                </div>--}}
-{{--                --}}{{-- statistics --}}
-{{--                <div class="tab-pane fade" id="pills-statistics" role="tabpanel" aria-labelledby="pills-statistics-tab">--}}
-{{--                    Statistics--}}
-{{--                </div>--}}
-{{--                --}}{{-- Note messasge --}}
-{{--                <div class="tab-pane fade" id="pills-message" role="tabpanel" aria-labelledby="pills-message-tab">--}}
-{{--                    Note and Message--}}
-{{--                </div>--}}
             </div>
         </div>
     </div>

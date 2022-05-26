@@ -41,6 +41,11 @@ class ClientRepository extends BaseRepository
         return $update_model;
     }
 
+    public function getClientDetails($id)
+    {
+        return $this->model->where('id',$id)->with(['user' => function($query){ $query->select('id','name'); }])->first();
+    }
+
     public function getClientsData(string $type, int $page_number, string $search_key,int $company_id): array
     {
         if ($search_key == '') {
