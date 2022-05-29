@@ -167,7 +167,8 @@
     </div>
     <div class="add-client__bottom d-flex justify-content-end  p-3">
       <a href="/orders/create" class="button button-discard me-3 d-flex align-items-center">Discard <span class="icon-close-circle ms-3"><span class="path1"></span><span class="path2"></span></span></a>
-      <button class="button button-primary" @click="addNewOrder"> Add order </button>
+      <button class="button button-primary" v-if="type == 2" @click="addNewOrder(true)"> Update order </button>
+      <button class="button button-primary" v-else @click="addNewOrder"> Add order </button>
     </div>
     </ValidationObserver>
   </div>
@@ -176,6 +177,7 @@
 <script>
 export default {
   name: "Step2",
+  props: ['type', 'order'],
   data: () => ({
       step2: {
         borrower_name: null,
@@ -202,6 +204,9 @@ export default {
     this.$root.$on('orderSubmitConfirm', (status) => {
         this.removeDataValue();
     });
+    if (this.type == 2) {
+      this.setStep2Data();
+    }
   },
   methods: {
     addEmail2() {
@@ -279,13 +284,13 @@ export default {
           }
       }
     },
-    addNewOrder() {
+    addNewOrder(type = false) {
       this.$refs.orderForm.validate().then((res) => {
           this.$root.$emit("updateStepData", {
             step: 2,
             data: this.step2
           });
-          this.$root.$emit("submitOrder");
+          this.$root.$emit("submitOrder", type);
       });
     },
     removeDataValue() {
@@ -298,6 +303,33 @@ export default {
         }
         this.step2 = newData;
         this.$refs.addContactForm.reset();
+    },
+    setStep2Data() {
+      let borrowerContact = JSON.parse(this.order.borrower_info.contact_email);
+      let borrowerEmail = borrowerContact['email'];
+      let borrowerPhone = borrowerContact['phone'];
+      console.log(borrowerContact, borrowerEmail, borrowerPhone);
+      
+      let contactInfo = JSON.parse(this.order.contact_info.contact_email);
+      let contactInfoEmail = contactInfo['email'];
+      let contactInfoPhone = contactInfo['phone'];
+      console.log(contactInfo, contactInfoEmail, contactInfoPhone);
+
+      let step2 = {
+        borrower_name: this.order.borrower_info.borrower_name,
+        co_borrower_name: this.order.borrower_info.co_borrower_name,
+        borrower_contact: borrowerPhone.length ? true : false,
+        borrower_email: borrowerEmail.length ? true : false,
+        borrower_contact_s: borrowerPhone,
+        borrower_email_s: borrowerEmail,
+        contactSame: this.order.contact_info.is_borrower,
+        contact_info: this.order.contact_info.contact,
+        contact_number: contactInfoPhone.length ? true : false,
+        email_address: contactInfoEmail.length ? true : false,
+        contact_number_s: contactInfoPhone,
+        email_address_s: contactInfoEmail,
+      };
+      this.step2 = step2;
     }
   },
   watch: {

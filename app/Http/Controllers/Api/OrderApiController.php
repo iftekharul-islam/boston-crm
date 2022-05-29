@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Order;
+use App\Helpers\CrmHelper;
 use App\Models\ContactInfo;
 use App\Models\BorrowerInfo;
 use App\Models\PropertyInfo;
@@ -18,6 +19,8 @@ use Illuminate\Support\Facades\Validator;
 
 class OrderApiController extends Controller
 {
+    use CrmHelper;
+    
     public function store(Request $get) {
         $step = $get->step1;
         $step2 = $get->step2;
@@ -36,26 +39,46 @@ class OrderApiController extends Controller
             $amcClient = $step['amcClient'];
             $appraiserName = $step['appraiserName'];
             
-            $dueDate = $step['dueDate'];
-            $receiveDate = $step['receiveDate'];
+            try {
+                $dueDate = Carbon::parse($step['dueDate'])->format('Y-m-d');
+                $receiveDate = Carbon::parse($step['receiveDate'])->format('Y-m-d');
+            } catch (\Exception $e) {
+                return response()->json(['error' => false, 'messages' => ['Please check received & due dates']]);
+            }
+            
             $systemOrder = $step['systemOrder'];
             $clientOrderNo = $step['clientOrderNo'];
             $lender = $step['lender'];
 
 
             $user = User::find($get->user_id);
+            $submitType = $get->type;
+            $orderId = null;
+            if ($submitType) {
+                $orderId = $get->order['id'];
+            }
+            
+            if ($orderId == null) {
+                $order = new Order;
+                $order->created_at = Carbon::now();
+                $order->status = 1;
+            } else {    
+                $order = Order::find($orderId);
+                if (!$order) {
+                    return response()->json(['error' => true, 'messages' => ['Order information not found']]);
+                }
+                $order->updated_at = Carbon::now();
+            }
+
             // creating orders
-            $order = new Order;
             $order->amc_id = $amcClient;
             $order->lender_id = $lender;
             $order->company_id = $company['id'];
-            $order->status = 1;
             $order->created_by = $user->id;
-            $order->received_date = $dueDate;
-            $order->due_date = $receiveDate;
+            $order->received_date = $receiveDate;
+            $order->due_date = $dueDate;
             $order->client_order_no = $clientOrderNo;
-            $order->system_order_no = $systemOrder ?? systemOrderNumber();
-            $order->created_at = Carbon::now();
+            $order->system_order_no = $systemOrder ?? $this->getSystemOrderNumber();
             $order->save();
 
 
@@ -65,27 +88,46 @@ class OrderApiController extends Controller
             $loanType = $step['loanType'];
 
             // Create appraisal details
-            $apprlDetails = new AppraisalDetail;
+
+            if ($orderId == null) {
+                $apprlDetails = new AppraisalDetail;
+                $apprlDetails->created_at = Carbon::now();
+            } else {    
+                $apprlDetails = AppraisalDetail::where('order_id', $order->id)->first();
+                if (!$apprlDetails) {
+                    return response()->json(['error' => true, 'messages' => ['Order information not found']]);
+                }
+                $apprlDetails->updated_at = Carbon::now();
+            }
+
             $apprlDetails->appraiser_id = $appraiserName;
             $apprlDetails->order_id = $order->id;
             $apprlDetails->loan_no = $loanNo;
             $apprlDetails->loan_type = $loanType;
             $apprlDetails->technology_fee = $technologyFee;
             $apprlDetails->fha_case_no = $fhaCaseNo;
-            $apprlDetails->created_at = Carbon::now();
             $apprlDetails->save();
 
             // Create Provider Types
-            $appraiserType = $step['appraiserType'];
             $fee = $get->providedData['extra'];
             $note = $step['note'];
 
-            $providerType = new ProvidedService;
+
+            if ($orderId == null) {
+                $providerType = new ProvidedService;
+                $providerType->created_at = Carbon::now();
+            } else {    
+                $providerType = ProvidedService::where('order_id', $order->id)->first();
+                if (!$providerType) {
+                    return response()->json(['error' => true, 'messages' => ['Order information not found']]);
+                }
+                $providerType->updated_at = Carbon::now();
+            }
+            
             $providerType->order_id = $order->id;
             $providerType->appraiser_type_fee = json_encode($fee);
             $providerType->note = $note;
             $providerType->total_fee = collect($fee)->sum('fee');
-            $providerType->created_at = Carbon::now();
             $providerType->save();
 
             $searchAddress = $step['searchAddress'];
@@ -97,7 +139,18 @@ class OrderApiController extends Controller
             $country = $step['country'];
 
             // create property info
-            $propertyInfo = new PropertyInfo;
+
+            if ($orderId == null) {
+                $propertyInfo = new PropertyInfo;
+                $propertyInfo->created_at = Carbon::now();
+            } else {    
+                $propertyInfo = PropertyInfo::where('order_id', $order->id)->first();
+                if (!$propertyInfo) {
+                    return response()->json(['error' => true, 'messages' => ['Order information not found']]);
+                }
+                $propertyInfo->updated_at = Carbon::now();
+            }
+
             $propertyInfo->order_id = $order->id;
             $propertyInfo->search_address = $searchAddress;
             $propertyInfo->street_name = $street;
@@ -108,7 +161,6 @@ class OrderApiController extends Controller
             $propertyInfo->unit_no = $unitNo;
             $propertyInfo->latitude = "1";
             $propertyInfo->longitude = "1";
-            $propertyInfo->created_at = Carbon::now();
             $propertyInfo->save();
 
 
@@ -118,8 +170,19 @@ class OrderApiController extends Controller
             $borrower_email_s = $step2['borrower_email_s'];
             $borrower_name = $step2['borrower_name'];
             $co_borrower_name = $step2['co_borrower_name'];
+
+
             // create borrower type
-            $borrowerType = new BorrowerInfo;
+            if ($orderId == null) {
+                $borrowerType = new BorrowerInfo;
+                $borrowerType->created_at = Carbon::now();
+            } else {    
+                $borrowerType = BorrowerInfo::where('order_id', $order->id)->first();
+                if (!$borrowerType) {
+                    return response()->json(['error' => true, 'messages' => ['Order information not found']]);
+                }
+                $borrowerType->updated_at = Carbon::now();
+            }
             $borrowerType->order_id = $order->id; 
             $borrowerType->borrower_name = $borrower_name;
             $borrowerType->co_borrower_name = $co_borrower_name;
@@ -127,7 +190,6 @@ class OrderApiController extends Controller
                 'email' => $borrower_email_s,
                 'phone' => $borrower_contact_s
             ]);
-            $borrowerType->created_at = Carbon::now();
             $borrowerType->save();
 
 
@@ -139,7 +201,17 @@ class OrderApiController extends Controller
             $email_address = $step2['email_address'];
             $email_address_s = $step2['email_address_s'];
 
-            $contactInfo = new ContactInfo;
+            if ($orderId == null) {
+                $contactInfo = new ContactInfo;
+                $contactInfo->created_at = Carbon::now();
+            } else {    
+                $contactInfo = ContactInfo::where('order_id', $order->id)->first();
+                if (!$contactInfo) {
+                    return response()->json(['error' => true, 'messages' => ['Order information not found']]);
+                }
+                $contactInfo->updated_at = Carbon::now();
+            }
+
             $contactInfo->order_id = $order->id;
             $contactInfo->is_borrower = $contactSame == 1 ? 1 : 0;
             $contactInfo->contact = $contact_info;
@@ -147,7 +219,6 @@ class OrderApiController extends Controller
                 'email' => $email_address_s,
                 'phone' => $contact_number_s
             ]);
-            $contactInfo->created_at = Carbon::now();
             $contactInfo->save();
 
             return response()->json([

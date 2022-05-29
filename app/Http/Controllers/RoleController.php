@@ -2,25 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\CrmHelper;
+use App\Models\CompanyUser;
+use Illuminate\Http\Response;
+use App\Services\CompanyService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Role;
+use Illuminate\Container\Container;
+use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\File;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Database\Eloquent\Model;
 use App\Http\Requests\RoleCreateRequest;
 use App\Http\Requests\RoleUpdateRequest;
-use App\Models\CompanyUser;
-use App\Services\CompanyService;
-use Illuminate\Container\Container;
 use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\File;
-use Spatie\Permission\Models\Role;
 
 class RoleController extends BaseController
 {
 	 protected CompanyService $service;
+	 use CrmHelper;
 	 
 	 /**
 		* Company Services.
@@ -38,7 +40,7 @@ class RoleController extends BaseController
 		*
 		* @return Application|Factory|View
 		*/
-	 public function index(): Application|Factory|View
+	 public function index() //: Application|Factory|View
 	 {
 			$roles       = $this->service->getCompanyAllRoles();
 			$permissions = $this->getModels();

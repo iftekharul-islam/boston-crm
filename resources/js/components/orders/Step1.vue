@@ -304,11 +304,13 @@
 export default {
   name: "Step1",
   props: {
+    order: [],
     systemOrderNo: String,
     orderListUrl: String,
     appraisalUsers: [],
     appraisalTypes: [],
     loanTypes: [],
+    type: null,
     amcClients: [],
     lenderClients: [],
 
@@ -359,6 +361,9 @@ export default {
   },
   created() {
     this.step1.systemOrder = this.systemOrderNo;
+    if (this.type == 2) {
+      this.setOrderValue();
+    }
     this.$root.$on('orderSubmitConfirm', (status) => {
         this.removeDataValue();
     });
@@ -394,7 +399,11 @@ export default {
     },
     addFee() {
         let newType = this.providerTypes.default.type;
-        let newFee = this.providerTypes.default.fee;        
+        let newFee = this.providerTypes.default.fee; 
+        this.setNewFee(newType, newFee);
+    },
+
+    setNewFee(newType, newFee) {
         if (newType && newFee) {
             let appType = [];
             for (let i in this.appraisalTypes) {
@@ -480,6 +489,36 @@ export default {
         this.providerTypes.extra = [];
         this.providerTypes.totalAmount = 0;
         this.$refs.orderForm.reset();
+    },
+    setOrderValue() {
+      let step1 = {
+        clientOrderNo: this.order.client_order_no,
+        unitNo: this.order.property_info.unit_no,
+        systemOrder: this.order.system_order_no,
+        loanNo: this.order.appraisal_detail.loan_no,
+        loanType: this.order.appraisal_detail.loan_type,
+        receiveDate: this.formateDate(this.order.received_date),
+        dueDate: this.formateDate(this.order.due_date),
+        technologyFee: this.order.appraisal_detail.technology_fee,
+        fhaCaseNo: this.order.appraisal_detail.fha_case_no,
+        appraiserName: this.order.appraisal_detail.appraiser_id,
+        appraiserType: '',
+        amcClient: this.order.amc.id,
+        lender: this.order.lender.id,
+        note: this.order.provider_service.note,
+        searchAddress: this.order.property_info.search_address,
+        state: this.order.property_info.state_name,
+        city: this.order.property_info.city_name,
+        street: this.order.property_info.street_name,
+        zipcode: this.order.property_info.zip,
+        country: this.order.property_info.country,
+      };
+      this.step1 = step1;
+      let setFee = JSON.parse(this.order.provider_service.appraiser_type_fee);
+      for( let i in setFee) {
+          let ele = setFee[i];
+          this.setNewFee(ele.typeId, ele.fee);
+      }
     }
   },
   watch: {
