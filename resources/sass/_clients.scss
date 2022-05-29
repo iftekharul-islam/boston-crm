@@ -133,12 +133,19 @@
 }
 .file-upload {
     width: fit-content;
+    cursor: pointer;
+    display: inline-block;
+    overflow: hidden;
+    position: relative;
     input {
-        position: absolute;
-        height: 100%;
-        width: 100%;
-        opacity: 0;
         cursor: pointer;
+        font-size: 100px;
+        filter: alpha(opacity=1);
+        -moz-opacity: 0.01;
+        opacity: 0.01;
+        position: absolute;
+        right: 0;
+        top: 0;
     }
     label {
         border: 1px solid $gray;
