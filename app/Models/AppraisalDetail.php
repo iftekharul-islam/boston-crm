@@ -24,6 +24,6 @@ class AppraisalDetail extends Model
     }
 
     public function loantype(){
-        return $this->belongsTo(LoanType::class,'loan_type_id','id');
+        return $this->belongsTo(LoanType::class,'loan_type','id');
     }
 }

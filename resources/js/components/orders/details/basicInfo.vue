@@ -29,6 +29,7 @@
     </div>
     <b-modal id="basic-info" size="lg" title="Edit Basic Information">
       <div class="modal-body">
+        <b-alert v-if="message" show variant="success"><a href="#" class="alert-link">{{ message }}</a></b-alert>
         <div class="row">
           <div class="col-md-6">
             <div class="group">
@@ -117,7 +118,8 @@ export default {
         due_date: new Date(),
         client_order_no: '',
         received_date: new Date(),
-      }
+      },
+      message: ''
     }
   },
   created() {
@@ -127,9 +129,9 @@ export default {
     getBasicInfo(){
       axios.get('get-basic-info/' + this.orderId)
           .then(res => {
-            this.info.client_order_no = res.data.appraisalDetails.client_order_no
-            this.info.due_date = res.data.appraisalDetails.due_date
-            this.info.received_date = res.data.appraisalDetails.received_date
+            this.info.client_order_no = res.data.orderDetails.client_order_no
+            this.info.due_date = res.data.orderDetails.due_date
+            this.info.received_date = res.data.orderDetails.received_date
 
             this.info.search_address = res.data.propertyInfo.search_address
             this.info.street_name = res.data.propertyInfo.street_name
@@ -143,9 +145,13 @@ export default {
       })
     },
     updateBasicInfoData(){
-      axios.post('update-basic-info/'+ this.orderId,this.info)
+      let that = this
+      axios.post('update-basic-info/'+ that.orderId,that.info)
           .then(res => {
-            console.log(res)
+            that.message = res.data.message
+            setTimeout(function(){
+              that.$bvModal.hide('basic-info')
+            }, 2000);
           }).catch(err => {
             console.log(err)
       })
