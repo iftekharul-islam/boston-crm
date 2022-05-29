@@ -2,34 +2,40 @@
 
 namespace App\Http\Controllers;
 
+
+use Carbon\Carbon;
+use Psy\Util\Json;
 use App\Helpers\Helper;
 use App\Models\ActivityLog;
-use App\Models\AppraisalDetail;
-use App\Models\BorrowerInfo;
-use App\Models\ContactInfo;
 use App\Models\Order;
+use App\Helpers\CrmHelper;
+use Illuminate\Support\Js;
+use App\Models\ContactInfo;
+use App\Models\BorrowerInfo;
 use App\Models\PropertyInfo;
-use App\Models\ProvidedService;
-use App\Repositories\OrderRepository;
-use App\Services\OrderService;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Carbon\Carbon;
-use Illuminate\Support\Js;
-use Psy\Util\Json;
+use App\Services\OrderService;
+use App\Models\AppraisalDetail;
+use App\Models\ProvidedService;
+use Illuminate\Http\JsonResponse;
 use Ramsey\Collection\Collection;
+
+use Illuminate\Contracts\View\View;
+use App\Repositories\OrderRepository;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Contracts\Foundation\Application;
+
 use Illuminate\Support\Facades\Auth;
+
 
 class OrderController extends BaseController
 {
     protected OrderService $service;
     protected OrderRepository $repository;
+    use CrmHelper;
 
     public function __construct(OrderService $order_service, OrderRepository $order_repository)
     {
@@ -43,10 +49,32 @@ class OrderController extends BaseController
      *
      * @return Application|Factory|View
      */
-    public function index() : View|Factory|Application
+    public function index(Request $get) : View|Factory|Application
     {
-        $orderData = Order::take(20)->get();
+        $orderData = $this->searchOrderData($get);
         return view('order.index', compact('orderData'));
+    }
+
+    /**
+     * Searching Order Data Request
+     * 
+     * @return JSON
+     */
+
+    public function searchOrderData(Request $get){
+        $data = $get->data;
+        $paginate = $get->paginate && $get->paginate > 0 ? $get->paginate : 10;
+        $order = Order::where(function($qry) use ($data) {
+            return $qry->where('system_order_no', "LIKE", "%$data%")
+                       ->orWhere("client_order_no", "LIKE", "%$data%")
+                       ->orWhere("received_date", "LIKE", "%$data%")
+                       ->orWhere("amc_id", "LIKE", "%$data%")
+                       ->orWhere("lender_id", "LIKE", "%$data%")
+                       ->orWhere("company_id", "LIKE", "%$data%")
+                       ->orWhere("due_date", "LIKE", "%$data%")
+                       ->orWhere("created_at", "LIKE", "%$data%");
+        })->with('user', 'amc', 'lender')->orderBy('id', 'desc')->paginate($paginate);
+        return $order;
     }
 
     /**
@@ -63,10 +91,9 @@ class OrderController extends BaseController
         $client_users = Helper::getClientsGroupBy($this->repository->getClients());
         $amc_clients = $client_users[0];
         $lender_clients = $client_users[1];
-        $company = auth()->user()->companies()->first();
 
+        $company = auth()->user()->companies()->first();        
         $userID = auth()->user()->id;
-
 
         return view('order.create',
             compact('system_order_no', 'userID', 'company', 'appraisal_users', 'appraisal_types', 'loan_types', 'amc_clients',
@@ -105,9 +132,28 @@ class OrderController extends BaseController
      *
      * @return Response
      */
-    public function edit(Order $order)
+    public function edit(Order $order, $id)
     {
+        $company = auth()->user()->companies()->first();        
+        $userID = auth()->user()->id;
+        $appraisal_users = $this->repository->getUserByRoleWise(role: 'appraiser');
+        $appraisal_types = $this->repository->getAppraisalTypes();
+        $loan_types = $this->repository->getLoanTypes();
+        $client_users = Helper::getClientsGroupBy($this->repository->getClients());
+        $amc_clients = $client_users[0];
+        $lender_clients = $client_users[1];
 
+        $order = Order::with(
+                'amc',
+                'lender',
+                'user', 
+                'appraisalDetail',
+                'providerService',
+                'propertyInfo',
+                'borrowerInfo',
+                'contactInfo'
+            )->where('id', $id)->first();
+        return view('order.edit',compact('order', 'appraisal_users', 'amc_clients', 'lender_clients', 'appraisal_types', 'loan_types', 'client_users', 'company', 'userID'));
     }
 
     /**

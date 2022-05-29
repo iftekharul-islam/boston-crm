@@ -2,10 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\ContactInfo;
+use App\Models\BorrowerInfo;
+use App\Models\PropertyInfo;
+use App\Models\AppraisalDetail;
+use App\Models\ProvidedService;
 use Spatie\MediaLibrary\HasMedia;
+use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Order extends Model implements HasMedia
 {
@@ -46,5 +51,30 @@ class Order extends Model implements HasMedia
     public function user()
     {
         return $this->belongsTo(User::class,'created_by','id');
+    }
+    
+    public function appraisalDetail()
+    {
+        return $this->belongsTo(AppraisalDetail::class, 'id', 'order_id');
+    }
+    
+    public function providerService()
+    {
+        return $this->belongsTo(ProvidedService::class, 'id', 'order_id');
+    }
+    
+    public function propertyInfo()
+    {
+        return $this->belongsTo(PropertyInfo::class, 'id', 'order_id');
+    }
+
+    public function borrowerInfo()
+    {
+        return $this->belongsTo(BorrowerInfo::class, 'id', 'order_id');
+    }
+   
+    public function contactInfo()
+    {
+        return $this->belongsTo(ContactInfo::class, 'id', 'order_id');
     }
 }

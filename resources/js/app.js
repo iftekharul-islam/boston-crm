@@ -26,6 +26,7 @@ Vue.component('ValidationObserver', ValidationObserver);
 
 import storage from "./store/index";
 import * as boston from "./helper/boston";
+import "./helper/config";
 
 /**
  * The following block of code may be used to automatically register your
@@ -65,10 +66,13 @@ Vue.component('invoice', require('./components/orders/details/invoice').default)
 Vue.component('notes', require('./components/orders/details/notes').default)
 Vue.component('activity-log', require('./components/orders/details/activityLog').default)
 Vue.component('order-list', require('./components/orders/list').default)
+Vue.component('order-edit', require('./components/orders/edit').default)
+Vue.component('paginate', require('./src/Pagination').default)
 
 axios.defaults.baseURL = window.origin;
 Vue.config.productionTip = false
 Vue.prototype.$boston = boston;
+import "./helper/BostonMixin";
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
