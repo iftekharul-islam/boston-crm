@@ -149,12 +149,13 @@
                                         </div>
                                     </div>
                                     <div class="group">
-                                        <label for="instruction" class="d-block mb-2 dashboard-label can-inspect">Trainee
-                                            can inspect </label>
+                                        <label for="instruction" class="d-block mb-2 dashboard-label can-inspect">Requirement File</label>
                                         <div class="position-relative file-upload">
-                                            <input type="file" name="instruction" id="instruction">
+                                            <input type="file" accept="application/octet-stream,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint,
+                                                text/plain, application/pdf" name="instruction" id="instruction">
                                             <label for="">Upload <img src="/img/upload.png"
                                                                       alt="boston profile"></label>
+                                            <span class="text-success" id="file-name"><a @if(isset($client->getMedia('clients')[0])) target="_blank" @else style="color: dimgray !important;cursor: default !important;" @endif href="{{ isset($client->getMedia('clients')[0]) ? $client->getMedia('clients')[0]->getFullUrl() : '#' }}"> @if(isset($client->getMedia('clients')[0])) Instruction File @else No File @endif</a></span>
                                         </div>
                                     </div>
                                 </div>
@@ -236,6 +237,10 @@
                 $(".address-label, .city-label, .state-label, .zip-label").removeClass('require');
                 $("#address,#city,#state,#zip").prop('required', false);
             }
+        });
+        $('#instruction').on('change',function() {
+            let file = $('#instruction')[0].files[0].name;
+            $('#file-name').text(file);
         });
         $("#discard").on("click",function (e){
             e.preventDefault();

@@ -28,9 +28,9 @@
                                             <select name="client_type" id="client-type" class="dashboard-input w-100"
                                                     required>
                                                 <option value="">Select a type</option>
-                                                <option value="amc">Amc</option>
-                                                <option value="lender">Lender</option>
-                                                <option value="both">Both</option>
+                                                <option value="amc" {{ (old("client_type") == 'amc' ? "selected":"") }}>Amc</option>
+                                                <option value="lender" {{ (old("client_type") == 'lender' ? "selected":"") }}>Lender</option>
+                                                <option value="both" {{ (old("client_type") == 'both' ? "selected":"") }}>Both</option>
                                             </select>
                                             <span class="icon-arrow-down bottom-arrow-icon"></span>
                                         </div>
@@ -38,7 +38,7 @@
                                     <div class="group">
                                         <label for="name" class="d-block mb-2 dashboard-label">Client name <span
                                                     class="text-danger require"></span></label>
-                                        <input type="text" id="name" name="name" class="dashboard-input w-100" required>
+                                        <input type="text" id="name" name="name" value="{{ old('name') }}" class="dashboard-input w-100" required>
                                     </div>
                                     <div class="group">
                                         <label for="email" class="d-block mb-2 dashboard-label">Email address <span
@@ -62,21 +62,21 @@
                                 <div class="right-side max-w-424 w-100">
                                     <div class="group">
                                         <label for="address" class="d-block mb-2 dashboard-label address-label">Address</label>
-                                        <input type="text" id="address" name="address" class="dashboard-input w-100">
+                                        <input type="text" id="address" name="address" value="{{ old('address') }}" class="dashboard-input w-100">
                                     </div>
                                     <div class="group">
                                         <label for="city" class="d-block mb-2 dashboard-label city-label">City </label>
-                                        <input type="text" id="city" name="city" class="dashboard-input w-100">
+                                        <input type="text" id="city" name="city" value="{{ old('city') }}" class="dashboard-input w-100">
                                     </div>
                                     <div class="group">
                                         <label for="state" class="d-block mb-2 dashboard-label state-label">State <span
                                                     class="text-danger"></span></label>
-                                        <input type="text" name="state" id="state" class="dashboard-input w-100">
+                                        <input type="text" name="state" id="state" value="{{ old('state') }}" class="dashboard-input w-100">
                                     </div>
                                     <div class="group">
                                         <label for="zip" class="d-block mb-2 dashboard-label zip-label">Zip code <span
                                                     class="text-danger"></span></label>
-                                        <input type="text" id="zip" name="zip" class="dashboard-input w-100">
+                                        <input type="text" id="zip" name="zip" value="{{ old('zip') }}" class="dashboard-input w-100">
                                     </div>
                                 </div>
                             </div>
@@ -89,20 +89,20 @@
                                                class="d-block mb-2 dashboard-label fee-for-1004uad-label">Technology fee
                                             for
                                             appraisal like 1004UAD</label>
-                                        <input type="number" name="fee_for_1004uad" id="fee-for-1004uad"
+                                        <input type="number" name="fee_for_1004uad" value="{{ old('fee_for_1004uad') }}" id="fee-for-1004uad"
                                                class="dashboard-input w-100">
                                     </div>
                                     <div class="group">
                                         <label for="fee-for-1004d" class="d-block mb-2 dashboard-label fee-for-1004d-label">Technology fee for appraisal like 1004D</label>
-                                        <input type="number" name="fee_for_1004d" id="fee-for-1004d" class="dashboard-input w-100">
+                                        <input type="number" name="fee_for_1004d" value="{{ old('fee_for_1004d') }}" id="fee-for-1004d" class="dashboard-input w-100">
                                     </div>
                                     <div class="group">
                                         <label for="deducts-technology-fee" class="d-block mb-2 dashboard-label deducts-technology-fee-label">Deduction of tech fee during payment </label>
                                         <div class="position-relative">
-                                            <select name="deducts_technology_fee" id="deducts-technology-fee" class="dashboard-input w-100">
+                                            <select name="deducts_technology_fee" value="{{ old('deducts_technology_fee') }}" id="deducts-technology-fee" class="dashboard-input w-100">
                                                 <option value="">Choose an option</option>
-                                                <option value="1">Yes</option>
-                                                <option value="0">No</option>
+                                                <option value="1" {{ (old("deducts_technology_fee") == 1 ? "selected":"") }}>Yes</option>
+                                                <option value="0" {{ (old("deducts_technology_fee") == 0 ? "selected":"") }}>No</option>
                                             </select>
                                             <span class="icon-arrow-down bottom-arrow-icon"></span>
                                         </div>
@@ -112,8 +112,8 @@
                                         <div class="position-relative">
                                             <select name="can_sign" id="can-sign" class="dashboard-input w-100">
                                                 <option value="">Choose an option</option>
-                                                <option value="1">Yes</option>
-                                                <option value="0">N/A</option>
+                                                <option value="1" {{ (old("can_sign") == 1 ? "selected":"") }}>Yes</option>
+                                                <option value="0" {{ (old("can_sign") == 0 ? "selected":"") }}>N/A</option>
                                             </select>
                                             <span class="icon-arrow-down bottom-arrow-icon"></span>
                                         </div>
@@ -124,8 +124,8 @@
                                         <div class="position-relative">
                                             <select name="can_inspect" id="can-inspect" class="dashboard-input w-100">
                                                 <option value="">Choose an option</option>
-                                                <option value="1">Yes</option>
-                                                <option value="0">N/A</option>
+                                                <option value="1" {{ (old("can_inspect") == 1 ? "selected":"") }}>Yes</option>
+                                                <option value="0" {{ (old("can_inspect") == 0 ? "selected":"") }}>N/A</option>
                                             </select>
                                             <span class="icon-arrow-down bottom-arrow-icon"></span>
                                         </div>
