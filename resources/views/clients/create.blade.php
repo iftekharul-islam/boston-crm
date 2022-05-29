@@ -170,7 +170,29 @@
             phoneCount++;
         })
         $(function () {
-            let clientType = $("#client-type").val();
+            let clientType = '';
+            $('#client-type').on('change', function (e) {
+                e.preventDefault();
+                clientType = $(this).val();
+                if (clientType === 'lender') {
+                    removeError();
+
+                    $(".address-label, .city-label, .state-label, .zip-label").addClass('require');
+
+                    $(".deducts-technology-fee-label, .fee-for-1004uad-label, .fee-for-1004d-label, .can-sign-label, .can-inspect-label").removeClass('require');
+                }else if(clientType === 'both'){
+                    removeError();
+
+                    $(".address-label, .city-label, .state-label, .zip-label,.deducts-technology-fee-label, .fee-for-1004uad-label, .fee-for-1004d-label, .can-sign-label, .can-inspect-label").addClass('require');
+                } else {
+                    removeError();
+
+                    $(".deducts-technology-fee-label, .fee-for-1004uad-label, .fee-for-1004d-label, .can-sign-label, .can-inspect-label").addClass('require');
+
+                    $(".address-label, .city-label, .state-label, .zip-label").removeClass('require');
+
+                }
+            });
             $("#client-create-form").validate({
                 rules: {
                     name: {
@@ -201,7 +223,7 @@
                     },
                     address: {
                         required: function () {
-                            return clientType !== 'amc'
+                            return clientType === 'lender' || clientType === 'both'
                         },
                         normalizer: function (value) {
                             return value.trim();
@@ -209,7 +231,7 @@
                     },
                     zip: {
                         required: function () {
-                            return clientType !== 'amc'
+                            return clientType === 'lender' || clientType === 'both'
                         },
                         normalizer: function (value) {
                             return value.trim();
@@ -217,7 +239,7 @@
                     },
                     state: {
                         required: function () {
-                            return clientType !== 'amc'
+                            return clientType === 'lender' || clientType === 'both'
                         },
                         normalizer: function (value) {
                             return value.trim();
@@ -225,7 +247,7 @@
                     },
                     city: {
                         required: function () {
-                            return clientType !== 'amc'
+                            return clientType === 'lender' || clientType === 'both'
                         },
                         normalizer: function (value) {
                             return value.trim();
@@ -233,7 +255,7 @@
                     },
                     fee_for_1004uad: {
                         required: function () {
-                            return clientType !== 'lender'
+                            return clientType === 'amc' || clientType === 'both'
                         },
                         normalizer: function (value) {
                             return value.trim();
@@ -241,7 +263,7 @@
                     },
                     fee_for_1004d: {
                         required: function () {
-                            return clientType !== 'lender'
+                            return clientType === 'amc' || clientType === 'both'
                         },
                         normalizer: function (value) {
                             return value.trim();
@@ -249,17 +271,17 @@
                     },
                     deducts_technology_fee: {
                         required: function () {
-                            return clientType !== 'lender'
+                            return clientType === 'amc' || clientType === 'both'
                         }
                     },
                     can_sign: {
                         required: function () {
-                            return clientType !== 'lender'
+                            return clientType === 'amc' || clientType === 'both'
                         }
                     },
                     can_inspect: {
                         required: function () {
-                            return clientType !== 'lender'
+                            return clientType === 'amc' || clientType === 'both'
                         }
                     },
                 },
@@ -322,28 +344,6 @@
         $('#instruction').on('change',function() {
             let file = $('#instruction')[0].files[0].name;
             $('#file-name').text(file);
-        });
-        $('#client-type').on('change', function (e) {
-            e.preventDefault();
-            let clientType = $(this).val();
-            if (clientType === 'lender') {
-                removeError();
-
-                $(".address-label, .city-label, .state-label, .zip-label").addClass('require');
-
-                $(".deducts-technology-fee-label, .fee-for-1004uad-label, .fee-for-1004d-label, .can-sign-label, .can-inspect-label").removeClass('require');
-            }else if(clientType === 'both'){
-                removeError();
-
-                $(".address-label, .city-label, .state-label, .zip-label,.deducts-technology-fee-label, .fee-for-1004uad-label, .fee-for-1004d-label, .can-sign-label, .can-inspect-label").addClass('require');
-            } else {
-                removeError();
-
-                $(".deducts-technology-fee-label, .fee-for-1004uad-label, .fee-for-1004d-label, .can-sign-label, .can-inspect-label").addClass('require');
-
-                $(".address-label, .city-label, .state-label, .zip-label").removeClass('require');
-
-            }
         });
         function removeError(){
             $("#client-create-form").data('validator').resetForm();
