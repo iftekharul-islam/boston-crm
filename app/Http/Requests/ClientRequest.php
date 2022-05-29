@@ -11,7 +11,7 @@ class ClientRequest extends FormRequest
 	 public function rules(): array
 	 {
 			return [
-				"name"                   => "required",
+				"name"                   => "required|unique:clients,name," . (int) $this->route( 'id' ),
 				"email"                  => "required|unique:clients,email," . (int) $this->route( 'id' ),
 				"phone"                  => "required|unique:clients,phone," . (int) $this->route( 'id' ),
 				"client_type"            => "required",
