@@ -82,6 +82,7 @@ class OrderApiController extends Controller
             $order->save();
 
 
+
             $fhaCaseNo = $step['fhaCaseNo'];
             $loanNo = $step['loanNo'];
             $technologyFee = $step['technologyFee'];
@@ -108,6 +109,9 @@ class OrderApiController extends Controller
             $apprlDetails->fha_case_no = $fhaCaseNo;
             $apprlDetails->save();
 
+            
+            
+
             // Create Provider Types
             $fee = $get->providedData['extra'];
             $note = $step['note'];
@@ -129,6 +133,7 @@ class OrderApiController extends Controller
             $providerType->note = $note;
             $providerType->total_fee = collect($fee)->sum('fee');
             $providerType->save();
+
 
             $searchAddress = $step['searchAddress'];
             $state = $step['state'];

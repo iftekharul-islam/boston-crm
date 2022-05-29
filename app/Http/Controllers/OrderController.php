@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+
 use Carbon\Carbon;
 use Psy\Util\Json;
-use App\Models\Order;
 use App\Helpers\Helper;
+use App\Models\ActivityLog;
+use App\Models\Order;
 use App\Helpers\CrmHelper;
 use Illuminate\Support\Js;
 use App\Models\ContactInfo;
@@ -18,12 +20,16 @@ use App\Models\AppraisalDetail;
 use App\Models\ProvidedService;
 use Illuminate\Http\JsonResponse;
 use Ramsey\Collection\Collection;
+
 use Illuminate\Contracts\View\View;
 use App\Repositories\OrderRepository;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Contracts\Foundation\Application;
+
+use Illuminate\Support\Facades\Auth;
+
 
 class OrderController extends BaseController
 {
@@ -67,7 +73,7 @@ class OrderController extends BaseController
                        ->orWhere("company_id", "LIKE", "%$data%")
                        ->orWhere("due_date", "LIKE", "%$data%")
                        ->orWhere("created_at", "LIKE", "%$data%");
-        })->with('user', 'amc', 'lender')->latest()->paginate($paginate);
+        })->with('user', 'amc', 'lender')->orderBy('id', 'desc')->paginate($paginate);
         return $order;
     }
 
@@ -76,18 +82,19 @@ class OrderController extends BaseController
      *
      * @return Application|Factory|View
      */
-    public function create() // : Application|Factory|View
+    public function create(): View|Factory|Application
     {
-        $system_order_no = $this->getSystemOrderNumber();
+        $system_order_no = $this->generateSystemOrderNo();
         $appraisal_users = $this->repository->getUserByRoleWise(role: 'appraiser');
         $appraisal_types = $this->repository->getAppraisalTypes();
         $loan_types = $this->repository->getLoanTypes();
         $client_users = Helper::getClientsGroupBy($this->repository->getClients());
         $amc_clients = $client_users[0];
         $lender_clients = $client_users[1];
+
         $company = auth()->user()->companies()->first();        
         $userID = auth()->user()->id;
-    
+
         return view('order.create',
             compact('system_order_no', 'userID', 'company', 'appraisal_users', 'appraisal_types', 'loan_types', 'amc_clients',
                 'lender_clients'));
@@ -113,7 +120,9 @@ class OrderController extends BaseController
     public function show($id)
     {
         $order_types = $this->repository->getOrderTypes($id);
-        return view('order.show',compact('order_types'));
+        $order_due_date = $this->repository->getOrderDueDate($id);
+        $diff_in_days = Carbon::parse($order_due_date->due_date)->diffInDays();
+        return view('order.show', compact('order_types','diff_in_days'));
     }
 
     /**
@@ -191,6 +200,14 @@ class OrderController extends BaseController
     public function updateBasicInfo(Request $request, $order_id): JsonResponse
     {
         $this->repository->updatePropertyInfo($order_id, $request->all());
+
+        $data = [
+          "activity_text" => "Basic info updated",
+          "activity_by" => Auth::id(),
+          "order_id" => $order_id
+        ];
+
+        $this->repository->addActivity($data);
         return response()->json(["message" => "Basic info updated successfully !"]);
     }
 
@@ -221,9 +238,9 @@ class OrderController extends BaseController
      * @param $order_id
      * @return JsonResponse
      */
-    public function updateAppraisalInfo(Request $request,$order_id) : JsonResponse
+    public function updateAppraisalInfo(Request $request, $order_id): JsonResponse
     {
-        $this->repository->updateAppraisalDetails($order_id,$request->all());
+        $this->repository->updateAppraisalDetails($order_id, $request->all());
         return response()->json(["message" => "Appraisal info updated successfully"]);
     }
 
@@ -257,43 +274,71 @@ class OrderController extends BaseController
         return response()->json(["clients" => $clients]);
     }
 
-
-    public function publicOrder($order_id)
+    /**
+     * @param $order_id
+     * @return Application|Factory|View
+     */
+    public function publicOrder($order_id): View|Factory|Application
     {
-        $order = AppraisalDetail::where('order_id',$order_id)->select("system_order_no")->first();
+        $order = AppraisalDetail::where('order_id', $order_id)->select("system_order_no")->first();
         $order_types = $this->repository->getOrderTypes($order_id);
-        return view('order.public-order',compact('order','order_types'));
+        return view('order.public-order', compact('order', 'order_types'));
     }
 
-    public function uploadOrderFiles(Request $request,$order_id)
+    public function uploadOrderFiles(Request $request, $order_id)
     {
-        $this->repository->saveOrderFiles($request->all(),$order_id);
-        if($request->ajax()){
+        $this->repository->saveOrderFiles($request->all(), $order_id);
+        if ($request->ajax()) {
             return response()->json(["message" => "Order file uploaded successfully"]);
         }
         return redirect()
-            ->to('public-order/'. $order_id)
-            ->with(['success'=>'Order file uploaded successfully']);
+            ->to('public-order/' . $order_id)
+            ->with(['success' => 'Order file uploaded successfully']);
 
     }
 
+
+    /**
+     * @param $order_id
+     * @return JsonResponse
+     */
+    public function getActivityLog($order_id): JsonResponse
+    {
+        $activity_log = $this->repository->getActivityLogData($order_id);
+        return response()->json(["activityLog" => $activity_log]);
+    }
+
+    /**
+     * @return int|string
+     */
+    public function generateSystemOrderNo(): int|string
+    {
+        $string_format = "BAS-000001";
+        $check_last_string = Order::latest()->first();
+        if($check_last_string){
+            $system_order_no = ++$check_last_string->system_order_no;
+        }else{
+            $system_order_no = $string_format;
+        }
+        return $system_order_no;
+    }
     public function saveOrderData()
     {
 //        Order::create([
-//            "amc_id" => 3,
+//            "amc_id" => 1,
 //            "lender_id" => 2,
-//            "status" => 1
+//            "status" => 1,
+//            "client_order_no" => "CLORD-1",
+//            "system_order_no" => "BAS-1212",
+//            "received_date" => Carbon::parse('05/18/2022')->format('Y-m-d'),
+//            "due_date" => Carbon::parse('05/30/2022')->format('Y-m-d'),
 //        ]);
 //        AppraisalDetail::create([
 //           "order_id" => 1,
-//           "client_order_no" => "CLIORD1",
-//           "system_order_no" => "BAS-1212",
-//           "appraiser_type_id" => 1,
-//            "loan_type_id" => 1,
+//           "appraiser_id" => 1,
+//            "loan_type" => 1,
 //            "loan_no" => "LoanNumber",
 //            "fha_case_no" => "FHACN12",
-//            "received_date" => Carbon::parse('05/18/2022')->format('Y-m-d'),
-//            "due_date" => Carbon::parse('05/20/2022')->format('Y-m-d'),
 //            "technology_fee" => 1000
 //        ]);
 //        ProvidedService::create([

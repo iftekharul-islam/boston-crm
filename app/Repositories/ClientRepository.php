@@ -35,10 +35,16 @@ class ClientRepository extends BaseRepository
         $update_model->update( $attributes );
 
         if (isset($attributes['instruction'])) {
+            $this->model->find($id)->getMedia('clients')[0]->delete();
             $this->model->find($id)->addMedia($attributes['instruction'])->toMediaCollection('clients');
         }
 
         return $update_model;
+    }
+
+    public function getClientDetails($id)
+    {
+        return $this->model->where('id',$id)->with(['user' => function($query){ $query->select('id','name'); }])->first();
     }
 
     public function getClientsData(string $type, int $page_number, string $search_key,int $company_id): array

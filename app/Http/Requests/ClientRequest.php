@@ -2,18 +2,28 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\UniqueEmail;
+use App\Rules\UniquePhone;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
+
 class ClientRequest extends FormRequest
 {
+
+    public function response(array $errors): \Illuminate\Http\RedirectResponse
+    {
+        return Redirect::back()->withErrors($errors)->withInput();
+    }
+
 	 public function rules(): array
 	 {
 			return [
-				"name"                   => "required",
-				"email"                  => "required|unique:clients,email," . (int) $this->route( 'id' ),
-				"phone"                  => "required|unique:clients,phone," . (int) $this->route( 'id' ),
+				"name"                   => "required|unique:clients,name," . (int) $this->route( 'id' ),
+				"email"                  => ["required","array",new UniqueEmail((int) $this->route( 'id' ))],
+				"phone"                  => ["required","array",new UniquePhone((int) $this->route( 'id' ))],
 				"client_type"            => "required",
 				"address"                => "required_if:client_type,==,lender",
 				"city"                   => "required_if:client_type,==,lender",
