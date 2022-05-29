@@ -141,9 +141,9 @@ class OrderController extends BaseController
      */
     public function getBasicInfo($order_id): JsonResponse
     {
-        $appraisal_details = $this->repository->getAppraisalDetails($order_id);
+        $order_details = $this->repository->getOrderDetails($order_id);
         $property_info = $this->repository->getPropertyInfo($order_id);
-        return response()->json(["appraisalDetails" => $appraisal_details, "propertyInfo" => $property_info]);
+        return response()->json(["orderDetails" => $order_details, "propertyInfo" => $property_info]);
     }
 
     /**
@@ -172,6 +172,7 @@ class OrderController extends BaseController
      */
     public function getAppraisalInfo($order_id): JsonResponse
     {
+        $order_details = $this->repository->getOrderDetails($order_id);
         $appraisal_details = $this->repository->getAppraisalDetails($order_id);
         $provided_service = $this->repository->getProvidedService($order_id);
         $appraisal_users = $this->repository->getUserByRoleWise(role: 'appraiser');
@@ -179,6 +180,7 @@ class OrderController extends BaseController
         $loan_types = $this->repository->getLoanTypes();
 
         return response()->json([
+            "orderDetails" => $order_details,
             "appraisalDetails" => $appraisal_details,
             "providedService" => $provided_service,
             "appraiserTypes" => $appraisal_types,
@@ -225,7 +227,9 @@ class OrderController extends BaseController
     public function getClientsInfo($order_id): JsonResponse
     {
         $clients = $this->repository->getClientDetails($order_id);
-        return response()->json(["clients" => $clients]);
+        $amc_file = $this->repository->getClientFile($clients->amc_id);
+        $lender_file = $this->repository->getClientFile($clients->lender_id);
+        return response()->json(["clients" => $clients,'amc_file' => $amc_file,'lender_file' => $lender_file]);
     }
 
     /**

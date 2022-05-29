@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;
 use JetBrains\PhpStorm\NoReturn;
+use PhpParser\Node\Scalar\String_;
 use Spatie\Permission\Models\Role;
 
 class OrderRepository extends BaseRepository
@@ -66,7 +67,7 @@ class OrderRepository extends BaseRepository
      */
     public function getOrderDueDate($order_id): mixed
     {
-        return $this->model->where('id',$order_id)->select('due_date')->first();
+        return $this->model->where('id', $order_id)->select('due_date')->first();
     }
 
     /**
@@ -131,6 +132,15 @@ class OrderRepository extends BaseRepository
      * @param $order_id
      * @return Builder|Model
      */
+    public function getOrderDetails($order_id): Builder|Model
+    {
+        return Order::find($order_id);
+    }
+
+    /**
+     * @param $order_id
+     * @return Builder|Model
+     */
     public function getAppraisalDetails($order_id): Builder|Model
     {
         return AppraisalDetail::query()->with([
@@ -175,12 +185,12 @@ class OrderRepository extends BaseRepository
             "country" => $data["country"],
             "unit_no" => $data["unit_no"]
         ]);
-        $appraisal_details = AppraisalDetail::query()->where('order_id', $order_id)->update([
-            "client_order_no" => $data["order_no"],
+        $order_details = Order::query()->where('id', $order_id)->update([
+            "client_order_no" => $data["client_order_no"],
             "received_date" => Carbon::parse($data["received_date"])->format('Y-m-d'),
             "due_date" => Carbon::parse($data["due_date"])->format('Y-m-d')
         ]);
-        return ($property_info && $appraisal_details);
+        return ($property_info && $order_details);
     }
 
     /**
@@ -188,10 +198,18 @@ class OrderRepository extends BaseRepository
      * @param $data
      * @return bool
      */
-    public function updateAppraisalDetails($order_id,$data): bool
+    public function updateAppraisalDetails($order_id, $data): bool
     {
-        return AppraisalDetail::query()->where('order_id',$order_id)
-            ->update($data);
+        return AppraisalDetail::query()
+            ->where('order_id', $order_id)
+            ->update([
+                "appraiser_id" => $data['appraiser_id'],
+                "loan_type" => $data['loan_type'],
+                "technology_fee" => $data['technology_fee'],
+                "fha_case_no" => $data['fha_case_no'],
+                "loan_no" => $data['loan_no'],
+            ]);
+//        $provided_service = ProvidedService::
     }
 
     /**
@@ -200,12 +218,12 @@ class OrderRepository extends BaseRepository
      */
     public function getBorrowerDetails($order_id): Builder|Model
     {
-        return BorrowerInfo::query()->where('order_id',$order_id)->first();
+        return BorrowerInfo::query()->where('order_id', $order_id)->first();
     }
 
     public function getContactDetails($order_id): Builder|Model
     {
-        return ContactInfo::query()->where('order_id',$order_id)->first();
+        return ContactInfo::query()->where('order_id', $order_id)->first();
     }
 
     /**
@@ -214,12 +232,26 @@ class OrderRepository extends BaseRepository
      */
     public function getClientDetails($order_id): Builder|Model
     {
-        return Order::query()->where('id',$order_id)->with([
-            'amc'=> function($query){
-                return $query->select('id','name');
-            },'lender' => function($query){
-                return $query->select('id','name');
+        return Order::query()->where('id', $order_id)
+            ->select('amc_id', 'lender_id')
+            ->with(['amc' => function ($query) {
+                return $query->select('id', 'name');
+            }, 'lender' => function ($query) {
+                return $query->select('id', 'name','address');
             }])->first();
+    }
+
+    /**
+     * @param $client_id
+     * @return String
+     */
+    public function getClientFile($client_id): String
+    {
+        $client_file = Client::find($client_id)->getMedia('clients');
+        if (isset($client_file[0])) {
+            return $client_file[0]->getFullUrl();
+        }
+        return '';
     }
 
     /**
@@ -227,11 +259,11 @@ class OrderRepository extends BaseRepository
      * @param $order_id
      * @return mixed
      */
-    public function saveOrderFiles($data,$order_id): mixed
+    public function saveOrderFiles($data, $order_id): mixed
     {
         return $this->model->find($order_id)
             ->addAllMediaFromRequest($data['files'])
-            ->each(function ($fileAdder) use ($data){
+            ->each(function ($fileAdder) use ($data) {
                 $fileAdder->toMediaCollection($data['file_type']);
             });
     }
@@ -251,8 +283,10 @@ class OrderRepository extends BaseRepository
      */
     public function getActivityLogData($order_id): Builder|Collection
     {
-        return ActivityLog::query()->where('order_id',$order_id)->with([
-            'user' => function($query){ $query->select('id','name'); }
+        return ActivityLog::query()->where('order_id', $order_id)->with([
+            'user' => function ($query) {
+                $query->select('id', 'name');
+            }
         ])->get();
     }
 }

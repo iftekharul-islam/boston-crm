@@ -44,6 +44,7 @@
     <!-- modal -->
      <b-modal id="appraisal-info" size="lg" title="Edit appraisal Information">
         <div class="modal-body">
+          <b-alert v-if="message" show variant="success"><a href="#" class="alert-link">{{ message }}</a></b-alert>
           <div class="row">
             <div class="col-md-6">
               <div class="group">
@@ -75,7 +76,7 @@
               <div class="group">
                 <label for="" class="d-block mb-2 dashboard-label">Loan Type <span class="require"></span></label>
                 <b-form-select
-                    v-model="details.loan_type_id"
+                    v-model="details.loan_type"
                     :options="loanTypes"
                     value-field="id"
                     text-field="name"
@@ -125,7 +126,7 @@
           appraiser_name: '',
           appraiser_type_id: '',
           appraiser_type: '',
-          loan_type_id: '',
+          loan_type: '',
           loan_type_name: '',
           client_order_no: '',
           system_order_no: '',
@@ -137,7 +138,8 @@
         },
         appraiserTypes: '',
         appraisers: '',
-        loanTypes: ''
+        loanTypes: '',
+        message: ''
       }
     },
     mounted() {
@@ -145,34 +147,38 @@
     },
     methods:{
       getAppraisalDetails(){
+        let that = this
         axios.get('get-appraisal-info/'+this.orderId)
             .then(res => {
-              this.details.appraiser_name = res.data.appraisalDetails.appraiser.name
-              this.details.loan_type_name = res.data.appraisalDetails.loantype.name
-              this.details.appraiser_type = JSON.parse(res.data.providedService.appraiser_type_fee)[0]["type"]
-              this.details.appraiser_type_id = JSON.parse(res.data.providedService.appraiser_type_fee)[0]["id"]
+              console.log('data'+res.data.orderDetails)
+              that.details.appraiser_name = res.data.appraisalDetails.appraiser.name
+              that.details.loan_type_name = res.data.appraisalDetails.loantype.name
 
-              this.details.client_order_no = res.data.appraisalDetails.client_order_no
-              this.details.appraiser_id = res.data.appraisalDetails.appraiser_id
-              this.details.loan_type_id = res.data.appraisalDetails.loan_type_id
-              this.details.system_order_no = res.data.appraisalDetails.system_order_no
-              this.details.loan_no = res.data.appraisalDetails.loan_no
-              this.details.fha_case_no = res.data.appraisalDetails.fha_case_no
-              this.details.due_date = res.data.appraisalDetails.due_date
-              this.details.received_date = res.data.appraisalDetails.received_date
-              this.details.technology_fee = res.data.appraisalDetails.technology_fee
+              that.details.client_order_no = res.data.orderDetails.client_order_no
+              that.details.appraiser_id = res.data.appraisalDetails.appraiser_id
+              that.details.loan_type = res.data.appraisalDetails.loan_type
+              that.details.system_order_no = res.data.orderDetails.system_order_no
+              that.details.loan_no = res.data.appraisalDetails.loan_no
+              that.details.fha_case_no = res.data.appraisalDetails.fha_case_no
+              that.details.due_date = res.data.appraisalDetails.due_date
+              that.details.received_date = res.data.appraisalDetails.received_date
+              that.details.technology_fee = res.data.appraisalDetails.technology_fee
 
-              this.appraiserTypes = res.data.appraiserTypes
-              this.appraisers = res.data.appraisers
-              this.loanTypes = res.data.loanTypes
+              that.appraiserTypes = res.data.appraiserTypes
+              that.appraisers = res.data.appraisers
+              that.loanTypes = res.data.loanTypes
             }).catch(err => {
           console.log(err)
         })
       },
       updateAppraisalDetails() {
-        axios.post('update-appraisal-info/' + this.orderId)
+        let that = this
+        axios.post('update-appraisal-info/' + that.orderId,that.details)
             .then( res => {
-              console.log(res)
+              that.message = res.data.message
+              setTimeout(function(){
+                that.$bvModal.hide('basic-info')
+              }, 2000);
             }).catch( err =>{
               console.log(err)
         })
