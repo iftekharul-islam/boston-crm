@@ -55,7 +55,7 @@
                                         <label for="phone" class="d-block mb-2 dashboard-label">Phone no <span
                                                     class="text-danger require"></span></label>
                                         @foreach(json_decode($client->phone) as $phone)
-                                            <input type="text" name="phone" id="phone" value="{{ $phone }}" class="dashboard-input w-100 mb-3" required>
+                                            <input type="text" name="phone[]" id="phone" value="{{ $phone }}" class="dashboard-input w-100 mb-3" required>
                                         @endforeach
                                         <div id="phone-append"></div>
                                         <div class="text-end">
