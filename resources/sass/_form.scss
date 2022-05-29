@@ -1,6 +1,7 @@
 .error {
     color: $danger
 }
+
 .step-btn {
     padding: 1px 35px;
     height: 24px;
@@ -12,7 +13,6 @@
         &::before {
             border-left: 16px solid $gray;
         }
-        
     }
     &:nth-child(1) {
         border-top-left-radius: 4px;
@@ -39,27 +39,32 @@
         border-top: 12px solid transparent;
         border-bottom: 12px solid transparent;
         top: 0px;
-      }
-  }
+    }
+}
+
 .add-order {
     background: $white;
     border-radius: 8px;
     padding: 32px;
 }
+
 .form-box {
     background: #F1F1F1;
     border-radius: 8px;
     padding: 24px 32px;
 }
+
 .group {
     margin-bottom: 32px;
     &:last-of-type {
         margin-bottom: 0;
     }
 }
+
 .max-w-424 {
     max-width: 424px;
 }
+
 .dashboard-input {
     height: 40px;
     background: $white;
@@ -73,6 +78,7 @@
         border: 1px solid $primary;
     }
 }
+
 .dashboard-textarea {
     background: $white;
     border: 1px solid $white;
@@ -86,36 +92,43 @@
         border: 1px solid $primary;
     }
 }
+
 select::-ms-expand {
     display: none;
 }
+
 select {
     -webkit-appearance: none;
     -moz-appearance: none;
     text-indent: 1px;
     text-overflow: '';
-  }
-  input[type="date"]::-webkit-calendar-picker-indicator {
-      opacity: 0;
-  }
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    opacity: 0;
+}
+
 .bottom-arrow-icon {
     position: absolute;
     right: 16px;
     top: 14px;
     pointer-events: none;
 }
+
 .calender-form {
     position: absolute;
     right: 16px;
     top: 12px;
     pointer-events: none;
 }
+
 .add-more {
     background: transparent;
     color: #2F415E;
     border: none;
     box-shadow: none;
 }
+
 .require {
     &::after {
         content: '*';
@@ -173,6 +186,7 @@ select {
         }
     }
 }
+
 .dark-checkbox {
     .checkbox-input {
         &:checked {

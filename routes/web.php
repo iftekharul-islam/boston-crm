@@ -13,6 +13,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\AppraisalTypeController;
 use App\Http\Controllers\LoanTypeController;
 use App\Http\Controllers\IconController;
+use App\Http\Controllers\MarketingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -93,9 +94,22 @@ Route::group( [ 'middleware' => [ 'auth:sanctum' ] ], function () {
 		 [ OrderController::class, 'destroy' ] )->middleware( 'role_permission:delete.order' )->name( 'orders.destroy' );
 
      //order details
+    Route::get('save-order-data',[OrderController::class,'saveOrderData']);
 
-    Route::get('/get-basic-info',[OrderController::class,'getBasicInfo'])->middleware('role_permission:view.order')->name('order.details.basic.info');
-     //Appraisal Type
+    Route::get('/get-basic-info/{id}',[OrderController::class,'getBasicInfo'])->middleware('role_permission:view.order');
+    Route::get('/get-appraisal-info/{id}',[OrderController::class,'getAppraisalInfo'])->middleware('role_permission:view.order');
+    Route::get('/get-borrower-info/{id}',[OrderController::class,'getBorrowerInfo'])->middleware('role_permission:view.order');
+    Route::get('/get-contact-info/{id}',[OrderController::class,'getContactInfo'])->middleware('role_permission:view.order');
+    Route::get('/get-clients-info/{id}',[OrderController::class,'getClientsInfo']);
+    Route::get('/get-activity-log/{id}',[OrderController::class,'getActivityLog']);
+
+
+    Route::post('/update-basic-info/{id}',[OrderController::class,'updateBasicInfo'])->middleware('role_permission:update.order');
+    Route::post('/update-appraisal-info/{id}',[OrderController::class,'updateAppraisalInfo'])->middleware('role_permission:update.order');
+    Route::post('/update-borrower-info/{id}',[OrderController::class,'updateBorrowerInfo'])->middleware('role_permission:update.order');
+    Route::post('/update-contact-info/{id}',[OrderController::class,'updateContactInfo'])->middleware('role_permission:update.order');
+
+    //Appraisal Type
 	 Route::get( 'appraisal-types',
 		 [ AppraisalTypeController::class, 'index' ] )->middleware( 'role_permission:view.appraisaltype' )->name( 'appraisal-types.index' );
 	 Route::get( 'appraisal-types/create',
@@ -125,6 +139,10 @@ Route::group( [ 'middleware' => [ 'auth:sanctum' ] ], function () {
 		 [ LoanTypeController::class, 'update' ] )->middleware( 'role_permission:update.loantype' )->name( 'loan-types.update' );
 	 Route::post( 'loan-types/{id}',
 		 [ LoanTypeController::class, 'destroy' ] )->middleware( 'role_permission:delete.loantype' )->name( 'loan-types.destroy' );
+
+     //Marketing
+    Route::get( 'marketing',
+        [ MarketingController::class, 'index' ] )->middleware( 'role_permission:view.marketing' )->name( 'marketing.index' );
 } );
 Auth::routes();
 
@@ -138,6 +156,7 @@ Route::view( '/order-add-step2', 'dashboard.order-add-step2' )->name( 'order.add
 Route::get( 'get/icons', [IconController::class, 'index'])->name('get.icon');
 Route::get( 'email/verify/{id}/{hash}', [ VerificationController::class, 'verify' ] )->name( 'verification.verify' );
 Route::get( 'accept-new-user/{code}', [ UserController::class, 'acceptInviteUser' ] )->name( 'accept.new.user' );
-Route::post( 'invite-user-update/{id}',
-	[ UserController::class, 'inviteUserUpdate' ] )->name( 'update.invite.user.profile' );
+Route::post( 'invite-user-update/{id}', [ UserController::class, 'inviteUserUpdate' ] )->name( 'update.invite.user.profile' );
+Route::get('/public-order/{id}',[OrderController::class,'publicOrder'])->name('public.order');
+Route::post('/upload-order-files/{id}',[OrderController::class,'uploadOrderFiles'])->name('order.file.upload');
 //Route::get( "{slug}", [ WebApiController::class, 'home' ] )->where( 'slug', ".*" );

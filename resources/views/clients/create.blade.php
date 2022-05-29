@@ -22,11 +22,6 @@
                             <div class="d-flex box justify-content-between left__wrap">
                                 <div class="left-side max-w-424 w-100 me-3">
                                     <div class="group">
-                                        <label for="name" class="d-block mb-2 dashboard-label">Client name <span
-                                                    class="text-danger require"></span></label>
-                                        <input type="text" id="name" name="name" class="dashboard-input w-100" required>
-                                    </div>
-                                    <div class="group">
                                         <label for="client-type" class="d-block mb-2 dashboard-label">Client type <span
                                                     class="text-danger require"></span></label>
                                         <div class="position-relative">
@@ -35,26 +30,32 @@
                                                 <option value="">Select a type</option>
                                                 <option value="amc">Amc</option>
                                                 <option value="lender">Lender</option>
+                                                <option value="both">Both</option>
                                             </select>
                                             <span class="icon-arrow-down bottom-arrow-icon"></span>
                                         </div>
                                     </div>
-                                    {{--                                    <div class="group">--}}
-                                    {{--                                        <label for="" class="d-block mb-2 dashboard-label">Client URL <span--}}
-                                    {{--                                                    class="text-danger require"></span></label>--}}
-                                    {{--                                        <input type="text" class="dashboard-input w-100">--}}
-                                    {{--                                    </div>--}}
+                                    <div class="group">
+                                        <label for="name" class="d-block mb-2 dashboard-label">Client name <span
+                                                    class="text-danger require"></span></label>
+                                        <input type="text" id="name" name="name" class="dashboard-input w-100" required>
+                                    </div>
                                     <div class="group">
                                         <label for="email" class="d-block mb-2 dashboard-label">Email address <span
                                                     class="text-danger require"></span></label>
-                                        <input type="email" id="email" name="email" class="dashboard-input w-100"
-                                               required>
+                                        <input type="email" id="email" name="email[]" class="dashboard-input w-100 mb-2 email" required>
+                                        <div id="email-append"></div>
+                                        <div class="text-end">
+                                            <button id="add-email" class="button button-transparent">+ Add More</button>
+                                        </div>
                                     </div>
                                     <div class="group">
-                                        <label for="phone" class="d-block mb-2 dashboard-label">Phone no <span
-                                                    class="text-danger require"></span></label>
-                                        <input type="text" name="phone" id="phone" class="dashboard-input w-100"
-                                               required>
+                                        <label for="phone" class="d-block mb-2 dashboard-label">Phone no <span class="text-danger require"></span></label>
+                                        <input type="text" name="phone[]" id="phone" class="dashboard-input w-100 mb-2" required>
+                                        <div id="phone-append"></div>
+                                        <div class="text-end">
+                                            <button id="add-phone" class="button button-transparent">+ Add More</button>
+                                        </div>
                                     </div>
                                 </div>
                                 {{-- right side --}}
@@ -77,17 +78,6 @@
                                                     class="text-danger"></span></label>
                                         <input type="text" id="zip" name="zip" class="dashboard-input w-100">
                                     </div>
-                                    <div class="group">
-                                        <label for="country" class="d-block mb-2 dashboard-label country-label">Country
-                                            <span
-                                                    class="text-danger"></span></label>
-                                        <input type="text" name="country" id="country" class="dashboard-input w-100">
-                                    </div>
-                                    {{--                                    <div class="group">--}}
-                                    {{--                                        <label for="" class="d-block mb-2 dashboard-label">Fax no <span--}}
-                                    {{--                                                    class="text-danger require"></span></label>--}}
-                                    {{--                                        <input type="text" class="dashboard-input w-100">--}}
-                                    {{--                                    </div>--}}
                                 </div>
                             </div>
                         </div>
@@ -97,27 +87,19 @@
                                     <div class="group">
                                         <label for="fee-for-1004UAD"
                                                class="d-block mb-2 dashboard-label fee-for-1004uad-label">Technology fee
-                                            for full
+                                            for
                                             appraisal like 1004UAD</label>
-                                        <input type="text" name="fee_for_1004uad" id="fee-for-1004uad"
+                                        <input type="number" name="fee_for_1004uad" id="fee-for-1004uad"
                                                class="dashboard-input w-100">
                                     </div>
                                     <div class="group">
-                                        <label for="fee-for-1004d"
-                                               class="d-block mb-2 dashboard-label fee-for-1004d-label">Technology fee
-                                            for full
-                                            appraisal like 1004D</label>
-                                        <input type="text" name="fee_for_1004d" id="fee-for-1004d"
-                                               class="dashboard-input w-100">
+                                        <label for="fee-for-1004d" class="d-block mb-2 dashboard-label fee-for-1004d-label">Technology fee for appraisal like 1004D</label>
+                                        <input type="number" name="fee_for_1004d" id="fee-for-1004d" class="dashboard-input w-100">
                                     </div>
                                     <div class="group">
-                                        <label for="deducts-technology-fee"
-                                               class="d-block mb-2 dashboard-label deducts-technology-fee-label">Deduction
-                                            of tech fee during
-                                            payment </label>
+                                        <label for="deducts-technology-fee" class="d-block mb-2 dashboard-label deducts-technology-fee-label">Deduction of tech fee during payment </label>
                                         <div class="position-relative">
-                                            <select name="deducts_technology_fee" id="deducts-technology-fee"
-                                                    class="dashboard-input w-100">
+                                            <select name="deducts_technology_fee" id="deducts-technology-fee" class="dashboard-input w-100">
                                                 <option value="">Choose an option</option>
                                                 <option value="1">Yes</option>
                                                 <option value="0">No</option>
@@ -126,8 +108,7 @@
                                         </div>
                                     </div>
                                     <div class="group">
-                                        <label for="can-sign" class="d-block mb-2 dashboard-label can-sign-label">Trainee
-                                            can sign </label>
+                                        <label for="can-sign" class="d-block mb-2 dashboard-label can-sign-label">Trainee can sign </label>
                                         <div class="position-relative">
                                             <select name="can_sign" id="can-sign" class="dashboard-input w-100">
                                                 <option value="">Choose an option</option>
@@ -150,12 +131,13 @@
                                         </div>
                                     </div>
                                     <div class="group">
-                                        <label for="instruction" class="d-block mb-2 dashboard-label">Instruction</label>
+                                        <label for="instruction" class="d-block mb-2 dashboard-label">Requirement File</label>
                                         <div class="position-relative file-upload">
                                             <input type="file" accept="application/octet-stream,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint,
                                                 text/plain, application/pdf" name="instruction" id="instruction">
                                             <label for="">Upload <img src="{{ asset('/img/upload.png') }}"
                                                                       alt="boston profile"></label>
+                                            <span class="text-success" id="file-name"></span>
                                         </div>
                                     </div>
                                 </div>
@@ -175,7 +157,20 @@
 @endsection
 @push('js')
     <script type="text/javascript">
+        let emailCount = 1;
+        let phoneCount = 1;
+        $('#add-email').on('click',function(e){
+            e.preventDefault();
+            $('#email-append').append('<input type="email" name="email[]" class="dashboard-input w-100 mb-2">');
+            emailCount++;
+        });
+        $('#add-phone').on('click',function(e){
+            e.preventDefault();
+            $('#phone-append').append('<input type="text" name="phone[]" class="dashboard-input w-100 mb-2">');
+            phoneCount++;
+        })
         $(function () {
+            let clientType = $("#client-type").val();
             $("#client-create-form").validate({
                 rules: {
                     name: {
@@ -192,9 +187,10 @@
                     },
                     phone: {
                         required: true,
+                        phoneUS: true,
                         normalizer: function (value) {
                             return value.trim();
-                        }
+                        },
                     },
                     email: {
                         required: true,
@@ -205,7 +201,7 @@
                     },
                     address: {
                         required: function () {
-                            return $("#client-type").val() === 'lender'
+                            return clientType !== 'amc'
                         },
                         normalizer: function (value) {
                             return value.trim();
@@ -213,7 +209,7 @@
                     },
                     zip: {
                         required: function () {
-                            return $("#client-type").val() === 'lender'
+                            return clientType !== 'amc'
                         },
                         normalizer: function (value) {
                             return value.trim();
@@ -221,15 +217,7 @@
                     },
                     state: {
                         required: function () {
-                            return $("#client-type").val() === 'lender'
-                        },
-                        normalizer: function (value) {
-                            return value.trim();
-                        }
-                    },
-                    country: {
-                        required: function () {
-                            return $("#client-type").val() === 'lender'
+                            return clientType !== 'amc'
                         },
                         normalizer: function (value) {
                             return value.trim();
@@ -237,7 +225,7 @@
                     },
                     city: {
                         required: function () {
-                            return $("#client-type").val() === 'lender'
+                            return clientType !== 'amc'
                         },
                         normalizer: function (value) {
                             return value.trim();
@@ -245,7 +233,7 @@
                     },
                     fee_for_1004uad: {
                         required: function () {
-                            return $("#client-type").val() === 'amc'
+                            return clientType !== 'lender'
                         },
                         normalizer: function (value) {
                             return value.trim();
@@ -253,7 +241,7 @@
                     },
                     fee_for_1004d: {
                         required: function () {
-                            return $("#client-type").val() === 'amc'
+                            return clientType !== 'lender'
                         },
                         normalizer: function (value) {
                             return value.trim();
@@ -261,17 +249,17 @@
                     },
                     deducts_technology_fee: {
                         required: function () {
-                            return $("#client-type").val() === 'amc'
+                            return clientType !== 'lender'
                         }
                     },
                     can_sign: {
                         required: function () {
-                            return $("#client-type").val() === 'amc'
+                            return clientType !== 'lender'
                         }
                     },
                     can_inspect: {
                         required: function () {
-                            return $("#client-type").val() === 'amc'
+                            return clientType !== 'lender'
                         }
                     },
                 },
@@ -297,9 +285,6 @@
                     state: {
                         required : "State is required"
                     },
-                    country: {
-                        required : "Country is required"
-                    },
                     city: {
                         required: "City is required"
                     },
@@ -307,7 +292,7 @@
                         required : "Technology fee for full appraisal(1004UAD) is required"
                     },
                     fee_for_1004d: {
-                        required : "Technology fee for full appraisal(1004D) is required"
+                        required : "Technology fee for appraisal(1004D) is required"
                     },
                     deducts_technology_fee: {
                         required : "Deduction of tech fee is required"
@@ -334,26 +319,36 @@
             $("div.alert-success").hide();
             $("div.alert-danger").hide();
         }, 3000);
+        $('#instruction').on('change',function() {
+            let file = $('#instruction')[0].files[0].name;
+            $('#file-name').text(file);
+        });
         $('#client-type').on('change', function (e) {
             e.preventDefault();
             let clientType = $(this).val();
             if (clientType === 'lender') {
-                $("#client-create-form").data('validator').resetForm();
-                $(document).find('.dashboard-input').removeClass('error');
+                removeError();
 
-                $(".address-label, .city-label, .state-label, .country-label, .zip-label").addClass('require');
+                $(".address-label, .city-label, .state-label, .zip-label").addClass('require');
 
                 $(".deducts-technology-fee-label, .fee-for-1004uad-label, .fee-for-1004d-label, .can-sign-label, .can-inspect-label").removeClass('require');
+            }else if(clientType === 'both'){
+                removeError();
+
+                $(".address-label, .city-label, .state-label, .zip-label,.deducts-technology-fee-label, .fee-for-1004uad-label, .fee-for-1004d-label, .can-sign-label, .can-inspect-label").addClass('require');
             } else {
-                $("#client-create-form").data('validator').resetForm();
-                $(document).find('.dashboard-input').removeClass('error');
+                removeError();
 
                 $(".deducts-technology-fee-label, .fee-for-1004uad-label, .fee-for-1004d-label, .can-sign-label, .can-inspect-label").addClass('require');
 
-                $(".address-label, .city-label, .state-label, .country-label, .zip-label").removeClass('require');
+                $(".address-label, .city-label, .state-label, .zip-label").removeClass('require');
 
             }
         });
+        function removeError(){
+            $("#client-create-form").data('validator').resetForm();
+            $(document).find('.dashboard-input').removeClass('error');
+        }
         $("#discard").on("click",function (e){
            e.preventDefault();
             swal({
@@ -370,5 +365,6 @@
                 }
             })
         });
+
     </script>
 @endpush

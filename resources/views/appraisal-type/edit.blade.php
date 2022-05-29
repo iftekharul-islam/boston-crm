@@ -36,6 +36,17 @@
                                     </span>
                         @enderror
                     </div>
+                    <div class="form-group mt-2">
+                        <label for="condo_type">
+                            <input type="checkbox" @if($appraisal_type->modified_form == 1 ) checked @endif name="condo_type" value="1" class="@error('condo_type') is-invalid @enderror" id="condo_type" value="{{ old('condo_type') }}">
+                            Condo Type
+                        </label>
+                        @error('condo_type')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
                     <button type="submit" class="btn btn-primary mt-2">Submit</button>
                 </form>
             </div>

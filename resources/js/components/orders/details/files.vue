@@ -1,19 +1,18 @@
 <template>
   <div class="row ">
     <div class="col-12">
-      Files
+      <!-- Files -->
       <div class="order-details-box bg-white">
         <div class="box-header">
           <p class="fw-bold text-light-black fs-20 mb-0">Files</p>
           <div class="group">
-            <div class="position-relative file-upload document-upload">
-              <input type="file">
+            <div v-b-modal.upload-files class="position-relative file-upload document-upload">
               <label for="">Upload <img src="/img/upload.png" alt="boston profile"></label>
             </div>
           </div>
         </div>
         <div class="box-body">
-          document
+          <!-- document -->
           <div class="document">
             <div class="row">
               <div class="col-sm-6 col-md-4 col-lg-3">
@@ -67,5 +66,68 @@
         </div>
       </div>
     </div>
+    <b-modal id="upload-files" size="lg" title="Uploads Order Files">
+      <div class="modal-body">
+        <b-alert v-if="showMessage" show variant="success"><a href="#" class="alert-link">{{ message }}</a></b-alert>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="group">
+              <label for="" class="d-block mb-2 dashboard-label">Select file type <span class="require"></span></label>
+              <b-form-select
+                  v-model="file_type"
+                  :options="fileTypes"
+                  class="dashboard-input w-100">
+                <template #first>
+                  <b-form-select-option value="" disabled>-- Please select an option --</b-form-select-option>
+                </template>
+              </b-form-select>
+            </div>
+            <div class="group">
+              <label for="" class="d-block mb-2 dashboard-label">Select file <span class="require"></span></label>
+              <b-form-file multiple v-model="files"></b-form-file>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div slot="modal-footer">
+        <b-button variant="secondary" @click="$bvModal.hide('upload-files')">Close</b-button>
+        <b-button variant="primary" @click="saveOrderFiles">Save</b-button>
+      </div>
+    </b-modal>
   </div>
 </template>
+<script>
+  export default {
+    props:{
+      orderId: String,
+      fileTypes: Array
+    },
+    data(){
+      return{
+        file_type: '',
+        files: [],
+        message: '',
+        showMessage: false
+      }
+    },
+    methods:{
+      saveOrderFiles(){
+        let that = this
+        const data = new FormData();
+        data.append('file_type', that.file_type)
+        data.append('files', that.files)
+
+        axios.post('upload-order-files/'+ this.orderId,data)
+            .then(res => {
+              that.message = res.data.message
+              that.showMessage = true
+              setTimeout(function(){
+                that.$bvModal.hide('upload-files')
+              }, 2000);
+            }).catch(err => {
+              console.log(err)
+        })
+      }
+    }
+  }
+</script>

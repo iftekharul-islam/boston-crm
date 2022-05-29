@@ -50,7 +50,7 @@
                 <input type="text"  class="dashboard-input w-100">
               </div>
               <div class="group">
-                <label for="" class="d-block mb-2 dashboard-label">AMC name</label>
+                <label for="" class="d-block mb-2 dashboard-label">Lender address</label>
                 <textarea class="dashboard-textarea w-100" cols="5"> </textarea>
                 <a href="#" class="primary-text fw-bold my-3 d-inline-block underline">AMC requirements 1</a>
                 <div class="position-relative file-upload">
@@ -68,3 +68,28 @@
     </b-modal>
   </div>
 </template>
+<script>
+  export default {
+    props:{
+      orderId: String
+    },
+    data(){
+      return{
+
+      }
+    },
+    created(){
+      this.getClientInfo()
+    },
+    methods:{
+      getClientInfo(){
+        axios.get('get-clients-info/' + this.orderId)
+            .then(res => {
+              console.log(res.data)
+            }).catch(err => {
+              console.log(err)
+        })
+      }
+    }
+  }
+</script>

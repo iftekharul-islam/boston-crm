@@ -18,6 +18,7 @@ class CreateAppraisalTypesTable extends Migration
 				 $table->foreignId( 'company_id' )->constrained()->onUpdate( 'cascade' )->onDelete( 'cascade' );
 				 $table->string( 'form_type' )->nullable();
 				 $table->string( 'modified_form' )->nullable();
+				 $table->integer('condo_type')->default(0);
 				 $table->softDeletes();
 				 $table->timestamps();
 			} );

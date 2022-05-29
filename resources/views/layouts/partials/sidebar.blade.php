@@ -33,7 +33,7 @@
         {{--             </div>--}}
         {{--             <span class="icon-arrow-down ms-auto"></span>--}}
         {{--        </a>--}}
-        @if(in_array('view.client', $user_permissions) || $is_owner || $user_role == 'admin')
+        @if(in_array('view.client', $user_permissions ?? []) || $is_owner || $user_role == 'admin')
             <a href="{{ route('clients.index') }}"
                class="list-item d-flex align-items-center  text-white {{ (request()->is('clients*')) ? 'active' : '' }}">
                 <div class="d-inline-flex align-items-center">
@@ -43,7 +43,7 @@
                 <span class="icon-arrow-down ms-auto"></span>
             </a>
         @endif
-        @if(in_array('view.user', $user_permissions) || $is_owner || $user_role == 'admin')
+        @if(in_array('view.user', $user_permissions ?? []) || $is_owner || $user_role == 'admin')
             <a href="{{ route('users.index') }}"
                class="list-item d-flex align-items-center  text-white {{ (request()->is('users*')) ? 'active' : '' }}">
                 <div class="d-inline-flex align-items-center">
@@ -53,7 +53,7 @@
                 <span class="icon-arrow-down ms-auto"></span>
             </a>
         @endif
-        @if(in_array('view.role', $user_permissions) || $is_owner || $user_role == 'admin')
+        @if(in_array('view.role', $user_permissions ?? []) || $is_owner || $user_role == 'admin')
             <a href="{{ route('roles.index') }}"
                class="list-item d-flex align-items-center  text-white {{ (request()->is('roles*')) ? 'active' : '' }}">
                 <div class="d-inline-flex align-items-center">
@@ -64,7 +64,7 @@
                 <span class="icon-arrow-down ms-auto"></span>
             </a>
         @endif
-        @if(in_array('view.order', $user_permissions) || $is_owner || $user_role == 'admin')
+        @if(in_array('view.order', $user_permissions ?? []) || $is_owner || $user_role == 'admin')
             <a href="{{ route('orders.index') }}"
                class="list-item d-flex align-items-center  text-white {{ (request()->is('orders*')) ? 'active' : '' }}">
                 <div class="d-inline-flex align-items-center">
@@ -97,7 +97,7 @@
             </div>
             <span class="icon-arrow-down ms-auto"></span>
         </a>
-        @if(in_array('view.appraisaltype', $user_permissions) || $is_owner || $user_role == 'admin')
+        @if(in_array('view.appraisaltype', $user_permissions ?? []) || $is_owner || $user_role == 'admin')
             <a href="{{ route('appraisal-types.index') }}" class="list-item d-flex align-items-center  text-white">
                 <div class="d-inline-flex align-items-center">
                 <span class="icon-profile-circle me-3 fs-3"><span class="path1"></span><span class="path2"></span><span
@@ -107,12 +107,22 @@
                 <span class="icon-arrow-down ms-auto"></span>
             </a>
         @endif
-        @if(in_array('view.loantype', $user_permissions) || $is_owner || $user_role == 'admin')
+        @if(in_array('view.loantype', $user_permissions ?? []) || $is_owner || $user_role == 'admin')
             <a href="{{ route('loan-types.index') }}" class="list-item d-flex align-items-center  text-white">
                 <div class="d-inline-flex align-items-center">
                 <span class="icon-profile-circle me-3 fs-3"><span class="path1"></span><span class="path2"></span><span
                             class="path3"></span></span>
                     <span class="items-text"> Loan Types </span>
+                </div>
+                <span class="icon-arrow-down ms-auto"></span>
+            </a>
+        @endif
+        @if(in_array('view.marketing', $user_permissions ?? []) || $is_owner || $user_role == 'admin')
+            <a href="{{ route('marketing.index') }}" class="list-item d-flex align-items-center  text-white">
+                <div class="d-inline-flex align-items-center">
+                <span class="icon-profile-circle me-3 fs-3"><span class="path1"></span><span class="path2"></span><span
+                            class="path3"></span></span>
+                    <span class="items-text"> Marketing </span>
                 </div>
                 <span class="icon-arrow-down ms-auto"></span>
             </a>
