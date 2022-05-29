@@ -207,14 +207,14 @@
                             return value.trim();
                         }
                     },
-                    phone: {
+                    "phone[]": {
                         required: true,
                         phoneUS: true,
                         normalizer: function (value) {
                             return value.trim();
                         },
                     },
-                    email: {
+                    "email[]": {
                         required: true,
                         email: true,
                         normalizer: function (value) {
@@ -292,10 +292,10 @@
                     client_type: {
                         required: "Client type is required"
                     },
-                    email: {
+                    "email[]": {
                         required: "Client email is required"
                     },
-                    phone: {
+                    "phone[]": {
                         required: "Client phone number is required"
                     },
                     address: {
