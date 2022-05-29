@@ -992,3 +992,22 @@ select {
         border: 1px solid $gray !important;
     }
 }
+.search-box {
+    display: flex;
+    .search-btn-icon {
+        width: 40px;
+        height: 40px;
+        background: $gray;
+        border-radius: 0px 4px 4px 0px;
+        @include flex-center;
+        border: none;
+    }
+    .search-input {
+        border-right: 0;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        &:focus {
+            outline: none;
+        }
+    }
+}

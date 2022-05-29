@@ -70,7 +70,7 @@
                 </div>
             </div>
             <div class="open-archive-btn">
-                <a href="{{ route('orders.create')}}" class="button button-primary">Add new order</a>
+                <a href="{{ route('orders.create')}}" class="button button-primary h-40 d-inline-flex align-items-center py-2">Add new order</a>
             </div>
         </div>
         {{-- In progress --}}
@@ -167,8 +167,16 @@
                     <button class="chart-btn h-32 d-flex align-items-center justify-content-between mb-2">Appraiser <span class="ms-1">(9)</span></button>
                 </div>
                 <div class="right d-flex">
-                    <input type="text" class="me-3 mb-3 px-3 bdr-1 br-4 gray-border" placeholder="Search...">
-                    <button class="button-primary px-4 inline-flex-center h-32 mb-2">View daily report</button>
+                    <div class="search-box me-3">
+                        <input type="text" class="search-input px-3 bdr-1 br-4 gray-border" placeholder="Search...">
+                        <button class="search-btn-icon">
+                            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M7.33333 13.6667C10.8311 13.6667 13.6667 10.8311 13.6667 7.33333C13.6667 3.83553 10.8311 1 7.33333 1C3.83553 1 1 3.83553 1 7.33333C1 10.8311 3.83553 13.6667 7.33333 13.6667Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M17 17L13 13" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>                                
+                        </button>
+                    </div>
+                    <button class="button-primary px-4 inline-flex-center h-40 ">View daily report</button>
                 </div>
             </div>
 

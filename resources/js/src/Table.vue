@@ -1,7 +1,7 @@
 <template>
     <div class="m-table" :bgcolor="bgcolor">
         <div class="m-table-content">
-            <table class="onlydesktop">
+            <table class="onlydesktop table">
                 <thead>
                     <th width="2%" v-if="showSelectOpt">
                         <m-checkbox ref="clickAllCheck" :color='bgcolor' @change="checkAll" noripple/>
