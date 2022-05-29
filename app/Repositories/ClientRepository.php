@@ -35,6 +35,7 @@ class ClientRepository extends BaseRepository
         $update_model->update( $attributes );
 
         if (isset($attributes['instruction'])) {
+            $this->model->find($id)->getMedia('clients')[0]->delete();
             $this->model->find($id)->addMedia($attributes['instruction'])->toMediaCollection('clients');
         }
 

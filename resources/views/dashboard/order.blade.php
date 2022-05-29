@@ -70,7 +70,7 @@
                 </div>
             </div>
             <div class="open-archive-btn">
-                <a href="{{ route('order.add')}}" class="button button-primary">Add new order</a>
+                <a href="{{ route('order.add')}}" class="button button-primary ">Add new order</a>
             </div>
         </div>
         {{-- In progress --}}

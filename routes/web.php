@@ -149,6 +149,7 @@ Auth::routes();
 Route::any('/import-client',[ClientController::class,'importClient'])->name('import-client');
 Route::redirect( '/', '/login' );
 Route::view( '/404', 'dashboard.error' );
+Route::view( '/403', 'dashboard.error-403' );
 Route::view( '/order', 'dashboard.order' );
 Route::view( '/order-details', 'dashboard.order-details' )->name( 'order.details' );
 Route::view( '/order-add', 'dashboard.order-add' )->name( 'order.add' );
