@@ -92,20 +92,24 @@ Route::group( [ 'middleware' => [ 'auth:sanctum' ] ], function () {
 		 [ OrderController::class, 'update' ] )->middleware( 'role_permission:update.order' )->name( 'orders.update' );
 	 Route::delete( 'orders/{id}',
 		 [ OrderController::class, 'destroy' ] )->middleware( 'role_permission:delete.order' )->name( 'orders.destroy' );
+	 
+	Route::post( 'search/order', [ OrderController::class, 'searchOrderData' ] )->middleware( 'role_permission:orders.index' );
 
      //order details
     Route::get('save-order-data',[OrderController::class,'saveOrderData']);
 
-    Route::get('/get-basic-info/{id}',[OrderController::class,'getBasicInfo'])->middleware('role_permission:view.order');
-    Route::get('/get-appraisal-info/{id}',[OrderController::class,'getAppraisalInfo'])->middleware('role_permission:view.order');
-    Route::get('/get-borrower-info/{id}',[OrderController::class,'getBorrowerInfo'])->middleware('role_permission:view.order');
-    Route::get('/get-contact-info/{id}',[OrderController::class,'getContactInfo'])->middleware('role_permission:view.order');
-    Route::get('/get-clients-info/{id}',[OrderController::class,'getClientsInfo']);
-    Route::get('/get-activity-log/{id}',[OrderController::class,'getActivityLog']);
+//    Route::get('/get-basic-info/{id}',[OrderController::class,'getBasicInfo'])->middleware('role_permission:view.order');
+//    Route::get('/get-appraisal-info/{id}',[OrderController::class,'getAppraisalInfo'])->middleware('role_permission:view.order');
+//    Route::get('/get-borrower-info/{id}',[OrderController::class,'getBorrowerInfo'])->middleware('role_permission:view.order');
+//    Route::get('/get-contact-info/{id}',[OrderController::class,'getContactInfo'])->middleware('role_permission:view.order');
+//    Route::get('/get-clients-info/{id}',[OrderController::class,'getClientsInfo']);
+//    Route::get('/get-activity-log/{id}',[OrderController::class,'getActivityLog']);
 
 
     Route::post('/update-basic-info/{id}',[OrderController::class,'updateBasicInfo'])->middleware('role_permission:update.order');
+    Route::post('/update-property-info/{id}',[OrderController::class,'updatePropertyInfo'])->middleware('role_permission:update.order');
     Route::post('/update-appraisal-info/{id}',[OrderController::class,'updateAppraisalInfo'])->middleware('role_permission:update.order');
+    Route::post('/update-client-info/{id}',[OrderController::class,'updateClientInfo']);
     Route::post('/update-borrower-info/{id}',[OrderController::class,'updateBorrowerInfo'])->middleware('role_permission:update.order');
     Route::post('/update-contact-info/{id}',[OrderController::class,'updateContactInfo'])->middleware('role_permission:update.order');
 
@@ -149,6 +153,7 @@ Auth::routes();
 Route::any('/import-client',[ClientController::class,'importClient'])->name('import-client');
 Route::redirect( '/', '/login' );
 Route::view( '/404', 'dashboard.error' );
+Route::view( '/403', 'dashboard.error-403' );
 Route::view( '/order', 'dashboard.order' );
 Route::view( '/order-details', 'dashboard.order-details' )->name( 'order.details' );
 Route::view( '/order-add', 'dashboard.order-add' )->name( 'order.add' );
@@ -156,8 +161,7 @@ Route::view( '/order-add-step2', 'dashboard.order-add-step2' )->name( 'order.add
 Route::get( 'get/icons', [IconController::class, 'index'])->name('get.icon');
 Route::get( 'email/verify/{id}/{hash}', [ VerificationController::class, 'verify' ] )->name( 'verification.verify' );
 Route::get( 'accept-new-user/{code}', [ UserController::class, 'acceptInviteUser' ] )->name( 'accept.new.user' );
-Route::post( 'invite-user-update/{id}',
-	[ UserController::class, 'inviteUserUpdate' ] )->name( 'update.invite.user.profile' );
+Route::post( 'invite-user-update/{id}', [ UserController::class, 'inviteUserUpdate' ] )->name( 'update.invite.user.profile' );
 Route::get('/public-order/{id}',[OrderController::class,'publicOrder'])->name('public.order');
 Route::post('/upload-order-files/{id}',[OrderController::class,'uploadOrderFiles'])->name('order.file.upload');
 //Route::get( "{slug}", [ WebApiController::class, 'home' ] )->where( 'slug', ".*" );

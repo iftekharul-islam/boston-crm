@@ -35,25 +35,32 @@
                                                 <option value="">Select a type</option>
                                                 <option value="amc" @if($client->client_type == 'amc') selected @endif>Amc</option>
                                                 <option value="lender" @if($client->client_type == 'lender') selected @endif>Lender</option>
+                                                <option value="both" @if($client->client_type == 'both') selected @endif>Both</option>
                                             </select>
                                             <span class="icon-arrow-down bottom-arrow-icon"></span>
                                         </div>
                                     </div>
-                                    {{--                                    <div class="group">--}}
-                                    {{--                                        <label for="" class="d-block mb-2 dashboard-label">Client URL <span--}}
-                                    {{--                                                    class="text-danger require"></span></label>--}}
-                                    {{--                                        <input type="text" class="dashboard-input w-100">--}}
-                                    {{--                                    </div>--}}
                                     <div class="group">
                                         <label for="email" class="d-block mb-2 dashboard-label">Email address <span
                                                     class="text-danger require"></span></label>
-                                        <input type="email" id="email" name="email" value="{{ $client->email }}" class="dashboard-input w-100">
+                                        @foreach(json_decode($client->email) as $email)
+                                            <input type="email" id="email" name="email[]" value="{{ $email }}" class="dashboard-input w-100 mb-3">
+                                        @endforeach
+                                        <div id="email-append"></div>
+                                        <div class="text-end">
+                                            <button id="add-email" class="button button-transparent">+ Add More</button>
+                                        </div>
                                     </div>
                                     <div class="group">
                                         <label for="phone" class="d-block mb-2 dashboard-label">Phone no <span
                                                     class="text-danger require"></span></label>
-                                        <input type="text" name="phone" id="phone" value="{{ $client->phone }}" class="dashboard-input w-100"
-                                               required>
+                                        @foreach(json_decode($client->phone) as $phone)
+                                            <input type="text" name="phone[]" id="phone" value="{{ $phone }}" class="dashboard-input w-100 mb-3" required>
+                                        @endforeach
+                                        <div id="phone-append"></div>
+                                        <div class="text-end">
+                                            <button id="add-phone" class="button button-transparent">+ Add More</button>
+                                        </div>
                                     </div>
                                 </div>
                                 {{-- right side --}}
@@ -80,17 +87,6 @@
                                                     class="text-danger"></span></label>
                                         <input type="text" id="zip" name="zip" value="{{ $client->zip }}" class="dashboard-input w-100">
                                     </div>
-                                    <div class="group">
-                                        <label for="country" class="d-block mb-2 dashboard-label country-label">Country
-                                            <span
-                                                    class="text-danger"></span></label>
-                                        <input type="text" name="country" id="country" value="{{ $client->country }}" class="dashboard-input w-100">
-                                    </div>
-                                    {{--                                    <div class="group">--}}
-                                    {{--                                        <label for="" class="d-block mb-2 dashboard-label">Fax no <span--}}
-                                    {{--                                                    class="text-danger require"></span></label>--}}
-                                    {{--                                        <input type="text" class="dashboard-input w-100">--}}
-                                    {{--                                    </div>--}}
                                 </div>
                             </div>
                         </div>
@@ -100,17 +96,17 @@
                                     <div class="group">
                                         <label for="fee-for-1004UAD"
                                                class="d-block mb-2 dashboard-label fee-for-1004UAD-label">Technology fee
-                                            for full
+                                            for
                                             appraisal like 1004UAD</label>
-                                        <input type="text" name="fee_for_1004uad" value="{{ $client->fee_for_1004uad }}" id="fee-for-1004UAD"
+                                        <input type="number" name="fee_for_1004uad" value="{{ $client->fee_for_1004uad }}" id="fee-for-1004UAD"
                                                class="dashboard-input w-100">
                                     </div>
                                     <div class="group">
                                         <label for="fee-for-1004D"
                                                class="d-block mb-2 dashboard-label fee-for-1004D-label">Technology fee
-                                            for full
+                                            for
                                             appraisal like 1004D</label>
-                                        <input type="text" name="fee_for_1004d" value="{{ $client->fee_for_1004d }}" id="fee-for-1004D"
+                                        <input type="number" name="fee_for_1004d" value="{{ $client->fee_for_1004d }}" id="fee-for-1004D"
                                                class="dashboard-input w-100">
                                     </div>
                                     <div class="group">
@@ -153,12 +149,13 @@
                                         </div>
                                     </div>
                                     <div class="group">
-                                        <label for="instruction" class="d-block mb-2 dashboard-label can-inspect">Trainee
-                                            can inspect </label>
+                                        <label for="instruction" class="d-block mb-2 dashboard-label can-inspect">Requirement File</label>
                                         <div class="position-relative file-upload">
-                                            <input type="file" name="instruction" id="instruction">
+                                            <input type="file" accept="application/octet-stream,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint,
+                                                text/plain, application/pdf" name="instruction" id="instruction">
                                             <label for="">Upload <img src="/img/upload.png"
                                                                       alt="boston profile"></label>
+                                            <span class="text-success" id="file-name"><a @if(isset($client->getMedia('clients')[0])) target="_blank" @else style="color: dimgray !important;cursor: default !important;" @endif href="{{ isset($client->getMedia('clients')[0]) ? $client->getMedia('clients')[0]->getFullUrl() : '#' }}"> @if(isset($client->getMedia('clients')[0])) Instruction File @else No File @endif</a></span>
                                         </div>
                                     </div>
                                 </div>
@@ -179,6 +176,18 @@
 @endsection
 @push('js')
     <script type="text/javascript">
+        let emailCount = 1;
+        let phoneCount = 1;
+        $('#add-email').on('click',function(e){
+            e.preventDefault();
+            $('#email-append').append('<input type="email" name="email[]" class="dashboard-input w-100 mb-2">');
+            emailCount++;
+        });
+        $('#add-phone').on('click',function(e){
+            e.preventDefault();
+            $('#phone-append').append('<input type="text" name="phone[]" class="dashboard-input w-100 mb-2">');
+            phoneCount++;
+        })
         $(function() {
             $("#client-create-form").validate({
                 errorClass: "text-danger",
@@ -190,7 +199,6 @@
                     address: "Address is required",
                     zip: "Zip code is required",
                     state: "State is required",
-                    country: "Country is required",
                     city: "City is required",
                     fee_for_1004uad: "Technology fee for full appraisal(1004UAD) is required",
                     fee_for_1004d: "Technology fee for full appraisal(1004D) is required",
@@ -201,8 +209,10 @@
             });
             let clientType = $('#client-type').val();
             if(clientType === 'lender'){
-                $(".address-label, .city-label, .state-label, .country-label, .zip-label").addClass('require');
-                $("#address,#city,#state,#country,#zip").prop('required', true);
+                $(".address-label, .city-label, .state-label, .zip-label").addClass('require');
+                $("#address,#city,#state,#zip").prop('required', true);
+            }else if(clientType === 'both'){
+                $(".address-label, .city-label, .state-label, .zip-label,.deducts-technology-fee-label, .fee-for-1004uad-label, .fee-for-1004d-label, .can-sign-label, .can-inspect-label").addClass('require');
             }else{
                 $(".deducts-technology-fee-label, .fee-for-1004UAD-label, .fee-for-1004D-label, .can-sign-label, .can-inspect-label").addClass('require');
                 $("#deducts-technology-fee, #fee-for-1004UAD, #fee-for-1004D-label ,#can-sign, #can-inspect").prop('required', true);
@@ -212,18 +222,25 @@
             e.preventDefault();
             let clientType = $(this).val();
             if (clientType === 'lender') {
-                $(".address-label, .city-label, .state-label, .country-label, .zip-label").addClass('require');
-                $("#address,#city,#state,#country,#zip").prop('required', true);
+                $(".address-label, .city-label, .state-label, .zip-label").addClass('require');
+                $("#address,#city,#state,#zip").prop('required', true);
 
                 $(".deducts-technology-fee-label, .fee-for-1004UAD-label, .fee-for-1004D-label, .can-sign-label, .can-inspect-label").removeClass('require');
                 $("#deducts-technology-fee, #fee-for-1004UAD, #fee-for-1004D-label ,#can-sign, #can-inspect").prop('required', false);
+            }else if(clientType === 'both'){
+                $(".address-label, .city-label, .state-label, .zip-label,.deducts-technology-fee-label, .fee-for-1004UAD-label, .fee-for-1004D-label, .can-sign-label, .can-inspect-label").addClass('require');
+                $("#address,#city,#state,#zip,#deducts-technology-fee, #fee-for-1004UAD, #fee-for-1004D-label ,#can-sign, #can-inspect").prop('required', true);
             } else {
                 $(".deducts-technology-fee-label, .fee-for-1004UAD-label, .fee-for-1004D-label, .can-sign-label, .can-inspect-label").addClass('require');
                 $("#deducts-technology-fee, #fee-for-1004UAD, #fee-for-1004D-label ,#can-sign, #can-inspect").prop('required', true);
 
-                $(".address-label, .city-label, .state-label, .country-label, .zip-label").removeClass('require');
-                $("#address,#city,#state,#country,#zip").prop('required', false);
+                $(".address-label, .city-label, .state-label, .zip-label").removeClass('require');
+                $("#address,#city,#state,#zip").prop('required', false);
             }
+        });
+        $('#instruction').on('change',function() {
+            let file = $('#instruction')[0].files[0].name;
+            $('#file-name').text(file);
         });
         $("#discard").on("click",function (e){
             e.preventDefault();

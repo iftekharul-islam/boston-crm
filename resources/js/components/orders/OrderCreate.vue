@@ -3,7 +3,7 @@
     <div class="order-add-box bg-white">
       <div class="order-add-box__form">
         <div class="d-flex align-items-center justify-content-between">
-          <p class="fw-bold">Add new order</p>
+          <p class="fw-bold">Add New Order </p>
           <div class="step">
             <button @click="gotoStep(1)" class="step-btn pointer"
                     :class="{'active': step === 1}">Step 1</button>
@@ -20,7 +20,7 @@
         <div class="alert alert-success" v-if="submitResult.submitStatus">
             {{ submitResult.message }}
         </div>
-        <Step1 v-show="step === 1"
+        <Step1 v-show="step === 1" :type="1" :order="[]"
                @step-change-active="stepChangeActiveStatus"
                :order-list-url="orderList"
                :system-order-no="systemOrderNo"
@@ -29,7 +29,7 @@
                :loan-types="loanTypes"
                :amc-clients="amcClients"
                :lender-clients="lenderClients"/>
-        <Step2 v-show="step === 2"/>
+        <Step2 v-show="step === 2" :type="1" :order="[]"/>
       </div>
     </div>
   </div>
@@ -62,6 +62,7 @@ export default {
       stepChangeActive: false,
       step1Data: [],
       step2Data: [],
+      providedData: [],
       submitResult: {
           error: false,
           submitStatus: false,
@@ -78,8 +79,12 @@ export default {
           }
       });
       
+      this.$root.$on("updateProviderData", (res) => {
+          this.providedData = res;
+      });
+      
       this.$root.$on("submitOrder", (res) => {
-          this.$boston.apiPost('store/order', {'step1' : this.step1Data, 'step2' : this.step2Data, 'company': this.company, 'user_id': this.user_id }).then(res => {
+          this.$boston.apiPost('store/order', {'step1' : this.step1Data, order: [], type: false, 'step2' : this.step2Data, 'company': this.company, 'providedData' : this.providedData, 'user_id': this.user_id }).then(res => {
               this.submitResult.error = res.error;
               this.submitResult.submitStatus = false;
               this.submitResult.message = res.messages;
@@ -91,6 +96,7 @@ export default {
                 this.stepChangeActive = false;
                 this.step = 1;
               }
+              $("html, body").animate({ scrollTop: 0 }, "slow");
           });
       });
   },

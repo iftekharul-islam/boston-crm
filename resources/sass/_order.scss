@@ -624,13 +624,17 @@ select {
 .workflow-content {
     display: flex;
     .list {
-        border-right: 1px solid $platinum;
         flex-basis: 40%;
+        background: $login-box;
+        padding: 16px 20px;
+        margin-right: 20px;
         .item {
             display: flex;
             align-items: center;
-            margin-bottom: 36px;
+            margin-bottom: 40px;
             cursor: pointer;
+            border-radius: 4px;
+            padding: 8px;
             p {
                 color: $gray;
             }
@@ -649,7 +653,7 @@ select {
                     border-radius: 8px;
                     background: $gray;
                     position: absolute;
-                    top: calc(100% + 6px);
+                    top: calc(100% + 17px);
                     left: 0;
                     right: 0;
                     margin: auto;
@@ -693,6 +697,7 @@ select {
                 }
             }
             &.current {
+                background: $primary;
                 .ball {
                     border-color: transparent;
                 }
@@ -701,16 +706,74 @@ select {
                 }
                 p {
                     font-weight: bold;
-                    color: $primary;
+                    color: $white;
                 }
             }
         }
     }
     .step-item {
         flex-basis: 60%;
-        padding-left: 48px;
+        padding: 16px 20px;
+        background: $login-box;
+        border-radius: 4px;
+    }
+    .step-items {
+        position: relative;
+        .edit-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 4px;
+            background: $white;
+            @include flex-center;
+            position: absolute;
+            right: 20px;
+            top: 12px;
+            border: 1px solid transparent;
+            cursor: pointer;
+        }
+        .dashboard-input {
+            border: 1px solid $gray;
+        }
+    }
+    .preparation-input {
+        select {
+            font-weight: normal;
+            border: 1px solid $gray;
+
+        }
+        .bottom-arrow-icon {
+            color: $gray;
+        }
+        textarea {
+            border: 1px solid $gray;
+        }
+        
+    }
+    .review-check {
+        label {
+            font-weight: normal;
+            &::after {
+                border: 1px solid $gray;
+            }
+        }
+    }
+    .submission-check {
+        input {
+            &:checked {
+               ~ label {
+                    &::after {
+                        background: #34A851 !important;
+                    }
+                }
+            }
+        }
     }
 }
+.scheduling-item {
+    position: relative;
+    
+}
+
 
 .document-upload {
     label {
@@ -927,5 +990,24 @@ select {
         width: 132px;
         height: 40px;
         border: 1px solid $gray !important;
+    }
+}
+.search-box {
+    display: flex;
+    .search-btn-icon {
+        width: 40px;
+        height: 40px;
+        background: $gray;
+        border-radius: 0px 4px 4px 0px;
+        @include flex-center;
+        border: none;
+    }
+    .search-input {
+        border-right: 0;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        &:focus {
+            outline: none;
+        }
     }
 }
