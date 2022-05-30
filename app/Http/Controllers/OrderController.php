@@ -122,6 +122,8 @@ class OrderController extends BaseController
         $appraisers = $this->repository->getUserByRoleWise(role: 'appraiser');
         $appraisal_types = $this->repository->getAppraisalTypes();
         $loan_types = $this->repository->getLoanTypes();
+        $all_amc = $this->repository->getAllClientByType('amc');
+        $all_lender = $this->repository->getAllClientByType('lender');
         $order = Order::with(
             'amc',
             'lender',
@@ -135,27 +137,14 @@ class OrderController extends BaseController
             'contactInfo',
             'activityLog.user'
         )->where('id', $id)->first();
+        $order->amc_file = $this->repository->getClientFile($order->amc_id);
+        $order->lender_file = $this->repository->getClientFile($order->lender_id);
 
         $order_types = $this->repository->getOrderTypes($id);
         $order_due_date = $this->repository->getOrderDueDate($id);
         $diff_in_days = Carbon::parse($order_due_date->due_date)->diffInDays();
 
-        $order = Order::with(
-            'amc',
-            'lender',
-            'user', 
-            'appraisalDetail',
-            'providerService',
-            'propertyInfo',
-            'borrowerInfo',
-            'contactInfo'
-        )->where('id', $id)->first();
-
-        if ($get->showArray && $get->showArray == "true") {
-            return $order->statusCode;
-        }
-
-        return view('order.show', compact('order_types', 'order', 'diff_in_days'));
+        return view('order.show', compact('order_types', 'order', 'diff_in_days','appraisers','appraisal_types','loan_types','all_amc','all_lender'));
     }
 
     /**
@@ -270,40 +259,6 @@ class OrderController extends BaseController
 
         $this->repository->addActivity($data);
         return response()->json(["message" => "Appraisal info updated successfully"]);
-    }
-
-    /**
-     * @param $order_id
-     * @return JsonResponse
-     */
-    public function getBorrowerInfo($order_id): JsonResponse
-    {
-        $borrower = $this->repository->getBorrowerDetails($order_id);
-        return response()->json(["borrower" => $borrower]);
-    }
-
-    /**
-     * @param $order_id
-     * @return JsonResponse
-     */
-    public function getContactInfo($order_id): JsonResponse
-    {
-        $contact = $this->repository->getContactDetails($order_id);
-        return response()->json(["contact" => $contact]);
-    }
-
-    /**
-     * @param $order_id
-     * @return JsonResponse
-     */
-    public function getClientsInfo($order_id): JsonResponse
-    {
-        $clients = $this->repository->getClientDetails($order_id);
-        $all_amc = $this->repository->getAllClientByType('amc');
-        $all_lender = $this->repository->getAllClientByType('lender');
-        $amc_file = $this->repository->getClientFile($clients->amc_id);
-        $lender_file = $this->repository->getClientFile($clients->lender_id);
-        return response()->json(["clients" => $clients,'amc_file' => $amc_file,'lender_file' => $lender_file,'allAmc' => $all_amc,'allLender' => $all_lender]);
     }
 
     public function updateClientInfo(Request $request,$order_id): JsonResponse

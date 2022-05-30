@@ -90,7 +90,10 @@
 <script>
 export default {
   props: {
-    orderId: String
+    orderId: String,
+    order: [],
+    allAmc: [],
+    allLender: []
   },
   data() {
     return {
@@ -106,30 +109,21 @@ export default {
       amcNewFile: '',
       amcFileName: '',
       message: '',
-      allAmc: '',
-      allLender: ''
     }
   },
   created() {
     this.getClientInfo()
+    console.log(this.order)
   },
   methods: {
     getClientInfo() {
-      axios.get('get-clients-info/' + this.orderId)
-          .then(res => {
-            this.amc_id = res.data.clients.amc.id
-            this.amc_file = res.data.amc_file
-            this.amc_name = res.data.clients.amc.name
-            this.lender_id = res.data.clients.lender.id
-            this.lender_file = res.data.lender_file
-            this.lender_name = res.data.clients.lender.name
-            this.lender_address = res.data.clients.lender.address
-
-            this.allAmc = res.data.allAmc
-            this.allLender = res.data.allLender
-          }).catch(err => {
-        console.log(err)
-      })
+        this.amc_id = this.order.amc.id
+        this.amc_file = this.order.amc_file
+        this.amc_name = this.order.amc.name
+        this.lender_id = this.order.lender.id
+        this.lender_file = this.order.lender_file
+        this.lender_name = this.order.lender.name
+        this.lender_address = this.order.lender.address
     },
     changeFileLender(e) {
       this.lenderNewFile = e.target.files[0]
