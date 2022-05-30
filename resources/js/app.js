@@ -26,6 +26,7 @@ Vue.component('ValidationObserver', ValidationObserver);
 
 import storage from "./store/index";
 import * as boston from "./helper/boston";
+import "./helper/config";
 
 /**
  * The following block of code may be used to automatically register your
@@ -50,7 +51,9 @@ Vue.component('pagination', Pagination);
 Vue.component('clients-list', require('./components/clients/list').default);
 Vue.component('order-create', require('./components/orders/OrderCreate').default)
 Vue.component('basic-info', require('./components/orders/details/basicInfo').default)
+Vue.component('property-info', require('./components/orders/details/propertyInfo').default)
 Vue.component('appraisal-details', require('./components/orders/details/appraisalDetails').default)
+Vue.component('provided-services', require('./components/orders/details/providedServices').default)
 Vue.component('workflow', require('./components/orders/details/workflow').default)
 Vue.component('client-info', require('./components/orders/details/clientInfo').default)
 Vue.component('call-log', require('./components/orders/details/callLog').default)
@@ -65,10 +68,13 @@ Vue.component('invoice', require('./components/orders/details/invoice').default)
 Vue.component('notes', require('./components/orders/details/notes').default)
 Vue.component('activity-log', require('./components/orders/details/activityLog').default)
 Vue.component('order-list', require('./components/orders/list').default)
+Vue.component('order-edit', require('./components/orders/edit').default)
+Vue.component('paginate', require('./src/Pagination').default)
 
 axios.defaults.baseURL = window.origin;
 Vue.config.productionTip = false
 Vue.prototype.$boston = boston;
+import "./helper/BostonMixin";
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application

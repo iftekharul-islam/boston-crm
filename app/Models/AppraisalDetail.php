@@ -20,10 +20,10 @@ class AppraisalDetail extends Model
     ];
 
     public function appraiser(){
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class,'appraiser_id','id');
     }
 
-    public function loantype(){
-        return $this->belongsTo(LoanType::class,'loan_type_id','id');
+    public function getLoanType(){
+        return $this->belongsTo(LoanType::class,'loan_type','id');
     }
 }

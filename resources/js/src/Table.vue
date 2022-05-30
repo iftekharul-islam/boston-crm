@@ -1,12 +1,12 @@
 <template>
     <div class="m-table" :bgcolor="bgcolor">
         <div class="m-table-content">
-            <table class="onlydesktop">
+            <table class="onlydesktop table">
                 <thead>
                     <th width="2%" v-if="showSelectOpt">
                         <m-checkbox ref="clickAllCheck" :color='bgcolor' @change="checkAll" noripple/>
                     </th>
-                    <th width="5%" v-if="showSlOpt">
+                    <th width="5%" v-if="showSlOpt" class="text-center">
                         SL
                     </th>
                     <th v-for="headItem, hi in headerItem" :class="`text-align-${headItem.align}`" :key="hi">{{ headItem.title | ucFirst }}</th>
@@ -17,8 +17,8 @@
                             <td width="2%" v-if="showSelectOpt" class="lnh-1">
                                 <m-checkbox :color='bgcolor' @change="chooseItem($event, tdItem)" v-model="tdItem.selected" noripple/>
                             </td>
-                            <td width="5%" text-center v-if="showSlOpt">
-                                {{ ti+1 }}
+                            <td width="5%" v-if="showSlOpt" class="text-center">
+                                {{ ti+slStart }}
                             </td>
                             <td v-for="hItem, hk in headerItem" :key="hk" :class="`text-align-${hItem.aligntd}`">
                                 <slot :name="hItem.item" v-bind:item="tdItem">
@@ -42,7 +42,7 @@
                     </template>
                 </tbody>
             </table>
-            <div class="onlymobile">
+            <!-- <div class="onlymobile">
                 <div class="m-table-mobile-header">
                     <div class="buttonCheckbox mr-2" color="primary" text outline v-if="showSelectOpt">
                         <m-checkbox :color='bgcolor' @change="checkAll"/>
@@ -94,7 +94,7 @@
                         </template>
                     </tbody>
                 </table>
-            </div>
+            </div> -->
         </div>
     </div>
 </template>
@@ -102,7 +102,7 @@
 <script>
 export default {
     name: 'm-table',
-    props: ['show-select', 'collapse', 'collapse-text', 'header', 'items', 'empty-message', 'index', 'bgcolor', 'show-sl'],
+    props: ['show-select', 'collapse', 'collapse-text', 'header', 'items', 'empty-message', 'index', 'bgcolor', 'show-sl', 'sl-start'],
     data: () => ({
         tableHeader: [],
         headerItem: [],
@@ -283,9 +283,52 @@ export default {
     .onlymobile{
         display: none;
     }
+    .m-table table {
+        border-top: thin solid #ccc;
+        border-right: thin solid #ccc;
+        width: 100%;
+        border-collapse: collapse;
+        transition: all 200ms linear;
+    }
+    .m-table table tr td, 
+    .m-table table thead th {
+        border-bottom: thin solid #ccc;
+        border-left: thin solid #ccc;
+        padding: 3px 5px;
+        font-size: 14px;
+        transition: all 200ms linear;
+    }
+     .m-table table thead th {
+        font-size: 15px;
+        background: #eee;
+        padding: 5px;
+        text-align: center;
+        transition: all 200ms linear;
+    }
     @media (max-width: 571px) {
         .onlymobile {
             display: block;
         }
     }
+
+    .text-align-center {
+        text-align: center;
+    }
+
+    .text-align-left {
+        text-align: left;
+    }
+
+    .text-align-right {
+        text-align: right;
+    }
+
+    .text-align-justify {
+        text-align: justify;
+    }
+
+    .no-padding {
+        padding: 0px!important;
+    }
+
 </style>

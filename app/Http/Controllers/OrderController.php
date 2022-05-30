@@ -2,34 +2,40 @@
 
 namespace App\Http\Controllers;
 
+
+use Carbon\Carbon;
+use Psy\Util\Json;
 use App\Helpers\Helper;
 use App\Models\ActivityLog;
-use App\Models\AppraisalDetail;
-use App\Models\BorrowerInfo;
-use App\Models\ContactInfo;
 use App\Models\Order;
+use App\Helpers\CrmHelper;
+use Illuminate\Support\Js;
+use App\Models\ContactInfo;
+use App\Models\BorrowerInfo;
 use App\Models\PropertyInfo;
-use App\Models\ProvidedService;
-use App\Repositories\OrderRepository;
-use App\Services\OrderService;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Carbon\Carbon;
-use Illuminate\Support\Js;
-use Psy\Util\Json;
+use App\Services\OrderService;
+use App\Models\AppraisalDetail;
+use App\Models\ProvidedService;
+use Illuminate\Http\JsonResponse;
 use Ramsey\Collection\Collection;
+
+use Illuminate\Contracts\View\View;
+use App\Repositories\OrderRepository;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Contracts\Foundation\Application;
+
 use Illuminate\Support\Facades\Auth;
+
 
 class OrderController extends BaseController
 {
     protected OrderService $service;
     protected OrderRepository $repository;
+    use CrmHelper;
 
     public function __construct(OrderService $order_service, OrderRepository $order_repository)
     {
@@ -43,10 +49,32 @@ class OrderController extends BaseController
      *
      * @return Application|Factory|View
      */
-    public function index() : View|Factory|Application
+    public function index(Request $get) : View|Factory|Application
     {
-        $orderData = Order::take(20)->get();
+        $orderData = $this->searchOrderData($get);
         return view('order.index', compact('orderData'));
+    }
+
+    /**
+     * Searching Order Data Request
+     * 
+     * @return JSON
+     */
+
+    public function searchOrderData(Request $get){
+        $data = $get->data;
+        $paginate = $get->paginate && $get->paginate > 0 ? $get->paginate : 10;
+        $order = Order::where(function($qry) use ($data) {
+            return $qry->where('system_order_no', "LIKE", "%$data%")
+                       ->orWhere("client_order_no", "LIKE", "%$data%")
+                       ->orWhere("received_date", "LIKE", "%$data%")
+                       ->orWhere("amc_id", "LIKE", "%$data%")
+                       ->orWhere("lender_id", "LIKE", "%$data%")
+                       ->orWhere("company_id", "LIKE", "%$data%")
+                       ->orWhere("due_date", "LIKE", "%$data%")
+                       ->orWhere("created_at", "LIKE", "%$data%");
+        })->with('user', 'amc', 'lender')->orderBy('id', 'desc')->paginate($paginate);
+        return $order;
     }
 
     /**
@@ -63,10 +91,9 @@ class OrderController extends BaseController
         $client_users = Helper::getClientsGroupBy($this->repository->getClients());
         $amc_clients = $client_users[0];
         $lender_clients = $client_users[1];
-        $company = auth()->user()->companies()->first();
 
+        $company = auth()->user()->companies()->first();        
         $userID = auth()->user()->id;
-
 
         return view('order.create',
             compact('system_order_no', 'userID', 'company', 'appraisal_users', 'appraisal_types', 'loan_types', 'amc_clients',
@@ -92,10 +119,27 @@ class OrderController extends BaseController
      */
     public function show($id)
     {
+        $appraisers = $this->repository->getUserByRoleWise(role: 'appraiser');
+        $appraisal_types = $this->repository->getAppraisalTypes();
+        $loan_types = $this->repository->getLoanTypes();
+        $order = Order::with(
+            'amc',
+            'lender',
+            'user',
+            'appraisalDetail',
+            'appraisalDetail.appraiser',
+            'appraisalDetail.getLoanType',
+            'providerService',
+            'propertyInfo',
+            'borrowerInfo',
+            'contactInfo',
+            'activityLog.user'
+        )->where('id', $id)->first();
+
         $order_types = $this->repository->getOrderTypes($id);
         $order_due_date = $this->repository->getOrderDueDate($id);
         $diff_in_days = Carbon::parse($order_due_date->due_date)->diffInDays();
-        return view('order.show', compact('order_types','diff_in_days'));
+        return view('order.show', compact('order','order_types','diff_in_days','appraisers','loan_types','appraisal_types'));
     }
 
     /**
@@ -105,9 +149,28 @@ class OrderController extends BaseController
      *
      * @return Response
      */
-    public function edit(Order $order)
+    public function edit(Order $order, $id)
     {
+        $company = auth()->user()->companies()->first();        
+        $userID = auth()->user()->id;
+        $appraisal_users = $this->repository->getUserByRoleWise(role: 'appraiser');
+        $appraisal_types = $this->repository->getAppraisalTypes();
+        $loan_types = $this->repository->getLoanTypes();
+        $client_users = Helper::getClientsGroupBy($this->repository->getClients());
+        $amc_clients = $client_users[0];
+        $lender_clients = $client_users[1];
 
+        $order = Order::with(
+                'amc',
+                'lender',
+                'user', 
+                'appraisalDetail',
+                'providerService',
+                'propertyInfo',
+                'borrowerInfo',
+                'contactInfo'
+            )->where('id', $id)->first();
+        return view('order.edit',compact('order', 'appraisal_users', 'amc_clients', 'lender_clients', 'appraisal_types', 'loan_types', 'client_users', 'company', 'userID'));
     }
 
     /**
@@ -135,16 +198,6 @@ class OrderController extends BaseController
         //
     }
 
-    /**
-     * @param $order_id
-     * @return JsonResponse
-     */
-    public function getBasicInfo($order_id): JsonResponse
-    {
-        $appraisal_details = $this->repository->getAppraisalDetails($order_id);
-        $property_info = $this->repository->getPropertyInfo($order_id);
-        return response()->json(["appraisalDetails" => $appraisal_details, "propertyInfo" => $property_info]);
-    }
 
     /**
      * @param Request $request
@@ -153,7 +206,7 @@ class OrderController extends BaseController
      */
     public function updateBasicInfo(Request $request, $order_id): JsonResponse
     {
-        $this->repository->updatePropertyInfo($order_id, $request->all());
+        $this->repository->updateBasicInfo($order_id, $request->all());
 
         $data = [
           "activity_text" => "Basic info updated",
@@ -165,27 +218,25 @@ class OrderController extends BaseController
         return response()->json(["message" => "Basic info updated successfully !"]);
     }
 
-
     /**
+     * @param Request $request
      * @param $order_id
      * @return JsonResponse
      */
-    public function getAppraisalInfo($order_id): JsonResponse
+    public function updatePropertyInfo(Request $request,$order_id): JsonResponse
     {
-        $appraisal_details = $this->repository->getAppraisalDetails($order_id);
-        $provided_service = $this->repository->getProvidedService($order_id);
-        $appraisal_users = $this->repository->getUserByRoleWise(role: 'appraiser');
-        $appraisal_types = $this->repository->getAppraisalTypes();
-        $loan_types = $this->repository->getLoanTypes();
+        $this->repository->updatePropertyInfo($order_id, $request->all());
 
-        return response()->json([
-            "appraisalDetails" => $appraisal_details,
-            "providedService" => $provided_service,
-            "appraiserTypes" => $appraisal_types,
-            "loanTypes" => $loan_types,
-            "appraisers" => $appraisal_users
-        ]);
+        $data = [
+            "activity_text" => "Basic info updated",
+            "activity_by" => Auth::id(),
+            "order_id" => $order_id
+        ];
+
+        $this->repository->addActivity($data);
+        return response()->json(["message" => "Property info updated successfully !"]);
     }
+
 
     /**
      * @param Request $request
@@ -194,7 +245,14 @@ class OrderController extends BaseController
      */
     public function updateAppraisalInfo(Request $request, $order_id): JsonResponse
     {
-        $this->repository->updateAppraisalDetails($order_id, $request->all());
+        $this->repository->updateAppraisalInfo($order_id, $request->all());
+        $data = [
+            "activity_text" => "Appraisal info info updated",
+            "activity_by" => Auth::id(),
+            "order_id" => $order_id
+        ];
+
+        $this->repository->addActivity($data);
         return response()->json(["message" => "Appraisal info updated successfully"]);
     }
 
@@ -225,7 +283,17 @@ class OrderController extends BaseController
     public function getClientsInfo($order_id): JsonResponse
     {
         $clients = $this->repository->getClientDetails($order_id);
-        return response()->json(["clients" => $clients]);
+        $all_amc = $this->repository->getAllClientByType('amc');
+        $all_lender = $this->repository->getAllClientByType('lender');
+        $amc_file = $this->repository->getClientFile($clients->amc_id);
+        $lender_file = $this->repository->getClientFile($clients->lender_id);
+        return response()->json(["clients" => $clients,'amc_file' => $amc_file,'lender_file' => $lender_file,'allAmc' => $all_amc,'allLender' => $all_lender]);
+    }
+
+    public function updateClientInfo(Request $request,$order_id): JsonResponse
+    {
+        $this->repository->updateClientDetails($order_id,$request->all());
+        return response()->json(['message' => 'Client info updated successfully']);
     }
 
     /**

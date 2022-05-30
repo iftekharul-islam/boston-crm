@@ -48,7 +48,7 @@ class ClientService
      */
     public function getClientData(int $id): ?Model
     {
-        return $this->clientRepository->find($id);
+        return $this->clientRepository->getClientDetails($id);
     }
 
 
