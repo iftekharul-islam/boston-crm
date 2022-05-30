@@ -68,7 +68,7 @@
           </div>
           <div class="group">
             <label for="" class="d-block mb-2 dashboard-label">Lender address</label>
-            <input class="dashboard-input w-100" type="text" :value="lender_address"></input>
+            <input class="dashboard-input w-100" type="text" :value="lender_address"/>
             <a :href="lender_file" target="_blank" class="primary-text fw-bold my-3 d-inline-block underline">Lender
               requirements 1</a>
             <div class="position-relative file-upload">
