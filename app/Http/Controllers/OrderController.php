@@ -117,12 +117,28 @@ class OrderController extends BaseController
      *
      * @return Application|Factory|View
      */
-    public function show($id)
+    public function show($id, Request $get)
     {
         $order_types = $this->repository->getOrderTypes($id);
         $order_due_date = $this->repository->getOrderDueDate($id);
         $diff_in_days = Carbon::parse($order_due_date->due_date)->diffInDays();
-        return view('order.show', compact('order_types','diff_in_days'));
+
+        $order = Order::with(
+            'amc',
+            'lender',
+            'user', 
+            'appraisalDetail',
+            'providerService',
+            'propertyInfo',
+            'borrowerInfo',
+            'contactInfo'
+        )->where('id', $id)->first();
+
+        if ($get->showArray && $get->showArray == "true") {
+            return $order;
+        }
+
+        return view('order.show', compact('order_types', 'order', 'diff_in_days'));
     }
 
     /**

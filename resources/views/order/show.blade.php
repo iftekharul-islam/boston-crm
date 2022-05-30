@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
     <div class="order-details bg-platinum dashboard-space">
-        <a href="{{ url('/order') }}" class="text-light-black d-inline-flex align-items-center mgb-20">
+        <a href="{{ url('/orders') }}" class="text-light-black d-inline-flex align-items-center mgb-20">
             <svg class="me-2" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M9.57086 5.18001C9.76086 5.18001 9.95086 5.25 10.1009 5.4C10.3909 5.69 10.3909 6.17 10.1009 6.46L4.56086 12L10.1009 17.54C10.3909 17.83 10.3909 18.31 10.1009 18.6C9.81086 18.89 9.33086 18.89 9.04086 18.6L2.97086 12.53C2.68086 12.24 2.68086 11.76 2.97086 11.47L9.04086 5.4C9.19086 5.25 9.38086 5.18 9.57086 5.18001Z"
                       fill="#2F415E"/>
@@ -39,42 +39,42 @@
         <div class="order-details-box-main row">
             <div class="order-details__left col-md-6">
                 {{-- Basic Information --}}
-                <basic-info :order-id="'{{ $order_id }}'"></basic-info>
+                <basic-info :order="{{ $order }}" :order-id="'{{ $order_id }}'"></basic-info>
                 {{-- Borrower --}}
-                <borrower :order-id="'{{ $order_id }}'"></borrower>
+                <borrower :order="{{ $order }}" :order-id="'{{ $order_id }}'"></borrower>
                 {{-- Contact --}}
-                <contact :order-id="'{{ $order_id }}'"></contact>
+                <contact :order="{{ $order }}" :order-id="'{{ $order_id }}'"></contact>
                 {{-- Inspection --}}
-                <inspection :order-id="'{{ $order_id }}'"></inspection>
+                <inspection :order="{{ $order }}" :order-id="'{{ $order_id }}'"></inspection>
                 {{-- Issues --}}
                 <issues></issues>
             </div>
             <div class="order-details__right col-md-6">
                 {{-- Appraisal Details --}}
-                <appraisal-details :order-id="'{{ $order_id }}'"></appraisal-details>
+                <appraisal-details :order="{{ $order }}" :order-id="'{{ $order_id }}'"></appraisal-details>
                 {{-- Client --}}
-                <client-info :order-id="'{{ $order_id }}'"></client-info>
+                <client-info :order="{{ $order }}" :order-id="'{{ $order_id }}'"></client-info>
                 {{-- Call log --}}
-                <call-log></call-log>
+                <call-log :order="{{ $order }}"></call-log>
                 {{-- Map --}}
-                <map-view></map-view>
+                <map-view :order="{{ $order }}"></map-view>
             </div>
         </div>
         <div class="row">
-            <workflow></workflow>
-            <history></history>
+            <workflow :order="{{ $order }}"></workflow>
+            <history :order="{{ $order }}"></history>
         </div>
         <div class="mgt-32">
-            <files></files>
+            <files :order="{{ $order }}"></files>
         </div>
 
         <div class="note-grid">
              {{-- Invoice --}}
-             <invoice></invoice>
+             <invoice :order="{{ $order }}"></invoice>
              {{-- Note --}}
-             <notes></notes>
+             <notes :order="{{ $order }}"></notes>
             {{-- Activity log --}}
-            <activity-log :order-id="'{{ $order_id }}'"></activity-log>
+            <activity-log :order="{{ $order }}" :order-id="'{{ $order_id }}'"></activity-log>
             {{-- <div class="row">
                 <div class="col-md-12">
                    

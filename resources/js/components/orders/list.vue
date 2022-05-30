@@ -33,6 +33,9 @@
             <template v-slot:amc_id="{item}">
                 {{ item.lender.name }}
             </template>
+            <template v-slot:rush="{item}">
+                {{ item.rush == 1 ? 'Yes' : 'No' }}
+            </template>
             <template v-slot:action="{item}">
                 <a :href="`orders/${item.id}/edit`" class="btn btn-success btn-sm" :data-key="item.id">
                     <span onclick="roleUpdateOpen(2);" class="icon-edit cursor-pointer"><span class="path1"></span><span class="path2"></span></span>
@@ -85,6 +88,10 @@ export default {
                 {
                     title: "Created By",
                     key: "user"
+                },
+                {
+                    title: "Rush Order",
+                    key: "rush"
                 }
             ], 
         }

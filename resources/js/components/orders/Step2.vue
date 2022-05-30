@@ -33,7 +33,7 @@
                     <span class="error-message">{{ errors[0] }}</span>
                     <div class="text-end mgt-20">
                       <button class="add-more " @click="addContact">
-                        <span class="icon-plus"></span> Add more
+                        <span class="icon-plus"></span> Add
                       </button>
                     </div>
                     <div class="new-array-items">
@@ -60,7 +60,7 @@
                     <span class="error-message">{{ errors[0] }}</span>
                     <div class="text-end mgt-20">
                       <button class="add-more" @click="addEmail">
-                        <span class="icon-plus"></span> Add more
+                        <span class="icon-plus"></span> Add
                       </button>
                     </div>
                     <div class="new-array-items">
@@ -110,7 +110,7 @@
                       <span class="error-message">{{ errors[0] }}</span>
                       <div class="text-end mgt-20">
                         <button class="add-more " @click="addContact2">
-                          <span class="icon-plus"></span> Add more
+                          <span class="icon-plus"></span> Add
                         </button>
                       </div>
                       <div class="new-array-items">
@@ -137,7 +137,7 @@
                     <span class="error-message">{{ errors[0] }}</span>
                     <div class="text-end mgt-20">
                       <button class="add-more" @click="addEmail2">
-                        <span class="icon-plus"></span> Add more
+                        <span class="icon-plus"></span> Add
                       </button>
                     </div>
                     <div class="new-array-items">
@@ -158,11 +158,20 @@
         </div>
       </div>
     </div>
-    <div class="group mgt-32 mgb-32">
-      <h4 class="box-header mb-3">Upload order form</h4>
-      <div class="position-relative file-upload">
-        <input type="file">
-        <label for="">Upload <img src="/img/upload.png" alt="boston profile"></label>
+    <div class="d-flex">
+      <div class="group mgt-32 mgb-32">
+        <h4 class="box-header mb-3">Upload order form</h4>
+        <div class="position-relative file-upload">
+          <input type="file">
+          <label for="">Upload <img src="/img/upload.png" alt="boston profile"></label>
+        </div>
+      </div>
+      <div class="group mgt-32 mgb-32 mgl-32">
+        <h4 class="box-header mb-3">Store as Rush Order</h4>
+        <label for="rushOrder">
+          <input type="checkbox" v-model="step2.rush" id="rushOrder" class="pr-2">
+          Rush
+        </label>
       </div>
     </div>
     <div class="add-client__bottom d-flex justify-content-end  p-3">
@@ -190,6 +199,7 @@ export default {
         contact_info: null,
         contact_number: false,
         email_address: false,
+        rush: 0,
         contact_number_s: [],
         email_address_s: [],
       },
@@ -299,6 +309,8 @@ export default {
           newData.i = null;
           if (i == "borrower_contact_s" || i == "borrower_email_s" || i == "contact_number_s" || i == "email_address_s") {
               newData.i = [];
+          } else if (i == "rush") {
+            newData.i = 0;
           }
         }
         this.step2 = newData;
@@ -308,12 +320,10 @@ export default {
       let borrowerContact = JSON.parse(this.order.borrower_info.contact_email);
       let borrowerEmail = borrowerContact['email'];
       let borrowerPhone = borrowerContact['phone'];
-      console.log(borrowerContact, borrowerEmail, borrowerPhone);
       
       let contactInfo = JSON.parse(this.order.contact_info.contact_email);
       let contactInfoEmail = contactInfo['email'];
       let contactInfoPhone = contactInfo['phone'];
-      console.log(contactInfo, contactInfoEmail, contactInfoPhone);
 
       let step2 = {
         borrower_name: this.order.borrower_info.borrower_name,
@@ -327,6 +337,7 @@ export default {
         contact_number: contactInfoPhone.length ? true : false,
         email_address: contactInfoEmail.length ? true : false,
         contact_number_s: contactInfoPhone,
+        rush: this.order.rush,
         email_address_s: contactInfoEmail,
       };
       this.step2 = step2;

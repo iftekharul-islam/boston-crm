@@ -116,7 +116,8 @@
 <script>
   export default {
     props:{
-      orderId: String
+      orderId: String,
+      order: [],
     },
     data(){
       return{
@@ -141,30 +142,33 @@
       }
     },
     mounted() {
-      this.getAppraisalDetails()
+      // this.getAppraisalDetails()
+    },
+    created(){
+      // this.details = this.order.app
     },
     methods:{
       getAppraisalDetails(){
         axios.get('get-appraisal-info/'+this.orderId)
             .then(res => {
-              this.details.appraiser_name = res.data.appraisalDetails.appraiser.name
-              this.details.loan_type_name = res.data.appraisalDetails.loantype.name
-              this.details.appraiser_type = JSON.parse(res.data.providedService.appraiser_type_fee)[0]["type"]
-              this.details.appraiser_type_id = JSON.parse(res.data.providedService.appraiser_type_fee)[0]["id"]
+                this.details.appraiser_name = res.data.appraisalDetails.appraiser.name
+                this.details.loan_type_name = res.data.appraisalDetails.loantype.name
+                this.details.appraiser_type = JSON.parse(res.data.providedService.appraiser_type_fee)[0]["type"]
+                this.details.appraiser_type_id = JSON.parse(res.data.providedService.appraiser_type_fee)[0]["id"]
 
-              this.details.client_order_no = res.data.appraisalDetails.client_order_no
-              this.details.appraiser_id = res.data.appraisalDetails.appraiser_id
-              this.details.loan_type_id = res.data.appraisalDetails.loan_type_id
-              this.details.system_order_no = res.data.appraisalDetails.system_order_no
-              this.details.loan_no = res.data.appraisalDetails.loan_no
-              this.details.fha_case_no = res.data.appraisalDetails.fha_case_no
-              this.details.due_date = res.data.appraisalDetails.due_date
-              this.details.received_date = res.data.appraisalDetails.received_date
-              this.details.technology_fee = res.data.appraisalDetails.technology_fee
+                this.details.client_order_no = res.data.appraisalDetails.client_order_no
+                this.details.appraiser_id = res.data.appraisalDetails.appraiser_id
+                this.details.loan_type_id = res.data.appraisalDetails.loan_type_id
+                this.details.system_order_no = res.data.appraisalDetails.system_order_no
+                this.details.loan_no = res.data.appraisalDetails.loan_no
+                this.details.fha_case_no = res.data.appraisalDetails.fha_case_no
+                this.details.due_date = res.data.appraisalDetails.due_date
+                this.details.received_date = res.data.appraisalDetails.received_date
+                this.details.technology_fee = res.data.appraisalDetails.technology_fee
 
-              this.appraiserTypes = res.data.appraiserTypes
-              this.appraisers = res.data.appraisers
-              this.loanTypes = res.data.loanTypes
+                this.appraiserTypes = res.data.appraiserTypes
+                this.appraisers = res.data.appraisers
+                this.loanTypes = res.data.loanTypes
             }).catch(err => {
           console.log(err)
         })
