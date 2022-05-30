@@ -174,23 +174,26 @@ class OrderRepository extends BaseRepository
      * @param $data
      * @return bool
      */
-    public function updatePropertyInfo($order_id, $data): bool
+    public function updateBasicInfo($order_id, $data): bool
     {
-        $property_info = PropertyInfo::query()->where('order_id', $order_id)->update([
-            "search_address" => $data["search_address"],
-            "street_name" => $data["street_name"],
-            "city_name" => $data["city_name"],
-            "state_name" => $data["state_name"],
-            "zip" => $data["zip"],
-            "country" => $data["country"],
-            "unit_no" => $data["unit_no"]
-        ]);
-        $order_details = Order::query()->where('id', $order_id)->update([
+        return Order::query()->where('id', $order_id)->update([
             "client_order_no" => $data["client_order_no"],
             "received_date" => Carbon::parse($data["received_date"])->format('Y-m-d'),
             "due_date" => Carbon::parse($data["due_date"])->format('Y-m-d')
         ]);
-        return ($property_info && $order_details);
+    }
+
+    public function updatePropertyInfo($order_id,$data): bool
+    {
+        return PropertyInfo::query()->where('id', $order_id)->update([
+            "search_address" => $data['search_address'],
+            "street_name" => $data['street_name'],
+            "city_name" => $data['city_name'],
+            "state_name" => $data['state_name'],
+            "zip" => $data['zip'],
+            "country" => $data['country'],
+            "unit_no" => $data['unit_no'],
+        ]);
     }
 
     /**
@@ -198,17 +201,14 @@ class OrderRepository extends BaseRepository
      * @param $data
      * @return bool
      */
-    public function updateAppraisalDetails($order_id, $data): bool
+    public function updateAppraisalInfo($order_id, $data): bool
     {
-        return AppraisalDetail::query()
-            ->where('order_id', $order_id)
-            ->update([
-                "appraiser_id" => $data['appraiser_id'],
-                "loan_type" => $data['loan_type'],
-                "technology_fee" => $data['technology_fee'],
-                "fha_case_no" => $data['fha_case_no'],
-                "loan_no" => $data['loan_no'],
-            ]);
+        return AppraisalDetail::query()->where('order_id', $order_id)->update([
+            "appraiser_id" => $data['appraiser_id'],
+            "loan_type" => $data['loan_type'],
+            "fha_case_no" => $data['fha_case_no'],
+            "loan_no" => $data['loan_no'],
+        ]);
 //        $provided_service = ProvidedService::
     }
 

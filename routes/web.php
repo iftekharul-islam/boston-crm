@@ -101,15 +101,16 @@ Route::group( [ 'middleware' => [ 'auth:sanctum' ] ], function () {
      //order details
     Route::get('save-order-data',[OrderController::class,'saveOrderData']);
 
-    Route::get('/get-basic-info/{id}',[OrderController::class,'getBasicInfo'])->middleware('role_permission:view.order');
-    Route::get('/get-appraisal-info/{id}',[OrderController::class,'getAppraisalInfo'])->middleware('role_permission:view.order');
-    Route::get('/get-borrower-info/{id}',[OrderController::class,'getBorrowerInfo'])->middleware('role_permission:view.order');
-    Route::get('/get-contact-info/{id}',[OrderController::class,'getContactInfo'])->middleware('role_permission:view.order');
-    Route::get('/get-clients-info/{id}',[OrderController::class,'getClientsInfo']);
-    Route::get('/get-activity-log/{id}',[OrderController::class,'getActivityLog']);
+//    Route::get('/get-basic-info/{id}',[OrderController::class,'getBasicInfo'])->middleware('role_permission:view.order');
+//    Route::get('/get-appraisal-info/{id}',[OrderController::class,'getAppraisalInfo'])->middleware('role_permission:view.order');
+//    Route::get('/get-borrower-info/{id}',[OrderController::class,'getBorrowerInfo'])->middleware('role_permission:view.order');
+//    Route::get('/get-contact-info/{id}',[OrderController::class,'getContactInfo'])->middleware('role_permission:view.order');
+//    Route::get('/get-clients-info/{id}',[OrderController::class,'getClientsInfo']);
+//    Route::get('/get-activity-log/{id}',[OrderController::class,'getActivityLog']);
 
 
     Route::post('/update-basic-info/{id}',[OrderController::class,'updateBasicInfo'])->middleware('role_permission:update.order');
+    Route::post('/update-property-info/{id}',[OrderController::class,'updatePropertyInfo'])->middleware('role_permission:update.order');
     Route::post('/update-appraisal-info/{id}',[OrderController::class,'updateAppraisalInfo'])->middleware('role_permission:update.order');
     Route::post('/update-client-info/{id}',[OrderController::class,'updateClientInfo']);
     Route::post('/update-borrower-info/{id}',[OrderController::class,'updateBorrowerInfo'])->middleware('role_permission:update.order');

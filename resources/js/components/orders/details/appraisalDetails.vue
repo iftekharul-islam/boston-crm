@@ -6,19 +6,9 @@
     </div>
     <div class="box-body">
       <div class="list__group">
-        <p class="mb-0 left-side">Appraiser Type</p>
-        <span>:</span>
-        <p class="right-side mb-0">{{ details.appraiser_type }}</p>
-      </div>
-      <div class="list__group">
         <p class="mb-0 left-side">Appraiser Name</p>
         <span>:</span>
         <p class="right-side mb-0">{{ details.appraiser_name }}</p>
-      </div>
-      <div class="list__group">
-        <p class="mb-0 left-side">Client Order #</p>
-        <span>:</span>
-        <p class="right-side mb-0">{{ details.client_order_no }}</p>
       </div>
       <div class="list__group">
         <p class="mb-0 left-side">Loan #</p>
@@ -35,11 +25,6 @@
         <span>:</span>
         <p class="right-side mb-0">{{ details.fha_case_no }}</p>
       </div>
-      <div class="list__group">
-        <p class="mb-0 left-side">Appraisal Total Fee </p>
-        <span>:</span>
-        <p class="right-side mb-0">{{ details.technology_fee }}</p>
-      </div>
     </div>
     <!-- modal -->
      <b-modal id="appraisal-info" size="lg" title="Edit appraisal Information">
@@ -48,23 +33,10 @@
           <div class="row">
             <div class="col-md-6">
               <div class="group">
-                <label for="" class="d-block mb-2 dashboard-label">Appraiser Type <span class="require"></span></label>
-                <b-form-select
-                    v-model="details.appraiser_type_id"
-                    :options="appraiserTypes"
-                    value-field="id"
-                    text-field="form_type"
-                    class="dashboard-input w-100">
-                  <template #first>
-                    <b-form-select-option value="" disabled>-- Please select an option --</b-form-select-option>
-                  </template>
-                </b-form-select>
-              </div>
-              <div class="group">
                 <label for="" class="d-block mb-2 dashboard-label">Appraiser Name <span class="require"></span></label>
                 <b-form-select
                     v-model="details.appraiser_id"
-                    :options="appraisers"
+                    :options="this.appraisers"
                     value-field="id"
                     text-field="name"
                     class="dashboard-input w-100">
@@ -77,7 +49,7 @@
                 <label for="" class="d-block mb-2 dashboard-label">Loan Type <span class="require"></span></label>
                 <b-form-select
                     v-model="details.loan_type"
-                    :options="loanTypes"
+                    :options="this.loanTypes"
                     value-field="id"
                     text-field="name"
                     class="dashboard-input w-100">
@@ -86,16 +58,8 @@
                   </template>
                 </b-form-select>
               </div>
-              <div class="group">
-                <label for="" class="d-block mb-2 dashboard-label">Appraisal Fee <span class="require"></span></label>
-                <input type="text" v-model="details.technology_fee" class="dashboard-input w-100">
-              </div>
             </div>
             <div class="col-md-6">
-              <div class="group">
-                <label for="" class="d-block mb-2 dashboard-label">Client Order # <span class="require"></span></label>
-                <input type="text" v-model="details.client_order_no" class="dashboard-input w-100">
-              </div>
               <div class="group">
                 <label for="" class="d-block mb-2 dashboard-label">Loan # <span class="require"></span></label>
                 <input type="text" v-model="details.loan_no" class="dashboard-input w-100">
@@ -119,31 +83,24 @@
     props:{
       orderId: String,
       order: [],
+      appraisers: [],
+      loanTypes: []
     },
     data(){
       return{
         details:{
-          appraiser_id: '',
           appraiser_name: '',
-          appraiser_type_id: '',
+          appraiser_id: '',
           appraiser_type: '',
           loan_type: '',
           loan_type_name: '',
-          client_order_no: '',
-          system_order_no: '',
           loan_no: '',
           fha_case_no: '',
-          due_date: new Date(),
-          received_date: new Date(),
-          technology_fee: ''
         },
-        appraiserTypes: [],
-        appraisers: '',
-        loanTypes: '',
         message: ''
       }
     },
-    mounted() {
+    created() {
       this.getAppraisalDetails()
     },
     created(){
@@ -157,37 +114,21 @@
     },
     methods:{
       getAppraisalDetails(){
-        let that = this
-        this.$boston.get('get-appraisal-info/'+this.orderId)
-            .then(res => {
-                this.details.appraiser_name = res.appraisalDetails.appraiser.name
-                this.details.loan_type_name = res.appraisalDetails.loantype.name
-
-                this.details.client_order_no = res.orderDetails.client_order_no
-                this.details.appraiser_id = res.appraisalDetails.appraiser_id
-                this.details.loan_type = res.appraisalDetails.loan_type
-                this.details.system_order_no = res.orderDetails.system_order_no
-                this.details.loan_no = res.appraisalDetails.loan_no
-                this.details.fha_case_no = res.appraisalDetails.fha_case_no
-                this.details.due_date = res.appraisalDetails.due_date
-                this.details.received_date = res.appraisalDetails.received_date
-                this.details.technology_fee = res.appraisalDetails.technology_fee
-
-                this.appraiserTypes = res.appraiserTypes
-                this.appraisers = res.appraisers
-                this.loanTypes = res.loanTypes
-
-            }).catch(err => {
-            console.log(err)
-        })
+          this.details.appraiser_id = this.order.appraisal_detail.appraiser_id
+          this.details.loan_type = this.order.appraisal_detail.loan_type
+          this.details.appraiser_name = this.order.appraisal_detail.appraiser.name
+          this.details.loan_type_name = this.order.appraisal_detail.get_loan_type.name
+          this.details.loan_no = this.order.appraisal_detail.loan_no
+          this.details.fha_case_no = this.order.appraisal_detail.fha_case_no
       },
       updateAppraisalDetails() {
         let that = this
-        axios.post('update-appraisal-info/' + that.orderId,that.details)
+        axios.post('update-appraisal-info/' + this.orderId,this.details)
             .then( res => {
-              that.message = res.data.message
+              this.message = res.data.message
               setTimeout(function(){
-                that.$bvModal.hide('basic-info')
+                that.$bvModal.hide('appraisal-info')
+                that.message = ''
               }, 2000);
             }).catch( err =>{
               console.log(err)

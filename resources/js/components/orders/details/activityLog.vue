@@ -13,24 +13,20 @@
 <script>
   export default {
     props:{
-      orderId: String
+      orderId: String,
+      order: []
     },
     data(){
       return{
-        activityLogs: '',
+        activityLogs: ''
       }
     },
     created() {
       this.getActivityLog()
     },
-    methods:{
+    methods: {
       getActivityLog(){
-        axios.get('get-activity-log/'+ this.orderId)
-            .then(res => {
-              this.activityLogs = res.data.activityLog
-            }).catch(err => {
-          console.log(err)
-        })
+        this.activityLogs = this.order.activity_log
       }
     }
   }
