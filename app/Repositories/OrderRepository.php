@@ -234,12 +234,23 @@ class OrderRepository extends BaseRepository
     {
         return Order::query()->where('id', $order_id)
             ->select('amc_id', 'lender_id')
-            ->with(['amc' => function ($query) {
-                return $query->select('id', 'name');
-            }, 'lender' => function ($query) {
-                return $query->select('id', 'name','address');
+            ->with(['amc'=> function($query){
+                $query->select('id','name');
+            },'lender'=> function($query){
+                $query->select('id','name','address');
             }])->first();
     }
+
+    /**
+     * @param $type
+     * @return Builder|Collection
+     */
+    public function getAllClientByType($type): Builder|Collection
+    {
+        return Client::where('client_type',$type)->orWhere('client_type','both')->get();
+    }
+
+
 
     /**
      * @param $client_id
@@ -252,6 +263,36 @@ class OrderRepository extends BaseRepository
             return $client_file[0]->getFullUrl();
         }
         return '';
+    }
+
+    /**
+     * @param $order_id
+     * @param $data
+     * @return bool
+     */
+    public function updateClientDetails($order_id,$data): bool
+    {
+        $order = Order::find($order_id)->update([
+            "amc_id" => $data['amc_id'],
+            "lender_id" => $data['lender_id']
+        ]);
+
+        $client = Client::where('id',$data['lender_id'])->update([
+           'address' => $data['address']
+        ]);
+
+        if (isset($data['amc_file'])) {
+            $amc = Client::find($data['amc_id']);
+            isset($amc->getMedia('clients')[0]) ? $amc->getMedia('clients')[0]->delete() :
+            $amc->addMedia($data['amc_file'])->toMediaCollection('clients');
+        }
+
+        if (isset($data['lender_file'])) {
+            $lender = Client::find($data['lender_id']);
+            isset($lender->getMedia('clients')[0]) ? $lender->getMedia('clients')[0]->delete() :
+            $lender->addMedia($data['lender_file'])->toMediaCollection('clients');
+        }
+        return $order && $client;
     }
 
     /**
