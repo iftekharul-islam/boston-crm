@@ -60,6 +60,15 @@ trait CrmHelper {
                 $error = true;
                 array_push($errorMessage, "Choose email address");
             }
+        } elseif ($type == "providerService") {
+            if ($get->note ==  null ) {
+                $error = true;
+                array_push($errorMessage, "Enter provider service fee");
+            }
+            if (count($get->data) == 0) {
+                $error = true;
+                array_push($errorMessage, "Please add some fee");
+            }
         }
 
         return [

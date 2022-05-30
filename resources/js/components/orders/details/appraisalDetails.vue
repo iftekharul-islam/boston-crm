@@ -8,7 +8,7 @@
       <div class="list__group">
         <p class="mb-0 left-side">Appraiser Name</p>
         <span>:</span>
-        <p class="right-side mb-0">{{ details.appraiser_name }}</p>
+        <p class="right-side mb-0">{{ order.appraisal_detail.appraiser.name }}</p>
       </div>
       <div class="list__group">
         <p class="mb-0 left-side">Loan #</p>
@@ -100,9 +100,6 @@
         message: ''
       }
     },
-    created() {
-      this.getAppraisalDetails()
-    },
     created(){
       // this.details = this.order.app
       let providerService = this.order.provider_service;
@@ -111,15 +108,16 @@
         this.details.appraiser_type = types[0].type;
         this.details.appraiser_type_id = types[0].typeId;
       }
+      this.getAppraisalDetails();
     },
     methods:{
       getAppraisalDetails(){
-          this.details.appraiser_id = this.order.appraisal_detail.appraiser_id
-          this.details.loan_type = this.order.appraisal_detail.loan_type
-          this.details.appraiser_name = this.order.appraisal_detail.appraiser.name
-          this.details.loan_type_name = this.order.appraisal_detail.get_loan_type.name
-          this.details.loan_no = this.order.appraisal_detail.loan_no
-          this.details.fha_case_no = this.order.appraisal_detail.fha_case_no
+          this.details.appraiser_id = this.order.appraisal_detail.appraiser_id;
+          this.details.loan_type = this.order.appraisal_detail.loan_type;
+          this.details.appraiser_name = this.order.appraisal_detail.appraiser.name;
+          this.details.loan_type_name = this.order.appraisal_detail.get_loan_type.name;
+          this.details.loan_no = this.order.appraisal_detail.loan_no;
+          this.details.fha_case_no = this.order.appraisal_detail.fha_case_no;
       },
       updateAppraisalDetails() {
         let that = this

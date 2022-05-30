@@ -115,21 +115,21 @@ export default {
   },
   methods: {
     getClientInfo() {
-      axios.get('get-clients-info/' + this.orderId)
-          .then(res => {
-            this.amc_id = res.data.clients.amc.id
-            this.amc_file = res.data.amc_file
-            this.amc_name = res.data.clients.amc.name
-            this.lender_id = res.data.clients.lender.id
-            this.lender_file = res.data.lender_file
-            this.lender_name = res.data.clients.lender.name
-            this.lender_address = res.data.clients.lender.address
+      // axios.get('get-clients-info/' + this.orderId)
+      //     .then(res => {
+      //       this.amc_id = res.data.clients.amc.id
+      //       this.amc_file = res.data.amc_file
+      //       this.amc_name = res.data.clients.amc.name
+      //       this.lender_id = res.data.clients.lender.id
+      //       this.lender_file = res.data.lender_file
+      //       this.lender_name = res.data.clients.lender.name
+      //       this.lender_address = res.data.clients.lender.address
 
-            this.allAmc = res.data.allAmc
-            this.allLender = res.data.allLender
-          }).catch(err => {
-        console.log(err)
-      })
+      //       this.allAmc = res.data.allAmc
+      //       this.allLender = res.data.allLender
+      //     }).catch(err => {
+      //   console.log(err)
+      // })
     },
     changeFileLender(e) {
       this.lenderNewFile = e.target.files[0]

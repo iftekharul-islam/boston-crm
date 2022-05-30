@@ -140,22 +140,11 @@ class OrderController extends BaseController
         $order_due_date = $this->repository->getOrderDueDate($id);
         $diff_in_days = Carbon::parse($order_due_date->due_date)->diffInDays();
 
-        $order = Order::with(
-            'amc',
-            'lender',
-            'user', 
-            'appraisalDetail',
-            'providerService',
-            'propertyInfo',
-            'borrowerInfo',
-            'contactInfo'
-        )->where('id', $id)->first();
-
         if ($get->showArray && $get->showArray == "true") {
-            return $order->statusCode;
+            return $order;
         }
 
-        return view('order.show', compact('order_types', 'order', 'diff_in_days'));
+        return view('order.show', compact('order_types', 'appraisers', 'appraisal_types', 'loan_types', 'order', 'diff_in_days'));
     }
 
     /**
@@ -420,8 +409,20 @@ class OrderController extends BaseController
             $order->status = $get->status;
             $order->save();
             $returnMessage = "Order Status Has Been Updated";
+        } elseif ($type == "providerService") {
+            $fee = $get->data;
+            $note = $get->note;
+
+            $providerType = ProvidedService::where('order_id', $order->id)->first();
+            $providerType->updated_at = Carbon::now();
+            $providerType->appraiser_type_fee = json_encode($fee);
+            $providerType->note = $note;
+            $providerType->total_fee = collect($fee)->sum('fee');
+            $providerType->save();
+
+            $returnMessage = "Order Provider Data Has Been Updated";
         }
 
-        return response()->json(['error' => true, 'messages' => $returnMessage]);
+        return response()->json(['error' => false, 'messages' => $returnMessage]);
     }
 }
