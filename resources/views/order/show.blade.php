@@ -15,19 +15,23 @@
         <div class="order-details-box-main row">
             <div class="order-details__left col-md-6">
                 {{-- Basic Information --}}
-                <basic-info :order="{{ $order }}" :order-id="'{{ $order_id }}'"></basic-info>
+                <basic-info :order="{{ $order }}"  :order-id="'{{ $order_id }}'"></basic-info>
+                {{-- Property Info --}}
+                <property-info :order="{{ $order }}"  :order-id="'{{ $order_id }}'"></property-info>
                 {{-- Borrower --}}
-                <borrower :order="{{ $order }}" :order-id="'{{ $order_id }}'"></borrower>
+                <borrower :order="{{ $order }}"  :order-id="'{{ $order_id }}'"></borrower>
                 {{-- Contact --}}
-                <contact :order="{{ $order }}" :order-id="'{{ $order_id }}'"></contact>
+                <contact :order="{{ $order }}"  :order-id="'{{ $order_id }}'"></contact>
                 {{-- Inspection --}}
-                <inspection :order="{{ $order }}" :order-id="'{{ $order_id }}'"></inspection>
+                <inspection :order="{{ $order }}"  :order-id="'{{ $order_id }}'"></inspection>
                 {{-- Issues --}}
                 <issues></issues>
             </div>
             <div class="order-details__right col-md-6">
                 {{-- Appraisal Details --}}
-                <appraisal-details :order="{{ $order }}" :order-id="'{{ $order_id }}'"></appraisal-details>
+                <appraisal-details :order="{{ $order }}" :appraisers="{{ $appraisers }}" :loan-types="{{ $loan_types }}" :order-id="'{{ $order_id }}'"></appraisal-details>
+                {{-- Provided Services --}}
+                <provided-services :order="{{ $order }}" :appraisal-types="{{ $appraisal_types }}" :order-id="'{{ $order_id }}'"></provided-services>
                 {{-- Client --}}
                 <client-info :order="{{ $order }}" :order-id="'{{ $order_id }}'"></client-info>
                 {{-- Call log --}}

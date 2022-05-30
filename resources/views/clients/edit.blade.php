@@ -96,17 +96,17 @@
                                     <div class="group">
                                         <label for="fee-for-1004UAD"
                                                class="d-block mb-2 dashboard-label fee-for-1004UAD-label">Technology fee
-                                            for full
+                                            for
                                             appraisal like 1004UAD</label>
-                                        <input type="text" name="fee_for_1004uad" value="{{ $client->fee_for_1004uad }}" id="fee-for-1004UAD"
+                                        <input type="number" name="fee_for_1004uad" value="{{ $client->fee_for_1004uad }}" id="fee-for-1004UAD"
                                                class="dashboard-input w-100">
                                     </div>
                                     <div class="group">
                                         <label for="fee-for-1004D"
                                                class="d-block mb-2 dashboard-label fee-for-1004D-label">Technology fee
-                                            for full
+                                            for
                                             appraisal like 1004D</label>
-                                        <input type="text" name="fee_for_1004d" value="{{ $client->fee_for_1004d }}" id="fee-for-1004D"
+                                        <input type="number" name="fee_for_1004d" value="{{ $client->fee_for_1004d }}" id="fee-for-1004D"
                                                class="dashboard-input w-100">
                                     </div>
                                     <div class="group">
