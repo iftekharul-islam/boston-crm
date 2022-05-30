@@ -297,6 +297,7 @@ export default {
         padding: 3px 5px;
         font-size: 14px;
         transition: all 200ms linear;
+        vertical-align: middle;
     }
      .m-table table thead th {
         font-size: 15px;

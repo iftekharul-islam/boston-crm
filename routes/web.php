@@ -93,6 +93,9 @@ Route::group( [ 'middleware' => [ 'auth:sanctum' ] ], function () {
 	 Route::delete( 'orders/{id}',
 		 [ OrderController::class, 'destroy' ] )->middleware( 'role_permission:delete.order' )->name( 'orders.destroy' );
 	 
+	Route::post( 'order/update/{type}',
+		 [ OrderController::class, 'orderUpdate' ] )->middleware( 'role_permission:update.order' )->name( 'orders.update.single' );
+	 
 	Route::post( 'search/order', [ OrderController::class, 'searchOrderData' ] )->middleware( 'role_permission:orders.index' );
 
      //order details

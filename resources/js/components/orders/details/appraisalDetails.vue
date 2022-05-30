@@ -117,7 +117,8 @@
 <script>
   export default {
     props:{
-      orderId: String
+      orderId: String,
+      order: [],
     },
     data(){
       return{
@@ -136,7 +137,7 @@
           received_date: new Date(),
           technology_fee: ''
         },
-        appraiserTypes: '',
+        appraiserTypes: [],
         appraisers: '',
         loanTypes: '',
         message: ''
@@ -145,29 +146,39 @@
     mounted() {
       this.getAppraisalDetails()
     },
+    created(){
+      // this.details = this.order.app
+      let providerService = this.order.provider_service;
+      let types = JSON.parse(providerService.appraiser_type_fee);
+      if (types.length) {
+        this.details.appraiser_type = types[0].type;
+        this.details.appraiser_type_id = types[0].typeId;
+      }
+    },
     methods:{
       getAppraisalDetails(){
         let that = this
-        axios.get('get-appraisal-info/'+this.orderId)
+        this.$boston.get('get-appraisal-info/'+this.orderId)
             .then(res => {
-              that.details.appraiser_name = res.data.appraisalDetails.appraiser.name
-              that.details.loan_type_name = res.data.appraisalDetails.loantype.name
+                this.details.appraiser_name = res.appraisalDetails.appraiser.name
+                this.details.loan_type_name = res.appraisalDetails.loantype.name
 
-              that.details.client_order_no = res.data.orderDetails.client_order_no
-              that.details.appraiser_id = res.data.appraisalDetails.appraiser_id
-              that.details.loan_type = res.data.appraisalDetails.loan_type
-              that.details.system_order_no = res.data.orderDetails.system_order_no
-              that.details.loan_no = res.data.appraisalDetails.loan_no
-              that.details.fha_case_no = res.data.appraisalDetails.fha_case_no
-              that.details.due_date = res.data.appraisalDetails.due_date
-              that.details.received_date = res.data.appraisalDetails.received_date
-              that.details.technology_fee = res.data.appraisalDetails.technology_fee
+                this.details.client_order_no = res.orderDetails.client_order_no
+                this.details.appraiser_id = res.appraisalDetails.appraiser_id
+                this.details.loan_type = res.appraisalDetails.loan_type
+                this.details.system_order_no = res.orderDetails.system_order_no
+                this.details.loan_no = res.appraisalDetails.loan_no
+                this.details.fha_case_no = res.appraisalDetails.fha_case_no
+                this.details.due_date = res.appraisalDetails.due_date
+                this.details.received_date = res.appraisalDetails.received_date
+                this.details.technology_fee = res.appraisalDetails.technology_fee
 
-              that.appraiserTypes = res.data.appraiserTypes
-              that.appraisers = res.data.appraisers
-              that.loanTypes = res.data.loanTypes
+                this.appraiserTypes = res.appraiserTypes
+                this.appraisers = res.appraisers
+                this.loanTypes = res.loanTypes
+
             }).catch(err => {
-          console.log(err)
+            console.log(err)
         })
       },
       updateAppraisalDetails() {

@@ -74,6 +74,7 @@ class OrderApiController extends Controller
             $order->amc_id = $amcClient;
             $order->lender_id = $lender;
             $order->company_id = $company['id'];
+            $order->rush = $step2['rush'];
             $order->created_by = $user->id;
             $order->received_date = $receiveDate;
             $order->due_date = $dueDate;
@@ -226,9 +227,15 @@ class OrderApiController extends Controller
             ]);
             $contactInfo->save();
 
+            if ($orderId == null) {
+                $message = "New order has been stored";
+            } else {    
+                $message = "Order {$order->system_order_no} has been updated";
+            }
+
             return response()->json([
-                "error" => false,
-                "message" => "New order has been stored"
+                "error" => false, 
+                "message" => $message
             ]);
         });
         return $orderProccess;

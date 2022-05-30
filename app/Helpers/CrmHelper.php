@@ -18,4 +18,57 @@ trait CrmHelper {
             return "BAS-".$order->id+1;
         }
     }
+
+    protected function getOrderError($get, $type) {
+        $error = false;
+        $errorMessage = "";
+
+        if ($type == "borrower") {
+            $array_filter2 = [
+                "borrower_name",
+                "co_borrower_name"
+            ];    
+            foreach ($array_filter2 as $item) {
+                if ($get->{$item} == null) {
+                    $error = true;
+                    array_push($errorMessage, $this->getTitleReplace($item)." is missing");
+                }
+            }
+            if ($get->borrower_contact == false) {
+                $error = true;
+                array_push($errorMessage, $this->getTitleReplace('borrower_contact')." is missing");
+            }
+            if ($get->borrower_email == false) {
+                $error = true;
+                array_push($errorMessage, $this->getTitleReplace('borrower_email')." is missing");
+            }
+        } elseif ($type == "contactInfo") {
+            $array_filter3 = [
+                "contact_info",
+                "contact_number",
+                "email_address"
+            ];
+            if ($get->contact_info == null) {
+                $error = true;
+                array_push($errorMessage, "Enter contact Info");
+            }
+            if ($get->contact_number == false) {
+                $error = true;
+                array_push($errorMessage, "Choose contact number");
+            }
+            if ($get->email_address == false) {
+                $error = true;
+                array_push($errorMessage, "Choose email address");
+            }
+        }
+
+        return [
+            "error" => $error,
+            "message" => $errorMessage,
+        ];
+    }
+
+    protected function getTitleReplace($item) {
+        return ucwords(str_replace("_", " ", $item));
+    }
 }
