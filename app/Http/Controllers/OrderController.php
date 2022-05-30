@@ -135,7 +135,7 @@ class OrderController extends BaseController
         )->where('id', $id)->first();
 
         if ($get->showArray && $get->showArray == "true") {
-            return $order;
+            return $order->statusCode;
         }
 
         return view('order.show', compact('order_types', 'order', 'diff_in_days'));
@@ -203,9 +203,9 @@ class OrderController extends BaseController
      */
     public function getBasicInfo($order_id): JsonResponse
     {
-        $appraisal_details = $this->repository->getAppraisalDetails($order_id);
+        $order_details = $this->repository->getOrderDetails($order_id);
         $property_info = $this->repository->getPropertyInfo($order_id);
-        return response()->json(["appraisalDetails" => $appraisal_details, "propertyInfo" => $property_info]);
+        return response()->json(["orderDetails" => $order_details, "propertyInfo" => $property_info]);
     }
 
     /**
@@ -234,6 +234,7 @@ class OrderController extends BaseController
      */
     public function getAppraisalInfo($order_id): JsonResponse
     {
+        $order_details = $this->repository->getOrderDetails($order_id);
         $appraisal_details = $this->repository->getAppraisalDetails($order_id);
         $provided_service = $this->repository->getProvidedService($order_id);
         $appraisal_users = $this->repository->getUserByRoleWise(role: 'appraiser');
@@ -241,6 +242,7 @@ class OrderController extends BaseController
         $loan_types = $this->repository->getLoanTypes();
 
         return response()->json([
+            "orderDetails" => $order_details,
             "appraisalDetails" => $appraisal_details,
             "providedService" => $provided_service,
             "appraiserTypes" => $appraisal_types,
@@ -287,7 +289,17 @@ class OrderController extends BaseController
     public function getClientsInfo($order_id): JsonResponse
     {
         $clients = $this->repository->getClientDetails($order_id);
-        return response()->json(["clients" => $clients]);
+        $all_amc = $this->repository->getAllClientByType('amc');
+        $all_lender = $this->repository->getAllClientByType('lender');
+        $amc_file = $this->repository->getClientFile($clients->amc_id);
+        $lender_file = $this->repository->getClientFile($clients->lender_id);
+        return response()->json(["clients" => $clients,'amc_file' => $amc_file,'lender_file' => $lender_file,'allAmc' => $all_amc,'allLender' => $all_lender]);
+    }
+
+    public function updateClientInfo(Request $request,$order_id): JsonResponse
+    {
+        $this->repository->updateClientDetails($order_id,$request->all());
+        return response()->json(['message' => 'Client info updated successfully']);
     }
 
     /**
@@ -338,56 +350,64 @@ class OrderController extends BaseController
         }
         return $system_order_no;
     }
+
     public function saveOrderData()
     {
-//        Order::create([
-//            "amc_id" => 1,
-//            "lender_id" => 2,
-//            "status" => 1,
-//            "client_order_no" => "CLORD-1",
-//            "system_order_no" => "BAS-1212",
-//            "received_date" => Carbon::parse('05/18/2022')->format('Y-m-d'),
-//            "due_date" => Carbon::parse('05/30/2022')->format('Y-m-d'),
-//        ]);
-//        AppraisalDetail::create([
-//           "order_id" => 1,
-//           "appraiser_id" => 1,
-//            "loan_type" => 1,
-//            "loan_no" => "LoanNumber",
-//            "fha_case_no" => "FHACN12",
-//            "technology_fee" => 1000
-//        ]);
-//        ProvidedService::create([
-//            "order_id" => 1,
-//            "appraiser_type_fee" => json_encode([
-//                ['type' => "test", 'fee' => '100'],['type' => "test", 'fee' => '100']
-//            ]),
-//            "total_fee" => 200,
-//            "note" => "Test"
-//        ]);
-//        BorrowerInfo::create([
-//            "order_id" => 1,
-//            "borrower_name" => "Borrower",
-//            "co_borrower_name" => "Co Borrower",
-//            "contact_email" => json_encode(["contact"=>"01988812097","email"=>"test@gmail.com"])
-//        ]);
-//        ContactInfo::create([
-//           "order_id" => 1,
-//            "is_borrower" => 1,
-//            "contact"=> "new york",
-//            "contact_email" => json_encode(["contact"=>"01988812097","email"=>"test@gmail.com"])
-//        ]);
-//        PropertyInfo::create([
-//            "order_id" => 1,
-//            "search_address" => "Mirpur",
-//            "street_name" => "2",
-//            "city_name" => "Dhaka",
-//            "state_name" => "Dhaka",
-//            "zip" => "1207",
-//            "unit_no" => "F-2A",
-//            "country"=> "Bangladesh",
-//            "latitude" => 23.21211,
-//            "longitude" => 21.23333
-//        ]);
+
+    }
+
+    public function orderUpdate($type, Request $get) {
+        $errorChecking = $this->getOrderError($get, $type);
+        $error = $errorChecking['error'];
+        $errorMessage = $errorChecking['message'];
+        if ($error == true) {
+            return response()->json(['error' => $error, 'messages' => $errorMessage]);
+        }
+
+        $order = Order::where('id', $get->order['id'])->first();
+        if (!$order) {
+            return response()->json(['error' => true, 'messages' => "Order Information Not Found"]);
+        }
+
+        $returnMessage = null;
+
+        if ($type == "borrower") {
+            $borrower_contact = $get->borrower_contact;
+            $borrower_contact_s = $get->borrower_contact_s;
+            $borrower_email = $get->borrower_email;
+            $borrower_email_s = $get->borrower_email_s;
+            $borrower_name = $get->borrower_name;
+            $co_borrower_name = $get->co_borrower_name;
+
+
+            // create borrower type
+            $borrowerType = BorrowerInfo::where('order_id', $order->id)->first();
+            $borrowerType->updated_at = Carbon::now();
+            $borrowerType->borrower_name = $borrower_name;
+            $borrowerType->co_borrower_name = $co_borrower_name;
+            $borrowerType->contact_email = json_encode([
+                'email' => $borrower_email_s,
+                'phone' => $borrower_contact_s
+            ]);
+            $borrowerType->save();
+            $returnMessage = "Borrower Information Has Been Updated";
+        } elseif ($type == "contactInfo") {
+            $contact_info = $get->contact_info;
+            $contact_number_s = $get->contact_number_s;
+            $email_address_s = $get->email_address_s;
+
+            $contactInfo = ContactInfo::where('order_id', $order->id)->first();
+            $contactInfo->updated_at = Carbon::now();
+            $contactInfo->is_borrower = count($contact_number_s) > 0 ? 1 : 0;
+            $contactInfo->contact = $contact_info;
+            $contactInfo->contact_email = json_encode([
+                'email' => $email_address_s,
+                'phone' => $contact_number_s
+            ]);
+            $contactInfo->save();
+            $returnMessage = "Contact Information Has Been Updated";
+        }
+
+        return response()->json(['error' => true, 'messages' => $returnMessage]);
     }
 }

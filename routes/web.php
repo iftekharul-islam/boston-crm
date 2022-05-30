@@ -93,6 +93,9 @@ Route::group( [ 'middleware' => [ 'auth:sanctum' ] ], function () {
 	 Route::delete( 'orders/{id}',
 		 [ OrderController::class, 'destroy' ] )->middleware( 'role_permission:delete.order' )->name( 'orders.destroy' );
 	 
+	Route::post( 'order/update/{type}',
+		 [ OrderController::class, 'orderUpdate' ] )->middleware( 'role_permission:update.order' )->name( 'orders.update.single' );
+	 
 	Route::post( 'search/order', [ OrderController::class, 'searchOrderData' ] )->middleware( 'role_permission:orders.index' );
 
      //order details
@@ -108,6 +111,7 @@ Route::group( [ 'middleware' => [ 'auth:sanctum' ] ], function () {
 
     Route::post('/update-basic-info/{id}',[OrderController::class,'updateBasicInfo'])->middleware('role_permission:update.order');
     Route::post('/update-appraisal-info/{id}',[OrderController::class,'updateAppraisalInfo'])->middleware('role_permission:update.order');
+    Route::post('/update-client-info/{id}',[OrderController::class,'updateClientInfo']);
     Route::post('/update-borrower-info/{id}',[OrderController::class,'updateBorrowerInfo'])->middleware('role_permission:update.order');
     Route::post('/update-contact-info/{id}',[OrderController::class,'updateContactInfo'])->middleware('role_permission:update.order');
 

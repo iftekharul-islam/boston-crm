@@ -11,31 +11,7 @@
             Back to order list</a>
         @php $order_id = request()->route('id') @endphp
         {{-- header --}}
-        <div class="order-details-header d-flex mgb-20">
-            <div class="left d-flex align-items-center">
-                <h4 class="fs-24 fw-bold text-light-black mb-0 mgr-20">Order details</h4>
-                @if($diff_in_days > 0)
-                    <span class="due">Due in {{ $diff_in_days }} days</span>
-                @else
-                    <span class="due">Already Overdue</span>
-                @endif
-            </div>
-            <div class="right d-flex align-items-center ms-auto">
-                <div class="current-status-group d-flex align-items-center mgr-20">
-                    <label for="role" class="d-block text-light-black me-3">Current status</label> 
-                    <div class="position-relative">
-                        <select name="role" id="role" class="login-input role-error fw-bold">
-                            <option value="">Not done</option> 
-                            <option value="3" class="text-capitalize">Done</option> 
-                            <option value="2" class="text-capitalize">admin</option>
-                        </select> 
-                        <span class="icon-arrow-down bottom-arrow-icon text-gray"></span>
-                    </div>
-                </div>
-                <a href="#" class="button button-primary h-40 d-inline-flex align-items-center mgr-20"><span class="mgr-20">Schedule</span> <span class="icon-calendar"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span class="path7"></span><span class="path8"></span></span></a>
-                <a href="#" class="button button-primary h-40 d-inline-flex align-items-center"><span class="mgr-20">Share order</span> <span class="icon-share"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span></span></a>
-            </div>
-        </div>
+        <order-header :order="{{ $order }}" :diff_in_days="{{ $diff_in_days }}"></order-header>
         <div class="order-details-box-main row">
             <div class="order-details__left col-md-6">
                 {{-- Basic Information --}}
@@ -90,4 +66,43 @@
             </div> --}}
         </div>
     </div>
+@endsection
+
+
+@section("js")
+<script>
+    $(document).on("click", ".order-details-box .box-header", function(e){
+        let body = $(this).parent().find('.box-body');
+        let target = $(e.target);
+        let targetA = $("a.edit");
+        
+        if ( !target.is(targetA)) {
+            if (body.is(":visible")) {
+                body.slideUp();
+            } else {
+                body.slideDown();
+            }
+        }
+    });
+    $(".alert-message").delay(4000).fadeOut(1000);
+</script>
+@endsection
+
+
+@section("css")
+<style>
+    .order-details-box .box-header{
+        cursor: pointer;
+    }
+    .list-items span {
+        border: thin solid #cfcfcf;
+        padding: 2px 10px;
+        border-radius: 0.25rem;
+        background: #efefef;
+        margin: 0;
+        margin-right: 8px;
+        display: inline-block;
+        cursor: pointer;
+    }
+</style>
 @endsection

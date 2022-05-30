@@ -54,6 +54,7 @@ Vue.component('basic-info', require('./components/orders/details/basicInfo').def
 Vue.component('appraisal-details', require('./components/orders/details/appraisalDetails').default)
 Vue.component('workflow', require('./components/orders/details/workflow').default)
 Vue.component('client-info', require('./components/orders/details/clientInfo').default)
+Vue.component('order-header', require('./components/orders/details/header').default)
 Vue.component('call-log', require('./components/orders/details/callLog').default)
 Vue.component('borrower', require('./components/orders/details/borrower').default)
 Vue.component('contact', require('./components/orders/details/contact').default)

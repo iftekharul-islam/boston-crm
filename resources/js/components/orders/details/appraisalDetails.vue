@@ -44,6 +44,7 @@
     <!-- modal -->
      <b-modal id="appraisal-info" size="lg" title="Edit appraisal Information">
         <div class="modal-body">
+          <b-alert v-if="message" show variant="success"><a href="#" class="alert-link">{{ message }}</a></b-alert>
           <div class="row">
             <div class="col-md-6">
               <div class="group">
@@ -75,7 +76,7 @@
               <div class="group">
                 <label for="" class="d-block mb-2 dashboard-label">Loan Type <span class="require"></span></label>
                 <b-form-select
-                    v-model="details.loan_type_id"
+                    v-model="details.loan_type"
                     :options="loanTypes"
                     value-field="id"
                     text-field="name"
@@ -126,7 +127,7 @@
           appraiser_name: '',
           appraiser_type_id: '',
           appraiser_type: '',
-          loan_type_id: '',
+          loan_type: '',
           loan_type_name: '',
           client_order_no: '',
           system_order_no: '',
@@ -136,47 +137,58 @@
           received_date: new Date(),
           technology_fee: ''
         },
-        appraiserTypes: '',
+        appraiserTypes: [],
         appraisers: '',
-        loanTypes: ''
+        loanTypes: '',
+        message: ''
       }
     },
     mounted() {
-      // this.getAppraisalDetails()
+      this.getAppraisalDetails()
     },
     created(){
       // this.details = this.order.app
+      let providerService = this.order.provider_service;
+      let types = JSON.parse(providerService.appraiser_type_fee);
+      if (types.length) {
+        this.details.appraiser_type = types[0].type;
+        this.details.appraiser_type_id = types[0].typeId;
+      }
     },
     methods:{
       getAppraisalDetails(){
-        axios.get('get-appraisal-info/'+this.orderId)
+        let that = this
+        this.$boston.get('get-appraisal-info/'+this.orderId)
             .then(res => {
-                this.details.appraiser_name = res.data.appraisalDetails.appraiser.name
-                this.details.loan_type_name = res.data.appraisalDetails.loantype.name
-                this.details.appraiser_type = JSON.parse(res.data.providedService.appraiser_type_fee)[0]["type"]
-                this.details.appraiser_type_id = JSON.parse(res.data.providedService.appraiser_type_fee)[0]["id"]
+                this.details.appraiser_name = res.appraisalDetails.appraiser.name
+                this.details.loan_type_name = res.appraisalDetails.loantype.name
 
-                this.details.client_order_no = res.data.appraisalDetails.client_order_no
-                this.details.appraiser_id = res.data.appraisalDetails.appraiser_id
-                this.details.loan_type_id = res.data.appraisalDetails.loan_type_id
-                this.details.system_order_no = res.data.appraisalDetails.system_order_no
-                this.details.loan_no = res.data.appraisalDetails.loan_no
-                this.details.fha_case_no = res.data.appraisalDetails.fha_case_no
-                this.details.due_date = res.data.appraisalDetails.due_date
-                this.details.received_date = res.data.appraisalDetails.received_date
-                this.details.technology_fee = res.data.appraisalDetails.technology_fee
+                this.details.client_order_no = res.orderDetails.client_order_no
+                this.details.appraiser_id = res.appraisalDetails.appraiser_id
+                this.details.loan_type = res.appraisalDetails.loan_type
+                this.details.system_order_no = res.orderDetails.system_order_no
+                this.details.loan_no = res.appraisalDetails.loan_no
+                this.details.fha_case_no = res.appraisalDetails.fha_case_no
+                this.details.due_date = res.appraisalDetails.due_date
+                this.details.received_date = res.appraisalDetails.received_date
+                this.details.technology_fee = res.appraisalDetails.technology_fee
 
-                this.appraiserTypes = res.data.appraiserTypes
-                this.appraisers = res.data.appraisers
-                this.loanTypes = res.data.loanTypes
+                this.appraiserTypes = res.appraiserTypes
+                this.appraisers = res.appraisers
+                this.loanTypes = res.loanTypes
+
             }).catch(err => {
-          console.log(err)
+            console.log(err)
         })
       },
       updateAppraisalDetails() {
-        axios.post('update-appraisal-info/' + this.orderId)
+        let that = this
+        axios.post('update-appraisal-info/' + that.orderId,that.details)
             .then( res => {
-              console.log(res)
+              that.message = res.data.message
+              setTimeout(function(){
+                that.$bvModal.hide('basic-info')
+              }, 2000);
             }).catch( err =>{
               console.log(err)
         })
