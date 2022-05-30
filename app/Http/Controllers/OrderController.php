@@ -273,9 +273,17 @@ class OrderController extends BaseController
     public function getClientsInfo($order_id): JsonResponse
     {
         $clients = $this->repository->getClientDetails($order_id);
+        $all_amc = $this->repository->getAllClientByType('amc');
+        $all_lender = $this->repository->getAllClientByType('lender');
         $amc_file = $this->repository->getClientFile($clients->amc_id);
         $lender_file = $this->repository->getClientFile($clients->lender_id);
-        return response()->json(["clients" => $clients,'amc_file' => $amc_file,'lender_file' => $lender_file]);
+        return response()->json(["clients" => $clients,'amc_file' => $amc_file,'lender_file' => $lender_file,'allAmc' => $all_amc,'allLender' => $all_lender]);
+    }
+
+    public function updateClientInfo(Request $request,$order_id): JsonResponse
+    {
+        $this->repository->updateClientDetails($order_id,$request->all());
+        return response()->json(['message' => 'Client info updated successfully']);
     }
 
     /**

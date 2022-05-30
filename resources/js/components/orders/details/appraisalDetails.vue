@@ -150,7 +150,6 @@
         let that = this
         axios.get('get-appraisal-info/'+this.orderId)
             .then(res => {
-              console.log('data'+res.data.orderDetails)
               that.details.appraiser_name = res.data.appraisalDetails.appraiser.name
               that.details.loan_type_name = res.data.appraisalDetails.loantype.name
 
