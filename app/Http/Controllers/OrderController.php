@@ -406,6 +406,10 @@ class OrderController extends BaseController
             ]);
             $contactInfo->save();
             $returnMessage = "Contact Information Has Been Updated";
+        } elseif ($type == "status") {
+            $order->status = $get->status;
+            $order->save();
+            $returnMessage = "Order Status Has Been Updated";
         }
 
         return response()->json(['error' => true, 'messages' => $returnMessage]);
