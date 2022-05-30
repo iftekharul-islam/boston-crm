@@ -25,6 +25,14 @@ class Order extends Model implements HasMedia
       'received_date' => 'date:d M Y'
     ];
 
+    protected $status_code = [
+        [
+            "Active" => 1,
+            "Cancelled" => 2,
+            "Deleted" => 3,
+        ]
+    ];
+
     protected $fillable = [
       "amc_id","lender_id","status","client_order_no","system_order_no","received_date","due_date"
     ];

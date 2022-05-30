@@ -103,6 +103,15 @@
     created() {
       this.getAppraisalDetails()
     },
+    created(){
+      // this.details = this.order.app
+      let providerService = this.order.provider_service;
+      let types = JSON.parse(providerService.appraiser_type_fee);
+      if (types.length) {
+        this.details.appraiser_type = types[0].type;
+        this.details.appraiser_type_id = types[0].typeId;
+      }
+    },
     methods:{
       getAppraisalDetails(){
           this.details.appraiser_id = this.order.appraisal_detail.appraiser_id
