@@ -33,7 +33,7 @@
                 {{-- Provided Services --}}
                 <provided-services :order="{{ $order }}" :appraisal-types="{{ $appraisal_types }}" :order-id="'{{ $order_id }}'"></provided-services>
                 {{-- Client --}}
-                <client-info :order="{{ $order }}" :order-id="'{{ $order_id }}'"></client-info>
+                <client-info :order="{{ $order }}" :all-amc="{{ $all_amc }}" :all-lender="{{ $all_lender }}" :order-id="'{{ $order_id }}'"></client-info>
                 {{-- Call log --}}
                 <call-log :order="{{ $order }}"></call-log>
                 {{-- Map --}}

@@ -283,13 +283,17 @@ class OrderRepository extends BaseRepository
 
         if (isset($data['amc_file'])) {
             $amc = Client::find($data['amc_id']);
-            isset($amc->getMedia('clients')[0]) ? $amc->getMedia('clients')[0]->delete() :
+            if(isset($amc->getMedia('clients')[0])){
+                $amc->getMedia('clients')[0]->delete();
+            }
             $amc->addMedia($data['amc_file'])->toMediaCollection('clients');
         }
 
         if (isset($data['lender_file'])) {
             $lender = Client::find($data['lender_id']);
-            isset($lender->getMedia('clients')[0]) ? $lender->getMedia('clients')[0]->delete() :
+            if(isset($lender->getMedia('clients')[0])){
+                $lender->getMedia('clients')[0]->delete();
+            }
             $lender->addMedia($data['lender_file'])->toMediaCollection('clients');
         }
         return $order && $client;

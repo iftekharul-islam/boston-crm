@@ -29,10 +29,11 @@
                 <ValidationProvider name="Note" rules="required" v-slot="{ errors }">
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
                     <label for="" class="d-block mb-2 dashboard-label">Note <span class="require"></span></label>
-                    <textarea type="text" v-model="note" class="dashboard-input w-100" style="min-height: 150px"></textarea>
+                    <textarea type="text" v-model="note" class="dashboard-input w-100" style="min-height: 100px"></textarea>
                     <span class="error-message">{{ errors[0] }}</span>
                   </div>
                 </ValidationProvider>
+                <div class="divider"></div>
                 <ValidationObserver ref="orderForm">
                     <ValidationProvider name="Appraiser Type" rules="required" v-slot="{ errors }">
                       <div class="group" :class="{ 'invalid-form' : errors[0] }">

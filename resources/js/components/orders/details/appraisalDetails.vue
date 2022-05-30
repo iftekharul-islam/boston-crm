@@ -100,6 +100,7 @@
         message: ''
       }
     },
+    
     created(){
       // this.details = this.order.app
       let providerService = this.order.provider_service;
