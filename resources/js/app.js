@@ -51,7 +51,9 @@ Vue.component('pagination', Pagination);
 Vue.component('clients-list', require('./components/clients/list').default);
 Vue.component('order-create', require('./components/orders/OrderCreate').default)
 Vue.component('basic-info', require('./components/orders/details/basicInfo').default)
+Vue.component('property-info', require('./components/orders/details/propertyInfo').default)
 Vue.component('appraisal-details', require('./components/orders/details/appraisalDetails').default)
+Vue.component('provided-services', require('./components/orders/details/providedServices').default)
 Vue.component('workflow', require('./components/orders/details/workflow').default)
 Vue.component('client-info', require('./components/orders/details/clientInfo').default)
 Vue.component('call-log', require('./components/orders/details/callLog').default)

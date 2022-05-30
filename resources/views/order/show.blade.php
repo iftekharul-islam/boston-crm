@@ -39,21 +39,25 @@
         <div class="order-details-box-main row">
             <div class="order-details__left col-md-6">
                 {{-- Basic Information --}}
-                <basic-info :order-id="'{{ $order_id }}'"></basic-info>
+                <basic-info :order="{{ $order }}"  :order-id="'{{ $order_id }}'"></basic-info>
+                {{-- Property Info --}}
+                <property-info :order="{{ $order }}"  :order-id="'{{ $order_id }}'"></property-info>
                 {{-- Borrower --}}
-                <borrower :order-id="'{{ $order_id }}'"></borrower>
+                <borrower :order="{{ $order }}"  :order-id="'{{ $order_id }}'"></borrower>
                 {{-- Contact --}}
-                <contact :order-id="'{{ $order_id }}'"></contact>
+                <contact :order="{{ $order }}"  :order-id="'{{ $order_id }}'"></contact>
                 {{-- Inspection --}}
-                <inspection :order-id="'{{ $order_id }}'"></inspection>
+                <inspection :order="{{ $order }}"  :order-id="'{{ $order_id }}'"></inspection>
                 {{-- Issues --}}
                 <issues></issues>
             </div>
             <div class="order-details__right col-md-6">
                 {{-- Appraisal Details --}}
-                <appraisal-details :order-id="'{{ $order_id }}'"></appraisal-details>
+                <appraisal-details :order="{{ $order }}" :appraisers="{{ $appraisers }}" :loan-types="{{ $loan_types }}" :order-id="'{{ $order_id }}'"></appraisal-details>
+                {{-- Provided Services --}}
+                <provided-services :order="{{ $order }}" :appraisal-types="{{ $appraisal_types }}" :order-id="'{{ $order_id }}'"></provided-services>
                 {{-- Client --}}
-                <client-info :order-id="'{{ $order_id }}'"></client-info>
+                <client-info :order="{{ $order }}" :order-id="'{{ $order_id }}'"></client-info>
                 {{-- Call log --}}
                 <call-log></call-log>
                 {{-- Map --}}
@@ -65,7 +69,7 @@
             <history></history>
         </div>
         <div class="mgt-32">
-            <files></files>
+            <files :order-id="'{{ $order_id }}'"></files>
         </div>
 
         <div class="note-grid">
@@ -74,7 +78,7 @@
              {{-- Note --}}
              <notes></notes>
             {{-- Activity log --}}
-            <activity-log :order-id="'{{ $order_id }}'"></activity-log>
+            <activity-log :order="{{ $order }}" :order-id="'{{ $order_id }}'"></activity-log>
             {{-- <div class="row">
                 <div class="col-md-12">
                    

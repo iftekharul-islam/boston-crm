@@ -7,24 +7,19 @@
     </div>
     <div class="box-body">
       <div class="list__group">
-        <p class="mb-0 left-side">Property address </p>
+        <p class="mb-0 left-side">Order no</p>
         <span>:</span>
-        <p class="right-side mb-0 primary-text fw-bold fs-20">{{ info.search_address }}</p>
+        <p class="right-side mb-0">{{ orderData.client_order_no }}</p>
       </div>
       <div class="list__group">
         <p class="mb-0 left-side">Due date</p>
         <span>:</span>
-        <p class="right-side mb-0">{{ info.due_date }}</p>
-      </div>
-      <div class="list__group">
-        <p class="mb-0 left-side">Order no</p>
-        <span>:</span>
-        <p class="right-side mb-0">{{ info.client_order_no }}</p>
+        <p class="right-side mb-0">{{ orderData.due_date }}</p>
       </div>
       <div class="list__group">
         <p class="mb-0 left-side">Order receive date</p>
         <span>:</span>
-        <p class="right-side mb-0">{{ info.received_date }}</p>
+        <p class="right-side mb-0">{{ orderData.received_date }}</p>
       </div>
     </div>
     <b-modal id="basic-info" size="lg" title="Edit Basic Information">
@@ -33,38 +28,8 @@
         <div class="row">
           <div class="col-md-6">
             <div class="group">
-              <label for="" class="d-block mb-2 dashboard-label">Search address <span class="require"></span></label>
-              <input type="text" v-model="info.search_address" class="dashboard-input w-100">
-            </div>
-            <div class="group">
-              <label for="" class="d-block mb-2 dashboard-label">Street name <span class="require"></span></label>
-              <input type="text" v-model="info.street_name" class="dashboard-input w-100">
-            </div>
-            <div class="group">
-              <label for="" class="d-block mb-2 dashboard-label">City name <span class="require"></span></label>
-              <input type="text" v-model="info.city_name" class="dashboard-input w-100">
-            </div>
-            <div class="group">
-              <label for="" class="d-block mb-2 dashboard-label">State name <span class="require"></span></label>
-              <input type="text" v-model="info.state_name" class="dashboard-input w-100">
-            </div>
-            <div class="group">
-              <label for="" class="d-block mb-2 dashboard-label">Zip <span class="require"></span></label>
-              <input type="text" v-model="info.zip" class="dashboard-input w-100">
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="group">
-              <label for="" class="d-block mb-2 dashboard-label">Unit # <span class="require"></span></label>
-              <input type="text" v-model="info.unit_no" class="dashboard-input w-100">
-            </div>
-            <div class="group">
-              <label for="" class="d-block mb-2 dashboard-label">County <span class="require"></span></label>
-              <input type="text" v-model="info.country" class="dashboard-input w-100">
-            </div>
-            <div class="group">
               <label for="" class="d-block mb-2 dashboard-label">Due date </label>
-              <v-date-picker v-model="info.due_date">
+              <v-date-picker v-model="orderData.due_date">
                 <template class="position-relative" v-slot="{ inputValue, inputEvents }">
                   <input
                       class="dashboard-input w-100"
@@ -76,11 +41,11 @@
             </div>
             <div class="group">
               <label for="" class="d-block mb-2 dashboard-label">Order no</label>
-              <input type="text" v-model="info.client_order_no" class="dashboard-input w-100">
+              <input type="text" v-model="orderData.client_order_no" class="dashboard-input w-100">
             </div>
             <div class="group">
               <label for="" class="d-block mb-2 dashboard-label">Order receive date</label>
-              <v-date-picker v-model="info.received_date">
+              <v-date-picker v-model="orderData.received_date">
                 <template class="position-relative" v-slot="{ inputValue, inputEvents }">
                   <input
                       class="dashboard-input w-100"
@@ -103,20 +68,14 @@
 <script>
 export default {
   props:{
-    orderId: String
+    orderId: String,
+    order: [],
   },
   data() {
     return {
-      info:{
-        search_address: '',
-        street_name: '',
-        city_name: '',
-        state_name: '',
-        zip:'',
-        unit_no:'',
-        country:'',
-        due_date: new Date(),
+      orderData:{
         client_order_no: '',
+        due_date: new Date(),
         received_date: new Date(),
       },
       message: ''
@@ -127,30 +86,18 @@ export default {
   },
   methods: {
     getBasicInfo(){
-      axios.get('get-basic-info/' + this.orderId)
-          .then(res => {
-            this.info.client_order_no = res.data.orderDetails.client_order_no
-            this.info.due_date = res.data.orderDetails.due_date
-            this.info.received_date = res.data.orderDetails.received_date
-
-            this.info.search_address = res.data.propertyInfo.search_address
-            this.info.street_name = res.data.propertyInfo.street_name
-            this.info.city_name = res.data.propertyInfo.city_name
-            this.info.state_name = res.data.propertyInfo.state_name
-            this.info.zip = res.data.propertyInfo.zip
-            this.info.country = res.data.propertyInfo.country
-            this.info.unit_no = res.data.propertyInfo.unit_no
-          }).catch(err => {
-        console.log(err)
-      })
+      this.orderData.client_order_no = this.order.client_order_no
+      this.orderData.due_date = this.order.due_date
+      this.orderData.received_date = this.order.received_date
     },
     updateBasicInfoData(){
       let that = this
-      axios.post('update-basic-info/'+ that.orderId,that.info)
+      axios.post('update-basic-info/'+ this.orderId,this.orderData)
           .then(res => {
-            that.message = res.data.message
+            this.message = res.data.message
             setTimeout(function(){
               that.$bvModal.hide('basic-info')
+              that.message = ''
             }, 2000);
           }).catch(err => {
             console.log(err)

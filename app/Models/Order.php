@@ -82,4 +82,9 @@ class Order extends Model implements HasMedia
     {
         return $this->belongsTo(ContactInfo::class, 'id', 'order_id');
     }
+
+    public function activityLog()
+    {
+        return $this->hasMany(ActivityLog::class,'order_id','id');
+    }
 }

@@ -119,10 +119,27 @@ class OrderController extends BaseController
      */
     public function show($id)
     {
+        $appraisers = $this->repository->getUserByRoleWise(role: 'appraiser');
+        $appraisal_types = $this->repository->getAppraisalTypes();
+        $loan_types = $this->repository->getLoanTypes();
+        $order = Order::with(
+            'amc',
+            'lender',
+            'user',
+            'appraisalDetail',
+            'appraisalDetail.appraiser',
+            'appraisalDetail.getLoanType',
+            'providerService',
+            'propertyInfo',
+            'borrowerInfo',
+            'contactInfo',
+            'activityLog.user'
+        )->where('id', $id)->first();
+
         $order_types = $this->repository->getOrderTypes($id);
         $order_due_date = $this->repository->getOrderDueDate($id);
         $diff_in_days = Carbon::parse($order_due_date->due_date)->diffInDays();
-        return view('order.show', compact('order_types','diff_in_days'));
+        return view('order.show', compact('order','order_types','diff_in_days','appraisers','loan_types','appraisal_types'));
     }
 
     /**
@@ -181,16 +198,6 @@ class OrderController extends BaseController
         //
     }
 
-    /**
-     * @param $order_id
-     * @return JsonResponse
-     */
-    public function getBasicInfo($order_id): JsonResponse
-    {
-        $order_details = $this->repository->getOrderDetails($order_id);
-        $property_info = $this->repository->getPropertyInfo($order_id);
-        return response()->json(["orderDetails" => $order_details, "propertyInfo" => $property_info]);
-    }
 
     /**
      * @param Request $request
@@ -199,7 +206,7 @@ class OrderController extends BaseController
      */
     public function updateBasicInfo(Request $request, $order_id): JsonResponse
     {
-        $this->repository->updatePropertyInfo($order_id, $request->all());
+        $this->repository->updateBasicInfo($order_id, $request->all());
 
         $data = [
           "activity_text" => "Basic info updated",
@@ -211,29 +218,25 @@ class OrderController extends BaseController
         return response()->json(["message" => "Basic info updated successfully !"]);
     }
 
-
     /**
+     * @param Request $request
      * @param $order_id
      * @return JsonResponse
      */
-    public function getAppraisalInfo($order_id): JsonResponse
+    public function updatePropertyInfo(Request $request,$order_id): JsonResponse
     {
-        $order_details = $this->repository->getOrderDetails($order_id);
-        $appraisal_details = $this->repository->getAppraisalDetails($order_id);
-        $provided_service = $this->repository->getProvidedService($order_id);
-        $appraisal_users = $this->repository->getUserByRoleWise(role: 'appraiser');
-        $appraisal_types = $this->repository->getAppraisalTypes();
-        $loan_types = $this->repository->getLoanTypes();
+        $this->repository->updatePropertyInfo($order_id, $request->all());
 
-        return response()->json([
-            "orderDetails" => $order_details,
-            "appraisalDetails" => $appraisal_details,
-            "providedService" => $provided_service,
-            "appraiserTypes" => $appraisal_types,
-            "loanTypes" => $loan_types,
-            "appraisers" => $appraisal_users
-        ]);
+        $data = [
+            "activity_text" => "Basic info updated",
+            "activity_by" => Auth::id(),
+            "order_id" => $order_id
+        ];
+
+        $this->repository->addActivity($data);
+        return response()->json(["message" => "Property info updated successfully !"]);
     }
+
 
     /**
      * @param Request $request
@@ -242,7 +245,14 @@ class OrderController extends BaseController
      */
     public function updateAppraisalInfo(Request $request, $order_id): JsonResponse
     {
-        $this->repository->updateAppraisalDetails($order_id, $request->all());
+        $this->repository->updateAppraisalInfo($order_id, $request->all());
+        $data = [
+            "activity_text" => "Appraisal info info updated",
+            "activity_by" => Auth::id(),
+            "order_id" => $order_id
+        ];
+
+        $this->repository->addActivity($data);
         return response()->json(["message" => "Appraisal info updated successfully"]);
     }
 
