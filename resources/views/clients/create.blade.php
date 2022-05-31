@@ -43,7 +43,7 @@
                                     <div class="group">
                                         <label for="email" class="d-block mb-2 dashboard-label">Email address <span
                                                     class="text-danger require"></span></label>
-                                        <input type="email" id="email" name="email[]" class="dashboard-input w-100 mb-2 email" required>
+                                        <input type="email" id="email" name="email[]" class="dashboard-input w-100 mb-2" required>
                                         <div id="email-append"></div>
                                         <div class="text-end">
                                             <button id="add-email" class="button button-transparent">+ Add More</button>
@@ -161,14 +161,22 @@
         let phoneCount = 1;
         $('#add-email').on('click',function(e){
             e.preventDefault();
-            $('#email-append').append('<input type="email" name="email[]" class="dashboard-input w-100 mb-2">');
+            $('#email-append').append('<div id="email-'+emailCount+'"><input type="email" name="email[]" class="email dashboard-input w-90 mb-2"><button type="button" id="'+emailCount+'" class="m-2 w-10 btn btn-danger email-button">X</button></div>');
             emailCount++;
+        });
+        $(document).on('click', '.email-button', function(){
+            let button_id = $(this).attr("id");
+            $('#email-'+button_id+'').remove();
         });
         $('#add-phone').on('click',function(e){
             e.preventDefault();
-            $('#phone-append').append('<input type="text" name="phone[]" class="dashboard-input w-100 mb-2">');
+            $('#phone-append').append('<div id="phone-'+ phoneCount+'"><input type="text" name="phone[]" class="phone dashboard-input w-90 mb-2"><button type="button" id="'+phoneCount+'" class="m-2 w-10 btn btn-danger phone-button">X</button></div>');
             phoneCount++;
-        })
+        });
+        $(document).on('click', '.phone-button', function(){
+            let button_id = $(this).attr("id");
+            $('#phone-'+button_id+'').remove();
+        });
         $(function () {
             let clientType = '';
             $('#client-type').on('change', function (e) {

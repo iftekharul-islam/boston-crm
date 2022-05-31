@@ -56,9 +56,9 @@ class OrderRepository extends BaseRepository
      * @param $order_id
      * @return mixed
      */
-    public function getOrderTypes($order_id): mixed
+    public function getOrderFileTypes($order_id): mixed
     {
-        return $this->model->find($order_id)->order_types;
+        return $this->model->find($order_id)->order_file_types;
     }
 
     /**
@@ -132,38 +132,6 @@ class OrderRepository extends BaseRepository
      * @param $order_id
      * @return Builder|Model
      */
-    public function getOrderDetails($order_id): Builder|Model
-    {
-        return Order::find($order_id);
-    }
-
-    /**
-     * @param $order_id
-     * @return Builder|Model
-     */
-    public function getAppraisalDetails($order_id): Builder|Model
-    {
-        return AppraisalDetail::query()->with([
-            'appraiser' => function ($query) {
-                $query->select('id', 'name');
-            }, 'loantype' => function ($query) {
-                $query->select('id', 'name');
-            }])->where('order_id', $order_id)->first();
-    }
-
-    /**
-     * @param $order_id
-     * @return Builder|Model
-     */
-    public function getProvidedService($order_id): Builder|Model
-    {
-        return ProvidedService::query()->where('order_id', $order_id)->first();
-    }
-
-    /**
-     * @param $order_id
-     * @return Builder|Model
-     */
     public function getPropertyInfo($order_id): Builder|Model
     {
         return PropertyInfo::query()->where('order_id', $order_id)->first();
@@ -209,37 +177,8 @@ class OrderRepository extends BaseRepository
             "fha_case_no" => $data['fha_case_no'],
             "loan_no" => $data['loan_no'],
         ]);
-//        $provided_service = ProvidedService::
     }
 
-    /**
-     * @param $order_id
-     * @return Builder|Model
-     */
-    public function getBorrowerDetails($order_id): Builder|Model
-    {
-        return BorrowerInfo::query()->where('order_id', $order_id)->first();
-    }
-
-    public function getContactDetails($order_id): Builder|Model
-    {
-        return ContactInfo::query()->where('order_id', $order_id)->first();
-    }
-
-    /**
-     * @param $order_id
-     * @return Builder|Model
-     */
-    public function getClientDetails($order_id): Builder|Model
-    {
-        return Order::query()->where('id', $order_id)
-            ->select('amc_id', 'lender_id')
-            ->with(['amc'=> function($query){
-                $query->select('id','name');
-            },'lender'=> function($query){
-                $query->select('id','name','address');
-            }])->first();
-    }
 
     /**
      * @param $type
@@ -263,6 +202,11 @@ class OrderRepository extends BaseRepository
             return $client_file[0]->getFullUrl();
         }
         return '';
+    }
+
+    public function getOrderFiles($order_id)
+    {
+        return $this->model->find($order_id)->getMedia('orders')->groupBy('custom_properties')->toArray();
     }
 
     /**
@@ -302,15 +246,16 @@ class OrderRepository extends BaseRepository
     /**
      * @param $data
      * @param $order_id
-     * @return mixed
+     * @return true
      */
-    public function saveOrderFiles($data, $order_id): mixed
+    public function saveOrderFiles($data, $order_id): bool
     {
-        return $this->model->find($order_id)
-            ->addAllMediaFromRequest($data['files'])
-            ->each(function ($fileAdder) use ($data) {
-                $fileAdder->toMediaCollection($data['file_type']);
-            });
+        foreach ($data['files'] as $file){
+            $this->model->find($order_id)->addMedia($file)
+                ->withCustomProperties(['type' => $data['file_type']])
+                ->toMediaCollection('orders');
+        }
+        return true;
     }
 
     /**
