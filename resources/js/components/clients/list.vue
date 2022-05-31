@@ -3,12 +3,10 @@
     <div class="clients-box clients-box-main bg-white">
       <div class="clients-top d-flex flex-wrap justify-content-between">
         <div class="left d-flex">
-          <template v-for="(type, index) in types">
-            <button class="clients-top-btn px-3 h-40" :class="{'active': isActive === type.type}"
+          <button v-for="(type, index) in types" :key="index" class="clients-top-btn px-3 h-40" :class="{'active': isActive === type.type}"
                     @click="getType(type.type)">
               {{ type.type }} <span class="ms-3">{{ type.count }}</span>
             </button>
-          </template>
         </div>
         <div class="right d-flex">
           <!-- Loader -->
@@ -39,10 +37,10 @@
           </thead>
           <tbody>
 
-          <tr v-for="client in clients.data">
+          <tr v-for="client, clientKey in clients.data" :key="clientKey">
             <td><b>{{ client.name }} </b></td>
-            <td><span class="d-flex mb-1" v-for="email in JSON.parse(client.email)">{{ email }}</span></td>
-            <td><span class="d-flex mb-1" v-for="phone in JSON.parse(client.phone)">{{ phone }}</span</td>
+            <td><span class="d-flex mb-1" :key="ei" v-for="email, ei in JSON.parse(client.email)">{{ email }}</span></td>
+            <td><span class="d-flex mb-1" :key="pi" v-for="phone, pi in JSON.parse(client.phone)">{{ phone }}</span</td>
             <td>{{ client.client_type }}</td>
             <td>{{ client.city }}</td>
             <td>{{ client.address }}</td>

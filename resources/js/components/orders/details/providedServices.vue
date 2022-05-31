@@ -75,7 +75,7 @@
                 </p>
               </div>
             </div>
-          </div>
+          </div> 
         <div slot="modal-footer" class="mgt-44">
           <b-button variant="secondary" @click="$bvModal.hide('provided-services')">Close</b-button>
           <b-button variant="primary" @click="updateProvidedServices">Save</b-button>
