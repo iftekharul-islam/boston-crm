@@ -442,17 +442,17 @@ export default {
     },
 
     checkProviderBalance() {
-          let totalfee = 0;
-          let checkCondoType = false;
-          this.providerTypes.extra.map((ele) => {
-              totalfee += parseFloat(ele.fee);
-              let checkCondo = Object.values(this.appraisalTypes).find(eles => eles.id == ele.typeId);
-              if ( checkCondo && checkCondo.condo_type == 1 ) {
-                  checkCondoType = true;
-              }
-          });
-          this.providerTypes.totalAmount = totalfee;
-          this.condoType = checkCondoType;
+        let totalfee = 0;
+        let checkCondoType = false;
+        this.providerTypes.extra.map((ele) => {
+            totalfee += parseFloat(ele.fee);
+            let checkCondo = Object.values(this.appraisalTypes).find(eles => eles.id == ele.typeId);
+            if ( checkCondo && checkCondo.condo_type == 1 ) {
+                checkCondoType = true;
+            }
+        });
+        this.providerTypes.totalAmount = totalfee;
+        this.condoType = checkCondoType;
     },
 
     checkProviderValidation(event, type) {

@@ -382,8 +382,20 @@ class OrderController extends BaseController
             $order->status = $get->status;
             $order->save();
             $returnMessage = "Order Status Has Been Updated";
+        } elseif ($type == "providerService") {
+            $fee = $get->data;
+            $note = $get->note;
+
+            $providerType = ProvidedService::where('order_id', $order->id)->first();
+            $providerType->updated_at = Carbon::now();
+            $providerType->appraiser_type_fee = json_encode($fee);
+            $providerType->note = $note;
+            $providerType->total_fee = collect($fee)->sum('fee');
+            $providerType->save();
+
+            $returnMessage = "Order Provider Data Has Been Updated";
         }
 
-        return response()->json(['error' => true, 'messages' => $returnMessage]);
+        return response()->json(['error' => false, 'messages' => $returnMessage]);
     }
 }
