@@ -18,6 +18,10 @@ function apiPost(url, data) {
     });
 }
 
+export function host(url) {
+    return window.location.origin + '/' + url;
+}
+
 function apiGet(url, data) {
     const headers = {
         'Content-Type': 'application/json',
@@ -74,7 +78,9 @@ function authPost(url, data) {
 
 function get(url, headerToken = null) {
     let headers = {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        "Access-Control-Allow-Origin": '*',
+        "Access-Control-Allow-Methods": 'GET'
     }
     if (headerToken) {
         headers.Authorization = headerToken;
@@ -189,6 +195,12 @@ export function getCookie(name) {
 }
 export function removeCookie(name) {
     document.cookie = name + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+}
+
+export const getPostcodeByLatLng = async(lat, lng) => {
+    if (!lat || !lng) return null
+    const res = await fetch(`https://api.postcodes.io/postcodes?lon=${lng}&lat=${lat}`);
+    return res;
 }
 
 export {

@@ -3,6 +3,7 @@
     <ValidationObserver ref="orderForm">
       <div class="row mgb-32">
         <div class="col-md-8 ">
+          <div class="map" ref="map" style="height: 0"></div>
           <div class="form-box">
             <h4 class="box-header mb-3">Appraisal details</h4>
             <div class="d-flex justify-content-between w-100">
@@ -136,7 +137,7 @@
               <div class="row">
                 <div class="col-12 text-end mt-4">
                   <button class="add-more" @click="addFee">
-                    <span class="icon-plus"></span> Add more
+                    <span class="icon-plus"></span> Add
                   </button>
                   <br><br>
                   <div class="provider-items" v-for="providerType, pi in providerTypes.extra" :key="pi">
@@ -218,7 +219,7 @@
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
                     <label for="" class="d-block mb-2 dashboard-label">Search address <span
                         class="text-danger require"></span></label>
-                    <input type="text" class="dashboard-input w-100" v-model="step1.searchAddress">
+                    <input type="text" ref="searchMapLocation" class="dashboard-input w-100" v-model="step1.searchAddress">
                     <span class="error-message">{{ errors[0] }}</span>
                   </div>
                 </ValidationProvider>
@@ -234,7 +235,7 @@
 
                 <ValidationProvider name="City name" rules="required" v-slot="{ errors }">
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
-                    <label label for="" class="d-block mb-2 dashboard-label">City name <span class="text-danger require"></span></label>
+                    <label label for="" class="d-block mb-2 dashboard-label">Area/City name <span class="text-danger require"></span></label>
                     <input type="text" class="dashboard-input w-100" v-model="step1.city">
                     <span class="error-message">{{ errors[0] }}</span>
                   </div>
@@ -271,9 +272,27 @@
 
                 <ValidationProvider name="County" rules="required" v-slot="{ errors }">
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
-                    <label for="" class="d-block mb-2 dashboard-label">County <span class="text-danger require"></span>
+                    <label for="" class="d-block mb-2 dashboard-label">Country <span class="text-danger require"></span>
                     </label>
                     <input type="text" class="dashboard-input w-100" v-model="step1.country">
+                    <span class="error-message">{{ errors[0] }}</span>
+                  </div>
+                </ValidationProvider>
+
+                <ValidationProvider name="Latitude" rules="required" v-slot="{ errors }">
+                  <div class="group" :class="{ 'invalid-form' : errors[0] }">
+                    <label for="" class="d-block mb-2 dashboard-label">Latitude <span class="text-danger require"></span>
+                    </label>
+                    <input type="text" class="dashboard-input w-100" v-model="step1.lat">
+                    <span class="error-message">{{ errors[0] }}</span>
+                  </div>
+                </ValidationProvider>
+
+                <ValidationProvider name="Longitude" rules="required" v-slot="{ errors }">
+                  <div class="group" :class="{ 'invalid-form' : errors[0] }">
+                    <label for="" class="d-block mb-2 dashboard-label">Longitude <span class="text-danger require"></span>
+                    </label>
+                    <input type="text" class="dashboard-input w-100" v-model="step1.lng">
                     <span class="error-message">{{ errors[0] }}</span>
                   </div>
                 </ValidationProvider>
@@ -340,6 +359,8 @@ export default {
         street: null,
         zipcode: null,
         country: null,
+        lat: null,
+        lng: null,
       },
       //All Msg Property
       clientOrderErrorMsg: '',
@@ -357,6 +378,14 @@ export default {
           extra: [],
           totalAmount: 0
       },
+      mapData: {
+        address: null,
+        map: null,
+        center: { lat: -25.308, lng: 133.036 },
+        currentPlace: null,
+        markerIcon: "",
+        data: [],
+      }
     }
   },
   created() {
@@ -369,6 +398,9 @@ export default {
     this.$root.$on('orderSubmitConfirm', (status) => {
         this.removeDataValue();
     });
+  },
+  mounted() {
+    this.geolocate();
   },
   methods: {
     stepChangeActive() {
@@ -514,6 +546,8 @@ export default {
         street: this.order.property_info.street_name,
         zipcode: this.order.property_info.zip,
         country: this.order.property_info.country,
+        lat: this.order.property_info.latitude,
+        lng: this.order.property_info.longitude,
       };
       this.step1 = step1;
       let setFee = JSON.parse(this.order.provider_service.appraiser_type_fee);
@@ -521,7 +555,121 @@ export default {
           let ele = setFee[i];
           this.setNewFee(ele.typeId, ele.fee);
       }
+    },
+
+    geolocate() {
+        this.mapData.markerIcon = this.$boston.host('img/marker.png');
+        this.mapData.map = new window.google.maps.Map(this.$refs['map'], {
+            center:  this.center,
+            zoom: 7,
+            gestureHandling: 'greedy'
+        });
+        new window.google.maps.Marker({
+            position: this.center,
+            map: this.map,
+            icon: this.markerIcon
+        });
+
+        const input = this.$refs.searchMapLocation;
+        const searchBox = new window.google.maps.places.SearchBox(input);
+        this.mapData.map.controls[window.google.maps.ControlPosition.TOP_LEFT].push(input);
+        this.mapData.map.addListener("bounds_changed", () => {
+          searchBox.setBounds(this.mapData.map.getBounds());
+        });
+
+        searchBox.addListener("places_changed", () => {
+          const places = searchBox.getPlaces();
+          if (places.length == 0) {
+            return;
+          }
+
+
+          // For each place, get the icon, name and location.
+          const bounds = new window.google.maps.LatLngBounds();
+          let markers = [];
+
+          places.forEach((place) => {
+            if (!place.geometry || !place.geometry.location) {
+              console.log("Returned place contains no geometry");
+              return;
+            }
+
+            const icon = {
+                url: place.icon,
+                size: new window.google.maps.Size(71, 71),
+                origin: new window.google.maps.Point(0, 0),
+                anchor: new window.google.maps.Point(17, 34),
+                scaledSize: new window.google.maps.Size(25, 25),
+            };
+
+            // Create a marker for each place.
+            markers.push(
+              new window.google.maps.Marker({
+                map: this.mapData.map,
+                icon: this.mapData.markerIcon,
+                title: place.name,
+                position: place.geometry.location,
+              })
+            );
+
+            if (place.geometry.viewport) {
+              bounds.union(place.geometry.viewport);
+            } else {
+              bounds.extend(place.geometry.location);
+            }
+            let addressData = {
+                postal_code: null,
+                country: null,
+                name: null,
+                street: null,
+                city: null,
+                location: null,
+                lat: null,
+                lon: null,
+                state: null,
+                place_id: null,
+            };
+            addressData.place_id = place.place_id;
+            // Location details
+            for (var i = 0; i < place.address_components.length; i++) {
+                if(place.address_components[i].types[0] == 'postal_code'){
+                    addressData.postal_code = place.address_components[i].long_name;
+                }
+                if(place.address_components[i].types[0] == 'route'){
+                    addressData.street = place.address_components[i].long_name;
+                }
+                if(place.address_components[i].types[0] == 'locality'){
+                    addressData.city = place.address_components[i].long_name;
+                }
+                if(place.address_components[i].types[0] == 'administrative_area_level_1'){
+                    addressData.state = place.address_components[i].short_name;
+                }
+                if(place.address_components[i].types[0] == 'country'){
+                    addressData.country = place.address_components[i].long_name;
+                }
+            }
+            addressData.name = place.name;
+            addressData.location = place.formatted_address;
+            addressData.lat = place.geometry.location.lat();
+            addressData.lon = place.geometry.location.lng();
+            this.mapData.data = addressData;
+            this.setMapDataToMode();
+          });
+          this.mapData.map.fitBounds(bounds);
+        });
+    },
+
+    setMapDataToMode() {
+        this.step1.searchAddress = this.mapData.data.location;
+        this.step1.state = this.mapData.data.state;
+        this.step1.city = this.mapData.data.city;
+        this.step1.street = this.mapData.data.street;
+        this.step1.zipcode = this.mapData.data.postal_code;
+        this.step1.country = this.mapData.data.country;
+        this.step1.lat = this.mapData.data.lat;
+        this.step1.lng = this.mapData.data.lon;
     }
+
   },
   watch: {
     providerTypes: {
@@ -538,7 +686,7 @@ export default {
         });
       },
       deep: true
-    }
+    },
   }
 }
 </script>

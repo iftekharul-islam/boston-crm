@@ -1,5 +1,7 @@
 @extends('layouts.app')
 @section('content')
+
+
     <div class="order-details bg-platinum dashboard-space">
         <a href="{{ url('/orders') }}" class="text-light-black d-inline-flex align-items-center mgb-20">
             <svg class="me-2" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -10,6 +12,8 @@
             </svg>
             Back to order list</a>
         @php $order_id = request()->route('id') @endphp
+
+
         {{-- header --}}
         <order-header :order="{{ $order }}" :diff_in_days="{{ $diff_in_days }}"></order-header>
         <div class="order-details-box-main row">
@@ -74,6 +78,7 @@
 
 
 @section("js")
+
 <script>
     $(document).on("click", ".order-details-box .box-header", function(e){
         let body = $(this).parent().find('.box-body');

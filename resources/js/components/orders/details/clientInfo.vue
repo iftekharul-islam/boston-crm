@@ -24,11 +24,11 @@
       </div>
     </div>
     <!-- modal -->
-    <b-modal id="client-info" size="lg" title="Edit client">
+    <b-modal id="client-info" size="md" title="Edit client">
       <div class="modal-body">
         <b-alert v-if="message" show variant="success"><a href="#" class="alert-link">{{ message }}</a></b-alert>
         <div class="row">
-          <div class="col-md-6">
+          <div class="col-md-12">
             <div class="group">
               <label for="" class="d-block mb-2 dashboard-label">AMC Name <span class="require"></span></label>
               <b-form-select
@@ -42,7 +42,7 @@
                 </template>
               </b-form-select>
             </div>
-            <a :href="amc_file" target="_blank" class="primary-text fw-bold my-3 d-inline-block underline">AMC
+            <a :href="amc_file" target="_blank" class="primary-text fw-bold my-3 d-block underline">AMC
               requirements 1</a>
             <div class="position-relative file-upload">
               <input type="file" @change="changeFileAmc">
@@ -51,31 +51,32 @@
               <span class="text-primary">{{ amcFileName }}</span>
             </div>
           </div>
-        </div>
-        <div class="col-md-6">
-          <div class="group">
-            <label for="" class="d-block mb-2 dashboard-label">Lender Name <span class="require"></span></label>
-            <b-form-select
-                v-model="lender_id"
-                :options="allLender"
-                value-field="id"
-                text-field="name"
-                class="dashboard-input w-100">
-              <template #first>
-                <b-form-select-option value="" disabled>-- Please select an option --</b-form-select-option>
-              </template>
-            </b-form-select>
-          </div>
-          <div class="group">
-            <label for="" class="d-block mb-2 dashboard-label">Lender address</label>
-            <input class="dashboard-input w-100" type="text" :value="lender_address"/>
-            <a :href="lender_file" target="_blank" class="primary-text fw-bold my-3 d-inline-block underline">Lender
-              requirements 1</a>
-            <div class="position-relative file-upload">
-              <input type="file" @change="changeFileLender">
-              <label for="">Upload <span class="icon-upload ms-3 fs-20"><span class="path1"></span><span
-                  class="path2"></span><span class="path3"></span></span></label>
-              <span class="text-primary">{{ lenderFileName }}</span>
+          <div class="divider"></div>
+          <div class="col-md-12">
+            <div class="group">
+              <label for="" class="d-block mb-2 dashboard-label">Lender Name <span class="require"></span></label>
+              <b-form-select
+                  v-model="lender_id"
+                  :options="allLender"
+                  value-field="id"
+                  text-field="name"
+                  class="dashboard-input w-100">
+                <template #first>
+                  <b-form-select-option value="" disabled>-- Please select an option --</b-form-select-option>
+                </template>
+              </b-form-select>
+            </div>
+            <div class="group">
+              <label for="" class="d-block mb-2 dashboard-label">Lender address</label>
+              <input class="dashboard-input w-100" type="text" :value="lender_address"/>
+              <a :href="lender_file" target="_blank" class="primary-text fw-bold my-3 d-block underline">Lender
+                requirements 1</a>
+              <div class="position-relative file-upload">
+                <input type="file" @change="changeFileLender">
+                <label for="">Upload <span class="icon-upload ms-3 fs-20"><span class="path1"></span><span
+                    class="path2"></span><span class="path3"></span></span></label>
+                <span class="text-primary">{{ lenderFileName }}</span>
+              </div>
             </div>
           </div>
         </div>
@@ -112,8 +113,7 @@ export default {
     }
   },
   created() {
-    this.getClientInfo()
-    console.log(this.order)
+    this.getClientInfo();
   },
   methods: {
     getClientInfo() {
@@ -156,3 +156,14 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+
+.divider {
+    border-top: 4px solid #35a6dc;
+    background: transparent;
+    padding-top: 20px;
+    margin-top: 20px;
+}
+
+</style>

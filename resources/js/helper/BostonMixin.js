@@ -18,6 +18,13 @@ Vue.mixin({
             } else {
                 return val;
             }
-        }
-    },
+        },
+        getLocationInfo(input, mapData) {
+
+            return {
+                mapData: mapData,
+                location: addressData
+            }
+        },
+    }
 });

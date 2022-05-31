@@ -1,5 +1,6 @@
 <template>
   <div class="order-details-box bg-white">
+   
     <div class="box-header">
       <p class="fw-bold text-light-black fs-20 mb-0">Basic Information</p>
       <a href="#" v-b-modal.basic-info class="d-inline-flex edit align-items-center fw-bold">Edit <span
@@ -22,11 +23,11 @@
         <p class="right-side mb-0">{{ orderData.received_date }}</p>
       </div>
     </div>
-    <b-modal id="basic-info" size="lg" title="Edit Basic Information">
+    <b-modal id="basic-info" size="md" title="Edit Basic Information">
       <div class="modal-body">
         <b-alert v-if="message" show variant="success"><a href="#" class="alert-link">{{ message }}</a></b-alert>
         <div class="row">
-          <div class="col-md-6">
+          <div class="col-md-12">
             <div class="group">
               <label for="" class="d-block mb-2 dashboard-label">Due date </label>
               <v-date-picker v-model="orderData.due_date">
@@ -71,6 +72,9 @@ export default {
     orderId: String,
     order: [],
   },
+  components: {
+    
+  },
   data() {
     return {
       orderData:{
@@ -78,11 +82,19 @@ export default {
         due_date: new Date(),
         received_date: new Date(),
       },
-      message: ''
+      message: '',
+      address: null,
+      map: null,
+      center: { lat: -25.308, lng: 133.036 },
+      currentPlace: null,
+      markerIcon: ""
     }
   },
   created() {
     this.getBasicInfo();
+  },
+  mounted() {
+
   },
   methods: {
     getBasicInfo(){
@@ -102,7 +114,12 @@ export default {
           }).catch(err => {
             console.log(err)
       })
-    }
+    },
   }
 }
 </script>
+
+
+<style scoped>
+
+</style>
