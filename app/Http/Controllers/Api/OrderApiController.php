@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Validator;
 class OrderApiController extends Controller
 {
     use CrmHelper;
-    
+
     public function store(Request $get) {
         $step = $get->step1;
         $step2 = $get->step2;
@@ -34,18 +34,18 @@ class OrderApiController extends Controller
         if ($error == true) {
             return response()->json(['error' => $error, 'messages' => $errorMessage]);
         }
-        
+
         $orderProccess = DB::transaction( function() use ($step, $step2, $company, $get) {
             $amcClient = $step['amcClient'];
             $appraiserName = $step['appraiserName'];
-            
+
             try {
                 $dueDate = Carbon::parse($step['dueDate'])->format('Y-m-d');
                 $receiveDate = Carbon::parse($step['receiveDate'])->format('Y-m-d');
             } catch (\Exception $e) {
                 return response()->json(['error' => false, 'messages' => ['Please check received & due dates']]);
             }
-            
+
             $systemOrder = $step['systemOrder'];
             $clientOrderNo = $step['clientOrderNo'];
             $lender = $step['lender'];
@@ -57,12 +57,12 @@ class OrderApiController extends Controller
             if ($submitType) {
                 $orderId = $get->order['id'];
             }
-            
+
             if ($orderId == null) {
                 $order = new Order;
                 $order->created_at = Carbon::now();
                 $order->status = 1;
-            } else {    
+            } else {
                 $order = Order::find($orderId);
                 if (!$order) {
                     return response()->json(['error' => true, 'messages' => ['Order information not found']]);
@@ -94,7 +94,7 @@ class OrderApiController extends Controller
             if ($orderId == null) {
                 $apprlDetails = new AppraisalDetail;
                 $apprlDetails->created_at = Carbon::now();
-            } else {    
+            } else {
                 $apprlDetails = AppraisalDetail::where('order_id', $order->id)->first();
                 if (!$apprlDetails) {
                     return response()->json(['error' => true, 'messages' => ['Order information not found']]);
@@ -110,8 +110,8 @@ class OrderApiController extends Controller
             $apprlDetails->fha_case_no = $fhaCaseNo;
             $apprlDetails->save();
 
-            
-            
+
+
 
             // Create Provider Types
             $fee = $get->providedData['extra'];
@@ -121,14 +121,14 @@ class OrderApiController extends Controller
             if ($orderId == null) {
                 $providerType = new ProvidedService;
                 $providerType->created_at = Carbon::now();
-            } else {    
+            } else {
                 $providerType = ProvidedService::where('order_id', $order->id)->first();
                 if (!$providerType) {
                     return response()->json(['error' => true, 'messages' => ['Order information not found']]);
                 }
                 $providerType->updated_at = Carbon::now();
             }
-            
+
             $providerType->order_id = $order->id;
             $providerType->appraiser_type_fee = json_encode($fee);
             $providerType->note = $note;
@@ -149,7 +149,7 @@ class OrderApiController extends Controller
             if ($orderId == null) {
                 $propertyInfo = new PropertyInfo;
                 $propertyInfo->created_at = Carbon::now();
-            } else {    
+            } else {
                 $propertyInfo = PropertyInfo::where('order_id', $order->id)->first();
                 if (!$propertyInfo) {
                     return response()->json(['error' => true, 'messages' => ['Order information not found']]);
@@ -182,14 +182,14 @@ class OrderApiController extends Controller
             if ($orderId == null) {
                 $borrowerType = new BorrowerInfo;
                 $borrowerType->created_at = Carbon::now();
-            } else {    
+            } else {
                 $borrowerType = BorrowerInfo::where('order_id', $order->id)->first();
                 if (!$borrowerType) {
                     return response()->json(['error' => true, 'messages' => ['Order information not found']]);
                 }
                 $borrowerType->updated_at = Carbon::now();
             }
-            $borrowerType->order_id = $order->id; 
+            $borrowerType->order_id = $order->id;
             $borrowerType->borrower_name = $borrower_name;
             $borrowerType->co_borrower_name = $co_borrower_name;
             $borrowerType->contact_email = json_encode([
@@ -210,7 +210,7 @@ class OrderApiController extends Controller
             if ($orderId == null) {
                 $contactInfo = new ContactInfo;
                 $contactInfo->created_at = Carbon::now();
-            } else {    
+            } else {
                 $contactInfo = ContactInfo::where('order_id', $order->id)->first();
                 if (!$contactInfo) {
                     return response()->json(['error' => true, 'messages' => ['Order information not found']]);
@@ -227,14 +227,21 @@ class OrderApiController extends Controller
             ]);
             $contactInfo->save();
 
+            //file upload
+            $file = $step2["file"];
+            Order::find($order->id)
+                ->addMediaFromBase64($file)
+                ->withCustomProperties(['type' => 'Order'])
+                ->toMediaCollection('orders');
+
             if ($orderId == null) {
                 $message = "New order has been stored";
-            } else {    
+            } else {
                 $message = "Order {$order->system_order_no} has been updated";
             }
 
             return response()->json([
-                "error" => false, 
+                "error" => false,
                 "message" => $message
             ]);
         });
@@ -257,7 +264,7 @@ class OrderApiController extends Controller
             $error = true;
             array_push($errorMessage['step1'], 'Company Information Missing');
         }
-        
+
         if (!isset($providedData['extra']) && count($providedData['extra']) == 0) {
             $error = true;
             array_push($errorMessage['step1'], 'Please add provider services data');

@@ -185,8 +185,6 @@
 </template>
 
 <script>
-import {log} from "../../../../public/js/app";
-
 export default {
   name: "Step2",
   props: ['type', 'order'],
@@ -225,9 +223,14 @@ export default {
   },
   methods: {
     addFile(event){
-      let fileData = event.target.files[0]
+        let that = this
+        let fileData = event.target.files[0]
+        var reader = new FileReader();
+        reader.readAsDataURL(fileData);
+        reader.onload = function () {
+            that.step2.file = reader.result
+        };
       this.step2.fileName = fileData.name
-      console.log(this.step2)
     },
     addEmail2() {
         this.$refs.addEmail2form.validate().then((status) => {
@@ -305,8 +308,7 @@ export default {
       }
     },
     addNewOrder(type = false) {
-      // console.log(this.step2)
-      this.$refs.orderForm.validate().then((res) => {
+        this.$refs.orderForm.validate().then((res) => {
           this.$root.$emit("updateStepData", {
             step: 2,
             data: this.step2
@@ -331,7 +333,7 @@ export default {
       let borrowerContact = JSON.parse(this.order.borrower_info.contact_email);
       let borrowerEmail = borrowerContact['email'];
       let borrowerPhone = borrowerContact['phone'];
-      
+
       let contactInfo = JSON.parse(this.order.contact_info.contact_email);
       let contactInfoEmail = contactInfo['email'];
       let contactInfoPhone = contactInfo['phone'];

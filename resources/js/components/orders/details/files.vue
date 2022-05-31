@@ -15,11 +15,11 @@
           <!-- document -->
           <div class="document">
             <div class="row">
-              <div class="col-sm-6 col-md-4 col-lg-3" v-for="file in orderFiles">
-                <p class="fw-bold text-light-black">{{ file }}</p>
-                <div class="d-flex align-items-center mb-3">
+              <div class="col-sm-6 col-md-4 col-lg-3" v-for="(files,type) in orderFiles" :key="type">
+                <p class="fw-bold text-light-black">{{ type }}</p>
+                <div class="d-flex align-items-center mb-3" v-for="file in files">
                   <img src="/img/pdf.svg" alt="boston profile" class="img-fluid">
-                  <span class="text-light-black d-inline-block mgl-12"></span>
+                  <span class="text-light-black d-inline-block mgl-12"><a :href="file.original_url" download>{{ file.name }}</a></span>
                 </div>
               </div>
             </div>
