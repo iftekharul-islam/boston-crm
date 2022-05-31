@@ -15,50 +15,11 @@
           <!-- document -->
           <div class="document">
             <div class="row">
-              <div class="col-sm-6 col-md-4 col-lg-3">
-                <p class="fw-bold text-light-black">Inspection</p>
-
+              <div class="col-sm-6 col-md-4 col-lg-3" v-for="file in orderFiles">
+                <p class="fw-bold text-light-black">{{ file }}</p>
                 <div class="d-flex align-items-center mb-3">
                   <img src="/img/pdf.svg" alt="boston profile" class="img-fluid">
-                  <span class="text-light-black d-inline-block mgl-12">Improvements on 23.03.2022</span>
-                </div>
-                <div class="d-flex align-items-center">
-                  <img src="/img/pdf.svg" alt="boston profile" class="img-fluid">
-                  <span class="text-light-black d-inline-block mgl-12">Improvements on 23.03.2022</span>
-                </div>
-              </div>
-              <div class="col-sm-6 col-md-4 col-lg-3">
-                <p class="fw-bold text-light-black">Order</p>
-
-                <div class="d-flex align-items-center mb-3">
-                  <img src="/img/pdf.svg" alt="boston profile" class="img-fluid">
-                  <span class="text-light-black d-inline-block mgl-12">Improvements on 23.03.2022</span>
-                </div>
-                <div class="d-flex align-items-center">
-                  <img src="/img/pdf.svg" alt="boston profile" class="img-fluid">
-                  <span class="text-light-black d-inline-block mgl-12">Improvements on 23.03.2022</span>
-                </div>
-              </div>
-              <div class="col-sm-6 col-md-4 col-lg-3">
-                <p class="fw-bold text-light-black">Report <span class="text-danger">*</span></p>
-                <div>
-                  <p class="text-gray">Didnt add yet</p>
-                  <div class="position-relative file-upload report-upload">
-                    <input type="file">
-                    <label for="">Upload <span class="icon-upload ms-3 fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span></label>
-                  </div>
-                </div>
-              </div>
-              <div class="col-sm-6 col-md-4 col-lg-3">
-                <p class="fw-bold text-light-black">Other</p>
-
-                <div class="d-flex align-items-center mb-3">
-                  <img src="/img/pdf.svg" alt="boston profile" class="img-fluid">
-                  <span class="text-light-black d-inline-block mgl-12">Improvements on 23.03.2022</span>
-                </div>
-                <div class="d-flex align-items-center">
-                  <img src="/img/pdf.svg" alt="boston profile" class="img-fluid">
-                  <span class="text-light-black d-inline-block mgl-12">Improvements on 23.03.2022</span>
+                  <span class="text-light-black d-inline-block mgl-12"></span>
                 </div>
               </div>
             </div>
@@ -68,14 +29,14 @@
     </div>
     <b-modal id="upload-files" size="lg" title="Uploads Order Files">
       <div class="modal-body">
-        <b-alert v-if="showMessage" show variant="success"><a href="#" class="alert-link">{{ message }}</a></b-alert>
+        <b-alert v-if="message" show variant="success"><a href="#" class="alert-link">{{ message }}</a></b-alert>
         <div class="row">
           <div class="col-md-6">
             <div class="group">
               <label for="" class="d-block mb-2 dashboard-label">Select file type <span class="require"></span></label>
               <b-form-select
-                  v-model="file_type"
-                  :options="fileTypes"
+                  v-model="fileData.file_type"
+                  :options="orderFileTypes"
                   class="dashboard-input w-100">
                 <template #first>
                   <b-form-select-option value="" disabled>-- Please select an option --</b-form-select-option>
@@ -84,7 +45,7 @@
             </div>
             <div class="group">
               <label for="" class="d-block mb-2 dashboard-label">Select file <span class="require"></span></label>
-              <b-form-file multiple v-model="files"></b-form-file>
+              <input type="file" multiple v-on:change="addFiles">
             </div>
           </div>
         </div>
@@ -100,29 +61,41 @@
   export default {
     props:{
       orderId: String,
-      fileTypes: Array
+      orderFileTypes: [],
+      orderFiles: []
     },
     data(){
       return{
-        file_type: '',
-        files: [],
-        message: '',
-        showMessage: false
+        fileData:{
+          file_type: '',
+          files: [],
+        },
+        message: ''
       }
     },
+    created(){
+      console.log(this.orderFiles)
+    },
     methods:{
+      addFiles(event){
+        this.fileData.files = event.target.files
+      },
       saveOrderFiles(){
         let that = this
-        const data = new FormData();
-        data.append('file_type', that.file_type)
-        data.append('files', that.files)
-
-        axios.post('upload-order-files/'+ this.orderId,data)
+        let formData = new FormData();
+        for( let i = 0; i < this.fileData.files.length; i++ ){
+          let file = this.fileData.files[i];
+          formData.append('files[' + i + ']', file);
+        }
+        formData.append('file_type',this.fileData.file_type)
+        axios.post('upload-order-files/'+ this.orderId,formData,{ headers: {
+          'Content-Type': 'multipart/form-data'
+        }})
             .then(res => {
-              that.message = res.data.message
-              that.showMessage = true
+              this.message = res.data.message
               setTimeout(function(){
                 that.$bvModal.hide('upload-files')
+                that.message = ''
               }, 2000);
             }).catch(err => {
               console.log(err)

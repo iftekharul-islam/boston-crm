@@ -18,7 +18,7 @@ class Order extends Model implements HasMedia
 
     protected $table = 'orders';
 
-    protected $appends = ['order_types'];
+    protected $appends = ['order_file_types'];
 
     protected $casts = [
       'due_date' => 'date:d M Y',
@@ -40,7 +40,7 @@ class Order extends Model implements HasMedia
     /**
      * @return string[]
      */
-    public function getOrderTypesAttribute(): array
+    public function getOrderFileTypesAttribute(): array
     {
         return array(
             'Assessor Card','Binder for Inspection','Comparable Photos','Condo Questionnaires',

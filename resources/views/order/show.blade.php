@@ -49,7 +49,7 @@
             <history :order="{{ $order }}"></history>
         </div>
         <div class="mgt-32">
-            <files :order="{{ $order }}"></files>
+            <files :order-files="{{ json_encode($order_files) }}" :order-id="'{{ $order_id }}'" :order-file-types="{{ json_encode($order_file_types) }}"></files>
         </div>
 
         <div class="note-grid">

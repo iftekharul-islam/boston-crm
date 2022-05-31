@@ -2,7 +2,7 @@
 @section('content')
     <div class="clients bg-platinum dashboard-space">
         <div class="clients-box add-client bg-white">
-            <form action="{{ route('clients.update',$client->id) }}" method="post" enctype="multipart/form-data">
+            <form id="client-edit-form" action="{{ route('clients.update',$client->id) }}" method="post" enctype="multipart/form-data">
                 @csrf
                 @method('put')
                 <div class="add-client-form">
@@ -180,31 +180,164 @@
         let phoneCount = 1;
         $('#add-email').on('click',function(e){
             e.preventDefault();
-            $('#email-append').append('<input type="email" name="email[]" class="dashboard-input w-100 mb-2">');
+            $('#email-append').append('<div id="email-'+emailCount+'"><input type="email" name="email[]" class="email dashboard-input w-90 mb-2"><button type="button" id="'+emailCount+'" class="m-2 w-10 btn btn-danger email-button">X</button></div>');
             emailCount++;
+        });
+        $(document).on('click', '.email-button', function(){
+            let button_id = $(this).attr("id");
+            $('#email-'+button_id+'').remove();
         });
         $('#add-phone').on('click',function(e){
             e.preventDefault();
-            $('#phone-append').append('<input type="text" name="phone[]" class="dashboard-input w-100 mb-2">');
+            $('#phone-append').append('<div id="phone-'+ phoneCount+'"><input type="text" name="phone[]" class="phone dashboard-input w-90 mb-2"><button type="button" id="'+phoneCount+'" class="m-2 w-10 btn btn-danger phone-button">X</button></div>');
             phoneCount++;
-        })
+        });
+        $(document).on('click', '.phone-button', function(){
+            let button_id = $(this).attr("id");
+            $('#phone-'+button_id+'').remove();
+        });
         $(function() {
-            $("#client-create-form").validate({
-                errorClass: "text-danger",
-                messages : {
-                    name: "Name is required",
-                    client_type : "Client type is required",
-                    email: "Email is required",
-                    phone: "Phone No is required",
-                    address: "Address is required",
-                    zip: "Zip code is required",
-                    state: "State is required",
-                    city: "City is required",
-                    fee_for_1004uad: "Technology fee for full appraisal(1004UAD) is required",
-                    fee_for_1004d: "Technology fee for full appraisal(1004D) is required",
-                    deducts_technology_fee: "Deduction of tech fee is required",
-                    can_sign: "Trainee can sign field is required",
-                    can_inspect: "Trainee can inspect field is required"
+            $("#client-edit-form").validate({
+                rules: {
+                    name: {
+                        required: true,
+                        normalizer: function (value) {
+                            return value.trim();
+                        }
+                    },
+                    client_type: {
+                        required: true,
+                        normalizer: function (value) {
+                            return value.trim();
+                        }
+                    },
+                    "phone[]": {
+                        required: true,
+                        phoneUS: true,
+                        normalizer: function (value) {
+                            return value.trim();
+                        },
+                    },
+                    "email[]": {
+                        required: true,
+                        email: true,
+                        normalizer: function (value) {
+                            return value.trim();
+                        }
+                    },
+                    address: {
+                        required: function () {
+                            return clientType === 'lender' || clientType === 'both'
+                        },
+                        normalizer: function (value) {
+                            return value.trim();
+                        }
+                    },
+                    zip: {
+                        required: function () {
+                            return clientType === 'lender' || clientType === 'both'
+                        },
+                        normalizer: function (value) {
+                            return value.trim();
+                        }
+                    },
+                    state: {
+                        required: function () {
+                            return clientType === 'lender' || clientType === 'both'
+                        },
+                        normalizer: function (value) {
+                            return value.trim();
+                        }
+                    },
+                    city: {
+                        required: function () {
+                            return clientType === 'lender' || clientType === 'both'
+                        },
+                        normalizer: function (value) {
+                            return value.trim();
+                        }
+                    },
+                    fee_for_1004uad: {
+                        required: function () {
+                            return clientType === 'amc' || clientType === 'both'
+                        },
+                        normalizer: function (value) {
+                            return value.trim();
+                        }
+                    },
+                    fee_for_1004d: {
+                        required: function () {
+                            return clientType === 'amc' || clientType === 'both'
+                        },
+                        normalizer: function (value) {
+                            return value.trim();
+                        }
+                    },
+                    deducts_technology_fee: {
+                        required: function () {
+                            return clientType === 'amc' || clientType === 'both'
+                        }
+                    },
+                    can_sign: {
+                        required: function () {
+                            return clientType === 'amc' || clientType === 'both'
+                        }
+                    },
+                    can_inspect: {
+                        required: function () {
+                            return clientType === 'amc' || clientType === 'both'
+                        }
+                    },
+                },
+                messages: {
+                    name: {
+                        required: "Client name is required"
+                    },
+                    client_type: {
+                        required: "Client type is required"
+                    },
+                    "email[]": {
+                        required: "Client email is required"
+                    },
+                    "phone[]": {
+                        required: "Client phone number is required"
+                    },
+                    address: {
+                        required: "Address is required"
+                    },
+                    zip: {
+                        required :"Zip code is required"
+                    },
+                    state: {
+                        required : "State is required"
+                    },
+                    city: {
+                        required: "City is required"
+                    },
+                    fee_for_1004uad: {
+                        required : "Technology fee for full appraisal(1004UAD) is required"
+                    },
+                    fee_for_1004d: {
+                        required : "Technology fee for appraisal(1004D) is required"
+                    },
+                    deducts_technology_fee: {
+                        required : "Deduction of tech fee is required"
+                    },
+                    can_sign: {
+                        required : "Trainee can sign field is required"
+                    },
+                    can_inspect: {
+                        required:"Trainee can inspect field is required"
+                    }
+                },
+                submitHandler: function (form) {
+                    if(form.valid()){
+                        form.submit();
+                    }else{
+                        $(this).data('validator').resetForm();
+                        return false;
+                    }
+
                 }
             });
             let clientType = $('#client-type').val();
