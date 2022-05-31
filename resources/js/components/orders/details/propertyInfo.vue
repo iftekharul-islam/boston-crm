@@ -12,14 +12,29 @@
         <p class="right-side mb-0 primary-text fw-bold fs-20">{{ info.search_address }}</p>
       </div>
       <div class="list__group">
-        <p class="mb-0 left-side">Property State</p>
+        <p class="mb-0 left-side">State</p>
         <span>:</span>
         <p class="right-side mb-0">{{ info.state_name }}</p>
       </div>
       <div class="list__group">
-        <p class="mb-0 left-side">Property City</p>
+        <p class="mb-0 left-side">City</p>
         <span>:</span>
         <p class="right-side mb-0">{{ info.city_name }}</p>
+      </div>
+      <div class="list__group">
+        <p class="mb-0 left-side">Street</p>
+        <span>:</span>
+        <p class="right-side mb-0">{{ info.street_name }}</p>
+      </div>
+      <div class="list__group">
+        <p class="mb-0 left-side">Latitude</p>
+        <span>:</span>
+        <p class="right-side mb-0">{{ info.latitude }}</p>
+      </div>
+      <div class="list__group">
+        <p class="mb-0 left-side">Longitude</p>
+        <span>:</span>
+        <p class="right-side mb-0">{{ info.longitude }}</p>
       </div>
       <div class="list__group">
         <p class="mb-0 left-side">Zip</p>
@@ -34,7 +49,7 @@
           <div class="col-md-6">
             <div class="group">
               <label for="" class="d-block mb-2 dashboard-label">Search address <span class="require"></span></label>
-              <input type="text" v-model="info.search_address" class="dashboard-input w-100">
+              <input type="text" ref="searchMapLocation" v-model="info.search_address" class="dashboard-input w-100">
             </div>
             <div class="group">
               <label for="" class="d-block mb-2 dashboard-label">Street name <span class="require"></span></label>
@@ -47,6 +62,11 @@
             <div class="group">
               <label for="" class="d-block mb-2 dashboard-label">State name <span class="require"></span></label>
               <input type="text" v-model="info.state_name" class="dashboard-input w-100">
+            </div>
+            <div class="divider"></div>
+            <div class="group">
+              <small>Edit with map location:</small>
+              <a :href="`/orders/${order.id}/edit`" class="btn btn-sm btn-primary">Edit Here</a>
             </div>
           </div>
           <div class="col-md-6">
@@ -61,6 +81,14 @@
             <div class="group">
               <label for="" class="d-block mb-2 dashboard-label">Zip <span class="require"></span></label>
               <input type="text" v-model="info.zip" class="dashboard-input w-100">
+            </div>
+            <div class="group">
+              <label for="" class="d-block mb-2 dashboard-label">Latitude <span class="require"></span></label>
+              <input type="text" v-model="info.latitude" class="dashboard-input w-100">
+            </div>
+            <div class="group">
+              <label for="" class="d-block mb-2 dashboard-label">Longitude <span class="require"></span></label>
+              <input type="text" v-model="info.longitude" class="dashboard-input w-100">
             </div>
           </div>
         </div>
@@ -88,12 +116,21 @@ export default {
         zip:'',
         unit_no:'',
         country:'',
+        longitude: '',
+        latitude: ''
       },
-      message: ''
+      message: '',
+      mapData: {
+        map: null,
+        center: {lat: null, lng: null},
+      }
     }
   },
   created() {
     this.getPropertyInfo();
+  },
+  mounted() {
+
   },
   methods: {
     getPropertyInfo(){
@@ -104,6 +141,10 @@ export default {
         this.info.zip = this.order.property_info.zip
         this.info.country = this.order.property_info.country
         this.info.unit_no = this.order.property_info.unit_no
+        this.info.latitude = this.order.property_info.latitude
+        this.info.longitude = this.order.property_info.longitude
+        this.mapData.center.lat = parseFloat(this.info.latitude);
+        this.mapData.center.lng = parseFloat(this.info.longitude);
     },
     updatePropertyInfo(){
       let that = this
@@ -117,7 +158,7 @@ export default {
           }).catch(err => {
             console.log(err)
       })
-    }
+    },
   }
 }
 </script>

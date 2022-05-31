@@ -21,7 +21,7 @@ mix.js('resources/js/app.js', 'public/js')
         processCssUrls: false,
         runtimeChunkPath: '.'
     })
-    .extract(['vue'])
+    .extract(['vue', 'bootstrap-vue', 'vue-select'])
     .disableNotifications()
     .webpackConfig({
         plugins: [

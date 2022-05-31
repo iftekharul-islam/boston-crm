@@ -143,6 +143,8 @@ class OrderApiController extends Controller
             $zipcode = $step['zipcode'];
             $city = $step['city'];
             $country = $step['country'];
+            $latitude = $step['lat'];
+            $longitude = $step['lng'];
 
             // create property info
 
@@ -165,8 +167,8 @@ class OrderApiController extends Controller
             $propertyInfo->zip = $zipcode;
             $propertyInfo->country = $country;
             $propertyInfo->unit_no = $unitNo;
-            $propertyInfo->latitude = "1";
-            $propertyInfo->longitude = "1";
+            $propertyInfo->latitude = $latitude;
+            $propertyInfo->longitude = $longitude;
             $propertyInfo->save();
 
 
@@ -220,10 +222,10 @@ class OrderApiController extends Controller
 
             $contactInfo->order_id = $order->id;
             $contactInfo->is_borrower = $contactSame == 1 ? 1 : 0;
-            $contactInfo->contact = $contact_info;
+            $contactInfo->contact = $contactSame == 1 ? $borrower_name : $contact_info;
             $contactInfo->contact_email = json_encode([
-                'email' => $email_address_s,
-                'phone' => $contact_number_s
+                'email' => $contactSame == 1 ? $borrower_email_s : $email_address_s,
+                'phone' => $contactSame == 1 ? $borrower_contact_s : $contact_number_s
             ]);
             $contactInfo->save();
 
@@ -265,7 +267,7 @@ class OrderApiController extends Controller
             array_push($errorMessage['step1'], 'Company Information Missing');
         }
 
-        if (!isset($providedData['extra']) && count($providedData['extra']) == 0) {
+        if (!isset($providedData['extra']) || isset($providedData['extra']) && count($providedData['extra']) == 0) {
             $error = true;
             array_push($errorMessage['step1'], 'Please add provider services data');
         }
@@ -287,6 +289,8 @@ class OrderApiController extends Controller
             "street",
             "zipcode",
             "country",
+            "lat",
+            "lng",
         ];
 
         foreach ($array_filter as $item) {
@@ -316,8 +320,7 @@ class OrderApiController extends Controller
             array_push($errorMessage['step2'], $this->recTitle('borrower_email')." is missing");
         }
 
-
-        if ($step2['contactSame'] == 1) {
+        if ($step2['contactSame'] == 0) {
             $array_filter3 = [
                 "contact_info",
                 "contact_number",

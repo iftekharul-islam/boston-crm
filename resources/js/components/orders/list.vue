@@ -36,12 +36,21 @@
             <template v-slot:rush="{item}">
                 {{ item.rush == 1 ? 'Yes' : 'No' }}
             </template>
+            <template v-slot:lat="{item}">
+                {{ item.property_info.latitude }}
+            </template>
+            <template v-slot:lon="{item}">
+                {{ item.property_info.longitude }}
+            </template>
             <template v-slot:action="{item}">
                 <a :href="`orders/${item.id}/edit`" class="btn btn-success btn-sm" :data-key="item.id">
                     <span onclick="roleUpdateOpen(2);" class="icon-edit cursor-pointer"><span class="path1"></span><span class="path2"></span></span>
                 </a>
                 <a :href="`orders/${item.id}`" class="btn btn-primary btn-sm" :data-key="item.id">
                     <span onclick="roleUpdateOpen(2);" class="icon-eye cursor-pointer"><span class="path1"></span><span class="path2"></span></span>
+                </a>
+                <a target="_blank" :href="`https://www.google.com/maps/search/?api=1&query=${item.property_info.search_address}`" class="btn btn-warning btn-sm" :data-key="item.id">
+                    Map
                 </a>
             </template>
         </Table>
@@ -92,6 +101,14 @@ export default {
                 {
                     title: "Rush Order",
                     key: "rush"
+                },
+                {
+                    title: "Latitue",
+                    key: "lat"
+                },
+                {
+                    title: "Longitue",
+                    key: "lon"
                 }
             ], 
         }
