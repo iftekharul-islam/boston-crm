@@ -113,7 +113,6 @@ export default {
   },
   created() {
     this.getClientInfo()
-    console.log(this.order)
   },
   methods: {
     getClientInfo() {

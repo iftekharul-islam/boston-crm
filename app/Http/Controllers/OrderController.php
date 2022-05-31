@@ -137,14 +137,16 @@ class OrderController extends BaseController
             'contactInfo',
             'activityLog.user'
         )->where('id', $id)->first();
+
         $order->amc_file = $this->repository->getClientFile($order->amc_id);
         $order->lender_file = $this->repository->getClientFile($order->lender_id);
 
-        $order_types = $this->repository->getOrderTypes($id);
+        $order_files = $this->repository->getOrderFiles($id);
+        $order_file_types = $this->repository->getOrderFileTypes($id);
         $order_due_date = $this->repository->getOrderDueDate($id);
         $diff_in_days = Carbon::parse($order_due_date->due_date)->diffInDays();
 
-        return view('order.show', compact('order_types', 'order', 'diff_in_days','appraisers','appraisal_types','loan_types','all_amc','all_lender'));
+        return view('order.show', compact('order_file_types','order_files', 'order', 'diff_in_days','appraisers','appraisal_types','loan_types','all_amc','all_lender'));
     }
 
     /**
@@ -278,7 +280,12 @@ class OrderController extends BaseController
         return view('order.public-order', compact('order', 'order_types'));
     }
 
-    public function uploadOrderFiles(Request $request, $order_id)
+    /**
+     * @param Request $request
+     * @param $order_id
+     * @return JsonResponse|\Illuminate\Http\RedirectResponse
+     */
+    public function uploadOrderFiles(Request $request, $order_id): JsonResponse|\Illuminate\Http\RedirectResponse
     {
         $this->repository->saveOrderFiles($request->all(), $order_id);
         if ($request->ajax()) {

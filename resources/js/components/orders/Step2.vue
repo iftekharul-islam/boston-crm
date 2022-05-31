@@ -162,8 +162,9 @@
       <div class="group mgt-32 mgb-32">
         <h4 class="box-header mb-3">Upload order form</h4>
         <div class="position-relative file-upload">
-          <input type="file">
+          <input type="file" @change="addFile">
           <label for="">Upload <img src="/img/upload.png" alt="boston profile"></label>
+          <span class="text-success">{{ step2.fileName }}</span>
         </div>
       </div>
       <div class="group mgt-32 mgb-32 mgl-32">
@@ -184,6 +185,8 @@
 </template>
 
 <script>
+import {log} from "../../../../public/js/app";
+
 export default {
   name: "Step2",
   props: ['type', 'order'],
@@ -202,6 +205,8 @@ export default {
         rush: 0,
         contact_number_s: [],
         email_address_s: [],
+        file: '',
+        fileName: ''
       },
       add: {
         contact: null,
@@ -219,6 +224,11 @@ export default {
     }
   },
   methods: {
+    addFile(event){
+      let fileData = event.target.files[0]
+      this.step2.fileName = fileData.name
+      console.log(this.step2)
+    },
     addEmail2() {
         this.$refs.addEmail2form.validate().then((status) => {
             if (status) {
@@ -295,6 +305,7 @@ export default {
       }
     },
     addNewOrder(type = false) {
+      // console.log(this.step2)
       this.$refs.orderForm.validate().then((res) => {
           this.$root.$emit("updateStepData", {
             step: 2,
