@@ -15,7 +15,7 @@
 
 
         {{-- header --}}
-        <order-header :order="{{ $order }}" :diff_in_days="{{ $diff_in_days }}"></order-header>
+        <order-header :order="{{ $order }}" :share-url="'{{ url('/public-order/'. $order_id ) }}'" :diff_in_days="{{ $diff_in_days }}"></order-header>
         <div class="order-details-box-main row">
             <div class="order-details__left col-md-6">
                 {{-- Basic Information --}}
@@ -61,15 +61,15 @@
             <activity-log :order="{{ $order }}" :order-id="'{{ $order_id }}'"></activity-log>
             {{-- <div class="row">
                 <div class="col-md-12">
-                   
+
                 </div>
                 <div class="col-md-12">
-                    
+
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    
+
                 </div>
             </div> --}}
         </div>
@@ -84,7 +84,7 @@
         let body = $(this).parent().find('.box-body');
         let target = $(e.target);
         let targetA = $("a.edit");
-        
+
         if ( !target.is(targetA)) {
             if (body.is(":visible")) {
                 body.slideUp();

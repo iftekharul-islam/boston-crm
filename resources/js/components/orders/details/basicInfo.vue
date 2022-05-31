@@ -1,6 +1,6 @@
 <template>
   <div class="order-details-box bg-white">
-   
+
     <div class="box-header">
       <p class="fw-bold text-light-black fs-20 mb-0">Basic Information</p>
       <a href="#" v-b-modal.basic-info class="d-inline-flex edit align-items-center fw-bold">Edit <span
@@ -67,13 +67,18 @@
   </div>
 </template>
 <script>
+import Calendar from 'v-calendar/lib/components/calendar.umd'
+import DatePicker from 'v-calendar/lib/components/date-picker.umd'
+
+Vue.component('VCalendar', Calendar)
+Vue.component('VDatePicker', DatePicker)
 export default {
   props:{
     orderId: String,
     order: [],
   },
   components: {
-    
+
   },
   data() {
     return {

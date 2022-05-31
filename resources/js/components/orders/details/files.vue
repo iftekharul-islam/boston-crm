@@ -73,9 +73,6 @@
         message: ''
       }
     },
-    created(){
-      console.log(this.orderFiles)
-    },
     methods:{
       addFiles(event){
         this.fileData.files = event.target.files

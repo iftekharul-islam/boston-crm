@@ -57,7 +57,7 @@ class OrderController extends BaseController
 
     /**
      * Searching Order Data Request
-     * 
+     *
      * @return JSON
      */
 
@@ -92,7 +92,7 @@ class OrderController extends BaseController
         $amc_clients = $client_users[0];
         $lender_clients = $client_users[1];
 
-        $company = auth()->user()->companies()->first();        
+        $company = auth()->user()->companies()->first();
         $userID = auth()->user()->id;
 
         return view('order.create',
@@ -158,7 +158,7 @@ class OrderController extends BaseController
      */
     public function edit(Order $order, $id)
     {
-        $company = auth()->user()->companies()->first();        
+        $company = auth()->user()->companies()->first();
         $userID = auth()->user()->id;
         $appraisal_users = $this->repository->getUserByRoleWise(role: 'appraiser');
         $appraisal_types = $this->repository->getAppraisalTypes();
@@ -170,7 +170,7 @@ class OrderController extends BaseController
         $order = Order::with(
                 'amc',
                 'lender',
-                'user', 
+                'user',
                 'appraisalDetail',
                 'providerService',
                 'propertyInfo',
@@ -275,8 +275,8 @@ class OrderController extends BaseController
      */
     public function publicOrder($order_id): View|Factory|Application
     {
-        $order = AppraisalDetail::where('order_id', $order_id)->select("system_order_no")->first();
-        $order_types = $this->repository->getOrderTypes($order_id);
+        $order = Order::find($order_id);
+        $order_types = $this->repository->getOrderFileTypes($order_id);
         return view('order.public-order', compact('order', 'order_types'));
     }
 
