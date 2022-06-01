@@ -4,29 +4,29 @@
       <div class="row mgb-32">
         <div class="col-md-8 ">
           <div class="map" ref="map" style="height: 0"></div>
-          <div class="form-box">
+          <div class="form-box h-100">
             <h4 class="box-header mb-3">Appraisal details</h4>
-            <div class="d-flex justify-content-between w-100">
+            <div class="d-flex justify-content-between w-100 box-flex">
               <div class="left max-w-424 w-100 me-3">
 
-                <ValidationProvider name="Order no" rules="required" v-slot="{ errors }">
+                <ValidationProvider class="group" name="Order no" rules="required" v-slot="{ errors }">
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
                     <label for="" class="d-block mb-2 dashboard-label">Client order no <span class="text-danger require"></span></label>
                     <input type="text" class="dashboard-input w-100" v-model="step1.clientOrderNo">
-                    <span class="error-message">{{ errors[0] }}</span>
+                    <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                   </div>
                 </ValidationProvider>
 
-                <ValidationProvider name="Loan no" rules="required" v-slot="{ errors }">
+                <ValidationProvider class="group" name="Loan no" rules="required" v-slot="{ errors }">
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
                     <label for="" class="d-block mb-2 dashboard-label">Loan no</label>
                     <input type="text" class="dashboard-input w-100" v-model="step1.loanNo">
-                    <span class="error-message">{{ errors[0] }}</span>
+                    <span  v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                   </div>
                 </ValidationProvider>
 
 
-                <ValidationProvider name="Received date" rules="required" v-slot="{ errors }">
+                <ValidationProvider class="group" name="Received date" rules="required" v-slot="{ errors }">
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
                       <label for="" class="d-block mb-2 dashboard-label">Received date <span
                           class="text-danger require"></span></label>
@@ -36,11 +36,11 @@
                             class="path3"></span><span class="path4"></span><span class="path5"></span><span
                             class="path6"></span><span class="path7"></span><span class="path8"></span></span>
                       </div>
-                      <span class="error-message">{{ errors[0] }}</span>
+                      <span  v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                   </div>
                 </ValidationProvider>
 
-                <ValidationProvider name="Due date" rules="required" v-slot="{ errors }">
+                <ValidationProvider class="group" name="Due date" rules="required" v-slot="{ errors }">
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
                     <label for="" class="d-block mb-2 dashboard-label">Due date <span
                         class="text-danger require"></span></label>
@@ -50,18 +50,18 @@
                           class="path3"></span><span class="path4"></span><span class="path5"></span><span
                           class="path6"></span><span class="path7"></span><span class="path8"></span></span>
                     </div>
-                    <span class="error-message">{{ errors[0] }}</span>
+                    <span  v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                   </div>
                 </ValidationProvider>
               </div>
               <div class="right max-w-424 w-100">
 
-              <div class="group">
+              <span class="group">
                 <label for="" class="d-block mb-2 dashboard-label">System order </label>
                 <input type="text" class="dashboard-input w-100" v-model="step1.systemOrder" readonly>
-              </div>
+              </span>
 
-                <ValidationProvider name="Loan type" rules="required" v-slot="{ errors }">
+                <ValidationProvider class="group" name="Loan type" rules="required" v-slot="{ errors }">
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
                     <label for="" class="d-block mb-2 dashboard-label">Loan type </label>
                     <div class="position-relative">
@@ -73,20 +73,20 @@
                       </select>
                       <span class="icon-arrow-down bottom-arrow-icon"></span>
                     </div>
-                    <span class="error-message">{{ errors[0] }}</span>
+                    <span  v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                   </div>
                 </ValidationProvider>
 
-                <ValidationProvider name="FHA case no" rules="required" v-slot="{ errors }">
+                <ValidationProvider class="group" name="FHA case no" rules="required" v-slot="{ errors }">
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
                     <label for="" class="d-block mb-2 dashboard-label">FHA case no <span
                         class="text-danger require" v-if="step1.loanType"></span></label>
                     <input type="text" class="dashboard-input w-100" v-model="step1.fhaCaseNo">
-                    <span class="error-message">{{ errors[0] }}</span>
+                    <span  v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                   </div>
                 </ValidationProvider>
 
-                <ValidationProvider name="Appraiser name" rules="required" v-slot="{ errors }">
+                <ValidationProvider class="group" name="Appraiser name" rules="required" v-slot="{ errors }">
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
                     <label for="" class="d-block mb-2 dashboard-label">Appraiser name <span
                         class="text-danger require"></span></label>
@@ -97,10 +97,11 @@
                                 :value="appraisal_user.id">
                           {{ appraisal_user.name }}
                         </option>
+                        <option value="ss">ss</option>
                       </select>
                       <span class="icon-arrow-down bottom-arrow-icon"></span>
                     </div>
-                    <span class="error-message">{{ errors[0] }}</span>
+                    <span  v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                   </div>
                 </ValidationProvider>
               </div>
@@ -112,6 +113,27 @@
             <div>
               <h4 class="box-header mb-3">Provided services</h4>
               <div class="row">
+
+                <!-- label -->
+                 <div class="col-6">
+                   <label for="" class="d-block mb-2 dashboard-label">Appraiser type </label>
+                </div>
+                <div class="col-6">
+                    <label for="" class="d-block mb-2 dashboard-label">Fee </label>
+                </div>
+                <!-- after added -->
+                  <div class="row" v-for="providerType, pi in providerTypes.extra" :key="pi">
+                    <div class="col-6">
+                      <p class="mb-0 ">{{ providerType.type }}</p>
+                    </div>
+                    <div class="col-6 d-flex justify-content-between">
+                      <p class="pdl-10 mb-0 fw-bold">{{ providerType.fee }}</p>
+                      <button class="button button-transparent p-2" @click="remoteProviderType(providerType, pi)">
+                         <span class="icon-trash"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></span>
+                      </button>
+                    </div>
+                  </div>
+                  <!-- input box and new add -->
                 <div class="col-6">
                   <div class="group" :class="{ 'invalid-form': providerTypes.error.type == true || this.proviedServicePass == false }">
                     <label for="" class="d-block mb-2 dashboard-label">Appraiser type </label>
@@ -132,25 +154,13 @@
                     <input type="number" step="any" @input="checkProviderValidation($event, 2)" class="dashboard-input w-100" v-model="providerTypes.default.fee">
                   </div>
                 </div>
-              </div>
-
-              <div class="row">
-                <div class="col-12 text-end mt-4">
-                  <button class="add-more" @click="addFee">
-                    <span class="icon-plus"></span> Add
-                  </button>
-                  <br><br>
-                  <div class="provider-items" v-for="providerType, pi in providerTypes.extra" :key="pi">
-                      <span>
-                        Type: <strong>{{ providerType.type }}</strong>
-                        Fee: <strong>$ {{ providerType.fee }}</strong>
-                      </span> 
-                      <span>
-                          <button class="btn-sm btn-danger" @click="remoteProviderType(providerType, pi)">Remove</button>
-                      </span>
-                  </div>
+                <div class="col-12 text-end mt-3">
+                   <button class="add-more" @click="addFee">
+                        <span class="icon-plus"></span> Add
+                    </button>
                 </div>
               </div>
+
             </div>
             <div class="mt-auto">
               <label for="" class="d-block mb-2 dashboard-label">Note <span class="text-danger require"></span></label>
@@ -163,10 +173,10 @@
       </div>
       <div class="row">
         <div class="col-md-4">
-          <div class="form-box h-100">
+          <div class="form-box h-100 box-flex">
             <h4 class="box-header mb-3">Client info</h4>
             
-            <ValidationProvider name="AMC name" rules="required" v-slot="{ errors }">
+            <ValidationProvider class="group" name="AMC name" rules="required" v-slot="{ errors }">
               <div class="group" :class="{ 'invalid-form' : errors[0] }">
                 <label for="" class="d-block mb-2 dashboard-label">AMC name <span
                     class="text-danger require"></span></label>
@@ -179,20 +189,20 @@
                   </select>
                   <span class="icon-arrow-down bottom-arrow-icon"></span>
                 </div>
-                <span class="error-message">{{ errors[0] }}</span>
+                <span  v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
               </div>
             </ValidationProvider>
 
-            <ValidationProvider name="Technology fee" :rules=" { required: (step1.amcClient == '') ? false : true}" v-slot="{ errors }">
+            <ValidationProvider class="group" name="Technology fee" :rules=" { required: (step1.amcClient == '') ? false : true}" v-slot="{ errors }">
               <div class="group" :class="{ 'invalid-form' : errors[0] }">
                 <label for="" class="d-block mb-2 dashboard-label">Technology fee <span
                     class="text-danger require"></span></label>
                 <input readonly type="text" class="dashboard-input w-100" v-model="step1.technologyFee">
-                <span class="error-message">{{ errors[0] }}</span>
+                <span  v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
               </div>
             </ValidationProvider>
 
-            <ValidationProvider name="Lender" rules="required" v-slot="{ errors }">
+            <ValidationProvider class="group" name="Lender" rules="required" v-slot="{ errors }">
               <div class="group" :class="{ 'invalid-form' : errors[0] }">
                 <label for="" class="d-block mb-2 dashboard-label">Lender <span class="text-danger require"></span></label>
                 <div class="position-relative">
@@ -204,7 +214,7 @@
                   </select>
                   <span class="icon-arrow-down bottom-arrow-icon"></span>
                 </div>
-                <span class="error-message">{{ errors[0] }}</span>
+                <span  v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
               </div>
             </ValidationProvider>
           </div>
@@ -213,87 +223,87 @@
         <div class="col-md-8 ">
           <div class="form-box">
             <h4 class="box-header mb-3">Property info</h4>
-            <div class="d-flex justify-content-between w-100">
+            <div class="d-flex justify-content-between w-100 box-flex">
               <div class="left max-w-424 w-100 me-3">
-                <ValidationProvider name="Search address" rules="required" v-slot="{ errors }">
+                <ValidationProvider class="group" name="Search address" rules="required" v-slot="{ errors }">
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
                     <label for="" class="d-block mb-2 dashboard-label">Search address <span
                         class="text-danger require"></span></label>
                     <input type="text" ref="searchMapLocation" class="dashboard-input w-100" v-model="step1.searchAddress">
-                    <span class="error-message">{{ errors[0] }}</span>
+                    <span  v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                   </div>
                 </ValidationProvider>
 
-                <ValidationProvider name="State name" rules="required" v-slot="{ errors }">
+                <ValidationProvider class="group" name="State name" rules="required" v-slot="{ errors }">
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
                   <label for="" class="d-block mb-2 dashboard-label">State name <span class="text-danger require"></span>
                   </label>
                   <input type="text" class="dashboard-input w-100" v-model="step1.state">
-                    <span class="error-message">{{ errors[0] }}</span>
+                    <span  v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                   </div>
                 </ValidationProvider>
 
-                <ValidationProvider name="City name" rules="required" v-slot="{ errors }">
+                <ValidationProvider class="group" name="City name" rules="required" v-slot="{ errors }">
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
                     <label label for="" class="d-block mb-2 dashboard-label">Area/City name <span class="text-danger require"></span></label>
                     <input type="text" class="dashboard-input w-100" v-model="step1.city">
-                    <span class="error-message">{{ errors[0] }}</span>
+                    <span  v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                   </div>
                 </ValidationProvider>
 
-                <ValidationProvider name="Unit No" :rules="{'required' : condoType == true}" v-slot="{ errors }">
+                <ValidationProvider class="group" name="Unit No" :rules="{'required' : condoType == true}" v-slot="{ errors }">
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
                     <label for="" class="d-block mb-2 dashboard-label">Unit No <span class="text-danger require"></span>
                     </label>
                     <input type="text" class="dashboard-input w-100" v-model="step1.unitNo">
-                    <span class="error-message">{{ errors[0] }}</span>
+                    <span  v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                   </div>
                 </ValidationProvider>
               </div>
 
               <div class="right max-w-424 w-100">
-                <ValidationProvider name="Street name" rules="required" v-slot="{ errors }">
+                <ValidationProvider class="group" name="Street name" rules="required" v-slot="{ errors }">
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
                   <label for="" class="d-block mb-2 dashboard-label">Street name <span class="text-danger require"></span>
                   </label>
                   <input type="text" class="dashboard-input w-100" v-model="step1.street">
-                  <span class="error-message">{{ errors[0] }}</span>
+                  <span  v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                   </div>
                 </ValidationProvider>
 
-                <ValidationProvider name="Zip code" rules="required|integer" v-slot="{ errors }">
+                <ValidationProvider class="group" name="Zip code" rules="required|integer" v-slot="{ errors }">
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
                   <label for="" class="d-block mb-2 dashboard-label">Zipcode <span class="text-danger require"></span>
                   </label>
                   <input type="number" class="dashboard-input w-100" v-model="step1.zipcode">
-                  <span class="error-message">{{ errors[0] }}</span>
+                  <span  v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                   </div>
                 </ValidationProvider>
 
-                <ValidationProvider name="County" rules="required" v-slot="{ errors }">
+                <ValidationProvider class="group" name="County" rules="required" v-slot="{ errors }">
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
                     <label for="" class="d-block mb-2 dashboard-label">Country <span class="text-danger require"></span>
                     </label>
                     <input type="text" class="dashboard-input w-100" v-model="step1.country">
-                    <span class="error-message">{{ errors[0] }}</span>
+                    <span  v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                   </div>
                 </ValidationProvider>
 
-                <ValidationProvider name="Latitude" rules="required" v-slot="{ errors }">
+                <ValidationProvider class="group" name="Latitude" rules="required" v-slot="{ errors }">
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
                     <label for="" class="d-block mb-2 dashboard-label">Latitude <span class="text-danger require"></span>
                     </label>
                     <input type="text" class="dashboard-input w-100" v-model="step1.lat">
-                    <span class="error-message">{{ errors[0] }}</span>
+                    <span  v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                   </div>
                 </ValidationProvider>
 
-                <ValidationProvider name="Longitude" rules="required" v-slot="{ errors }">
+                <ValidationProvider class="group" name="Longitude" rules="required" v-slot="{ errors }">
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
                     <label for="" class="d-block mb-2 dashboard-label">Longitude <span class="text-danger require"></span>
                     </label>
                     <input type="text" class="dashboard-input w-100" v-model="step1.lng">
-                    <span class="error-message">{{ errors[0] }}</span>
+                    <span  v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                   </div>
                 </ValidationProvider>
 
@@ -302,7 +312,7 @@
           </div>
         </div>
       </div>
-      <div class="add-client__bottom d-flex justify-content-end  p-3">
+      <div class="add-client__bottom d-flex justify-content-end p-3 mgt-32">
         <button class="button button-primary" @click="nextStep">
           Next
           <svg class="ms-4" width="20" height="14" viewBox="0 0 20 14" fill="none" xmlns="http://www.w3.org/2000/svg">

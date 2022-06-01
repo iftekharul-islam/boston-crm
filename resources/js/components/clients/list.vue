@@ -39,8 +39,16 @@
 
           <tr v-for="client, clientKey in clients.data" :key="clientKey">
             <td><b>{{ client.name }} </b></td>
-            <td><span class="d-flex mb-1" :key="ei" v-for="email, ei in JSON.parse(client.email)">{{ email }}</span></td>
-            <td><span class="d-flex mb-1" :key="pi" v-for="phone, pi in JSON.parse(client.phone)">{{ phone }}</span</td>
+            <td>
+              <div class="client-contact-limit">
+                <span class="d-flex" :key="ei" v-for="email, ei in JSON.parse(client.email)">{{ email }}</span>
+              </div>
+            </td>
+            <td>
+              <div class="client-contact-limit">
+                <span class="d-flex" :key="pi" v-for="phone, pi in JSON.parse(client.phone)">{{ phone }}</span>
+              </div>
+              </td>
             <td>{{ client.client_type }}</td>
             <td>{{ client.city }}</td>
             <td>{{ client.address }}</td>
@@ -64,6 +72,8 @@
   </div>
 </template>
 <script>
+import Pagination from 'vue-pagination-2'
+Vue.component('pagination', Pagination)
 export default {
   props: {
     showRoute: String,

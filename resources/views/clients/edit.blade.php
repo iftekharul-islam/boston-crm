@@ -43,23 +43,31 @@
                                     <div class="group">
                                         <label for="email" class="d-block mb-2 dashboard-label">Email address <span
                                                     class="text-danger require"></span></label>
-                                        @foreach(json_decode($client->email) as $email)
-                                            <input type="email" id="email" name="email[]" value="{{ $email }}" class="dashboard-input w-100 mb-3">
+                                        @foreach(json_decode($client->email) as $key => $email)
+                                            @if($key == 0)
+                                                <input type="email" id="email" name="email[]" value="{{ $email }}" class="dashboard-input w-100 mb-3">
+                                            @else
+                                                <div id={{"email-" . $key + 10 }}><input type="email" name="email[]" value="{{ $email }}" class="dashboard-inputemail dashboard-input w-90 mb-2"><button type="button" id="{{ $key + 10 }}" class="m-2 w-10 btn btn-danger email-button">X</button></div>
+                                            @endif
                                         @endforeach
-                                        <div id="email-append"></div>
+                                        <div id="email-append" class="contact-append"></div>
                                         <div class="text-end">
-                                            <button id="add-email" class="button button-transparent">+ Add More</button>
+                                            <button id="add-email" class="button button-transparent text-gray p-0">+ Add More</button>
                                         </div>
                                     </div>
                                     <div class="group">
                                         <label for="phone" class="d-block mb-2 dashboard-label">Phone no <span
                                                     class="text-danger require"></span></label>
-                                        @foreach(json_decode($client->phone) as $phone)
+                                        @foreach(json_decode($client->phone) as $key => $phone)
+                                        @if($key == 0)
                                             <input type="text" name="phone[]" id="phone" value="{{ $phone }}" class="dashboard-input w-100 mb-3" required>
+                                        @else
+                                            <div id="{{ "phone-".$key + 10 }}"><input type="text" name="phone[]" value="{{ $phone }}" class="dashboard-input w-phone dashboard-input w-90 mb-2"><button type="button" id="{{ $key + 10 }}" class="m-2 w-10 btn btn-danger phone-button">X</button></div>
+                                        @endif
                                         @endforeach
-                                        <div id="phone-append"></div>
+                                        <div id="phone-append" class="contact-append"></div>
                                         <div class="text-end">
-                                            <button id="add-phone" class="button button-transparent">+ Add More</button>
+                                            <button id="add-phone" class="button button-transparent text-gray p-0">+ Add More</button>
                                         </div>
                                     </div>
                                 </div>
@@ -180,7 +188,7 @@
         let phoneCount = 1;
         $('#add-email').on('click',function(e){
             e.preventDefault();
-            $('#email-append').append('<div id="email-'+emailCount+'"><input type="email" name="email[]" class="email dashboard-input w-90 mb-2"><button type="button" id="'+emailCount+'" class="m-2 w-10 btn btn-danger email-button">X</button></div>');
+            $('#email-append').append('<div class="append-div" id="email-'+emailCount+'"><input type="email" name="email[]" class="email dashboard-input"><button type="button" id="'+emailCount+'" class="button button-transparent p-0 contact-del-btn email-button"><span class="icon-trash"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></span></button></div>');
             emailCount++;
         });
         $(document).on('click', '.email-button', function(){
@@ -189,7 +197,7 @@
         });
         $('#add-phone').on('click',function(e){
             e.preventDefault();
-            $('#phone-append').append('<div id="phone-'+ phoneCount+'"><input type="text" name="phone[]" class="phone dashboard-input w-90 mb-2"><button type="button" id="'+phoneCount+'" class="m-2 w-10 btn btn-danger phone-button">X</button></div>');
+            $('#phone-append').append('<div class="append-div" id="phone-'+ phoneCount+'"><input type="text" name="phone[]" class="phone dashboard-input"><button type="button" id="'+phoneCount+'" class="button button-transparent p-0 contact-del-btn phone-button"><span class="icon-trash"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></span></button></div>');
             phoneCount++;
         });
         $(document).on('click', '.phone-button', function(){

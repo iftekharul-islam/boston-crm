@@ -15,7 +15,7 @@
 
 
         {{-- header --}}
-        <order-header :order="{{ $order }}" :share-url="'{{ url('/public-order/'. $order_id ) }}'" :diff_in_days="{{ $diff_in_days }}"></order-header>
+        <order-header :order="{{ $order }}" :share-url="'{{ url('/public-order/'. base64_encode($order_id) ) }}'" :diff_in_days="{{ $diff_in_days }}"></order-header>
         <div class="order-details-box-main row">
             <div class="order-details__left col-md-6">
                 {{-- Basic Information --}}
