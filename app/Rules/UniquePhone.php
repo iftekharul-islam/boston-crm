@@ -33,7 +33,7 @@ class UniquePhone implements Rule
     {
         $passed = true;
         foreach ($this->client_phones as $phone){
-            $decoded_phone = json_decode($phone,true);
+            $decoded_phone = !is_array($phone) ? [$phone] : json_decode($phone,true);
             if(array_intersect($value,$decoded_phone)){
                 $passed = false;
             }

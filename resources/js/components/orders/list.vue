@@ -10,7 +10,7 @@
                 <input type="text" v-model="pages.searchModel" @input="searchData($event)" class="me-3 mb-3 px-3 bdr-1 br-4 form-control gray-border" placeholder="Search...">
                 <select @change="loadPage(pages.activePage)" name="paginate" class="form-control" v-model="pages.paginate">
                     <option value="">Per page</option>
-                    <option :value="item" :key="ik" v-for="item, ik in pages.perPages">{{ item }}</option>
+                    <option :value="item" :key="ik" v-for="item, ik in pages.perPages">{{ item }} Per page</option>
                 </select>
             </div>
         </div>

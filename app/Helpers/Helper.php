@@ -101,8 +101,20 @@ class Helper
 	 {
 			$amc_clients    = collect();
 			$lender_clients = collect();
+			$both_client = collect();
 			foreach ( $clients as $client ) {
-				 $client->client_type === 'amc' ? $amc_clients[] = $client : $lender_clients[] = $client;
+				 if ($client->client_type === 'amc') {
+					$amc_clients[] = $client;
+				 } else if($client->client_type === 'lender') {
+					$lender_clients[] = $client;
+				 } else if($client->client_type === 'both'){
+					$both_client[] = $client;
+				 }
+			}
+
+			if ($both_client->count() > 0) {
+				$amc_clients = $amc_clients->merge($both_client);
+				$lender_clients = $lender_clients->merge($both_client);
 			}
 			
 			return [ $amc_clients, $lender_clients ];
