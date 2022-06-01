@@ -89,20 +89,20 @@
                                                class="d-block mb-2 dashboard-label fee-for-1004uad-label">Technology fee
                                             for
                                             appraisal like 1004UAD</label>
-                                        <input type="number" name="fee_for_1004uad" value="{{ old('fee_for_1004uad') }}" id="fee-for-1004uad"
+                                        <input type="number" onkeypress="return event.charCode >= 48 && event.charCode <= 57" name="fee_for_1004uad" value="{{ old('fee_for_1004uad') }}" id="fee-for-1004uad"
                                                class="dashboard-input w-100">
                                     </div>
                                     <div class="group">
                                         <label for="fee-for-1004d" class="d-block mb-2 dashboard-label fee-for-1004d-label">Technology fee for appraisal like 1004D</label>
-                                        <input type="number" name="fee_for_1004d" value="{{ old('fee_for_1004d') }}" id="fee-for-1004d" class="dashboard-input w-100">
+                                        <input type="number" onkeypress="return event.charCode >= 48 && event.charCode <= 57" name="fee_for_1004d" value="{{ old('fee_for_1004d') }}" id="fee-for-1004d" class="dashboard-input w-100">
                                     </div>
                                     <div class="group">
                                         <label for="deducts-technology-fee" class="d-block mb-2 dashboard-label deducts-technology-fee-label">Deduction of tech fee during payment </label>
                                         <div class="position-relative">
                                             <select name="deducts_technology_fee" value="{{ old('deducts_technology_fee') }}" id="deducts-technology-fee" class="dashboard-input w-100">
                                                 <option value="">Choose an option</option>
-                                                <option value="1" {{ (old("deducts_technology_fee") == 1 ? "selected":"") }}>Yes</option>
-                                                <option value="0" {{ (old("deducts_technology_fee") == 0 ? "selected":"") }}>No</option>
+                                                <option value="1">Yes</option>
+                                                <option value="0">No</option>
                                             </select>
                                             <span class="icon-arrow-down bottom-arrow-icon"></span>
                                         </div>
@@ -112,8 +112,8 @@
                                         <div class="position-relative">
                                             <select name="can_sign" id="can-sign" class="dashboard-input w-100">
                                                 <option value="">Choose an option</option>
-                                                <option value="1" {{ (old("can_sign") == 1 ? "selected":"") }}>Yes</option>
-                                                <option value="0" {{ (old("can_sign") == 0 ? "selected":"") }}>N/A</option>
+                                                <option value="1">Yes</option>
+                                                <option value="0">N/A</option>
                                             </select>
                                             <span class="icon-arrow-down bottom-arrow-icon"></span>
                                         </div>
@@ -124,8 +124,8 @@
                                         <div class="position-relative">
                                             <select name="can_inspect" id="can-inspect" class="dashboard-input w-100">
                                                 <option value="">Choose an option</option>
-                                                <option value="1" {{ (old("can_inspect") == 1 ? "selected":"") }}>Yes</option>
-                                                <option value="0" {{ (old("can_inspect") == 0 ? "selected":"") }}>N/A</option>
+                                                <option value="1">Yes</option>
+                                                <option value="0">N/A</option>
                                             </select>
                                             <span class="icon-arrow-down bottom-arrow-icon"></span>
                                         </div>
@@ -266,7 +266,7 @@
                             return clientType === 'amc' || clientType === 'both'
                         },
                         normalizer: function (value) {
-                            return value.trim();
+                            return value.trim() > 0;
                         }
                     },
                     fee_for_1004d: {
@@ -274,7 +274,7 @@
                             return clientType === 'amc' || clientType === 'both'
                         },
                         normalizer: function (value) {
-                            return value.trim();
+                            return value.trim() > 0;
                         }
                     },
                     deducts_technology_fee: {
@@ -304,7 +304,7 @@
                         required: "Client email is required"
                     },
                     "phone[]": {
-                        required: "Client phone number is required"
+                        required: "Client phone number is required.(i.e. 000-000-0000)"
                     },
                     address: {
                         required: "Address is required"

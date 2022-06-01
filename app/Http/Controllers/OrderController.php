@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Psy\Util\Json;
 use App\Helpers\Helper;
 use App\Models\ActivityLog;
+use App\Models\User;
 use App\Models\Order;
 use App\Helpers\CrmHelper;
 use Illuminate\Support\Js;
@@ -20,7 +21,6 @@ use App\Models\AppraisalDetail;
 use App\Models\ProvidedService;
 use Illuminate\Http\JsonResponse;
 use Ramsey\Collection\Collection;
-use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\View\View;
 use App\Repositories\OrderRepository;
 use Illuminate\Contracts\View\Factory;
@@ -140,7 +140,7 @@ class OrderController extends BaseController
 
         $order->amc_file = $this->repository->getClientFile($order->amc_id);
         $order->lender_file = $this->repository->getClientFile($order->lender_id);
-
+        $order->user_role = User::find($order->created_by)->getUserRole($order->created_by,$order->company_id);
         $order_files = $this->repository->getOrderFiles($id);
         $order_file_types = $this->repository->getOrderFileTypes($id);
         $order_due_date = $this->repository->getOrderDueDate($id);
@@ -403,9 +403,7 @@ class OrderController extends BaseController
             "activity_text" => $returnMessage,
             "activity_by" => Auth::id(),
             "order_id" => $order->id
-        ];      
+        ];
         $this->repository->addActivity($data);
-
-        return response()->json(['error' => false, 'messages' => $returnMessage]);
     }
 }
