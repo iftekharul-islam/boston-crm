@@ -709,4 +709,5 @@ export default {
 .provider-items:nth-last-child(1) {
   border-bottom: none;
 }
+
 </style>

@@ -235,7 +235,7 @@ class OrderController extends BaseController
         $this->repository->updatePropertyInfo($order_id, $request->all());
 
         $data = [
-            "activity_text" => "Basic info updated",
+            "activity_text" => "Order properties information has been updated",
             "activity_by" => Auth::id(),
             "order_id" => $order_id
         ];
@@ -254,7 +254,7 @@ class OrderController extends BaseController
     {
         $this->repository->updateAppraisalInfo($order_id, $request->all());
         $data = [
-            "activity_text" => "Appraisal info info updated",
+            "activity_text" => "Order appraisal information has been updated",
             "activity_by" => Auth::id(),
             "order_id" => $order_id
         ];
@@ -395,6 +395,13 @@ class OrderController extends BaseController
 
             $returnMessage = "Order Provider Data Has Been Updated";
         }
+
+        $data = [
+            "activity_text" => $returnMessage,
+            "activity_by" => Auth::id(),
+            "order_id" => $order->id
+        ];      
+        $this->repository->addActivity($data);
 
         return response()->json(['error' => false, 'messages' => $returnMessage]);
     }

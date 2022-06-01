@@ -14,14 +14,15 @@ let path = require('path');
  */
 
 mix.js('resources/js/app.js', 'public/js')
-    .vue()
     .sass('resources/sass/app.scss', 'public/css')
+    .vue()
     .options({
         legacyNodePolyfills: false,
         processCssUrls: false,
-        runtimeChunkPath: '.'
+        runtimeChunkPath: '.',
+        autoprefixe: false,
     })
-    .extract(['vue', 'bootstrap-vue', 'vue-select'])
+    .extract(['vue', 'bootstrap-vue', 'vee-validate', 'vue-select'])
     .disableNotifications()
     .webpackConfig({
         plugins: [
