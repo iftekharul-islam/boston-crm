@@ -859,18 +859,18 @@ select {
 .note-chat {
     max-height: 400px;
     overflow: auto;
-    &::-webkit-scrollbar-track {
-        background-color: #F5F5F5;
-        border-radius: 10px;
-    }
-    &::-webkit-scrollbar {
-        width: 10px;
-        background-color: #F5F5F5;
-    }
-    &::-webkit-scrollbar-thumb {
-        border-radius: 10px;
-        background: #9697A0;
-    }
+}
+::-webkit-scrollbar-track {
+    background-color: #F5F5F5;
+    border-radius: 10px;
+}
+::-webkit-scrollbar {
+    width: 10px;
+    background-color: #F5F5F5;
+}
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background: #9697A0;
 }
 
 //  modal
@@ -1011,3 +1011,29 @@ select {
         }
     }
 }
+
+.box-flex {
+    .group {
+        display: block;
+        margin-bottom: 32px;
+        &:last-of-type {
+            margin-bottom: 0;
+        }
+        >.group {
+            margin: 0;
+        }
+    }
+}
+
+.new-array-items{
+    // margin-top: 15px;
+    .items {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 3px 16px;
+        background: $white;
+        border-radius: 4px;
+        margin-top: 12px;
+    }
+  }
