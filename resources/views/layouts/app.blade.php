@@ -98,6 +98,13 @@
 <script>
     $(document).ready(function () {
         $('.crm-select').select2();
+
+        $(".submenu").hide();
+        $('#sidebar .sidebar-dropdown').hover(function () {
+            $(this).find('.submenu').show(500);
+        }, function () {
+            $(this).find('.submenu').hide(500);
+        });
     });
     sidebarToggle = () => {
         let sidebarToggle = document.getElementById("sidebar");

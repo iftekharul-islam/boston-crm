@@ -38,6 +38,12 @@
         .list-item {
             padding: 12px 18px 12px 40px;
             transition: all .3s ease-in;
+            &:hover {
+                background: $primary;
+                .icon-arrow-down {
+                    display: block;
+                }
+            }
             &.active {
                 background: $primary;
                 .icon-arrow-down {
@@ -72,3 +78,90 @@
         padding-left: 20px;
     }
 }
+
+.sidebar-dropdown {
+   
+    .submenu {
+        padding-left: 0px;
+        padding-right: 0px;
+        padding-top: 0px;
+        background: #223045;
+        .submenu-item {
+            color: $white;
+            padding: 10px 20px;
+            padding-left: 65px;
+            .submenu-link {
+                padding: 3px;
+                display: block;
+            }
+            &:hover {
+                background: $primary;
+            }
+
+        }
+    }
+    &:hover {
+        .list-item {
+            background: $primary;
+        }
+        .icon-arrow-down {
+            display: block;
+        }
+    }
+    
+}
+
+
+// @-moz-keyframes rotateX {
+//     0% {
+//       opacity: 0;
+//       transform: rotateX(-90deg);
+//     }
+//     50% {
+//       transform: rotateX(-20deg);
+//     }
+//     100% {
+//       opacity: 1;
+//       transform: rotateX(0deg);
+//     }
+//   }
+//   @-webkit-keyframes rotateX {
+//     0% {
+//       opacity: 0;
+//       transform: rotateX(-90deg);
+//     }
+//     50% {
+//       transform: rotateX(-20deg);
+//     }
+//     100% {
+//       opacity: 1;
+//       transform: rotateX(0deg);
+//     }
+//   }
+//   @-o-keyframes rotateX {
+//     0% {
+//       opacity: 0;
+//       transform: rotateX(-90deg);
+//     }
+//     50% {
+//       transform: rotateX(-20deg);
+//     }
+//     100% {
+//       opacity: 1;
+//       transform: rotateX(0deg);
+//     }
+//   }
+//   @keyframes rotateX {
+//     0% {
+//       opacity: 0;
+//       transform: rotateX(-90deg);
+//     }
+//     50% {
+//       transform: rotateX(-20deg);
+//     }
+//     100% {
+//       opacity: 1;
+//       transform: rotateX(0deg);
+//     }
+//   }
+  

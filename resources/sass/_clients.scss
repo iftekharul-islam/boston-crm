@@ -218,6 +218,7 @@
 .client-contact-limit {
     max-height: 25px;
     overflow-y: auto;
+    overflow-x: hidden;
 }
 .contact-append {
     .append-div {
