@@ -19,6 +19,19 @@ Vue.mixin({
                 return val;
             }
         },
+        copy(data) {
+            try {
+                var aux = document.createElement("input");
+                aux.setAttribute("value", data);
+                document.body.appendChild(aux);
+                aux.select();
+                document.execCommand("copy");
+                document.body.removeChild(aux);
+                return true;
+            } catch (e) {
+                return false;
+            }
+        },
         getLocationInfo(input, mapData) {
 
             return {

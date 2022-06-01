@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Order;
 use App\Helpers\CrmHelper;
+use App\Models\ActivityLog;
 use App\Models\ContactInfo;
 use App\Models\BorrowerInfo;
 use App\Models\PropertyInfo;
@@ -230,17 +231,27 @@ class OrderApiController extends Controller
             $contactInfo->save();
 
             //file upload
-            $file = $step2["file"];
-            Order::find($order->id)
-                ->addMediaFromBase64($file)
-                ->withCustomProperties(['type' => 'Order'])
-                ->toMediaCollection('orders');
+            if (isset($step2["file"])) {
+                $file = $step2["file"];
+                if (str_contains($file, 'data:image/')) {
+                    $order->addMediaFromBase64($file)
+                        ->withCustomProperties(['type' => 'Order'])
+                        ->toMediaCollection('orders');
+                }
+            }
 
             if ($orderId == null) {
                 $message = "New order has been stored";
             } else {
                 $message = "Order {$order->system_order_no} has been updated";
             }
+
+            $data = [
+                "activity_text" => $message,
+                "activity_by" => Auth::id(),
+                "order_id" => $order->id
+            ];      
+            ActivityLog::create($data);
 
             return response()->json([
                 "error" => false,

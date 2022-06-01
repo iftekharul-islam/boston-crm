@@ -28,9 +28,7 @@
 </template>
 
 <script>
-import VueClipboard from 'vue-clipboard2'
-VueClipboard.config.autoSetContainer = true
-Vue.use(VueClipboard)
+
 export default {
     props: ['order', 'diff_in_days','shareUrl'],
     name: 'Order-header',
@@ -48,7 +46,7 @@ export default {
         },
         copyURL(event) {
             let container = this.$refs.shareLink
-            this.$copyText(container.href, container)
+            this.copy(container);
             this.copied = true
             setTimeout(() => {
                 this.copied = false
