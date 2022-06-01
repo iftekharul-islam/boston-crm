@@ -64,6 +64,8 @@
   </div>
 </template>
 <script>
+import Pagination from 'vue-pagination-2'
+Vue.component('pagination', Pagination)
 export default {
   props: {
     showRoute: String,

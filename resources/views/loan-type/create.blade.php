@@ -4,7 +4,7 @@
     <div class="container">
         <div class="row">
             <div class="col-6 mx-auto">
-                <form action="{{ route('loan-types.store') }}" method="POST">
+                <form id="loan-type-form" action="{{ route('loan-types.store') }}" method="POST">
                     @csrf
 
                     <div class="form-group mb-2">
@@ -17,9 +17,20 @@
                                     </span>
                         @enderror
                     </div>
-                    <button type="submit" class="btn btn-primary mt-2">Submit</button>
+                    <button type="button" id="submit-button" class="btn btn-primary mt-2">Submit</button>
                 </form>
             </div>
         </div>
     </div>
 @endsection
+@push('js')
+<script type="text/javascript">
+    $(function() {
+        $('#submit-button').on('click',function(e) {
+            e.preventDefault();
+            $(this).attr('disabled', true);
+            $('#loan-type-form').submit();
+        });
+    });
+</script>
+@endpush

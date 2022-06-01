@@ -20,7 +20,7 @@ use App\Models\AppraisalDetail;
 use App\Models\ProvidedService;
 use Illuminate\Http\JsonResponse;
 use Ramsey\Collection\Collection;
-
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\View\View;
 use App\Repositories\OrderRepository;
 use Illuminate\Contracts\View\Factory;
@@ -275,8 +275,11 @@ class OrderController extends BaseController
      */
     public function publicOrder($order_id): View|Factory|Application
     {
-        $order = Order::find($order_id);
-        $order_types = $this->repository->getOrderFileTypes($order_id);
+        $order = Order::find(base64_decode($order_id));
+        if(!$order){
+            abort(404);
+        }
+        $order_types = $this->repository->getOrderFileTypes(base64_decode($order_id));
         return view('order.public-order', compact('order', 'order_types'));
     }
 
