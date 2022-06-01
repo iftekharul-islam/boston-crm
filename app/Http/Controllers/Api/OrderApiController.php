@@ -255,6 +255,7 @@ class OrderApiController extends Controller
 
             return response()->json([
                 "error" => false,
+                "orderId" => $order->id,
                 "message" => $message
             ]);
         });

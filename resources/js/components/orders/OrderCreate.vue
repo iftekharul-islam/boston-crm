@@ -95,6 +95,9 @@ export default {
                 this.$root.$emit('orderSubmitConfirm', true);
                 this.stepChangeActive = false;
                 this.step = 1;
+                setTimeout(() => {
+                  window.location.href = "/orders/"+res.orderId + "?r=create"
+                },1000);
               }
               $("html, body").animate({ scrollTop: 0 }, "slow");
           });
