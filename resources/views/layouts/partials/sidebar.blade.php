@@ -44,6 +44,8 @@
             </a>
         @endif
         @if(in_array('view.user', $user_permissions ?? []) || $is_owner || $user_role == 'admin')
+         <!-- submenu -->
+         <div class=" sidebar-dropdown">
             <a href="{{ route('users.index') }}"
                class="list-item d-flex align-items-center  text-white {{ (request()->is('users*')) ? 'active' : '' }}">
                 <div class="d-inline-flex align-items-center">
@@ -52,6 +54,14 @@
                 </div>
                 <span class="icon-arrow-down ms-auto"></span>
             </a>
+                 <!-- dropdown menu -->
+                 <ul class="submenu">
+                     <li class="submenu-item"><a href="#" class="submenu-link text-light">Some where</a></li>
+                     <li class="submenu-item"><a href="#" class="submenu-link text-light">Any where</a></li>
+                     <li class="submenu-item"><a href="#" class="submenu-link text-light">Some where</a></li>
+                     <li class="submenu-item"><a href="#" class="submenu-link text-light">Some where</a></li>
+                 </ul>
+            </div>
         @endif
         @if(in_array('view.role', $user_permissions ?? []) || $is_owner || $user_role == 'admin')
             <a href="{{ route('roles.index') }}"
