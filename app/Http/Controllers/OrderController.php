@@ -82,7 +82,7 @@ class OrderController extends BaseController
      *
      * @return Application|Factory|View
      */
-    public function create(): View|Factory|Application
+    public function create() //: View|Factory|Application
     {
         $system_order_no = $this->generateSystemOrderNo();
         $appraisal_users = $this->repository->getUserByRoleWise(role: 'appraiser');

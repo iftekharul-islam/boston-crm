@@ -97,7 +97,6 @@
                                 :value="appraisal_user.id">
                           {{ appraisal_user.name }}
                         </option>
-                        <option value="ss">ss</option>
                       </select>
                       <span class="icon-arrow-down bottom-arrow-icon"></span>
                     </div>
@@ -114,12 +113,13 @@
               <h4 class="box-header mb-3">Provided services</h4>
               <div class="row">
 
+              <div class="provided-service-data row mgb-20" v-if="providerTypes.extra.length > 0">
                 <!-- label -->
-                 <div class="col-6">
-                   <label for="" class="d-block mb-2 dashboard-label">Appraiser type </label>
+                <div class="col-6">
+                  <label for="" class="d-block mb-2 dashboard-label"><strong>Appraiser type</strong> </label>
                 </div>
                 <div class="col-6">
-                    <label for="" class="d-block mb-2 dashboard-label">Fee </label>
+                    <label for="" class="d-block mb-2 dashboard-label"><strong>Fee</strong> </label>
                 </div>
                 <!-- after added -->
                   <div class="row" v-for="providerType, pi in providerTypes.extra" :key="pi">
@@ -129,10 +129,11 @@
                     <div class="col-6 d-flex justify-content-between">
                       <p class="pdl-10 mb-0 fw-bold">{{ providerType.fee }}</p>
                       <button class="button button-transparent p-2" @click="remoteProviderType(providerType, pi)">
-                         <span class="icon-trash"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></span>
+                        <span class="icon-trash"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></span>
                       </button>
                     </div>
                   </div>
+                </div>
                   <!-- input box and new add -->
                 <div class="col-6">
                   <div class="group" :class="{ 'invalid-form': providerTypes.error.type == true || this.proviedServicePass == false }">

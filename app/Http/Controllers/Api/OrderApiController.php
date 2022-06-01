@@ -39,7 +39,7 @@ class OrderApiController extends Controller
         $orderProccess = DB::transaction( function() use ($step, $step2, $company, $get) {
             $amcClient = $step['amcClient'];
             $appraiserName = $step['appraiserName'];
-
+            
             try {
                 $dueDate = Carbon::parse($step['dueDate'])->format('Y-m-d');
                 $receiveDate = Carbon::parse($step['receiveDate'])->format('Y-m-d');
