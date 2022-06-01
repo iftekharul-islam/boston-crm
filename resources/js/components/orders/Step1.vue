@@ -113,7 +113,7 @@
               <h4 class="box-header mb-3">Provided services</h4>
               <div class="row">
                 <div class="col-6">
-                  <div class="group" :class="{ 'invalid-form': providerTypes.error.type == true }">
+                  <div class="group" :class="{ 'invalid-form': providerTypes.error.type == true || this.proviedServicePass == false }">
                     <label for="" class="d-block mb-2 dashboard-label">Appraiser type </label>
                     <div class="position-relative">
                        <select name="" id="" class="dashboard-input w-100" @change="checkProviderValidation($event, 1)" v-model="providerTypes.default.type">
@@ -127,7 +127,7 @@
                   </div>
                 </div>
                 <div class="col-6">
-                  <div class="group" :class="{ 'invalid-form': providerTypes.error.fee == true }">
+                  <div class="group" :class="{ 'invalid-form': providerTypes.error.fee == true || this.proviedServicePass == false }">
                     <label for="" class="d-block mb-2 dashboard-label">Fee </label>
                     <input type="number" step="any" @input="checkProviderValidation($event, 2)" class="dashboard-input w-100" v-model="providerTypes.default.fee">
                   </div>
@@ -337,6 +337,7 @@ export default {
   data() {
     return {
       stepActive: false,
+      proviedServicePass: false,
       step1: {
         unitNo: '',
         clientOrderNo: '',
@@ -412,7 +413,7 @@ export default {
 
     nextStep() {
       this.$refs.orderForm.validate().then( (status) => {
-          if (status) {
+          if (status && this.proviedServicePass == true) {
               this.stepActive = true;
               this.stepChangeActive();
           }
@@ -485,6 +486,10 @@ export default {
         });
         this.providerTypes.totalAmount = totalfee;
         this.condoType = checkCondoType;
+        this.proviedServicePass = false;
+        if (this.providerTypes.extra.length > 0) {
+          this.proviedServicePass = true;
+        }
     },
 
     checkProviderValidation(event, type) {
