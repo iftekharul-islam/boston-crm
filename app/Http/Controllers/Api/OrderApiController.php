@@ -248,7 +248,7 @@ class OrderApiController extends Controller
 
             $data = [
                 "activity_text" => $message,
-                "activity_by" => Auth::id(),
+                "activity_by" => $user->id,
                 "order_id" => $order->id
             ];      
             ActivityLog::create($data);
