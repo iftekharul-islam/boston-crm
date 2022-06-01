@@ -48,7 +48,7 @@
               <div class="client-contact-limit">
                 <span class="d-flex" :key="pi" v-for="phone, pi in JSON.parse(client.phone)">{{ phone }}</span>
               </div>
-              </td>
+            </td>
             <td>{{ client.client_type }}</td>
             <td>{{ client.city }}</td>
             <td>{{ client.address }}</td>

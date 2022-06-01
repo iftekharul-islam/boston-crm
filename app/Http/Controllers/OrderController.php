@@ -88,6 +88,7 @@ class OrderController extends BaseController
         $appraisal_users = $this->repository->getUserByRoleWise(role: 'appraiser');
         $appraisal_types = $this->repository->getAppraisalTypes();
         $loan_types = $this->repository->getLoanTypes();
+        
         $client_users = Helper::getClientsGroupBy($this->repository->getClients());
         $amc_clients = $client_users[0];
         $lender_clients = $client_users[1];

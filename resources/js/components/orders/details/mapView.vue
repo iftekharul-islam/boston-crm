@@ -7,6 +7,8 @@
      <div class="map" ref="map" v-if="!mapNotFound">
         <MapMarker :lat="mapData.lat" :lng="mapData.lng"></MapMarker>
         <MapInfo :lat="mapData.lat" :lng="mapData.lng" class="map-info-bg">
+            <span style="text-align: center; color: #2473e8">Boston Order's Property Info:</span> <br><br>
+            S.O.N: <strong style="color: #000">#{{ order.system_order_no }}</strong> <br>
             {{ order.property_info.search_address }}
         </MapInfo>
       </div>

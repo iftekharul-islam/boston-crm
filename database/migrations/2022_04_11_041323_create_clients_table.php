@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('name');
             $table->json('email')->nullable();
             $table->json('phone')->nullable();
-            $table->enum('client_type',['amc','lender','both'])->comment('can be of two types');
+            $table->enum('client_type',['amc','lender','both'])->comment('can be of three types');
             $table->string('address')->nullable();
             $table->string('city')->nullable();
             $table->string('state')->nullable();

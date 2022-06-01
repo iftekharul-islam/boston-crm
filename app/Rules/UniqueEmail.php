@@ -34,8 +34,9 @@ class UniqueEmail implements Rule
     {
         $passed = true;
         foreach ($this->client_emails as $email){
-            $decoded_email = json_decode($email,true);
-            if(array_intersect($value,$decoded_email)){
+            $decoded_email = !is_array($email) ? [$email] : json_decode($email, true);
+            
+            if(array_intersect($value, $decoded_email)){
                 $passed = false;
             }
         }

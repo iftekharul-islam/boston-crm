@@ -182,7 +182,7 @@
                 <label for="" class="d-block mb-2 dashboard-label">AMC name <span
                     class="text-danger require"></span></label>
                 <div class="position-relative">
-                  <select name="" id="" class="dashboard-input w-100" v-model="step1.amcClient">
+                  <select name="" id="" class="dashboard-input w-100" @change="getAmcClient" v-model="step1.amcClient">
                     <option value="">Please select amc client</option>
                     <option v-for="amc_client in amcClients" :key="amc_client.id" :value="amc_client.id">
                       {{ amc_client.name }}
@@ -207,7 +207,7 @@
               <div class="group" :class="{ 'invalid-form' : errors[0] }">
                 <label for="" class="d-block mb-2 dashboard-label">Lender <span class="text-danger require"></span></label>
                 <div class="position-relative">
-                  <select name="" id="" class="dashboard-input w-100" v-model="step1.lender">
+                  <select name="" id="" class="dashboard-input w-100" @change="getLenderClient" v-model="step1.lender">
                     <option value="">Please select lender client</option>
                     <option v-for="lender_client in lenderClients" :key="lender_client.id" :value="lender_client.id">
                       {{ lender_client.name }}
@@ -684,6 +684,34 @@ export default {
         this.step1.country = this.mapData.data.country;
         this.step1.lat = this.mapData.data.lat;
         this.step1.lng = this.mapData.data.lon;
+    },
+    getAmcClient(event) {
+        let id = parseInt(event.target.value);
+        let findObject = this.amcClients.find(ele => ele.id == id);
+        if (findObject && findObject.client_type == "both") {
+            this.step1.lender = id;
+        } else {
+          let checkAmcId = this.lenderClients.find(ele => ele.id == this.step1.lender);
+          if (checkAmcId && checkAmcId.client_type == "both") {
+              this.step1.lender = null;
+          }
+        }
+    },
+    getLenderClient(event) {
+        let id = parseInt(event.target.value);
+        let findObject = this.lenderClients.find(ele => ele.id == id);
+        if (findObject && findObject.client_type == "both") {
+            this.step1.amcClient = id;
+        } else {
+          let checkAmcId = this.amcClients.find(ele => ele.id == this.step1.amcClient);
+          if (checkAmcId && checkAmcId.client_type == "both") {
+              this.step1.amcClient = null;
+          }
+        }
+    },
+
+    findTechnologyFee() {
+      
     }
 
   },
