@@ -214,3 +214,28 @@
         font-size: 50px !important;
     }
 }
+
+.client-contact-limit {
+    max-height: 25px;
+    overflow-y: auto;
+}
+.contact-append {
+    .append-div {
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        margin-bottom: 16px;
+        input {
+            flex-grow: 1;
+            margin-top: 0 !important;
+        }
+        .error {
+            margin-top: 8px;
+        }
+        .contact-del-btn {
+            position: absolute;
+            right: 16px;
+            top: 13px;
+        }
+    }
+}

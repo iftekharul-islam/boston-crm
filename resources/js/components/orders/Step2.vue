@@ -6,45 +6,47 @@
         <div class="form-box">
           <h4 class="box-header mb-3">Borrower info</h4>
 
-          <div class="d-flex justify-content-between w-100">
+          <div class="d-flex justify-content-between w-100 box-flex">
             <div class="left max-w-424 w-100 me-3">
-              <ValidationProvider name="Borrower Name" rules="required" v-slot="{ errors }">
+              <ValidationProvider class="group" name="Borrower Name" rules="required" v-slot="{ errors }">
                 <div class="group" :class="{ 'invalid-form' : errors[0] }">
                   <label for="" class="d-block mb-2 dashboard-label">Borrower name <span
                       class="text-danger require"></span></label>
                   <input type="text" v-model="step2.borrower_name" class="dashboard-input w-100">
-                  <span class="error-message">{{ errors[0] }}</span>
+                  <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                 </div>
               </ValidationProvider>
-              <ValidationProvider name="Co Borrower Name" rules="required" v-slot="{ errors }">
+              <ValidationProvider class="group" name="Co Borrower Name" rules="required" v-slot="{ errors }">
                 <div class="group" :class="{ 'invalid-form' : errors[0] }">
                 <label for="" class="d-block mb-2 dashboard-label">Co-borrower name</label>
                 <input type="text" v-model="step2.co_borrower_name" class="dashboard-input w-100">
-                <span class="error-message">{{ errors[0] }}</span>
+                <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
               </div>
               </ValidationProvider>
             </div>
             <div class="middle max-w-424 w-100 me-3">
               <ValidationObserver ref="addContactForm">
-                <ValidationProvider name="Contact No" :rules="{ 'required' : add.contact == null && step2.borrower_contact == false }" v-slot="{ errors }">
+                <ValidationProvider class="group" name="Contact No" :rules="{ 'required' : add.contact == null && step2.borrower_contact == false }" v-slot="{ errors }">
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
                     <label for="" class="d-block mb-2 dashboard-label">Contact no <span class="text-danger require"></span></label>
                     <input v-model="add.contact" type="text" class="dashboard-input w-100">
-                    <span class="error-message">{{ errors[0] }}</span>
-                    <div class="text-end mgt-20">
-                      <button class="add-more " @click="addContact">
-                        <span class="icon-plus"></span> Add
-                      </button>
-                    </div>
+                    <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                    <!-- new item -->
                     <div class="new-array-items">
                       <div class="items" v-for="item, ki in step2.borrower_contact_s" :key="ki">
                         <div class="item-content"> {{ item }} </div>
                         <div class="item-remove">
-                          <button class="btn btn-sm btn-danger" @click="removeItem(ki, 'contact')">
-                            Remove
+                          <button class="button button-transparent p-2 pe-0" @click="removeItem(ki, 'contact')">
+                            <span class="icon-trash"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></span>
                           </button>
                         </div>
                       </div>
+                    </div>
+                    <!-- add button -->
+                     <div class="text-end mt-3">
+                      <button class="add-more " @click="addContact">
+                        <span class="icon-plus"></span> Add
+                      </button>
                     </div>
                   </div>
                 </ValidationProvider>
@@ -52,26 +54,27 @@
             </div>
             <div class="right max-w-424 w-100">
               <ValidationObserver ref="addEmailForm">
-                <ValidationProvider name="Email Address" :rules="{ 'required' : add.email == null && step2.borrower_email == false }" v-slot="{ errors }">
+                <ValidationProvider class="group" name="Email Address" :rules="{ 'required' : add.email == null && step2.borrower_email == false }" v-slot="{ errors }">
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
                     <label for="" class="d-block mb-2 dashboard-label">Email address <span
                         class="text-danger require"></span></label>
                     <input v-model="add.email" type="text" class="dashboard-input w-100">
-                    <span class="error-message">{{ errors[0] }}</span>
-                    <div class="text-end mgt-20">
-                      <button class="add-more" @click="addEmail">
-                        <span class="icon-plus"></span> Add
-                      </button>
-                    </div>
+                    <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                  
                     <div class="new-array-items">
                       <div class="items" v-for="item, ki in step2.borrower_email_s" :key="ki">
                         <div class="item-content"> {{ item }} </div>
                         <div class="item-remove">
-                          <button class="btn btn-sm btn-danger" @click="removeItem(ki, 'email')">
-                            Remove
+                          <button class="button button-transparent p-2 pe-0" @click="removeItem(ki, 'email')">
+                           <span class="icon-trash"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></span>
                           </button>
                         </div>
                       </div>
+                    </div>
+                      <div class="text-end mt-3">
+                      <button class="add-more" @click="addEmail">
+                        <span class="icon-plus"></span> Add
+                      </button>
                     </div>
                   </div>
                 </ValidationProvider>
@@ -84,7 +87,7 @@
     </div>
     <div class="row">
       <div class="col-md-12 ">
-        <div class="form-box">
+        <div class="form-box box-flex">
           <h4 class="box-header mb-3">Contact info</h4>
           <div class="group checkbox-group position-relative mb-2">
             <input v-model="step2.contactSame" type="checkbox" class=" checkbox-input w-100">
@@ -92,36 +95,37 @@
           </div>
           <div class="d-flex justify-content-between w-100">
             <div class="left max-w-424 w-100 me-3">
-              <ValidationProvider name="Contact Info" :rules="{'required' : step2.contactSame == false}" v-slot="{ errors }">
+              <ValidationProvider class="group" name="Contact Info" :rules="{'required' : step2.contactSame == false}" v-slot="{ errors }">
                 <div class="group" :class="{ 'invalid-form' : errors[0] }">
                   <label for="" class="d-block mb-2 dashboard-label">Contact <span
                       class="text-danger require"></span></label>
                   <textarea :disabled="step2.contactSame == true" v-model="step2.contact_info" name="" class="dashboard-textarea w-100" id="" cols="30" rows="3"></textarea>
-                  <span class="error-message">{{ errors[0] }}</span>
+                  <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                 </div>
               </ValidationProvider>
             </div>
             <div class="middle max-w-424 w-100 me-3">
               <ValidationObserver ref="addContact2form">
-                  <ValidationProvider name="Contact Number" :rules="{'required' : step2.contactSame == false && (step2.contact_number == false || add.contact2 == null) }" v-slot="{ errors }">
+                  <ValidationProvider class="group" name="Contact Number" :rules="{'required' : step2.contactSame == false && (step2.contact_number == false || add.contact2 == null) }" v-slot="{ errors }">
                     <div class="group" :class="{ 'invalid-form' : errors[0] }">
                       <label for="" class="d-block mb-2 dashboard-label">Contact no <span class="text-danger require"></span></label>
                       <input :disabled="step2.contactSame == true" v-model="add.contact2" type="text" class="dashboard-input w-100">
-                      <span class="error-message">{{ errors[0] }}</span>
-                      <div class="text-end mgt-20">
-                        <button class="add-more " @click="addContact2">
-                          <span class="icon-plus"></span> Add
-                        </button>
-                      </div>
+                      <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                      
                       <div class="new-array-items">
                         <div class="items" v-for="item, ki in step2.contact_number_s" :key="ki">
                           <div class="item-content"> {{ item }} </div>
                           <div class="item-remove">
-                            <button class="btn btn-sm btn-danger" @click="removeItem(ki, 'contact2')">
-                              Remove
+                            <button class="button button-transparent p-2 pe-0" @click="removeItem(ki, 'contact2')">
+                              <span class="icon-trash"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></span>
                             </button>
                           </div>
                         </div>
+                      </div>
+                      <div class="text-end mt-3">
+                        <button class="add-more " @click="addContact2">
+                          <span class="icon-plus"></span> Add
+                        </button>
                       </div>
                     </div>
                   </ValidationProvider>
@@ -129,26 +133,27 @@
             </div>
             <div class="right max-w-424 w-100">
               <ValidationObserver ref="addEmail2form">
-                  <ValidationProvider name="Contact Email Address" :rules="{'required' : step2.contactSame == false && (step2.email_address == false || add.email2 == null)}" v-slot="{ errors }">
+                  <ValidationProvider class="group" name="Contact Email Address" :rules="{'required' : step2.contactSame == false && (step2.email_address == false || add.email2 == null)}" v-slot="{ errors }">
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
                     <label for="" class="d-block mb-2 dashboard-label">Email address <span
                         class="text-danger require"></span></label>
                     <input :disabled="step2.contactSame == true" v-model="add.email2" type="text" class="dashboard-input w-100">
-                    <span class="error-message">{{ errors[0] }}</span>
-                    <div class="text-end mgt-20">
-                      <button class="add-more" @click="addEmail2">
-                        <span class="icon-plus"></span> Add
-                      </button>
-                    </div>
+                    <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                    
                     <div class="new-array-items">
                       <div class="items" v-for="item, ki in step2.email_address_s" :key="ki">
                         <div class="item-content"> {{ item }} </div>
                         <div class="item-remove">
-                          <button class="btn btn-sm btn-danger" @click="removeItem(ki, 'email2')">
-                            Remove
+                          <button class="button button-transparent p-2 pe-0" @click="removeItem(ki, 'email2')">
+                           <span class="icon-trash"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></span>
                           </button>
                         </div>
                       </div>
+                    </div>
+                    <div class="text-end mt-3">
+                      <button class="add-more" @click="addEmail2">
+                        <span class="icon-plus"></span> Add
+                      </button>
                     </div>
                   </div>
                 </ValidationProvider>
@@ -371,19 +376,5 @@ export default {
 </script>
 
 <style scoped>
-.new-array-items{
-  margin-top: 15px;
-}
-.new-array-items .items {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #ddd;
-}
-.new-array-items .items:nth-last-child(1) {
-  border-bottom: unset;
-  margin-bottom: 0;
-}
+
 </style>
