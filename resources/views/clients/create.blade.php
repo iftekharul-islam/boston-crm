@@ -89,12 +89,12 @@
                                                class="d-block mb-2 dashboard-label fee-for-1004uad-label">Technology fee
                                             for
                                             appraisal like 1004UAD</label>
-                                        <input type="number" onkeypress="return event.charCode >= 48 && event.charCode <= 57" name="fee_for_1004uad" value="{{ old('fee_for_1004uad') }}" id="fee-for-1004uad"
+                                        <input type="number" onpaste="return false" onkeypress="return event.charCode >= 48 && event.charCode <= 57" name="fee_for_1004uad" value="{{ old('fee_for_1004uad') }}" id="fee-for-1004uad"
                                                class="dashboard-input w-100">
                                     </div>
                                     <div class="group">
                                         <label for="fee-for-1004d" class="d-block mb-2 dashboard-label fee-for-1004d-label">Technology fee for appraisal like 1004D</label>
-                                        <input type="number" onkeypress="return event.charCode >= 48 && event.charCode <= 57" name="fee_for_1004d" value="{{ old('fee_for_1004d') }}" id="fee-for-1004d" class="dashboard-input w-100">
+                                        <input type="number" onpaste="return false" onkeypress="return event.charCode >= 48 && event.charCode <= 57" name="fee_for_1004d" value="{{ old('fee_for_1004d') }}" id="fee-for-1004d" class="dashboard-input w-100">
                                     </div>
                                     <div class="group">
                                         <label for="deducts-technology-fee" class="d-block mb-2 dashboard-label deducts-technology-fee-label">Deduction of tech fee during payment </label>
@@ -178,6 +178,14 @@
             $('#phone-'+button_id+'').remove();
         });
         $(function () {
+            // $.validator.addMethod('positiveNumber',
+            //     function (value) {
+            //         return Number(value) > 0;
+            //     }, 'Enter a positive number.');
+            // $.extend(jQuery.validator.messages, {
+            //     phoneUS: "Please enter a valid phone no. (i.e. 000-000-0000)"
+            // });
+
             let clientType = '';
             $('#client-type').on('change', function (e) {
                 e.preventDefault();
@@ -218,9 +226,6 @@
                     "phone[]": {
                         required: true,
                         phoneUS: true,
-                        normalizer: function (value) {
-                            return value.trim();
-                        },
                     },
                     "email[]": {
                         required: true,
@@ -266,16 +271,18 @@
                             return clientType === 'amc' || clientType === 'both'
                         },
                         normalizer: function (value) {
-                            return value.trim() > 0;
-                        }
+                            return value.trim();
+                        },
+                        number: true
                     },
                     fee_for_1004d: {
                         required: function () {
                             return clientType === 'amc' || clientType === 'both'
                         },
                         normalizer: function (value) {
-                            return value.trim() > 0;
-                        }
+                            return value.trim();
+                        },
+                        number: true
                     },
                     deducts_technology_fee: {
                         required: function () {
@@ -304,7 +311,8 @@
                         required: "Client email is required"
                     },
                     "phone[]": {
-                        required: "Client phone number is required.(i.e. 000-000-0000)"
+                        required: "Client phone number is required",
+                        phoneUS: "Please enter a valid phone no. (i.e. 000-000-0000)"
                     },
                     address: {
                         required: "Address is required"
@@ -319,10 +327,12 @@
                         required: "City is required"
                     },
                     fee_for_1004uad: {
-                        required : "Technology fee for full appraisal(1004UAD) is required"
+                        required : "Technology fee for full appraisal(1004UAD) is required",
+                        number: "Please enter a valid number"
                     },
                     fee_for_1004d: {
-                        required : "Technology fee for appraisal(1004D) is required"
+                        required : "Technology fee for appraisal(1004D) is required",
+                        number: "Please enter a valid number",
                     },
                     deducts_technology_fee: {
                         required : "Deduction of tech fee is required"
