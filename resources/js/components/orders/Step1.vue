@@ -27,16 +27,17 @@
 
 
                 <ValidationProvider class="group" name="Received date" rules="required" v-slot="{ errors }">
-                  <div class="group" :class="{ 'invalid-form' : errors[0] }">
+                  <div class="group" :class="{ 'invalid-form' : (errors[0] || dateIssue.status) }">
                       <label for="" class="d-block mb-2 dashboard-label">Received date <span
                           class="text-danger require"></span></label>
                       <div class="position-relative">
-                        <input type="date" class="dashboard-input w-100" v-model="step1.receiveDate">
+                        <input type="date" class="dashboard-input w-100" @input="checkDateInput($event.target.value, 1)" v-model="step1.receiveDate">
                         <span class="icon-calendar icon"><span class="path1"></span><span class="path2"></span><span
                             class="path3"></span><span class="path4"></span><span class="path5"></span><span
                             class="path6"></span><span class="path7"></span><span class="path8"></span></span>
                       </div>
-                      <span  v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                      <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                      <span v-if="dateIssue.status" class="error-message">{{ dateIssue.message }}</span>
                   </div>
                 </ValidationProvider>
 
@@ -45,12 +46,12 @@
                     <label for="" class="d-block mb-2 dashboard-label">Due date <span
                         class="text-danger require"></span></label>
                     <div class="position-relative">
-                      <input type="date" class="dashboard-input w-100" v-model="step1.dueDate">
+                      <input type="date" class="dashboard-input w-100" @input="checkDateInput($event.target.value, 2)" v-model="step1.dueDate">
                       <span class="icon-calendar icon"><span class="path1"></span><span class="path2"></span><span
                           class="path3"></span><span class="path4"></span><span class="path5"></span><span
                           class="path6"></span><span class="path7"></span><span class="path8"></span></span>
                     </div>
-                    <span  v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                    <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                   </div>
                 </ValidationProvider>
               </div>
@@ -136,7 +137,7 @@
                 </div>
                   <!-- input box and new add -->
                 <div class="col-6">
-                  <div class="group" :class="{ 'invalid-form': providerTypes.error.type == true || this.proviedServicePass == false }">
+                  <div class="group" :class="{ 'invalid-form': submitAction && (providerTypes.error.type == true || this.proviedServicePass == false) }">
                     <label for="" class="d-block mb-2 dashboard-label">Appraiser type </label>
                     <div class="position-relative">
                        <select name="" id="" class="dashboard-input w-100" @change="checkProviderValidation($event, 1)" v-model="providerTypes.default.type">
@@ -150,7 +151,7 @@
                   </div>
                 </div>
                 <div class="col-6">
-                  <div class="group" :class="{ 'invalid-form': providerTypes.error.fee == true || this.proviedServicePass == false }">
+                  <div class="group" :class="{ 'invalid-form': submitAction && (providerTypes.error.fee == true || this.proviedServicePass == false) }">
                     <label for="" class="d-block mb-2 dashboard-label">Fee </label>
                     <input type="number" step="any" @input="checkProviderValidation($event, 2)" class="dashboard-input w-100" v-model="providerTypes.default.fee">
                   </div>
@@ -164,8 +165,10 @@
 
             </div>
             <div class="mt-auto">
-              <label for="" class="d-block mb-2 dashboard-label">Note <span class="text-danger require"></span></label>
-              <textarea name="" id="" rows="7" class="dashboard-textarea w-100" v-model="step1.note"></textarea>
+              <div class="group" :class="{ 'invalid-form': submitAction && (step1.note == null || step1.note == '') }">
+                  <label for="" class="d-block mb-2 dashboard-label">Note <span class="text-danger require"></span></label>
+                  <textarea name="" id="" rows="7" class="dashboard-textarea w-100" v-model="step1.note"></textarea>
+              </div>
               <h3 class="text-light-black fw-bold mgt-40">Total fee : <span> $ {{ providerTypes.totalAmount }} </span></h3>
             </div>
           </div>
@@ -347,6 +350,11 @@ export default {
   },
   data() {
     return {
+      dateIssue: {
+        status: false,
+        message: "Received Date Must Be Smaller Than Due Date"
+      },
+      submitAction: false,
       stepActive: false,
       proviedServicePass: false,
       step1: {
@@ -423,13 +431,13 @@ export default {
     },
 
     nextStep() {
+      this.submitAction = true;
       this.$refs.orderForm.validate().then( (status) => {
-          if (status && this.proviedServicePass == true) {
+          if (status && this.proviedServicePass == true && !this.dateIssue.status) {
               this.stepActive = true;
               this.stepChangeActive();
           }
       });
-
     },
     validateData() {
       let errorCount = 0;
@@ -541,14 +549,17 @@ export default {
         this.$refs.orderForm.reset();
     },
     setOrderValue() {
+      let receivedDate = this.formateDate(this.order.received_date);
+      let dueDate = this.formateDate(this.order.due_date);
+      
       let step1 = {
         clientOrderNo: this.order.client_order_no,
         unitNo: this.order.property_info.unit_no,
         systemOrder: this.order.system_order_no,
         loanNo: this.order.appraisal_detail.loan_no,
         loanType: this.order.appraisal_detail.loan_type,
-        receiveDate: this.formateDate(this.order.received_date),
-        dueDate: this.formateDate(this.order.due_date),
+        receiveDate: receivedDate,
+        dueDate: dueDate,
         technologyFee: this.order.appraisal_detail.technology_fee,
         fhaCaseNo: this.order.appraisal_detail.fha_case_no,
         appraiserName: this.order.appraisal_detail.appraiser_id,
@@ -571,6 +582,13 @@ export default {
           let ele = setFee[i];
           this.setNewFee(ele.typeId, ele.fee);
       }
+
+      let receivedDateFormated = new Date(receivedDate);
+      let dueDateFormated = new Date(dueDate);
+      if (receivedDateFormated > dueDateFormated) {
+        this.dateIssue.status = true;
+      }
+
     },
 
     geolocate() {
@@ -712,6 +730,25 @@ export default {
 
     findTechnologyFee() {
       
+    },
+    checkDateInput(value, type) {
+        this.dateIssue.status = false;
+        var date = new Date(value);
+        if (type == 1) {
+          if (this.step1.dueDate) {
+            let dueDate = new Date(this.step1.dueDate);
+            if (dueDate < date) {
+              this.dateIssue.status = true;
+            }
+          }
+        } else {
+          if (this.step1.receiveDate) {
+            let receiveDate = new Date(this.step1.receiveDate);
+            if (receiveDate > date) {
+              this.dateIssue.status = true;
+            }
+          }
+        }
     }
 
   },
