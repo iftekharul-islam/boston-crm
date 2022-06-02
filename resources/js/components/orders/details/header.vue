@@ -21,7 +21,7 @@
             <a href="javascript:;" v-if="savingStatus" @click="saveStatus" class="button button-success h-40 d-inline-flex align-items-center mgr-20"><span>Save Status</span></a>
 
             <a href="#" class="button button-primary h-40 d-inline-flex align-items-center mgr-20"><span class="mgr-20">Schedule</span> <span class="icon-calendar"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span class="path7"></span><span class="path8"></span></span></a>
-            <span v-if="copied" class="alert alert-success">Copied</span>
+            <span v-if="copied" class="alert alert-success py-2 mb-0 mgr-20 text-600">Copied</span>
             <a :href="shareUrl" @click.prevent="copyURL" ref="shareLink" class="button button-primary h-40 d-inline-flex align-items-center"><span class="mgr-20">Share order</span> <span class="icon-share"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span></span></a>
         </div>
     </div>
