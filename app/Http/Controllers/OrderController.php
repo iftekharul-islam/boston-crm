@@ -88,7 +88,7 @@ class OrderController extends BaseController
         $appraisal_users = $this->repository->getUserByRoleWise(role: 'appraiser');
         $appraisal_types = $this->repository->getAppraisalTypes();
         $loan_types = $this->repository->getLoanTypes();
-        
+
         $client_users = Helper::getClientsGroupBy($this->repository->getClients());
         $amc_clients = $client_users[0];
         $lender_clients = $client_users[1];
@@ -291,14 +291,16 @@ class OrderController extends BaseController
      */
     public function uploadOrderFiles(Request $request, $order_id): JsonResponse|\Illuminate\Http\RedirectResponse
     {
+        if($request->has('public')){
+            $order_id = base64_decode($order_id);
+        }
         $this->repository->saveOrderFiles($request->all(), $order_id);
         if ($request->ajax()) {
             return response()->json(["message" => "Order file uploaded successfully"]);
         }
         return redirect()
-            ->to('public-order/' . $order_id)
+            ->to('public-order/' . base64_encode($order_id))
             ->with(['success' => 'Order file uploaded successfully']);
-
     }
 
 

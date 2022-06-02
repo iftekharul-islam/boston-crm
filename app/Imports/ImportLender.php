@@ -18,15 +18,13 @@ class ImportLender implements ToModel,WithChunkReading,WithBatchInserts,WithHead
     public function model(array $row)
     {
         return new Client([
-            "name" => trim($row["lender"]),
-            "email" => trim($row["email"]),
-            "phone" => trim($row["phone"]),
+            "name" => $row["lender"],
             "client_type" => 'lender',
-            "address" => trim($row["address"]),
-            "country" => 'USA',
-            "city" => trim($row["city"]),
-            "zip" => trim($row["zip"]),
-            "state" => trim($row["state"]),
+            "address" => $row["address"],
+            "city" => $row["city"],
+            "zip" => $row["zip"],
+            "state" => $row["state"],
+            "created_by" => auth()->user()->id,
             "company_id" => auth()->user()->companies()->first()->id
         ]);
     }

@@ -30,6 +30,7 @@
                             @endforeach
                         </select>
                     </div>
+                    <input type="hidden" name="public">
                     <div class="col-md-4">
                         <input class="form-control" type="file" name="files[]" multiple>
                     </div>
