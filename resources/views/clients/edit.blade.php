@@ -47,7 +47,7 @@
                                             @if($key == 0)
                                                 <input type="email" id="email" name="email[]" value="{{ $email }}" class="dashboard-input w-100 mb-3">
                                             @else
-                                                <div id={{"email-" . $key + 10 }}><input type="email" name="email[]" value="{{ $email }}" class="dashboard-inputemail dashboard-input w-90 mb-2"><button type="button" id="{{ $key + 10 }}" class="m-2 w-10 btn btn-danger email-button">X</button></div>
+                                                <div class="append-div" id={{"email-" . $key + 10 }}><input type="email" name="email[]" value="{{ $email }}" class="dashboard-inputemail dashboard-input"><button type="button" id="{{ $key + 10 }}" class="button button-transparent p-0 contact-del-btn email-button"><span class="icon-trash"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></span></button></div>
                                             @endif
                                         @endforeach
                                         <div id="email-append" class="contact-append"></div>
@@ -62,7 +62,7 @@
                                         @if($key == 0)
                                             <input type="text" name="phone[]" id="phone" value="{{ $phone }}" class="dashboard-input w-100 mb-3" required>
                                         @else
-                                            <div id="{{ "phone-".$key + 10 }}"><input type="text" name="phone[]" value="{{ $phone }}" class="dashboard-input w-phone dashboard-input w-90 mb-2"><button type="button" id="{{ $key + 10 }}" class="m-2 w-10 btn btn-danger phone-button">X</button></div>
+                                            <div class="append-div" id="{{ "phone-".$key + 10 }}"><input type="text" name="phone[]" value="{{ $phone }}" class="dashboard-input w-phone dashboard-input"><button type="button" id="{{ $key + 10 }}" class="button button-transparent p-0 contact-del-btn phone-button"><span class="icon-trash"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></span></button></div>
                                         @endif
                                         @endforeach
                                         <div id="phone-append" class="contact-append"></div>
