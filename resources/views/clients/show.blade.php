@@ -84,18 +84,22 @@
                                 <p class="mb-0 left-side">Phone no</p>
                                 <span>:</span>
                                 <div class="right-side">
-                                @foreach(json_decode($client->phone) as $phone)
-                                   <p class="mb-0">{{ $phone }}</p>
-                                @endforeach
+                                @if($client->phone != null)
+                                    @foreach(json_decode($client->phone) as $phone)
+                                    <p class="mb-0">{{ $phone }}</p>
+                                    @endforeach
+                                @endif
                                 </div>
                             </div>
                             <div class="personal-info__group">
                                 <p class="mb-0 left-side">Email address</p>
                                 <span>:</span>
                                 <div class="right-side">
-                                @foreach(json_decode($client->email) as $email)
-                                    <p class="right-side">{{ $email }}</p>
-                                @endforeach
+                                @if($client->email != null)
+                                    @foreach(json_decode($client->email) as $email)
+                                        <p class="right-side">{{ $email }}</p>
+                                    @endforeach
+                                @endif
                                 </div>
                             </div>
                         </div>

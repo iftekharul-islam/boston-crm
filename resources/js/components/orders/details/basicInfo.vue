@@ -30,7 +30,9 @@
           <div class="col-md-12">
             <div class="group">
               <label for="" class="d-block mb-2 dashboard-label">Due date </label>
-              <v-date-picker v-model="orderData.due_date">
+              <v-date-picker
+               v-model="orderData.due_date"
+               :available-dates='{ start: new Date(), end: null }'>
                 <template class="position-relative" v-slot="{ inputValue, inputEvents }">
                   <input
                       class="dashboard-input w-100"

@@ -43,13 +43,15 @@
                                     <div class="group">
                                         <label for="email" class="d-block mb-2 dashboard-label">Email address <span
                                                     class="text-danger require"></span></label>
-                                        @foreach(json_decode($client->email) as $key => $email)
-                                            @if($key == 0)
-                                                <input type="email" id="email" name="email[]" value="{{ $email }}" class="dashboard-input w-100 mb-3">
-                                            @else
-                                                <div class="append-div" id={{"email-" . $key + 10 }}><input type="email" name="email[]" value="{{ $email }}" class="dashboard-inputemail dashboard-input"><button type="button" id="{{ $key + 10 }}" class="button button-transparent p-0 contact-del-btn email-button"><span class="icon-trash"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></span></button></div>
-                                            @endif
-                                        @endforeach
+                                        @if($client->email != null)
+                                            @foreach(json_decode($client->email) as $key => $email)
+                                                @if($key == 0)
+                                                    <input type="email" id="email" name="email[]" value="{{ $email }}" class="dashboard-input w-100 mb-3">
+                                                @else
+                                                    <div class="append-div" id={{"email-" . $key + 10 }}><input type="email" name="email[]" value="{{ $email }}" class="dashboard-inputemail dashboard-input"><button type="button" id="{{ $key + 10 }}" class="button button-transparent p-0 contact-del-btn email-button"><span class="icon-trash"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></span></button></div>
+                                                @endif
+                                            @endforeach
+                                        @endif
                                         <div id="email-append" class="contact-append"></div>
                                         <div class="text-end">
                                             <button id="add-email" class="button button-transparent text-gray p-0">+ Add More</button>
@@ -58,13 +60,15 @@
                                     <div class="group">
                                         <label for="phone" class="d-block mb-2 dashboard-label">Phone no <span
                                                     class="text-danger require"></span></label>
-                                        @foreach(json_decode($client->phone) as $key => $phone)
-                                        @if($key == 0)
-                                            <input type="text" name="phone[]" id="phone" value="{{ $phone }}" class="dashboard-input w-100 mb-3" required>
-                                        @else
-                                            <div class="append-div" id="{{ "phone-".$key + 10 }}"><input type="text" name="phone[]" value="{{ $phone }}" class="dashboard-input w-phone dashboard-input"><button type="button" id="{{ $key + 10 }}" class="button button-transparent p-0 contact-del-btn phone-button"><span class="icon-trash"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></span></button></div>
+                                        @if($client->phone != null)
+                                            @foreach(json_decode($client->phone) as $key => $phone)
+                                                @if($key == 0)
+                                                    <input type="text" name="phone[]" id="phone" value="{{ $phone }}" class="dashboard-input w-100 mb-3" required>
+                                                @else
+                                                    <div class="append-div" id="{{ "phone-".$key + 10 }}"><input type="text" name="phone[]" value="{{ $phone }}" class="dashboard-input w-phone dashboard-input"><button type="button" id="{{ $key + 10 }}" class="button button-transparent p-0 contact-del-btn phone-button"><span class="icon-trash"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></span></button></div>
+                                                @endif
+                                            @endforeach
                                         @endif
-                                        @endforeach
                                         <div id="phone-append" class="contact-append"></div>
                                         <div class="text-end">
                                             <button id="add-phone" class="button button-transparent text-gray p-0">+ Add More</button>
