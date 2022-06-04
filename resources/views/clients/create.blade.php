@@ -51,7 +51,7 @@
                                     </div>
                                     <div class="group">
                                         <label for="phone" class="d-block mb-2 dashboard-label">Phone no <span class="text-danger require"></span></label>
-                                        <input type="text" name="phone[]" id="phone" class="dashboard-input w-100 mb-3" required>
+                                        <input type="text" maxlength="12" onkeyup="return formatPhoneNo(event)" name="phone[]" id="phone"  class="dashboard-input w-100 mb-3" required>
                                         <div id="phone-append" class="contact-append"></div>
                                         <div class="text-end">
                                             <button id="add-phone" class="button button-transparent p-0 text-gray">+ Add More</button>
@@ -89,12 +89,12 @@
                                                class="d-block mb-2 dashboard-label fee-for-1004uad-label">Technology fee
                                             for
                                             appraisal like 1004UAD</label>
-                                        <input type="number" onpaste="return false" onkeypress="return event.charCode >= 48 && event.charCode <= 57" name="fee_for_1004uad" value="{{ old('fee_for_1004uad') }}" id="fee-for-1004uad"
+                                        <input type="number" onpaste="return false" onkeypress="return numbersOnly(event)" name="fee_for_1004uad" value="{{ old('fee_for_1004uad') }}" id="fee-for-1004uad"
                                                class="dashboard-input w-100">
                                     </div>
                                     <div class="group">
                                         <label for="fee-for-1004d" class="d-block mb-2 dashboard-label fee-for-1004d-label">Technology fee for appraisal like 1004D</label>
-                                        <input type="number" onpaste="return false" onkeypress="return event.charCode >= 48 && event.charCode <= 57" name="fee_for_1004d" value="{{ old('fee_for_1004d') }}" id="fee-for-1004d" class="dashboard-input w-100">
+                                        <input type="number" onpaste="return false" onkeypress="return numbersOnly(event)" name="fee_for_1004d" value="{{ old('fee_for_1004d') }}" id="fee-for-1004d" class="dashboard-input w-100">
                                     </div>
                                     <div class="group">
                                         <label for="deducts-technology-fee" class="d-block mb-2 dashboard-label deducts-technology-fee-label">Deduction of tech fee during payment </label>
@@ -157,6 +157,19 @@
 @endsection
 @push('js')
     <script type="text/javascript">
+        function numbersOnly(e){
+            return e.charCode >= 48 && e.charCode <= 57;
+        }
+
+        function formatPhoneNo(e){
+            let totalInput = 0;
+            let phoneNo = e.target.value;
+            let formatedPhoneNo = ''
+            if(phoneNo.length == 11){
+               e.target.value = phoneNo.replace(/(\d{3})\-?(\d{3})\-?(\d{4}).*/,'$1-$2-$3')
+            }
+        }
+
         let emailCount = 1;
         let phoneCount = 1;
         $('#add-email').on('click',function(e){
@@ -170,7 +183,7 @@
         });
         $('#add-phone').on('click',function(e){
             e.preventDefault();
-            $('#phone-append').append('<div class="append-div" id="phone-'+ phoneCount+'"><input type="text" name="phone[]" class="phone dashboard-input"><button type="button" id="'+phoneCount+'" class="button button-transparent p-0 contact-del-btn phone-button"><span class="icon-trash"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></span></button></div>');
+            $('#phone-append').append('<div class="append-div" id="phone-'+ phoneCount+'"><input type="text" name="phone[]" maxlength="12" onkeyup="return formatPhoneNo(event)" class="phone dashboard-input"><button type="button" id="'+phoneCount+'" class="button button-transparent p-0 contact-del-btn phone-button"><span class="icon-trash"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></span></button></div>');
             phoneCount++;
         });
         $(document).on('click', '.phone-button', function(){
@@ -178,14 +191,6 @@
             $('#phone-'+button_id+'').remove();
         });
         $(function () {
-            // $.validator.addMethod('positiveNumber',
-            //     function (value) {
-            //         return Number(value) > 0;
-            //     }, 'Enter a positive number.');
-            // $.extend(jQuery.validator.messages, {
-            //     phoneUS: "Please enter a valid phone no. (i.e. 000-000-0000)"
-            // });
-
             let clientType = '';
             $('#client-type').on('change', function (e) {
                 e.preventDefault();
