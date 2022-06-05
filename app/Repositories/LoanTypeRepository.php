@@ -13,4 +13,8 @@ class LoanTypeRepository extends BaseRepository
 	 {
 			parent::__construct( $model );
 	 }
+
+     public function allLoanTypes($company_id){
+         return $this->model->where('company_id',$company_id)->paginate(10);
+     }
 }
