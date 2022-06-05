@@ -201,7 +201,7 @@
                 </div>
             </div>
             <div class="add-client__bottom d-flex justify-content-end  p-3">
-                <button class="button button-discard me-3 d-flex align-items-center">Discard <span class="icon-close-circle ms-3"><span class="path1"></span><span class="path2"></span></span></button>
+                <button class="button button-discard me-3 d-flex align-items-center text-light-black">Discard <span class="icon-close-circle ms-3"><span class="path1"></span><span class="path2"></span></span></button>
                 <a href="{{ route('order.add-step2')}}" class="button button-primary"> Next 
                     <svg class="ms-4" width="20" height="14" viewBox="0 0 20 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M12.4291 13.82C12.2391 13.82 12.0491 13.75 11.8991 13.6C11.6091 13.31 11.6091 12.83 11.8991 12.54L17.4391 7L11.8991 1.46C11.6091 1.17 11.6091 0.689995 11.8991 0.399995C12.1891 0.109995 12.6691 0.109995 12.9591 0.399995L19.0291 6.47C19.3191 6.76 19.3191 7.24 19.0291 7.52999L12.9591 13.6C12.8091 13.75 12.6191 13.82 12.4291 13.82Z" fill="white"/>
