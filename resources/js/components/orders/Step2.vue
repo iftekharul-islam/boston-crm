@@ -166,10 +166,10 @@
     <div class="d-flex">
       <div class="group mgt-32 mgb-32">
         <h4 class="box-header mb-3">Upload order form</h4>
-        <div class="position-relative file-upload">
+        <div class="position-relative file-upload d-flex align-items-center">
           <input type="file" @change="addFile">
           <label for="">Upload <img src="/img/upload.png" alt="boston profile"></label>
-          <span class="text-success">{{ step2.fileName }}</span>
+          <span class="text-success file-name">{{ step2.fileName }}</span>
         </div>
       </div>
       <div class="group mgt-32 mgb-32 mgl-32">

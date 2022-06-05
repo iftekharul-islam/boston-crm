@@ -65,13 +65,21 @@
                 <ValidationProvider class="group" name="Loan type" rules="required" v-slot="{ errors }">
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
                     <label for="" class="d-block mb-2 dashboard-label">Loan type </label>
-                    <div class="position-relative">
-                      <select name="" id="" class="dashboard-input w-100" v-model="step1.loanType">
+                    <div class="position-relative borderless-select">
+                      <v-select
+                          class="dashboard-input w-100"
+                          v-model="step1.loanType"
+                          :options="loanTypes"
+                          :searchable="false"
+                          label="name">
+                      </v-select>
+                      
+                      <!-- <select name="" id="" class="dashboard-input w-100 loan-type-select" v-model="step1.loanType">
                         <option value="">Please Select Loan Type</option>
                         <option v-for="loan_type in loanTypes" :key="loan_type.id" :value="loan_type.id">
                           {{ loan_type.name }}
                         </option>
-                      </select>
+                      </select> -->
                       <span class="icon-arrow-down bottom-arrow-icon"></span>
                     </div>
                     <span  v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
@@ -92,13 +100,20 @@
                     <label for="" class="d-block mb-2 dashboard-label">Appraiser name <span
                         class="text-danger require"></span></label>
                     <div class="position-relative">
-                      <select name="" id="" class="dashboard-input w-100" v-model="step1.appraiserName">
+                      <v-select
+                          class="dashboard-input w-100"
+                          v-model="step1.appraiserName"
+                          :options="appraisalUsers"
+                          :searchable="false"
+                          label="name">
+                      </v-select>
+                      <!-- <select name="" id="" class="dashboard-input w-100" v-model="step1.appraiserName">
                         <option value="">Please select appraisal user name</option>
                         <option v-for="appraisal_user in appraisalUsers" :key="appraisal_user.id"
                                 :value="appraisal_user.id">
                           {{ appraisal_user.name }}
                         </option>
-                      </select>
+                      </select> -->
                       <span class="icon-arrow-down bottom-arrow-icon"></span>
                     </div>
                     <span  v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
@@ -140,6 +155,14 @@
                   <div class="group" :class="{ 'invalid-form': submitAction && (providerTypes.error.type == true || this.proviedServicePass == false) }">
                     <label for="" class="d-block mb-2 dashboard-label">Appraiser type </label>
                     <div class="position-relative">
+                       <!-- <v-select
+                       @change="checkProviderValidation($event, 1)"
+                          class="dashboard-input w-100"
+                          v-model="providerTypes.default.type"
+                          :options="appraisalTypes"
+                          :searchable="false"
+                          label="name">
+                    </v-select> -->
                        <select name="" id="" class="dashboard-input w-100" @change="checkProviderValidation($event, 1)" v-model="providerTypes.default.type">
                         <option value="">Please select appraisal type</option>
                         <option v-for="appraisal_type in appraisalTypes" :key="appraisal_type.id" :value="appraisal_type.id">
@@ -185,12 +208,19 @@
                 <label for="" class="d-block mb-2 dashboard-label">AMC name <span
                     class="text-danger require"></span></label>
                 <div class="position-relative">
-                  <select name="" id="" class="dashboard-input w-100" @change="getAmcClient" v-model="step1.amcClient">
+                   <v-select
+                          class="dashboard-input w-100"
+                          v-model="step1.amcClient"
+                          :options="amcClients"
+                          :searchable="false"
+                          label="name">
+                    </v-select>
+                  <!-- <select name="" id="" class="dashboard-input w-100" @change="getAmcClient" v-model="step1.amcClient">
                     <option value="">Please select amc client</option>
                     <option v-for="amc_client in amcClients" :key="amc_client.id" :value="amc_client.id">
                       {{ amc_client.name }}
                     </option>
-                  </select>
+                  </select> -->
                   <span class="icon-arrow-down bottom-arrow-icon"></span>
                 </div>
                 <span  v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
@@ -210,12 +240,19 @@
               <div class="group" :class="{ 'invalid-form' : errors[0] }">
                 <label for="" class="d-block mb-2 dashboard-label">Lender <span class="text-danger require"></span></label>
                 <div class="position-relative">
-                  <select name="" id="" class="dashboard-input w-100" @change="getLenderClient" v-model="step1.lender">
+                   <v-select
+                          class="dashboard-input w-100"
+                          v-model="step1.lender"
+                          :options="lenderClients"
+                          :searchable="false"
+                          label="name">
+                    </v-select>
+                  <!-- <select name="" id="" class="dashboard-input w-100" @change="getLenderClient" v-model="step1.lender">
                     <option value="">Please select lender client</option>
                     <option v-for="lender_client in lenderClients" :key="lender_client.id" :value="lender_client.id">
                       {{ lender_client.name }}
                     </option>
-                  </select>
+                  </select> -->
                   <span class="icon-arrow-down bottom-arrow-icon"></span>
                 </div>
                 <span  v-if="errors[0]" class="error-message">{{ errors[0] }}</span>

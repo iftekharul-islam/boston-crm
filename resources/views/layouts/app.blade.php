@@ -97,6 +97,7 @@
 <script>
     $(document).ready(function () {
         $('.crm-select').select2();
+        $('.loan-type-select').select2();
 
         $(".submenu").hide();
         $('#sidebar .sidebar-dropdown').hover(function () {
