@@ -89,12 +89,13 @@
       <div class="col-md-12 ">
         <div class="form-box box-flex">
           <h4 class="box-header mb-3">Contact info</h4>
-          <div class="group checkbox-group position-relative mb-2">
-            <input v-model="step2.contactSame" type="checkbox" class=" checkbox-input w-100">
-            <label for="" class="checkbox-label text-primary">Set borrower as contact</label>
-          </div>
+         
           <div class="d-flex justify-content-between w-100">
             <div class="left max-w-424 w-100 me-3">
+               <div class=" checkbox-group position-relative mgb-20">
+                <input v-model="step2.contactSame" type="checkbox" class=" checkbox-input w-100">
+                <label for="" class="checkbox-label primary-text">Set borrower as contact</label>
+              </div>
               <ValidationProvider class="group" name="Contact Info" :rules="{'required' : step2.contactSame == false}" v-slot="{ errors }">
                 <div class="group" :class="{ 'invalid-form' : errors[0] }">
                   <label for="" class="d-block mb-2 dashboard-label">Contact <span
@@ -181,7 +182,7 @@
       </div>
     </div>
     <div class="add-client__bottom d-flex justify-content-end  p-3">
-      <a href="/orders/create" class="button button-discard me-3 d-flex align-items-center">Discard <span class="icon-close-circle ms-3"><span class="path1"></span><span class="path2"></span></span></a>
+      <a href="/orders/create" class="button button-discard me-3 d-flex align-items-center text-light-black">Discard <span class="icon-close-circle ms-3"><span class="path1"></span><span class="path2"></span></span></a>
       <button class="button button-primary" v-if="type == 2" @click="addNewOrder(true)"> Update order </button>
       <button class="button button-primary" v-else @click="addNewOrder"> Add order </button>
     </div>
