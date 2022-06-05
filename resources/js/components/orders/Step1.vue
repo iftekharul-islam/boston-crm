@@ -11,7 +11,8 @@
 
                 <ValidationProvider class="group" name="Order no" rules="required" v-slot="{ errors }">
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
-                    <label for="" class="d-block mb-2 dashboard-label">Client order no <span class="text-danger require"></span></label>
+                    <label for="" class="d-block mb-2 dashboard-label">Client order no <span
+                        class="text-danger require"></span></label>
                     <input type="text" class="dashboard-input w-100" v-model="step1.clientOrderNo">
                     <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                   </div>
@@ -21,23 +22,24 @@
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
                     <label for="" class="d-block mb-2 dashboard-label">Loan no</label>
                     <input type="text" class="dashboard-input w-100" v-model="step1.loanNo">
-                    <span  v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                    <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                   </div>
                 </ValidationProvider>
 
 
                 <ValidationProvider class="group" name="Received date" rules="required" v-slot="{ errors }">
                   <div class="group" :class="{ 'invalid-form' : (errors[0] || dateIssue.status) }">
-                      <label for="" class="d-block mb-2 dashboard-label">Received date <span
-                          class="text-danger require"></span></label>
-                      <div class="position-relative">
-                        <input type="date" class="dashboard-input w-100" @input="checkDateInput($event.target.value, 1)" v-model="step1.receiveDate">
-                        <span class="icon-calendar icon"><span class="path1"></span><span class="path2"></span><span
-                            class="path3"></span><span class="path4"></span><span class="path5"></span><span
-                            class="path6"></span><span class="path7"></span><span class="path8"></span></span>
-                      </div>
-                      <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
-                      <span v-if="dateIssue.status" class="error-message">{{ dateIssue.message }}</span>
+                    <label for="" class="d-block mb-2 dashboard-label">Received date <span
+                        class="text-danger require"></span></label>
+                    <div class="position-relative">
+                      <input type="date" class="dashboard-input w-100" @input="checkDateInput($event.target.value, 1)"
+                             v-model="step1.receiveDate">
+                      <span class="icon-calendar icon"><span class="path1"></span><span class="path2"></span><span
+                          class="path3"></span><span class="path4"></span><span class="path5"></span><span
+                          class="path6"></span><span class="path7"></span><span class="path8"></span></span>
+                    </div>
+                    <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                    <span v-if="dateIssue.status" class="error-message">{{ dateIssue.message }}</span>
                   </div>
                 </ValidationProvider>
 
@@ -46,7 +48,8 @@
                     <label for="" class="d-block mb-2 dashboard-label">Due date <span
                         class="text-danger require"></span></label>
                     <div class="position-relative">
-                      <input type="date" class="dashboard-input w-100" @input="checkDateInput($event.target.value, 2)" v-model="step1.dueDate">
+                      <input type="date" class="dashboard-input w-100" @input="checkDateInput($event.target.value, 2)"
+                             v-model="step1.dueDate">
                       <span class="icon-calendar icon"><span class="path1"></span><span class="path2"></span><span
                           class="path3"></span><span class="path4"></span><span class="path5"></span><span
                           class="path6"></span><span class="path7"></span><span class="path8"></span></span>
@@ -73,7 +76,7 @@
                           :searchable="false"
                           label="name">
                       </v-select>
-                      
+
                       <!-- <select name="" id="" class="dashboard-input w-100 loan-type-select" v-model="step1.loanType">
                         <option value="">Please Select Loan Type</option>
                         <option v-for="loan_type in loanTypes" :key="loan_type.id" :value="loan_type.id">
@@ -82,7 +85,7 @@
                       </select> -->
                       <span class="icon-arrow-down bottom-arrow-icon"></span>
                     </div>
-                    <span  v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                    <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                   </div>
                 </ValidationProvider>
 
@@ -91,7 +94,7 @@
                     <label for="" class="d-block mb-2 dashboard-label">FHA case no <span
                         class="text-danger require" v-if="step1.loanType"></span></label>
                     <input type="text" class="dashboard-input w-100" v-model="step1.fhaCaseNo">
-                    <span  v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                    <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                   </div>
                 </ValidationProvider>
 
@@ -116,7 +119,7 @@
                       </select> -->
                       <span class="icon-arrow-down bottom-arrow-icon"></span>
                     </div>
-                    <span  v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                    <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                   </div>
                 </ValidationProvider>
               </div>
@@ -129,15 +132,15 @@
               <h4 class="box-header mb-3">Provided services</h4>
               <div class="row">
 
-              <div class="provided-service-data row mgb-20" v-if="providerTypes.extra.length > 0">
-                <!-- label -->
-                <div class="col-6">
-                  <label for="" class="d-block mb-2 dashboard-label"><strong>Appraiser type</strong> </label>
-                </div>
-                <div class="col-6">
+                <div class="provided-service-data row mgb-20" v-if="providerTypes.extra.length > 0">
+                  <!-- label -->
+                  <div class="col-6">
+                    <label for="" class="d-block mb-2 dashboard-label"><strong>Appraiser type</strong> </label>
+                  </div>
+                  <div class="col-6">
                     <label for="" class="d-block mb-2 dashboard-label"><strong>Fee</strong> </label>
-                </div>
-                <!-- after added -->
+                  </div>
+                  <!-- after added -->
                   <div class="row" v-for="providerType, pi in providerTypes.extra" :key="pi">
                     <div class="col-6">
                       <p class="mb-0 ">{{ providerType.type }}</p>
@@ -145,54 +148,54 @@
                     <div class="col-6 d-flex justify-content-between">
                       <p class="pdl-10 mb-0 fw-bold">{{ providerType.fee }}</p>
                       <button class="button button-transparent p-2" @click="remoteProviderType(providerType, pi)">
-                        <span class="icon-trash"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></span>
+                        <span class="icon-trash"><span class="path1"></span><span class="path2"></span><span
+                            class="path3"></span><span class="path4"></span></span>
                       </button>
                     </div>
                   </div>
                 </div>
-                  <!-- input box and new add -->
+                <!-- input box and new add -->
                 <div class="col-6">
-                  <div class="group" :class="{ 'invalid-form': submitAction && (providerTypes.error.type == true || this.proviedServicePass == false) }">
+                  <div class="group"
+                       :class="{ 'invalid-form': submitAction && (providerTypes.error.type == true || this.proviedServicePass == false) }">
                     <label for="" class="d-block mb-2 dashboard-label">Appraiser type </label>
-                    <div class="position-relative">
-                       <!-- <v-select
-                       @change="checkProviderValidation($event, 1)"
+                    <div class="position-relative borderless-select">
+                      <v-select
+                          @option:selected="checkProviderValidation($event, 1)"
                           class="dashboard-input w-100"
                           v-model="providerTypes.default.type"
                           :options="appraisalTypes"
                           :searchable="false"
-                          label="name">
-                    </v-select> -->
-                       <select name="" id="" class="dashboard-input w-100" @change="checkProviderValidation($event, 1)" v-model="providerTypes.default.type">
-                        <option value="">Please select appraisal type</option>
-                        <option v-for="appraisal_type in appraisalTypes" :key="appraisal_type.id" :value="appraisal_type.id">
-                          {{ appraisal_type.form_type }}
-                        </option>
-                      </select>
+                          label="form_type">
+                      </v-select>
                       <span class="icon-arrow-down bottom-arrow-icon"></span>
                     </div>
                   </div>
                 </div>
                 <div class="col-6">
-                  <div class="group" :class="{ 'invalid-form': submitAction && (providerTypes.error.fee == true || this.proviedServicePass == false) }">
+                  <div class="group"
+                       :class="{ 'invalid-form': submitAction && (providerTypes.error.fee == true || this.proviedServicePass == false) }">
                     <label for="" class="d-block mb-2 dashboard-label">Fee </label>
-                    <input type="number" step="any" @input="checkProviderValidation($event, 2)" class="dashboard-input w-100" v-model="providerTypes.default.fee">
+                    <input type="number" step="any" @input="checkProviderValidation($event, 2)"
+                           class="dashboard-input w-100" v-model="providerTypes.default.fee">
                   </div>
                 </div>
                 <div class="col-12 text-end mt-3">
-                   <button class="add-more" @click="addFee">
-                        <span class="icon-plus"></span> Add
-                    </button>
+                  <button class="add-more" @click="addFee">
+                    <span class="icon-plus"></span> Add
+                  </button>
                 </div>
               </div>
 
             </div>
             <div class="mt-auto">
               <div class="group" :class="{ 'invalid-form': submitAction && (step1.note == null || step1.note == '') }">
-                  <label for="" class="d-block mb-2 dashboard-label">Note <span class="text-danger require"></span></label>
-                  <textarea name="" id="" rows="7" class="dashboard-textarea w-100" v-model="step1.note"></textarea>
+                <label for="" class="d-block mb-2 dashboard-label">Note <span
+                    class="text-danger require"></span></label>
+                <textarea name="" id="" rows="7" class="dashboard-textarea w-100" v-model="step1.note"></textarea>
               </div>
-              <h3 class="text-light-black fw-bold mgt-40">Total fee : <span> $ {{ providerTypes.totalAmount }} </span></h3>
+              <h3 class="text-light-black fw-bold mgt-40">Total fee : <span> $ {{ providerTypes.totalAmount }} </span>
+              </h3>
             </div>
           </div>
 
@@ -202,60 +205,50 @@
         <div class="col-md-4">
           <div class="form-box h-100 box-flex">
             <h4 class="box-header mb-3">Client info</h4>
-            
+
             <ValidationProvider class="group" name="AMC name" rules="required" v-slot="{ errors }">
               <div class="group" :class="{ 'invalid-form' : errors[0] }">
                 <label for="" class="d-block mb-2 dashboard-label">AMC name <span
                     class="text-danger require"></span></label>
                 <div class="position-relative">
-                   <v-select
-                          class="dashboard-input w-100"
-                          v-model="step1.amcClient"
-                          :options="amcClients"
-                          :searchable="false"
-                          label="name">
-                    </v-select>
-                  <!-- <select name="" id="" class="dashboard-input w-100" @change="getAmcClient" v-model="step1.amcClient">
-                    <option value="">Please select amc client</option>
-                    <option v-for="amc_client in amcClients" :key="amc_client.id" :value="amc_client.id">
-                      {{ amc_client.name }}
-                    </option>
-                  </select> -->
+                  <v-select
+                      class="dashboard-input w-100"
+                      v-model="step1.amcClient"
+                      :options="amcClients"
+                      :searchable="false"
+                      label="name">
+                  </v-select>
                   <span class="icon-arrow-down bottom-arrow-icon"></span>
                 </div>
-                <span  v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
               </div>
             </ValidationProvider>
 
-            <ValidationProvider class="group" name="Technology fee" :rules=" { required: (step1.amcClient == '') ? false : true}" v-slot="{ errors }">
+            <ValidationProvider class="group" name="Technology fee"
+                                :rules=" { required: (step1.amcClient == '') ? false : true}" v-slot="{ errors }">
               <div class="group" :class="{ 'invalid-form' : errors[0] }">
                 <label for="" class="d-block mb-2 dashboard-label">Technology fee <span
                     class="text-danger require"></span></label>
                 <input readonly type="text" class="dashboard-input w-100" v-model="step1.technologyFee">
-                <span  v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
               </div>
             </ValidationProvider>
 
             <ValidationProvider class="group" name="Lender" rules="required" v-slot="{ errors }">
               <div class="group" :class="{ 'invalid-form' : errors[0] }">
-                <label for="" class="d-block mb-2 dashboard-label">Lender <span class="text-danger require"></span></label>
+                <label for="" class="d-block mb-2 dashboard-label">Lender <span
+                    class="text-danger require"></span></label>
                 <div class="position-relative">
-                   <v-select
-                          class="dashboard-input w-100"
-                          v-model="step1.lender"
-                          :options="lenderClients"
-                          :searchable="false"
-                          label="name">
-                    </v-select>
-                  <!-- <select name="" id="" class="dashboard-input w-100" @change="getLenderClient" v-model="step1.lender">
-                    <option value="">Please select lender client</option>
-                    <option v-for="lender_client in lenderClients" :key="lender_client.id" :value="lender_client.id">
-                      {{ lender_client.name }}
-                    </option>
-                  </select> -->
+                  <v-select
+                      class="dashboard-input w-100"
+                      v-model="step1.lender"
+                      :options="lenderClients"
+                      :searchable="false"
+                      label="name">
+                  </v-select>
                   <span class="icon-arrow-down bottom-arrow-icon"></span>
                 </div>
-                <span  v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
               </div>
             </ValidationProvider>
           </div>
@@ -270,34 +263,38 @@
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
                     <label for="" class="d-block mb-2 dashboard-label">Search address <span
                         class="text-danger require"></span></label>
-                    <input type="text" ref="searchMapLocation" class="dashboard-input w-100" v-model="step1.searchAddress">
-                    <span  v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                    <input type="text" ref="searchMapLocation" class="dashboard-input w-100"
+                           v-model="step1.searchAddress">
+                    <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                   </div>
                 </ValidationProvider>
 
                 <ValidationProvider class="group" name="State name" rules="required" v-slot="{ errors }">
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
-                  <label for="" class="d-block mb-2 dashboard-label">State name <span class="text-danger require"></span>
-                  </label>
-                  <input type="text" class="dashboard-input w-100" v-model="step1.state">
-                    <span  v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                    <label for="" class="d-block mb-2 dashboard-label">State name <span
+                        class="text-danger require"></span>
+                    </label>
+                    <input type="text" class="dashboard-input w-100" v-model="step1.state">
+                    <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                   </div>
                 </ValidationProvider>
 
                 <ValidationProvider class="group" name="City name" rules="required" v-slot="{ errors }">
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
-                    <label label for="" class="d-block mb-2 dashboard-label">Area/City name <span class="text-danger require"></span></label>
+                    <label label for="" class="d-block mb-2 dashboard-label">Area/City name <span
+                        class="text-danger require"></span></label>
                     <input type="text" class="dashboard-input w-100" v-model="step1.city">
-                    <span  v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                    <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                   </div>
                 </ValidationProvider>
 
-                <ValidationProvider class="group" name="Unit No" :rules="{'required' : condoType == true}" v-slot="{ errors }">
+                <ValidationProvider class="group" name="Unit No" :rules="{'required' : condoType == true}"
+                                    v-slot="{ errors }">
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
                     <label for="" class="d-block mb-2 dashboard-label">Unit No <span class="text-danger require"></span>
                     </label>
                     <input type="text" class="dashboard-input w-100" v-model="step1.unitNo">
-                    <span  v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                    <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                   </div>
                 </ValidationProvider>
               </div>
@@ -305,19 +302,20 @@
               <div class="right max-w-424 w-100">
                 <ValidationProvider class="group" name="Street name" rules="required" v-slot="{ errors }">
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
-                  <label for="" class="d-block mb-2 dashboard-label">Street name <span class="text-danger require"></span>
-                  </label>
-                  <input type="text" class="dashboard-input w-100" v-model="step1.street">
-                  <span  v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                    <label for="" class="d-block mb-2 dashboard-label">Street name <span
+                        class="text-danger require"></span>
+                    </label>
+                    <input type="text" class="dashboard-input w-100" v-model="step1.street">
+                    <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                   </div>
                 </ValidationProvider>
 
                 <ValidationProvider class="group" name="Zip code" rules="required|integer" v-slot="{ errors }">
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
-                  <label for="" class="d-block mb-2 dashboard-label">Zipcode <span class="text-danger require"></span>
-                  </label>
-                  <input type="number" class="dashboard-input w-100" v-model="step1.zipcode">
-                  <span  v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                    <label for="" class="d-block mb-2 dashboard-label">Zipcode <span class="text-danger require"></span>
+                    </label>
+                    <input type="number" class="dashboard-input w-100" v-model="step1.zipcode">
+                    <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                   </div>
                 </ValidationProvider>
 
@@ -326,25 +324,27 @@
                     <label for="" class="d-block mb-2 dashboard-label">Country <span class="text-danger require"></span>
                     </label>
                     <input type="text" class="dashboard-input w-100" v-model="step1.country">
-                    <span  v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                    <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                   </div>
                 </ValidationProvider>
 
                 <ValidationProvider class="group" name="Latitude" rules="required" v-slot="{ errors }">
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
-                    <label for="" class="d-block mb-2 dashboard-label">Latitude <span class="text-danger require"></span>
+                    <label for="" class="d-block mb-2 dashboard-label">Latitude <span
+                        class="text-danger require"></span>
                     </label>
                     <input type="text" class="dashboard-input w-100" v-model="step1.lat">
-                    <span  v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                    <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                   </div>
                 </ValidationProvider>
 
                 <ValidationProvider class="group" name="Longitude" rules="required" v-slot="{ errors }">
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
-                    <label for="" class="d-block mb-2 dashboard-label">Longitude <span class="text-danger require"></span>
+                    <label for="" class="d-block mb-2 dashboard-label">Longitude <span
+                        class="text-danger require"></span>
                     </label>
                     <input type="text" class="dashboard-input w-100" v-model="step1.lng">
-                    <span  v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                    <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                   </div>
                 </ValidationProvider>
 
@@ -424,21 +424,21 @@ export default {
       fahCaseNoErrorMsg: '',
       condoType: false,
       providerTypes: {
-          default: {
-              type: null,
-              fee: null,
-          },
-          error: {
-            type: false,
-            fee: false
-          },
-          extra: [],
-          totalAmount: 0
+        default: {
+          type: null,
+          fee: null,
+        },
+        error: {
+          type: false,
+          fee: false
+        },
+        extra: [],
+        totalAmount: 0
       },
       mapData: {
         address: null,
         map: null,
-        center: { lat: -25.308, lng: 133.036 },
+        center: {lat: -25.308, lng: 133.036},
         currentPlace: null,
         markerIcon: "",
         data: [],
@@ -446,6 +446,7 @@ export default {
     }
   },
   created() {
+    console.log(this.appraisalTypes)
     this.step1.systemOrder = this.systemOrderNo;
 
     if (this.type == 2) {
@@ -453,7 +454,7 @@ export default {
     }
 
     this.$root.$on('orderSubmitConfirm', (status) => {
-        this.removeDataValue();
+      this.removeDataValue();
     });
   },
   mounted() {
@@ -469,11 +470,11 @@ export default {
 
     nextStep() {
       this.submitAction = true;
-      this.$refs.orderForm.validate().then( (status) => {
-          if (status && this.proviedServicePass == true && !this.dateIssue.status) {
-              this.stepActive = true;
-              this.stepChangeActive();
-          }
+      this.$refs.orderForm.validate().then((status) => {
+        if (status && this.proviedServicePass == true && !this.dateIssue.status) {
+          this.stepActive = true;
+          this.stepChangeActive();
+        }
       });
     },
     validateData() {
@@ -482,113 +483,113 @@ export default {
         errorCount++;
         this.clientOrderErrorMsg = 'Client Order No Required';
       }
-      return ! errorCount >= 0;
+      return !errorCount >= 0;
     },
     resetAllErrorMsg() {
       this.clientOrderErrorMsg = '';
       this.fahCaseNoErrorMsg = '';
     },
     addFee() {
-        let newType = this.providerTypes.default.type;
-        let newFee = this.providerTypes.default.fee; 
-        this.setNewFee(newType, newFee);
+      let newType = this.providerTypes.default.type;
+      let newFee = this.providerTypes.default.fee;
+      this.setNewFee(newType, newFee);
     },
 
     setNewFee(newType, newFee) {
-        if (newType && newFee) {
-            let appType = [];
-            for (let i in this.appraisalTypes) {
-                let appritem = this.appraisalTypes[i];
-                if (appritem.id == newType) {
-                    appType = appritem;
-                }
-            }
-            if ( appType.condo_type == 1) {
-              this.condoType = true;
-            }
-            let checkOld = ( this.providerTypes.extra ).find((ele) =>  ele.typeId == newType);
-            if (!checkOld) {              
-              this.providerTypes.extra.push({
-                  typeId: appType.id,
-                  type: appType.form_type,
-                  fee: newFee
-              });
-            }
-            this.providerTypes.default.type = null;
-            this.providerTypes.default.fee = null;
-            this.providerTypes.error.type = false;
-            this.providerTypes.error.fee = false;
-            this.checkProviderBalance();
-        } else {
-            if (this.providerTypes.default.type == null){
-                this.providerTypes.error.type = true;
-            }
-            if (this.providerTypes.default.fee == null){
-                this.providerTypes.error.fee = true;
-            }
+      if (newType && newFee) {
+        let appType = [];
+        for (let i in this.appraisalTypes) {
+          let appritem = this.appraisalTypes[i];
+          if (appritem.id == newType) {
+            appType = appritem;
+          }
         }
-        this.$root.$emit("updateProviderData", this.providerTypes);
+        if (appType.condo_type == 1) {
+          this.condoType = true;
+        }
+        let checkOld = (this.providerTypes.extra).find((ele) => ele.typeId == newType);
+        if (!checkOld) {
+          this.providerTypes.extra.push({
+            typeId: appType.id,
+            type: appType.form_type,
+            fee: newFee
+          });
+        }
+        this.providerTypes.default.type = null;
+        this.providerTypes.default.fee = null;
+        this.providerTypes.error.type = false;
+        this.providerTypes.error.fee = false;
+        this.checkProviderBalance();
+      } else {
+        if (this.providerTypes.default.type == null) {
+          this.providerTypes.error.type = true;
+        }
+        if (this.providerTypes.default.fee == null) {
+          this.providerTypes.error.fee = true;
+        }
+      }
+      this.$root.$emit("updateProviderData", this.providerTypes);
     },
 
     checkProviderBalance() {
-        let totalfee = 0;
-        let checkCondoType = false;
-        this.providerTypes.extra.map((ele) => {
-            totalfee += parseFloat(ele.fee);
-            let checkCondo = Object.values(this.appraisalTypes).find(eles => eles.id == ele.typeId);
-            if ( checkCondo && checkCondo.condo_type == 1 ) {
-                checkCondoType = true;
-            }
-        });
-        this.providerTypes.totalAmount = totalfee;
-        this.condoType = checkCondoType;
-        this.proviedServicePass = false;
-        if (this.providerTypes.extra.length > 0) {
-          this.proviedServicePass = true;
+      let totalfee = 0;
+      let checkCondoType = false;
+      this.providerTypes.extra.map((ele) => {
+        totalfee += parseFloat(ele.fee);
+        let checkCondo = Object.values(this.appraisalTypes).find(eles => eles.id == ele.typeId);
+        if (checkCondo && checkCondo.condo_type == 1) {
+          checkCondoType = true;
         }
+      });
+      this.providerTypes.totalAmount = totalfee;
+      this.condoType = checkCondoType;
+      this.proviedServicePass = false;
+      if (this.providerTypes.extra.length > 0) {
+        this.proviedServicePass = true;
+      }
     },
 
     checkProviderValidation(event, type) {
-        if (type == 2 && this.providerTypes.default.type == null){
-            this.providerTypes.error.type = true;
-        } else {
-            this.providerTypes.error.type = false;
-        }
-        if (type == 1 && this.providerTypes.default.fee == null){
-            this.providerTypes.error.fee = true;
-        } else {
-            this.providerTypes.error.fee = false;
-        }
+      if (type == 2 && this.providerTypes.default.type == null) {
+        this.providerTypes.error.type = true;
+      } else {
+        this.providerTypes.error.type = false;
+      }
+      if (type == 1 && this.providerTypes.default.fee == null) {
+        this.providerTypes.error.fee = true;
+      } else {
+        this.providerTypes.error.fee = false;
+      }
     },
     remoteProviderType(item, index) {
-        this.providerTypes.extra.splice(index, 1);
-        if (this.providerTypes.extra.length == 0) {
-            this.providerTypes.totalAmount = 0;
-            this.condoType = false;
-        } else {
-          this.checkProviderBalance();
-        }
+      this.providerTypes.extra.splice(index, 1);
+      if (this.providerTypes.extra.length == 0) {
+        this.providerTypes.totalAmount = 0;
+        this.condoType = false;
+      } else {
+        this.checkProviderBalance();
+      }
     },
     removeDataValue() {
-        let newData = [];
-        for (let i in this.step1) {
-          if (i == "technologyFee") {
-              newData[i] = 10;
-          } else if (i == "fee") {
-              newData[i] = [];
-          } else {
-              newData[i] = null;
-          }
+      let newData = [];
+      for (let i in this.step1) {
+        if (i == "technologyFee") {
+          newData[i] = 10;
+        } else if (i == "fee") {
+          newData[i] = [];
+        } else {
+          newData[i] = null;
         }
-        this.step1 = newData;
-        this.providerTypes.extra = [];
-        this.providerTypes.totalAmount = 0;
-        this.$refs.orderForm.reset();
+      }
+      this.step1 = newData;
+      this.providerTypes.extra = [];
+      this.providerTypes.totalAmount = 0;
+      this.$refs.orderForm.reset();
     },
     setOrderValue() {
       let receivedDate = this.formateDate(this.order.received_date);
       let dueDate = this.formateDate(this.order.due_date);
-      
+
       let step1 = {
         clientOrderNo: this.order.client_order_no,
         unitNo: this.order.property_info.unit_no,
@@ -615,9 +616,9 @@ export default {
       };
       this.step1 = step1;
       let setFee = JSON.parse(this.order.provider_service.appraiser_type_fee);
-      for( let i in setFee) {
-          let ele = setFee[i];
-          this.setNewFee(ele.typeId, ele.fee);
+      for (let i in setFee) {
+        let ele = setFee[i];
+        this.setNewFee(ele.typeId, ele.fee);
       }
 
       let receivedDateFormated = new Date(receivedDate);
@@ -629,178 +630,178 @@ export default {
     },
 
     geolocate() {
-        this.mapData.markerIcon = this.$boston.host('img/marker.png');
-        this.mapData.map = new window.google.maps.Map(this.$refs['map'], {
-            center:  this.center,
-            zoom: 7,
-            gestureHandling: 'greedy'
-        });
-        new window.google.maps.Marker({
-            position: this.center,
-            map: this.map,
-            icon: this.markerIcon
-        });
+      this.mapData.markerIcon = this.$boston.host('img/marker.png');
+      this.mapData.map = new window.google.maps.Map(this.$refs['map'], {
+        center: this.center,
+        zoom: 7,
+        gestureHandling: 'greedy'
+      });
+      new window.google.maps.Marker({
+        position: this.center,
+        map: this.map,
+        icon: this.markerIcon
+      });
 
-        const input = this.$refs.searchMapLocation;
-        const searchBox = new window.google.maps.places.SearchBox(input);
-        this.mapData.map.controls[window.google.maps.ControlPosition.TOP_LEFT].push(input);
-        this.mapData.map.addListener("bounds_changed", () => {
-          searchBox.setBounds(this.mapData.map.getBounds());
-        });
+      const input = this.$refs.searchMapLocation;
+      const searchBox = new window.google.maps.places.SearchBox(input);
+      this.mapData.map.controls[window.google.maps.ControlPosition.TOP_LEFT].push(input);
+      this.mapData.map.addListener("bounds_changed", () => {
+        searchBox.setBounds(this.mapData.map.getBounds());
+      });
 
-        searchBox.addListener("places_changed", () => {
-          const places = searchBox.getPlaces();
-          if (places.length == 0) {
+      searchBox.addListener("places_changed", () => {
+        const places = searchBox.getPlaces();
+        if (places.length == 0) {
+          return;
+        }
+
+
+        // For each place, get the icon, name and location.
+        const bounds = new window.google.maps.LatLngBounds();
+        let markers = [];
+
+        places.forEach((place) => {
+          if (!place.geometry || !place.geometry.location) {
+            console.log("Returned place contains no geometry");
             return;
           }
 
+          const icon = {
+            url: place.icon,
+            size: new window.google.maps.Size(71, 71),
+            origin: new window.google.maps.Point(0, 0),
+            anchor: new window.google.maps.Point(17, 34),
+            scaledSize: new window.google.maps.Size(25, 25),
+          };
 
-          // For each place, get the icon, name and location.
-          const bounds = new window.google.maps.LatLngBounds();
-          let markers = [];
-
-          places.forEach((place) => {
-            if (!place.geometry || !place.geometry.location) {
-              console.log("Returned place contains no geometry");
-              return;
-            }
-
-            const icon = {
-                url: place.icon,
-                size: new window.google.maps.Size(71, 71),
-                origin: new window.google.maps.Point(0, 0),
-                anchor: new window.google.maps.Point(17, 34),
-                scaledSize: new window.google.maps.Size(25, 25),
-            };
-
-            // Create a marker for each place.
-            markers.push(
+          // Create a marker for each place.
+          markers.push(
               new window.google.maps.Marker({
                 map: this.mapData.map,
                 icon: this.mapData.markerIcon,
                 title: place.name,
                 position: place.geometry.location,
               })
-            );
+          );
 
-            if (place.geometry.viewport) {
-              bounds.union(place.geometry.viewport);
-            } else {
-              bounds.extend(place.geometry.location);
+          if (place.geometry.viewport) {
+            bounds.union(place.geometry.viewport);
+          } else {
+            bounds.extend(place.geometry.location);
+          }
+          let addressData = {
+            postal_code: null,
+            country: null,
+            name: null,
+            street: null,
+            city: null,
+            location: null,
+            lat: null,
+            lon: null,
+            state: null,
+            place_id: null,
+          };
+          addressData.place_id = place.place_id;
+          // Location details
+          for (var i = 0; i < place.address_components.length; i++) {
+            if (place.address_components[i].types[0] == 'postal_code') {
+              addressData.postal_code = place.address_components[i].long_name;
             }
-            let addressData = {
-                postal_code: null,
-                country: null,
-                name: null,
-                street: null,
-                city: null,
-                location: null,
-                lat: null,
-                lon: null,
-                state: null,
-                place_id: null,
-            };
-            addressData.place_id = place.place_id;
-            // Location details
-            for (var i = 0; i < place.address_components.length; i++) {
-                if(place.address_components[i].types[0] == 'postal_code'){
-                    addressData.postal_code = place.address_components[i].long_name;
-                }
-                if(place.address_components[i].types[0] == 'route'){
-                    addressData.street = place.address_components[i].long_name;
-                }
-                if(place.address_components[i].types[0] == 'locality'){
-                    addressData.city = place.address_components[i].long_name;
-                }
-                if(place.address_components[i].types[0] == 'administrative_area_level_1'){
-                    addressData.state = place.address_components[i].short_name;
-                }
-                if(place.address_components[i].types[0] == 'country'){
-                    addressData.country = place.address_components[i].long_name;
-                }
+            if (place.address_components[i].types[0] == 'route') {
+              addressData.street = place.address_components[i].long_name;
             }
-            addressData.name = place.name;
-            addressData.location = place.formatted_address;
-            addressData.lat = place.geometry.location.lat();
-            addressData.lon = place.geometry.location.lng();
-            this.mapData.data = addressData;
-            this.setMapDataToMode();
-          });
-          this.mapData.map.fitBounds(bounds);
+            if (place.address_components[i].types[0] == 'locality') {
+              addressData.city = place.address_components[i].long_name;
+            }
+            if (place.address_components[i].types[0] == 'administrative_area_level_1') {
+              addressData.state = place.address_components[i].short_name;
+            }
+            if (place.address_components[i].types[0] == 'country') {
+              addressData.country = place.address_components[i].long_name;
+            }
+          }
+          addressData.name = place.name;
+          addressData.location = place.formatted_address;
+          addressData.lat = place.geometry.location.lat();
+          addressData.lon = place.geometry.location.lng();
+          this.mapData.data = addressData;
+          this.setMapDataToMode();
         });
+        this.mapData.map.fitBounds(bounds);
+      });
     },
 
     setMapDataToMode() {
-        this.step1.searchAddress = this.mapData.data.location;
-        this.step1.state = this.mapData.data.state;
-        this.step1.city = this.mapData.data.city;
-        this.step1.street = this.mapData.data.street;
-        this.step1.zipcode = this.mapData.data.postal_code;
-        this.step1.country = this.mapData.data.country;
-        this.step1.lat = this.mapData.data.lat;
-        this.step1.lng = this.mapData.data.lon;
+      this.step1.searchAddress = this.mapData.data.location;
+      this.step1.state = this.mapData.data.state;
+      this.step1.city = this.mapData.data.city;
+      this.step1.street = this.mapData.data.street;
+      this.step1.zipcode = this.mapData.data.postal_code;
+      this.step1.country = this.mapData.data.country;
+      this.step1.lat = this.mapData.data.lat;
+      this.step1.lng = this.mapData.data.lon;
     },
     getAmcClient(event) {
-        let id = parseInt(event.target.value);
-        let findObject = this.amcClients.find(ele => ele.id == id);
-        if (findObject && findObject.client_type == "both") {
-            this.step1.lender = id;
-        } else {
-          let checkAmcId = this.lenderClients.find(ele => ele.id == this.step1.lender);
-          if (checkAmcId && checkAmcId.client_type == "both") {
-              this.step1.lender = null;
-          }
+      let id = parseInt(event.target.value);
+      let findObject = this.amcClients.find(ele => ele.id == id);
+      if (findObject && findObject.client_type == "both") {
+        this.step1.lender = id;
+      } else {
+        let checkAmcId = this.lenderClients.find(ele => ele.id == this.step1.lender);
+        if (checkAmcId && checkAmcId.client_type == "both") {
+          this.step1.lender = null;
         }
+      }
     },
     getLenderClient(event) {
-        let id = parseInt(event.target.value);
-        let findObject = this.lenderClients.find(ele => ele.id == id);
-        if (findObject && findObject.client_type == "both") {
-            this.step1.amcClient = id;
-        } else {
-          let checkAmcId = this.amcClients.find(ele => ele.id == this.step1.amcClient);
-          if (checkAmcId && checkAmcId.client_type == "both") {
-              this.step1.amcClient = null;
-          }
+      let id = parseInt(event.target.value);
+      let findObject = this.lenderClients.find(ele => ele.id == id);
+      if (findObject && findObject.client_type == "both") {
+        this.step1.amcClient = id;
+      } else {
+        let checkAmcId = this.amcClients.find(ele => ele.id == this.step1.amcClient);
+        if (checkAmcId && checkAmcId.client_type == "both") {
+          this.step1.amcClient = null;
         }
+      }
     },
 
     findTechnologyFee() {
-      
+
     },
     checkDateInput(value, type) {
-        this.dateIssue.status = false;
-        var date = new Date(value);
-        if (type == 1) {
-          if (this.step1.dueDate) {
-            let dueDate = new Date(this.step1.dueDate);
-            if (dueDate < date) {
-              this.dateIssue.status = true;
-            }
-          }
-        } else {
-          if (this.step1.receiveDate) {
-            let receiveDate = new Date(this.step1.receiveDate);
-            if (receiveDate > date) {
-              this.dateIssue.status = true;
-            }
+      this.dateIssue.status = false;
+      var date = new Date(value);
+      if (type == 1) {
+        if (this.step1.dueDate) {
+          let dueDate = new Date(this.step1.dueDate);
+          if (dueDate < date) {
+            this.dateIssue.status = true;
           }
         }
+      } else {
+        if (this.step1.receiveDate) {
+          let receiveDate = new Date(this.step1.receiveDate);
+          if (receiveDate > date) {
+            this.dateIssue.status = true;
+          }
+        }
+      }
     }
 
   },
   watch: {
     providerTypes: {
       handler(val) {
-          
+
       },
-      deep:true
+      deep: true
     },
     step1: {
       handler(val) {
         this.$root.$emit("updateStepData", {
           step: 1,
-          data: { providerType: this.providerTypes, ...val}
+          data: {providerType: this.providerTypes, ...val}
         });
       },
       deep: true
@@ -811,19 +812,21 @@ export default {
 
 <style scoped>
 .provider-items {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 15px;
-    text-align: left;
-    font-size: 13px;
-    vertical-align: middle;
-    align-items: center;
-    border-bottom: thin solid #999;
-    padding-bottom: 15px;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  text-align: left;
+  font-size: 13px;
+  vertical-align: middle;
+  align-items: center;
+  border-bottom: thin solid #999;
+  padding-bottom: 15px;
 }
+
 .provider-items span strong {
   display: block;
 }
+
 .provider-items:nth-last-child(1) {
   border-bottom: none;
 }
