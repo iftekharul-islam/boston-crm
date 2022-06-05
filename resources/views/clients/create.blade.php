@@ -162,12 +162,8 @@
         }
 
         function formatPhoneNo(e){
-            let totalInput = 0;
             let phoneNo = e.target.value;
-            let formatedPhoneNo = ''
-            if(phoneNo.length == 11){
-               e.target.value = phoneNo.replace(/(\d{3})\-?(\d{3})\-?(\d{4}).*/,'$1-$2-$3')
-            }
+            e.target.value = phoneNo.replace(/(\d{3})\-?(\d{3})\-?(\d{4}).*/,'$1-$2-$3')
         }
 
         let emailCount = 1;
