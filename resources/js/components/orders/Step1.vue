@@ -154,21 +154,15 @@
                 <div class="col-6">
                   <div class="group" :class="{ 'invalid-form': submitAction && (providerTypes.error.type == true || this.proviedServicePass == false) }">
                     <label for="" class="d-block mb-2 dashboard-label">Appraiser type </label>
-                    <div class="position-relative">
-                       <!-- <v-select
-                       @change="checkProviderValidation($event, 1)"
-                          class="dashboard-input w-100"
-                          v-model="providerTypes.default.type"
-                          :options="appraisalTypes"
-                          :searchable="false"
-                          label="name">
-                    </v-select> -->
-                       <select name="" id="" class="dashboard-input w-100" @change="checkProviderValidation($event, 1)" v-model="providerTypes.default.type">
-                        <option value="">Please select appraisal type</option>
-                        <option v-for="appraisal_type in appraisalTypes" :key="appraisal_type.id" :value="appraisal_type.id">
-                          {{ appraisal_type.form_type }}
-                        </option>
-                      </select>
+                    <div class="position-relative borderless-select">
+                      <v-select
+                        @option:selected="checkProviderValidation($event, 1)"
+                        class="dashboard-input w-100"
+                        v-model="providerTypes.default.type"
+                        :options="appraisalTypes"
+                        :searchable="false"
+                        label="form_type">
+                      </v-select>
                       <span class="icon-arrow-down bottom-arrow-icon"></span>
                     </div>
                   </div>
@@ -215,12 +209,6 @@
                           :searchable="false"
                           label="name">
                     </v-select>
-                  <!-- <select name="" id="" class="dashboard-input w-100" @change="getAmcClient" v-model="step1.amcClient">
-                    <option value="">Please select amc client</option>
-                    <option v-for="amc_client in amcClients" :key="amc_client.id" :value="amc_client.id">
-                      {{ amc_client.name }}
-                    </option>
-                  </select> -->
                   <span class="icon-arrow-down bottom-arrow-icon"></span>
                 </div>
                 <span  v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
@@ -247,12 +235,6 @@
                           :searchable="false"
                           label="name">
                     </v-select>
-                  <!-- <select name="" id="" class="dashboard-input w-100" @change="getLenderClient" v-model="step1.lender">
-                    <option value="">Please select lender client</option>
-                    <option v-for="lender_client in lenderClients" :key="lender_client.id" :value="lender_client.id">
-                      {{ lender_client.name }}
-                    </option>
-                  </select> -->
                   <span class="icon-arrow-down bottom-arrow-icon"></span>
                 </div>
                 <span  v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
@@ -446,6 +428,7 @@ export default {
     }
   },
   created() {
+    console.log(this.appraisalTypes)
     this.step1.systemOrder = this.systemOrderNo;
 
     if (this.type == 2) {
@@ -549,6 +532,7 @@ export default {
     },
 
     checkProviderValidation(event, type) {
+      console.log(event)
         if (type == 2 && this.providerTypes.default.type == null){
             this.providerTypes.error.type = true;
         } else {
@@ -556,7 +540,9 @@ export default {
         }
         if (type == 1 && this.providerTypes.default.fee == null){
             this.providerTypes.error.fee = true;
+            console.log('changed')
         } else {
+          console.log('check')
             this.providerTypes.error.fee = false;
         }
     },
