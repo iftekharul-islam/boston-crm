@@ -41,8 +41,8 @@ class OrderApiController extends Controller
             $appraiserName = $step['appraiserName'];
             
             try {
-                $dueDate = Carbon::parse($step['dueDate'])->format('Y-m-d');
-                $receiveDate = Carbon::parse($step['receiveDate'])->format('Y-m-d');
+                $dueDate = Carbon::parse($step['dueDate']);
+                $receiveDate = Carbon::parse($step['receiveDate']);
             } catch (\Exception $e) {
                 return response()->json(['error' => false, 'messages' => ['Please check received & due dates']]);
             }
@@ -51,6 +51,8 @@ class OrderApiController extends Controller
             $clientOrderNo = $step['clientOrderNo'];
             $lender = $step['lender'];
 
+            $amcClient = isset($amcClient['id']) ? $amcClient['id'] : $amcClient;
+            $lender = isset($lender['id']) ? $lender['id'] : $lender;
 
             $user = User::find($get->user_id);
             $submitType = $get->type;
@@ -71,19 +73,20 @@ class OrderApiController extends Controller
                 $order->updated_at = Carbon::now();
             }
 
+            // dd($this->getSystemOrderNumber());
+            $systemOrder = $systemOrder ? $systemOrder : $this->getSystemOrderNumber();
             // creating orders
             $order->amc_id = $amcClient;
             $order->lender_id = $lender;
             $order->company_id = $company['id'];
-            $order->rush = $step2['rush'];
+            $order->rush = $step2['rush'] ? 1 : 0;
             $order->created_by = $user->id;
             $order->received_date = $receiveDate;
             $order->due_date = $dueDate;
             $order->client_order_no = $clientOrderNo;
-            $order->system_order_no = $systemOrder ?? $this->getSystemOrderNumber();
+            $order->system_order_no = $systemOrder;
+            // return $order;
             $order->save();
-
-
 
             $fhaCaseNo = $step['fhaCaseNo'];
             $loanNo = $step['loanNo'];
@@ -103,15 +106,15 @@ class OrderApiController extends Controller
                 $apprlDetails->updated_at = Carbon::now();
             }
 
+            $appraiserName = isset($appraiserName['id']) ? $appraiserName['id'] : $appraiserName;
+            
             $apprlDetails->appraiser_id = $appraiserName;
             $apprlDetails->order_id = $order->id;
             $apprlDetails->loan_no = $loanNo;
-            $apprlDetails->loan_type = $loanType;
+            $apprlDetails->loan_type = isset($loanType['id']) ? $loanType['id'] : $loanType;
             $apprlDetails->technology_fee = $technologyFee;
             $apprlDetails->fha_case_no = $fhaCaseNo;
             $apprlDetails->save();
-
-
 
 
             // Create Provider Types

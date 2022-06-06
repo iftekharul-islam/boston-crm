@@ -103,20 +103,13 @@
                     <label for="" class="d-block mb-2 dashboard-label">Appraiser name <span
                         class="text-danger require"></span></label>
                     <div class="position-relative">
-                      <v-select
-                          class="dashboard-input w-100"
-                          v-model="step1.appraiserName"
-                          :options="appraisalUsers"
-                          :searchable="false"
-                          label="name">
-                      </v-select>
-                      <!-- <select name="" id="" class="dashboard-input w-100" v-model="step1.appraiserName">
+                      <select name="" id="" class="dashboard-input w-100" v-model="step1.appraiserName">
                         <option value="">Please select appraisal user name</option>
                         <option v-for="appraisal_user in appraisalUsers" :key="appraisal_user.id"
                                 :value="appraisal_user.id">
                           {{ appraisal_user.name }}
                         </option>
-                      </select> -->
+                      </select>
                       <span class="icon-arrow-down bottom-arrow-icon"></span>
                     </div>
                     <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
@@ -211,13 +204,12 @@
                 <label for="" class="d-block mb-2 dashboard-label">AMC name <span
                     class="text-danger require"></span></label>
                 <div class="position-relative">
-                  <v-select
+                  <select
                       class="dashboard-input w-100"
-                      v-model="step1.amcClient"
-                      :options="amcClients"
-                      :searchable="false"
-                      label="name">
-                  </v-select>
+                      v-model="step1.amcClient">
+                      <option value="">Choose Amc Client</option>
+                      <option :value="item.id" :key="ik" v-for="item, ik in amcClients">{{ item.name }}</option>
+                  </select>
                   <span class="icon-arrow-down bottom-arrow-icon"></span>
                 </div>
                 <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
@@ -239,13 +231,12 @@
                 <label for="" class="d-block mb-2 dashboard-label">Lender <span
                     class="text-danger require"></span></label>
                 <div class="position-relative">
-                  <v-select
+                  <select
                       class="dashboard-input w-100"
-                      v-model="step1.lender"
-                      :options="lenderClients"
-                      :searchable="false"
-                      label="name">
-                  </v-select>
+                      v-model="step1.lender">
+                      <option value="">Choose Lender</option>
+                      <option :value="item.id" :key="ik" v-for="item, ik in lenderClients">{{ item.name }}</option>
+                  </select>
                   <span class="icon-arrow-down bottom-arrow-icon"></span>
                 </div>
                 <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
@@ -446,7 +437,6 @@ export default {
     }
   },
   created() {
-    console.log(this.appraisalTypes)
     this.step1.systemOrder = this.systemOrderNo;
 
     if (this.type == 2) {
@@ -497,18 +487,24 @@ export default {
 
     setNewFee(newType, newFee) {
       if (newType && newFee) {
-        let appType = [];
-        for (let i in this.appraisalTypes) {
-          let appritem = this.appraisalTypes[i];
-          if (appritem.id == newType) {
-            appType = appritem;
+        let appType = newType;
+
+        if (newType.id) {
+          appType = newType;
+        } else {
+          for (let i in this.appraisalTypes) {
+            let appritem = this.appraisalTypes[i];
+            if (appritem.id == newType) {
+              appType = appritem;
+            }
           }
         }
+              
         if (appType.condo_type == 1) {
           this.condoType = true;
         }
-        let checkOld = (this.providerTypes.extra).find((ele) => ele.typeId == newType);
-        if (!checkOld) {
+        let checkOld = (this.providerTypes.extra).find((ele) => ele.typeId == appType.id);
+        if (!checkOld && appType.id) {
           this.providerTypes.extra.push({
             typeId: appType.id,
             type: appType.form_type,
@@ -614,6 +610,10 @@ export default {
         lat: this.order.property_info.latitude,
         lng: this.order.property_info.longitude,
       };
+      
+      console.log(this.order.appraisal_detail.appraiser_id);
+      console.log(this.appraisalUsers);
+      
       this.step1 = step1;
       let setFee = JSON.parse(this.order.provider_service.appraiser_type_fee);
       for (let i in setFee) {

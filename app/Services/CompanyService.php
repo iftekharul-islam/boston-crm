@@ -127,12 +127,13 @@ class CompanyService
 		*
 		* @return $this
 		*/
-	 public function createRole($name = 'admin', $description = ''): CompanyService
+	 public function createRole($name = 'admin', $company = null, $description = ''): CompanyService
 	 {
 			$this->role = Role::query()->create( [
 				'name'        => strtolower( $name ),
 				'description' => $description,
 				'guard_name'  => 'web',
+				'company_id'  => $company == null ? 1 : $company->id,
 			] );
 			
 			return $this;
