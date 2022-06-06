@@ -10,7 +10,7 @@
               <div class="left max-w-424 w-100 me-3">
 
                 <ValidationProvider class="group" name="Order no" rules="required" v-slot="{ errors }">
-                  <div class="group" :class="{ 'invalid-form' : errors[0] }">
+                  <div :class="{ 'invalid-form' : errors[0] }">
                     <label for="" class="d-block mb-2 dashboard-label">Client order no <span
                         class="text-danger require"></span></label>
                     <input type="text" class="dashboard-input w-100" v-model="step1.clientOrderNo">
@@ -19,7 +19,7 @@
                 </ValidationProvider>
 
                 <ValidationProvider class="group" name="Loan no" rules="required" v-slot="{ errors }">
-                  <div class="group" :class="{ 'invalid-form' : errors[0] }">
+                  <div :class="{ 'invalid-form' : errors[0] }">
                     <label for="" class="d-block mb-2 dashboard-label">Loan no</label>
                     <input type="text" class="dashboard-input w-100" v-model="step1.loanNo">
                     <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
@@ -28,7 +28,7 @@
 
 
                 <ValidationProvider class="group" name="Received date" rules="required" v-slot="{ errors }">
-                  <div class="group" :class="{ 'invalid-form' : (errors[0] || dateIssue.status) }">
+                  <div :class="{ 'invalid-form' : (errors[0] || dateIssue.status) }">
                     <label for="" class="d-block mb-2 dashboard-label">Received date <span
                         class="text-danger require"></span></label>
                     <div class="position-relative">
@@ -44,7 +44,7 @@
                 </ValidationProvider>
 
                 <ValidationProvider class="group" name="Due date" rules="required" v-slot="{ errors }">
-                  <div class="group" :class="{ 'invalid-form' : errors[0] }">
+                  <div :class="{ 'invalid-form' : errors[0] }">
                     <label for="" class="d-block mb-2 dashboard-label">Due date <span
                         class="text-danger require"></span></label>
                     <div class="position-relative">
@@ -66,31 +66,20 @@
               </span>
 
                 <ValidationProvider class="group" name="Loan type" rules="required" v-slot="{ errors }">
-                  <div class="group" :class="{ 'invalid-form' : errors[0] }">
+                  <div :class="{ 'invalid-form' : errors[0] }">
                     <label for="" class="d-block mb-2 dashboard-label">Loan type </label>
-                    <div class="position-relative borderless-select">
-                      <v-select
-                          class="dashboard-input w-100"
-                          v-model="step1.loanType"
-                          :options="loanTypes"
-                          :searchable="false"
-                          label="name">
-                      </v-select>
-
-                      <!-- <select name="" id="" class="dashboard-input w-100 loan-type-select" v-model="step1.loanType">
-                        <option value="">Please Select Loan Type</option>
-                        <option v-for="loan_type in loanTypes" :key="loan_type.id" :value="loan_type.id">
-                          {{ loan_type.name }}
-                        </option>
-                      </select> -->
-                      <span class="icon-arrow-down bottom-arrow-icon"></span>
-                    </div>
+                    <select name="" id="" class="dashboard-input w-100 loan-type-select" v-model="step1.loanType">
+                      <option value="">Please Select Loan Type</option>
+                      <option v-for="loan_type in loanTypes" :key="loan_type.id" :value="loan_type.id">
+                        {{ loan_type.name }}
+                      </option>
+                    </select>
                     <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                   </div>
                 </ValidationProvider>
 
                 <ValidationProvider class="group" name="FHA case no" rules="required" v-slot="{ errors }">
-                  <div class="group" :class="{ 'invalid-form' : errors[0] }">
+                  <div :class="{ 'invalid-form' : errors[0] }">
                     <label for="" class="d-block mb-2 dashboard-label">FHA case no <span
                         class="text-danger require" v-if="step1.loanType"></span></label>
                     <input type="text" class="dashboard-input w-100" v-model="step1.fhaCaseNo">
@@ -99,19 +88,16 @@
                 </ValidationProvider>
 
                 <ValidationProvider class="group" name="Appraiser name" rules="required" v-slot="{ errors }">
-                  <div class="group" :class="{ 'invalid-form' : errors[0] }">
+                  <div :class="{ 'invalid-form' : errors[0] }">
                     <label for="" class="d-block mb-2 dashboard-label">Appraiser name <span
                         class="text-danger require"></span></label>
-                    <div class="position-relative">
-                      <select name="" id="" class="dashboard-input w-100" v-model="step1.appraiserName">
+                      <select class="dashboard-input w-100" v-model="step1.appraiserName">
                         <option value="">Please select appraisal user name</option>
                         <option v-for="appraisal_user in appraisalUsers" :key="appraisal_user.id"
                                 :value="appraisal_user.id">
                           {{ appraisal_user.name }}
                         </option>
                       </select>
-                      <span class="icon-arrow-down bottom-arrow-icon"></span>
-                    </div>
                     <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                   </div>
                 </ValidationProvider>
@@ -124,7 +110,6 @@
             <div>
               <h4 class="box-header mb-3">Provided services</h4>
               <div class="row">
-
                 <div class="provided-service-data row mgb-20" v-if="providerTypes.extra.length > 0">
                   <!-- label -->
                   <div class="col-6">
@@ -148,31 +133,40 @@
                   </div>
                 </div>
                 <!-- input box and new add -->
-                <div class="col-6">
-                  <div class="group"
-                       :class="{ 'invalid-form': submitAction && (providerTypes.error.type == true || this.proviedServicePass == false) }">
-                    <label for="" class="d-block mb-2 dashboard-label">Appraiser type </label>
-                    <div class="position-relative borderless-select">
-                      <v-select
-                          @option:selected="checkProviderValidation($event, 1)"
-                          class="dashboard-input w-100"
-                          v-model="providerTypes.default.type"
-                          :options="appraisalTypes"
-                          :searchable="false"
-                          label="form_type">
-                      </v-select>
-                      <span class="icon-arrow-down bottom-arrow-icon"></span>
+                <div class="col-12">
+                  <ValidationObserver ref="providerServices">
+                    <div class="row">
+                      <div class="col-6">
+                        <ValidationProvider name="Appraiser Type" :rules="{'required' : (providerTypes.error.type == true || this.proviedServicePass == false)}" v-slot="{ errors }">
+                        <div class="group" :class="{ 'invalid-form': errors[0] }">
+                          <label for="" class="d-block mb-2 dashboard-label">Appraiser type </label>
+                          <div class="position-relative borderless-select">
+                            <select
+                                @change="checkProviderValidation($event, 1)"
+                                class="dashboard-input w-100"
+                                v-model="providerTypes.default.type">
+                                <option value="">Choose Provided Service</option>
+                                <option :value="item.id" :key="ki" v-for="item, ki in appraisalTypes">{{ item.form_type }}</option>
+                            </select>
+                            <span class="icon-arrow-down bottom-arrow-icon"></span>
+                          </div>
+                        </div>
+                        </ValidationProvider>
+
+                      </div>
+                      <div class="col-6">
+                        <ValidationProvider name="Fee" :rules="{'required' : (providerTypes.error.fee == true || this.proviedServicePass == false) }" v-slot="{ errors }">
+                        <div class="group" :class="{ 'invalid-form': errors[0] }">
+                          <label for="" class="d-block mb-2 dashboard-label">Fee </label>
+                          <input type="number" step="any" @input="checkProviderValidation($event, 2)"
+                                class="dashboard-input w-100" v-model="providerTypes.default.fee">
+                        </div>
+                        </ValidationProvider>
+                      </div>
                     </div>
-                  </div>
+                  </ValidationObserver>
                 </div>
-                <div class="col-6">
-                  <div class="group"
-                       :class="{ 'invalid-form': submitAction && (providerTypes.error.fee == true || this.proviedServicePass == false) }">
-                    <label for="" class="d-block mb-2 dashboard-label">Fee </label>
-                    <input type="number" step="any" @input="checkProviderValidation($event, 2)"
-                           class="dashboard-input w-100" v-model="providerTypes.default.fee">
-                  </div>
-                </div>
+
                 <div class="col-12 text-end mt-3">
                   <button class="add-more" @click="addFee">
                     <span class="icon-plus"></span> Add
@@ -182,13 +176,13 @@
 
             </div>
             <div class="mt-auto">
-              <div class="group" :class="{ 'invalid-form': submitAction && (step1.note == null || step1.note == '') }">
-                <label for="" class="d-block mb-2 dashboard-label">Note <span
-                    class="text-danger require"></span></label>
-                <textarea name="" id="" rows="7" class="dashboard-textarea w-100" v-model="step1.note"></textarea>
-              </div>
-              <h3 class="text-light-black fw-bold mgt-40">Total fee : <span> $ {{ providerTypes.totalAmount }} </span>
-              </h3>
+              <ValidationProvider name="Provided Note" :rules="{'required' : (step1.note == null || step1.note == '')}" v-slot="{ errors }">
+                <div class="group" :class="{ 'invalid-form' : errors[0] }">
+                  <label for="" class="d-block mb-2 dashboard-label">Note <span class="text-danger require"></span></label>
+                  <textarea name="" id="" rows="7" class="dashboard-textarea w-100" v-model="step1.note"></textarea>
+                </div>
+              </ValidationProvider>
+              <h3 class="text-light-black fw-bold mgt-40">Total fee : <span> $ {{ providerTypes.totalAmount }} </span></h3>
             </div>
           </div>
 
@@ -394,7 +388,7 @@ export default {
         receiveDate: '',
         technologyFee: 10,
         fhaCaseNo: '',
-        appraiserName: '',
+        appraiserName: null,
         dueDate: '',
         appraiserType: '',
         amcClient: '',
@@ -420,7 +414,7 @@ export default {
           fee: null,
         },
         error: {
-          type: false,
+          type: true,
           fee: false
         },
         extra: [],
@@ -459,11 +453,12 @@ export default {
     },
 
     nextStep() {
-      this.submitAction = true;
       this.$refs.orderForm.validate().then((status) => {
         if (status && this.proviedServicePass == true && !this.dateIssue.status) {
-          this.stepActive = true;
-          this.stepChangeActive();
+            this.stepActive = true;
+            this.stepChangeActive();
+        } else {
+            $("html, body").animate({scrollTop: 0}, 300);
         }
       });
     },
@@ -480,9 +475,11 @@ export default {
       this.fahCaseNoErrorMsg = '';
     },
     addFee() {
-      let newType = this.providerTypes.default.type;
-      let newFee = this.providerTypes.default.fee;
-      this.setNewFee(newType, newFee);
+      this.$refs.providerServices.validate().then( (status) => {
+          let newType = this.providerTypes.default.type;
+          let newFee = this.providerTypes.default.fee;
+          this.setNewFee(newType, newFee);        
+      })
     },
 
     setNewFee(newType, newFee) {
@@ -610,10 +607,7 @@ export default {
         lat: this.order.property_info.latitude,
         lng: this.order.property_info.longitude,
       };
-      
-      console.log(this.order.appraisal_detail.appraiser_id);
-      console.log(this.appraisalUsers);
-      
+            
       this.step1 = step1;
       let setFee = JSON.parse(this.order.provider_service.appraiser_type_fee);
       for (let i in setFee) {

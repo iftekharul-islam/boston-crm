@@ -101,9 +101,9 @@
 
         $(".submenu").hide();
         $('#sidebar .sidebar-dropdown').hover(function () {
-            $(this).find('.submenu').show(500);
+            $(this).find('.submenu').stop().show(500);
         }, function () {
-            $(this).find('.submenu').hide(500);
+            $(this).find('.submenu').stop().hide(500);
         });
     });
     sidebarToggle = () => {
