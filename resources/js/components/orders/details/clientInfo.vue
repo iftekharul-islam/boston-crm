@@ -12,7 +12,8 @@
           <span>:</span>
           <p class="right-side mb-0">{{ amc_name }}</p>
         </div>
-        <a :href="amc_file !== '' || amc_file !== null ? amc_file : '#'" target="_blank" class="underline primary-text text-600">AMC requirements</a>
+        <a v-if="amc_file != ''" :href="amc_file" target="_blank" class="underline primary-text text-600">AMC requirements</a>
+        <a v-else :href="'#'" class="secondary-text text-gray">AMC requirements</a>
       </div>
       <div class="list">
         <div class="list__group mb-3">
@@ -20,7 +21,8 @@
           <span>:</span>
           <p class="right-side mb-0">{{ lender_name }}</p>
         </div>
-        <a :href="lender_file" target="_blank" class="underline primary-text text-600">Lender requirements</a>
+        <a v-if="lender_file != ''" :href="lender_file" target="_blank" class="underline primary-text text-600">Lender requirements</a>
+        <a v-else :href="'#'" class="text-gray">Lender requirements</a>
       </div>
     </div>
     <!-- modal -->
@@ -43,7 +45,7 @@
               </b-form-select>
             </div>
             <a :href="amc_file" target="_blank" class="primary-text fw-bold my-3 d-block underline">AMC
-              requirements 1</a>
+              requirements</a>
             <div class="position-relative file-upload">
               <input type="file" @change="changeFileAmc">
               <label for="">Upload <span class="icon-upload ms-3 fs-20"><span class="path1"></span><span
@@ -70,7 +72,7 @@
               <label for="" class="d-block mb-2 dashboard-label">Lender address</label>
               <input class="dashboard-input w-100" type="text" :value="lender_address"/>
               <a :href="lender_file" target="_blank" class="primary-text fw-bold my-3 d-block underline">Lender
-                requirements 1</a>
+                requirements</a>
               <div class="position-relative file-upload">
                 <input type="file" @change="changeFileLender">
                 <label for="">Upload <span class="icon-upload ms-3 fs-20"><span class="path1"></span><span

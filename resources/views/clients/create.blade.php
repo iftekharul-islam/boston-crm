@@ -89,12 +89,12 @@
                                                class="d-block mb-2 dashboard-label fee-for-1004uad-label">Technology fee
                                             for
                                             appraisal like 1004UAD</label>
-                                        <input type="number" onpaste="return false" onkeypress="return numbersOnly(event)" name="fee_for_1004uad" value="{{ old('fee_for_1004uad') }}" id="fee-for-1004uad"
+                                        <input type="number" onpaste="return false" min="0" onkeypress="return numbersOnly(event)" name="fee_for_1004uad" value="{{ old('fee_for_1004uad') }}" id="fee-for-1004uad"
                                                class="dashboard-input w-100">
                                     </div>
                                     <div class="group">
                                         <label for="fee-for-1004d" class="d-block mb-2 dashboard-label fee-for-1004d-label">Technology fee for appraisal like 1004D</label>
-                                        <input type="number" onpaste="return false" onkeypress="return numbersOnly(event)" name="fee_for_1004d" value="{{ old('fee_for_1004d') }}" id="fee-for-1004d" class="dashboard-input w-100">
+                                        <input type="number" onpaste="return false" min="0" onkeypress="return numbersOnly(event)" name="fee_for_1004d" value="{{ old('fee_for_1004d') }}" id="fee-for-1004d" class="dashboard-input w-100">
                                     </div>
                                     <div class="group">
                                         <label for="deducts-technology-fee" class="d-block mb-2 dashboard-label deducts-technology-fee-label">Deduction of tech fee during payment </label>
