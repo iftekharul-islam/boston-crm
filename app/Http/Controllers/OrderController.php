@@ -93,8 +93,7 @@ class OrderController extends BaseController
         $amc_clients = $client_users[0];
         $lender_clients = $client_users[1];
 
-        $company = auth()->user()->companies()->first();
-        
+        $company = auth()->user()->companies()->first();        
         $userID = auth()->user()->id;
 
         return view('order.create',
