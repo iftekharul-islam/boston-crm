@@ -11,11 +11,13 @@ trait CrmHelper {
         if ($order) {
             $orderLength = $order->id+1;
             $length = strlen($orderLength) < 8 ? 8 - strlen($orderLength) : 0;
-        }
-        if ($length > 0) {
-            return "BAS-".str_pad($order->id+1, $length, 0, STR_PAD_LEFT);
+            if ($length > 0) {
+                return "BAS-".str_pad($order->id+1, $length, 0, STR_PAD_LEFT);
+            } else {
+                return "BAS-".$order->id+1;
+            }
         } else {
-            return "BAS-".$order->id+1;
+            return "BAS-000001";
         }
     }
 

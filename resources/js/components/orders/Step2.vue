@@ -96,7 +96,7 @@
                 <input v-model="step2.contactSame" type="checkbox" class=" checkbox-input w-100">
                 <label for="" class="checkbox-label primary-text">Set borrower as contact</label>
               </div>
-              <ValidationProvider class="group" name="Contact Info" :rules="{'required' : step2.contactSame == false}" v-slot="{ errors }">
+              <ValidationProvider class="group" name="Contact Info" :rules="{'required' : step2.contactSame == false }" v-slot="{ errors }">
                 <div class="group" :class="{ 'invalid-form' : errors[0] }">
                   <label for="" class="d-block mb-2 dashboard-label">Contact <span
                       class="text-danger require"></span></label>
@@ -107,7 +107,7 @@
             </div>
             <div class="middle max-w-424 w-100 me-3">
               <ValidationObserver ref="addContact2form">
-                  <ValidationProvider class="group" name="Contact Number" :rules="{'required' : step2.contactSame == false && (step2.contact_number == false || add.contact2 == null) }" v-slot="{ errors }">
+                  <ValidationProvider class="group" name="Contact Number" :rules="{'required' : step2.contactSame == false && (step2.contact_number == false && add.contact2 == null) }" v-slot="{ errors }">
                     <div class="group" :class="{ 'invalid-form' : errors[0] }">
                       <label for="" class="d-block mb-2 dashboard-label">Contact no <span class="text-danger require"></span></label>
                       <input :disabled="step2.contactSame == true" v-model="add.contact2" type="text" class="dashboard-input w-100">
@@ -134,7 +134,7 @@
             </div>
             <div class="right max-w-424 w-100">
               <ValidationObserver ref="addEmail2form">
-                  <ValidationProvider class="group" name="Contact Email Address" :rules="{'required' : step2.contactSame == false && (step2.email_address == false || add.email2 == null)}" v-slot="{ errors }">
+                  <ValidationProvider class="group" name="Contact Email Address" :rules="{'required' : step2.contactSame == false && (step2.email_address == false && add.email2 == null)}" v-slot="{ errors }">
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
                     <label for="" class="d-block mb-2 dashboard-label">Email address <span
                         class="text-danger require"></span></label>
@@ -247,6 +247,7 @@ export default {
                   this.step2.email_address_s.push(newEmail);
                   this.add.email2 = null;
                   this.step2.email_address = true;
+                  this.$refs.addEmail2form.reset();
                 }
             }
         });
@@ -260,6 +261,7 @@ export default {
                   this.step2.contact_number_s.push(newContact);
                   this.add.contact2 = null;
                   this.step2.contact_number = true;
+                  this.$refs.addContact2form.reset();
                 }
             }
         });

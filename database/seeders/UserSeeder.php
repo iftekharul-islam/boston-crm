@@ -18,7 +18,7 @@ class UserSeeder extends Seeder {
             [
                 'name'     => 'Super Admin',
                 'email'    => 'superadmin@boston.com',
-                'password' => Hash::make( 'SuperAdmin_%-boston' ),
+                'password' => Hash::make( '123456' ),
             ],
         ];
         foreach ( $users as $user ) {

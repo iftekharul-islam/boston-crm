@@ -47,8 +47,6 @@ class OrderRepository extends BaseRepository
         if ($role) {
             $this->users = $this->getCompanyUsers($role);
         }
-
-
         return $this->users;
     }
 
