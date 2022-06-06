@@ -12,7 +12,7 @@
           <span>:</span>
           <p class="right-side mb-0">{{ amc_name }}</p>
         </div>
-        <a :href="amc_file" target="_blank" class="underline primary-text text-600">AMC requirements</a>
+        <a :href="amc_file !== '' || amc_file !== null ? amc_file : '#'" target="_blank" class="underline primary-text text-600">AMC requirements</a>
       </div>
       <div class="list">
         <div class="list__group mb-3">
