@@ -234,11 +234,18 @@
         }
     }
     .box-body {
-        margin-top: 20px;
-        padding: 0 32px 32px 32px;
+        // margin-top: 20px;
+        padding: 20px 32px 32px 32px;
+        border-radius: 0px 0px 8px 8px;
+        height: 100%;
     }
 }
-
+.activity-order-details-box {
+    .box-body {
+        max-height: 500px;
+        overflow: auto;
+    }
+}
 .order-details-top {
     // border-bottom: 1px solid $platinum;
     // padding-bottom: 20px;

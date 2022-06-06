@@ -1,9 +1,9 @@
 <template>
-  <div class="order-details-box bg-white">
+  <div class="order-details-box ">
     <div class="box-header">
       <p class="fw-bold text-light-black fs-20 mb-0">Notes</p>
     </div>
-    <div class="box-body">
+    <div class="box-body bg-white">
       <div class="note-chat">
 <!--        item chat-->
         <div class="chat-item">
