@@ -1,9 +1,9 @@
 <template>
-  <div class="order-details-box bg-white">
+  <div class="order-details-box activity-order-details-box">
     <div class="box-header">
       <p class="fw-bold text-light-black fs-20 mb-0">Activity log</p>
     </div>
-    <div class="box-body">
+    <div class="box-body bg-white">
       <template v-for="activityLog, ai in activityLogs">
         <div class="fs-14 logItem" :key="ai">
           <div class="logby">
@@ -65,7 +65,7 @@
     position: absolute;
     width: 1px;
     height: 100%;
-    top: 0;
+    top: 50%;
     left: 0;
     background: #999;
   }
@@ -78,6 +78,9 @@
     top: 50%;
     background: #5de1b5;
     border-radius: 0.5rem;
+  }
+  .logItem:last-of-type::before {
+    height: 0;
   }
 
 </style>
