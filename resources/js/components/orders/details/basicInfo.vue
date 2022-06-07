@@ -89,6 +89,8 @@ export default {
         due_date: new Date(),
         received_date: new Date(),
       },
+      editData: {},
+      backupData: {},
       message: '',
       address: null,
       map: null,
@@ -108,6 +110,8 @@ export default {
       this.orderData.client_order_no = this.order.client_order_no
       this.orderData.due_date = this.order.due_date
       this.orderData.received_date = this.order.received_date
+      this.editData = Object.assign({}, this.orderData);
+      this.backupData = Object.assign({}, this.orderData);
     },
     updateBasicInfoData(){
       let that = this

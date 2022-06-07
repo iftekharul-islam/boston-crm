@@ -45,5 +45,8 @@ Vue.mixin({
                 location: addressData
             }
         },
+        isNumber(val) {
+            return !isNaN(val);
+        },
     }
 });

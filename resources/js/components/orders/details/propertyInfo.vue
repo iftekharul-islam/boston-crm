@@ -41,6 +41,11 @@
         <span>:</span>
         <p class="right-side mb-0">{{ edited.zip }}</p>
       </div>
+      <div class="list__group">
+        <p class="mb-0 left-side">Unit No</p>
+        <span>:</span>
+        <p class="right-side mb-0">{{ edited.unit_no }}</p>
+      </div>
     </div>
     <b-modal id="property-info" size="lg" title="Edit Basic Information">
       <div class="modal-body">
@@ -71,7 +76,7 @@
           </div>
           <div class="col-md-6">
             <div class="group">
-              <label for="" class="d-block mb-2 dashboard-label">Unit # <span class="require"></span></label>
+              <label for="" class="d-block mb-2 dashboard-label">Unit # <span v-if="condoType" class="require"></span></label>
               <input type="text" v-model="info.unit_no" class="dashboard-input w-100">
             </div>
             <div class="group">
@@ -104,6 +109,7 @@
 export default {
   props:{
     orderId: String,
+    appraisal_types: [],
     order: []
   },
   data() {
@@ -119,6 +125,7 @@ export default {
         longitude: '',
         latitude: ''
       },
+      condoType: false,
       edited: {},
       message: '',
       mapData: {
@@ -158,9 +165,22 @@ export default {
         this.mapData.center.lat = parseFloat(this.info.latitude);
         this.mapData.center.lng = parseFloat(this.info.longitude);
         this.edited = Object.assign({}, this.info);
+
+        let provider_service = JSON.parse(this.order.provider_service.appraiser_type_fee);
+        for(let i in provider_service) {
+            let self = provider_service[i];
+            let findIndex = this.appraisal_types.find(ele => ele.id == self.typeId);
+            if (findIndex && findIndex.condo_type == 1) {
+              this.condoType = true;
+              break;
+            }
+        }
     },
     updatePropertyInfo(){
       let that = this
+      if (this.condoType == true && (this.info.unit_no == null || this.info.unit_no == "") ) {
+          return false;
+      }
       axios.post('update-property-info/'+ this.orderId, this.info)
           .then(res => {
             console.log(res);

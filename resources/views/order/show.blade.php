@@ -21,7 +21,7 @@
                 {{-- Basic Information --}}
                 <basic-info :order="{{ $order }}"  :order-id="'{{ $order_id }}'"></basic-info>
                 {{-- Property Info --}}
-                <property-info :order="{{ $order }}"  :order-id="'{{ $order_id }}'"></property-info>
+                <property-info :appraisal_types="{{ $appraisal_types }}" :order="{{ $order }}"  :order-id="'{{ $order_id }}'"></property-info>
                 {{-- Borrower --}}
                 <borrower :order="{{ $order }}"  :order-id="'{{ $order_id }}'"></borrower>
                 {{-- Contact --}}

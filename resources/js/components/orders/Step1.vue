@@ -273,8 +273,7 @@
                   </div>
                 </ValidationProvider>
 
-                <ValidationProvider class="group" name="Unit No" :rules="{'required' : condoType == true}"
-                                    v-slot="{ errors }">
+                <ValidationProvider class="group" name="Unit No" :rules="{'required' : condoType == true}" v-slot="{ errors }">
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
                     <label for="" class="d-block mb-2 dashboard-label">Unit No <span class="text-danger require"></span>
                     </label>
@@ -376,6 +375,8 @@ export default {
         status: false,
         message: "Received Date Must Be Smaller Than Due Date"
       },
+      invalidPhone1: null,
+      invalidPhone2: null,
       submitAction: false,
       stepActive: false,
       proviedServicePass: false,
@@ -763,6 +764,7 @@ export default {
     findTechnologyFee() {
 
     },
+
     checkDateInput(value, type) {
       this.dateIssue.status = false;
       var date = new Date(value);
