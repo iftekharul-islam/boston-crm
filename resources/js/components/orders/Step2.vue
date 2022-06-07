@@ -182,11 +182,19 @@
       </div>
     </div>
     <div class="add-client__bottom d-flex justify-content-end  p-3">
-      <a href="/orders/create" class="button button-discard me-3 d-flex align-items-center text-light-black">Discard <span class="icon-close-circle ms-3"><span class="path1"></span><span class="path2"></span></span></a>
+      <a @click.prevent="discardOrder" href="/orders/create" class="button button-discard me-3 d-flex align-items-center text-light-black">Discard <span class="icon-close-circle ms-3"><span class="path1"></span><span class="path2"></span></span></a>
       <button class="button button-primary" v-if="type == 2" @click="addNewOrder(true)"> Update order </button>
       <button class="button button-primary" v-else @click="addNewOrder"> Add order </button>
     </div>
     </ValidationObserver>
+    <confirm-dialog ref="popup">
+        <h4 style="margin-top: 0">{{ dialogue.title }}</h4>
+        <p>{{ dialogue.message }}</p>
+        <div class="btns mt-3">
+            <button class="cancel-btn" @click="_cancel">{{ dialogue.cancelButton }}</button>
+            <span class="ok-btn" @click="_confirm">{{ dialogue.okButton }}</span>
+        </div>
+    </confirm-dialog>
   </div>
 </template>
 
@@ -195,6 +203,14 @@ export default {
   name: "Step2",
   props: ['type', 'order'],
   data: () => ({
+      dialogue: {
+        title: undefined,
+        message: undefined,
+        okButton: undefined,
+        cancelButton: 'Go Back',
+        resolvePromise: undefined,
+        rejectPromise: undefined,
+      },
       step2: {
         borrower_name: null,
         co_borrower_name: null,
@@ -362,7 +378,22 @@ export default {
         email_address_s: contactInfoEmail,
       };
       this.step2 = step2;
-    }
+    },
+    discardOrder() {
+        this.dialogue.title = "Discard Order.";
+        this.dialogue.message = "Are you want to discard this order now.";
+        this.dialogue.okButton = "Yes";
+        this.dialogue.cancelButton = "No";
+        this.$refs.popup.open()
+    },
+    _confirm() {
+        this.$refs.popup.close();
+        window.location.href = "/orders/create";
+    },
+
+    _cancel() {
+        this.$refs.popup.close();
+    },
   },
   watch: {
     step2: {

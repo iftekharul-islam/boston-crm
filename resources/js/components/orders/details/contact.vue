@@ -69,7 +69,7 @@
             </ValidationObserver>
             <div class="divider"></div>
             <ValidationObserver ref="addEmailForm">
-                <ValidationProvider name="Contact Email Address" :rules="{'required' : add.email == null && email_address == false}" v-slot="{ errors }">
+                <ValidationProvider name="Contact Email Address" :rules="{'required' : email_address == false || (email_address == true && add.email == null)}" v-slot="{ errors }">
                 <div class="group" :class="{ 'invalid-form' : errors[0] }">
                   <label for="" class="d-block mb-2 dashboard-label">Email address <span
                       class="text-danger require"></span></label>
@@ -148,21 +148,29 @@
         this.email_address_s = contactInfoEmail;
       },
       updateContactInfo(){
-          this.$refs.orderForm.validate().then((status) => {
-              if (status) {
-                  this.$boston.post('order/update/contactInfo', {
-                    contact_info: this.contact_info,
-                    contact_number: this.contact_number,
-                    email_address: this.email_address,
-                    contact_number_s: this.contact_number_s,
-                    email_address_s: this.email_address_s,
-                    order: this.order
-                  }).then(res => {
-                      this.submittedMessage = res.messages;
-                      this.$bvModal.hide('contact-info');
-                      this.hideSubmittedMessage();
-                  });
-              }
+          if (this.email_address == true && this.contact_number == true) {
+              this.submitData();
+          } else {
+              this.$refs.orderForm.validate().then((status) => {
+                  if (status) {
+                      this.submitData();
+                  }
+              });
+          }
+      },
+      submitData() {
+          this.$refs.orderForm.reset();
+          this.$boston.post('order/update/contactInfo', {
+            contact_info: this.contact_info,
+            contact_number: this.contact_number,
+            email_address: this.email_address,
+            contact_number_s: this.contact_number_s,
+            email_address_s: this.email_address_s,
+            order: this.order
+          }).then(res => {
+              this.submittedMessage = res.messages;
+              this.$bvModal.hide('contact-info');
+              this.hideSubmittedMessage();
           });
       },
       addEmail() {
@@ -173,7 +181,8 @@
                   if (!findOld && newEmail != null) {
                     this.email_address_s.push(newEmail);
                     this.add.email = null;
-                    this.contact_email = true;
+                    this.email_address = true;
+                    this.$refs.addEmailForm.reset();
                   }
               }
           });
@@ -187,6 +196,7 @@
                     this.contact_number_s.push(newContact);
                     this.add.contact = null;
                     this.contact_number = true;
+                    this.$refs.addContactForm.reset();
                   }
               }
           });
@@ -195,7 +205,7 @@
         if (type == 'email') {
             this.email_address_s.splice(index, 1);
             if (this.email_address_s.length == 0) {
-              this.contact_email = false;
+              this.email_address = false;
             }
         } else if (type == 'contact') {
             this.contact_number_s.splice(index, 1);

@@ -1,6 +1,12 @@
 import Vue from "vue";
 
+const ConfirmDialogue = () =>
+    import ( /* webpackChunkName: "ConfirmDialogue" */ "../src/ConfirmDialogue");
+
 Vue.mixin({
+    components: {
+        "confirm-dialog": ConfirmDialogue
+    },
     methods: {
         formateDate(date) {
             if (date == null) {

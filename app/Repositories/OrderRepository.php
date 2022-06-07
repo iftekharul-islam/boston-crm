@@ -151,7 +151,7 @@ class OrderRepository extends BaseRepository
 
     public function updatePropertyInfo($order_id,$data): bool
     {
-        return PropertyInfo::query()->where('id', $order_id)->update([
+        return PropertyInfo::query()->where('order_id', $order_id)->update([
             "search_address" => $data['search_address'],
             "street_name" => $data['street_name'],
             "city_name" => $data['city_name'],
