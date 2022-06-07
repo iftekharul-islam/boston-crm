@@ -32,13 +32,28 @@ class UniquePhone implements Rule
     public function passes($attribute, $value)
     {
         $passed = true;
+        if($this->array_has_duplicates($value)){
+            return false;
+        }
         foreach ($this->client_phones as $phone){
-            $decoded_phone = !is_array($phone) ? [$phone] : json_decode($phone,true);
-            if(array_intersect($value,$decoded_phone)){
-                $passed = false;
+            $decoded_phone = !is_array($phone) ? [$phone] : json_decode($phone, true);
+            foreach ($decoded_phone as $phoneStr){
+                $d_phone = json_decode($phoneStr);
+                if(array_intersect($d_phone, $value)) {
+                    $passed = false;
+                }
             }
         }
         return $passed;
+    }
+
+    /**
+     * @param $array
+     * @return bool
+     */
+    public function array_has_duplicates($array): bool
+    {
+        return count($array) !== count(array_unique($array));
     }
 
     /**
@@ -48,6 +63,6 @@ class UniquePhone implements Rule
      */
     public function message()
     {
-        return 'The phone number has already taken.';
+        return 'The phone number has already taken/duplicate phone.';
     }
 }
