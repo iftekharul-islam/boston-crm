@@ -165,7 +165,7 @@
 
 @section('js')
     <script>
-        const MAX_FILE_SIZE = 1024 * 1024; // 1MB
+        const MAX_FILE_SIZE = 3 * 1024 * 1024; // 1MB
         $(document).ready(function () {
             if ($(".success-msg")){
                 setTimeout(function(){

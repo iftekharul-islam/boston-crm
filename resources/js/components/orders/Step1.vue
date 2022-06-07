@@ -199,7 +199,7 @@
                     class="text-danger require"></span></label>
                 <div class="position-relative">
                   <select
-                      class="dashboard-input w-100"
+                      class="dashboard-input w-100 select2"
                       v-model="step1.amcClient">
                       <option value="">Choose Amc Client</option>
                       <option :value="item.id" :key="ik" v-for="item, ik in amcClients">{{ item.name }}</option>
@@ -444,6 +444,7 @@ export default {
   },
   mounted() {
     this.geolocate();
+    $('select').select2();
   },
   methods: {
     stepChangeActive() {
