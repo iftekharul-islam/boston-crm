@@ -146,8 +146,9 @@ class OrderController extends BaseController
         $order_file_types = $this->repository->getOrderFileTypes($id);
         $order_due_date = $this->repository->getOrderDueDate($id);
         $diff_in_days = Carbon::parse($order_due_date->due_date)->diffInDays();
+        $diff_in_hours = Carbon::parse($order_due_date->due_date)->diffInHours();
 
-        return view('order.show', compact('order_file_types','order_files', 'order', 'diff_in_days','appraisers','appraisal_types','loan_types','all_amc','all_lender'));
+        return view('order.show', compact('order_file_types','order_files', 'order', 'diff_in_days', 'diff_in_hours','appraisers','appraisal_types','loan_types','all_amc','all_lender'));
     }
 
     /**
@@ -178,6 +179,7 @@ class OrderController extends BaseController
                 'borrowerInfo',
                 'contactInfo'
             )->where('id', $id)->first();
+        $order->file = $this->repository->getOrderFile($id);
         return view('order.edit',compact('order', 'appraisal_users', 'amc_clients', 'lender_clients', 'appraisal_types', 'loan_types', 'client_users', 'company', 'userID'));
     }
 

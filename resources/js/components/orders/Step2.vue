@@ -169,7 +169,9 @@
         <h4 class="box-header mb-3">Upload order form</h4>
         <div class="position-relative file-upload d-flex align-items-center">
           <input type="file" @change="addFile">
-          <label for="">Upload <img src="/img/upload.png" alt="boston profile"></label>
+          <label for="">Upload <img src="/img/upload.png" alt="boston order file"></label>
+<!--          {{ step2 }}-->
+
           <span class="text-success file-name">{{ step2.fileName }}</span>
         </div>
       </div>
@@ -247,12 +249,13 @@ export default {
     addFile(event){
         let that = this
         let fileData = event.target.files[0]
-        var reader = new FileReader();
+        let reader = new FileReader();
         reader.readAsDataURL(fileData);
         reader.onload = function () {
             that.step2.file = reader.result
         };
       this.step2.fileName = fileData.name
+      console.log(this.step2.fileName)
     },
     addEmail2() {
         this.$refs.addEmail2form.validate().then((status) => {
@@ -376,6 +379,7 @@ export default {
         contact_number_s: contactInfoPhone,
         rush: this.order.rush,
         email_address_s: contactInfoEmail,
+        fileName: this.order.file.file_name,
       };
       this.step2 = step2;
     },
