@@ -61,6 +61,11 @@ class OrderApiController extends Controller
                 $orderId = $get->order['id'];
             }
 
+            $oldOrder = Order::where('client_order_no', $clientOrderNo)->first();
+            if ($oldOrder) {
+                return response()->json(['error' => true, 'submit' => true, 'messages' => 'Client order number already exists. Please change client order number on step 1']);
+            }
+
             if ($orderId == null) {
                 $order = new Order;
                 $order->created_at = Carbon::now();

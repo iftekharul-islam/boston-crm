@@ -97,6 +97,7 @@
         servicesFee: null,
         note: null,
         message: '',
+        unitNo: null,
         add: {
           serviceType: null,
           serviceFee: null,

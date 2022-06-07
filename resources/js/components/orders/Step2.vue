@@ -29,8 +29,9 @@
                 <ValidationProvider class="group" name="Contact No" :rules="{ 'required' : add.contact == null && step2.borrower_contact == false }" v-slot="{ errors }">
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
                     <label for="" class="d-block mb-2 dashboard-label">Contact no <span class="text-danger require"></span></label>
-                    <input v-model="add.contact" type="text" class="dashboard-input w-100">
+                    <input v-model="add.contact" @input="contactNumberChecking($event, 1)" type="text" class="dashboard-input w-100">
                     <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                    <span v-if="invalidPhone1 == false" class="text-danger error-message">Invalid Phone Number</span>
                     <!-- new item -->
                     <div class="new-array-items">
                       <div class="items" v-for="item, ki in step2.borrower_contact_s" :key="ki">
@@ -107,11 +108,12 @@
             </div>
             <div class="middle max-w-424 w-100 me-3">
               <ValidationObserver ref="addContact2form">
-                  <ValidationProvider class="group" name="Contact Number" :rules="{'required' : step2.contactSame == false && (step2.contact_number == false && add.contact2 == null) }" v-slot="{ errors }">
+                  <ValidationProvider class="group" name="Contact Number" :rules="{'required' : step2.contactSame == false && (step2.contact_number == false && add.contact2 == null ) }" v-slot="{ errors }">
                     <div class="group" :class="{ 'invalid-form' : errors[0] }">
                       <label for="" class="d-block mb-2 dashboard-label">Contact no <span class="text-danger require"></span></label>
-                      <input :disabled="step2.contactSame == true" v-model="add.contact2" type="text" class="dashboard-input w-100">
+                      <input :disabled="step2.contactSame == true" @input="contactNumberChecking($event, 2)" v-model="add.contact2" type="text" class="dashboard-input w-100">
                       <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                      <span v-if="invalidPhone2 == false" class="text-danger error-message">Invalid Phone Number</span>
                       
                       <div class="new-array-items">
                         <div class="items" v-for="item, ki in step2.contact_number_s" :key="ki">
@@ -205,6 +207,8 @@ export default {
   name: "Step2",
   props: ['type', 'order'],
   data: () => ({
+      invalidPhone1: true,
+      invalidPhone2: true,
       dialogue: {
         title: undefined,
         message: undefined,
@@ -275,6 +279,9 @@ export default {
         this.$refs.addContact2form.validate().then((status) => {
             if (status) {
                 let newContact = this.add.contact2;
+                if (!this.isNumber(newContact)) {
+                    return;
+                }
                 let findOld = this.step2.contact_number_s.find((ele) =>  ele == newContact);
                 if (!findOld && newContact != null) {
                   this.step2.contact_number_s.push(newContact);
@@ -302,6 +309,9 @@ export default {
         this.$refs.addContactForm.validate().then((status) => {
             if (status) {
                 let newContact = this.add.contact;
+                if (!this.isNumber(newContact)) {
+                    return;
+                }
                 let findOld = this.step2.borrower_contact_s.find((ele) =>  ele == newContact);
                 if (!findOld && newContact != null) {
                   this.step2.borrower_contact_s.push(newContact);
@@ -397,6 +407,25 @@ export default {
 
     _cancel() {
         this.$refs.popup.close();
+    },
+
+    contactNumberChecking(e, type){
+        let phoneNo = e.target.value;
+        if ( !this.isNumber(phoneNo) ) {
+            if (type == 1) {
+                this.invalidPhone1 = false;
+            } 
+            if(type == 2) {
+                this.invalidPhone2 = false;
+            }
+        } else {
+            if (type == 1) {
+                this.invalidPhone1 = true;
+            } 
+            if(type == 2) {
+                this.invalidPhone2 = true;
+            }
+        }
     },
   },
   watch: {

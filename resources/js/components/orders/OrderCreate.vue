@@ -10,12 +10,15 @@
             <button @click="gotoStep(2)" class="step-btn" :class="{'active': step === 2}">Step 2</button>
           </div>
         </div>
-        <div class="alert alert-danger alertBlocks" v-if="submitResult.error">
+        <div class="alert alert-danger alertBlocks" v-if="submitResult.error && submitResult.submit == false">
             <template v-for="eItem in submitResult.message">
-              <span v-for="erItem, ei in eItem" :key="ei">
+              <span v-for="erItem, ei in eItem" :key="ei + '0-0-1'">
                 * {{ erItem }}
               </span>
             </template>
+        </div>
+        <div class="alert alert-danger" v-if="submitResult.error && submitResult.submit">
+            {{ submitResult.message }}
         </div>
         <div class="alert alert-success" v-if="submitResult.submitStatus">
             {{ submitResult.message }}
@@ -66,7 +69,8 @@ export default {
       submitResult: {
           error: false,
           submitStatus: false,
-          message: []
+          message: [],
+          submit: false,
       }
     }
   },
@@ -87,18 +91,23 @@ export default {
           this.$boston.apiPost('store/order', {'step1' : this.step1Data, order: [], type: false, 'step2' : this.step2Data, 'company': this.company, 'providedData' : this.providedData, 'user_id': this.user_id }).then(res => {
               this.submitResult.error = res.error;
               this.submitResult.submitStatus = false;
-              this.submitResult.message = res.messages;
+              this.submitResult.submit = false;
+
+              if (res.submit && res.submit == true) {
+                this.submitResult.message = res.messages;
+                this.submitResult.submit = true;
+              } else {
+                this.submitResult.message = res.messages;
+              }
 
               if (res.error == false) {
                 this.submitResult.message = res.message;
                 this.submitResult.submitStatus = true;
-                this.$root.$emit('orderSubmitConfirm', true);
-                this.stepChangeActive = false;
-                this.step = 1;
                 setTimeout(() => {
                   window.location.href = "/orders/"+res.orderId + "?r=create"
                 },500);
               }
+
               $("html, body").animate({ scrollTop: 0 }, "slow");
           });
       });
