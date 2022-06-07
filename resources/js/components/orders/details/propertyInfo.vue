@@ -2,44 +2,44 @@
   <div class="order-details-box bg-white">
     <div class="box-header">
       <p class="fw-bold text-light-black fs-20 mb-0">Property Information</p>
-      <a href="#" v-b-modal.property-info class="d-inline-flex edit align-items-center fw-bold">Edit <span
+      <a href="#" @click="openModal" class="d-inline-flex edit align-items-center fw-bold">Edit <span
           class="icon-edit ms-3"><span class="path1"></span><span class="path2"></span></span></a>
     </div>
     <div class="box-body">
       <div class="list__group">
         <p class="mb-0 left-side">Property address </p>
         <span>:</span>
-        <p class="right-side mb-0 primary-text fw-bold fs-20">{{ info.search_address }}</p>
+        <p class="right-side mb-0 primary-text fw-bold fs-20">{{ edited.search_address }}</p>
       </div>
       <div class="list__group">
         <p class="mb-0 left-side">State</p>
         <span>:</span>
-        <p class="right-side mb-0">{{ info.state_name }}</p>
+        <p class="right-side mb-0">{{ edited.state_name }}</p>
       </div>
       <div class="list__group">
         <p class="mb-0 left-side">City</p>
         <span>:</span>
-        <p class="right-side mb-0">{{ info.city_name }}</p>
+        <p class="right-side mb-0">{{ edited.city_name }}</p>
       </div>
       <div class="list__group">
         <p class="mb-0 left-side">Street</p>
         <span>:</span>
-        <p class="right-side mb-0">{{ info.street_name }}</p>
+        <p class="right-side mb-0">{{ edited.street_name }}</p>
       </div>
       <div class="list__group">
         <p class="mb-0 left-side">Latitude</p>
         <span>:</span>
-        <p class="right-side mb-0">{{ info.latitude }}</p>
+        <p class="right-side mb-0">{{ edited.latitude }}</p>
       </div>
       <div class="list__group">
         <p class="mb-0 left-side">Longitude</p>
         <span>:</span>
-        <p class="right-side mb-0">{{ info.longitude }}</p>
+        <p class="right-side mb-0">{{ edited.longitude }}</p>
       </div>
       <div class="list__group">
         <p class="mb-0 left-side">Zip</p>
         <span>:</span>
-        <p class="right-side mb-0">{{ info.zip }}</p>
+        <p class="right-side mb-0">{{ edited.zip }}</p>
       </div>
     </div>
     <b-modal id="property-info" size="lg" title="Edit Basic Information">
@@ -94,7 +94,7 @@
         </div>
       </div>
       <div slot="modal-footer">
-        <b-button variant="secondary" @click="$bvModal.hide('property-info')">Close</b-button>
+        <b-button variant="secondary" @click="closeModal">Close</b-button>
         <b-button variant="primary" @click="updatePropertyInfo">Save</b-button>
       </div>
     </b-modal>
@@ -119,11 +119,17 @@ export default {
         longitude: '',
         latitude: ''
       },
+      edited: {},
       message: '',
       mapData: {
         map: null,
         center: {lat: null, lng: null},
       }
+    }
+  },
+  computed: {
+    oldData() {
+        return this.edited;
     }
   },
   created() {
@@ -133,6 +139,12 @@ export default {
 
   },
   methods: {
+    closeModal() {
+        this.$bvModal.hide('property-info');
+    },
+    openModal() {
+        this.$bvModal.show('property-info');
+    },
     getPropertyInfo(){
         this.info.search_address = this.order.property_info.search_address
         this.info.street_name = this.order.property_info.street_name
@@ -145,15 +157,17 @@ export default {
         this.info.longitude = this.order.property_info.longitude
         this.mapData.center.lat = parseFloat(this.info.latitude);
         this.mapData.center.lng = parseFloat(this.info.longitude);
+        this.edited = Object.assign({}, this.info);
     },
     updatePropertyInfo(){
       let that = this
-      axios.post('update-property-info/'+ this.orderId,this.info)
+      axios.post('update-property-info/'+ this.orderId, this.info)
           .then(res => {
+            console.log(res);
             that.message = res.data.message
+            this.edited = Object.assign({}, this.info);
             setTimeout(function(){
               that.$bvModal.hide('property-info')
-              that.message = ''
             }, 2000);
           }).catch(err => {
             console.log(err)

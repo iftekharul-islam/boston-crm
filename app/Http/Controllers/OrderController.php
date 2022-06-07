@@ -233,7 +233,7 @@ class OrderController extends BaseController
      */
     public function updatePropertyInfo(Request $request,$order_id): JsonResponse
     {
-        $this->repository->updatePropertyInfo($order_id, $request->all());
+        $info = $this->repository->updatePropertyInfo($order_id, $request->all());
 
         $data = [
             "activity_text" => "Order properties information has been updated",
