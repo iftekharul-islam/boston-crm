@@ -202,6 +202,15 @@ class OrderRepository extends BaseRepository
         return '';
     }
 
+    public function getOrderFile($order_id){
+        $files = $this->model->find($order_id)->getMedia('orders')->toArray();
+        foreach ($files as $file){
+            if($file['custom_properties']['type'] == 'Order'){
+                return $file;
+            }
+        }
+    }
+
     public function getOrderFiles($order_id)
     {
         return $this->model->find($order_id)->getMedia('orders')->groupBy('custom_properties')->toArray();

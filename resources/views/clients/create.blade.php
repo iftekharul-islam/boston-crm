@@ -187,6 +187,10 @@
             $('#phone-'+button_id+'').remove();
         });
         $(function () {
+            $("#client-create-form input[name='email[]']").each(function() {
+                console.log(this)
+                $(this).rules("add", { unique: true });
+            });
             let clientType = '';
             $('#client-type').on('change', function (e) {
                 e.preventDefault();
@@ -346,6 +350,7 @@
                     }
                 },
                 submitHandler: function (form) {
+                    console.log(form)
                     if(form.valid()){
                         form.submit();
                     }else{
