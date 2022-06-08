@@ -17,8 +17,8 @@ class UniquePhone implements Rule
     public function __construct($client_id)
     {
         $this->client_id = $client_id;
-        ($this->client_id > 0) ? $this->client_phones = json_decode(Client::where('id','!=', $this->client_id)->pluck('phone'),true)
-            : $this->client_phones = json_decode(Client::pluck('phone'),true);
+        ($this->client_id > 0) ? $this->client_phones = json_decode(Client::whereNotNull('phone')->where('id','!=', $this->client_id)->pluck('phone'),true)
+            : $this->client_phones = json_decode(Client::whereNotNull('phone')->pluck('phone'),true);
 
     }
 

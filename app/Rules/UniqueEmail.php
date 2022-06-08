@@ -18,7 +18,7 @@ class UniqueEmail implements Rule
     public function __construct($client_id)
     {
         $this->client_id = $client_id;
-        ($this->client_id > 0) ? $this->client_emails = json_decode(Client::where('id','!=', $this->client_id)->pluck('email'),true)
+        ($this->client_id > 0) ? $this->client_emails = json_decode(Client::whereNotNull('email')->where('id','!=', $this->client_id)->pluck('email'),true)
             : $this->client_emails = json_decode(Client::whereNotNull('email')->pluck('email'),true);
 
     }
