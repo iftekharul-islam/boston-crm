@@ -178,7 +178,7 @@
             $('.image-error').text("");
             let fileSize = this.files[0].size;
             if (fileSize > MAX_FILE_SIZE) {
-                $('.image-error').text("File must not exceed 1 MB!");
+                $('.image-error').text("File must not exceed 3 MB!");
                 return;
             }
             readURL(this);
