@@ -37,7 +37,7 @@
                         <label for="email" class="d-block text-light-black mb-2">{{ __('Email Address') }}</label>
 
                         <div class="">
-                            <input id="email" type="text" class="login-input form-control @error('email') is-invalid @enderror" name="email" value="{{ $email ?? old('email') }}" required autocomplete="email" autofocus readonly>
+                            <input id="email" type="text" class="login-input w-100 @error('email') is-invalid @enderror" name="email" value="{{ $email ?? old('email') }}" required autocomplete="email" autofocus readonly>
 
                             @error('email')
                                 <span class="invalid-feedback" role="alert">
@@ -51,7 +51,7 @@
                         <label for="password" class="d-block text-light-black mb-2">{{ __('Password') }}</label>
 
                         <div class="">
-                            <input id="password" type="password" class="login-input form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
+                            <input id="password" type="password" class="login-input w-100 @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
 
                             @error('password')
                                 <span class="invalid-feedback" role="alert">
@@ -65,7 +65,7 @@
                         <label for="password-confirm" class="d-block text-light-black mb-2">{{ __('Confirm Password') }}</label>
 
                         <div class="">
-                            <input id="password-confirm" type="password" class="login-input form-control" name="password_confirmation" required autocomplete="new-password">
+                            <input id="password-confirm" type="password" class="login-input w-100" name="password_confirmation" required autocomplete="new-password">
                         </div>
                     </div>
 

@@ -12,7 +12,7 @@
                     <div class="group mgb-40">
                         <label for="name" class="d-block text-light-black mb-2">{{ __('Name') }}</label>
                         <div class="">
-                            <input id="name" type="text" class="login-input form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}"  autocomplete="name" autofocus>
+                            <input id="name" type="text" class="login-input w-100 @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}"  autocomplete="name" autofocus>
                             @error('name')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -24,7 +24,7 @@
                     <div class="group mgb-40">
                         <label for="email" class="d-block text-light-black mb-2">{{ __('Email address') }}</label>
                         <div class="">
-                            <input id="email" type="text" class="login-input form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" autocomplete="email">
+                            <input id="email" type="text" class="login-input w-100 @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" autocomplete="email">
                             @error('email')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -36,7 +36,7 @@
                     <div class="group mgb-40">
                         <label for="companyName" class="d-block text-light-black mb-2">{{ __('Company Name') }}</label>
                         <div class="">
-                            <input id="companyName" type="text" class="login-input form-control @error('company_name') is-invalid @enderror" name="company_name" autocomplete="company-name">           
+                            <input id="companyName" type="text" class="login-input w-100 @error('company_name') is-invalid @enderror" name="company_name" autocomplete="company-name">           
                             @error('company_name')
                             <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -50,7 +50,7 @@
                         <div class="">
                             <div class="position-relative">
                                 <input id="password" type="password"
-                                       class="login-input form-control @error('password') is-invalid @enderror"
+                                       class="login-input w-100 @error('password') is-invalid @enderror"
                                        name="password" autocomplete="password" autofocus>
                                 {{-- eye icon --}}
                                 <span class="icon-eye icons show-password"><span class="path1"></span><span
