@@ -10,17 +10,17 @@
         <div class="list__group">
           <p class="mb-0 left-side">Order no</p>
           <span>:</span>
-          <p class="right-side mb-0">{{ orderData.client_order_no }}</p>
+          <p class="right-side mb-0">{{ edited.client_order_no }}</p>
         </div>
         <div class="list__group">
           <p class="mb-0 left-side">Due date</p>
           <span>:</span>
-          <p class="right-side mb-0">{{ orderData.due_date }}</p>
+          <p class="right-side mb-0">{{ edited.due_date }}</p>
         </div>
         <div class="list__group">
           <p class="mb-0 left-side">Order receive date</p>
           <span>:</span>
-          <p class="right-side mb-0">{{ orderData.received_date }}</p>
+          <p class="right-side mb-0">{{ edited.received_date }}</p>
         </div>
       </div>
       <b-modal id="basic-info" size="md" title="Edit Basic Information">
@@ -32,6 +32,8 @@
                 <ValidationProvider class="d-block mb-2 dashboard-label" name="Due date" rules="required"
                                     v-slot="{ errors }">
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
+                    <label for="" class="d-block mb-2 dashboard-label">Overdue date <span
+                        class="text-danger require"></span></label>
                     <v-date-picker
                         v-model="orderData.due_date"
                         :available-dates='{ start: new Date(), end: null }'>
@@ -48,9 +50,11 @@
                 </ValidationProvider>
               </div>
               <div class="group">
-                <ValidationProvider class="d-block mb-2 dashboard-label" name="Order no" rules="required"
+                <ValidationProvider class="d-block mb-2 dashboard-label" name="Client order no" rules="required"
                                     v-slot="{ errors }">
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
+                    <label for="" class="d-block mb-2 dashboard-label">CLient order no <span
+                        class="text-danger require"></span></label>
                     <input type="text" v-model="orderData.client_order_no" class="dashboard-input w-100">
                     <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                   </div>
@@ -60,6 +64,8 @@
                 <ValidationProvider class="d-block mb-2 dashboard-label" name="Order receive date" rules="required"
                                     v-slot="{ errors }">
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
+                    <label for="" class="d-block mb-2 dashboard-label">Received date <span
+                        class="text-danger require"></span></label>
                     <v-date-picker v-model="orderData.received_date">
                       <template class="position-relative" v-slot="{ inputValue, inputEvents }">
                         <input
@@ -103,8 +109,7 @@ export default {
         due_date: new Date(),
         received_date: new Date(),
       },
-      editData: {},
-      backupData: {},
+      edited: {},
       message: '',
       address: null,
       map: null,
@@ -116,16 +121,12 @@ export default {
   created() {
     this.getBasicInfo();
   },
-  mounted() {
-
-  },
   methods: {
     getBasicInfo() {
       this.orderData.client_order_no = this.order.client_order_no
       this.orderData.due_date = this.order.due_date
       this.orderData.received_date = this.order.received_date
-      this.editData = Object.assign({}, this.orderData);
-      this.backupData = Object.assign({}, this.orderData);
+      this.edited = Object.assign({}, this.orderData);
     },
     updateBasicInfoData() {
       this.$refs.basicInfo.validate().then((status) => {
@@ -134,6 +135,7 @@ export default {
           axios.post('update-basic-info/' + this.orderId, this.orderData)
               .then(res => {
                 this.message = res.data.message
+                this.edited = Object.assign({}, this.orderData);
                 setTimeout(function () {
                   that.$bvModal.hide('basic-info')
                   that.message = ''
