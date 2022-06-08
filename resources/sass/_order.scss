@@ -234,8 +234,17 @@
         }
     }
     .box-body {
-        margin-top: 20px;
-        padding: 0 32px 32px 32px;
+        // margin-top: 20px;
+        padding: 20px 32px 32px 32px;
+        border-radius: 0px 0px 8px 8px;
+        height: 100%;
+    }
+}
+
+.activity-order-details-box {
+    .box-body {
+        max-height: 500px;
+        overflow: auto;
     }
 }
 
@@ -480,7 +489,8 @@
         }
     }
 }
- .file-upload {
+
+.file-upload {
     .file-name {
         max-width: 200px;
         white-space: nowrap;
@@ -748,7 +758,6 @@ select {
         select {
             font-weight: normal;
             border: 1px solid $gray;
-
         }
         .bottom-arrow-icon {
             color: $gray;
@@ -756,7 +765,6 @@ select {
         textarea {
             border: 1px solid $gray;
         }
-        
     }
     .review-check {
         label {
@@ -769,7 +777,7 @@ select {
     .submission-check {
         input {
             &:checked {
-               ~ label {
+                ~label {
                     &::after {
                         background: #34A851 !important;
                     }
@@ -778,11 +786,10 @@ select {
         }
     }
 }
+
 .scheduling-item {
     position: relative;
-    
 }
-
 
 .document-upload {
     label {
@@ -869,14 +876,17 @@ select {
     max-height: 400px;
     overflow: auto;
 }
+
 ::-webkit-scrollbar-track {
     background-color: #F5F5F5;
     border-radius: 10px;
 }
+
 ::-webkit-scrollbar {
     width: 10px;
     background-color: #F5F5F5;
 }
+
 ::-webkit-scrollbar-thumb {
     border-radius: 10px;
     background: #9697A0;
@@ -972,7 +982,8 @@ select {
 
 .invalid-form input,
 .invalid-form select,
-.invalid-form textarea {
+.invalid-form textarea,
+.invalid-form .borderless-select .select2 .selection .select2-selection {
     border: thin solid #c44;
     color: #c44;
 }
@@ -1001,6 +1012,7 @@ select {
         border: 1px solid $gray !important;
     }
 }
+
 .search-box {
     display: flex;
     .search-btn-icon {
@@ -1034,7 +1046,7 @@ select {
     }
 }
 
-.new-array-items{
+.new-array-items {
     // margin-top: 15px;
     .items {
         display: flex;
@@ -1045,11 +1057,11 @@ select {
         border-radius: 4px;
         margin-top: 12px;
     }
-  }
+}
 
-  // select 2
-  .select2-container {
-      .selection {
+// select 2
+.select2-container {
+    .selection {
         .select2-selection {
             height: 40px;
             .select2-selection__rendered {
@@ -1061,34 +1073,35 @@ select {
                 display: none;
             }
         }
-      }
-      .select2-dropdown {
-          .select2-results {
-              .select2-results__options {
-                  .select2-results__option--highlighted {
-                      background: $primary;
-                      color: $white;
-                  }
-                  .select2-results__option--selected {
-                      background: $primary;
-                      color: $white;
-                  }
-              }
-          }
-      }
-      &.select2-container--focus {
+    }
+    .select2-dropdown {
+        .select2-results {
+            .select2-results__options {
+                .select2-results__option--highlighted {
+                    background: $primary;
+                    color: $white;
+                }
+                .select2-results__option--selected {
+                    background: $primary;
+                    color: $white;
+                }
+            }
+        }
+    }
+    &.select2-container--focus {
         .select2-selection {
             border: 1px solid $primary;
         }
-      }
-  }
+    }
+}
+
 //   border less
 .borderless-select {
     .select2 {
         .selection {
-          .select2-selection {
-              border: none;
-          }
+            .select2-selection {
+                border: none;
+            }
         }
     }
 }
@@ -1130,13 +1143,13 @@ select {
                 color: $white;
             }
             &.vs__dropdown-option--selected {
-                background-color: $primary  !important;
+                background-color: $primary !important;
                 color: $white;
-              }
-              &.vs__dropdown-option--highlight {
-                background-color: $primary  !important;
+            }
+            &.vs__dropdown-option--highlight {
+                background-color: $primary !important;
                 color: $white;
-              }
+            }
         }
     }
     .vs__selected-options {
@@ -1147,6 +1160,7 @@ select {
         display: none;
     }
 }
+
 .invalid-form {
     .vs__dropdown-menu {
         margin: 0;

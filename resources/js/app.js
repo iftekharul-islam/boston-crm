@@ -1,10 +1,8 @@
 require('./bootstrap');
 window.Vue = require('vue').default
-import vSelect from 'vue-select';
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
-import 'vue-select/dist/vue-select.css';
 
 import { ValidationProvider } from "vee-validate/dist/vee-validate.full.esm";
 import { ValidationObserver } from 'vee-validate';
@@ -17,13 +15,16 @@ import "./helper/config";
 
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
-Vue.component('v-select', vSelect)
+
+// import vSelect from 'vue-select';
+// Vue.component('v-select', vSelect)
 
 import "./src/vue_component";
 
 axios.defaults.baseURL = window.origin;
 Vue.config.productionTip = false
 Vue.prototype.$boston = boston;
+
 import "./helper/BostonMixin";
 
 const app = new Vue({

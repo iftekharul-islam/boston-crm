@@ -48,7 +48,7 @@
               </div>
               </ValidationProvider>
 
-               <ValidationProvider name="Co-borrower Name" rules="required" v-slot="{ errors }">
+              <ValidationProvider name="Co-borrower Name" rules="required" v-slot="{ errors }">
                 <div class="group" :class="{ 'invalid-form' : errors[0] }">
                   <label for="" class="d-block mb-2 dashboard-label">Co-borrower name <span class="require"></span></label>
                   <input type="text" v-model="co_borrower_name" class="dashboard-input w-100">
@@ -56,12 +56,11 @@
                 </div>
               </ValidationProvider>
 
-
               <ValidationObserver ref="addContactForm">
-                <ValidationProvider name="Contact No" :rules="{ 'required' : add.contact == null && borrower_contact == false }" v-slot="{ errors }">
+                <ValidationProvider name="Contact No" :rules="{ 'required' : add.contact == null && borrower_contact == false, min: 10, max: 12 }" v-slot="{ errors }">
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
                     <label for="" class="d-block mb-2 dashboard-label">Contact no <span class="text-danger require"></span></label>
-                    <input v-model="add.contact" type="text" class="dashboard-input w-100">
+                    <input v-model="add.contact" type="text" class="dashboard-input w-100" @input="contactNumberChecking($event, 1)">
                     <span class="error-message">{{ errors[0] }}</span>
                     <div class="text-end mgb-20">
                       <button class="add-more " @click="addContact">
@@ -151,7 +150,6 @@
     },
     methods:{
       getBorrowerInfo(){
-
         let borrowerContact = JSON.parse(this.order.borrower_info.contact_email);
         let borrowerEmail = borrowerContact['email'];
         let borrowerPhone = borrowerContact['phone'];
@@ -162,6 +160,11 @@
         this.borrower_email = borrowerEmail.length ? true : false;
         this.borrower_contact_s = borrowerPhone;
         this.borrower_email_s = borrowerEmail;
+      },
+      contactNumberChecking(e, type){
+          let phoneNo = e.target.value;
+          let formatedNumber = this.$boston.formatPhoneNo(phoneNo);
+          this.add.contact = formatedNumber;
       },
       updateBorrowerInfo(){
           this.$refs.orderForm.validate().then((status) => {

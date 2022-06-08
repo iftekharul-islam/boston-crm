@@ -2,7 +2,7 @@
     <div class="order-details-header d-flex mgb-20">
         <div class="left d-flex align-items-center">
             <h4 class="fs-24 fw-bold text-light-black mb-0 mgr-20">Order details</h4>
-            <span class="due" v-if="diff_in_days > 0">Due in {{ diff_in_days }} days</span>
+            <span class="due" v-if="diff_in_days === 0 && diff_in_hours > 0">Due in {{ diff_in_days }} days, {{ diff_in_hours }} hours</span>
             <span class="due" v-else>Already Overdue</span>
         </div>
         <div class="right d-flex align-items-center ms-auto">
@@ -30,7 +30,7 @@
 <script>
 
 export default {
-    props: ['order', 'diff_in_days','shareUrl'],
+    props: ['order', 'diff_in_days','diff_in_hours','shareUrl'],
     name: 'Order-header',
     data: () => ({
         savingStatus: false,

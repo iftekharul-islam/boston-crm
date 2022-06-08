@@ -1,8 +1,8 @@
 <?php
 return [
     'image_file_size'                => [
-        'min' => 100,
-        'max' => 1024,
+        'min' => 10,
+        'max' => 3072,
     ],
     'image_path_directory'           => 'public',
     'time_format'                    => [

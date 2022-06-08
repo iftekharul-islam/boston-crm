@@ -1,10 +1,10 @@
 <template>
-  <div class="order-details-box bg-white">
+  <div class="order-details-box ">
     <div class="box-header">
       <p class="fw-bold text-light-black fs-20 mb-0">Invoice</p>
       <a href="" class="d-inline-flex edit add-call align-items-center fw-bold">Add invoice</a>
     </div>
-    <div class="box-body">
+    <div class="box-body bg-white">
       <div class="invoice-table">
         <div class="table-responsive">
           <table class="table table-hover mb-0">

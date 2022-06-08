@@ -18,8 +18,8 @@ class UniqueEmail implements Rule
     public function __construct($client_id)
     {
         $this->client_id = $client_id;
-        ($this->client_id > 0) ? $this->client_emails = json_decode(Client::where('id','!=', $this->client_id)->pluck('email'),true)
-            : $this->client_emails = json_decode(Client::pluck('email'),true);
+        ($this->client_id > 0) ? $this->client_emails = json_decode(Client::whereNotNull('email')->where('id','!=', $this->client_id)->pluck('email'),true)
+            : $this->client_emails = json_decode(Client::whereNotNull('email')->pluck('email'),true);
 
     }
 
@@ -33,14 +33,28 @@ class UniqueEmail implements Rule
     public function passes($attribute, $value): bool
     {
         $passed = true;
+        if($this->array_has_duplicates($value)){
+            return false;
+        }
         foreach ($this->client_emails as $email){
             $decoded_email = !is_array($email) ? [$email] : json_decode($email, true);
-            
-            if(array_intersect($value, $decoded_email)){
-                $passed = false;
+            foreach ($decoded_email as $emailStr){
+                $d_email = json_decode($emailStr);
+                if(array_intersect($d_email, $value)) {
+                    $passed = false;
+                }
             }
         }
         return $passed;
+    }
+
+    /**
+     * @param $array
+     * @return bool
+     */
+    public function array_has_duplicates($array): bool
+    {
+        return count($array) !== count(array_unique($array));
     }
 
     /**
@@ -50,6 +64,6 @@ class UniqueEmail implements Rule
      */
     public function message()
     {
-        return 'This email has already taken.';
+        return 'This email has already taken/duplicate email.';
     }
 }
