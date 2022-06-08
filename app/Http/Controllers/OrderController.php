@@ -216,16 +216,20 @@ class OrderController extends BaseController
      */
     public function updateBasicInfo(Request $request, $order_id): JsonResponse
     {
+        $orderClient = Order::where('id', '!=', $request->id)->where('client_order_no', $request->client_order_no)->first();
+        if ($orderClient) {
+            return response()->json([ 'error' => true, "message" => "This client order number already exists, change it."]);
+        }
         $this->repository->updateBasicInfo($order_id, $request->all());
 
         $data = [
-          "activity_text" => "Basic info updated",
-          "activity_by" => Auth::id(),
-          "order_id" => $order_id
+            "activity_text" => "Basic info updated",
+            "activity_by" => Auth::id(),
+            "order_id" => $order_id
         ];
 
         $this->repository->addActivity($data);
-        return response()->json(["message" => "Basic info updated successfully !"]);
+        return response()->json(['error' => false, "message" => "Basic info updated successfully !"]);
     }
 
     /**

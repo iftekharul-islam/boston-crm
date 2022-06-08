@@ -95,6 +95,12 @@
 </script>
 @endsection
 
+@section("js")
+<script>
+    $(".alertdissable").delay(3000).slideUp(1000);
+</script>
+@endsection
+
 
 @section("css")
 <style>

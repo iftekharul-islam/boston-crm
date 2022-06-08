@@ -23,6 +23,7 @@
           <p class="right-side mb-0">{{ edited.received_date }}</p>
         </div>
       </div>
+
       <b-modal id="basic-info" size="md" title="Edit Basic Information">
         <div class="modal-body">
           <b-alert v-if="message" show variant="success"><a href="#" class="alert-link">{{ message }}</a></b-alert>
@@ -115,7 +116,8 @@ export default {
       map: null,
       center: {lat: -25.308, lng: 133.036},
       currentPlace: null,
-      markerIcon: ""
+      markerIcon: "",
+      errorStatus: false
     }
   },
   created() {
@@ -128,23 +130,23 @@ export default {
       this.orderData.received_date = this.order.received_date
       this.edited = Object.assign({}, this.orderData);
     },
-    updateBasicInfoData() {
-      this.$refs.basicInfo.validate().then((status) => {
-        if (status) {
-          let that = this
-          axios.post('update-basic-info/' + this.orderId, this.orderData)
-              .then(res => {
-                this.message = res.data.message
-                this.edited = Object.assign({}, this.orderData);
-                setTimeout(function () {
-                  that.$bvModal.hide('basic-info')
-                  that.message = ''
-                }, 2000);
-              }).catch(err => {
-            console.log(err)
-          })
-        }
-      })
+    updateBasicInfoData(){
+      let that = this
+      axios.post('update-basic-info/'+ this.orderId,this.orderData)
+        .then(res => {
+          this.message = res.data.message
+          this.errorStatus = res.data.error;
+          if (this.errorStatus) {
+
+          }else {
+              setTimeout(function(){
+                that.$bvModal.hide('basic-info');
+                that.message = '';
+              }, 5000);
+          }
+        }).catch(err => {
+          console.log(err)
+      });
     },
   }
 }
