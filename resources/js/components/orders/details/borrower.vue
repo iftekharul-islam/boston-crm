@@ -130,13 +130,13 @@
     data(){
       return {
         submittedMessage: null,
+
         borrower_name: null,
         co_borrower_name: null,
         borrower_contact: false,
         borrower_email: false,
         borrower_contact_s: [],
         borrower_email_s: [],
-        edited: {},
 
         add: {
           contact: null,
@@ -162,7 +162,6 @@
         this.borrower_email = borrowerEmail.length ? true : false;
         this.borrower_contact_s = borrowerPhone;
         this.borrower_email_s = borrowerEmail;
-        this.edited = Object.assign({},)
       },
       updateBorrowerInfo(){
           this.$refs.orderForm.validate().then((status) => {
