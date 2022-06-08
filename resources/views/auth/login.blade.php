@@ -15,7 +15,7 @@
                             <label for="email" class="d-block text-light-black mb-2">{{ __('Email address') }}</label>
                             <div class="">
                                 <input id="email" type="email"
-                                       class="login-input form-control @error('email') is-invalid @enderror"
+                                       class="login-input w-100 @error('email') is-invalid @enderror"
                                        name="email" value="{{ old('email') }}" autocomplete="email" autofocus>
 
                                 @error('email')
@@ -32,7 +32,7 @@
                             <div class="">
                                 <div class="position-relative">
                                     <input id="password" type="password"
-                                           class="login-input form-control @error('email') is-invalid @enderror"
+                                           class="login-input w-100 @error('email') is-invalid @enderror"
                                            name="password" autocomplete="password" autofocus>
                                     {{-- eye icon --}}
                                     <span class="icon-eye icons show-password"><span class="path1"></span><span

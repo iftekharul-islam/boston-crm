@@ -16,7 +16,6 @@ html {
   body {
     font-size: 16px;
     color: $light-black;
-    // font-family: "averta-regular";
   }
 }
 
@@ -1346,7 +1345,7 @@ html {
   }
 //  border color
   .gray-border {
-    border-color: $gray;
+    border-color: $gray !important;
   }
   .primary-border {
     border-color: $primary !important;
@@ -1470,6 +1469,9 @@ html {
  }
  .bg-login-box {
    background: $login-box;
+ }
+ .bg-gray {
+   background: $gray;
  }
 
 // font size

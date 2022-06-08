@@ -20,7 +20,7 @@
                     <div class="row mb-3">
                         <label for="email" class="d-block text-light-black mb-2">{{ __('Email address') }}</label>
                         <div class="">
-                            <input id="email" type="text" class="login-input form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" autocomplete="email" autofocus>
+                            <input id="email" type="text" class="login-input w-100 @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" autocomplete="email" autofocus>
 
                             @error('email')
                                 <span class="invalid-feedback" role="alert">
