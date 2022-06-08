@@ -25,7 +25,7 @@
     </div>
     <b-modal id="basic-info" size="md" title="Edit Basic Information">
       <div class="modal-body">
-        <b-alert v-if="message" show variant="success"><a href="#" class="alert-link">{{ message }}</a></b-alert>
+        <b-alert v-if="message" class="alertdissable" show :variant="`${errorStatus == false ? 'success' : 'danger'}`"><a href="#" class="alert-link">{{ message }}</a></b-alert>
         <div class="row">
           <div class="col-md-12">
             <div class="group">
@@ -96,7 +96,8 @@ export default {
       map: null,
       center: { lat: -25.308, lng: 133.036 },
       currentPlace: null,
-      markerIcon: ""
+      markerIcon: "",
+      errorStatus: false
     }
   },
   created() {
@@ -118,10 +119,15 @@ export default {
       axios.post('update-basic-info/'+ this.orderId,this.orderData)
           .then(res => {
             this.message = res.data.message
-            setTimeout(function(){
-              that.$bvModal.hide('basic-info')
-              that.message = ''
-            }, 2000);
+            this.errorStatus = res.data.error;
+            if (this.errorStatus) {
+
+            }else {
+                setTimeout(function(){
+                  that.$bvModal.hide('basic-info');
+                  that.message = '';
+                }, 5000);
+            }
           }).catch(err => {
             console.log(err)
       })

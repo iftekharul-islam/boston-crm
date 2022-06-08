@@ -23,6 +23,7 @@ class OrderApiController extends Controller
     use CrmHelper;
 
     public function store(Request $get) {
+
         $step = $get->step1;
         $step2 = $get->step2;
         $company = $get->company;
@@ -59,12 +60,13 @@ class OrderApiController extends Controller
             $orderId = null;
             if ($submitType) {
                 $orderId = $get->order['id'];
+            } else {
+                $oldOrder = Order::where('client_order_no', $clientOrderNo)->first();
+                if ($oldOrder) {
+                    return response()->json(['error' => true, 'submit' => true, 'messages' => 'Client order number already exists. Please change client order number on step 1']);
+                }
             }
 
-            $oldOrder = Order::where('client_order_no', $clientOrderNo)->first();
-            if ($oldOrder) {
-                return response()->json(['error' => true, 'submit' => true, 'messages' => 'Client order number already exists. Please change client order number on step 1']);
-            }
 
             if ($orderId == null) {
                 $order = new Order;
