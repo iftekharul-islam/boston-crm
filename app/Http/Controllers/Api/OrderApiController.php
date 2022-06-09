@@ -92,6 +92,7 @@ class OrderApiController extends Controller
             $order->due_date = $dueDate;
             $order->client_order_no = $clientOrderNo;
             $order->system_order_no = $systemOrder;
+            $order->workflow_status = json_encode(['orderCreate' => 1]);
             // return $order;
             $order->save();
 
