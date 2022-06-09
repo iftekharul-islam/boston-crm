@@ -43,7 +43,7 @@
             </div>
         </div>
         <div class="row">
-            <workflow :order="{{ $order }}"></workflow>
+            <workflow :order="{{ $order }}" appraisers="{{ $appraisers }}"></workflow>
             <history :order="{{ $order }}"></history>
         </div>
         <div class="mgt-32">
