@@ -22,7 +22,8 @@ class Order extends Model implements HasMedia
 
     protected $casts = [
       'due_date' => 'date:d M Y',
-      'received_date' => 'date:d M Y'
+      'received_date' => 'date:d M Y',
+      'created_at' => 'date:d M Y H:i A'
     ];
 
     protected $status_code = [
@@ -48,6 +49,25 @@ class Order extends Model implements HasMedia
             'Missing Photos', 'Offer to Purchase', 'Order Form','Permit', 'Property (MLS)', 'Public Record',
             'Purchase and Sales Agreement','Rehab List','Renovation List', 'Report Binder','Title',
             'Unit Deed','Zip File'
+        );
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getWorkflowStepsAttribute(): array
+    {
+        return array(
+            'orderCreate' => 1,
+            'scheduling' => 0,
+            'reportPreparation'=> 0,
+            'inspection'=> 0,
+            'initialReview'=> 0,
+            'reportAnalysisReview'=> 0,
+            'reWritingReport'=> 0,
+            'qualityAssurance'=> 0,
+            'submission'=> 0,
+            'revision'=> 0,
         );
     }
 
@@ -94,5 +114,10 @@ class Order extends Model implements HasMedia
     public function activityLog()
     {
         return $this->hasMany(ActivityLog::class,'order_id','id');
+    }
+
+    public function inspection()
+    {
+        return $this->belongsTo(OrderWInspection::class,'order_id','id');
     }
 }

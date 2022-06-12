@@ -67,11 +67,8 @@
 
                 <ValidationProvider class="group" name="Loan type" rules="required" v-slot="{ errors }">
                   <div :class="{ 'invalid-form' : errors[0] }">
-                    <!-- <label for="" class="d-block mb-2 dashboard-label">
-                      Loan type 
-                      <button v-b-modal.basic-info @click="addLoan"> + loan types</button>
-                    </label> -->
-                    <select name="" id="" class="dashboard-input w-100 loan-type-select" v-model="step1.loanType">
+                    <label for="" class="d-block mb-2 dashboard-label">Loan type </label>
+                    <select name="" id="loanTypeSelect" class="dashboard-input w-100 loan-type-select" v-model="step1.loanType">
                       <option value="">Please Select Loan Type</option>
                       <option v-for="loan_type in loanTypes" :key="loan_type.id" :value="loan_type.id">
                         {{ loan_type.name }}
@@ -94,7 +91,7 @@
                   <div :class="{ 'invalid-form' : errors[0] }">
                     <label for="" class="d-block mb-2 dashboard-label">Appraiser name <span
                         class="text-danger require"></span></label>
-                      <select class="dashboard-input w-100" v-model="step1.appraiserName">
+                      <select id="apprClientSelect" class="dashboard-input w-100" v-model="step1.appraiserName">
                         <option value="">Please select appraisal user name</option>
                         <option v-for="appraisal_user in appraisalUsers" :key="appraisal_user.id"
                                 :value="appraisal_user.id">
@@ -144,10 +141,7 @@
                         <div class="group" :class="{ 'invalid-form': errors[0] }">
                           <label for="" class="d-block mb-2 dashboard-label">Appraiser type </label>
                           <div class="position-relative borderless-select">
-                            <select
-                                @change="checkProviderValidation($event, 1)"
-                                class="dashboard-input w-100"
-                                v-model="providerTypes.default.type">
+                            <select id="providerTypeFee" class="dashboard-input w-100" v-model="providerTypes.default.type">
                                 <option value="">Choose Provided Service</option>
                                 <option :value="item.id" :key="ki" v-for="item, ki in appraisalTypes">{{ item.form_type }}</option>
                             </select>
@@ -161,8 +155,7 @@
                         <ValidationProvider name="Fee" :rules="{'required' : (providerTypes.error.fee == true || this.proviedServicePass == false) }" v-slot="{ errors }">
                         <div class="group" :class="{ 'invalid-form': errors[0] }">
                           <label for="" class="d-block mb-2 dashboard-label">Fee </label>
-                          <input type="number" step="any" @input="checkProviderValidation($event, 2)"
-                                class="dashboard-input w-100" v-model="providerTypes.default.fee">
+                          <input @input="checkProviderValidation($event, 2)" type="number" step="any" class="dashboard-input w-100" v-model="providerTypes.default.fee">
                         </div>
                         </ValidationProvider>
                       </div>
@@ -202,6 +195,7 @@
                     class="text-danger require"></span></label>
                 <div class="position-relative">
                   <select
+                      id="amcClientSelect"
                       class="dashboard-input w-100 select2"
                       v-model="step1.amcClient">
                       <option value="">Choose Amc Client</option>
@@ -229,6 +223,7 @@
                     class="text-danger require"></span></label>
                 <div class="position-relative">
                   <select
+                      id="lenderClientSelect"
                       class="dashboard-input w-100"
                       v-model="step1.lender">
                       <option value="">Choose Lender</option>
@@ -246,12 +241,12 @@
           <div class="form-box">
             <h4 class="box-header mb-3">Property info</h4>
             <div class="d-flex justify-content-between w-100 box-flex">
-              <div class="left max-w-424 w-100 me-3">
+              <div class="left max-w-424 w-100 mb-3">
                 
-                <div class="group">
+                <div class="group mb-3">
                   <label for="" class="d-block mb-2 dashboard-label">Search address <span
                       class="text-danger require"></span></label>
-                  <input type="text" ref="searchMapLocation" class="dashboard-input w-100">
+                  <input type="text" v-model="searchIngAddress" ref="searchMapLocation" class="dashboard-input w-100">
                 </div>
 
                 <ValidationProvider class="group" name="Address name" rules="required" v-slot="{ errors }">
@@ -431,6 +426,7 @@ export default {
         lat: null,
         lng: null,
       },
+      searchIngAddress: null,
       //All Msg Property
       clientOrderErrorMsg: '',
       fahCaseNoErrorMsg: '',
@@ -471,10 +467,37 @@ export default {
   mounted() {
     this.geolocate();
     $('select').select2();
+    this.select2Features();
   },
   methods: {
-    addLoan() {
-      console.log('hello');
+    select2Features() {
+        $(document).on("change", "#providerTypeFee", function(e){
+            let value = e.target.value;
+            this.providerTypes.default.type = value;
+            this.checkProviderValidation(e, 1);
+        }.bind(this));
+
+        $(document).on("change", "#loanTypeSelect", function(e){
+            let value = e.target.value;
+            this.step1.loan_type = value;
+        }.bind(this));
+        
+        $(document).on("change", "#loanTypeSelect", function(e){
+            let value = e.target.value;
+            this.step1.loan_type = value;
+        }.bind(this));
+        $(document).on("change", "#amcClientSelect", function(e){
+            let value = e.target.value;
+            this.step1.amc = value;
+        }.bind(this));
+        $(document).on("change", "#lenderClientSelect", function(e){
+            let value = e.target.value;
+            this.step1.lender = value;
+        }.bind(this));
+        $(document).on("change", "#apprClientSelect", function(e){
+            let value = e.target.value;
+            this.step1.appraiserName = value;
+        }.bind(this));
     },
     stepChangeActive() {
       this.$emit('step-change-active', {
@@ -493,6 +516,7 @@ export default {
         }
       });
     },
+
     validateData() {
       let errorCount = 0;
       if (this.clientOrderNo.length === 0) {
@@ -507,10 +531,12 @@ export default {
     },
     addFee() {
       this.$refs.providerServices.validate().then( (status) => {
-          let newType = this.providerTypes.default.type;
-          let newFee = this.providerTypes.default.fee;
-          this.setNewFee(newType, newFee);        
-      })
+          if (status) {
+            let newType = this.providerTypes.default.type;
+            let newFee = this.providerTypes.default.fee;
+            this.setNewFee(newType, newFee);
+          }
+      });
     },
 
     setNewFee(newType, newFee) {
@@ -646,6 +672,8 @@ export default {
         let ele = setFee[i];
         this.setNewFee(ele.typeId, ele.fee);
       }
+
+      this.searchIngAddress = this.order.property_info.formatedAddress;
 
       let receivedDateFormated = new Date(receivedDate);
       let dueDateFormated = new Date(dueDate);

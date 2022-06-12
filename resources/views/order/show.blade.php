@@ -47,7 +47,7 @@
             </div>
         </div>
         <div class="row">
-            <workflow :order="{{ $order }}"></workflow>
+            <B :order="{{ $order }}" appraisers="{{ $appraisers }}"></workflow>
             <history :order="{{ $order }}"></history>
         </div>
         <div class="mgt-32">
@@ -96,6 +96,12 @@
         }
     });
     $(".alert-message").delay(4000).fadeOut(1000);
+</script>
+@endsection
+
+@section("js")
+<script>
+    $(".alertdissable").delay(3000).slideUp(1000);
 </script>
 @endsection
 

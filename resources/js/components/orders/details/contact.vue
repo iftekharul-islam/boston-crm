@@ -44,10 +44,10 @@
             </ValidationProvider>
 
             <ValidationObserver ref="addContactForm">
-                <ValidationProvider name="Contact Number" :rules="{'required' : add.contact == null && contact_number == false}" v-slot="{ errors }">
+                <ValidationProvider name="Contact Number" :rules="{'required' : add.contact == null && contact_number == false, min: 10, max: 12}" v-slot="{ errors }">
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
                     <label for="" class="d-block mb-2 dashboard-label">Contact no <span class="text-danger require"></span></label>
-                    <input v-model="add.contact" type="text" class="dashboard-input w-100">
+                    <input v-model="add.contact" @input="contactNumberChecking($event, 1)" type="text" class="dashboard-input w-100">
                     <span class="error-message">{{ errors[0] }}</span>
                     <div class="text-end mgb-20">
                       <button class="add-more " @click="addContact">
@@ -187,16 +187,24 @@
               }
           });
       },
+      contactNumberChecking(e, type){
+          let phoneNo = e.target.value;
+          let formatedNumber = this.$boston.formatPhoneNo(phoneNo);
+          this.add.contact = formatedNumber;
+      },
       addContact() {
           this.$refs.addContactForm.validate().then((status) => {
               if (status) {
                   let newContact = this.add.contact;
+                  if ( newContact.length < 10 || newContact.length > 12 ) {
+                      return false;
+                  }
                   let findOld = this.contact_number_s.find((ele) =>  ele == newContact);
                   if (!findOld && newContact != null) {
-                    this.contact_number_s.push(newContact);
-                    this.add.contact = null;
-                    this.contact_number = true;
-                    this.$refs.addContactForm.reset();
+                      this.contact_number_s.push(newContact);
+                      this.add.contact = null;
+                      this.contact_number = true;
+                      this.$refs.addContactForm.reset();
                   }
               }
           });

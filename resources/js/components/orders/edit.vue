@@ -101,10 +101,10 @@ export default {
                     this.submitResult.submitStatus = true;
                     this.stepChangeActive = false;
                     this.step = 1;
+                    setTimeout(() => {
+                      window.location.href = "/orders/"+this.order.id + "?r=create"
+                    },500);
                 }
-                setTimeout(() => {
-                  window.location.href = "/orders/"+res.orderId + "?r=create"
-                },500);
                 
                 $("html, body").animate({ scrollTop: 0 }, 100);
             });

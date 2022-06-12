@@ -7,9 +7,14 @@
     </div>
     <div class="box-body">
       <div class="list__group">
-        <p class="mb-0 left-side">Property address </p>
+        <p class="mb-0 left-side">Property Details </p>
         <span>:</span>
-        <p class="right-side mb-0 primary-text fw-bold fs-20">{{ edited.search_address }}</p>
+        <p class="right-side mb-0 primary-text fw-bold fs-20">{{ edited.formatedAddress }}</p>
+      </div>
+      <div class="list__group">
+        <p class="mb-0 left-side">Property address</p>
+        <span>:</span>
+        <p class="right-side mb-0">{{ edited.search_address }}</p>
       </div>
       <div class="list__group">
         <p class="mb-0 left-side">State</p>
@@ -115,6 +120,7 @@ export default {
   data() {
     return {
       info:{
+        formatedAddress: '',
         search_address: '',
         street_name: '',
         city_name: '',
@@ -157,6 +163,7 @@ export default {
         this.info.street_name = this.order.property_info.street_name
         this.info.city_name = this.order.property_info.city_name
         this.info.state_name = this.order.property_info.state_name
+        this.info.formatedAddress = this.order.property_info.formatedAddress
         this.info.zip = this.order.property_info.zip
         this.info.country = this.order.property_info.country
         this.info.unit_no = this.order.property_info.unit_no
