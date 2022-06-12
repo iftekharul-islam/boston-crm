@@ -123,10 +123,10 @@ export default {
   },
   data: () => ({
     isActive: 'order-create',
-    status: '',
+    status: [],
   }),
   created(){
-    this.status = JSON.parse(this.order.workflow_status)
+    this.status = this.order.workflow_status ?? [];
   },
   methods: {
     changeTab(type) {

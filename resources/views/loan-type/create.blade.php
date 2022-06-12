@@ -6,7 +6,6 @@
             <div class="col-6 mx-auto">
                 <form id="loan-type-form" action="{{ route('loan-types.store') }}" method="POST">
                     @csrf
-
                     <div class="form-group mb-2">
                         <label for="exampleInputEmail1">Loan type</label>
                         <input type="text" name="name" class="form-control @error('name') is-invalid @enderror"

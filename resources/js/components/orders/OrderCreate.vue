@@ -11,11 +11,11 @@
           </div>
         </div>
         <div class="alert alert-danger alertBlocks" v-if="submitResult.error && submitResult.submit == false">
-            <template v-for="eItem in submitResult.message">
+            <div v-for="eItem, ki in submitResult.message" :key="ki">
               <span v-for="erItem, ei in eItem" :key="ei + '0-0-1'">
                 * {{ erItem }}
               </span>
-            </template>
+            </div>
         </div>
         <div class="alert alert-danger" v-if="submitResult.error && submitResult.submit">
             {{ submitResult.message }}

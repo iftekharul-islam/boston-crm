@@ -149,6 +149,7 @@ class OrderApiController extends Controller
 
 
             $searchAddress = $step['searchAddress'];
+            $formatedAddress = $step['formatedAddress'];
             $state = $step['state'];
             $street = $step['street'];
             $unitNo = $step['unitNo'];
@@ -173,6 +174,7 @@ class OrderApiController extends Controller
 
             $propertyInfo->order_id = $order->id;
             $propertyInfo->search_address = $searchAddress;
+            $propertyInfo->formatedAddress = $formatedAddress;
             $propertyInfo->street_name = $street;
             $propertyInfo->city_name = $city;
             $propertyInfo->state_name = $state;
@@ -365,6 +367,24 @@ class OrderApiController extends Controller
 
     protected function recTitle($item) {
         return ucwords(str_replace("_", " ", $item));
+    }
+
+    public function getSameData(Request $get){
+        $propertyInfo = PropertyInfo::where('street_name', "LIKE", "%$get->street%")->get()->pluck('order_id');
+        $order = Order::whereIn('id', $propertyInfo)->orderBy('id', 'desc')->with(
+            'amc',
+            'lender',
+            'user',
+            'appraisalDetail',
+            'providerService',
+            'propertyInfo',
+            'borrowerInfo',
+            'contactInfo'
+        )->get();
+        return response()->json([
+            'totalOrder' => $order->count(),
+            'orders' => $order
+        ]);
     }
 
 }
