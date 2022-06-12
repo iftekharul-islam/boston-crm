@@ -1,14 +1,18 @@
 @extends('layouts.app')
 @section('content')
     <div class="order-details bg-platinum dashboard-space">
-        <a href="{{ url('/orders') }}" class="text-light-black d-inline-flex align-items-center mgb-20">
-            <svg class="me-2" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M9.57086 5.18001C9.76086 5.18001 9.95086 5.25 10.1009 5.4C10.3909 5.69 10.3909 6.17 10.1009 6.46L4.56086 12L10.1009 17.54C10.3909 17.83 10.3909 18.31 10.1009 18.6C9.81086 18.89 9.33086 18.89 9.04086 18.6L2.97086 12.53C2.68086 12.24 2.68086 11.76 2.97086 11.47L9.04086 5.4C9.19086 5.25 9.38086 5.18 9.57086 5.18001Z"
-                      fill="#2F415E"/>
-                <path d="M3.67 11.25L20.5 11.25C20.91 11.25 21.25 11.59 21.25 12C21.25 12.41 20.91 12.75 20.5 12.75L3.67 12.75C3.26 12.75 2.92 12.41 2.92 12C2.92 11.59 3.26 11.25 3.67 11.25Z"
-                      fill="#2F415E"/>
-            </svg>
-            Back to order list</a>
+        <div class="header-dual-part">
+            <a href="{{ url('/orders') }}" class="text-light-black d-inline-flex align-items-center mgb-20">
+                <svg class="me-2" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9.57086 5.18001C9.76086 5.18001 9.95086 5.25 10.1009 5.4C10.3909 5.69 10.3909 6.17 10.1009 6.46L4.56086 12L10.1009 17.54C10.3909 17.83 10.3909 18.31 10.1009 18.6C9.81086 18.89 9.33086 18.89 9.04086 18.6L2.97086 12.53C2.68086 12.24 2.68086 11.76 2.97086 11.47L9.04086 5.4C9.19086 5.25 9.38086 5.18 9.57086 5.18001Z"
+                        fill="#2F415E"/>
+                    <path d="M3.67 11.25L20.5 11.25C20.91 11.25 21.25 11.59 21.25 12C21.25 12.41 20.91 12.75 20.5 12.75L3.67 12.75C3.26 12.75 2.92 12.41 2.92 12C2.92 11.59 3.26 11.25 3.67 11.25Z"
+                        fill="#2F415E"/>
+                </svg>
+                Back to order list
+            </a>
+            <a href="{{ route('orders.create')}}" class="button button-primary h-40 d-inline-flex align-items-center py-2">Add new order</a>
+        </div>
         @php $order_id = request()->route('id') @endphp
 
 
@@ -110,6 +114,14 @@
         margin-right: 8px;
         display: inline-block;
         cursor: pointer;
+    }
+    .header-dual-part {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        align-content: center;
+        vertical-align: middle;
+        margin-bottom: 20px;
     }
 </style>
 @endsection

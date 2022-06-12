@@ -1,19 +1,20 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\Api\WebApiController;
-use App\Http\Controllers\VerificationController;
-use App\Http\Controllers\LocalizationController;
-use App\Http\Controllers\RoleController;
-use App\Http\Controllers\ClientController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\OrderController;
-use App\Http\Controllers\AppraisalTypeController;
-use App\Http\Controllers\LoanTypeController;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\IconController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ClientController;
+use App\Http\Controllers\LoanTypeController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MarketingController;
+use App\Http\Controllers\Api\WebApiController;
+use App\Http\Controllers\Api\OrderApiController;
+use App\Http\Controllers\LocalizationController;
+use App\Http\Controllers\VerificationController;
+use App\Http\Controllers\AppraisalTypeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -115,6 +116,8 @@ Route::group( [ 'middleware' => [ 'auth:sanctum' ] ], function () {
     Route::post('/update-client-info/{id}',[OrderController::class,'updateClientInfo']);
     Route::post('/update-borrower-info/{id}',[OrderController::class,'updateBorrowerInfo'])->middleware('role_permission:update.order');
     Route::post('/update-contact-info/{id}',[OrderController::class,'updateContactInfo'])->middleware('role_permission:update.order');
+
+	Route::post('api/get/same/orders/by/street', [OrderApiController::class, 'getSameData']);
 
     //Appraisal Type
 	 Route::get( 'appraisal-types',

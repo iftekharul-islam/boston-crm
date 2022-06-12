@@ -67,7 +67,10 @@
 
                 <ValidationProvider class="group" name="Loan type" rules="required" v-slot="{ errors }">
                   <div :class="{ 'invalid-form' : errors[0] }">
-                    <label for="" class="d-block mb-2 dashboard-label">Loan type </label>
+                    <!-- <label for="" class="d-block mb-2 dashboard-label">
+                      Loan type 
+                      <button v-b-modal.basic-info @click="addLoan"> + loan types</button>
+                    </label> -->
                     <select name="" id="" class="dashboard-input w-100 loan-type-select" v-model="step1.loanType">
                       <option value="">Please Select Loan Type</option>
                       <option v-for="loan_type in loanTypes" :key="loan_type.id" :value="loan_type.id">
@@ -244,11 +247,18 @@
             <h4 class="box-header mb-3">Property info</h4>
             <div class="d-flex justify-content-between w-100 box-flex">
               <div class="left max-w-424 w-100 me-3">
-                <ValidationProvider class="group" name="Search address" rules="required" v-slot="{ errors }">
+                
+                <div class="group">
+                  <label for="" class="d-block mb-2 dashboard-label">Search address <span
+                      class="text-danger require"></span></label>
+                  <input type="text" ref="searchMapLocation" class="dashboard-input w-100">
+                </div>
+
+                <ValidationProvider class="group" name="Address name" rules="required" v-slot="{ errors }">
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
-                    <label for="" class="d-block mb-2 dashboard-label">Search address <span
+                    <label for="" class="d-block mb-2 dashboard-label">Address Name <span
                         class="text-danger require"></span></label>
-                    <input type="text" ref="searchMapLocation" class="dashboard-input w-100"
+                    <input type="text" class="dashboard-input w-100"
                            v-model="step1.searchAddress">
                     <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                   </div>
@@ -263,6 +273,8 @@
                     <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                   </div>
                 </ValidationProvider>
+
+                
 
                 <ValidationProvider class="group" name="City name" rules="required" v-slot="{ errors }">
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
@@ -289,7 +301,7 @@
                     <label for="" class="d-block mb-2 dashboard-label">Street name <span
                         class="text-danger require"></span>
                     </label>
-                    <input type="text" class="dashboard-input w-100" v-model="step1.street">
+                    <input type="text" @input="changeStreetAddress($event.target.value)" class="dashboard-input w-100" v-model="step1.street">
                     <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                   </div>
                 </ValidationProvider>
@@ -351,12 +363,23 @@
         </button>
       </div>
     </ValidationObserver>
+
+    <street-address v-if="showStreetAddress" :data="streetAddress">
+        <template v-slot:close>
+            <span @click="showStreetAddress = false">X</span>
+        </template>
+    </street-address>
+
   </div>
 </template>
 
 <script>
+import StreetAddress from "./StreetAddress";
 export default {
   name: "Step1",
+  components: {
+    StreetAddress
+  },
   props: {
     order: [],
     systemOrderNo: String,
@@ -371,6 +394,8 @@ export default {
   },
   data() {
     return {
+      showStreetAddress: false,
+      streetAddress: [],
       dateIssue: {
         status: false,
         message: "Received Date Must Be Smaller Than Due Date"
@@ -397,6 +422,7 @@ export default {
         fee: [],
         note: '',
         searchAddress: '',
+        formatedAddress: '',
         state: '',
         city: '',
         street: null,
@@ -447,6 +473,9 @@ export default {
     $('select').select2();
   },
   methods: {
+    addLoan() {
+      console.log('hello');
+    },
     stepChangeActive() {
       this.$emit('step-change-active', {
         status: this.stepActive,
@@ -604,6 +633,7 @@ export default {
         state: this.order.property_info.state_name,
         city: this.order.property_info.city_name,
         street: this.order.property_info.street_name,
+        formatedAddress: this.order.property_info.formatedAddress,
         zipcode: this.order.property_info.zip,
         country: this.order.property_info.country,
         lat: this.order.property_info.latitude,
@@ -698,14 +728,14 @@ export default {
             place_id: null,
           };
           addressData.place_id = place.place_id;
-          // Location details
+          
           for (var i = 0; i < place.address_components.length; i++) {
             if (place.address_components[i].types[0] == 'postal_code') {
               addressData.postal_code = place.address_components[i].long_name;
             }
-            if (place.address_components[i].types[0] == 'route') {
-              addressData.street = place.address_components[i].long_name;
-            }
+            // if (place.address_components[i].types[0] == 'route') {
+            //   addressData.street = place.address_components[i].long_name;
+            // }
             if (place.address_components[i].types[0] == 'locality') {
               addressData.city = place.address_components[i].long_name;
             }
@@ -716,11 +746,14 @@ export default {
               addressData.country = place.address_components[i].long_name;
             }
           }
+          let streetRd = place.formatted_address.split(",");
+          addressData.street = streetRd[0];
           addressData.name = place.name;
           addressData.location = place.formatted_address;
           addressData.lat = place.geometry.location.lat();
           addressData.lon = place.geometry.location.lng();
           this.mapData.data = addressData;
+          this.step1.formatedAddress = $(input).val();
           this.setMapDataToMode();
         });
         this.mapData.map.fitBounds(bounds);
@@ -728,7 +761,8 @@ export default {
     },
 
     setMapDataToMode() {
-      this.step1.searchAddress = this.mapData.data.location;
+      this.step1.searchAddress = this.mapData.data.name;
+      this.step1.formatedAddress = this.mapData.data.location;
       this.step1.state = this.mapData.data.state;
       this.step1.city = this.mapData.data.city;
       this.step1.street = this.mapData.data.street;
@@ -736,6 +770,7 @@ export default {
       this.step1.country = this.mapData.data.country;
       this.step1.lat = this.mapData.data.lat;
       this.step1.lng = this.mapData.data.lon;
+      this.changeStreetAddress(this.step1.street);
     },
     getAmcClient(event) {
       let id = parseInt(event.target.value);
@@ -764,6 +799,19 @@ export default {
 
     findTechnologyFee() {
 
+    },
+
+    changeStreetAddress(value) {
+        this.$boston.authPost('get/same/orders/by/street', {'street' : value}).then( (res) => {
+            let totalOrder = res.totalOrder;
+            let orders = res.orders;
+            if (totalOrder > 0) {
+              this.showStreetAddress = true;
+              this.streetAddress = orders;
+            }
+        }).catch(err => {
+
+        });
     },
 
     checkDateInput(value, type) {
