@@ -73,7 +73,8 @@ class OrderController extends BaseController
                        ->orWhere("company_id", "LIKE", "%$data%")
                        ->orWhere("due_date", "LIKE", "%$data%")
                        ->orWhere("created_at", "LIKE", "%$data%");
-        })->with('user', 'amc', 'lender', 'propertyInfo')->orderBy('id', 'desc')->paginate($paginate);
+        })->with('user', 'amc', 'appraisalDetail',   'appraisalDetail.appraiser',
+        'appraisalDetail.getLoanType', 'lender', 'propertyInfo')->orderBy('id', 'desc')->paginate($paginate);
         return $order;
     }
 
