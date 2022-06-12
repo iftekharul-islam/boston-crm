@@ -242,7 +242,7 @@
             <h4 class="box-header mb-3">Property info</h4>
             <div class="d-flex justify-content-between w-100 box-flex">
               <div class="left max-w-424 w-100 mb-3">
-                
+
                 <div class="group mb-3">
                   <label for="" class="d-block mb-2 dashboard-label">Search address <span
                       class="text-danger require"></span></label>
@@ -269,7 +269,7 @@
                   </div>
                 </ValidationProvider>
 
-                
+
 
                 <ValidationProvider class="group" name="City name" rules="required" v-slot="{ errors }">
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
@@ -481,7 +481,7 @@ export default {
             let value = e.target.value;
             this.step1.loan_type = value;
         }.bind(this));
-        
+
         $(document).on("change", "#loanTypeSelect", function(e){
             let value = e.target.value;
             this.step1.loan_type = value;
@@ -553,7 +553,7 @@ export default {
             }
           }
         }
-              
+
         if (appType.condo_type == 1) {
           this.condoType = true;
         }
@@ -665,7 +665,7 @@ export default {
         lat: this.order.property_info.latitude,
         lng: this.order.property_info.longitude,
       };
-            
+
       this.step1 = step1;
       let setFee = JSON.parse(this.order.provider_service.appraiser_type_fee);
       for (let i in setFee) {
@@ -756,7 +756,7 @@ export default {
             place_id: null,
           };
           addressData.place_id = place.place_id;
-          
+
           for (var i = 0; i < place.address_components.length; i++) {
             if (place.address_components[i].types[0] == 'postal_code') {
               addressData.postal_code = place.address_components[i].long_name;

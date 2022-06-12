@@ -4,8 +4,6 @@
     <div class="order-details-box bg-white h-100">
       <div class="box-header">
         <p class="fw-bold text-light-black fs-20 mb-0">Workflow</p>
-        <a href="" class="d-inline-flex edit align-items-center fw-bold">Edit <span class="icon-edit ms-3"><span
-            class="path1"></span><span class="path2"></span></span></a>
       </div>
       <div class="box-body">
         <div class="workflow-content">
@@ -67,9 +65,9 @@
           <!-- step item -->
           <div class="step-item ">
             <!-- Order creation -->
-            <OrderCreate :order="this.order" v-if="isActive === 'order-create'"></OrderCreate>
+            <OrderCreate :order="order" v-if="isActive === 'order-create'"></OrderCreate>
             <!-- Scheduling -->
-            <Schedule :order="this.order" v-if="isActive === 'scheduling'"></Schedule>
+            <Schedule :order="order" :appraisers="appraisers" v-if="isActive === 'scheduling'"></Schedule>
             <!-- Inspection -->
             <Inspection v-if="isActive === 'inspection'"></Inspection>
             <!-- Report preparation -->
@@ -107,7 +105,8 @@ import Revision from "../workflow/Revision";
 export default {
   name: 'WorkFlow',
   props: {
-    order: []
+    order: [],
+    appraisers: []
   },
   components: {
     Revision,
@@ -123,10 +122,10 @@ export default {
   },
   data: () => ({
     isActive: 'order-create',
-    status: [],
+    status: '',
   }),
   created(){
-    this.status = this.order.workflow_status ?? [];
+    this.status = JSON.parse(this.order.workflow_status) ?? '';
   },
   methods: {
     changeTab(type) {
