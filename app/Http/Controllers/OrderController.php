@@ -27,7 +27,6 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Contracts\Foundation\Application;
-
 use Illuminate\Support\Facades\Auth;
 
 
@@ -94,7 +93,7 @@ class OrderController extends BaseController
         $amc_clients = $client_users[0];
         $lender_clients = $client_users[1];
 
-        $company = auth()->user()->companies()->first();        
+        $company = auth()->user()->companies()->first();
         $userID = auth()->user()->id;
 
         return view('order.create',
@@ -138,7 +137,7 @@ class OrderController extends BaseController
             'borrowerInfo',
             'contactInfo',
             'activityLog.user',
-            'inspection'
+            'inspection.user'
         )->where('id', $id)->first();
         $order->amc_file = $this->repository->getClientFile($order->amc_id);
         $order->lender_file = $this->repository->getClientFile($order->lender_id);

@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\OrderApiController;
 use App\Http\Controllers\LocalizationController;
 use App\Http\Controllers\VerificationController;
 use App\Http\Controllers\AppraisalTypeController;
+use App\Http\Controllers\OrderWorkflowController;
 
 /*
 |--------------------------------------------------------------------------
@@ -93,11 +94,12 @@ Route::group( [ 'middleware' => [ 'auth:sanctum' ] ], function () {
 		 [ OrderController::class, 'update' ] )->middleware( 'role_permission:update.order' )->name( 'orders.update' );
 	 Route::delete( 'orders/{id}',
 		 [ OrderController::class, 'destroy' ] )->middleware( 'role_permission:delete.order' )->name( 'orders.destroy' );
-	 
+
 	Route::post( 'order/update/{type}',
 		 [ OrderController::class, 'orderUpdate' ] )->middleware( 'role_permission:update.order' )->name( 'orders.update.single' );
-	 
+
 	Route::post( 'search/order', [ OrderController::class, 'searchOrderData' ] )->middleware( 'role_permission:orders.index' );
+    Route::post('api/get/same/orders/by/street', [OrderApiController::class, 'getSameData']);
 
      //order details
     Route::get('save-order-data',[OrderController::class,'saveOrderData']);
@@ -117,7 +119,9 @@ Route::group( [ 'middleware' => [ 'auth:sanctum' ] ], function () {
     Route::post('/update-borrower-info/{id}',[OrderController::class,'updateBorrowerInfo'])->middleware('role_permission:update.order');
     Route::post('/update-contact-info/{id}',[OrderController::class,'updateContactInfo'])->middleware('role_permission:update.order');
 
-	Route::post('api/get/same/orders/by/street', [OrderApiController::class, 'getSameData']);
+    //order workflow
+    Route::post('/update-order-schedule',[OrderWorkflowController::class,'updateOrderSchedule']);
+
 
     //Appraisal Type
 	 Route::get( 'appraisal-types',
