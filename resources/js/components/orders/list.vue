@@ -14,33 +14,29 @@
                 </select>
             </div>
         </div>
-        <Table :items="orderData" :show-sl="true" :sl-start="pages.pageData.from" :header="order.header">
-            <template v-slot:user="{item}">
-                {{ item.user.name }}
+        <Table :items="orderData" :sl-start="pages.pageData.from" :header="order.header">
+            <template v-slot:amc_id="{item}">
+                {{ item.amc.name }}
             </template>
-            <template v-slot:created_at="{item}">
-                {{ item.created_at | dateTime }}
+            <template v-slot:map_it="{item}">
+                <a target="_blank" :href="`https://www.google.com/maps/search/?api=1&query=${item.property_info ? item.property_info.search_address : ''}`" :data-key="item.id">
+                    <img src="/img/marker.png" class="img-fluid" style="height: 24px">
+                </a>
             </template>
-            <template v-slot:received_date="{item}">
-                {{ item.received_date | onlyDate }}
+            <template v-slot:inspector="{item}">
+                {{ item.inspector ? '-' : '-' }}
             </template>
             <template v-slot:due_date="{item}">
                 {{ item.due_date | onlyDate }}
             </template>
-            <template v-slot:lender_id="{item}">
-                {{ item.amc.name }}
+            <template v-slot:inspection_date="{item}">
+                {{ item.inspector ? '-' : '-' }}
             </template>
-            <template v-slot:amc_id="{item}">
-                {{ item.lender.name }}
+            <template v-slot:appraiser="{item}">
+                {{ item.appraisal_detail.appraiser.name }}
             </template>
-            <template v-slot:rush="{item}">
-                {{ item.rush == 1 ? 'Yes' : 'No' }}
-            </template>
-            <template v-slot:lat="{item}">
-                {{ item.property_info ? item.property_info.latitude : '-' }}
-            </template>
-            <template v-slot:lon="{item}">
-                {{ item.property_info ? item.property_info.longitude : '-' }}
+             <template v-slot:property_address="{item}">
+                {{ item.property_info.search_address }}
             </template>
             <template v-slot:action="{item}">
                 <a :href="`orders/${item.id}/edit`" class="btn btn-success btn-sm" :data-key="item.id">
@@ -48,9 +44,6 @@
                 </a>
                 <a :href="`orders/${item.id}`" class="btn btn-primary btn-sm" :data-key="item.id">
                     <span onclick="roleUpdateOpen(2);" class="icon-eye cursor-pointer"><span class="path1"></span><span class="path2"></span></span>
-                </a>
-                <a target="_blank" :href="`https://www.google.com/maps/search/?api=1&query=${item.property_info ? item.property_info.search_address : ''}`" class="btn btn-warning btn-sm" :data-key="item.id">
-                    Map
                 </a>
             </template>
         </Table>
@@ -78,37 +71,37 @@ export default {
         },
         order: {
             header: [
-                'System Order No@system_order_no@center@center',
-                'Client Order No@client_order_no@center@center',
-                'Received Date@received_date@center@center',
+                'Order No@client_order_no@center@center',
+                'Client Name@amc_id@center@center',
+                'Property Address@property_address@center@center',
+                'Appraiser@appraiser@center@center',
+                'Inspector@inspector@center@center',
+                'Inspection Date@inspection_date@center@center',
                 'Due date@due_date@center@center',
-                'Created At@created_at@center@center',
+                'Status@status@center@center',
+                'Map It@map_it@center@center',
                 'Action@action@center@center',
             ],
             disableHeader: [
                 {
-                    title: "Lender",
-                    key: "lender_id"
+                    title: "Appraiser (0)",
+                    key: "appraiser"
                 },
                 {
-                    title: "Amc",
-                    key: "amc_id"
+                    title: "Client (0)",
+                    key: "client"
                 },
                 {
-                    title: "Created By",
-                    key: "user"
+                    title: "Loan Type (0)",
+                    key: "loanType"
                 },
                 {
-                    title: "Rush Order",
-                    key: "rush"
+                    title: "Report Type (0)",
+                    key: "reportType"
                 },
                 {
-                    title: "Latitude",
+                    title: "Property Type (0)",
                     key: "lat"
-                },
-                {
-                    title: "Longitude",
-                    key: "lon"
                 }
             ],
  
@@ -120,37 +113,37 @@ export default {
     },
     methods: {
         checkColumnActive(val) {
-            let getHeader = (this.order.header);
-            let findActive = false;            
-            for (let index in getHeader){
-                let ele = getHeader[index];
-                let key = ele.split("@");
-                if (key[1] && val.key == key[1]) {
-                    findActive = val.key == key[1] ? true : false;
-                    break;
-                }
-            }
-            return findActive;
+            // let getHeader = (this.order.header);
+            // let findActive = false;            
+            // for (let index in getHeader){
+            //     let ele = getHeader[index];
+            //     let key = ele.split("@");
+            //     if (key[1] && val.key == key[1]) {
+            //         findActive = val.key == key[1] ? true : false;
+            //         break;
+            //     }
+            // }
+            // return findActive;
         },
         addToTable(val) {
-            let getHeader = (this.order.header);
-            let getIndex = getHeader.find( (ele) => {
-                let key = ele.split("@");
-                if(val.key == key[1]) {
-                    return true;
-                }
-            });
-            if (!getIndex) {
-                this.order.header.splice( 3, 0, 
-                    val.title + '@' + val.key + '@center@center'
-                );
-            } else  {
-                let getIndexNo = this.order.header.findIndex(ele => {
-                    return ele == getIndex;
-                });
-                this.order.header.splice(getIndexNo, 1);
-            } 
-            this.checkColumnActive(val)
+            // let getHeader = (this.order.header);
+            // let getIndex = getHeader.find( (ele) => {
+            //     let key = ele.split("@");
+            //     if(val.key == key[1]) {
+            //         return true;
+            //     }
+            // });
+            // if (!getIndex) {
+            //     this.order.header.splice( 3, 0, 
+            //         val.title + '@' + val.key + '@center@center'
+            //     );
+            // } else  {
+            //     let getIndexNo = this.order.header.findIndex(ele => {
+            //         return ele == getIndex;
+            //     });
+            //     this.order.header.splice(getIndexNo, 1);
+            // } 
+            // this.checkColumnActive(val)
         },
         loadPage(acitvePage = null){
             this.pages.acitvePage = acitvePage;
