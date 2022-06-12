@@ -47,7 +47,7 @@
             </div>
         </div>
         <div class="row">
-            <B :order="{{ $order }}" appraisers="{{ $appraisers }}"></workflow>
+            <workflow :order="{{ $order }}" appraisers="{{ $appraisers }}"></workflow>
             <history :order="{{ $order }}"></history>
         </div>
         <div class="mgt-32">
