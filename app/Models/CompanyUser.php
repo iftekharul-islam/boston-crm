@@ -14,6 +14,7 @@ class CompanyUser extends Pivot {
         'company_id',
         'user_id',
         'role_id',
+        'role_name',
         'status',
         'active_company',
         'join_date'

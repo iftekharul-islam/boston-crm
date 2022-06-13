@@ -3,17 +3,18 @@
 namespace App\Models;
 
 use App\Auth\VerifyEmail;
-use App\Notifications\ResetPasswordNotification;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Config;
+use App\Models\CompanyUser;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\MediaLibrary\HasMedia;
-use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Notifications\Notifiable;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use App\Notifications\ResetPasswordNotification;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class User extends Authenticatable implements HasMedia
 {
@@ -96,4 +97,10 @@ class User extends Authenticatable implements HasMedia
 	public function userProfile(): HasOne {
 		return $this->hasOne(UserProfile::class);
 	}
+
+
+	public function getCompanyProfile(){
+		return CompanyUser::where('user_id', $this->id)->first();
+	}
+
 }

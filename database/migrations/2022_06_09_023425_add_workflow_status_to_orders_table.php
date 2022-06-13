@@ -13,9 +13,14 @@ class AddWorkflowStatusToOrdersTable extends Migration
      */
     public function up()
     {
-        Schema::table('orders', function (Blueprint $table) {
-            $table->json('workflow_status')->after('system_order_no')->nullable();
-            $table->dropColumn('order_file');
+        Schema::table('orders', function (Blueprint $table) {            
+            if (!Schema::hasColumn('orders', 'workflow_status')) {
+                $table->json('workflow_status')->nullable()->after('system_order_no');
+            }
+
+            if (Schema::hasColumn('orders', 'order_file')) {
+                $table->dropColumn('order_file');
+            }
         });
     }
 
@@ -27,7 +32,9 @@ class AddWorkflowStatusToOrdersTable extends Migration
     public function down()
     {
         Schema::table('orders', function (Blueprint $table) {
-            //
+            if (!Schema::hasColumn('orders', 'workflow_status')) {
+                $table->dropColumn('workflow_status');
+            }
         });
     }
 }

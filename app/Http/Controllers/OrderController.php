@@ -49,9 +49,11 @@ class OrderController extends BaseController
      *
      * @return Application|Factory|View
      */
-    public function index(Request $get) : View|Factory|Application
+    public function index(Request $get) //: View|Factory|Application
     {
-        $orderData = $this->searchOrderData($get);
+        $user = Auth::user();
+        $companyId = $user->getCompanyProfile()->company_id;
+        $orderData = $this->searchOrderData($get, $user, $companyId);
         return view('order.index', compact('orderData'));
     }
 
@@ -61,7 +63,11 @@ class OrderController extends BaseController
      * @return JSON
      */
 
-    public function searchOrderData(Request $get){
+    public function searchOrderData(Request $get, $user = null, $companyId = null){
+        if ($user == null){
+            $user = Auth::user();
+            $companyId = $user->getCompanyProfile()->company_id;
+        }
         $data = $get->data;
         $paginate = $get->paginate && $get->paginate > 0 ? $get->paginate : 10;
         $order = Order::where(function($qry) use ($data) {
@@ -74,7 +80,11 @@ class OrderController extends BaseController
                        ->orWhere("due_date", "LIKE", "%$data%")
                        ->orWhere("created_at", "LIKE", "%$data%");
         })->with('user', 'amc', 'appraisalDetail',   'appraisalDetail.appraiser',
-        'appraisalDetail.getLoanType', 'lender', 'propertyInfo')->orderBy('id', 'desc')->paginate($paginate);
+        'appraisalDetail.getLoanType', 'lender', 'propertyInfo')
+        ->where('created_by', $user->id)
+        ->where('company_id', $companyId)
+        ->orderBy('id', 'desc')
+        ->paginate($paginate);
         return $order;
     }
 
@@ -83,7 +93,7 @@ class OrderController extends BaseController
      *
      * @return Application|Factory|View
      */
-    public function create() //: View|Factory|Application
+    public function create(Request $get) //: View|Factory|Application
     {
         $system_order_no = $this->generateSystemOrderNo();
         $appraisal_users = $this->repository->getUserByRoleWise(role: 'appraiser');
@@ -97,9 +107,13 @@ class OrderController extends BaseController
         $company = auth()->user()->companies()->first();        
         $userID = auth()->user()->id;
 
-        return view('order.create',
-            compact('system_order_no', 'userID', 'company', 'appraisal_users', 'appraisal_types', 'loan_types', 'amc_clients',
-                'lender_clients'));
+        $data = compact('system_order_no', 'userID', 'company', 'appraisal_users', 'appraisal_types', 'loan_types', 'amc_clients', 'lender_clients');
+
+        if ($get->array && $get->array == 'true') {
+            return $data;
+        }
+
+        return view('order.create', $data);
     }
 
     /**
@@ -169,7 +183,6 @@ class OrderController extends BaseController
         $client_users = Helper::getClientsGroupBy($this->repository->getClients());
         $amc_clients = $client_users[0];
         $lender_clients = $client_users[1];
-
         $order = Order::with(
                 'amc',
                 'lender',
