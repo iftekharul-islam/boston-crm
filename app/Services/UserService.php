@@ -132,7 +132,6 @@ class UserService
 	 public function updateProfileInformation($attributes, $user_id): static
 	 {
 			$this->profileRepository->updateProfile( attributes: $attributes, user_id: $user_id );
-			
 			return $this;
 	 }
 }

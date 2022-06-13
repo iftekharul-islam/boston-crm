@@ -149,7 +149,7 @@ class OrderApiController extends Controller
 
 
             $searchAddress = $step['searchAddress'];
-            $formatedAddress = $step['formatedAddress'];
+            $formatedAddress = $step['formatedAddress'] ?? $searchAddress;
             $state = $step['state'];
             $street = $step['street'];
             $unitNo = $step['unitNo'];

@@ -127,13 +127,14 @@ class CompanyService
 		*
 		* @return $this
 		*/
-	 public function createRole($name = 'admin', $company = null, $description = ''): CompanyService
+	 public function createRole($name = 'admin', $company = null, $description = '', $user = null): CompanyService
 	 {
 			$this->role = Role::query()->create( [
 				'name'        => strtolower( $name ),
 				'description' => $description,
 				'guard_name'  => 'web',
 				'company_id'  => $company == null ? 1 : $company->id,
+				'user_id'  => $user == null ? 1 : $user->id,
 			] );
 			
 			return $this;
@@ -228,9 +229,10 @@ class CompanyService
 	 {
 			$user_company = auth()->user()->companies()->first();
 			
-			return $user_company->roles()->with( 'permissions', function ($query) {
+			$roles = $user_company->roles()->with( 'permissions', function ($query) {
 				 return $query->get( [ 'name' ] );
 			} )->get();
+			return $roles;
 	 }
 	 
 	 /**
@@ -288,12 +290,19 @@ class CompanyService
 		*/
 	 public function syncWithCompany($company, $role_id): static
 	 {
+			$rolename = null;
+			$role = Role::where('id', $role_id)->first();
+			if ($role && $role->name == 'appraiser') {
+				$rolename = $role->name;
+			}
+			
 			CompanyUser::query()->create( [
 				'company_id' => $company->id,
 				'user_id'    => $this->user->id,
 				'role_id'    => $role_id,
+				'role_name'    => $rolename,
 				'status'     => 0,
-			] );
+			]);
 			
 			return $this;
 	 }

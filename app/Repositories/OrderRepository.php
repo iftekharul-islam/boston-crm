@@ -75,9 +75,13 @@ class OrderRepository extends BaseRepository
      */
     #[NoReturn] public function getCompanyUsers(object $role): Collection|array
     {
+        $array = ['role_id', $role->id];
+        if ($role->name == 'appraiser') {
+            $array = ['role_name', 'appraiser'];
+        }
         $company_user_ids = CompanyUser::query()?->where([
             ['company_id', '=', $this->company->id],
-            ['role_id', $role->id],
+            $array,
             ['status', 1]
         ])->pluck('user_id');
 

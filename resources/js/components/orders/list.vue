@@ -16,7 +16,7 @@
         </div>
         <Table :items="orderData" :sl-start="pages.pageData.from" :header="order.header">
             <template v-slot:amc_id="{item}">
-                {{ item.amc.name }}
+                {{ item.amc ? item.amc.name : '-' }}
             </template>
             <template v-slot:map_it="{item}">
                 <a target="_blank" :href="`https://www.google.com/maps/search/?api=1&query=${item.property_info ? item.property_info.search_address : ''}`" :data-key="item.id">
@@ -50,6 +50,8 @@
         <paginate align="center" :total-page="pages.pageData.last_page" @loadPage="loadPage($event)"></paginate>
     </div>
 </template>
+
+
 
 <script>
 import Table from "../../src/Table.vue"
