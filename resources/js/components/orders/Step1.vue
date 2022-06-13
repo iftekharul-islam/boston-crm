@@ -487,13 +487,46 @@ export default {
             this.step1.loan_type = value;
         }.bind(this));
         $(document).on("change", "#amcClientSelect", function(e){
-            let value = e.target.value;
-            this.step1.amc = value;
+            let changeLender = false;
+            let id = e.target.value;
+            this.step1.amc = id;
+            let findObject = this.amcClients.find(ele => ele.id == id);
+            if (findObject && findObject.client_type == "both") {
+              this.step1.lender = id;
+              changeLender = true;
+            } else {
+              let checkAmcId = this.lenderClients.find(ele => ele.id == this.step1.lender);
+              if (checkAmcId && checkAmcId.client_type == "both") {
+                this.step1.lender = null;
+                changeLender = true;
+              }
+            }
+            if (changeLender) {
+              $("#lenderClientSelect").val(this.step1.lender).trigger('change');
+            }
         }.bind(this));
-        $(document).on("change", "#lenderClientSelect", function(e){
-            let value = e.target.value;
-            this.step1.lender = value;
+        
+        $("#lenderClientSelect").on("select2:select", function(e){
+            var data = e.params.data;
+            let id = data.id;
+            this.step1.lender = id;
+            let changeLender = false;
+            let findObject = this.lenderClients.find(ele => ele.id == id);
+            if (findObject && findObject.client_type == "both") {
+              this.step1.amcClient = id;
+              changeLender = true;
+            } else {
+              let checkAmcId = this.amcClients.find(ele => ele.id == this.step1.amcClient);
+              if (checkAmcId && checkAmcId.client_type == "both") {
+                this.step1.amcClient = null;
+                changeLender = true;
+              }
+            }
+            if (changeLender) {
+              $("#amcClientSelect").val(this.step1.amcClient).trigger('change');
+            }
         }.bind(this));
+
         $(document).on("change", "#apprClientSelect", function(e){
             let value = e.target.value;
             this.step1.appraiserName = value;
@@ -800,29 +833,11 @@ export default {
       this.step1.lng = this.mapData.data.lon;
       this.changeStreetAddress(this.step1.street);
     },
-    getAmcClient(event) {
-      let id = parseInt(event.target.value);
-      let findObject = this.amcClients.find(ele => ele.id == id);
-      if (findObject && findObject.client_type == "both") {
-        this.step1.lender = id;
-      } else {
-        let checkAmcId = this.lenderClients.find(ele => ele.id == this.step1.lender);
-        if (checkAmcId && checkAmcId.client_type == "both") {
-          this.step1.lender = null;
-        }
-      }
+    getAmcClient(id) {
+      
     },
-    getLenderClient(event) {
-      let id = parseInt(event.target.value);
-      let findObject = this.lenderClients.find(ele => ele.id == id);
-      if (findObject && findObject.client_type == "both") {
-        this.step1.amcClient = id;
-      } else {
-        let checkAmcId = this.amcClients.find(ele => ele.id == this.step1.amcClient);
-        if (checkAmcId && checkAmcId.client_type == "both") {
-          this.step1.amcClient = null;
-        }
-      }
+    getLenderClient(id) {
+      
     },
 
     findTechnologyFee() {
