@@ -12,6 +12,7 @@ use App\Models\ContactInfo;
 use App\Models\LoanType;
 use App\Models\Order;
 use App\Models\PropertyInfo;
+use App\Models\OrderWInspection;
 use App\Models\ProvidedService;
 use App\Models\User;
 use Carbon\Carbon;
@@ -66,6 +67,15 @@ class OrderRepository extends BaseRepository
     public function getOrderDueDate($order_id): mixed
     {
         return $this->model->where('id', $order_id)->select('due_date')->first();
+    }
+
+    /**
+     * @param $order_id
+     * @return mixed
+     */
+    public function getDurations($order_id): mixed
+    {
+        return OrderWInspection::where('order_id', $order_id)->durations->first();
     }
 
     /**

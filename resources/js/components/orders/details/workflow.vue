@@ -106,7 +106,7 @@ export default {
   name: 'WorkFlow',
   props: {
     order: [],
-    appraisers: []
+    appraisers: [],
   },
   components: {
     Revision,

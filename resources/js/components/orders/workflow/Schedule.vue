@@ -1,7 +1,7 @@
 <template>
   <div class="schedule-part">
-    <div class="scheduling-item step-items">
-    <a class="edit-btn"><span class="icon-edit"><span class="path1"></span><span class="path2"></span></span></a>
+    <div v-if="alreadyScheduled == 1" class="scheduling-item step-items">
+    <a class="edit-btn"><span @click="editSchedule" class="icon-edit"><span class="path1"></span><span class="path2"></span></span></a>
     <div class="group">
       <p class="text-light-black mgb-12">Scheduled by</p>
       <p class="mb-0 text-light-black fw-bold">{{ scheduleData.inspector_name }}</p>
@@ -16,18 +16,23 @@
     </div>
     <div class="group">
       <p class="text-light-black mgb-12">Durration</p>
-      <p class="mb-0 text-light-black fw-bold">{{ scheduleData.duration }} hours</p>
+      <p class="mb-0 text-light-black fw-bold">{{ scheduleData.duration }}</p>
     </div>
-    <div class="text-end mgt-32">
-      <button type="button" v-b-modal.schedule class="button button-primary px-4 h-40 d-inline-flex align-items-center">Schedule</button>
-    </div>
+
   </div>
+  <div v-else class="scheduling-item step-items">
+    <p>Not yet scheduled, Click Schedule button to schedule the order</p>
+    <div class="text-end mgt-32">
+      <button v-if="alreadyScheduled == 0" type="button" v-b-modal.schedule class="button button-primary px-4 h-40 d-inline-flex align-items-center">Schedule</button>
+    </div>
+    </div>
     <b-modal id="schedule" size="md" title="Schedule">
         <div class="modal-body">
             <b-alert v-if="message" show variant="success">
             <a href="#" class="alert-link">{{ message }}</a></b-alert>
             <div class="row">
                 <div class="col-md-12">
+                    <ValidationObserver ref="scheduleForm">
                     <ValidationProvider class="group" name="Appraiser name" rules="required" v-slot="{ errors }">
                         <div :class="{ 'invalid-form' : errors[0] }">
                             <label for="" class="d-block mb-2 dashboard-label">Appraiser name <span
@@ -72,8 +77,8 @@
                                 <option value="">Please select duration</option>
                                 <option
                                     v-for="duration in durations"
-                                    :key="duration.id"
-                                    :value="duration.id">
+                                    :key="duration.duration"
+                                    :value="duration.duration">
                                     {{ duration.duration }}
                                 </option>
                             </select>
@@ -94,6 +99,7 @@
                             <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                         </div>
                     </ValidationProvider>
+                    </ValidationObserver>
                 </div>
             </div>
         </div>
@@ -122,9 +128,22 @@ export default {
         duration:'',
         note:''
     },
-    durations: [{'id': 1,'duration':'1 hour'},{'id': 2,'duration':'2 hour'},{'id': 3,'duration':'3 hour'}],
+    alreadyScheduled: 0,
+    durations: [
+        {'duration':'15 minutes'},
+        {'duration':'20 minutes'},
+        {'duration':'25 minutes'},
+        {'duration':'30 minutes'},
+        {'duration':'35 minutes'},
+        {'duration':'40 minutes'},
+        {'duration':'45 minutes'},
+        {'duration':'50 minutes'},
+        {'duration':'55 minutes'},
+        {'duration':'60 minutes'},
+    ],
   }),
   created(){
+    this.alreadyScheduled = (JSON.parse(this.order.workflow_status)).scheduling
     this.getScheduleData()
   },
   mounted() {
@@ -153,14 +172,19 @@ export default {
     saveSchedule(){
         this.$boston.post('update-order-schedule',this.scheduleData)
         .then(res => {
-            let that = this
             this.message = res.message;
+            this.alreadyScheduled = 1;
             setTimeout(() => {
-                that.$bvModal.hide('schedule')
-                that.message = '';
+                this.$refs.scheduleForm.reset();
+                this.$bvModal.hide('schedule')
+                this.message = '';
             },3000);
-        })
+        }).bind(this)
     },
+    editSchedule(){
+        this.$bvModal.show('schedule')
+        this.getScheduleData()
+    }
   }
 }
 </script>
