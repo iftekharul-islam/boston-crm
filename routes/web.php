@@ -121,6 +121,7 @@ Route::group( [ 'middleware' => [ 'auth:sanctum' ] ], function () {
 
     //order workflow
     Route::post('/update-order-schedule',[OrderWorkflowController::class,'updateOrderSchedule']);
+    Route::get('/check-event',[OrderWorkflowController::class,'checkEvent']);
 
 
     //Appraisal Type
