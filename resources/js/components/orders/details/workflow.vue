@@ -71,7 +71,7 @@
             <!-- Inspection -->
             <Inspection :inspection="order['inspection']" v-if="isActive === 'inspection'"></Inspection>
             <!-- Report preparation -->
-            <ReportPreparation v-if="isActive === 'report-preparation'"></ReportPreparation>
+            <ReportPreparation v-if="isActive === 'report-preparation'" :role="myRole" :users="users" :order="order"></ReportPreparation>
             <!-- Initial Review -->
             <InitialReview v-if="isActive === 'initial-review'"></InitialReview>
             <!-- Report Analysis and Review -->
@@ -105,6 +105,9 @@ import Revision from "../workflow/Revision";
 export default {
   name: 'WorkFlow',
   props: {
+    users: Array,
+    permissions: Array,
+    role: String,
     order: [],
     appraisers: [],
   },
@@ -123,11 +126,18 @@ export default {
   data: () => ({
     isActive: 'order-create',
     status: '',
+    myRole: '',
   }),
   created(){
+    this.updateRole()
     this.status = JSON.parse(this.order.workflow_status) ?? '';
   },
   methods: {
+    updateRole() {
+      if (this.role.length) {
+        this.myRole = this.role
+      }
+    },
     changeTab(type) {
       this.isActive = type
     }

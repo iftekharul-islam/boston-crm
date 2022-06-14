@@ -51,6 +51,16 @@ class OrderRepository extends BaseRepository
         return $this->users;
     }
 
+    public function getUserExpectRole(string $role): Collection|\Illuminate\Support\Collection|array
+    {
+        $this->company = $this->getAuthUserCompany();
+        $role = $this->getRoleByName($role);
+        if ($role) {
+            $this->users = $this->getCompanyUsersWithoutAdmin($role);
+        }
+        return $this->users;
+    }
+
     /**
      * @param $order_id
      * @return mixed
@@ -94,6 +104,19 @@ class OrderRepository extends BaseRepository
             $array,
             ['status', 1]
         ])->pluck('user_id');
+
+        return User::query()->whereIn('id', $company_user_ids)->get(['id', 'name', 'email']);
+    }
+
+    #[NoReturn] public function getCompanyUsersWithoutAdmin(object $role): Collection|array
+    {
+        if ($role->name == 'appraiser') {
+            $array = ['role_name', 'appraiser'];
+        }
+        $company_user_ids = CompanyUser::query()?->where([
+            ['company_id', '=', $this->company->id],
+            ['status', 1]
+        ])->where('role_id', '!=', $role->id)->pluck('user_id');
 
         return User::query()->whereIn('id', $company_user_ids)->get(['id', 'name', 'email']);
     }
