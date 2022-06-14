@@ -120,4 +120,9 @@ class Order extends Model implements HasMedia
     {
         return $this->hasOne(OrderWInspection::class,'order_id','id');
     }
+
+    public function report()
+    {
+        return $this->hasOne(OrderWReport::class,'order_id', 'id');
+    }
 }

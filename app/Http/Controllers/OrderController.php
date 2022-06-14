@@ -152,7 +152,11 @@ class OrderController extends BaseController
             'contactInfo',
             'activityLog.user',
             'inspection.user',
-            'inspection.attachments'
+            'inspection.attachments',
+            'report.reviewer',
+            'report.trainee',
+            'report.assignee',
+            'report.creator'
         )->where('id', $id)->first();
         $order->amc_file = $this->repository->getClientFile($order->amc_id);
         $order->lender_file = $this->repository->getClientFile($order->lender_id);
@@ -162,8 +166,9 @@ class OrderController extends BaseController
         $order_due_date = $this->repository->getOrderDueDate($id);
         $diff_in_days = Carbon::parse($order_due_date->due_date)->diffInDays();
         $diff_in_hours = Carbon::parse($order_due_date->due_date)->diffInHours();
+        $all_users = $this->repository->getUserExpectRole(role: 'admin');
 
-        return view('order.show', compact('order_file_types','order_files', 'order', 'diff_in_days', 'diff_in_hours','appraisers','appraisal_types','loan_types','all_amc','all_lender'));
+        return view('order.show', compact('all_users', 'order_file_types', 'order_files', 'order', 'diff_in_days', 'diff_in_hours','appraisers','appraisal_types','loan_types','all_amc','all_lender'));
     }
 
     /**

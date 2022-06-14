@@ -47,7 +47,7 @@
             </div>
         </div>
         <div class="row">
-            <workflow :order="{{ $order }}" :appraisers="{{ $appraisers }}"></workflow>
+            <workflow :order="{{ $order }}" :appraisers="{{ $appraisers }}" :permissions="{{ json_encode($user_permissions) }}" :role="'{{ $user_role }}'" :users="{{ json_encode($all_users) }}"></workflow>
             <history :order="{{ $order }}"></history>
         </div>
         <div class="mgt-32">

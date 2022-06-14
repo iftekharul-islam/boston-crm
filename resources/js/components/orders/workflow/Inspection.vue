@@ -57,7 +57,7 @@ export default {
       inspection: [],
     },
   data: () => ({
-    editable: false,
+    editable: true,
     fileData:{
       id: null,
       name: '',
@@ -77,6 +77,7 @@ export default {
           this.id = this.inspection?.id
           if(this.inspection.attachments.length){
             this.dataFiles = this.inspection.attachments
+            this.editable = false
           }
       },
       addFiles(event){
