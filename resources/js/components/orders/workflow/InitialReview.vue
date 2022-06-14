@@ -10,7 +10,7 @@
       <p class="mb-0 text-light-black fw-bold">15 Feb 2022</p>
     </div>
     <div class="group">
-      <p class="text-light-black mgb-12">Traineee</p>
+      <p class="text-light-black mgb-12">Trainee</p>
       <p class="mb-0 text-light-black fw-bold">15 Feb 2022</p>
     </div>
     <div class="group">
@@ -58,7 +58,14 @@
 export default {
   name: 'InitialReview',
   data: () => ({
-    
+    initialReview:{
+      report_creator_name: '',
+      report_reviewer_name: '',
+      assigned_to:'',
+      trainee_id:'',
+      note: '',
+      is_review_done:''
+    }
   })
 }
 </script>
