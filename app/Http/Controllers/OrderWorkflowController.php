@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Helpers\CrmHelper;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Spatie\GoogleCalendar\Event;
 use App\Services\OrderWorkflowService;
 use App\Repositories\OrderWorkflowRepository;
 
@@ -29,5 +30,14 @@ class OrderWorkflowController extends BaseController
         //$this->service->setOrderSchedule($request->all());
 
         return response()->json(['message' => 'Schedule has been updated successfully']);
+    }
+
+    public function checkEvent(){
+        dd(Event::get());
+        $event = new Event;
+        $event->name = 'A new event';
+        $event->startDateTime = Carbon::now();
+        $event->endDateTime = Carbon::now()->addHour();
+        $event->save();
     }
 }
