@@ -15,7 +15,7 @@
       <p class="mb-0 text-light-black fw-bold">{{ scheduleData.note }}</p>
     </div>
     <div class="group">
-      <p class="text-light-black mgb-12">Durration</p>
+      <p class="text-light-black mgb-12">Duration</p>
       <p class="mb-0 text-light-black fw-bold">{{ scheduleData.duration }}</p>
     </div>
 
@@ -164,9 +164,8 @@ export default {
     },
     select2Features() {
         $(document).on("change", "#apprClientSelect", function(e){
-            let value = e.target.value;
-            console.log(e.target.value)
-            this.scheduleData.appraiser_id = value;
+            let value = e.target.value
+            this.scheduleData.appraiser_id = value
         }.bind(this));
     },
     saveSchedule(){
