@@ -8,6 +8,7 @@ use Psy\Util\Json;
 use App\Helpers\Helper;
 use App\Models\ActivityLog;
 use App\Models\User;
+use App\Models\OrderWInspection;
 use App\Models\Order;
 use App\Helpers\CrmHelper;
 use Illuminate\Support\Js;
@@ -151,7 +152,8 @@ class OrderController extends BaseController
             'borrowerInfo',
             'contactInfo',
             'activityLog.user',
-            'inspection.user'
+            'inspection.user',
+            'inspection.attachments'
         )->where('id', $id)->first();
         $order->amc_file = $this->repository->getClientFile($order->amc_id);
         $order->lender_file = $this->repository->getClientFile($order->lender_id);
@@ -322,7 +324,6 @@ class OrderController extends BaseController
             ->with(['success' => 'Order file uploaded successfully']);
     }
 
-
     /**
      * @param $order_id
      * @return JsonResponse
@@ -427,5 +428,41 @@ class OrderController extends BaseController
             "order_id" => $order->id
         ];
         $this->repository->addActivity($data);
+    }
+
+    public function uploadInpectionFiles(Request $request, $inspection_id): JsonResponse|\Illuminate\Http\RedirectResponse
+    {
+        if($request->has('public')){
+            $inspection_id = base64_decode($inspection_id);
+        }
+        $data = $this->saveInpectionFiles($request->all(), $inspection_id);
+        logger($data);
+        if ($request->ajax()) {
+            return response()->json([
+                "file" => $data['media'],
+                "message" => "inspection file uploaded successfully"
+            ]);
+        }
+        return redirect()
+            -back()
+            ->with(['success' => 'inspection file uploaded successfully']);
+    }
+
+    public function saveInpectionFiles($data, $inspection_id)
+    {
+        $inspection = OrderWInspection::find($inspection_id);
+        if(!$inspection){
+            return false;
+        }
+        foreach ($data['files'] as $file){
+            $inspection->find($inspection_id)->addMedia($file)
+                ->withCustomProperties(['type' => $data['file_type']])
+                ->toMediaCollection('inspection');
+        }
+        $inspection = OrderWInspection::with('attachments')->where('id', $inspection_id)->first();
+        return [
+           'status' => true,
+           'media' => $inspection->attachments,
+        ];
     }
 }

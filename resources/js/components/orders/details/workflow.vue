@@ -69,7 +69,7 @@
             <!-- Scheduling -->
             <Schedule :order="order" :appraisers="appraisers" v-if="isActive === 'scheduling'"></Schedule>
             <!-- Inspection -->
-            <Inspection v-if="isActive === 'inspection'"></Inspection>
+            <Inspection :inspection="order['inspection']" v-if="isActive === 'inspection'"></Inspection>
             <!-- Report preparation -->
             <ReportPreparation v-if="isActive === 'report-preparation'"></ReportPreparation>
             <!-- Initial Review -->
