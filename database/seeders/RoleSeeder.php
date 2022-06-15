@@ -17,7 +17,6 @@ class RoleSeeder extends Seeder {
 				['name' => 'admin', 'guard_name' => 'web']
 			]
 		);
-
 		$roles = Role::query()->get();
 		$companies = Company::query()->get();
 		foreach ($roles as $role) {
