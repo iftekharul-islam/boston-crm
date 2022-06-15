@@ -1,5 +1,12 @@
 @extends('layouts.app')
 
+@php
+    $remember = ['email' => null, 'password' => null, 'time' => null];
+    if (Cache::has('login_remember')) {
+        $remember = Cache::get('login_remember');
+    }
+@endphp
+
 @section('content')
     <div class="login ">
         <div class="d-flex login-row login-space flex-wrap">
@@ -16,7 +23,7 @@
                             <div class="">
                                 <input id="email" type="email"
                                        class="login-input w-100 @error('email') is-invalid @enderror"
-                                       name="email" value="{{ old('email') }}" autocomplete="email" autofocus>
+                                       name="email" value="{{ old('email') ?? $remember['email'] }}" autocomplete="email" autofocus>
 
                                 @error('email')
                                 <span class="invalid-feedback" role="alert">
@@ -33,7 +40,7 @@
                                 <div class="position-relative">
                                     <input id="password" type="password"
                                            class="login-input w-100 @error('email') is-invalid @enderror"
-                                           name="password" autocomplete="password" autofocus>
+                                           name="password" value="{{ old('password') ?? $remember['password'] }}" autocomplete="password" autofocus>
                                     {{-- eye icon --}}
                                     <span class="icon-eye icons show-password"><span class="path1"></span><span
                                                 class="path2"></span></span>
@@ -53,7 +60,7 @@
                             <div class="">
                                 <div class="checkbox-group">
                                     <input class="checkbox-input" type="checkbox" name="remember"
-                                           id="remember" {{ old('remember') ? 'checked' : '' }}>
+                                           id="remember" {{ $remember['email'] ? 'checked' : '' }}>
 
                                     <label class="checkbox-label" for="remember">
                                         {{ __('Remember Me') }}

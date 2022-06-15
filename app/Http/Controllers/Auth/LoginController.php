@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
-use App\Models\CompanyUser;
 use App\Models\User;
-use App\Providers\RouteServiceProvider;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use Illuminate\Http\RedirectResponse;
+use App\Models\CompanyUser;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Cache;
+use App\Providers\RouteServiceProvider;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class LoginController extends Controller
 {
@@ -61,6 +62,9 @@ class LoginController extends Controller
 				 if ( ! $active_user ) {
 						return redirect()->route( 'login' )->with( 'inactive-user',
 							'Your account has been deactivated. Please contact with admin.' )->withInput();
+				 }
+				 if ($request->remember) {
+					Cache::put('login_remember', [ 'email' => $request->email, 'password' => $request->password, 'time' => time()], config('boston_crm.login_time'));
 				 }
 			}
 			// If the class is using the ThrottlesLogins trait, we can automatically throttle
