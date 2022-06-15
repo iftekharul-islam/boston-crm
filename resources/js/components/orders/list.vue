@@ -33,7 +33,7 @@
                 {{ item.inspector ? '-' : '-' }}
             </template>
             <template v-slot:appraiser="{item}">
-                {{ item.appraisal_detail.appraiser.name }}
+                {{ item.appraisal_detail.appraiser ? item.appraisal_detail.appraiser.name : '-' }}
             </template>
              <template v-slot:property_address="{item}">
                 {{ item.property_info.search_address }}
