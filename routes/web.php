@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\OrderApiController;
 use App\Http\Controllers\LocalizationController;
 use App\Http\Controllers\VerificationController;
 use App\Http\Controllers\AppraisalTypeController;
+use App\Http\Controllers\OrderWorkflowController;
 
 /*
 |--------------------------------------------------------------------------
@@ -93,11 +94,12 @@ Route::group( [ 'middleware' => [ 'auth:sanctum' ] ], function () {
 		 [ OrderController::class, 'update' ] )->middleware( 'role_permission:update.order' )->name( 'orders.update' );
 	 Route::delete( 'orders/{id}',
 		 [ OrderController::class, 'destroy' ] )->middleware( 'role_permission:delete.order' )->name( 'orders.destroy' );
-	 
+
 	Route::post( 'order/update/{type}',
 		 [ OrderController::class, 'orderUpdate' ] )->middleware( 'role_permission:update.order' )->name( 'orders.update.single' );
-	 
+
 	Route::post( 'search/order', [ OrderController::class, 'searchOrderData' ] )->middleware( 'role_permission:orders.index' );
+    Route::post('api/get/same/orders/by/street', [OrderApiController::class, 'getSameData']);
 
      //order details
     Route::get('save-order-data',[OrderController::class,'saveOrderData']);
@@ -117,7 +119,10 @@ Route::group( [ 'middleware' => [ 'auth:sanctum' ] ], function () {
     Route::post('/update-borrower-info/{id}',[OrderController::class,'updateBorrowerInfo'])->middleware('role_permission:update.order');
     Route::post('/update-contact-info/{id}',[OrderController::class,'updateContactInfo'])->middleware('role_permission:update.order');
 
-	Route::post('api/get/same/orders/by/street', [OrderApiController::class, 'getSameData']);
+    //order workflow
+    Route::post('/update-order-schedule',[OrderWorkflowController::class,'updateOrderSchedule']);
+    Route::get('/check-event',[OrderWorkflowController::class,'checkEvent']);
+
 
     //Appraisal Type
 	 Route::get( 'appraisal-types',
@@ -164,10 +169,14 @@ Route::view( '/order', 'dashboard.order' );
 Route::view( '/order-details', 'dashboard.order-details' )->name( 'order.details' );
 Route::view( '/order-add', 'dashboard.order-add' )->name( 'order.add' );
 Route::view( '/order-add-step2', 'dashboard.order-add-step2' )->name( 'order.add-step2' );
+Route::view( '/call-management', 'dashboard.call-management' );
 Route::get( 'get/icons', [IconController::class, 'index'])->name('get.icon');
 Route::get( 'email/verify/{id}/{hash}', [ VerificationController::class, 'verify' ] )->name( 'verification.verify' );
 Route::get( 'accept-new-user/{code}', [ UserController::class, 'acceptInviteUser' ] )->name( 'accept.new.user' );
 Route::post( 'invite-user-update/{id}', [ UserController::class, 'inviteUserUpdate' ] )->name( 'update.invite.user.profile' );
 Route::get('/public-order/{id}',[OrderController::class,'publicOrder'])->name('public.order');
 Route::post('/upload-order-files/{id}',[OrderController::class,'uploadOrderFiles'])->name('order.file.upload');
+Route::post('/upload-inspection-files/{id}',[OrderController::class,'uploadInpectionFiles'])->name('inspection.file.upload');
+Route::post('/admin-report-preparation-create/{id}',[OrderWorkflowController::class,'storeAdminReportPreparation'])->name('report.preparation.create');
+Route::post('/assignee-report-preparation-create/{id}',[OrderWorkflowController::class,'storeAssigneeReportPreparation'])->name('assignee.preparation.create');
 //Route::get( "{slug}", [ WebApiController::class, 'home' ] )->where( 'slug', ".*" );

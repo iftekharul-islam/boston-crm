@@ -10,7 +10,7 @@
       <p class="mb-0 text-light-black fw-bold">15 Feb 2022</p>
     </div>
     <div class="group">
-      <p class="text-light-black mgb-12">Traineee</p>
+      <p class="text-light-black mgb-12">Trainee</p>
       <p class="mb-0 text-light-black fw-bold">15 Feb 2022</p>
     </div>
     <div class="group">
@@ -48,6 +48,10 @@
         <input type="checkbox" class="checkbox-input check-data">
         <label for="" class="checkbox-label text-capitalize">Review done</label>
       </div>
+      <div class="checkbox-group review-check mgt-20">
+        <input type="checkbox" class="checkbox-input check-data">
+        <label for="" class="checkbox-label text-capitalize">Review done as check & upload</label>
+      </div>
     </div>
     <div class="text-end mgt-32">
       <button class="button button-primary px-4 h-40 d-inline-flex align-items-center">Done</button>
@@ -57,6 +61,15 @@
 <script>
 export default {
   name: 'InitialReview',
-  data: () => ({})
+  data: () => ({
+    initialReview:{
+      report_creator_name: '',
+      report_reviewer_name: '',
+      assigned_to:'',
+      trainee_id:'',
+      note: '',
+      is_review_done:''
+    }
+  })
 }
 </script>

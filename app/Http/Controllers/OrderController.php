@@ -8,6 +8,7 @@ use Psy\Util\Json;
 use App\Helpers\Helper;
 use App\Models\ActivityLog;
 use App\Models\User;
+use App\Models\OrderWInspection;
 use App\Models\Order;
 use App\Helpers\CrmHelper;
 use Illuminate\Support\Js;
@@ -27,7 +28,6 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Contracts\Foundation\Application;
-
 use Illuminate\Support\Facades\Auth;
 
 
@@ -103,7 +103,7 @@ class OrderController extends BaseController
         $amc_clients = $client_users[0];
         $lender_clients = $client_users[1];
 
-        $company = auth()->user()->companies()->first();        
+        $company = auth()->user()->companies()->first();
         $userID = auth()->user()->id;
 
         $data = compact('system_order_no', 'userID', 'company', 'appraisal_users', 'appraisal_types', 'loan_types', 'amc_clients', 'lender_clients');
@@ -151,7 +151,12 @@ class OrderController extends BaseController
             'borrowerInfo',
             'contactInfo',
             'activityLog.user',
-            'inspection'
+            'inspection.user',
+            'inspection.attachments',
+            'report.reviewer',
+            'report.trainee',
+            'report.assignee',
+            'report.creator'
         )->where('id', $id)->first();
         $order->amc_file = $this->repository->getClientFile($order->amc_id);
         $order->lender_file = $this->repository->getClientFile($order->lender_id);
@@ -161,8 +166,9 @@ class OrderController extends BaseController
         $order_due_date = $this->repository->getOrderDueDate($id);
         $diff_in_days = Carbon::parse($order_due_date->due_date)->diffInDays();
         $diff_in_hours = Carbon::parse($order_due_date->due_date)->diffInHours();
+        $all_users = $this->repository->getUserExpectRole(role: 'admin');
 
-        return view('order.show', compact('order_file_types','order_files', 'order', 'diff_in_days', 'diff_in_hours','appraisers','appraisal_types','loan_types','all_amc','all_lender'));
+        return view('order.show', compact('all_users', 'order_file_types', 'order_files', 'order', 'diff_in_days', 'diff_in_hours','appraisers','appraisal_types','loan_types','all_amc','all_lender'));
     }
 
     /**
@@ -322,7 +328,6 @@ class OrderController extends BaseController
             ->with(['success' => 'Order file uploaded successfully']);
     }
 
-
     /**
      * @param $order_id
      * @return JsonResponse
@@ -427,5 +432,41 @@ class OrderController extends BaseController
             "order_id" => $order->id
         ];
         $this->repository->addActivity($data);
+    }
+
+    public function uploadInpectionFiles(Request $request, $inspection_id): JsonResponse|\Illuminate\Http\RedirectResponse
+    {
+        if($request->has('public')){
+            $inspection_id = base64_decode($inspection_id);
+        }
+        $data = $this->saveInpectionFiles($request->all(), $inspection_id);
+        logger($data);
+        if ($request->ajax()) {
+            return response()->json([
+                "file" => $data['media'],
+                "message" => "inspection file uploaded successfully"
+            ]);
+        }
+        return redirect()
+            -back()
+            ->with(['success' => 'inspection file uploaded successfully']);
+    }
+
+    public function saveInpectionFiles($data, $inspection_id)
+    {
+        $inspection = OrderWInspection::find($inspection_id);
+        if(!$inspection){
+            return false;
+        }
+        foreach ($data['files'] as $file){
+            $inspection->find($inspection_id)->addMedia($file)
+                ->withCustomProperties(['type' => $data['file_type']])
+                ->toMediaCollection('inspection');
+        }
+        $inspection = OrderWInspection::with('attachments')->where('id', $inspection_id)->first();
+        return [
+           'status' => true,
+           'media' => $inspection->attachments,
+        ];
     }
 }

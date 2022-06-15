@@ -85,17 +85,17 @@ class Order extends Model implements HasMedia
     {
         return $this->belongsTo(User::class,'created_by','id');
     }
-    
+
     public function appraisalDetail()
     {
         return $this->belongsTo(AppraisalDetail::class, 'id', 'order_id');
     }
-    
+
     public function providerService()
     {
         return $this->belongsTo(ProvidedService::class, 'id', 'order_id');
     }
-    
+
     public function propertyInfo()
     {
         return $this->belongsTo(PropertyInfo::class, 'id', 'order_id');
@@ -105,7 +105,7 @@ class Order extends Model implements HasMedia
     {
         return $this->belongsTo(BorrowerInfo::class, 'id', 'order_id');
     }
-   
+
     public function contactInfo()
     {
         return $this->belongsTo(ContactInfo::class, 'id', 'order_id');
@@ -118,6 +118,11 @@ class Order extends Model implements HasMedia
 
     public function inspection()
     {
-        return $this->belongsTo(OrderWInspection::class,'order_id','id');
+        return $this->hasOne(OrderWInspection::class,'order_id','id');
+    }
+
+    public function report()
+    {
+        return $this->hasOne(OrderWReport::class,'order_id', 'id');
     }
 }
