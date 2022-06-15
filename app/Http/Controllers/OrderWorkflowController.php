@@ -89,4 +89,8 @@ class OrderWorkflowController extends BaseController
         return response()->json(['message' => 'Report not available']);
     
     }
+
+    public function saveInitialReview(Request $request){
+        $this->repository->updateInitialReviewData($request->all());
+    }
 }
