@@ -477,19 +477,20 @@ export default {
             this.checkProviderValidation(e, 1);
         }.bind(this));
 
-        $(document).on("change", "#loanTypeSelect", function(e){
-            let value = e.target.value;
-            this.step1.loan_type = value;
-        }.bind(this));
+        // $(document).on("change", "#loanTypeSelect", function(e){
+        //     let value = e.target.value;
+        //     this.step1.loanType = value;
+        // }.bind(this));
         
-        $(document).on("change", "#loanTypeSelect", function(e){
+        $("#loanTypeSelect").on("select2:select", function(e){
             let value = e.target.value;
-            this.step1.loan_type = value;
+            this.step1.loanType = value;
         }.bind(this));
+
         $(document).on("change", "#amcClientSelect", function(e){
             let changeLender = false;
             let id = e.target.value;
-            this.step1.amc = id;
+            this.step1.amcClient = id;
             let findObject = this.amcClients.find(ele => ele.id == id);
             if (findObject && findObject.client_type == "both") {
               this.step1.lender = id;
