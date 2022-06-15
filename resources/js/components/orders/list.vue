@@ -33,7 +33,12 @@
                 {{ item.inspector ? '-' : '-' }}
             </template>
             <template v-slot:appraiser="{item}">
-                {{ item.appraisal_detail.appraiser ? item.appraisal_detail.appraiser.name : '-' }}
+                <template v-if="item.appraisal_detail">
+                    {{ item.appraisal_detail.appraiser ? item.appraisal_detail.appraiser.name : '-' }}
+                </template>
+                <template v-else>
+                    -
+                </template>
             </template>
              <template v-slot:property_address="{item}">
                 {{ item.property_info.search_address }}
@@ -112,6 +117,7 @@ export default {
     created() {
         this.pages.pageData = this.data;
         this.orderData = this.data.data;
+        console.log(this.orderData);
     },
     methods: {
         checkColumnActive(val) {
