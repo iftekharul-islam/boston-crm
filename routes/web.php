@@ -169,6 +169,7 @@ Route::view( '/order', 'dashboard.order' );
 Route::view( '/order-details', 'dashboard.order-details' )->name( 'order.details' );
 Route::view( '/order-add', 'dashboard.order-add' )->name( 'order.add' );
 Route::view( '/order-add-step2', 'dashboard.order-add-step2' )->name( 'order.add-step2' );
+Route::view( '/call-management', 'dashboard.call-management' );
 Route::get( 'get/icons', [IconController::class, 'index'])->name('get.icon');
 Route::get( 'email/verify/{id}/{hash}', [ VerificationController::class, 'verify' ] )->name( 'verification.verify' );
 Route::get( 'accept-new-user/{code}', [ UserController::class, 'acceptInviteUser' ] )->name( 'accept.new.user' );
