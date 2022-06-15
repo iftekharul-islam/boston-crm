@@ -1,17 +1,17 @@
 <template>
   <div class="report-preparation-item step-items">
     <div v-if="isAdmin">
-        <div v-if="dataExist">
-          <a class="edit-btn" @click="dataExist = false"><span class="icon-edit"><span class="path1"></span><span class="path2"></span></span></a>
-          <div class="group">
-            <p class="text-light-black mgb-12">Report creator</p>
-            <p class="mb-0 text-light-black fw-bold">{{ this.creator }}</p>
-          </div>
-          <div class="group">
-            <p class="text-light-black mgb-12">Report reviewer</p>
-            <p class="mb-0 text-light-black fw-bold">{{ this.viewer }}</p>
-          </div>
+      <div v-if="adminDataExist">
+        <a class="edit-btn" @click="adminDataExist = false"><span class="icon-edit"><span class="path1"></span><span class="path2"></span></span></a>
+        <div class="group">
+          <p class="text-light-black mgb-12">Report creator</p>
+          <p class="mb-0 text-light-black fw-bold">{{ this.creator }}</p>
         </div>
+        <div class="group">
+          <p class="text-light-black mgb-12">Report reviewer</p>
+          <p class="mb-0 text-light-black fw-bold">{{ this.viewer }}</p>
+        </div>
+      </div>
       <div v-else>
         <ValidationObserver ref="adminForm">
           <div class="mgb-32">
@@ -68,59 +68,72 @@
           <p class="mb-0 text-light-black fw-bold">{{ this.note }}</p>
         </div>
     </div>
+    <div v-else-if="isEmpty">
+      <div class="group text-center">
+          <p class="text-light-black mgb-12">Admin not udpated yet</p>
+        </div>
+    </div>
     <div v-else>
-      <ValidationObserver ref="assigneeForm">
-          <div class="mgb-32">
-              <ValidationProvider class="group" name="Assign to" rules="required" v-slot="{ errors }">
-                <div :class="{ 'invalid-form' : errors[0] }">
-                  <label for="" class="d-block mb-2 dashboard-label">Assign to </label>
-                  <select name="" class="dashboard-input w-100 loan-type-select" v-model="assignTo">
-                    <option value="">Please Select a user</option>
-                    <option v-for="user in users" :key="user.id" :value="user.id">
-                        {{ user.name }}
-                    </option>
-                  </select>
-                  <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
-                </div>
-              </ValidationProvider>
-            </div>
-          <div class="mgb-32">
-              <ValidationProvider class="group" name="Trainee Selection" rules="required" v-slot="{ errors }">
-                <div :class="{ 'invalid-form' : errors[0] }">
-                  <label for="" class="d-block mb-2 dashboard-label">Trainee Selection </label>
-                  <select name="" class="dashboard-input w-100 loan-type-select" v-model="traineeId">
-                    <option value="">Please Select a user</option>
-                    <option v-for="user in users" :key="user.id" :value="user.id">
-                        {{ user.name }}
-                    </option>
-                  </select>
-                  <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
-                </div>
-              </ValidationProvider>
-            </div>
-          <div class="mgb-32">
-            <ValidationProvider class="group" name="Note" rules="required" v-slot="{ errors }">
-                <div :class="{ 'invalid-form' : errors[0] }">
-                  <label for="" class="mb-2 text-light-black d-inline-block">Add note</label>
-                  <div class="preparation-input w-100 position-relative">
-                    <textarea name="" id="" cols="30" rows="3" class="w-100 dashboard-textarea" v-model="note"></textarea>
+        <div class="group">
+          <p class="text-light-black mgb-12">Report creator</p>
+          <p class="mb-0 text-light-black fw-bold">{{ this.creator }}</p>
+        </div>
+        <div class="group">
+          <p class="text-light-black mgb-12">Report reviewer</p>
+          <p class="mb-0 text-light-black fw-bold">{{ this.viewer }}</p>
+        </div>
+        <ValidationObserver ref="assigneeForm">
+            <div class="mgb-32">
+                <ValidationProvider class="group" name="Assign to" rules="required" v-slot="{ errors }">
+                  <div :class="{ 'invalid-form' : errors[0] }">
+                    <label for="" class="d-block mb-2 dashboard-label">Assign to </label>
+                    <select name="" class="dashboard-input w-100 loan-type-select" v-model="assignTo">
+                      <option value="">Please Select a user</option>
+                      <option v-for="user in users" :key="user.id" :value="user.id">
+                          {{ user.name }}
+                      </option>
+                    </select>
+                    <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                   </div>
-                  <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
-                </div>
-            </ValidationProvider>
-          </div>
-          <div class="mgb-32">
-            <label for="" class="mb-2 text-light-black d-inline-block">Files</label>
-            <!-- upload -->
-            <div class="position-relative file-upload mgt-20">
-              <input type="file">
-              <label for="" class="py-2">Upload <span class="icon-upload ms-3 fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span></label>
+                </ValidationProvider>
+              </div>
+            <div class="mgb-32">
+                <ValidationProvider class="group" name="Trainee Selection" rules="required" v-slot="{ errors }">
+                  <div :class="{ 'invalid-form' : errors[0] }">
+                    <label for="" class="d-block mb-2 dashboard-label">Trainee Selection </label>
+                    <select name="" class="dashboard-input w-100 loan-type-select" v-model="traineeId">
+                      <option value="">Please Select a user</option>
+                      <option v-for="user in users" :key="user.id" :value="user.id">
+                          {{ user.name }}
+                      </option>
+                    </select>
+                    <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                  </div>
+                </ValidationProvider>
+              </div>
+            <div class="mgb-32">
+              <ValidationProvider class="group" name="Note" rules="required" v-slot="{ errors }">
+                  <div :class="{ 'invalid-form' : errors[0] }">
+                    <label for="" class="mb-2 text-light-black d-inline-block">Add note</label>
+                    <div class="preparation-input w-100 position-relative">
+                      <textarea name="" id="" cols="30" rows="3" class="w-100 dashboard-textarea" v-model="note"></textarea>
+                    </div>
+                    <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                  </div>
+              </ValidationProvider>
             </div>
-          </div>
-          <div class="text-end mgt-32">
-            <button class="button button-primary px-4 h-40 d-inline-flex align-items-center" @click="saveAssigneeData">Done</button>
-          </div>
-      </ValidationObserver>
+            <div class="mgb-32">
+              <label for="" class="mb-2 text-light-black d-inline-block">Files</label>
+              <!-- upload -->
+              <div class="position-relative file-upload mgt-20">
+                <input type="file">
+                <label for="" class="py-2">Upload <span class="icon-upload ms-3 fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span></label>
+              </div>
+            </div>
+            <div class="text-end mgt-32">
+              <button class="button button-primary px-4 h-40 d-inline-flex align-items-center" @click="saveAssigneeData">Done</button>
+            </div>
+        </ValidationObserver>
     </div>
     </div>
   </div>
@@ -134,6 +147,8 @@ export default {
     order: [],
   },
   data: () => ({
+    isEmpty: false,
+    adminDataExist: true,
     dataExist: true,
     creator: '',
     viewer: '',
@@ -155,6 +170,18 @@ export default {
         this.trainee = !_.isEmpty(report.assignee) ? report.assignee.name : '', 
         this.note = report.note
       }
+      if(this.creator || this.viewer){
+        this.isEmpty = false
+        this.adminDataExist = true;
+      } else {
+        this.isEmpty = true
+        this.adminDataExist = false;
+      }
+      if(this.trainee || this.note){
+        this.dataExist = true
+      } else {
+        this.dataExist = false
+      }
     },
     saveAdminData() {
         this.$refs.adminForm.validate().then((status) => {
@@ -167,7 +194,7 @@ export default {
           console.log(data)
           this.$boston.post('admin-report-preparation-create/'+ this.order.id, data).then(res => {
               console.log('response', res)
-              this.dataExist = true
+              this.adminDataExist = true;
           }).catch(err => {
               console.log('err', err)
           });
