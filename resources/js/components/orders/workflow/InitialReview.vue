@@ -48,6 +48,10 @@
         <input type="checkbox" class="checkbox-input check-data">
         <label for="" class="checkbox-label text-capitalize">Review done</label>
       </div>
+      <div class="checkbox-group review-check mgt-20">
+        <input type="checkbox" class="checkbox-input check-data">
+        <label for="" class="checkbox-label text-capitalize">Review done as check & upload</label>
+      </div>
     </div>
     <div class="text-end mgt-32">
       <button class="button button-primary px-4 h-40 d-inline-flex align-items-center">Done</button>
