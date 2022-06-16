@@ -14,7 +14,9 @@ class AddIsCheckUploadColumnToOrderWInitialReviews extends Migration
     public function up()
     {
         Schema::table('order_w_initial_reviews', function (Blueprint $table) {
-            $table->tinyInteger('is_check_upload')->after('is_review_done');
+            if (!Schema::hasColumn('order_w_initial_reviews', 'is_check_upload')) {
+                $table->tinyInteger('is_check_upload')->after('is_review_done');                
+            }
         });
     }
 
@@ -26,7 +28,7 @@ class AddIsCheckUploadColumnToOrderWInitialReviews extends Migration
     public function down()
     {
         Schema::table('order_w_intitial_reviews', function (Blueprint $table) {
-            //
+            $table->dropColumn('is_check_upload');
         });
     }
 }

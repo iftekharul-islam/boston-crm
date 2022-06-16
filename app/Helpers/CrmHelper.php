@@ -1,7 +1,9 @@
 <?php
 
 namespace App\Helpers;
+use Carbon\Carbon;
 use App\Models\Order;
+use App\Models\OrderWHistory;
 
 trait CrmHelper {
 
@@ -82,4 +84,42 @@ trait CrmHelper {
     protected function getTitleReplace($item) {
         return ucwords(str_replace("_", " ", $item));
     }
+
+    protected function addHistory( $order, $user, $title, $type ) {
+        $wkHistory = new OrderWHistory();
+        $wkHistory->order_id = $order->id;
+        $wkHistory->created_by = $user->id;
+        $wkHistory->history = $title;
+        $wkHistory->type = $type;
+        $wkHistory->created_at = Carbon::now();
+        $wkHistory->save();
+    }
+
+    protected function orderDetails($id) {
+        return Order::with(
+            'amc',
+            'lender',
+            'user',
+            'appraisalDetail',
+            'appraisalDetail.appraiser',
+            'appraisalDetail.getLoanType',
+            'providerService',
+            'propertyInfo',
+            'borrowerInfo',
+            'contactInfo',
+            'activityLog.user',
+            'inspection.user',
+            'inspection.attachments',
+            'report.reviewer',
+            'report.trainee',
+            'report.assignee',
+            'report.creator',
+            'reportRewrite.assignee',
+            'analysis.assignee',
+            'analysis.attachments',
+            'initialReview.assignee',
+            'workHisotry.user'
+        )->where('id', $id)->first();
+    }
+
 }

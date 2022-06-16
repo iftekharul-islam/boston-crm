@@ -125,6 +125,12 @@ export default {
     Schedule,
     Inspection
   },
+  provide() {
+    return {
+      usersInfo: this.users,
+      appraisersInfo: this.appraisers,
+    }
+  },
   data: () => ({
     isActive: 'order-create',
     status: '',

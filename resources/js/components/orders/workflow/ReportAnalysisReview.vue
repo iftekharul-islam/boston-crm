@@ -79,7 +79,7 @@
             <p class="text-light-black mgb-12">Analysis file upload</p>
             <div class="document">
                 <div class="row">
-                    <div class="d-flex align-items-center mb-3" v-for="file in dataFiles">
+                    <div class="d-flex align-items-center mb-3" v-for="file, ik in dataFiles" :key="ik">
                         <img src="/img/pdf.svg" alt="boston profile" class="img-fluid">
                         <span class="text-light-black d-inline-block mgl-12">{{ file.name }}</span>
                     </div>
@@ -141,6 +141,7 @@ export default {
       }
       let analysis = !_.isEmpty(this.order.analysis) ? this.order.analysis : false;
       if(analysis){
+          this.assignTo = analysis.assigned_to
           this.assignToName = analysis.assignee.name
           this.dataFiles = analysis.attachments
           if(analysis.is_review_send_back){
