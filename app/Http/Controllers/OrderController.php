@@ -127,6 +127,7 @@ class OrderController extends BaseController
         //
     }
 
+
     /**
      * @param Order $order
      *
@@ -139,37 +140,15 @@ class OrderController extends BaseController
         $loan_types = $this->repository->getLoanTypes();
         $all_amc = $this->repository->getAllClientByType('amc');
         $all_lender = $this->repository->getAllClientByType('lender');
-        $order = Order::with(
-            'amc',
-            'lender',
-            'user',
-            'appraisalDetail',
-            'appraisalDetail.appraiser',
-            'appraisalDetail.getLoanType',
-            'providerService',
-            'propertyInfo',
-            'borrowerInfo',
-            'contactInfo',
-            'activityLog.user',
-            'inspection.user',
-            'inspection.attachments',
-            'report.reviewer',
-            'report.trainee',
-            'report.assignee',
-            'report.creator',
-            'report.attachments',
-            'reportRewrite.assignee',
-            'analysis.assignee',
-            'analysis.attachments',
-            'initialReview.assignee',
-        )->where('id', $id)->first();
 
-        return $order;
+        $order = $this->orderDetails($id);
 
         $noRewrite = 1;
         if (isset($order->analysis->is_review_send_back) && $order->analysis->is_review_send_back == 1) {
             $noRewrite = 0;
         }
+
+        // return $order;
 
         $order->amc_file = $this->repository->getClientFile($order->amc_id);
         $order->lender_file = $this->repository->getClientFile($order->lender_id);

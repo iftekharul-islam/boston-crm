@@ -14,8 +14,13 @@ class AddEventIdAndRescheduleNoteToOrderWInspectionsTable extends Migration
     public function up()
     {
         Schema::table('order_w_inspections', function (Blueprint $table) {
-            $table->string('event_id')->after('note')->nullable();
-            $table->text('reschedule_note')->after('note')->nullable();
+            if (!Schema::hasColumn('order_w_inspections', 'event_id')) {
+                $table->string('event_id')->after('note')->nullable();
+            }
+
+            if (!Schema::hasColumn('order_w_inspections', 'reschedule_note')) {
+                $table->text('reschedule_note')->after('note')->nullable();
+            }
         });
     }
 
@@ -27,7 +32,7 @@ class AddEventIdAndRescheduleNoteToOrderWInspectionsTable extends Migration
     public function down()
     {
         Schema::table('order_w_inspections', function (Blueprint $table) {
-            //
+            $table->dropColumn(['event_id', 'reschedule_note']);
         });
     }
 }
