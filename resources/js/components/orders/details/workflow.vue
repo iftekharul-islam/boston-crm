@@ -75,7 +75,7 @@
             <!-- Initial Review -->
             <InitialReview v-if="isActive === 'initial-review'"></InitialReview>
             <!-- Report Analysis and Review -->
-            <ReportAnalysisReview v-if="isActive === 'report-analysis-review'"></ReportAnalysisReview>
+            <ReportAnalysisReview v-if="isActive === 'report-analysis-review'" :order="order" :users="users"></ReportAnalysisReview>
             <!-- Re-writing the report -->
             <RewritingReport v-if="isActive === 'rewriting-report'"></RewritingReport>
             <!-- Quality Assurance (E&O) -->
