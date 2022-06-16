@@ -93,4 +93,8 @@ class OrderWorkflowController extends BaseController
     public function saveInitialReview(Request $request){
         $this->repository->updateInitialReviewData($request->all());
     }
+
+    public function updateQa(Request $request){
+        
+    }
 }
