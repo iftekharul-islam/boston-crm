@@ -164,6 +164,8 @@ class OrderController extends BaseController
             'initialReview.assignee',
         )->where('id', $id)->first();
 
+        return $order;
+
         $noRewrite = 1;
         if (isset($order->analysis->is_review_send_back) && $order->analysis->is_review_send_back == 1) {
             $noRewrite = 0;

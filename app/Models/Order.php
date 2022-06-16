@@ -21,7 +21,7 @@ class Order extends Model implements HasMedia
 
     protected $table = 'orders';
 
-    protected $appends = ['order_file_types'];
+    protected $appends = ['order_file_types', 'order_status'];
 
     protected $casts = [
       'due_date' => 'date:d M Y',
@@ -58,6 +58,12 @@ class Order extends Model implements HasMedia
       "amc_id","lender_id","status","client_order_no","system_order_no","received_date","due_date"
     ];
 
+    protected static function booted()
+    {
+        
+    }
+
+
     /**
      * @return string[]
      */
@@ -70,6 +76,10 @@ class Order extends Model implements HasMedia
             'Purchase and Sales Agreement','Rehab List','Renovation List', 'Report Binder','Title',
             'Unit Deed','Zip File'
         );
+    }
+
+    public function getOrderStatusAttribute(){
+        return self::OrderStatus[$this->status];
     }
 
     /**
