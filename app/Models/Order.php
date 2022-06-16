@@ -5,10 +5,12 @@ namespace App\Models;
 use App\Models\ContactInfo;
 use App\Models\BorrowerInfo;
 use App\Models\PropertyInfo;
+use App\Models\OrderWRewrite;
 use App\Models\AppraisalDetail;
 use App\Models\ProvidedService;
 use App\Models\OrderWInitialReview;
 use Spatie\MediaLibrary\HasMedia;
+use App\Models\OrderWReportAnalysis;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -33,6 +35,23 @@ class Order extends Model implements HasMedia
             "Cancelled" => 2,
             "Deleted" => 3,
         ]
+    ];
+
+    public const OrderStatus = [
+        1 => "Scheduled",
+        2 => "Rescheduled",
+        3 => "Inspected",
+        4 => "Report Preparation & Initial Review",
+        5 => "Ready for Analysis and Review",
+        6 => "Check and Upload",
+        7 => "Rewrite",
+        8 => "Under Rewriting",
+        9 => "Ready for Analysis and Review",
+        10 => "Under Quality Assurance (E&O)",
+        11 => "Ready for Submission/Delivery",
+        12 => "Delivered",
+        13 => "Under Correction/Revision",
+        14 => "Delivered",
     ];
 
     protected $fillable = [
@@ -125,6 +144,11 @@ class Order extends Model implements HasMedia
     public function report()
     {
         return $this->hasOne(OrderWReport::class,'order_id', 'id');
+    }
+
+    public function reportRewrite()
+    {
+        return $this->hasOne(OrderWRewrite::class,'order_id', 'id');
     }
   
     public function analysis()
