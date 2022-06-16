@@ -60,7 +60,7 @@ class Order extends Model implements HasMedia
 
     protected static function booted()
     {
-        
+
     }
 
 
@@ -160,14 +160,19 @@ class Order extends Model implements HasMedia
     {
         return $this->hasOne(OrderWRewrite::class,'order_id', 'id');
     }
-  
+
     public function analysis()
     {
         return $this->hasOne(OrderWReportAnalysis::class,'order_id', 'id');
     }
-  
+
     public function initialReview()
     {
         return $this->hasOne(OrderWInitialReview::class,'order_id', 'id');
+    }
+
+    public function qualityAssurance()
+    {
+        return $this->hasOne(OrderWQa::class,'order_id','id');
     }
 }

@@ -114,7 +114,6 @@ export default {
   methods: {
     addFiles(event){
       this.fileData.files = event.target.files
-        console.log(this.files)
     },
     saveFiles(){
           this.editable = false

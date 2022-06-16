@@ -159,12 +159,12 @@ class OrderController extends BaseController
             'report.creator',
             'report.attachments',
             'reportRewrite.assignee',
+            'analysis.updatedBy',
             'analysis.assignee',
             'analysis.attachments',
             'initialReview.assignee',
+            'qualityAssurance.assignee',
         )->where('id', $id)->first();
-
-        return $order;
 
         $noRewrite = 1;
         if (isset($order->analysis->is_review_send_back) && $order->analysis->is_review_send_back == 1) {
