@@ -47,17 +47,19 @@ class OrderWorkflowRepository extends BaseRepository
      */
     public function updateInitialReviewData($data): bool
     {
-        $order_initial_review = OrderWInitialReview::updateOrCreate(
-            ['id' => $data['initial_review_id']],
-            [
-                "order_id" => $data["order_id"],
-                "assigned_to" => $data["assigned_to"],
-                "note" => $data["note"],
-                "is_review_done" => $data["is_review_done"] == "1" ? 1 : 0,
-                "is_check_upload" => $data["is_check_upload"] == "1" ? 1 : 0,
-                "created_by" => Auth::user()->id
-            ]
-        );
+        if($data['initial_review_id'] > 0){
+            $order_initial_review = OrderWInitialReview::find($data['initial_review_id']);
+            $order_initial_review->updated_by = Auth::user()->id;
+        }else{
+            $order_initial_review = new OrderWInitialReview();
+            $order_initial_review->created_by = Auth::user()->id;
+        }
+        $order_initial_review->order_id = $data["order_id"];
+        $order_initial_review->assigned_to = $data["assigned_to"];
+        $order_initial_review->note = $data["note"];
+        $order_initial_review->is_review_done = $data["is_review_done"] == "1" ? 1 : 0;
+        $order_initial_review->is_check_upload = $data["is_check_upload"] == "1" ? 1 : 0;
+
         $order = Order::find($data['order_id'])->forceFill([
             'workflow_status->initialReview' => 1
         ])->save();
