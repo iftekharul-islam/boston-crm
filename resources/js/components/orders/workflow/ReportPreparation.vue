@@ -67,6 +67,18 @@
           <p class="text-light-black mgb-12">Note</p>
           <p class="mb-0 text-light-black fw-bold">{{ this.note }}</p>
         </div>
+          <div class="group">
+              <p class="text-light-black mgb-12">Report preparation file upload</p>
+              <div class="document">
+                  <div class="row">
+                      <div class="d-flex align-items-center mb-3" v-for="file in dataFiles">
+                          <img src="/img/pdf.svg" alt="boston profile" class="img-fluid">
+                          <span class="text-light-black d-inline-block mgl-12">{{ file.name }}</span>
+                      </div>
+                  </div>
+              </div>
+
+          </div>
     </div>
     <div v-else-if="isEmpty">
       <div class="group text-center">
@@ -122,13 +134,13 @@
                   </div>
               </ValidationProvider>
             </div>
-            <div class="mgb-32">
-              <label for="" class="mb-2 text-light-black d-inline-block">Files</label>
-              <!-- upload -->
-              <div class="position-relative file-upload mgt-20">
-                <input type="file">
-                <label for="" class="py-2">Upload <span class="icon-upload ms-3 fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span></label>
-              </div>
+            <div>
+                <p class="text-light-black mgb-12">Files</p>
+                <div class="position-relative file-upload">
+                    <input type="file" multiple v-on:change="addFiles">
+                    <label for="" class="py-2">Upload <span class="icon-upload ms-3 fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span></label>
+                </div>
+                <p class="text-light-black mgb-12" v-if="fileData.files.length">{{ fileData.files.length }} Files</p>
             </div>
             <div class="text-end mgt-32">
               <button class="button button-primary px-4 h-40 d-inline-flex align-items-center" @click="saveAssigneeData">Done</button>
@@ -153,22 +165,51 @@ export default {
     creator: '',
     viewer: '',
     trainee: '',
-    note: '',
     isAdmin: false,
     creatorId: '',
     viewerId: '',
     traineeId: '',
     assignTo: '',
     note: '',
+      fileData:{
+          file_type: '',
+          files: [],
+      },
+      dataFiles: [],
+      message: '',
   }),
   methods: {
+      addFiles(event){
+          this.fileData.files = event.target.files
+          console.log(this.files)
+      },
+      saveFiles(){
+          this.editable = false
+          let that = this
+          let formData = new FormData();
+          for( let i = 0; i < this.fileData.files.length; i++ ){
+              let file = this.files[i];
+              formData.append('files[' + i + ']', file);
+          }
+          formData.append('file_type',this.fileData.file_type)
+          axios.post('upload-inspection-files/'+ this.id, formData,{ headers: {
+                  'Content-Type': 'multipart/form-data'
+              }})
+              .then(res => {
+                  console.log('response', res.data)
+                  this.fileData = []
+              }).catch(err => {
+              console.log(err)
+          })
+      },
     updateAdmin() {
       let report = !_.isEmpty(this.order.report) ? this.order.report : false;
       if(report){
-        this.creator = !_.isEmpty(report.creator) ? report.creator.name : '', 
-        this.viewer = !_.isEmpty(report.reviewer) ? report.reviewer.name : '', 
-        this.trainee = !_.isEmpty(report.assignee) ? report.assignee.name : '', 
+        this.creator = !_.isEmpty(report.creator) ? report.creator.name : '',
+        this.viewer = !_.isEmpty(report.reviewer) ? report.reviewer.name : '',
+        this.trainee = !_.isEmpty(report.assignee) ? report.assignee.name : '',
         this.note = report.note
+        this.dataFiles = report.attachments
       }
       if(this.creator || this.viewer){
         this.isEmpty = false
@@ -192,14 +233,16 @@ export default {
             'reviewed_by': this.viewerId
           }
           console.log(data)
-          this.$boston.post('admin-report-preparation-create/'+ this.order.id, data).then(res => {
+          this.$boston.post('admin-report-preparation-create/'+ this.order.id, formData, { headers: {
+                  'Content-Type': 'multipart/form-data'
+              }}).then(res => {
               console.log('response', res)
               this.adminDataExist = true;
           }).catch(err => {
               console.log('err', err)
           });
-        } 
-            
+        }
+
       })
     },
     saveAssigneeData() {
@@ -207,13 +250,24 @@ export default {
           if(status) {
             console.log(status)
             console.log('hello')
+              let formData = new FormData();
+              for( let i = 0; i < this.fileData.files.length; i++ ){
+                  let file = this.fileData.files[i];
+                  formData.append('files[' + i + ']', file);
+              }
+              formData.append('file_type', this.fileData.file_type)
+              formData.append('assigned_to', this.assignTo)
+              formData.append('note', this.note)
+              formData.append('trainee_id', this.traineeId)
             const data = {
               'note': this.note,
               'assigned_to': this.assignTo,
               'trainee_id': this.traineeId,
             }
             console.log(data)
-            this.$boston.post('assignee-report-preparation-create/'+ this.order.id, data).then(res => {
+            this.$boston.post('assignee-report-preparation-create/'+ this.order.id, formData, { headers: {
+                    'Content-Type': 'multipart/form-data'
+                }}).then(res => {
                 console.log('response', res)
                 this.dataExist = true
             }).catch(err => {
@@ -229,7 +283,7 @@ export default {
     }
   },
   created() {
-    this.updateRole();
+    // this.updateRole();
     this.updateAdmin()
     console.log(this.order)
   },
