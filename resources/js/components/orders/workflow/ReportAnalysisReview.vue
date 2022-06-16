@@ -76,7 +76,7 @@
             <p class="mb-0 text-light-black fw-bold">{{ assignToName }}</p>
         </div>
         <div class="group">
-            <p class="text-light-black mgb-12">Inspection file upload</p>
+            <p class="text-light-black mgb-12">Analysis file upload</p>
             <div class="document">
                 <div class="row">
                     <div class="d-flex align-items-center mb-3" v-for="file in dataFiles">
@@ -171,14 +171,6 @@ export default {
             formData.append('assigned_to', this.assignTo)
             formData.append('note', this.note)
             formData.append('noteCheck', this.noteCheck)
-            const data = {
-              'note': this.note,
-              'assigned_to': this.assignTo,
-              'noteCheck': this.noteCheck,
-              'files': formData,
-            }
-            console.log(data)
-              // return;
             this.$boston.post('report-analysis-create/'+ this.order.id, formData, { headers: {
                     'Content-Type': 'multipart/form-data'
                 }}).then(res => {

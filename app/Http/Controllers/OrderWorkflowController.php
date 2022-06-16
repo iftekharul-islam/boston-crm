@@ -86,12 +86,34 @@ class OrderWorkflowController extends BaseController
             $report->note = $request->note;
             $report->updated_by = auth()->user()->id;
             $report->save();
+
+            $this->savePreparationFiles($request->all(), $report->id);
+
             return response()->json(['message' => 'Report updated successfully']);
         }
 
         return response()->json(['message' => 'Report not available']);
 
     }
+
+    public function savePreparationFiles($data, $id)
+    {
+        $report = OrderWReport::find($id);
+        if(!$report){
+            return false;
+        }
+        foreach ($data['files'] as $file){
+            $report->find($id)->addMedia($file)
+                ->withCustomProperties(['type' => $data['file_type']])
+                ->toMediaCollection('preparation');
+        }
+        $report = OrderWReport::with('attachments')->where('id', $id)->first();
+        return [
+            'status' => true,
+            'media' => $report->attachments,
+        ];
+    }
+
 
     public function storeReportAnalysis(Request $request, $id) {
         logger("hello from storeReportAnalysis");

@@ -157,6 +157,7 @@ class OrderController extends BaseController
             'report.trainee',
             'report.assignee',
             'report.creator',
+            'report.attachments',
             'analysis.assignee',
             'analysis.attachments',
         )->where('id', $id)->first();
