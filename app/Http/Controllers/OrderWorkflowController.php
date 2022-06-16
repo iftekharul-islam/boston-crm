@@ -147,7 +147,7 @@ class OrderWorkflowController extends BaseController
                 ->withCustomProperties(['type' => $data['file_type']])
                 ->toMediaCollection('analysis');
         }
-        $analysis = OrderWInspection::with('attachments')->where('id', $id)->first();
+        $analysis = OrderWReportAnalysis::with('attachments')->where('id', $id)->first();
         return [
             'status' => true,
             'media' => $analysis->attachments,
