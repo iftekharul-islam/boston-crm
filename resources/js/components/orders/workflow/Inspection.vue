@@ -11,16 +11,14 @@
     </div>
     <div class="group">
       <p class="text-light-black mgb-12">Inspection file upload</p>
-          <div class="document">
-            <div class="row">
-            
-                <div class="d-flex align-items-center mb-3" v-for="file in dataFiles">
-                  <img src="/img/pdf.svg" alt="boston profile" class="img-fluid">
-                  <span class="text-light-black d-inline-block mgl-12">{{ file.name }}</span>
-                </div>
-            
+      <div class="document">
+        <div class="row">
+            <div class="d-flex align-items-center mb-3" v-for="file in dataFiles">
+              <img src="/img/pdf.svg" alt="boston profile" class="img-fluid">
+              <span class="text-light-black d-inline-block mgl-12">{{ file.name }}</span>
             </div>
-          </div>
+        </div>
+      </div>
       <!-- upload -->
       <div class="position-relative file-upload mgt-20" v-if="editable">
         <div v-b-modal.upload-ins-files class="position-relative file-upload document-upload">

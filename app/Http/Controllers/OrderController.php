@@ -157,12 +157,14 @@ class OrderController extends BaseController
             'report.trainee',
             'report.assignee',
             'report.creator',
-            'reportAnalysis',
-            'reportRewrite'
+            'reportRewrite.assignee',
+            'analysis.assignee',
+            'analysis.attachments',
+            'initialReview.assignee',
         )->where('id', $id)->first();
 
         $noRewrite = 1;
-        if (isset($order->reportAnalysis->is_review_send_back) && $order->reportAnalysis->is_review_send_back == 1) {
+        if (isset($order->analysis->is_review_send_back) && $order->analysis->is_review_send_back == 1) {
             $noRewrite = 0;
         }
 
@@ -456,7 +458,7 @@ class OrderController extends BaseController
             ]);
         }
         return redirect()
-            -back()
+            ->back()
             ->with(['success' => 'inspection file uploaded successfully']);
     }
 

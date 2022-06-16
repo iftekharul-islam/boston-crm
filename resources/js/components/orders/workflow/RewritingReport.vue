@@ -1,6 +1,6 @@
 <template>
   <div class="re-writing-report-item step-items">
-    <a class="edit-btn"><span class="icon-edit"><span class="path1"></span><span class="path2"></span></span></a>
+    <a class="edit-btn" v-if="current.assigned_to"><span class="icon-edit"><span class="path1"></span><span class="path2"></span></span></a>
     <div class="group">
       <p class="text-light-black mgb-12">Note from previous stpes</p>
       <p class="mb-0 text-light-black fw-bold" v-html="prev.note"></p>
@@ -64,7 +64,7 @@ export default {
       current: [],
   }),
   created(){
-    this.prev = this.order.report_analysis ?? [];
+    this.prev = this.order.analysis ?? [];
     this.current = this.order.report_rewrite ?? [];
 
     console.log(this.prev);
