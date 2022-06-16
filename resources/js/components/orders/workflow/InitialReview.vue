@@ -34,13 +34,15 @@
                 <p class="text-light-black mgb-12">Notes</p>
                 <p class="mb-0 text-light-black fw-bold">{{ initialReview.note }}</p>
             </div>
-            <div class="group">
-                <p class="text-light-black mgb-12">Review Done</p>
-                <p class="mb-0 text-light-black fw-bold">{{ initialReview.is_review_done == '1' ? 'yes' : 'no' }}</p>
-            </div>
-            <div class="group">
-                <p class="text-light-black mgb-12">Review Done as check & upload</p>
-                <p class="mb-0 text-light-black fw-bold">{{ initialReview.is_check_upload == '1' ? 'yes' : 'no' }}</p>
+            <div class="mgb-32 d-flex align-items-center">
+                <div class="checkbox-group review-check mgr-20" v-if="initialReview.is_review_done == 1">
+                    <input type="radio" checked class="checkbox-input check-data">
+                    <label for="" class="checkbox-label text-capitalize">Review Done</label>
+                </div>
+                <div class="checkbox-group review-check" v-if="initialReview.is_check_upload == 1">
+                    <input type="radio" checked class="checkbox-input check-data">
+                    <label for="" class="checkbox-label text-capitalize">Review Done As Check & upload</label>
+                </div>
             </div>
             <br /><br />
         </div>
@@ -73,13 +75,17 @@
                             <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                         </div>
                     </ValidationProvider>
-                    <div class="checkbox-group review-check mgt-20">
-                        <b-form-checkbox v-model="initialReview.is_review_done" value="1" unchecked-value="0">
-                            Review done
-                        </b-form-checkbox>
-                        <b-form-checkbox v-model="initialReview.is_check_upload" value="1" unchecked-value="0">
-                            Review done as check & upload
-                        </b-form-checkbox>
+                    <div class="mgb-32 d-flex align-items-center">
+                        <div class="checkbox-group review-check mgr-20">
+                            <input type="radio" class="checkbox-input check-data" v-model="initialReview.checkbox"
+                                value="1">
+                            <label for="" class="checkbox-label text-capitalize">Review Done</label>
+                        </div>
+                        <div class="checkbox-group review-check">
+                            <input type="radio" class="checkbox-input check-data" v-model="initialReview.checkbox"
+                                value="2">
+                            <label for="" class="checkbox-label text-capitalize">Review Done As Check & upload</label>
+                        </div>
                     </div>
                 </div>
             </ValidationObserver>
@@ -108,6 +114,7 @@
                 assigned_to: '',
                 assigned_name: '',
                 note: '',
+                checkbox: '',
                 is_review_done: '',
                 is_check_upload: '',
                 order_id: '',
@@ -121,7 +128,6 @@
             this.alreadyInitialReview = (JSON.parse(this.order.workflow_status)).initialReview
             this.alreadyInitialReview == 1 ? this.currentStep = 'view' : 'create'
             this.getInitialReviewData();
-            console.log(this.currentStep)
         },
         methods: {
             getInitialReviewData() {
@@ -129,12 +135,19 @@
                 this.initialReview.report_reviewer_name = this.order.report.reviewer.name
                 this.initialReview.report_trainee_name = this.order.report.trainee.name
                 this.initialReview.report_note = this.order.report.note
-                this.initialReview.initial_review_id = this.order.initial_review.id
-                this.initialReview.note = this.order.initial_review.note
-                this.initialReview.assigned_name = this.order.initial_review.assignee.name
-                this.initialReview.assigned_to = this.order.initial_review.assigned_to
-                this.initialReview.is_review_done = this.order.initial_review.is_review_done
-                this.initialReview.is_check_upload = this.order.initial_review.is_check_upload
+                if (this.order.initial_review) {
+                    this.initialReview.initial_review_id = this.order.initial_review.id
+                    this.initialReview.note = this.order.initial_review.note
+                    this.initialReview.assigned_name = this.order.initial_review.assignee.name
+                    this.initialReview.assigned_to = this.order.initial_review.assigned_to
+                    this.initialReview.is_review_done = this.order.initial_review.is_review_done
+                    this.order.initial_review.is_check_upload = this.order.initial_review.is_check_upload
+                    if(this.order.initial_review.is_review_done == 1){
+                        this.initialReview.checkbox = '1'
+                    }else{
+                        this.initialReview.checkbox = '2'
+                    }
+                }
             },
             saveInitialReview() {
                 this.$refs.initialReviewForm.validate().then((status) => {
