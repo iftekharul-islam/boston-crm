@@ -61,14 +61,14 @@
             <p class="text-light-black mgb-12">Note from previous steps</p>
             <p class="mb-0 text-light-black fw-bold">{{ this.preNote }}</p>
         </div>
-        <div class="group">
+        <div class="group" v-if="noteCheck == 1">
             <p class="text-light-black mgb-12">Note from this step</p>
             <a href="#" class="primary-text mb-2">(Rewrite & send back)</a>
             <p class="mb-0 text-light-black fw-bold">{{ note }}</p>
         </div>
-        <div class="group">
+        <div class="group" v-if="noteCheck == 2">
             <p class="text-light-black mgb-12">Note from this step</p>
-            <a href="#" class="primary-text mb-2">(Rewrite & send back)</a>
+            <a href="#" class="primary-text mb-2">(Check & Upload)</a>
             <p class="mb-0 text-light-black fw-bold">{{ note }}</p>
         </div>
         <div class="group">
@@ -76,10 +76,10 @@
             <p class="mb-0 text-light-black fw-bold">{{ assignToName }}</p>
         </div>
         <div class="group">
-            <p class="text-light-black mgb-12">Inspection file upload</p>
+            <p class="text-light-black mgb-12">Analysis file upload</p>
             <div class="document">
                 <div class="row">
-                    <div class="d-flex align-items-center mb-3" v-for="file in dataFiles">
+                    <div class="d-flex align-items-center mb-3" v-for="file, ik in dataFiles" :key="ik">
                         <img src="/img/pdf.svg" alt="boston profile" class="img-fluid">
                         <span class="text-light-black d-inline-block mgl-12">{{ file.name }}</span>
                     </div>
@@ -142,15 +142,15 @@ export default {
       }
       let analysis = !_.isEmpty(this.order.analysis) ? this.order.analysis : false;
       if(analysis){
-          console.log(analysis)
           this.assignToName = analysis.assignee.name
-          this.note = analysis.note
           this.dataFiles = analysis.attachments
           if(analysis.is_review_send_back){
               this.noteCheck = 1
+              this.note = analysis.rewrite_note
           }
           if(analysis.is_check_upload){
               this.noteCheck = 2
+              this.note = analysis.note
           }
       }
       if(this.assignToName || this.note){
@@ -159,37 +159,29 @@ export default {
     },
     saveAssigneeData() {
         this.$refs.assigneeForm.validate().then((status) => {
-            if(status) {
-                console.log(status)
-                console.log('hello')
-                let formData = new FormData();
-                for( let i = 0; i < this.fileData.files.length; i++ ){
-                let file = this.fileData.files[i];
-                formData.append('files[' + i + ']', file);
-                }
-                formData.append('file_type', this.fileData.file_type)
-                formData.append('assigned_to', this.assignTo)
-                formData.append('note', this.note)
-                formData.append('noteCheck', this.noteCheck)
-                const data = {
-                'note': this.note,
-                'assigned_to': this.assignTo,
-                'noteCheck': this.noteCheck,
-                'files': formData,
-                }
-                console.log(data)
-                // return;
-                this.$boston.post('report-analysis-create/'+ this.order.id, formData, { headers: {
-                        'Content-Type': 'multipart/form-data'
-                    }}).then(res => {
-                    this.fileData = []
-                    console.log('response', res)
-                    this.isEditable = false
-                }).catch(err => {
-                    console.log('err', err)
-                });
+          if(status) {
+            console.log(status)
+            console.log('hello')
+            let formData = new FormData();
+            for( let i = 0; i < this.fileData.files.length; i++ ){
+              let file = this.fileData.files[i];
+              formData.append('files[' + i + ']', file);
             }
-        })
+            formData.append('file_type', this.fileData.file_type)
+            formData.append('assigned_to', this.assignTo)
+            formData.append('note', this.note)
+            formData.append('noteCheck', this.noteCheck)
+            this.$boston.post('report-analysis-create/'+ this.order.id, formData, { headers: {
+                    'Content-Type': 'multipart/form-data'
+                }}).then(res => {
+                this.fileData = []
+                console.log('response', res)
+                this.isEditable = false
+            }).catch(err => {
+                console.log('err', err)
+            });
+          }
+      })
     },
   },
   created() {

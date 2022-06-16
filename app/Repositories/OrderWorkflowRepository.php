@@ -57,8 +57,9 @@ class OrderWorkflowRepository extends BaseRepository
         $order_initial_review->order_id = $data["order_id"];
         $order_initial_review->assigned_to = $data["assigned_to"];
         $order_initial_review->note = $data["note"];
-        $order_initial_review->is_review_done = $data["is_review_done"] == "1" ? 1 : 0;
-        $order_initial_review->is_check_upload = $data["is_check_upload"] == "1" ? 1 : 0;
+        $order_initial_review->is_review_done = $data["checkbox"] == "1" ? 1 : 0;
+        $order_initial_review->is_check_upload = $data["checkbox"] == "2" ? 1 : 0;
+        $order_initial_review->save();
 
         $order = Order::find($data['order_id'])->forceFill([
             'workflow_status->initialReview' => 1

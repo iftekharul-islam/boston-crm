@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class OrderWReport extends Model
+class OrderWReport extends Model implements HasMedia
 {
-    use HasFactory;
+    use HasFactory, InteractsWithMedia;
 
 
     public function reviewer(){
@@ -17,12 +19,17 @@ class OrderWReport extends Model
     public function assignee(){
         return $this->belongsTo(User::class, 'assigned_to', 'id');
     }
-    
+
     public function trainee(){
         return $this->belongsTo(User::class, 'trainee_id', 'id');
     }
 
     public function creator(){
         return $this->belongsTo(User::class, 'creator_id', 'id');
+    }
+
+    public function attachments()
+    {
+        return $this->media()->where('collection_name', '=', 'preparation');
     }
 }

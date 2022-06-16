@@ -89,52 +89,78 @@ class OrderWorkflowController extends BaseController
             $report->note = $request->note;
             $report->updated_by = auth()->user()->id;
             $report->save();
+
+            if(isset($request['files']) && count($request['files'])) {
+                $this->savePreparationFiles($request->all(), $report->id);
+            }
             return response()->json(['message' => 'Report updated successfully']);
         }
 
         return response()->json(['message' => 'Report not available']);
 
     }
+
+    public function savePreparationFiles($data, $id)
+    {
+        $report = OrderWReport::find($id);
+        if(!$report){
+            return false;
+        }
+        foreach ($data['files'] as $file){
+            $report->find($id)->addMedia($file)
+                ->withCustomProperties(['type' => $data['file_type']])
+                ->toMediaCollection('preparation');
+        }
+        $report = OrderWReport::with('attachments')->where('id', $id)->first();
+        return [
+            'status' => true,
+            'media' => $report->attachments,
+        ];
+    }
+
     public function storeReportAnalysis(Request $request, $id) {
         logger("hello from storeReportAnalysis");
         logger($request->all());
         $report = OrderWReportAnalysis::where('order_id', $id)->first();
         if($report){
-            $report->note = $request->note;
-            logger(gettype($request->noteCheck));
             if($request->noteCheck == '1'){
-                logger('this is note 1');
                 $report->is_review_send_back = 1;
                 $report->is_check_upload = 0;
+                $report->rewrite_note = $request->note;
             } else {
-                logger('this is note 2');
                 $report->is_review_send_back = 0;
                 $report->is_check_upload = 1;
+                $report->note = $request->note;
             }
             $report->assigned_to = $request->assigned_to;
             $report->updated_by = auth()->user()->id;
             $report->save();
 
-            $this->saveAnalysisFiles($request->all(), $report->id);
+            if(isset($request['files']) && count($request['files'])){
+                $this->saveAnalysisFiles($request->all(), $report->id);
+            }
 
             return response()->json(['message' => 'Report Analysis updated successfully']);
         }
         
         $new = new OrderWReportAnalysis();
         $new->order_id = $id;
-        $new->note = $request->note;
         if($request->noteCheck == '1'){
             $new->is_review_send_back = 1;
             $new->is_check_upload = 0;
+            $new->rewrite_note = $request->note;
         } else {
             $new->is_review_send_back = 0;
             $new->is_check_upload = 1;
+            $new->note = $request->note;
         }
         $new->assigned_to = $request->assigned_to;
         $new->created_by = auth()->user()->id;
         $new->save();
 
-        $this->saveAnalysisFiles($request->all(), $report->id);
+        if(isset($request['files']) && count($request['files'])){
+            $this->saveAnalysisFiles($request->all(), $id);
+        }
 
         return response()->json(['message' => 'Report Analysis created successfully']);
 
@@ -151,7 +177,7 @@ class OrderWorkflowController extends BaseController
                 ->withCustomProperties(['type' => $data['file_type']])
                 ->toMediaCollection('analysis');
         }
-        $analysis = OrderWInspection::with('attachments')->where('id', $id)->first();
+        $analysis = OrderWReportAnalysis::with('attachments')->where('id', $id)->first();
         return [
             'status' => true,
             'media' => $analysis->attachments,
@@ -162,7 +188,7 @@ class OrderWorkflowController extends BaseController
     }
 
     public function updateQa(Request $request){
-        
+
     }
 
     public function rewriteReport(Request $get) {
