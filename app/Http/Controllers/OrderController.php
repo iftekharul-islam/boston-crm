@@ -157,6 +157,8 @@ class OrderController extends BaseController
             'report.trainee',
             'report.assignee',
             'report.creator',
+            'analysis.assignee',
+            'analysis.attachments',
             'initialReview.assignee',
         )->where('id', $id)->first();
         $order->amc_file = $this->repository->getClientFile($order->amc_id);
@@ -449,7 +451,7 @@ class OrderController extends BaseController
             ]);
         }
         return redirect()
-            -back()
+            ->back()
             ->with(['success' => 'inspection file uploaded successfully']);
     }
 
