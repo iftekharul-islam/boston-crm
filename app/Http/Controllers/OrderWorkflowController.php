@@ -57,6 +57,43 @@ class OrderWorkflowController extends BaseController
 
         //Event::quickCreate('Appointment at Somewhere on July 1 10am-10:25am');
     }
+    public function uploadInspectionFiles(Request $request, $inspection_id): JsonResponse|\Illuminate\Http\RedirectResponse
+    {
+        if($request->has('public')){
+            $inspection_id = base64_decode($inspection_id);
+        }
+        $data = $this->saveInspectionFiles($request->all(), $inspection_id);
+
+        logger($data);
+
+        if ($request->ajax()) {
+            return response()->json([
+                "file" => $data['media'],
+                "message" => "inspection file uploaded successfully"
+            ]);
+        }
+        return redirect()
+            ->back()
+            ->with(['success' => 'inspection file uploaded successfully']);
+    }
+
+    public function saveInspectionFiles($data, $inspection_id)
+    {
+        $inspection = OrderWInspection::find($inspection_id);
+        if(!$inspection){
+            return false;
+        }
+        foreach ($data['files'] as $file){
+            $inspection->find($inspection_id)->addMedia($file)
+                ->withCustomProperties(['type' => $data['file_type']])
+                ->toMediaCollection('inspection');
+        }
+        $inspection = OrderWInspection::with('attachments')->where('id', $inspection_id)->first();
+        return [
+            'status' => true,
+            'media' => $inspection->attachments,
+        ];
+    }
 
     public function storeAdminReportPreparation(Request $request, $id) {
         logger("hello from storeAdminReportPreparation");
@@ -74,6 +111,8 @@ class OrderWorkflowController extends BaseController
         $new->creator_id = $request->creator_id;
         $new->created_by = auth()->user()->id;
         $new->save();
+
+//        addHistory( $report, auth()->user()->id, 'report preparation created by', 'report-preparation' );
 
         return response()->json(['message' => 'Report created successfully']);
 
@@ -93,6 +132,8 @@ class OrderWorkflowController extends BaseController
             if(isset($request['files']) && count($request['files'])) {
                 $this->savePreparationFiles($request->all(), $report->id);
             }
+//            addHistory( $report, auth()->user()->id, 'report preparation updated by', 'report-preparation' );
+
             return response()->json(['message' => 'Report updated successfully']);
         }
 
@@ -140,6 +181,8 @@ class OrderWorkflowController extends BaseController
                 $this->saveAnalysisFiles($request->all(), $report->id);
             }
 
+//            addHistory( $report, auth()->user()->id, 'report analysis created by', 'report-preparation' );
+
             return response()->json(['message' => 'Report Analysis updated successfully']);
         }
         
@@ -162,8 +205,9 @@ class OrderWorkflowController extends BaseController
             $this->saveAnalysisFiles($request->all(), $id);
         }
 
-        return response()->json(['message' => 'Report Analysis created successfully']);
+//        addHistory( $new, auth()->user()->id, 'report analysis updated by', 'report-analysis-review' );
 
+        return response()->json(['message' => 'Report Analysis created successfully']);
     }
 
     public function saveAnalysisFiles($data, $id)
@@ -183,6 +227,7 @@ class OrderWorkflowController extends BaseController
             'media' => $analysis->attachments,
         ];
     }
+
     public function saveInitialReview(Request $request){
         $this->repository->updateInitialReviewData($request->all());
     }
