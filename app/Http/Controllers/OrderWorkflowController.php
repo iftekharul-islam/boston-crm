@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\OrderWInspection;
+use App\Models\OrderWReportAnalysis;
 use Carbon\Carbon;
 use App\Helpers\CrmHelper;
 use App\Models\OrderWReport;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Spatie\GoogleCalendar\Event;
@@ -89,7 +92,67 @@ class OrderWorkflowController extends BaseController
         return response()->json(['message' => 'Report not available']);
 
     }
+    public function storeReportAnalysis(Request $request, $id) {
+        logger("hello from storeReportAnalysis");
+        logger($request->all());
+        $report = OrderWReportAnalysis::where('order_id', $id)->first();
+        if($report){
+            $report->note = $request->note;
+            logger(gettype($request->noteCheck));
+            if($request->noteCheck == '1'){
+                logger('this is note 1');
+                $report->is_review_send_back = 1;
+                $report->is_check_upload = 0;
+            } else {
+                logger('this is note 2');
+                $report->is_review_send_back = 0;
+                $report->is_check_upload = 1;
+            }
+            $report->assigned_to = $request->assigned_to;
+            $report->updated_by = auth()->user()->id;
+            $report->save();
 
+            $this->saveAnalysisFiles($request->all(), $report->id);
+
+            return response()->json(['message' => 'Report Analysis updated successfully']);
+        }
+        $new = new OrderWReportAnalysis();
+        $new->order_id = $id;
+        $new->note = $request->note;
+        if($request->noteCheck == '1'){
+            $new->is_review_send_back = 1;
+            $new->is_check_upload = 0;
+        } else {
+            $new->is_review_send_back = 0;
+            $new->is_check_upload = 1;
+        }
+        $new->assigned_to = $request->assigned_to;
+        $new->created_by = auth()->user()->id;
+        $new->save();
+
+        $this->saveAnalysisFiles($request->all(), $report->id);
+
+        return response()->json(['message' => 'Report Analysis created successfully']);
+
+    }
+
+    public function saveAnalysisFiles($data, $id)
+    {
+        $analysis = OrderWReportAnalysis::find($id);
+        if(!$analysis){
+            return false;
+        }
+        foreach ($data['files'] as $file){
+            $analysis->find($id)->addMedia($file)
+                ->withCustomProperties(['type' => $data['file_type']])
+                ->toMediaCollection('analysis');
+        }
+        $analysis = OrderWInspection::with('attachments')->where('id', $id)->first();
+        return [
+            'status' => true,
+            'media' => $analysis->attachments,
+        ];
+    }
     public function saveInitialReview(Request $request){
         $this->repository->updateInitialReviewData($request->all());
     }

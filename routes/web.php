@@ -179,7 +179,9 @@ Route::get('accept-new-user/{code}', [UserController::class, 'acceptInviteUser']
 Route::post('invite-user-update/{id}', [UserController::class, 'inviteUserUpdate'])->name('update.invite.user.profile');
 Route::get('/public-order/{id}', [OrderController::class, 'publicOrder'])->name('public.order');
 Route::post('/upload-order-files/{id}', [OrderController::class, 'uploadOrderFiles'])->name('order.file.upload');
+//workflow
 Route::post('/upload-inspection-files/{id}', [OrderController::class, 'uploadInpectionFiles'])->name('inspection.file.upload');
 Route::post('/admin-report-preparation-create/{id}', [OrderWorkflowController::class, 'storeAdminReportPreparation'])->name('report.preparation.create');
 Route::post('/assignee-report-preparation-create/{id}', [OrderWorkflowController::class, 'storeAssigneeReportPreparation'])->name('assignee.preparation.create');
+Route::post('/report-analysis-create/{id}', [OrderWorkflowController::class, 'storeReportAnalysis'])->name('report.analysis.create');
 //Route::get( "{slug}", [ WebApiController::class, 'home' ] )->where( 'slug', ".*" );
