@@ -230,10 +230,17 @@ class OrderWorkflowController extends BaseController
 
     public function saveInitialReview(Request $request){
         $this->repository->updateInitialReviewData($request->all());
+        return response()->json(['message' => 'Initial Review saved successfully']);
     }
 
-    public function updateQa(Request $request){
+    public function saveQualityAssurance(Request $request){
+        $this->repository->saveQualityAssurance($request->all());
+        return response()->json(['message' => 'Quality Assurance saved successfully']);
+    }
 
+    public function updateQualityAssurance(Request $request){
+        $this->repository->updateQualityAssurance($request->all());
+        return response()->json(['message' => 'Quality Assurance updated successfully']);
     }
 
     public function rewriteReport(Request $get) {
