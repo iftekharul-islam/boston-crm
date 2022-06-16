@@ -61,14 +61,14 @@
             <p class="text-light-black mgb-12">Note from previous steps</p>
             <p class="mb-0 text-light-black fw-bold">{{ this.preNote }}</p>
         </div>
-        <div class="group">
+        <div class="group" v-if="noteCheck == 1">
             <p class="text-light-black mgb-12">Note from this step</p>
             <a href="#" class="primary-text mb-2">(Rewrite & send back)</a>
             <p class="mb-0 text-light-black fw-bold">{{ note }}</p>
         </div>
-        <div class="group">
+        <div class="group" v-if="noteCheck == 2">
             <p class="text-light-black mgb-12">Note from this step</p>
-            <a href="#" class="primary-text mb-2">(Rewrite & send back)</a>
+            <a href="#" class="primary-text mb-2">(Check & Upload)</a>
             <p class="mb-0 text-light-black fw-bold">{{ note }}</p>
         </div>
         <div class="group">
@@ -142,15 +142,15 @@ export default {
       }
       let analysis = !_.isEmpty(this.order.analysis) ? this.order.analysis : false;
       if(analysis){
-          console.log(analysis)
           this.assignToName = analysis.assignee.name
-          this.note = analysis.note
           this.dataFiles = analysis.attachments
           if(analysis.is_review_send_back){
               this.noteCheck = 1
+              this.note = analysis.rewrite_note
           }
           if(analysis.is_check_upload){
               this.noteCheck = 2
+              this.note = analysis.note
           }
       }
       if(this.assignToName || this.note){

@@ -87,8 +87,9 @@ class OrderWorkflowController extends BaseController
             $report->updated_by = auth()->user()->id;
             $report->save();
 
-            $this->savePreparationFiles($request->all(), $report->id);
-
+            if(isset($request['files']) && count($request['files'])) {
+                $this->savePreparationFiles($request->all(), $report->id);
+            }
             return response()->json(['message' => 'Report updated successfully']);
         }
 
@@ -119,40 +120,43 @@ class OrderWorkflowController extends BaseController
         logger($request->all());
         $report = OrderWReportAnalysis::where('order_id', $id)->first();
         if($report){
-            $report->note = $request->note;
-            logger(gettype($request->noteCheck));
             if($request->noteCheck == '1'){
-                logger('this is note 1');
                 $report->is_review_send_back = 1;
                 $report->is_check_upload = 0;
+                $report->rewrite_note = $request->note;
             } else {
-                logger('this is note 2');
                 $report->is_review_send_back = 0;
                 $report->is_check_upload = 1;
+                $report->note = $request->note;
             }
             $report->assigned_to = $request->assigned_to;
             $report->updated_by = auth()->user()->id;
             $report->save();
 
-            $this->saveAnalysisFiles($request->all(), $report->id);
+            if(isset($request['files']) && count($request['files'])){
+                $this->saveAnalysisFiles($request->all(), $report->id);
+            }
 
             return response()->json(['message' => 'Report Analysis updated successfully']);
         }
         $new = new OrderWReportAnalysis();
         $new->order_id = $id;
-        $new->note = $request->note;
         if($request->noteCheck == '1'){
             $new->is_review_send_back = 1;
             $new->is_check_upload = 0;
+            $new->rewrite_note = $request->note;
         } else {
             $new->is_review_send_back = 0;
             $new->is_check_upload = 1;
+            $new->note = $request->note;
         }
         $new->assigned_to = $request->assigned_to;
         $new->created_by = auth()->user()->id;
         $new->save();
 
-        $this->saveAnalysisFiles($request->all(), $report->id);
+        if(isset($request['files']) && count($request['files'])){
+            $this->saveAnalysisFiles($request->all(), $id);
+        }
 
         return response()->json(['message' => 'Report Analysis created successfully']);
 
@@ -180,6 +184,6 @@ class OrderWorkflowController extends BaseController
     }
 
     public function updateQa(Request $request){
-        
+
     }
 }

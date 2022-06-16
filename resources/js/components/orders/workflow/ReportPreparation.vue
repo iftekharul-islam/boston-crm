@@ -283,7 +283,7 @@ export default {
     }
   },
   created() {
-    // this.updateRole();
+    this.updateRole();
     this.updateAdmin()
     console.log(this.order)
   },
