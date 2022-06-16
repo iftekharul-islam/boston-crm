@@ -37,6 +37,23 @@ class Order extends Model implements HasMedia
         ]
     ];
 
+    public const OrderStatus = [
+        1 => "Scheduled",
+        2 => "Rescheduled",
+        3 => "Inspected",
+        4 => "Report Preparation & Initial Review",
+        5 => "Ready for Analysis and Review",
+        6 => "Check and Upload",
+        7 => "Rewrite",
+        8 => "Under Rewriting",
+        9 => "Ready for Analysis and Review",
+        10 => "Under Quality Assurance (E&O)",
+        11 => "Ready for Submission/Delivery",
+        12 => "Delivered",
+        13 => "Under Correction/Revision",
+        14 => "Delivered",
+    ];
+
     protected $fillable = [
       "amc_id","lender_id","status","client_order_no","system_order_no","received_date","due_date"
     ];
