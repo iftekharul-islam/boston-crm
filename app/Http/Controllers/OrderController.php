@@ -446,40 +446,4 @@ class OrderController extends BaseController
         ];
         $this->repository->addActivity($data);
     }
-
-    public function uploadInpectionFiles(Request $request, $inspection_id): JsonResponse|\Illuminate\Http\RedirectResponse
-    {
-        if($request->has('public')){
-            $inspection_id = base64_decode($inspection_id);
-        }
-        $data = $this->saveInpectionFiles($request->all(), $inspection_id);
-        logger($data);
-        if ($request->ajax()) {
-            return response()->json([
-                "file" => $data['media'],
-                "message" => "inspection file uploaded successfully"
-            ]);
-        }
-        return redirect()
-            ->back()
-            ->with(['success' => 'inspection file uploaded successfully']);
-    }
-
-    public function saveInpectionFiles($data, $inspection_id)
-    {
-        $inspection = OrderWInspection::find($inspection_id);
-        if(!$inspection){
-            return false;
-        }
-        foreach ($data['files'] as $file){
-            $inspection->find($inspection_id)->addMedia($file)
-                ->withCustomProperties(['type' => $data['file_type']])
-                ->toMediaCollection('inspection');
-        }
-        $inspection = OrderWInspection::with('attachments')->where('id', $inspection_id)->first();
-        return [
-           'status' => true,
-           'media' => $inspection->attachments,
-        ];
-    }
 }
