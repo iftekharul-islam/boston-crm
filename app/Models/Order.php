@@ -7,6 +7,7 @@ use App\Models\BorrowerInfo;
 use App\Models\PropertyInfo;
 use App\Models\AppraisalDetail;
 use App\Models\ProvidedService;
+use App\Models\OrderWInitialReview;
 use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -125,8 +126,14 @@ class Order extends Model implements HasMedia
     {
         return $this->hasOne(OrderWReport::class,'order_id', 'id');
     }
+  
     public function analysis()
     {
         return $this->hasOne(OrderWReportAnalysis::class,'order_id', 'id');
+    }
+  
+    public function initialReview()
+    {
+        return $this->hasOne(OrderWInitialReview::class,'order_id', 'id');
     }
 }

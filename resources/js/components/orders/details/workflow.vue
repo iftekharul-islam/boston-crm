@@ -73,7 +73,7 @@
             <!-- Report preparation -->
             <ReportPreparation v-if="isActive === 'report-preparation'" :role="myRole" :users="users" :order="order"></ReportPreparation>
             <!-- Initial Review -->
-            <InitialReview v-if="isActive === 'initial-review'"></InitialReview>
+            <InitialReview :order="order" :users="users" v-if="isActive === 'initial-review'"></InitialReview>
             <!-- Report Analysis and Review -->
             <ReportAnalysisReview v-if="isActive === 'report-analysis-review'" :order="order" :users="users"></ReportAnalysisReview>
             <!-- Re-writing the report -->
