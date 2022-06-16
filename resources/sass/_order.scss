@@ -728,6 +728,24 @@ select {
                 }
             }
         }
+        .item.disable {
+            p {
+                color: #bbb;
+            }
+            span.ball {
+                background: #ddd;
+                border-color: #ddd;
+            }
+        }
+        .item.activeStep {
+            p {
+                color: #0ea591;
+            }
+            span.ball {
+                background: #67e9d8;
+                border-color: #19b7a2;
+            }
+        }
     }
     .step-item {
         flex-basis: 60%;

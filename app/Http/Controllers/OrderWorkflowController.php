@@ -114,7 +114,6 @@ class OrderWorkflowController extends BaseController
         ];
     }
 
-
     public function storeReportAnalysis(Request $request, $id) {
         logger("hello from storeReportAnalysis");
         logger($request->all());
@@ -175,5 +174,12 @@ class OrderWorkflowController extends BaseController
             'status' => true,
             'media' => $analysis->attachments,
         ];
+    }
+    public function saveInitialReview(Request $request){
+        $this->repository->updateInitialReviewData($request->all());
+    }
+
+    public function updateQa(Request $request){
+        
     }
 }

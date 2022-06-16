@@ -18,13 +18,14 @@
       <p class="text-light-black mgb-12">Duration</p>
       <p class="mb-0 text-light-black fw-bold">{{ scheduleData.duration }}</p>
     </div>
-
   </div>
-  <div v-else class="scheduling-item step-items">
-    <p>Not yet scheduled, Click Schedule button to schedule the order</p>
-    <div class="text-end mgt-32">
-      <button v-if="alreadyScheduled == 0" type="button" v-b-modal.schedule class="button button-primary px-4 h-40 d-inline-flex align-items-center">Schedule</button>
-    </div>
+    <div v-else class="scheduling-item step-items">
+      <p>Not yet scheduled, Click Schedule button to schedule the order</p>
+      <div class="text-end mgt-32">
+        <button v-if="alreadyScheduled == 0" type="button" v-b-modal.schedule
+                class="button button-primary px-4 h-40 d-inline-flex align-items-center">Schedule
+        </button>
+      </div>
     </div>
     <b-modal id="schedule" size="md" title="Schedule">
         <div class="modal-body">

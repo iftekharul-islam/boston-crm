@@ -1,75 +1,175 @@
 <template>
-  <div class="initial-review-item step-items">
-    <a class="edit-btn"><span class="icon-edit"><span class="path1"></span><span class="path2"></span></span></a>
-    <div class="group">
-      <p class="text-light-black mgb-12">Report creator</p>
-      <p class="mb-0 text-light-black fw-bold">15 Feb 2022</p>
+    <div>
+        <div class="initial-review-item step-items" v-if="currentStep == 'create'">
+            <div class="group">
+                <p class="text-light-black mgb-12">Report creator</p>
+                <p class="mb-0 text-light-black fw-bold">{{ initialReview.report_creator_name }}</p>
+            </div>
+            <div class="group">
+                <p class="text-light-black mgb-12">Report reviewer</p>
+                <p class="mb-0 text-light-black fw-bold">{{ initialReview.report_reviewer_name }}</p>
+            </div>
+            <div class="group">
+                <p class="text-light-black mgb-12">Report Preparation Notes</p>
+                <p class="mb-0 text-light-black fw-bold">{{ initialReview.report_note }}</p>
+            </div>
+            <br /><br />
+        </div>
+        <div class="initial-review-item step-items" v-if="currentStep == 'view'">
+            <a class="edit-btn" @click="editInitialReview"><span class="icon-edit"><span class="path1"></span><span
+                        class="path2"></span></span></a>
+            <div class="group">
+                <p class="text-light-black mgb-12">Report creator</p>
+                <p class="mb-0 text-light-black fw-bold">{{ initialReview.report_creator_name }}</p>
+            </div>
+            <div class="group">
+                <p class="text-light-black mgb-12">Report reviewer</p>
+                <p class="mb-0 text-light-black fw-bold">{{ initialReview.report_reviewer_name }}</p>
+            </div>
+            <div class="group">
+                <p class="text-light-black mgb-12">Assigned to</p>
+                <p class="mb-0 text-light-black fw-bold">{{ initialReview.assigned_name }}</p>
+            </div>
+            <div class="group">
+                <p class="text-light-black mgb-12">Notes</p>
+                <p class="mb-0 text-light-black fw-bold">{{ initialReview.note }}</p>
+            </div>
+            <div class="mgb-32 d-flex align-items-center">
+                <div class="checkbox-group review-check mgr-20" v-if="initialReview.is_review_done == 1">
+                    <input type="radio" checked class="checkbox-input check-data">
+                    <label for="" class="checkbox-label text-capitalize">Review Done</label>
+                </div>
+                <div class="checkbox-group review-check" v-if="initialReview.is_check_upload == 1">
+                    <input type="radio" checked class="checkbox-input check-data">
+                    <label for="" class="checkbox-label text-capitalize">Review Done As Check & upload</label>
+                </div>
+            </div>
+            <br /><br />
+        </div>
+        <div class="initial-review-form" v-if="currentStep == 'create' || currentStep == 'edit'">
+            <ValidationObserver ref="initialReviewForm">
+                <div class="mgb-32">
+                    <ValidationProvider class="group" name="Assigned to" rules="required" v-slot="{ errors }">
+                        <div :class="{ 'invalid-form' : errors[0] }">
+                            <label for="" class="d-block mb-2 dashboard-label">Assigned to<span
+                                    class="text-danger require"></span></label>
+                            <select class="dashboard-input w-100" v-model="initialReview.assigned_to">
+                                <option value="">Please select to assign</option>
+                                <option v-for="user in users" :key="user.id" :value="user.id">
+                                    {{ user.name }}
+                                </option>
+                            </select>
+                            <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                        </div>
+                    </ValidationProvider>
+                </div>
+                <div class="mgb-32">
+                    <ValidationProvider class="d-block mb-2 dashboard-label" name="Notes" rules="required"
+                        v-slot="{ errors }">
+                        <div class="group" :class="{ 'invalid-form' : errors[0] }">
+                            <label for="" class="d-block mb-2 dashboard-label">Notes <span
+                                    class="text-danger require"></span></label>
+                            <b-form-textarea v-model="initialReview.note" placeholder="Enter notes..." rows="2"
+                                cols="5">
+                            </b-form-textarea>
+                            <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                        </div>
+                    </ValidationProvider>
+                    <div class="mgb-32 d-flex align-items-center">
+                        <div class="checkbox-group review-check mgr-20">
+                            <input type="radio" class="checkbox-input check-data" v-model="initialReview.checkbox"
+                                value="1">
+                            <label for="" class="checkbox-label text-capitalize">Review Done</label>
+                        </div>
+                        <div class="checkbox-group review-check">
+                            <input type="radio" class="checkbox-input check-data" v-model="initialReview.checkbox"
+                                value="2">
+                            <label for="" class="checkbox-label text-capitalize">Review Done As Check & upload</label>
+                        </div>
+                    </div>
+                </div>
+            </ValidationObserver>
+            <div class="text-end mgt-32">
+                <button class="button button-primary px-4 h-40 d-inline-flex align-items-center"
+                    @click="saveInitialReview">Done
+                </button>
+            </div>
+        </div>
     </div>
-    <div class="group">
-      <p class="text-light-black mgb-12">Report reviewer</p>
-      <p class="mb-0 text-light-black fw-bold">15 Feb 2022</p>
-    </div>
-    <div class="group">
-      <p class="text-light-black mgb-12">Trainee</p>
-      <p class="mb-0 text-light-black fw-bold">15 Feb 2022</p>
-    </div>
-    <div class="group">
-      <p class="text-light-black mgb-12">Note</p>
-      <p class="mb-0 text-light-black fw-bold">Lorem ipsum, or lipsum as it is sometimes known, is dummy text used
-        in laying out print, graphic or web designs. The passage is attributed
-        to an unknown</p>
-    </div>
-    <div class="mgb-32">
-      <label for="" class="mb-2 text-light-black d-inline-block">Assign to</label>
-      <div class="preparation-input w-100 position-relative">
-        <select name="" id="" class="w-100 dashboard-input">
-          <option value="">Hello</option>
-          <option value="">Hello</option>
-        </select>
-        <span class="icon-arrow-down bottom-arrow-icon"></span>
-      </div>
-    </div>
-    <div class="mgb-32">
-      <label for="" class="mb-2 text-light-black d-inline-block">Trainee selection</label>
-      <div class="preparation-input w-100 position-relative">
-        <select name="" id="" class="w-100 dashboard-input">
-          <option value="">Hello</option>
-          <option value="">Hello</option>
-        </select>
-        <span class="icon-arrow-down bottom-arrow-icon"></span>
-      </div>
-    </div>
-    <div class="mgb-32">
-      <label for="" class="mb-2 text-light-black d-inline-block">Add note</label>
-      <div class="preparation-input w-100 position-relative">
-        <textarea name="" id="" cols="30" rows="3" class="w-100 dashboard-textarea"></textarea>
-      </div>
-      <div class="checkbox-group review-check mgt-20">
-        <input type="checkbox" class="checkbox-input check-data">
-        <label for="" class="checkbox-label text-capitalize">Review done</label>
-      </div>
-      <div class="checkbox-group review-check mgt-20">
-        <input type="checkbox" class="checkbox-input check-data">
-        <label for="" class="checkbox-label text-capitalize">Review done as check & upload</label>
-      </div>
-    </div>
-    <div class="text-end mgt-32">
-      <button class="button button-primary px-4 h-40 d-inline-flex align-items-center">Done</button>
-    </div>
-  </div>
 </template>
 <script>
-export default {
-  name: 'InitialReview',
-  data: () => ({
-    initialReview:{
-      report_creator_name: '',
-      report_reviewer_name: '',
-      assigned_to:'',
-      trainee_id:'',
-      note: '',
-      is_review_done:''
+    export default {
+        name: 'InitialReview',
+        props: {
+            order: [],
+            users: []
+        },
+        data: () => ({
+            initialReview: {
+                initial_review_id: 0,
+                report_creator_name: '',
+                report_reviewer_name: '',
+                report_trainee_name: '',
+                report_note: '',
+                assigned_to: '',
+                assigned_name: '',
+                note: '',
+                checkbox: '',
+                is_review_done: '',
+                is_check_upload: '',
+                order_id: '',
+            },
+            message: '',
+            alreadyInitialReview: 0,
+            currentStep: 'create',
+        }),
+        created() {
+            this.initialReview.order_id = this.order.id
+            this.alreadyInitialReview = (JSON.parse(this.order.workflow_status)).initialReview
+            this.alreadyInitialReview == 1 ? this.currentStep = 'view' : 'create'
+            this.getInitialReviewData();
+        },
+        methods: {
+            getInitialReviewData() {
+                this.initialReview.report_creator_name = this.order.report.creator.name
+                this.initialReview.report_reviewer_name = this.order.report.reviewer.name
+                this.initialReview.report_trainee_name = this.order.report.trainee.name
+                this.initialReview.report_note = this.order.report.note
+                if (this.order.initial_review) {
+                    this.initialReview.initial_review_id = this.order.initial_review.id
+                    this.initialReview.note = this.order.initial_review.note
+                    this.initialReview.assigned_name = this.order.initial_review.assignee.name
+                    this.initialReview.assigned_to = this.order.initial_review.assigned_to
+                    this.initialReview.is_review_done = this.order.initial_review.is_review_done
+                    this.order.initial_review.is_check_upload = this.order.initial_review.is_check_upload
+                    if(this.order.initial_review.is_review_done == 1){
+                        this.initialReview.checkbox = '1'
+                    }else{
+                        this.initialReview.checkbox = '2'
+                    }
+                }
+            },
+            saveInitialReview() {
+                this.$refs.initialReviewForm.validate().then((status) => {
+                    if (status) {
+                        let self = this
+                        this.$boston.post('save-initial-review', this.initialReview)
+                            .then(res => {
+                                this.message = res.message
+                                setTimeout(() => {
+                                    self.$refs.initialReviewForm.reset();
+                                    self.message = '';
+                                }, 3000);
+                            }).catch(err => {
+                                console.log(err)
+                            })
+                    }
+                })
+            },
+            editInitialReview() {
+                this.currentStep = 'edit'
+                console.log('changed')
+            }
+        }
     }
-  })
-}
 </script>
