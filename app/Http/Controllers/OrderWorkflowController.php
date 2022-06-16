@@ -70,7 +70,7 @@ class OrderWorkflowController extends BaseController
         $new->save();
 
         return response()->json(['message' => 'Report created successfully']);
-    
+
     }
 
     public function storeAssigneeReportPreparation(Request $request, $id) {
@@ -87,7 +87,7 @@ class OrderWorkflowController extends BaseController
         }
 
         return response()->json(['message' => 'Report not available']);
-    
+
     }
 
     public function saveInitialReview(Request $request){

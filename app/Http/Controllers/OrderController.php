@@ -156,7 +156,8 @@ class OrderController extends BaseController
             'report.reviewer',
             'report.trainee',
             'report.assignee',
-            'report.creator'
+            'report.creator',
+            'initialReview.assignee',
         )->where('id', $id)->first();
         $order->amc_file = $this->repository->getClientFile($order->amc_id);
         $order->lender_file = $this->repository->getClientFile($order->lender_id);
