@@ -14,9 +14,9 @@ class ChangeInspectionDateColumnToOrderWInspectionsTable extends Migration
     public function up()
     {
         Schema::table('order_w_inspections', function (Blueprint $table) {
-            $table->dropColumn('inspection_date');
-            $table->dropColumn('inspection_time');
-            $table->timestamp('inspection_date_time')->after('inspector_id');
+            if ( !Schema::hasColumn('order_w_inspections', 'inspection_date_time') ) {
+                $table->timestamp('inspection_date_time')->after('inspector_id');
+            }
         });
     }
 
@@ -28,7 +28,7 @@ class ChangeInspectionDateColumnToOrderWInspectionsTable extends Migration
     public function down()
     {
         Schema::table('order_w_inspections', function (Blueprint $table) {
-            //
+            $table->dropColumn(['inspection_date_time']);
         });
     }
 }

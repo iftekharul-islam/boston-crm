@@ -14,7 +14,9 @@ class AddColorIdToUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('color_id')->after('password')->nullable();
+            if (!Schema::hasColumn('users', 'color_id')) {
+                $table->string('color_id')->after('password')->nullable();
+            }
         });
     }
 
@@ -26,7 +28,7 @@ class AddColorIdToUsersTable extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            //
+            $table->dropColumn('color_id');
         });
     }
 }

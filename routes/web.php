@@ -184,4 +184,6 @@ Route::post('/upload-inspection-files/{id}', [OrderController::class, 'uploadInp
 Route::post('/admin-report-preparation-create/{id}', [OrderWorkflowController::class, 'storeAdminReportPreparation'])->name('report.preparation.create');
 Route::post('/assignee-report-preparation-create/{id}', [OrderWorkflowController::class, 'storeAssigneeReportPreparation'])->name('assignee.preparation.create');
 Route::post('/report-analysis-create/{id}', [OrderWorkflowController::class, 'storeReportAnalysis'])->name('report.analysis.create');
+Route::post('rewrite-report/update/', [OrderWorkflowController::class, 'rewriteReport']);
+
 //Route::get( "{slug}", [ WebApiController::class, 'home' ] )->where( 'slug', ".*" );

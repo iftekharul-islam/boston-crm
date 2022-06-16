@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\OrderWInspection;
-use App\Models\OrderWReportAnalysis;
 use Carbon\Carbon;
+use App\Models\Order;
 use App\Helpers\CrmHelper;
 use App\Models\OrderWReport;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use App\Models\OrderWInspection;
 use Spatie\GoogleCalendar\Event;
+use Illuminate\Http\JsonResponse;
+use App\Models\OrderWReportAnalysis;
+use App\Models\OrderWRevision;
+use App\Models\OrderWRewrite;
 use App\Services\OrderWorkflowService;
 use App\Repositories\OrderWorkflowRepository;
 
@@ -116,6 +119,7 @@ class OrderWorkflowController extends BaseController
 
             return response()->json(['message' => 'Report Analysis updated successfully']);
         }
+        
         $new = new OrderWReportAnalysis();
         $new->order_id = $id;
         $new->note = $request->note;
@@ -160,4 +164,45 @@ class OrderWorkflowController extends BaseController
     public function updateQa(Request $request){
         
     }
+
+    public function rewriteReport(Request $get) {
+        $order = Order::find($get->order_id);
+        $user = auth()->user();
+        
+        if(!$order){
+            return response()->json([
+                'error' => true,
+                'message' => 'Order Information Not Found'
+            ]);
+        }
+        
+        $reWrite = OrderWRewrite::where('order_id', $order->id)->first();
+        if (!$reWrite) {
+            $reWrite = new OrderWRewrite();
+            $reWrite->order_id = $order->id;
+            $reWrite->created_at = Carbon::now();
+            $reWrite->created_by = $user->id;
+            $reWrite->assigned_to = $get->assigned_to;
+            $reWrite->save();
+            $historyTitle = "New assignee assiged by ".$user->name.' on the Re-writing the report section.';
+        } else {
+            $reWrite->updated_by = $user->id;
+            $reWrite->updated_at = Carbon::now();
+            $historyTitle = "Re-writing the report section updated by ".$user->name;
+        }
+
+        $reWrite->note = $get->note;
+        $reWrite->save();
+
+        $order->status = 8;
+        $order->save();
+
+        $this->addHistory($order, $user, $historyTitle, 'rewriting-report');
+        $orderData = $this->orderDetails($get->order_id);
+        return [
+            'status' => 'success',
+            'data' => $orderData
+        ];
+    }
+
 }

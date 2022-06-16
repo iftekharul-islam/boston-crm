@@ -5,11 +5,12 @@ namespace App\Models;
 use App\Models\ContactInfo;
 use App\Models\BorrowerInfo;
 use App\Models\PropertyInfo;
+use App\Models\OrderWHistory;
 use App\Models\OrderWRewrite;
 use App\Models\AppraisalDetail;
 use App\Models\ProvidedService;
-use App\Models\OrderWInitialReview;
 use Spatie\MediaLibrary\HasMedia;
+use App\Models\OrderWInitialReview;
 use App\Models\OrderWReportAnalysis;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -169,5 +170,10 @@ class Order extends Model implements HasMedia
     public function initialReview()
     {
         return $this->hasOne(OrderWInitialReview::class,'order_id', 'id');
+    }
+
+    public function workHisotry()
+    {
+        return $this->hasMany(OrderWHistory::class,'order_id', 'id');
     }
 }

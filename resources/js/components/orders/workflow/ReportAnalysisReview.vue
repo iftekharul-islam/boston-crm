@@ -159,37 +159,37 @@ export default {
     },
     saveAssigneeData() {
         this.$refs.assigneeForm.validate().then((status) => {
-          if(status) {
-            console.log(status)
-            console.log('hello')
-            let formData = new FormData();
-            for( let i = 0; i < this.fileData.files.length; i++ ){
-              let file = this.fileData.files[i];
-              formData.append('files[' + i + ']', file);
+            if(status) {
+                console.log(status)
+                console.log('hello')
+                let formData = new FormData();
+                for( let i = 0; i < this.fileData.files.length; i++ ){
+                let file = this.fileData.files[i];
+                formData.append('files[' + i + ']', file);
+                }
+                formData.append('file_type', this.fileData.file_type)
+                formData.append('assigned_to', this.assignTo)
+                formData.append('note', this.note)
+                formData.append('noteCheck', this.noteCheck)
+                const data = {
+                'note': this.note,
+                'assigned_to': this.assignTo,
+                'noteCheck': this.noteCheck,
+                'files': formData,
+                }
+                console.log(data)
+                // return;
+                this.$boston.post('report-analysis-create/'+ this.order.id, formData, { headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }}).then(res => {
+                    this.fileData = []
+                    console.log('response', res)
+                    this.isEditable = false
+                }).catch(err => {
+                    console.log('err', err)
+                });
             }
-            formData.append('file_type', this.fileData.file_type)
-            formData.append('assigned_to', this.assignTo)
-            formData.append('note', this.note)
-            formData.append('noteCheck', this.noteCheck)
-            const data = {
-              'note': this.note,
-              'assigned_to': this.assignTo,
-              'noteCheck': this.noteCheck,
-              'files': formData,
-            }
-            console.log(data)
-              // return;
-            this.$boston.post('report-analysis-create/'+ this.order.id, formData, { headers: {
-                    'Content-Type': 'multipart/form-data'
-                }}).then(res => {
-                this.fileData = []
-                console.log('response', res)
-                this.isEditable = false
-            }).catch(err => {
-                console.log('err', err)
-            });
-          }
-      })
+        })
     },
   },
   created() {
