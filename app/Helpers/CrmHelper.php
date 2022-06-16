@@ -31,7 +31,7 @@ trait CrmHelper {
             $array_filter2 = [
                 "borrower_name",
                 "co_borrower_name"
-            ];    
+            ];
             foreach ($array_filter2 as $item) {
                 if ($get->{$item} == null) {
                     $error = true;
@@ -117,8 +117,12 @@ trait CrmHelper {
             'reportRewrite.assignee',
             'analysis.assignee',
             'analysis.attachments',
+            'analysis.updatedBy',
             'initialReview.assignee',
-            'workHisotry.user'
+            'workHisotry.user',
+            'qualityAssurance.assignee',
+            'qualityAssurance.attachments',
+            'qualityAssurance.updatedBy',
         )->where('id', $id)->first();
     }
 

@@ -12,7 +12,8 @@
                     <p class="mb-0 text-light-black fw-bold">{{ order.analysis.note }}</p>
                 </div>
                 <div v-if="currentStep == 'view'">
-                    <a class="edit-btn" v-if="qa.note != ''" @click="editQualityAssurance"><span class="icon-edit"><span class="path1"></span><span class="path2"></span></span></a>
+                    <a class="edit-btn" v-if="qa.note != ''" @click="editQualityAssurance"><span class="icon-edit"><span
+                                class="path1"></span><span class="path2"></span></span></a>
                     <div class="group">
                         <p class="text-light-black mgb-12">Instruction from this step</p>
                         <p class="mb-0 text-light-black fw-bold">{{ qa.note }}</p>
@@ -43,27 +44,40 @@
                         </div>
                     </div>
                 </div>
-                <div v-if="qa.note == ''">
-                    <div class="group">
-                        <div class="position-relative file-upload">
-                            <input type="file" multiple v-on:change="addFiles">
-                            <label for="" class="py-2">Upload <span class="icon-upload ms-3 fs-20"><span
-                                        class="path1"></span><span class="path2"></span><span
-                                        class="path3"></span></span></label>
-                            <p v-if="filesCount > 0">{{ filesCount + 'files selected' }}</p>
+            </div>
+            <div v-if="qa.note == '' || currentStep == 'edit'">
+                <div class="group">
+                    <p class="text-light-black mgb-12">Files</p>
+                    <div class="d-flex align-items-center" v-for="attachment in order.quality_assurance.attachments">
+                        <div class="file-img">
+                            <img src="/img/pdf.png" alt="boston pdf image">
+                        </div>
+                        <div class="mgl-12">
+                            <p class="text-light-black mb-0">{{ attachment.name }}</p>
+                            <p class="text-gray mb-0 fs-12">Uploaded: {{ order.quality_assurance.updated_by.name + ', ' +
+                                order.quality_assurance.updated_at }}</p>
                         </div>
                     </div>
-                    <div class="mgb-20">
-                        <label for="" class="mb-2 text-light-black d-inline-block">Add note</label>
-                        <div class="preparation-input w-100 position-relative">
-                            <textarea v-model="qa.note" cols="30" rows="3" class="w-100 dashboard-textarea"></textarea>
-                        </div>
+                </div>
+                <div class="group">
+                    <div class="position-relative file-upload">
+                        <input type="file" multiple v-on:change="addFiles">
+                        <label for="" class="py-2">Upload <span class="icon-upload ms-3 fs-20"><span
+                                    class="path1"></span><span class="path2"></span><span
+                                    class="path3"></span></span></label>
+                        <p v-if="filesCount > 0">{{ filesCount + 'files selected' }}</p>
                     </div>
-                    <button class="btn btn-secondary b-1">Add comparable list for original photo</button>
-                    <div class="text-end mgt-32">
-                        <button class="button button-primary px-4 h-40 d-inline-flex align-items-center"
-                            @click="updateQualityAssurance">Done</button>
+                </div>
+                <div class="mgb-20">
+                    <label for="" class="mb-2 text-light-black d-inline-block">Add note</label>
+                    <div class="preparation-input w-100 position-relative">
+                        <textarea v-model="qa.note" cols="30" rows="3" class="w-100 dashboard-textarea"></textarea>
                     </div>
+                </div>
+                <button class="btn btn-secondary b-1">Add comparable list for original photo</button>
+                <div class="text-end mgt-32">
+                    <button class="button button-primary px-4 h-40 d-inline-flex align-items-center"
+                        @click="updateQualityAssurance">Done</button>
                 </div>
             </div>
             <div v-if="currentStep == 'create'">
@@ -166,7 +180,7 @@
                 this.filesCount = event.target.files.length
             },
             editQualityAssurance() {
-                this.currentStep = 'view'
+                this.currentStep = 'edit'
                 console.log(this.currentStep)
             },
             updateQualityAssurance() {

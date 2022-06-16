@@ -12,7 +12,8 @@ class OrderWQa extends Model implements HasMedia
     use HasFactory, InteractsWithMedia;
 
     protected $casts = [
-        'effective_date' => 'date:d M Y'
+        'effective_date' => 'date:d M Y',
+        'updated_at' => 'date:d M Y h:i A'
     ];
 
     protected $fillable = [
@@ -21,5 +22,13 @@ class OrderWQa extends Model implements HasMedia
 
     public function assignee(){
         return $this->belongsTo(User::class, 'assigned_to', 'id');
+    }
+
+    public function attachments(){
+        return $this->media()->where('collection_name', '=', 'qa');
+    }
+
+    public function updatedBy(){
+        return $this->belongsTo(User::class, 'updated_by', 'id');
     }
 }
