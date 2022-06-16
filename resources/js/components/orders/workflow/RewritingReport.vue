@@ -3,20 +3,16 @@
     <a class="edit-btn"><span class="icon-edit"><span class="path1"></span><span class="path2"></span></span></a>
     <div class="group">
       <p class="text-light-black mgb-12">Note from previous stpes</p>
-      <p class="mb-0 text-light-black fw-bold">Lorem ipsum, or lipsum as it is sometimes known, is dummy text used
-        in laying out print, graphic or web designs. The passage is attributed
-        to an unknown</p>
+      <p class="mb-0 text-light-black fw-bold" v-html="prev.note"></p>
     </div>
-    <div class="group">
+    <div class="group" v-if="current.note">
       <p class="text-light-black mgb-12">Note from this step</p>
       <a href="#" class="primary-text mb-2">(Rewrite & send back)</a>
-      <p class="mb-0 text-light-black fw-bold">Lorem ipsum, or lipsum as it is sometimes known, is dummy text used
-        in laying out print, graphic or web designs. The passage is attributed
-        to an unknown</p>
+      <p class="mb-0 text-light-black fw-bold" v-html="current.note"></p>
     </div>
-    <div class="group">
+    <div class="group" v-if="current.assigned_to">
       <p class="text-light-black mgb-12">Assign to</p>
-      <p class="mb-0 text-light-black fw-bold">Hafizur Rahman</p>
+      <p class="mb-0 text-light-black fw-bold">{{ current.assigned_to.name }}</p>
     </div>
     <div class="group">
       <p class="text-light-black mgb-12">Inspection file upload</p>
@@ -62,6 +58,20 @@
 <script>
 export default {
   name: 'RewritingReport',
-  data: () => ({})
+  props: ['order'],
+  data: () => ({
+      prev: [],
+      current: [],
+  }),
+  created(){
+    this.prev = this.order.report_analysis ?? [];
+    this.current = this.order.report_rewrite ?? [];
+
+    console.log(this.prev);
+    console.log(this.current);
+  },  
+  methods: {
+
+  }
 }
 </script>

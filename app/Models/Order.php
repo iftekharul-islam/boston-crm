@@ -5,9 +5,11 @@ namespace App\Models;
 use App\Models\ContactInfo;
 use App\Models\BorrowerInfo;
 use App\Models\PropertyInfo;
+use App\Models\OrderWRewrite;
 use App\Models\AppraisalDetail;
 use App\Models\ProvidedService;
 use Spatie\MediaLibrary\HasMedia;
+use App\Models\OrderWReportAnalysis;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -124,5 +126,16 @@ class Order extends Model implements HasMedia
     public function report()
     {
         return $this->hasOne(OrderWReport::class,'order_id', 'id');
+    }
+
+    
+    public function reportAnalysis()
+    {
+        return $this->hasOne(OrderWReportAnalysis::class,'order_id', 'id');
+    }
+
+    public function reportRewrite()
+    {
+        return $this->hasOne(OrderWRewrite::class,'order_id', 'id');
     }
 }
