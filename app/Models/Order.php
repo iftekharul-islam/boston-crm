@@ -7,6 +7,7 @@ use App\Models\BorrowerInfo;
 use App\Models\PropertyInfo;
 use App\Models\OrderWHistory;
 use App\Models\OrderWRewrite;
+use App\Models\OrderWRevision;
 use App\Models\AppraisalDetail;
 use App\Models\ProvidedService;
 use Spatie\MediaLibrary\HasMedia;
@@ -50,9 +51,8 @@ class Order extends Model implements HasMedia
         9 => "Ready for Analysis and Review",
         10 => "Under Quality Assurance (E&O)",
         11 => "Ready for Submission/Delivery",
-        12 => "Delivered",
-        13 => "Under Correction/Revision",
-        14 => "Delivered",
+        12 => "Under Correction/Revision",
+        13 => "Delivered",
     ];
 
     protected $fillable = [
@@ -179,5 +179,10 @@ class Order extends Model implements HasMedia
     public function workHisotry()
     {
         return $this->hasMany(OrderWHistory::class,'order_id', 'id');
+    }
+
+    public function revission()
+    {
+        return $this->hasMany(OrderWRevision::class,'order_id', 'id');
     }
 }

@@ -106,8 +106,8 @@ export default {
   }),
   inject: ['usersInfo'],
   created(){
-    this.orderData = this.order;
-    this.initData(this.orderData);
+      this.orderData = this.order;
+      this.initData(this.orderData);
   },  
   methods: {
       initData(order){
@@ -136,6 +136,7 @@ export default {
                     this.editable = true;
                     this.initData(this.orderData);
                     this.$root.$emit('wk_update', this.orderData);
+                    this.$root.$emit('wk_flow_menu', this.orderData);
                 }).catch(err => {
                     console.log('err', err)
                 });

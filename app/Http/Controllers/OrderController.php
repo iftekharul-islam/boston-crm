@@ -80,7 +80,7 @@ class OrderController extends BaseController
                        ->orWhere("due_date", "LIKE", "%$data%")
                        ->orWhere("created_at", "LIKE", "%$data%");
         })->with('user', 'amc', 'appraisalDetail',   'appraisalDetail.appraiser',
-        'appraisalDetail.getLoanType', 'lender', 'propertyInfo')
+        'appraisalDetail.getLoanType', 'lender', 'propertyInfo', 'inspection.user')
         ->where('company_id', $companyId)
         ->orderBy('id', 'desc')
         ->paginate($paginate);
@@ -145,6 +145,8 @@ class OrderController extends BaseController
 
         $noRewrite = 1;
         if (isset($order->analysis->is_review_send_back) && $order->analysis->is_review_send_back == 1) {
+            $noRewrite = 0;
+        } else if( !isset($order->analysis->is_review_send_back)) {
             $noRewrite = 0;
         }
 

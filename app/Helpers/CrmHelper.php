@@ -120,9 +120,10 @@ trait CrmHelper {
             'analysis.updatedBy',
             'initialReview.assignee',
             'workHisotry.user',
+            'revission',
             'qualityAssurance.assignee',
             'qualityAssurance.attachments',
-            'qualityAssurance.updatedBy',
+            'qualityAssurance.updatedBy'
         )->where('id', $id)->first();
     }
 

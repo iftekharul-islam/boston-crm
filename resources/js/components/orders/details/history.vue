@@ -34,6 +34,10 @@ export default {
     }),
     created(){
       this.history = this.order.work_hisotry;
+
+      this.$root.$on('wk_update', (res) => {
+          this.history = res.work_hisotry;
+      });
     }
 }
 
