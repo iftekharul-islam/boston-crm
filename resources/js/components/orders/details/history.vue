@@ -6,8 +6,7 @@
         <p class="fw-bold text-light-black fs-20 mb-0">History</p>
 
       </div>
-      <div class="box-body">
-        <p class="mb-3 text-light-black">Order Created by: <span class="text-600 text-light-black">Toushi</span></p>
+      <div class="box-body">        
         <template v-for="item, ai in history">
           <div class="fs-14 logItem" :key="ai">
             <div class="logby">
