@@ -11,8 +11,16 @@ class OrderWReportAnalysis extends Model implements HasMedia
 {
     use HasFactory, InteractsWithMedia;
 
+    protected $casts=[
+        'updated_at' => 'date:d M Y h:i A',
+    ];
+
     public function assignee(){
         return $this->belongsTo(User::class, 'assigned_to', 'id');
+    }
+
+    public function updatedBy(){
+        return $this->belongsTo(User::class, 'updated_by','id');
     }
 
     public function attachments()

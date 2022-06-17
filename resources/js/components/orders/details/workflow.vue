@@ -79,7 +79,7 @@
             <!-- Re-writing the report -->
             <RewritingReport :order="orderData" v-if="isActive === 'rewriting-report'"></RewritingReport>
             <!-- Quality Assurance (E&O) -->
-            <QualityAssurance v-if="isActive === 'quality-assurance'"></QualityAssurance>
+            <QualityAssurance :order="order" :users="users" v-if="isActive === 'quality-assurance'"></QualityAssurance>
             <!-- Submission -->
             <Submission v-if="isActive === 'submission'"></Submission>
             <!-- Revision -->

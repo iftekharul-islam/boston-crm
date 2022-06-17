@@ -2,11 +2,12 @@
 
 namespace App\Repositories;
 
-use App\Models\OrderWInitialReview;
 use Auth;
 use Carbon\Carbon;
 use App\Models\Order;
+use App\Models\OrderWQa;
 use App\Models\OrderWInspection;
+use App\Models\OrderWInitialReview;
 
 class OrderWorkflowRepository extends BaseRepository
 {
@@ -47,10 +48,10 @@ class OrderWorkflowRepository extends BaseRepository
      */
     public function updateInitialReviewData($data): bool
     {
-        if($data['initial_review_id'] > 0){
+        if ($data['initial_review_id'] > 0) {
             $order_initial_review = OrderWInitialReview::find($data['initial_review_id']);
             $order_initial_review->updated_by = Auth::user()->id;
-        }else{
+        } else {
             $order_initial_review = new OrderWInitialReview();
             $order_initial_review->created_by = Auth::user()->id;
         }
@@ -65,5 +66,42 @@ class OrderWorkflowRepository extends BaseRepository
             'workflow_status->initialReview' => 1
         ])->save();
         return $order && $order_initial_review;
+    }
+
+    public function saveQualityAssurance($data)
+    {
+        if ($data['qa_id'] > 0) {
+            $order_quality_assurance = OrderWQa::find($data['qa_id']);
+            $order_quality_assurance->updated_by = Auth::user()->id;
+        } else {
+            $order_quality_assurance = new OrderWQa();
+            $order_quality_assurance->created_by = Auth::user()->id;
+        }
+        $order_quality_assurance->order_id = $data['order_id'];
+        $order_quality_assurance->assigned_to = $data['assigned_to'];
+        $order_quality_assurance->effective_date = Carbon::parse($data['effective_date'])->format('Y-m-d H:i:s');
+        $order_quality_assurance->save();
+
+        $order = Order::find($data['order_id'])->forceFill([
+            'workflow_status->qualityAssurance' => 1
+        ])->save();
+
+        return $order && $order_quality_assurance;
+    }
+
+    public function updateQualityAssurance($data)
+    {
+        if ($data['qa_id'] > 0) {
+            $order_quality_assurance = OrderWQa::find($data['qa_id']);
+            $order_quality_assurance->updated_by = Auth::user()->id;
+            $order_quality_assurance->note = $data['note'];
+            foreach ($data['files'] as $file) {
+                $order_quality_assurance->addMedia($file)
+                    ->toMediaCollection('qa');
+            }
+            $order_quality_assurance->save();
+
+            return $order_quality_assurance;
+        }
     }
 }

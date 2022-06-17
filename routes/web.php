@@ -124,6 +124,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/update-order-schedule', [OrderWorkflowController::class, 'updateOrderSchedule']);
     Route::get('/check-event', [OrderWorkflowController::class, 'checkEvent']);
     Route::post('/save-initial-review',[OrderWorkflowController::class,'saveInitialReview']);
+    Route::post('/save-quality-assurance',[OrderWorkflowController::class,'saveQualityAssurance']);
+    Route::post('/update-quality-assurance',[OrderWorkflowController::class,'updateQualityAssurance']);
 
 
     //Appraisal Type
@@ -180,7 +182,7 @@ Route::post('invite-user-update/{id}', [UserController::class, 'inviteUserUpdate
 Route::get('/public-order/{id}', [OrderController::class, 'publicOrder'])->name('public.order');
 Route::post('/upload-order-files/{id}', [OrderController::class, 'uploadOrderFiles'])->name('order.file.upload');
 //workflow
-Route::post('/upload-inspection-files/{id}', [OrderController::class, 'uploadInpectionFiles'])->name('inspection.file.upload');
+Route::post('/upload-inspection-files/{id}', [OrderWorkflowController::class, 'uploadInspectionFiles'])->name('inspection.file.upload');
 Route::post('/admin-report-preparation-create/{id}', [OrderWorkflowController::class, 'storeAdminReportPreparation'])->name('report.preparation.create');
 Route::post('/assignee-report-preparation-create/{id}', [OrderWorkflowController::class, 'storeAssigneeReportPreparation'])->name('assignee.preparation.create');
 Route::post('/report-analysis-create/{id}', [OrderWorkflowController::class, 'storeReportAnalysis'])->name('report.analysis.create');

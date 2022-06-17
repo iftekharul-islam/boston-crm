@@ -114,7 +114,6 @@ export default {
   methods: {
     addFiles(event){
       this.fileData.files = event.target.files
-        console.log(this.files)
     },
     saveFiles(){
           this.editable = false
@@ -142,6 +141,7 @@ export default {
       }
       let analysis = !_.isEmpty(this.order.analysis) ? this.order.analysis : false;
       if(analysis){
+          this.assignTo = analysis.assigned_to
           this.assignToName = analysis.assignee.name
           this.dataFiles = analysis.attachments
           if(analysis.is_review_send_back){

@@ -168,7 +168,6 @@
             },
             editInitialReview() {
                 this.currentStep = 'edit'
-                console.log('changed')
             }
         }
     }
