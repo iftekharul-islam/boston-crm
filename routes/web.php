@@ -185,5 +185,11 @@ Route::post('/admin-report-preparation-create/{id}', [OrderWorkflowController::c
 Route::post('/assignee-report-preparation-create/{id}', [OrderWorkflowController::class, 'storeAssigneeReportPreparation'])->name('assignee.preparation.create');
 Route::post('/report-analysis-create/{id}', [OrderWorkflowController::class, 'storeReportAnalysis'])->name('report.analysis.create');
 Route::post('rewrite-report/update/', [OrderWorkflowController::class, 'rewriteReport']);
+Route::post('revissin/add', [OrderWorkflowController::class, 'revissinAdd']);
+Route::post('revissin/edit', [OrderWorkflowController::class, 'revissinEdit']);
+Route::post('revissin/solutions/add', [OrderWorkflowController::class, 'revissinSolutionAdd']);
+Route::post('revissin/solutions/marked', [OrderWorkflowController::class, 'revissinSolutionMarked']);
+Route::post('revissin/solutions/delete', [OrderWorkflowController::class, 'revissinSolutionDelete']);
+
 
 //Route::get( "{slug}", [ WebApiController::class, 'home' ] )->where( 'slug', ".*" );

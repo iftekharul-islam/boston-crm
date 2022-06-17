@@ -24,13 +24,13 @@
                 </a>
             </template>
             <template v-slot:inspector="{item}">
-                {{ item.inspector ? '-' : '-' }}
+                {{ item.inspection ? item.inspection.user.name : '-' }}
             </template>
             <template v-slot:due_date="{item}">
                 {{ item.due_date | onlyDate }}
             </template>
             <template v-slot:inspection_date="{item}">
-                {{ item.inspector ? '-' : '-' }}
+                {{ item.inspection ? item.inspection.inspection_date_time : '-' }}
             </template>
             <template v-slot:appraiser="{item}">
                 <template v-if="item.appraisal_detail">
@@ -85,7 +85,7 @@ export default {
                 'Inspector@inspector@center@center',
                 'Inspection Date@inspection_date@center@center',
                 'Due date@due_date@center@center',
-                'Status@status@center@center',
+                'Status@order_status@center@center',
                 'Map It@map_it@center@center',
                 'Action@action@center@center',
             ],
@@ -117,7 +117,6 @@ export default {
     created() {
         this.pages.pageData = this.data;
         this.orderData = this.data.data;
-        console.log(this.orderData);
     },
     methods: {
         checkColumnActive(val) {

@@ -399,7 +399,7 @@ export default {
         this.dialogue.message = "Are you want to discard this order now.";
         this.dialogue.okButton = "Yes";
         this.dialogue.cancelButton = "No";
-        this.$refs.popup.open()
+        this.$refs.popup.open();
     },
     _confirm() {
         this.$refs.popup.close();

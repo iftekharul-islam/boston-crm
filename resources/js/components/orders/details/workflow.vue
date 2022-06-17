@@ -65,25 +65,25 @@
           <!-- step item -->
           <div class="step-item ">
             <!-- Order creation -->
-            <OrderCreate :order="order" v-if="isActive === 'order-create'"></OrderCreate>
+            <OrderCreate :order="orderData" v-if="isActive === 'order-create'"></OrderCreate>
             <!-- Scheduling -->
-            <Schedule :order="order" :appraisers="appraisers" v-if="isActive === 'scheduling'"></Schedule>
+            <Schedule :order="orderData" :appraisers="appraisers" v-if="isActive === 'scheduling'"></Schedule>
             <!-- Inspection -->
-            <Inspection :inspection="order['inspection']" v-if="isActive === 'inspection'"></Inspection>
+            <Inspection :inspection="orderData['inspection']" v-if="isActive === 'inspection'"></Inspection>
             <!-- Report preparation -->
-            <ReportPreparation v-if="isActive === 'report-preparation'" :role="myRole" :users="users" :order="order"></ReportPreparation>
+            <ReportPreparation v-if="isActive === 'report-preparation'" :role="myRole" :users="users" :order="orderData"></ReportPreparation>
             <!-- Initial Review -->
-            <InitialReview :order="order" :users="users" v-if="isActive === 'initial-review'"></InitialReview>
+            <InitialReview :order="orderData" :users="users" v-if="isActive === 'initial-review'"></InitialReview>
             <!-- Report Analysis and Review -->
-            <ReportAnalysisReview v-if="isActive === 'report-analysis-review'" :order="order" :users="users"></ReportAnalysisReview>
+            <ReportAnalysisReview v-if="isActive === 'report-analysis-review'" :order="orderData" :users="users"></ReportAnalysisReview>
             <!-- Re-writing the report -->
-            <RewritingReport :order="order" v-if="isActive === 'rewriting-report'"></RewritingReport>
+            <RewritingReport :order="orderData" v-if="isActive === 'rewriting-report'"></RewritingReport>
             <!-- Quality Assurance (E&O) -->
             <QualityAssurance v-if="isActive === 'quality-assurance'"></QualityAssurance>
             <!-- Submission -->
             <Submission v-if="isActive === 'submission'"></Submission>
             <!-- Revision -->
-            <Revision v-if="isActive === 'revision'"></Revision>
+            <Revision :order="orderData" v-if="isActive === 'revision'"></Revision>
           </div>
         </div>
       </div>
@@ -137,11 +137,23 @@ export default {
     myRole: '',
   }),
   created(){
-    this.updateRole()
-    this.status = JSON.parse(this.order.workflow_status) ?? '';
-    this.changeTab('rewriting-report');
+      this.initOrder(this.order);
+      this.updateRole()
+
+      let getParams = this.params();
+      if (getParams['wkf']) {
+          this.changeTab(getParams['wkf']);
+      }
+
+      this.$root.$on('wk_flow_menu', (res) => {
+          this.initOrder(res);
+      });
   },
   methods: {
+    initOrder(order) {
+        this.orderData = order;
+        this.status = JSON.parse(order.workflow_status) ?? [];
+    },
     updateRole() {
       if (this.role.length) {
         this.myRole = this.role
@@ -152,6 +164,10 @@ export default {
           return false;
       }
       this.isActive = type;
+      if (type == "revision") {
+        this.$root.$emit('open_revision', true);
+      }
+      this.addParam('wkf', type);
     }
   }
 }

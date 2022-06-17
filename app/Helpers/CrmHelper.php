@@ -118,7 +118,9 @@ trait CrmHelper {
             'analysis.assignee',
             'analysis.attachments',
             'initialReview.assignee',
-            'workHisotry.user'
+            'workHisotry.user',
+            // 'revission.created_by,updated_by,delivered_by',
+            'revission'
         )->where('id', $id)->first();
     }
 

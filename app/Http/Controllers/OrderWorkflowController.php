@@ -220,11 +220,225 @@ class OrderWorkflowController extends BaseController
         $reWrite->note = $get->note;
         $reWrite->save();
 
+        $workStatus = json_decode($order->workflow_status, true);
+        $workStatus['reWritingReport'] = 1;
+
         $order->status = 8;
+        $order->workflow_status = json_encode($workStatus);
         $order->save();
 
         $this->addHistory($order, $user, $historyTitle, 'rewriting-report');
         $orderData = $this->orderDetails($get->order_id);
+        return [
+            'status' => 'success',
+            'data' => $orderData
+        ];
+    }
+
+    public function revissinAdd(Request $get) {
+        $order = Order::find($get->order_id);
+        $user = auth()->user();
+        
+        if(!$order){
+            return response()->json([
+                'error' => true,
+                'message' => 'Order Information Not Found'
+            ]);
+        }
+
+        $deliveredDate = Carbon::parse($get->date);
+
+        $reWrite = new OrderWRevision();
+        $reWrite->order_id = $order->id;
+        $reWrite->created_at = Carbon::now();
+        $reWrite->created_by = $user->id;
+        $reWrite->updated_by = $user->id;
+        $reWrite->revision_date = $deliveredDate;
+        $reWrite->delivery_date = Carbon::now();
+        $reWrite->revision_details = $get->revission;
+        $reWrite->solution_details = "-";
+        $reWrite->save();
+        $historyTitle = "New revission created by ".$user->name;
+
+        $workStatus = json_decode($order->workflow_status, true);
+        $workStatus['revision'] = 1;
+
+        $order->status = 12;
+        $order->workflow_status = json_encode($workStatus);
+        $order->save();
+
+        $this->addHistory($order, $user, $historyTitle, 'revision');
+        $orderData = $this->orderDetails($get->order_id);
+        return [
+            'status' => 'success',
+            'data' => $orderData
+        ];
+    }
+
+    public function revissinEdit(Request $get) {
+        $order = Order::find($get->order_id);
+        $user = auth()->user();
+        
+        if(!$order){
+            return response()->json([
+                'error' => true,
+                'message' => 'Order Information Not Found'
+            ]);
+        }
+
+        $deliveredDate = Carbon::parse($get->date);
+
+        $reWrite = OrderWRevision::where('order_id', $get->order_id)->where('id', $get->id)->first();
+        if(!$order){
+            return response()->json([
+                'error' => true,
+                'message' => 'Order Revission Information Not Found'
+            ]);
+        }
+
+        $reWrite->updated_at = Carbon::now();
+        $reWrite->updated_by = $user->id;
+        $reWrite->revision_date = $deliveredDate;
+        $reWrite->revision_details = $get->revission;
+        $reWrite->solution_details = "-";
+        $reWrite->save();
+        $historyTitle = "Revission has been updated by ".$user->name;
+
+        $workStatus = json_decode($order->workflow_status, true);
+        $workStatus['revision'] = 1;
+
+        $order->status = 12;
+        $order->workflow_status = json_encode($workStatus);
+        $order->save();
+
+        $this->addHistory($order, $user, $historyTitle, 'revision');
+        $orderData = $this->orderDetails($get->order_id);
+        return [
+            'status' => 'success',
+            'data' => $orderData
+        ];
+    }
+
+    public function revissinSolutionAdd(Request $get) {
+        $order = Order::find($get->order_id);
+        $user = auth()->user();
+        
+        if(!$order){
+            return response()->json([
+                'error' => true,
+                'message' => 'Order Information Not Found'
+            ]);
+        }
+
+        $reWrite = OrderWRevision::where('order_id', $get->order_id)->where('id', $get->revission['id'])->first();
+        if (!$reWrite) {
+            return response()->json([
+                'error' => true,
+                'message' => 'Order Revission Information Not Found'
+            ]);
+        }
+        $reWrite->updated_at = Carbon::now();
+        $reWrite->updated_by = $user->id;
+        $reWrite->completed_by = $user->id;
+        $reWrite->delivered_by = $user->id;
+        $reWrite->delivery_date = Carbon::now();
+        $reWrite->solution_details = $get->revission['solution_details_edited'];
+        $reWrite->save();
+
+        $historyTitle = "Solution added for revission. Solution added by ".$user->name;
+
+        $workStatus = json_decode($order->workflow_status, true);
+        $workStatus['revision'] = 1;
+
+        $order->status = 13;
+        $order->workflow_status = json_encode($workStatus);
+        $order->save();
+
+        $this->addHistory($order, $user, $historyTitle, 'revision');
+        $orderData = $this->orderDetails($get->order_id);
+
+        return [
+            'status' => 'success',
+            'data' => $orderData
+        ];
+    }
+
+    public function revissinSolutionMarked(Request $get) {
+        $order = Order::find($get->order_id);
+        $user = auth()->user();
+        
+        if(!$order){
+            return response()->json([
+                'error' => true,
+                'message' => 'Order Information Not Found'
+            ]);
+        }
+
+        $reWrite = OrderWRevision::where('order_id', $get->order_id)->where('id', $get->id)->first();
+        if (!$reWrite) {
+            return response()->json([
+                'error' => true,
+                'message' => 'Order Revission Information Not Found'
+            ]);
+        }
+        $reWrite->updated_at = Carbon::now();
+        $reWrite->updated_by = $user->id;
+        $reWrite->completed_by = $get->completed_by;
+        $reWrite->delivered_by = $get->delivered_by;
+        $reWrite->delivery_date = Carbon::parse($get->delivery_date);
+        $reWrite->solution_details = $get->solution_details;
+        $reWrite->save();
+
+        $historyTitle = "Revission marked as delivered by ".$user->name;
+
+        $workStatus = json_decode($order->workflow_status, true);
+        $workStatus['revision'] = 1;
+
+        $order->status = 13;
+        $order->workflow_status = json_encode($workStatus);
+        $order->save();
+
+        $this->addHistory($order, $user, $historyTitle, 'revision');
+        $orderData = $this->orderDetails($get->order_id);
+
+        return [
+            'status' => 'success',
+            'data' => $orderData
+        ];        
+    }
+
+    public function revissinSolutionDelete(Request $get) {
+        $order = Order::find($get->order_id);
+        $user = auth()->user();
+        
+        if(!$order){
+            return response()->json([
+                'error' => true,
+                'message' => 'Order Information Not Found'
+            ]);
+        }
+
+        $reWrite = OrderWRevision::where('order_id', $get->order_id)->where('id', $get->id)->first();
+        if (!$reWrite) {
+            return response()->json([
+                'error' => true,
+                'message' => 'Order Revission Information Not Found'
+            ]);
+        }
+        $reWrite->delete();
+
+        $historyTitle = "Revission has been deleted by ".$user->name;
+        $this->addHistory($order, $user, $historyTitle, 'revision');
+        $orderData = $this->orderDetails($get->order_id);
+
+        $reWrite = OrderWRevision::where('order_id', $get->order_id)->first();
+        if (!$reWrite) {
+            $workStatus = json_decode($order->workflow_status, true);
+            $workStatus['revision'] = 0;
+            $order->workflow_status = json_encode($workStatus);
+            $order->save();            
+        }
+
         return [
             'status' => 'success',
             'data' => $orderData
