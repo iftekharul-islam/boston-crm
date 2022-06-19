@@ -122,6 +122,8 @@ trait CrmHelper {
             'initialReview.assignee',
             'workHisotry.user',
             'revission',
+            'submission.trainee',
+            'submission.deliveryMan',
             'qualityAssurance.assignee',
             'qualityAssurance.attachments',
             'qualityAssurance.updatedBy'

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\OrderWSubmission;
 use Carbon\Carbon;
 use App\Models\Order;
 use App\Helpers\CrmHelper;
@@ -338,7 +339,7 @@ class OrderWorkflowController extends BaseController
 
         $this->addHistory($order, $user, $historyTitle, 'rewriting-report');
         $orderData = $this->orderDetails($get->order_id);
-        
+
         return [
             'status' => 'success',
             'data' => $orderData
@@ -549,6 +550,56 @@ class OrderWorkflowController extends BaseController
             $order->save();
         }
 
+        return [
+            'status' => 'success',
+            'data' => $orderData
+        ];
+    }
+
+    public function storeSubmission(Request $request, $id) {
+        logger($request->all());
+        $order = Order::find($id);
+        $user = auth()->user();
+
+        if(!$order){
+            return response()->json([
+                'error' => true,
+                'message' => 'Order Information Not Found'
+            ]);
+        }
+
+        $submission = OrderWSubmission::where('order_id', $id)->first();
+        if ($submission) {
+            $submission->trainee_id = $request->trainee_id;
+            $submission->delivery_man_id = $request->delivery_man_id;
+            $submission->delivery_date = $request->delivery_date;
+            $submission->is_trainee_signed = $request->is_trainee_signed ? 1 : 0;
+            $submission->updated_by = auth()->user()->id;
+            $submission->save();
+
+            $historyTitle = "Workflow submission updated data by ".$user->name.' on Workflow submission section.';
+
+        } else {
+            $newSubmission = new OrderWSubmission();
+            $newSubmission->order_id = $order->id;
+            $newSubmission->trainee_id = $request->trainee_id;
+            $newSubmission->delivery_man_id = $request->delivery_man_id;
+            $newSubmission->delivery_date = $request->delivery_date;
+            $newSubmission->is_trainee_signed = $request->is_trainee_signed ? 1 : 0;
+            $newSubmission->created_by = auth()->user()->id;
+            $newSubmission->save();
+
+            $historyTitle = "Workflow submission created data by ".$user->name.' on Workflow submission section.';
+        }
+
+        $workStatus = json_decode($order->workflow_status, true);
+        $workStatus['submission'] = 1;
+        $order->status = 11;
+        $order->workflow_status = json_encode($workStatus);
+        $order->save();
+
+        $this->addHistory($order, $user, $historyTitle, 'submission');
+        $orderData = $this->orderDetails($id);
         return [
             'status' => 'success',
             'data' => $orderData
