@@ -1,0 +1,123 @@
+
+.vue-modal {
+    position: fixed;
+    background: $modal-bg;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    padding: 20px;
+    @include flex-center;
+}
+.map-direction  {
+    .content {
+        display: flex;
+        width: 100%;
+        height: 100%;
+        > .left {
+            padding: 24px 0;
+            box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.12);
+            border-radius: 8px 0px 0px 8px;
+            max-width: 360px;
+            min-width: 360px;
+        }
+        .full-map {
+            width: 100%;
+            border-radius: 0px 8px 8px 0px;
+            iframe {
+                width: 100%;
+                height: 100%;
+                border-radius: 0px 8px 8px 0px;
+            }
+            .x-btn {
+                width: 32px;
+                height: 32px;
+                background: $white;
+                @include flex-center;
+                border-radius: 4px;
+                position: absolute;
+                right: 16px;
+                top: 20px;
+            }
+        }
+    }
+}
+.destination {
+    &-list {
+        list-style: none;
+        padding: 0;
+        &-item {
+            display: flex;
+            position: relative;
+            margin-bottom: 12px;
+            .drag-dot {
+                position: absolute;
+                left: -20px;
+                top: 7px;
+                cursor: pointer;
+            }
+            .del-icon {
+                position: absolute;
+                right: -25px;
+                top: 7px;
+            }
+        }
+    }
+    &-time {
+        margin-top: 90px;
+        border-radius: 8px;
+        padding: 12px;
+        border: 1px solid $gray;
+    }
+}
+.starting-point,
+.destination {
+    padding: 0 36px;
+}
+.destination-time-space {
+    padding: 0 16px;
+}
+.destination-time {
+    .logo {
+        width: 48px;
+        min-width: 48px;
+        height: 48px;
+        background: $primary;
+        border-radius: 8px;
+        @include flex-center;
+    }
+}
+
+.max-w-556 {
+    max-width: 556px;
+}
+.com-list {
+    .content {
+        padding: 32px 16px;
+        border: 1px solid rgba(25, 183, 162, 0.5);
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.08);
+        border-radius: 4px;
+        background: $white;
+        .add {
+            border: 1px solid #19B7A2;
+            border-radius: 16px;
+            padding: 3px 10px; 
+            display: inline-block;
+            margin-top: 8px;
+        }
+    }
+}
+.map-name {
+    &-list {
+        background: $platinum;
+        padding: 8px 16px;
+        border-radius: 4px;
+        margin-bottom: 12px;
+    }
+}
+.map-name-outline {
+    display: flex;
+    p {
+        max-width: 360px;
+    }
+}
