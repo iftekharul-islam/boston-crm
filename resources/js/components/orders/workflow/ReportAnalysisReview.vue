@@ -98,6 +98,7 @@ export default {
     users: Array,
   },
   data: () => ({
+    orderData: [],
     isEditable: true,
     assignToName: '',
     assignTo: '',
@@ -115,31 +116,12 @@ export default {
     addFiles(event){
       this.fileData.files = event.target.files
     },
-    saveFiles(){
-          this.editable = false
-          let that = this
-          let formData = new FormData();
-          for( let i = 0; i < this.fileData.files.length; i++ ){
-              let file = this.files[i];
-              formData.append('files[' + i + ']', file);
-          }
-          formData.append('file_type',this.fileData.file_type)
-          axios.post('upload-inspection-files/'+ this.id, formData,{ headers: {
-                  'Content-Type': 'multipart/form-data'
-              }})
-              .then(res => {
-                  console.log('response', res.data)
-                  this.fileData = []
-              }).catch(err => {
-              console.log(err)
-          })
-      },
     updateData(){
-      let report = !_.isEmpty(this.order.report) ? this.order.report : false;
+      let report = !_.isEmpty(this.orderData.report) ? this.orderData.report : false;
       if(report){
         this.preNote = report.note
       }
-      let analysis = !_.isEmpty(this.order.analysis) ? this.order.analysis : false;
+      let analysis = !_.isEmpty(this.orderData.analysis) ? this.orderData.analysis : false;
       if(analysis){
           this.assignTo = analysis.assigned_to
           this.assignToName = analysis.assignee.name
@@ -160,8 +142,6 @@ export default {
     saveAssigneeData() {
         this.$refs.assigneeForm.validate().then((status) => {
           if(status) {
-            console.log(status)
-            console.log('hello')
             let formData = new FormData();
             for( let i = 0; i < this.fileData.files.length; i++ ){
               let file = this.fileData.files[i];
@@ -171,12 +151,15 @@ export default {
             formData.append('assigned_to', this.assignTo)
             formData.append('note', this.note)
             formData.append('noteCheck', this.noteCheck)
-            this.$boston.post('report-analysis-create/'+ this.order.id, formData, { headers: {
+            this.$boston.post('report-analysis-create/'+ this.orderData.id, formData, { headers: {
                     'Content-Type': 'multipart/form-data'
                 }}).then(res => {
                 this.fileData = []
-                console.log('response', res)
                 this.isEditable = false
+                this.orderData = res.data;
+                this.updateData();
+                this.$root.$emit('wk_update', this.orderData);
+                this.$root.$emit('wk_flow_menu', this.orderData);
             }).catch(err => {
                 console.log('err', err)
             });
@@ -185,10 +168,8 @@ export default {
     },
   },
   created() {
+    this.orderData = this.order;
     this.updateData()
-    console.log(this.order)
-    console.log(this.users)
   },
-
 }
 </script>
