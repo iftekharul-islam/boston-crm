@@ -90,8 +90,10 @@ class OrderWorkflowController extends BaseController
 
         $orderData = $this->orderDetails($order->id);
 
-        $order->status = 3;
-        $order->save();
+        $order->forceFill([
+                'workflow_status->inspection' => 1,
+                'status' => 3
+        ])->save();
 
         return response([
             "file" => $data['media'],
