@@ -143,7 +143,7 @@
                     this.initialReview.assigned_name = this.orderData.initial_review.assignee.name
                     this.initialReview.assigned_to = this.orderData.initial_review.assigned_to
                     this.initialReview.is_review_done = this.orderData.initial_review.is_review_done
-                    this.order.initial_review.is_check_upload = this.orderData.initial_review.is_check_upload
+                    this.initialReview.is_check_upload = this.orderData.initial_review.is_check_upload
                     if(this.orderData.initial_review.is_review_done == 1){
                         this.initialReview.checkbox = '1'
                     }else{
@@ -162,6 +162,8 @@
                                 this.$root.$emit('wk_update', this.orderData)
                                 this.$root.$emit('wk_flow_menu', this.orderData)
                                 this.getInitialReviewData()
+                                console.log(this.currentStep)
+                                this.currentStep = 'view'
                                 setTimeout(() => {
                                     self.$refs.initialReviewForm.reset();
                                     self.message = '';
