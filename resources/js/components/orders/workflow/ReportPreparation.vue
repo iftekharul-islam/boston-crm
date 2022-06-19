@@ -208,6 +208,10 @@ export default {
         this.creator = !_.isEmpty(report.creator) ? report.creator.name : '',
         this.viewer = !_.isEmpty(report.reviewer) ? report.reviewer.name : '',
         this.trainee = !_.isEmpty(report.assignee) ? report.assignee.name : '',
+        this.creatorId = report.creator_id
+        this.viewerId = report.reviewed_by
+        this.assignTo = report.assigned_to
+        this.traineeId = report.trainee_id
         this.note = report.note
         this.dataFiles = report.attachments
       }
