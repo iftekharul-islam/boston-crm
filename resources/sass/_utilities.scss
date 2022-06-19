@@ -1460,6 +1460,21 @@ html {
   .text-light-red {
     color: $light-red;
   }
+  .text-blue-eye {
+    color: $blue-eye;
+  }
+  .text-purple {
+    color: $purple;
+  }
+  .text-brown {
+    color: $brown;
+  }
+  .text-yellow-msg {
+    color: $yellow-msg;
+  }
+  .text-light-red {
+    color: $light-red;
+  }
  // background
  .bg-light-black {
    background: $light-black;
@@ -1472,6 +1487,9 @@ html {
  }
  .bg-gray {
    background: $gray;
+ }
+ .primary-bg {
+   background: $primary !important;
  }
 
 // font size
