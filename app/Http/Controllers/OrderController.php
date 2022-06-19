@@ -150,8 +150,6 @@ class OrderController extends BaseController
             $noRewrite = 0;
         }
 
-        // return $order;
-
         $order->amc_file = $this->repository->getClientFile($order->amc_id);
         $order->lender_file = $this->repository->getClientFile($order->lender_id);
         $order->user_role = User::find($order->created_by)->getUserRole($order->created_by,$order->company_id);

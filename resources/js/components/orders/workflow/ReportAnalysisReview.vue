@@ -169,8 +169,8 @@ export default {
   },
   created() {
     this.orderData = this.order;
-    console.log(this.orderData)
-    // this.updateData()
+    // console.log(this.orderData)
+    this.updateData()
   },
 }
 </script>
