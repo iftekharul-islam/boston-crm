@@ -60,7 +60,11 @@
               <p class="mb-0 text-light-black fw-bold">{{ this.viewer }}</p>
             </div>
             <div class="group">
-              <p class="text-light-black mgb-12">Traineee</p>
+                <p class="text-light-black mgb-12">Assigne to</p>
+                <p class="mb-0 text-light-black fw-bold">{{ this.assignToName }}</p>
+            </div>
+            <div class="group">
+              <p class="text-light-black mgb-12">Trainee to</p>
               <p class="mb-0 text-light-black fw-bold">{{ this.trainee }}</p>
             </div>
             <div class="group">
@@ -199,6 +203,7 @@ export default {
     viewerId: '',
     traineeId: '',
     assignTo: '',
+    assignToName: '',
     note: '',
       fileData:{
           file_type: '',
@@ -216,7 +221,8 @@ export default {
       if(report){
         this.creator = !_.isEmpty(report.creator) ? report.creator.name : '',
         this.viewer = !_.isEmpty(report.reviewer) ? report.reviewer.name : '',
-        this.trainee = !_.isEmpty(report.assignee) ? report.assignee.name : '',
+        this.trainee = !_.isEmpty(report.trainee) ? report.trainee.name : '',
+        this.assignToName = !_.isEmpty(report.assignee) ? report.assignee.name : '',
         this.creatorId = report.creator_id
         this.viewerId = report.reviewed_by
         this.assignTo = report.assigned_to
