@@ -9,7 +9,16 @@
                     <th width="5%" v-if="showSlOpt" class="text-center">
                         SL
                     </th>
-                    <th v-for="headItem, hi in headerItem" :class="`text-align-${headItem.align}`" :key="hi">{{ headItem.title | ucFirst }}</th>
+                    <th @click="clickHeader(headItem)" v-for="headItem, hi in headerItem" :class="`text-align-${headItem.align}`" :key="hi">
+                        <slot :name="`head_${headItem.item}`" v-bind:item="headItem">
+                            <template v-if="headItem.imageHead">
+                                <img :src="headItem.imageHeadSrc.src" :height="headItem.imageHeadSrc.height" :width="headItem.imageHeadSrc.width">
+                            </template>
+                            <template v-else>
+                                {{ headItem.title | ucFirst }}
+                            </template>
+                        </slot>
+                    </th>
                 </thead>
                 <tbody>
                     <template v-if="dataItem.length > 0">
@@ -42,59 +51,7 @@
                     </template>
                 </tbody>
             </table>
-            <!-- <div class="onlymobile">
-                <div class="m-table-mobile-header">
-                    <div class="buttonCheckbox mr-2" color="primary" text outline v-if="showSelectOpt">
-                        <m-checkbox :color='bgcolor' @change="checkAll"/>
-                        Select All
-                    </div>
-                    <button :disabled="dataItem.length == 0" v-if="collapse != null" class="expandLists" :color="expand.color" text small>{{ expand.title }}</button>
-                </div>
-                <table class="m-table-mobile">
-                    <tbody>
-                        <template v-if="dataItem.length > 0">
-                            <tr v-for="tdItem, ti in dataItem" :key="ti" :class="`${collapse != null ? 'collapse-table' : ''}`">
-                                <td class="m-table-control">
-                                    <div class="m-table-control-body">
-                                        <div class="m-table-control-left">
-                                            <div v-if="showSelectOpt" class="m-table-mobile-select">
-                                                <m-checkbox :color='bgcolor' @change="chooseItem($event, tdItem)" v-model="tdItem.selected"/>
-                                            </div>
-                                            <div class="m-table-mobile-opt-text">
-                                                {{ mobileText != null ? tdItem[mobileText] : mobileText }}
-                                            </div>
-                                        </div>
-                                        <div class="m-table-control-right">
-                                            <i class="mdi mdi-arrow-down"></i>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="no-padding m-content-td-data">
-                                    <div class="m-table-td-data" v-for="hItem, hk in headerItem" :key="hk">
-                                        <div class="m-table-mobile-tr">
-                                            <div class="m-table-left" v-if="hItem.item != 'action'">
-                                                {{ hItem.title | ucFirst }}
-                                            </div>
-                                            <div :class="`m-table-right ${hItem.item == 'action' ? 'action' : ''}`">
-                                                <slot :name="hItem.item" v-bind:item="tdItem">
-                                                    <div v-html="tdItem[hItem.item] ? tdItem[hItem.item] : '-'"></div>
-                                                </slot>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        </template>
-                        <template v-else>
-                            <tr>
-                                <td class="text-center mt-3">
-                                    <div v-html="noDataMessage"></div>
-                                </td>
-                            </tr>
-                        </template>
-                    </tbody>
-                </table>
-            </div> -->
+            <slot name="popup"></slot>
         </div>
     </div>
 </template>
@@ -181,17 +138,28 @@ export default {
                     let spl = ele.split('@');
                     let alignStr = 'left';
                     let alignStr2 = 'left';
+                    let imageHead = false;
+                    let imageHeadSrc = {src: null, height: null, width: null};
                     if(spl[2]){
                         alignStr = spl[2];
                     }
                     if(spl[3]){
                         alignStr2 = spl[3];
                     }
+                    if (spl[4]){
+                        imageHead = true;
+                        let imageStr = spl[4].split("_");
+                        imageHeadSrc.src = imageStr[0] ?? null;
+                        imageHeadSrc.height = imageStr[1] ?? null;
+                        imageHeadSrc.width = imageStr[2] ?? null;
+                    }
                     let newSpl = {
                         title: spl[0],
                         item: spl[1],
                         align: alignStr,
                         aligntd: alignStr2,
+                        imageHead: imageHead, 
+                        imageHeadSrc: imageHeadSrc
                     }
                     this.headerItem.push(newSpl);
                 });
@@ -234,6 +202,9 @@ export default {
             }
             this.$emit('change', this.selectedItems);
         },
+        clickHeader(item) {
+            this.$emit('headClick', item);
+        }
     },
     filters: {
         ucFirst(string) {
@@ -271,6 +242,10 @@ export default {
 </script>
 
 <style lang="css" scoped>
+    .m-table-content{
+        position: relative;
+    }
+
     .m-table-control-left {
         display: inline-flex;
         align-items: center;
@@ -284,26 +259,29 @@ export default {
         display: none;
     }
     .m-table table {
-        border-top: thin solid #ccc;
-        border-right: thin solid #ccc;
+        /* border-top: thin solid #ccc; */
+        /* border-right: thin solid #ccc; */
         width: 100%;
         border-collapse: collapse;
         transition: all 200ms linear;
     }
+    .m-table table tr {
+        border-top: thin solid #ccc;
+    }
     .m-table table tr td, 
     .m-table table thead th {
-        border-bottom: thin solid #ccc;
-        border-left: thin solid #ccc;
-        padding: 3px 5px;
+        /* border-left: thin solid #ccc; */
+        padding: 5px 5px;
         font-size: 14px;
         transition: all 200ms linear;
         vertical-align: middle;
     }
      .m-table table thead th {
         font-size: 15px;
-        background: #eee;
+        /* background: #eee; */
+        border-bottom: thin solid #ccc;
         padding: 5px;
-        text-align: center;
+        /* text-align: center; */
         transition: all 200ms linear;
     }
     @media (max-width: 571px) {

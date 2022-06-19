@@ -5,7 +5,7 @@
                 <div class="group">
                     <p class="text-light-black mgb-12">Instruction from previous step</p>
                     <p class="text-success">(Rewrite & send back)</p>
-                    <p class="mb-0 text-light-black fw-bold">{{ orderData.analysis.rewrite_note }}</p>
+                    <p class="mb-0 text-light-black fw-bold">{{ orderData.w.rewrite_note }}</p>
                 </div>
                 <div class="group">
                     <p class="text-success">(Check & Upload)</p>
