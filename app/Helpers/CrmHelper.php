@@ -114,6 +114,7 @@ trait CrmHelper {
             'report.trainee',
             'report.assignee',
             'report.creator',
+            'report.attachments',
             'reportRewrite.assignee',
             'analysis.assignee',
             'analysis.attachments',

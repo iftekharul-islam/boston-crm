@@ -159,6 +159,7 @@ export default {
     order: [],
   },
   data: () => ({
+    orderData: [],
     isEmpty: false,
     adminDataExist: true,
     dataExist: true,
@@ -181,29 +182,9 @@ export default {
   methods: {
       addFiles(event){
           this.fileData.files = event.target.files
-          console.log(this.files)
-      },
-      saveFiles(){
-          this.editable = false
-          let that = this
-          let formData = new FormData();
-          for( let i = 0; i < this.fileData.files.length; i++ ){
-              let file = this.files[i];
-              formData.append('files[' + i + ']', file);
-          }
-          formData.append('file_type',this.fileData.file_type)
-          axios.post('upload-inspection-files/'+ this.id, formData,{ headers: {
-                  'Content-Type': 'multipart/form-data'
-              }})
-              .then(res => {
-                  console.log('response', res.data)
-                  this.fileData = []
-              }).catch(err => {
-              console.log(err)
-          })
       },
     updateAdmin() {
-      let report = !_.isEmpty(this.order.report) ? this.order.report : false;
+      let report = !_.isEmpty(this.orderData.report) ? this.orderData.report : false;
       if(report){
         this.creator = !_.isEmpty(report.creator) ? report.creator.name : '',
         this.viewer = !_.isEmpty(report.reviewer) ? report.reviewer.name : '',
@@ -230,30 +211,29 @@ export default {
     },
     saveAdminData() {
         this.$refs.adminForm.validate().then((status) => {
-        if(status) {
-          console.log('hello')
-          const data = {
-            'creator_id': this.creatorId,
-            'reviewed_by': this.viewerId
-          }
-          console.log(data)
-          this.$boston.post('admin-report-preparation-create/'+ this.order.id, formData, { headers: {
-                  'Content-Type': 'multipart/form-data'
-              }}).then(res => {
-              console.log('response', res)
-              this.adminDataExist = true;
-          }).catch(err => {
-              console.log('err', err)
-          });
-        }
-
-      })
+            if (status) {
+                const data = {
+                    'creator_id': this.creatorId,
+                    'reviewed_by': this.viewerId
+                }
+                this.$boston.post('admin-report-preparation-create/' + this.orderData.id, data, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                }).then(res => {
+                    this.orderData = res.data;
+                    this.updateAdmin();
+                    this.$root.$emit('wk_update', this.orderData);
+                    this.$root.$emit('wk_flow_menu', this.orderData);
+                }).catch(err => {
+                    console.log('err', err)
+                });
+            }
+        })
     },
     saveAssigneeData() {
         this.$refs.assigneeForm.validate().then((status) => {
           if(status) {
-            console.log(status)
-            console.log('hello')
               let formData = new FormData();
               for( let i = 0; i < this.fileData.files.length; i++ ){
                   let file = this.fileData.files[i];
@@ -263,17 +243,13 @@ export default {
               formData.append('assigned_to', this.assignTo)
               formData.append('note', this.note)
               formData.append('trainee_id', this.traineeId)
-            const data = {
-              'note': this.note,
-              'assigned_to': this.assignTo,
-              'trainee_id': this.traineeId,
-            }
-            console.log(data)
-            this.$boston.post('assignee-report-preparation-create/'+ this.order.id, formData, { headers: {
+            this.$boston.post('assignee-report-preparation-create/'+ this.orderData.id, formData, { headers: {
                     'Content-Type': 'multipart/form-data'
                 }}).then(res => {
-                console.log('response', res)
-                this.dataExist = true
+                this.orderData = res.data;
+                this.updateAdmin();
+                this.$root.$emit('wk_update', this.orderData);
+                this.$root.$emit('wk_flow_menu', this.orderData);
             }).catch(err => {
                 console.log('err', err)
             });
@@ -287,9 +263,9 @@ export default {
     }
   },
   created() {
-    this.updateRole();
-    this.updateAdmin()
-    console.log(this.order)
+      this.orderData = this.order;
+      this.updateRole();
+      this.updateAdmin()
   },
 }
 </script>

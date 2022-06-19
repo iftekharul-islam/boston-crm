@@ -102,31 +102,56 @@ class OrderWorkflowController extends BaseController
     }
 
     public function storeAdminReportPreparation(Request $request, $id) {
-        logger("hello from storeAdminReportPreparation");
-        logger($request->all());
+        $order = Order::find($id);
+        $user = auth()->user();
+
+        if(!$order){
+            return response()->json([
+                'error' => true,
+                'message' => 'Order Information Not Found'
+            ]);
+        }
         $report = OrderWReport::where('order_id', $id)->first();
-        if($report){
+        if ($report) {
             $report->reviewed_by = $request->reviewed_by;
             $report->creator_id = $request->creator_id;
             $report->save();
-            return response()->json(['message' => 'Report updated successfully']);
+            $historyTitle = "Report preparation updated by ".$user->name.' on Report preparation section.';
+        } else {
+            $newReport = new OrderWReport();
+            $newReport->order_id = $id;
+            $newReport->reviewed_by = $request->reviewed_by;
+            $newReport->creator_id = $request->creator_id;
+            $newReport->created_by = $user->id;
+            $newReport->save();
+            $historyTitle = "Report preparation created by ".$user->name.' on Report preparation section.';
         }
-        $new = new OrderWReport();
-        $new->order_id = $id;
-        $new->reviewed_by = $request->reviewed_by;
-        $new->creator_id = $request->creator_id;
-        $new->created_by = auth()->user()->id;
-        $new->save();
 
-//        addHistory( $report, auth()->user()->id, 'report preparation created by', 'report-preparation' );
+        $workStatus = json_decode($order->workflow_status, true);
+        $workStatus['reportPreparation'] = 1;
+        $order->status = 4;
+        $order->workflow_status = json_encode($workStatus);
+        $order->save();
 
-        return response()->json(['message' => 'Report created successfully']);
-
+        $this->addHistory($order, $user, $historyTitle, 'report-preparation');
+        $orderData = $this->orderDetails($id);
+        return [
+            'status' => 'success',
+            'data' => $orderData
+        ];
     }
 
     public function storeAssigneeReportPreparation(Request $request, $id) {
-        logger("hello from storeAssigneeReportPreparation");
-        logger($request->all());
+        $order = Order::find($id);
+        $user = auth()->user();
+
+        if(!$order){
+            return response()->json([
+                'error' => true,
+                'message' => 'Order Information Not Found'
+            ]);
+        }
+
         $report = OrderWReport::where('order_id', $id)->first();
         if($report){
             $report->assigned_to = $request->assigned_to;
@@ -138,12 +163,27 @@ class OrderWorkflowController extends BaseController
             if(isset($request['files']) && count($request['files'])) {
                 $this->savePreparationFiles($request->all(), $report->id);
             }
-//            addHistory( $report, auth()->user()->id, 'report preparation updated by', 'report-preparation' );
 
-            return response()->json(['message' => 'Report updated successfully']);
+            $historyTitle = "Report preparation updated data by ".$user->name.' on Report preparation section.';
+
+            $workStatus = json_decode($order->workflow_status, true);
+            $workStatus['reportPreparation'] = 1;
+            $order->status = 4;
+            $order->workflow_status = json_encode($workStatus);
+            $order->save();
+
+            $this->addHistory($order, $user, $historyTitle, 'report-preparation');
+            $orderData = $this->orderDetails($id);
+            return [
+                'status' => 'success',
+                'data' => $orderData
+            ];
         }
 
-        return response()->json(['message' => 'Report not available']);
+        return response()->json([
+            'error' => true,
+            'message' => 'Report not available'
+        ]);
 
     }
 
@@ -158,62 +198,77 @@ class OrderWorkflowController extends BaseController
                 ->withCustomProperties(['type' => $data['file_type']])
                 ->toMediaCollection('preparation');
         }
-        $report = OrderWReport::with('attachments')->where('id', $id)->first();
-        return [
-            'status' => true,
-            'media' => $report->attachments,
-        ];
+
+        return true;
     }
 
     public function storeReportAnalysis(Request $request, $id) {
-        logger("hello from storeReportAnalysis");
-        logger($request->all());
-        $report = OrderWReportAnalysis::where('order_id', $id)->first();
-        if($report){
+        $order = Order::find($id);
+        $user = auth()->user();
+
+        if(!$order){
+            return response()->json([
+                'error' => true,
+                'message' => 'Order Information Not Found'
+            ]);
+        }
+
+        $analysis = OrderWReportAnalysis::where('order_id', $id)->first();
+        if ($analysis) {
             if($request->noteCheck == '1'){
-                $report->is_review_send_back = 1;
-                $report->is_check_upload = 0;
-                $report->rewrite_note = $request->note;
+                $analysis->is_review_send_back = 1;
+                $analysis->is_check_upload = 0;
+                $analysis->rewrite_note = $request->note;
             } else {
-                $report->is_review_send_back = 0;
-                $report->is_check_upload = 1;
-                $report->note = $request->note;
+                $analysis->is_review_send_back = 0;
+                $analysis->is_check_upload = 1;
+                $analysis->note = $request->note;
             }
-            $report->assigned_to = $request->assigned_to;
-            $report->updated_by = auth()->user()->id;
-            $report->save();
+            $analysis->assigned_to = $request->assigned_to;
+            $analysis->updated_by = auth()->user()->id;
+            $analysis->save();
 
             if(isset($request['files']) && count($request['files'])){
-                $this->saveAnalysisFiles($request->all(), $report->id);
+                $this->saveAnalysisFiles($request->all(), $analysis->id);
             }
 
-//            addHistory( $report, auth()->user()->id, 'report analysis created by', 'report-preparation' );
+            $historyTitle = "Report analysis updated data by ".$user->name.' on Report analysis and reviewed section.';
 
-            return response()->json(['message' => 'Report Analysis updated successfully']);
-        }
-
-        $new = new OrderWReportAnalysis();
-        $new->order_id = $id;
-        if($request->noteCheck == '1'){
-            $new->is_review_send_back = 1;
-            $new->is_check_upload = 0;
-            $new->rewrite_note = $request->note;
         } else {
-            $new->is_review_send_back = 0;
-            $new->is_check_upload = 1;
-            $new->note = $request->note;
+            $newAnalysis = new OrderWReportAnalysis();
+            $newAnalysis->order_id = $id;
+            if($request->noteCheck == '1'){
+                $newAnalysis->is_review_send_back = 1;
+                $newAnalysis->is_check_upload = 0;
+                $newAnalysis->rewrite_note = $request->note;
+            } else {
+                $newAnalysis->is_review_send_back = 0;
+                $newAnalysis->is_check_upload = 1;
+                $newAnalysis->note = $request->note;
+            }
+            $newAnalysis->assigned_to = $request->assigned_to;
+            $newAnalysis->created_by = auth()->user()->id;
+            $newAnalysis->save();
+
+            if(isset($request['files']) && count($request['files'])){
+                $this->saveAnalysisFiles($request->all(), $id);
+            }
+
+            $historyTitle = "Report analysis created data by ".$user->name.' on Report analysis and reviewed section.';
         }
-        $new->assigned_to = $request->assigned_to;
-        $new->created_by = auth()->user()->id;
-        $new->save();
 
-        if(isset($request['files']) && count($request['files'])){
-            $this->saveAnalysisFiles($request->all(), $id);
-        }
+        $workStatus = json_decode($order->workflow_status, true);
+        $workStatus['reportAnalysisReview'] = 1;
+        $order->status = 9;
+        $order->workflow_status = json_encode($workStatus);
+        $order->save();
 
-//        addHistory( $new, auth()->user()->id, 'report analysis updated by', 'report-analysis-review' );
-
-        return response()->json(['message' => 'Report Analysis created successfully']);
+        $this->addHistory($order, $user, $historyTitle, 'report-analysis-review');
+        $orderData = $this->orderDetails($id);
+        return [
+            'status' => 'success',
+            'data' => $orderData
+        ];
     }
 
     public function saveAnalysisFiles($data, $id)
@@ -227,11 +282,7 @@ class OrderWorkflowController extends BaseController
                 ->withCustomProperties(['type' => $data['file_type']])
                 ->toMediaCollection('analysis');
         }
-        $analysis = OrderWReportAnalysis::with('attachments')->where('id', $id)->first();
-        return [
-            'status' => true,
-            'media' => $analysis->attachments,
-        ];
+        return true;
     }
 
     public function saveInitialReview(Request $request){
