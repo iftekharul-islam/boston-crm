@@ -658,6 +658,7 @@ select {
             }
             .ball {
                 width: 24px;
+                min-width: 24px;
                 height: 24px;
                 border: 1px solid $gray;
                 border-radius: 50%;

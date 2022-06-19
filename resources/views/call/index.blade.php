@@ -27,15 +27,15 @@
             <div class="call-list">
                 {{-- header --}}
                 <div class="call-list-header">
-                    <span class="call-list-item">SL</span>
-                    <span class="call-list-item">Order no</span>
-                    <span class="call-list-item">Client name</span>
-                    <span class="call-list-item">Property address</span>
-                    <span class="call-list-item">Inspector</span>
-                    <span class="call-list-item">Appraiser</span>
-                    <span class="call-list-item">Last call</span>
-                    <span class="call-list-item">Insp. date & time</span>
-                    <span class="call-list-item">Status</span>
+                    <span class="call-list-item ">SL</span>
+                    <span class="call-list-item ">Order no</span>
+                    <span class="call-list-item ">Client name</span>
+                    <span class="call-list-item ">Property address</span>
+                    <span class="call-list-item ">Inspector</span>
+                    <span class="call-list-item ">Appraiser</span>
+                    <span class="call-list-item ">Last call</span>
+                    <span class="call-list-item ">Insp. date & time</span>
+                    <span class="call-list-item ">Status</span>
                     <span class="call-list-item">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path opacity="0.25" d="M17.028 0H6.972C2.604 0 0 2.604 0 6.972V17.028C0 21.396 2.604 24 6.972 24H17.028C21.396 24 24 21.396 24 17.028V6.972C24 2.604 21.396 0 17.028 0Z" fill="#2F415E"/>
@@ -73,4 +73,4 @@
             </div>
         </div>
    </div>
-@endsection
+ @endsection
