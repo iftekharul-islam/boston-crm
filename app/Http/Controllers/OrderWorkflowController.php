@@ -33,16 +33,26 @@ class OrderWorkflowController extends BaseController
 
     public function updateOrderSchedule(Request $request){
         $this->repository->updateOrderScheduleData($request->all());
-        //work for set event on google calender
+        //code for set event on google calender
         //$this->service->setOrderSchedule($request->order_id);
 
         $order = Order::find($request->order_id);
         $user = auth()->user();
-        $historyTitle = "Order Schedule Created by " . $user->name;
+        if($request->schedule_id > 0){
+            $message = 'Schedule updated successfully';
+            $historyTitle = 'Schedule updated By ' . auth()->user()->name;
+        }else{
+            $message = 'Schedule createded successfully';
+            $historyTitle = 'Schedule created By ' . auth()->user()->name;
+        }
 
         $this->addHistory($order, $user, $historyTitle, 'scheduling');
 
-        return response()->json(['message' => 'Schedule has been updated successfully']);
+        $orderData = $this->orderDetails($request->order_id);
+        return [
+            'message' => $message,
+            'data' => $orderData
+        ];
     }
 
     public function checkEvent(){
@@ -63,24 +73,25 @@ class OrderWorkflowController extends BaseController
 
         //Event::quickCreate('Appointment at Somewhere on July 1 10am-10:25am');
     }
-    public function uploadInspectionFiles(Request $request, $inspection_id): JsonResponse|\Illuminate\Http\RedirectResponse
+
+
+    public function uploadInspectionFiles(Request $request, $inspection_id)
     {
-        if($request->has('public')){
-            $inspection_id = base64_decode($inspection_id);
-        }
+        $order_w_inspection = OrderWInspection::find($inspection_id);
         $data = $this->saveInspectionFiles($request->all(), $inspection_id);
+        $order = Order::find($order_w_inspection->order_id);
+        $user = auth()->user();
+        $historyTitle = 'Inspection files uploaded by ' . auth()->user()->name;
 
-        logger($data);
+        $this->addHistory($order, $user, $historyTitle, 'inspection');
 
-        if ($request->ajax()) {
-            return response()->json([
-                "file" => $data['media'],
-                "message" => "inspection file uploaded successfully"
-            ]);
-        }
-        return redirect()
-            ->back()
-            ->with(['success' => 'inspection file uploaded successfully']);
+        $orderData = $this->orderDetails($order->id);
+
+        return response([
+            "file" => $data['media'],
+            "data" => $orderData,
+            "message" => "inspection file uploaded successfully"
+        ]);
     }
 
     public function saveInspectionFiles($data, $inspection_id)
@@ -95,6 +106,7 @@ class OrderWorkflowController extends BaseController
                 ->toMediaCollection('inspection');
         }
         $inspection = OrderWInspection::with('attachments')->where('id', $inspection_id)->first();
+
         return [
             'status' => true,
             'media' => $inspection->attachments,
