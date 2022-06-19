@@ -106,6 +106,7 @@
         },
         data: () => ({
             initialReview: {
+                orderData: [],
                 initial_review_id: 0,
                 report_creator_name: '',
                 report_reviewer_name: '',
@@ -124,25 +125,26 @@
             currentStep: 'create',
         }),
         created() {
-            this.initialReview.order_id = this.order.id
-            this.alreadyInitialReview = (JSON.parse(this.order.workflow_status)).initialReview
+            this.orderData = this.order
+            this.initialReview.order_id = this.orderData.id
+            this.alreadyInitialReview = (JSON.parse(this.orderData.workflow_status)).initialReview
             this.alreadyInitialReview == 1 ? this.currentStep = 'view' : 'create'
             this.getInitialReviewData();
         },
         methods: {
             getInitialReviewData() {
-                this.initialReview.report_creator_name = this.order.report.creator.name
-                this.initialReview.report_reviewer_name = this.order.report.reviewer.name
-                this.initialReview.report_trainee_name = this.order.report.trainee.name
-                this.initialReview.report_note = this.order.report.note
-                if (this.order.initial_review) {
-                    this.initialReview.initial_review_id = this.order.initial_review.id
-                    this.initialReview.note = this.order.initial_review.note
-                    this.initialReview.assigned_name = this.order.initial_review.assignee.name
-                    this.initialReview.assigned_to = this.order.initial_review.assigned_to
-                    this.initialReview.is_review_done = this.order.initial_review.is_review_done
-                    this.order.initial_review.is_check_upload = this.order.initial_review.is_check_upload
-                    if(this.order.initial_review.is_review_done == 1){
+                this.initialReview.report_creator_name = this.orderData.report.creator.name
+                this.initialReview.report_reviewer_name = this.orderData.report.reviewer.name
+                this.initialReview.report_trainee_name = this.orderData.report.trainee.name
+                this.initialReview.report_note = this.orderData.report.note
+                if (this.orderData.initial_review) {
+                    this.initialReview.initial_review_id = this.orderData.initial_review.id
+                    this.initialReview.note = this.orderData.initial_review.note
+                    this.initialReview.assigned_name = this.orderData.initial_review.assignee.name
+                    this.initialReview.assigned_to = this.orderData.initial_review.assigned_to
+                    this.initialReview.is_review_done = this.orderData.initial_review.is_review_done
+                    this.order.initial_review.is_check_upload = this.orderData.initial_review.is_check_upload
+                    if(this.orderData.initial_review.is_review_done == 1){
                         this.initialReview.checkbox = '1'
                     }else{
                         this.initialReview.checkbox = '2'
@@ -156,6 +158,10 @@
                         this.$boston.post('save-initial-review', this.initialReview)
                             .then(res => {
                                 this.message = res.message
+                                this.orderData = res.data
+                                this.$root.$emit('wk_update', this.orderData)
+                                this.$root.$emit('wk_flow_menu', this.orderData)
+                                this.getInitialReviewData()
                                 setTimeout(() => {
                                     self.$refs.initialReviewForm.reset();
                                     self.message = '';
