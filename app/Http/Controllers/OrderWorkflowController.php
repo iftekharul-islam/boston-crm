@@ -338,6 +338,7 @@ class OrderWorkflowController extends BaseController
 
         $this->addHistory($order, $user, $historyTitle, 'rewriting-report');
         $orderData = $this->orderDetails($get->order_id);
+        
         return [
             'status' => 'success',
             'data' => $orderData
