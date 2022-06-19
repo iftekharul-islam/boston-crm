@@ -740,11 +740,16 @@ select {
         }
         .item.activeStep {
             p {
-                color: #0ea591;
+                color: #19b7a2;
             }
             span.ball {
-                background: #67e9d8;
-                border-color: #19b7a2;
+                background: #19b7a2;
+                border-color: #f6fdfc;
+            }
+        }
+        .item.activeStep.current {
+            p {
+                color: #fff;
             }
         }
     }

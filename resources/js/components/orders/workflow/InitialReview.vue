@@ -125,14 +125,18 @@
             currentStep: 'create',
         }),
         created() {
-            this.orderData = this.order
-            this.initialReview.order_id = this.orderData.id
-            this.alreadyInitialReview = (JSON.parse(this.orderData.workflow_status)).initialReview
-            this.alreadyInitialReview == 1 ? this.currentStep = 'view' : 'create'
-            this.getInitialReviewData();
+            this.getInitialReviewData(this.order);
+            this.$root.$on("wk_update", (res) => {
+                this.getInitialReviewData(res);
+            });
         },
         methods: {
-            getInitialReviewData() {
+            getInitialReviewData(order) {
+                this.orderData = order
+                this.initialReview.order_id = this.orderData.id
+                this.alreadyInitialReview = (JSON.parse(this.orderData.workflow_status)).initialReview
+                this.alreadyInitialReview == 1 ? this.currentStep = 'view' : 'create'
+
                 this.initialReview.report_creator_name = this.orderData.report.creator.name
                 this.initialReview.report_reviewer_name = this.orderData.report.reviewer.name
                 this.initialReview.report_trainee_name = this.orderData.report.trainee.name

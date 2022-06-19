@@ -273,15 +273,21 @@ export default {
     }
   }),
   created(){
-      this.orderData = this.order;
-      this.revisionData = this.orderData.revission;
-      this.revissionKey = Math.floor(Math.random(10000) * 1000);
-
       this.$root.$on('open_revision', status => {
           this.revissionModal = status;
       });
+
+      this.initData(this.order);
+      this.$root.$on("wk_update", (res) => {
+          this.initData(res);
+      });
   },
   methods: {
+    initData(order) {
+        this.orderData = order;
+        this.revisionData = this.orderData.revission;
+        this.revissionKey = Math.floor(Math.random(10000) * 1000);
+    },
     revission() {
       this.revissionModal = !this.revissionModal
     },

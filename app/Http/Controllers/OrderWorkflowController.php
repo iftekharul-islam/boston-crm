@@ -89,12 +89,12 @@ class OrderWorkflowController extends BaseController
 
         $this->addHistory($order, $user, $historyTitle, 'inspection');
 
-        $orderData = $this->orderDetails($order->id);
-
         $order->forceFill([
             'workflow_status->inspection' => 1,
             'status' => 3
         ])->save();
+
+        $orderData = $this->orderDetails($order->id);
 
         return response([
             "file" => $data['media'],
