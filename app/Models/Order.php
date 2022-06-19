@@ -53,6 +53,7 @@ class Order extends Model implements HasMedia
         11 => "Ready for Submission/Delivery",
         12 => "Under Correction/Revision",
         13 => "Delivered",
+        14 => "Cancelled"
     ];
 
     protected $fillable = [
