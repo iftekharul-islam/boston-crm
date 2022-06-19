@@ -53,6 +53,7 @@ class Order extends Model implements HasMedia
         11 => "Ready for Submission/Delivery",
         12 => "Under Correction/Revision",
         13 => "Delivered",
+        14 => "Cancelled"
     ];
 
     protected $fillable = [
@@ -179,6 +180,10 @@ class Order extends Model implements HasMedia
     public function workHisotry()
     {
         return $this->hasMany(OrderWHistory::class,'order_id', 'id');
+    }
+    public function submission()
+    {
+        return $this->hasOne(OrderWSubmission::class,'order_id', 'id');
     }
 
     public function revission()

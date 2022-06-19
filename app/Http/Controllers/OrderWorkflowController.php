@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\OrderWSubmission;
 use Carbon\Carbon;
 use App\Models\Order;
+use App\Models\OrderWQa;
 use App\Helpers\CrmHelper;
 use App\Models\OrderWReport;
 use Illuminate\Http\Request;
@@ -31,229 +33,393 @@ class OrderWorkflowController extends BaseController
         $this->repository = $order_w_repository;
     }
 
-    public function updateOrderSchedule(Request $request){
+    public function updateOrderSchedule(Request $request)
+    {
         $this->repository->updateOrderScheduleData($request->all());
-        //work for set event on google calender
-        $this->service->setOrderSchedule($request->order_id);
+        //code for set event on google calender
+        //$this->service->setOrderSchedule($request->order_id);
 
-        return response()->json(['message' => 'Schedule has been updated successfully']);
+        $order = Order::find($request->order_id);
+        $user = auth()->user();
+        if ($request->schedule_id > 0) {
+            $message = 'Schedule updated successfully';
+            $historyTitle = 'Schedule updated By ' . auth()->user()->name;
+        } else {
+            $message = 'Schedule createded successfully';
+            $historyTitle = 'Schedule created By ' . auth()->user()->name;
+        }
+
+        $this->addHistory($order, $user, $historyTitle, 'scheduling');
+
+        $orderData = $this->orderDetails($request->order_id);
+        return [
+            'message' => $message,
+            'data' => $orderData
+        ];
     }
 
-    public function checkEvent(){
+    public function checkEvent()
+    {
         //create a new event
-//        $event = new Event;
-//
-//        $event->name = '580 E 2Nd St, Unit 3, Boston, Massachusetts, Suffolk, 02127 Safayet Hoque (Micelotta, Daniel 781-987-4946) ';
-//        $event->description = 'Event description';
-//        $event->startDateTime = Carbon::parse('2022-06-19 12:00');
-//        $event->endDateTime = Carbon::parse('2022-06-19 13:00');
-//        $event->location = '580 E 2Nd St, Unit 3, Boston, Massachusetts, Suffolk, 02127';
-//        $event->colorId = 11;
-//        $event->description = 'Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs. The passage is attributed to an unknown Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs. The passage is attributed to an unknown';
-//        $event->addAttendee(['email' => 'safayet.hoque@gmail.com']);
-//        $event->save();
-//
-//        return \response()->json(['message' => 'success']);
+        //        $event = new Event;
+        //
+        //        $event->name = '580 E 2Nd St, Unit 3, Boston, Massachusetts, Suffolk, 02127 Safayet Hoque (Micelotta, Daniel 781-987-4946) ';
+        //        $event->description = 'Event description';
+        //        $event->startDateTime = Carbon::parse('2022-06-19 12:00');
+        //        $event->endDateTime = Carbon::parse('2022-06-19 13:00');
+        //        $event->location = '580 E 2Nd St, Unit 3, Boston, Massachusetts, Suffolk, 02127';
+        //        $event->colorId = 11;
+        //        $event->description = 'Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs. The passage is attributed to an unknown Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs. The passage is attributed to an unknown';
+        //        $event->addAttendee(['email' => 'safayet.hoque@gmail.com']);
+        //        $event->save();
+        //
+        //        return \response()->json(['message' => 'success']);
 
         //Event::quickCreate('Appointment at Somewhere on July 1 10am-10:25am');
     }
-    public function uploadInspectionFiles(Request $request, $inspection_id): JsonResponse|\Illuminate\Http\RedirectResponse
+
+
+    public function uploadInspectionFiles(Request $request, $inspection_id)
     {
-        if($request->has('public')){
-            $inspection_id = base64_decode($inspection_id);
-        }
+        $order_w_inspection = OrderWInspection::find($inspection_id);
         $data = $this->saveInspectionFiles($request->all(), $inspection_id);
+        $order = Order::find($order_w_inspection->order_id);
+        $user = auth()->user();
+        $historyTitle = 'Inspection files uploaded by ' . auth()->user()->name;
 
-        logger($data);
+        $this->addHistory($order, $user, $historyTitle, 'inspection');
 
-        if ($request->ajax()) {
-            return response()->json([
-                "file" => $data['media'],
-                "message" => "inspection file uploaded successfully"
-            ]);
-        }
-        return redirect()
-            ->back()
-            ->with(['success' => 'inspection file uploaded successfully']);
+        $orderData = $this->orderDetails($order->id);
+
+        $order->forceFill([
+            'workflow_status->inspection' => 1,
+            'status' => 3
+        ])->save();
+
+        return response([
+            "file" => $data['media'],
+            "data" => $orderData,
+            "message" => "inspection file uploaded successfully"
+        ]);
     }
 
     public function saveInspectionFiles($data, $inspection_id)
     {
         $inspection = OrderWInspection::find($inspection_id);
-        if(!$inspection){
+        if (!$inspection) {
             return false;
         }
-        foreach ($data['files'] as $file){
+        foreach ($data['files'] as $file) {
             $inspection->find($inspection_id)->addMedia($file)
                 ->withCustomProperties(['type' => $data['file_type']])
                 ->toMediaCollection('inspection');
         }
         $inspection = OrderWInspection::with('attachments')->where('id', $inspection_id)->first();
+
         return [
             'status' => true,
             'media' => $inspection->attachments,
         ];
     }
 
-    public function storeAdminReportPreparation(Request $request, $id) {
-        logger("hello from storeAdminReportPreparation");
-        logger($request->all());
+    public function storeAdminReportPreparation(Request $request, $id)
+    {
+        $order = Order::find($id);
+        $user = auth()->user();
+
+        if (!$order) {
+            return response()->json([
+                'error' => true,
+                'message' => 'Order Information Not Found'
+            ]);
+        }
         $report = OrderWReport::where('order_id', $id)->first();
-        if($report){
+        if ($report) {
             $report->reviewed_by = $request->reviewed_by;
             $report->creator_id = $request->creator_id;
             $report->save();
-            return response()->json(['message' => 'Report updated successfully']);
+            $historyTitle = "Report preparation updated by " . $user->name . ' on Report preparation section.';
+        } else {
+            $newReport = new OrderWReport();
+            $newReport->order_id = $id;
+            $newReport->reviewed_by = $request->reviewed_by;
+            $newReport->creator_id = $request->creator_id;
+            $newReport->created_by = $user->id;
+            $newReport->save();
+            $historyTitle = "Report preparation created by " . $user->name . ' on Report preparation section.';
         }
-        $new = new OrderWReport();
-        $new->order_id = $id;
-        $new->reviewed_by = $request->reviewed_by;
-        $new->creator_id = $request->creator_id;
-        $new->created_by = auth()->user()->id;
-        $new->save();
 
-//        addHistory( $report, auth()->user()->id, 'report preparation created by', 'report-preparation' );
+        $workStatus = json_decode($order->workflow_status, true);
+        $workStatus['reportPreparation'] = 1;
+        $order->status = 4;
+        $order->workflow_status = json_encode($workStatus);
+        $order->save();
 
-        return response()->json(['message' => 'Report created successfully']);
-
+        $this->addHistory($order, $user, $historyTitle, 'report-preparation');
+        $orderData = $this->orderDetails($id);
+        return [
+            'status' => 'success',
+            'data' => $orderData
+        ];
     }
 
-    public function storeAssigneeReportPreparation(Request $request, $id) {
-        logger("hello from storeAssigneeReportPreparation");
-        logger($request->all());
+    public function storeAssigneeReportPreparation(Request $request, $id)
+    {
+        $order = Order::find($id);
+        $user = auth()->user();
+
+        if (!$order) {
+            return response()->json([
+                'error' => true,
+                'message' => 'Order Information Not Found'
+            ]);
+        }
+
         $report = OrderWReport::where('order_id', $id)->first();
-        if($report){
+
+        if($report) {
+            $report->reviewed_by = $request->reviewed_by;
+            $report->creator_id = $request->creator_id;
             $report->assigned_to = $request->assigned_to;
             $report->trainee_id = $request->trainee_id;
             $report->note = $request->note;
             $report->updated_by = auth()->user()->id;
             $report->save();
 
-            if(isset($request['files']) && count($request['files'])) {
+            if (isset($request['files']) && count($request['files'])) {
                 $this->savePreparationFiles($request->all(), $report->id);
             }
-//            addHistory( $report, auth()->user()->id, 'report preparation updated by', 'report-preparation' );
+          
+            $historyTitle = "Report preparation updated by " . $user->name . ' on Report preparation section.';
+        } else {
+            $newReport = new OrderWReport();
+            $newReport->order_id = $order->id;
+            $newReport->reviewed_by = $request->reviewed_by;
+            $newReport->creator_id = $request->creator_id;
+            $newReport->assigned_to = $request->assigned_to;
+            $newReport->trainee_id = $request->trainee_id;
+            $newReport->note = $request->note;
+            $newReport->created_by = $user->id;
+            $newReport->save();
 
-            return response()->json(['message' => 'Report updated successfully']);
+            $historyTitle = "Report preparation updated data by " . $user->name . ' on Report preparation section.';
+
+            $historyTitle = "Report preparation created by " . $user->name . ' on Report preparation section.';
+
+            if (isset($request['files']) && count($request['files'])) {
+                $this->savePreparationFiles($request->all(), $newReport->id);
+            }
         }
+        $workStatus = json_decode($order->workflow_status, true);
+        $workStatus['reportPreparation'] = 1;
+        $order->status = 4;
+        $order->workflow_status = json_encode($workStatus);
+        $order->save();
 
-        return response()->json(['message' => 'Report not available']);
+        $this->addHistory($order, $user, $historyTitle, 'report-preparation');
+        $orderData = $this->orderDetails($id);
+        return [
+            'status' => 'success',
+            'data' => $orderData
+        ];
 
     }
 
     public function savePreparationFiles($data, $id)
     {
         $report = OrderWReport::find($id);
-        if(!$report){
+        if (!$report) {
             return false;
         }
-        foreach ($data['files'] as $file){
+        foreach ($data['files'] as $file) {
             $report->find($id)->addMedia($file)
                 ->withCustomProperties(['type' => $data['file_type']])
                 ->toMediaCollection('preparation');
         }
-        $report = OrderWReport::with('attachments')->where('id', $id)->first();
-        return [
-            'status' => true,
-            'media' => $report->attachments,
-        ];
+
+        return true;
     }
 
-    public function storeReportAnalysis(Request $request, $id) {
-        logger("hello from storeReportAnalysis");
-        logger($request->all());
-        $report = OrderWReportAnalysis::where('order_id', $id)->first();
-        if($report){
-            if($request->noteCheck == '1'){
-                $report->is_review_send_back = 1;
-                $report->is_check_upload = 0;
-                $report->rewrite_note = $request->note;
-            } else {
-                $report->is_review_send_back = 0;
-                $report->is_check_upload = 1;
-                $report->note = $request->note;
-            }
-            $report->assigned_to = $request->assigned_to;
-            $report->updated_by = auth()->user()->id;
-            $report->save();
-
-            if(isset($request['files']) && count($request['files'])){
-                $this->saveAnalysisFiles($request->all(), $report->id);
-            }
-
-//            addHistory( $report, auth()->user()->id, 'report analysis created by', 'report-preparation' );
-
-            return response()->json(['message' => 'Report Analysis updated successfully']);
-        }
-        
-        $new = new OrderWReportAnalysis();
-        $new->order_id = $id;
-        if($request->noteCheck == '1'){
-            $new->is_review_send_back = 1;
-            $new->is_check_upload = 0;
-            $new->rewrite_note = $request->note;
-        } else {
-            $new->is_review_send_back = 0;
-            $new->is_check_upload = 1;
-            $new->note = $request->note;
-        }
-        $new->assigned_to = $request->assigned_to;
-        $new->created_by = auth()->user()->id;
-        $new->save();
-
-        if(isset($request['files']) && count($request['files'])){
-            $this->saveAnalysisFiles($request->all(), $id);
-        }
-
-//        addHistory( $new, auth()->user()->id, 'report analysis updated by', 'report-analysis-review' );
-
-        return response()->json(['message' => 'Report Analysis created successfully']);
-    }
-
-    public function saveAnalysisFiles($data, $id)
+    public function storeReportAnalysis(Request $request, $id)
     {
-        $analysis = OrderWReportAnalysis::find($id);
-        if(!$analysis){
-            return false;
-        }
-        foreach ($data['files'] as $file){
-            $analysis->find($id)->addMedia($file)
-                ->withCustomProperties(['type' => $data['file_type']])
-                ->toMediaCollection('analysis');
-        }
-        $analysis = OrderWReportAnalysis::with('attachments')->where('id', $id)->first();
-        return [
-            'status' => true,
-            'media' => $analysis->attachments,
-        ];
-    }
-
-    public function saveInitialReview(Request $request){
-        $this->repository->updateInitialReviewData($request->all());
-        return response()->json(['message' => 'Initial Review saved successfully']);
-    }
-
-    public function saveQualityAssurance(Request $request){
-        $this->repository->saveQualityAssurance($request->all());
-        return response()->json(['message' => 'Quality Assurance saved successfully']);
-    }
-
-    public function updateQualityAssurance(Request $request){
-        $this->repository->updateQualityAssurance($request->all());
-        return response()->json(['message' => 'Quality Assurance updated successfully']);
-    }
-
-    public function rewriteReport(Request $get) {
-        $order = Order::find($get->order_id);
+        $order = Order::find($id);
         $user = auth()->user();
-        
-        if(!$order){
+
+        if (!$order) {
             return response()->json([
                 'error' => true,
                 'message' => 'Order Information Not Found'
             ]);
         }
-        
+
+        $analysis = OrderWReportAnalysis::where('order_id', $id)->first();
+        if ($analysis) {
+            if ($request->noteCheck == '1') {
+                $analysis->is_review_send_back = 1;
+                $analysis->is_check_upload = 0;
+                $analysis->rewrite_note = $request->note;
+            } else {
+                $analysis->is_review_send_back = 0;
+                $analysis->is_check_upload = 1;
+                $analysis->note = $request->note;
+            }
+            $analysis->assigned_to = $request->assigned_to;
+            $analysis->updated_by = auth()->user()->id;
+            $analysis->save();
+
+            if (isset($request['files']) && count($request['files'])) {
+                $this->saveAnalysisFiles($request->all(), $analysis->id);
+            }
+
+            $historyTitle = "Report analysis updated by ".$user->name.' on Report analysis and reviewed section.';
+
+        } else {
+            $newAnalysis = new OrderWReportAnalysis();
+            $newAnalysis->order_id = $id;
+            if ($request->noteCheck == '1') {
+                $newAnalysis->is_review_send_back = 1;
+                $newAnalysis->is_check_upload = 0;
+                $newAnalysis->rewrite_note = $request->note;
+            } else {
+                $newAnalysis->is_review_send_back = 0;
+                $newAnalysis->is_check_upload = 1;
+                $newAnalysis->note = $request->note;
+            }
+            $newAnalysis->assigned_to = $request->assigned_to;
+            $newAnalysis->created_by = auth()->user()->id;
+            $newAnalysis->save();
+
+            if (isset($request['files']) && count($request['files'])) {
+                $this->saveAnalysisFiles($request->all(), $id);
+            }
+
+            $historyTitle = "Report analysis created by ".$user->name.' on Report analysis and reviewed section.';
+        }
+
+        $workStatus = json_decode($order->workflow_status, true);
+        $workStatus['reportAnalysisReview'] = 1;
+        $order->status = 9;
+        $order->workflow_status = json_encode($workStatus);
+        $order->save();
+
+        $this->addHistory($order, $user, $historyTitle, 'report-analysis-review');
+        $orderData = $this->orderDetails($id);
+        return [
+            'status' => 'success',
+            'data' => $orderData
+        ];
+    }
+
+    public function saveAnalysisFiles($data, $id)
+    {
+        $analysis = OrderWReportAnalysis::find($id);
+        if (!$analysis) {
+            return false;
+        }
+        foreach ($data['files'] as $file) {
+            $analysis->find($id)->addMedia($file)
+                ->withCustomProperties(['type' => $data['file_type']])
+                ->toMediaCollection('analysis');
+        }
+        return true;
+    }
+
+    public function saveInitialReview(Request $request)
+    {
+        $this->repository->updateInitialReviewData($request->all());
+        $order = Order::find($request->order_id);
+        $user = auth()->user();
+        if ($request->initial_review_id > 0) {
+            $message = 'Initial Review updated successfully';
+            $historyTitle = 'Initial Review updated By ' . auth()->user()->name;
+        } else {
+            $message = 'Initial Review createded successfully';
+            $historyTitle = 'Initial Review created By ' . auth()->user()->name;
+        }
+
+        $this->addHistory($order, $user, $historyTitle, 'initial-review');
+        if ($request->is_review_done == 1) {
+            $order->status = 5;
+        }
+        if ($request->is_check_upload == 1) {
+            $order->status = 6;
+        }
+
+        $orderData = $this->orderDetails($request->order_id);
+        return [
+            'message' => $message,
+            'data' => $orderData
+        ];
+    }
+
+    public function saveQualityAssurance(Request $request)
+    {
+        $this->repository->saveQualityAssurance($request->all());
+
+        $order = Order::find($request->order_id);
+        $user = auth()->user();
+        if ($request->qa_id > 0) {
+            $message = 'Quality Assurance updated successfully';
+            $historyTitle = 'Quality Assurance updated By ' . auth()->user()->name;
+        } else {
+            $message = 'Quality Assurance createded successfully';
+            $historyTitle = 'Quality Assurance created By ' . auth()->user()->name;
+        }
+
+        $this->addHistory($order, $user, $historyTitle, 'quality-assurance');
+
+        $order->forceFill([
+            'workflow_status->qualityAssurance' => 1,
+            'status' => 10
+        ])->save();
+
+        $orderData = $this->orderDetails($request->order_id);
+        return [
+            'message' => $message,
+            'data' => $orderData
+        ];
+    }
+
+    public function updateQualityAssurance(Request $request)
+    {
+        $this->repository->updateQualityAssurance($request->all());
+        $order_qa = OrderWQa::find($request->qa_id);
+        $order = Order::find($order_qa->order_id);
+        $user = auth()->user();
+        if ($request->qa_id > 0) {
+            $message = 'Quality Assurance updated successfully';
+            $historyTitle = 'Quality Assurance updated By ' . auth()->user()->name;
+        } else {
+            $message = 'Quality Assurance createded successfully';
+            $historyTitle = 'Quality Assurance created By ' . auth()->user()->name;
+        }
+
+        $this->addHistory($order, $user, $historyTitle, 'quality-assurance');
+
+        $order->forceFill([
+            'workflow_status->qualityAssurance' => 1,
+            'status' => 10
+        ])->save();
+
+        $orderData = $this->orderDetails($order->id);
+        return [
+            'message' => $message,
+            'data' => $orderData
+        ];
+    }
+
+    public function rewriteReport(Request $get)
+    {
+        $order = Order::find($get->order_id);
+        $user = auth()->user();
+
+        if (!$order) {
+            return response()->json([
+                'error' => true,
+                'message' => 'Order Information Not Found'
+            ]);
+        }
+
         $reWrite = OrderWRewrite::where('order_id', $order->id)->first();
         if (!$reWrite) {
             $reWrite = new OrderWRewrite();
@@ -262,11 +428,11 @@ class OrderWorkflowController extends BaseController
             $reWrite->created_by = $user->id;
             $reWrite->assigned_to = $get->assigned_to;
             $reWrite->save();
-            $historyTitle = "New assignee assiged by ".$user->name.' on the Re-writing the report section.';
+            $historyTitle = "New assignee assiged by " . $user->name . ' on the Re-writing the report section.';
         } else {
             $reWrite->updated_by = $user->id;
             $reWrite->updated_at = Carbon::now();
-            $historyTitle = "Re-writing the report section updated by ".$user->name;
+            $historyTitle = "Re-writing the report section updated by " . $user->name;
         }
 
         $reWrite->note = $get->note;
@@ -281,17 +447,19 @@ class OrderWorkflowController extends BaseController
 
         $this->addHistory($order, $user, $historyTitle, 'rewriting-report');
         $orderData = $this->orderDetails($get->order_id);
+
         return [
             'status' => 'success',
             'data' => $orderData
         ];
     }
 
-    public function revissinAdd(Request $get) {
+    public function revissinAdd(Request $get)
+    {
         $order = Order::find($get->order_id);
         $user = auth()->user();
-        
-        if(!$order){
+
+        if (!$order) {
             return response()->json([
                 'error' => true,
                 'message' => 'Order Information Not Found'
@@ -310,7 +478,7 @@ class OrderWorkflowController extends BaseController
         $reWrite->revision_details = $get->revission;
         $reWrite->solution_details = "-";
         $reWrite->save();
-        $historyTitle = "New revission created by ".$user->name;
+        $historyTitle = "New revission created by " . $user->name;
 
         $workStatus = json_decode($order->workflow_status, true);
         $workStatus['revision'] = 1;
@@ -327,11 +495,12 @@ class OrderWorkflowController extends BaseController
         ];
     }
 
-    public function revissinEdit(Request $get) {
+    public function revissinEdit(Request $get)
+    {
         $order = Order::find($get->order_id);
         $user = auth()->user();
-        
-        if(!$order){
+
+        if (!$order) {
             return response()->json([
                 'error' => true,
                 'message' => 'Order Information Not Found'
@@ -341,7 +510,7 @@ class OrderWorkflowController extends BaseController
         $deliveredDate = Carbon::parse($get->date);
 
         $reWrite = OrderWRevision::where('order_id', $get->order_id)->where('id', $get->id)->first();
-        if(!$order){
+        if (!$order) {
             return response()->json([
                 'error' => true,
                 'message' => 'Order Revission Information Not Found'
@@ -354,7 +523,7 @@ class OrderWorkflowController extends BaseController
         $reWrite->revision_details = $get->revission;
         $reWrite->solution_details = "-";
         $reWrite->save();
-        $historyTitle = "Revission has been updated by ".$user->name;
+        $historyTitle = "Revision has been updated by ".$user->name;
 
         $workStatus = json_decode($order->workflow_status, true);
         $workStatus['revision'] = 1;
@@ -371,11 +540,12 @@ class OrderWorkflowController extends BaseController
         ];
     }
 
-    public function revissinSolutionAdd(Request $get) {
+    public function revissinSolutionAdd(Request $get)
+    {
         $order = Order::find($get->order_id);
         $user = auth()->user();
-        
-        if(!$order){
+
+        if (!$order) {
             return response()->json([
                 'error' => true,
                 'message' => 'Order Information Not Found'
@@ -386,7 +556,7 @@ class OrderWorkflowController extends BaseController
         if (!$reWrite) {
             return response()->json([
                 'error' => true,
-                'message' => 'Order Revission Information Not Found'
+                'message' => 'Order Revision Information Not Found'
             ]);
         }
         $reWrite->updated_at = Carbon::now();
@@ -397,7 +567,7 @@ class OrderWorkflowController extends BaseController
         $reWrite->solution_details = $get->revission['solution_details_edited'];
         $reWrite->save();
 
-        $historyTitle = "Solution added for revission. Solution added by ".$user->name;
+        $historyTitle = "Solution added for revision. Solution added by ".$user->name;
 
         $workStatus = json_decode($order->workflow_status, true);
         $workStatus['revision'] = 1;
@@ -415,11 +585,12 @@ class OrderWorkflowController extends BaseController
         ];
     }
 
-    public function revissinSolutionMarked(Request $get) {
+    public function revissinSolutionMarked(Request $get)
+    {
         $order = Order::find($get->order_id);
         $user = auth()->user();
-        
-        if(!$order){
+
+        if (!$order) {
             return response()->json([
                 'error' => true,
                 'message' => 'Order Information Not Found'
@@ -430,7 +601,7 @@ class OrderWorkflowController extends BaseController
         if (!$reWrite) {
             return response()->json([
                 'error' => true,
-                'message' => 'Order Revission Information Not Found'
+                'message' => 'Order Revision Information Not Found'
             ]);
         }
         $reWrite->updated_at = Carbon::now();
@@ -441,7 +612,8 @@ class OrderWorkflowController extends BaseController
         $reWrite->solution_details = $get->solution_details;
         $reWrite->save();
 
-        $historyTitle = "Revission marked as delivered by ".$user->name;
+        $historyTitle = "Revision marked as delivered by ".$user->name;
+
 
         $workStatus = json_decode($order->workflow_status, true);
         $workStatus['revision'] = 1;
@@ -456,14 +628,15 @@ class OrderWorkflowController extends BaseController
         return [
             'status' => 'success',
             'data' => $orderData
-        ];        
+        ];
     }
 
-    public function revissinSolutionDelete(Request $get) {
+    public function revissinSolutionDelete(Request $get)
+    {
         $order = Order::find($get->order_id);
         $user = auth()->user();
-        
-        if(!$order){
+
+        if (!$order) {
             return response()->json([
                 'error' => true,
                 'message' => 'Order Information Not Found'
@@ -474,12 +647,13 @@ class OrderWorkflowController extends BaseController
         if (!$reWrite) {
             return response()->json([
                 'error' => true,
-                'message' => 'Order Revission Information Not Found'
+                'message' => 'Order Revision Information Not Found'
             ]);
         }
         $reWrite->delete();
 
-        $historyTitle = "Revission has been deleted by ".$user->name;
+        $historyTitle = "Revision has been deleted by ".$user->name;
+
         $this->addHistory($order, $user, $historyTitle, 'revision');
         $orderData = $this->orderDetails($get->order_id);
 
@@ -488,7 +662,7 @@ class OrderWorkflowController extends BaseController
             $workStatus = json_decode($order->workflow_status, true);
             $workStatus['revision'] = 0;
             $order->workflow_status = json_encode($workStatus);
-            $order->save();            
+            $order->save();
         }
 
         return [
@@ -497,4 +671,53 @@ class OrderWorkflowController extends BaseController
         ];
     }
 
+    public function storeSubmission(Request $request, $id)
+    {
+        logger($request->all());
+        $order = Order::find($id);
+        $user = auth()->user();
+
+        if (!$order) {
+            return response()->json([
+                'error' => true,
+                'message' => 'Order Information Not Found'
+            ]);
+        }
+
+        $submission = OrderWSubmission::where('order_id', $id)->first();
+        if ($submission) {
+            $submission->trainee_id = $request->trainee_id;
+            $submission->delivery_man_id = $request->delivery_man_id;
+            $submission->delivery_date = $request->delivery_date;
+            $submission->is_trainee_signed = $request->is_trainee_signed ? 1 : 0;
+            $submission->updated_by = auth()->user()->id;
+            $submission->save();
+
+            $historyTitle = "Workflow submission updated data by " . $user->name . ' on Workflow submission section.';
+        } else {
+            $newSubmission = new OrderWSubmission();
+            $newSubmission->order_id = $order->id;
+            $newSubmission->trainee_id = $request->trainee_id;
+            $newSubmission->delivery_man_id = $request->delivery_man_id;
+            $newSubmission->delivery_date = $request->delivery_date;
+            $newSubmission->is_trainee_signed = $request->is_trainee_signed ? 1 : 0;
+            $newSubmission->created_by = auth()->user()->id;
+            $newSubmission->save();
+
+            $historyTitle = "Workflow submission created data by " . $user->name . ' on Workflow submission section.';
+        }
+
+        $workStatus = json_decode($order->workflow_status, true);
+        $workStatus['submission'] = 1;
+        $order->status = 11;
+        $order->workflow_status = json_encode($workStatus);
+        $order->save();
+
+        $this->addHistory($order, $user, $historyTitle, 'submission');
+        $orderData = $this->orderDetails($id);
+        return [
+            'status' => 'success',
+            'data' => $orderData
+        ];
+    }
 }

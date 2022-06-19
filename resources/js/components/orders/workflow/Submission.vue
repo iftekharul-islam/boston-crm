@@ -1,68 +1,160 @@
 <template>
   <div class="re-writing-report-item step-items ">
-    <a class="edit-btn"><span class="icon-edit"><span class="path1"></span><span class="path2"></span></span></a>
-    <div class="group">
-      <p class="text-light-black mgb-12">Trainee name</p>
-      <p class="mb-0 text-light-black fw-bold">Sahabul Gazi</p>
-    </div>
-    <div class="group">
-      <p class="text-light-black mgb-12">Quality assureance</p>
-      <p class="mb-0 text-light-black fw-bold">Miftahul Robi</p>
-    </div>
-    <div class="group">
-      <p class="text-light-black mgb-12">Quality assureance</p>
-      <p class="mb-0 text-light-black fw-bold">Hafizur Rahman</p>
-    </div>
-    <div class="group">
-      <p class="text-light-black mgb-12">Delivery date</p>
-      <p class="mb-0 text-light-black fw-bold">23 Feb 2022</p>
-    </div>
-    <div class="group">
-      <div class="checkbox-group submission-check mgt-20">
-        <input type="checkbox" class="checkbox-input check-data" checked>
-        <label for="" class="checkbox-label text-capitalize">Review done</label>
+      <div v-if="isEditable">
+          <ValidationObserver ref="submissionForm">
+              <div class="mgb-32">
+                  <ValidationProvider class="group" name="Trainee Selection" rules="required" v-slot="{ errors }">
+                      <div :class="{ 'invalid-form' : errors[0] }">
+                          <label for="" class="d-block mb-2 dashboard-label">Trainee name </label>
+                          <select name="" class="dashboard-input w-100 loan-type-select" v-model="traineeId">
+                              <option value="">Please Select a user</option>
+                              <option v-for="user in users" :key="user.id" :value="user.id">
+                                  {{ user.name }}
+                              </option>
+                          </select>
+                          <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                      </div>
+                  </ValidationProvider>
+              </div>
+              <div class="mgb-32">
+                  <div class="group">
+                      <p class="text-light-black mgb-12">Quality assureance</p>
+                      <p class="mb-0 text-light-black fw-bold" v-if="qaName.length">{{ qaName }}</p>
+                      <p class="mb-0 text-light-black fw-bold" v-else>Not assigned yet</p>
+                  </div>
+              </div>
+              <div class="mgb-32">
+                  <ValidationProvider class="group" name="Delivery man" rules="required" v-slot="{ errors }">
+                      <div :class="{ 'invalid-form' : errors[0] }">
+                          <label for="" class="d-block mb-2 dashboard-label">Delivery man name </label>
+                          <select name="" class="dashboard-input w-100 loan-type-select" v-model="dManId">
+                              <option value="">Please Select a user</option>
+                              <option v-for="user in users" :key="user.id" :value="user.id">
+                                  {{ user.name }}
+                              </option>
+                          </select>
+                          <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                      </div>
+                  </ValidationProvider>
+              </div>
+              <div class="mgb-20">
+                  <ValidationProvider name="Date & time" rules="required" v-slot="{ errors }">
+                      <div class="group" :class="{ 'invalid-form' : errors[0] }">
+                          <label>Delivery date</label>
+                          <div class="position-relative">
+                              <input type="date" v-model="deliveryDate" class="dashboard-input w-100 gray-border">
+                              <span class="icon-calendar icon"><span class="path1"></span><span class="path2"></span><span
+                                  class="path3"></span><span class="path4"></span><span class="path5"></span><span
+                                  class="path6"></span><span class="path7"></span><span class="path8"></span></span>
+                          </div>
+                          <span class="error-message">{{ errors[0] }}</span>
+                      </div>
+                  </ValidationProvider>
+              </div>
+              <div>
+                  <div class="checkbox-group review-check mgt-20">
+                      <input type="checkbox" class="checkbox-input check-data" v-model="isAssineed">
+                      <label for="" class="checkbox-label text-capitalize">Check it, if trainee signed. </label>
+                  </div>
+              </div>
+              <div class="text-end mgt-32">
+                  <button class="button button-primary px-4 h-40 d-inline-flex align-items-center" @click="saveAssigneeData">Done</button>
+              </div>
+          </ValidationObserver>
       </div>
-    </div>
-
-    <div class="mgb-32">
-      <label for="" class="mb-2 text-light-black d-inline-block">Assign to</label>
-      <div class="preparation-input w-100 position-relative">
-        <select name="" id="" class="w-100 dashboard-input">
-          <option value="">Hello</option>
-          <option value="">Hello</option>
-        </select>
-        <span class="icon-arrow-down bottom-arrow-icon"></span>
+      <div v-else>
+          <a class="edit-btn"><span class="icon-edit" @click="isEditable = true"><span class="path1"></span><span class="path2"></span></span></a>
+          <div class="group">
+              <p class="text-light-black mgb-12">Trainee name</p>
+              <p class="mb-0 text-light-black fw-bold">{{ traineeName }}</p>
+          </div>
+          <div class="group">
+              <p class="text-light-black mgb-12">Quality assureance</p>
+              <p class="mb-0 text-light-black fw-bold" v-if="qaName.length">{{ qaName }}</p>
+              <p class="mb-0 text-light-black fw-bold" v-else>Not assigned yet</p>
+          </div>
+          <div class="group">
+              <p class="text-light-black mgb-12">Delivery man name</p>
+              <p class="mb-0 text-light-black fw-bold">{{ dManName }}</p>
+          </div>
+          <div class="group">
+              <p class="text-light-black mgb-12">Delivery date</p>
+              <p class="mb-0 text-light-black fw-bold">{{ deliveryDate | onlyDate }}</p>
+          </div>
+          <div class="group">
+              <div class="checkbox-group submission-check mgt-20">
+                  <input type="checkbox" class="checkbox-input check-data" v-model="isAssineed" disabled>
+                  <label for="" class="checkbox-label text-capitalize">Trainee assigned</label>
+              </div>
+          </div>
       </div>
-    </div>
-    <div class="mgb-32">
-      <label for="" class="mb-2 text-light-black d-inline-block">Delivery man</label>
-      <div class="preparation-input w-100 position-relative">
-        <select name="" id="" class="w-100 dashboard-input">
-          <option value="">Hello</option>
-          <option value="">Hello</option>
-        </select>
-        <span class="icon-arrow-down bottom-arrow-icon"></span>
-      </div>
-    </div>
-    <div class="mgb-20">
-      <label for="" class="mb-2 text-light-black d-inline-block">Assign to</label>
-      <input type="date" class="dashboard-input w-100 position-relative">
-    </div>
-    <div>
-      <div class="checkbox-group review-check mgt-20">
-        <input type="checkbox" class="checkbox-input check-data">
-        <label for="" class="checkbox-label text-capitalize">Chcek it, if trainee signed. </label>
-      </div>
-    </div>
-
-    <div class="text-end mgt-32">
-      <button class="button button-primary px-4 h-40 d-inline-flex align-items-center">Done</button>
-    </div>
   </div>
 </template>
 <script>
 export default {
-  name: 'Submission',
-  data: () => ({})
+    name: 'Submission',
+    props: {
+        order: [],
+        users: Array,
+    },
+    data: () => ({
+        orderData: [],
+        isEditable: true,
+        traineeId: '',
+        traineeName: '',
+        dManId: '',
+        dManName: '',
+        assignToName: '',
+        deliveryDate: '',
+        isAssineed: '',
+        qaName: ''
+    }),
+    methods: {
+        updateData(){
+            let qAssureance = !_.isEmpty(this.orderData.quality_assurance) ? this.orderData.quality_assurance : false;
+            if(qAssureance){
+                this.qaName = !_.isEmpty(qAssureance.assignee) ? qAssureance.assignee.name : '';
+            }
+            let submission = !_.isEmpty(this.orderData.submission) ? this.orderData.submission : false;
+            if(submission){
+                this.traineeName = !_.isEmpty(submission.trainee) ? submission.trainee.name : '';
+                this.dManName = !_.isEmpty(submission.delivery_man) ? submission.delivery_man.name : '';
+                this.isAssineed = submission.is_trainee_signed;
+                this.deliveryDate = submission.delivery_date;
+                this.isEditable = false
+            } else {
+                this.isEditable = true
+            }
+        },
+        saveAssigneeData() {
+            this.$refs.submissionForm.validate().then((status) => {
+                if(status) {
+                    const data = {
+                        'trainee_id': this.traineeId,
+                        'delivery_man_id': this.dManId,
+                        'delivery_date': this.deliveryDate,
+                        'is_trainee_signed': this.isAssineed,
+                    }
+                    console.log('data', data)
+                    this.$boston.post('submission-create/'+ this.orderData.id, data, { headers: {
+                            'Content-Type': 'multipart/form-data'
+                        }}).then(res => {
+                        console.log('res', res.data)
+                        this.orderData = res.data;
+                        this.updateData();
+                        this.$root.$emit('wk_update', this.orderData);
+                        this.$root.$emit('wk_flow_menu', this.orderData);
+                    }).catch(err => {
+                        console.log('err', err)
+                    });
+                }
+            })
+        },
+    },
+    created() {
+        this.orderData = this.order;
+        console.log(this.orderData)
+        this.updateData()
+    },
 }
 </script>

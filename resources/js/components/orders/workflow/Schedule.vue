@@ -53,55 +53,62 @@
                     </ValidationProvider>
                     <ValidationProvider class="d-block mb-2 dashboard-label" name="Inspection date & time" rules="required"
                                 v-slot="{ errors }">
-                        <div class="group" :class="{ 'invalid-form' : errors[0] }">
-                            <label for="" class="d-block mb-2 dashboard-label">Inspection date & time<span
-                                class="text-danger require"></span></label>
-                            <v-date-picker
-                                mode="datetime"
-                                v-model="scheduleData.inspection_date_time"
-                                :available-dates='{ start: new Date(), end: null }'>
-                                <template class="position-relative" v-slot="{ inputValue, inputEvents }">
-                                <input
-                                    class="dashboard-input w-100"
-                                    :value="inputValue"
-                                    v-on="inputEvents"
-                                />
-                                </template>
-                            </v-date-picker>
-                            <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
-                        </div>
-                    </ValidationProvider>
-                    <ValidationProvider class="group" name="Duration" rules="required" v-slot="{ errors }">
-                        <div :class="{ 'invalid-form' : errors[0] }">
-                            <label for="" class="d-block mb-2 dashboard-label">Duration <span
-                                class="text-danger require"></span></label>
-                            <select class="dashboard-input w-100" v-model="scheduleData.duration">
-                                <option value="">Please select duration</option>
-                                <option
-                                    v-for="duration in durations"
-                                    :key="duration.duration"
-                                    :value="duration.duration">
-                                    {{ duration.duration }}
-                                </option>
-                            </select>
-                            <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
-                        </div>
-                    </ValidationProvider>
-                    <ValidationProvider class="d-block mb-2 dashboard-label" name="Notes" rules="required"
+                                <div :class="{ 'invalid-form' : errors[0] }">
+                                    <label for="" class="d-block mb-2 dashboard-label">Appraiser name <span
+                                            class="text-danger require"></span></label>
+                                    <select id="apprClientSelect" class="dashboard-input w-100"
+                                        v-model="scheduleData.appraiser_id">
+                                        <option value="">Please select appraiser</option>
+                                        <option v-for="appraisar in appraisers" :key="appraisar.id"
+                                            :value="appraisar.id">
+                                            {{ appraisar.name }}
+                                        </option>
+                                    </select>
+                                    <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                                </div>
+                            </ValidationProvider>
+                            <ValidationProvider class="d-block mb-2 dashboard-label" name="Inspection date & time"
+                                rules="required" v-slot="{ errors }">
+                                <div class="group" :class="{ 'invalid-form' : errors[0] }">
+                                    <label for="" class="d-block mb-2 dashboard-label">Inspection date & time<span
+                                            class="text-danger require"></span></label>
+                                    <v-date-picker mode="datetime" v-model="scheduleData.inspection_date_time"
+                                        :available-dates='{ start: new Date(), end: null }'>
+                                        <template class="position-relative" v-slot="{ inputValue, inputEvents }">
+                                            <input class="dashboard-input w-100" :value="inputValue"
+                                                v-on="inputEvents" />
+                                        </template>
+                                    </v-date-picker>
+                                    <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                                </div>
+                            </ValidationProvider>
+                            <ValidationProvider class="group" name="Duration" rules="required" v-slot="{ errors }">
+                                <div :class="{ 'invalid-form' : errors[0] }">
+                                    <label for="" class="d-block mb-2 dashboard-label">Duration <span
+                                            class="text-danger require"></span></label>
+                                    <select class="dashboard-input w-100" v-model="scheduleData.duration">
+                                        <option value="">Please select duration</option>
+                                        <option v-for="duration in durations" :key="duration.duration"
+                                            :value="duration.duration">
+                                            {{ duration.duration }}
+                                        </option>
+                                    </select>
+                                    <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                                </div>
+                            </ValidationProvider>
+                            <ValidationProvider class="d-block mb-2 dashboard-label" name="Notes" rules="required"
                                 v-slot="{ errors }">
-                        <div class="group" :class="{ 'invalid-form' : errors[0] }">
-                            <label for="" class="d-block mb-2 dashboard-label">Notes <span
-                                class="text-danger require"></span></label>
-                            <b-form-textarea
-                                v-model="scheduleData.note"
-                                placeholder="Enter notes..."
-                                rows="2"
-                                cols="5">
-                            </b-form-textarea>
-                            <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
-                        </div>
-                    </ValidationProvider>
-                    </ValidationObserver>
+                                <div class="group" :class="{ 'invalid-form' : errors[0] }">
+                                    <label for="" class="d-block mb-2 dashboard-label">Notes <span
+                                            class="text-danger require"></span></label>
+                                    <b-form-textarea v-model="scheduleData.note" placeholder="Enter notes..." rows="2"
+                                        cols="5">
+                                    </b-form-textarea>
+                                    <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                                </div>
+                            </ValidationProvider>
+                        </ValidationObserver>
+                    </div>
                 </div>
             </div>
         </div>
@@ -283,81 +290,96 @@
   </div>
 </template>
 <script>
-export default {
-  name: 'Schedule',
-  props: {
-    order: [],
-    appraisers: [],
-  },
-  data: () => ({
-    mapOpen: false,
-    comList: false,
-    message: '',
-    scheduleData:{
-        schedule_id: 0,
-        order_id: '',
-        appraiser_id: '',
-        inspector_name: '',
-        inspection_date_time: '',
-        duration:'',
-        note:''
-    },
-    alreadyScheduled: 0,
-    durations: [
-        {'duration':'15 minutes'},
-        {'duration':'20 minutes'},
-        {'duration':'25 minutes'},
-        {'duration':'30 minutes'},
-        {'duration':'35 minutes'},
-        {'duration':'40 minutes'},
-        {'duration':'45 minutes'},
-        {'duration':'50 minutes'},
-        {'duration':'55 minutes'},
-        {'duration':'60 minutes'},
-    ],
-  }),
-  created(){
-    this.alreadyScheduled = (JSON.parse(this.order.workflow_status)).scheduling
-    this.getScheduleData()
-  },
-  mounted() {
-    $('select').select2();
-    this.select2Features();
-    this.scheduleData.order_id = this.order.id
-  },
-  methods:{
-    getScheduleData(){
-        let data = this.order.inspection
-        this.scheduleData.schedule_id = data.id
-        this.scheduleData.order_id = data.order_id
-        this.scheduleData.appraiser_id = data.inspector_id
-        this.scheduleData.inspector_name = data.user.name
-        this.scheduleData.inspection_date_time = data.inspection_date_time
-        this.scheduleData.duration = data.duration
-        this.scheduleData.note = data.note
-    },
-    select2Features() {
-        $(document).on("change", "#apprClientSelect", function(e){
-            let value = e.target.value
-            this.scheduleData.appraiser_id = value
-        }.bind(this));
-    },
-    saveSchedule(){
-        this.$boston.post('update-order-schedule',this.scheduleData)
-        .then(res => {
-            this.message = res.message;
-            this.alreadyScheduled = 1;
-            setTimeout(() => {
-                this.$refs.scheduleForm.reset();
-                this.$bvModal.hide('schedule')
-                this.message = '';
-            },3000);
-        }).bind(this)
-    },
-    editSchedule(){
-        this.$bvModal.show('schedule')
-        this.getScheduleData()
+    import Calendar from 'v-calendar/lib/components/calendar.umd'
+    import DatePicker from 'v-calendar/lib/components/date-picker.umd'
+
+    Vue.component('VCalendar', Calendar)
+    Vue.component('VDatePicker', DatePicker)
+    export default {
+        name: 'Schedule',
+        props: {
+            order: [],
+            appraisers: [],
+        },
+        data: () => ({
+            message: '',
+            orderData: [],
+            scheduleData: {
+                schedule_id: 0,
+                order_id: '',
+                appraiser_id: '',
+                inspector_name: '',
+                inspection_date_time: '',
+                duration: '',
+                note: ''
+            },
+            alreadyScheduled: 0,
+            durations: [
+                { 'duration': '15 minutes' },
+                { 'duration': '20 minutes' },
+                { 'duration': '25 minutes' },
+                { 'duration': '30 minutes' },
+                { 'duration': '35 minutes' },
+                { 'duration': '40 minutes' },
+                { 'duration': '45 minutes' },
+                { 'duration': '50 minutes' },
+                { 'duration': '55 minutes' },
+                { 'duration': '60 minutes' },
+            ],
+        }),
+        created() {
+            this.orderData = this.order
+            this.alreadyScheduled = (JSON.parse(this.orderData.workflow_status)).scheduling
+            this.getScheduleData()
+        },
+        mounted() {
+            $('select').select2();
+            this.select2Features();
+            this.scheduleData.order_id = this.orderData.id
+        },
+        methods: {
+            getScheduleData() {
+                let data = this.orderData.inspection
+                if (data) {
+                    this.scheduleData.schedule_id = data.id
+                    this.scheduleData.order_id = data.order_id
+                    this.scheduleData.appraiser_id = data.inspector_id
+                    this.scheduleData.inspector_name = data.user.name
+                    this.scheduleData.inspection_date_time = data.inspection_date_time
+                    this.scheduleData.duration = data.duration
+                    this.scheduleData.note = data.note
+                }
+            },
+            select2Features() {
+                $(document).on("change", "#apprClientSelect", function (e) {
+                    let value = e.target.value
+                    this.scheduleData.appraiser_id = value
+                }.bind(this));
+            },
+            saveSchedule() {
+                this.$refs.scheduleForm.validate().then((status) => {
+                    if (status) {
+                        this.$boston.post('update-order-schedule', this.scheduleData)
+                        .then(res => {
+                            this.message = res.message;
+                            this.alreadyScheduled = 1;
+                            this.orderData = res.data;
+                            this.$root.$emit('wk_update', this.orderData);
+                            this.$root.$emit('wk_flow_menu', this.orderData);
+                            this.getScheduleData()
+                            let self = this;
+                            setTimeout(function () {
+                                self.$bvModal.hide('schedule')
+                                self.message = '';
+                            }, 2000);
+                        })
+                    }
+                })
+            },
+            editSchedule() {
+                this.$bvModal.show('schedule')
+                this.getScheduleData()
+            },
+        }
     }
-  }
-}
 </script>

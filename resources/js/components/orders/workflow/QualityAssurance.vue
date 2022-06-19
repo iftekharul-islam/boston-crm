@@ -5,11 +5,11 @@
                 <div class="group">
                     <p class="text-light-black mgb-12">Instruction from previous step</p>
                     <p class="text-success">(Rewrite & send back)</p>
-                    <p class="mb-0 text-light-black fw-bold">{{ order.analysis.rewrite_note }}</p>
+                    <p class="mb-0 text-light-black fw-bold">{{ orderData.analysis.rewrite_note }}</p>
                 </div>
                 <div class="group">
                     <p class="text-success">(Check & Upload)</p>
-                    <p class="mb-0 text-light-black fw-bold">{{ order.analysis.note }}</p>
+                    <p class="mb-0 text-light-black fw-bold">{{ orderData.analysis.note }}</p>
                 </div>
                 <div v-if="currentStep == 'view'">
                     <a class="edit-btn" v-if="qa.note != ''" @click="editQualityAssurance"><span class="icon-edit"><span
@@ -24,7 +24,7 @@
                     </div>
                     <div class="group">
                         <p class="text-light-black mgb-12">Original effective date</p>
-                        <p class="mb-0 text-light-black fw-bold">{{ this.order.due_date }}</p>
+                        <p class="mb-0 text-light-black fw-bold">{{ this.orderData.due_date }}</p>
                     </div>
                     <div class="group">
                         <p class="text-light-black mgb-12">Changed effective date</p>
@@ -33,19 +33,19 @@
                 </div>
                 <div class="group">
                     <p class="text-light-black mgb-12">Files</p>
-                    <div class="d-flex align-items-center" v-for="attachment in order.analysis.attachments">
+                    <div class="d-flex align-items-center" v-for="attachment in orderData.analysis.attachments">
                         <div class="file-img">
                             <img src="/img/pdf.png" alt="boston pdf image">
                         </div>
                         <div class="mgl-12">
                             <p class="text-light-black mb-0">{{ attachment.name }}</p>
-                            <p class="text-gray mb-0 fs-12">Uploaded: {{ order.analysis.updated_by.name + ', ' +
-                                order.analysis.updated_at }}</p>
+                            <p class="text-gray mb-0 fs-12">Uploaded: {{ orderData.analysis.updated_by.name + ', ' +
+                                orderData.analysis.updated_at }}</p>
                         </div>
                     </div>
                 </div>
             </div>
-            <div v-if="qa.note == '' || currentStep == 'edit'">
+            <div v-if="(qa.note == '' && orderData.quality_assurance) || currentStep == 'edit'">
                 <div class="group">
                     <p class="text-light-black mgb-12">Files</p>
                     <div class="d-flex align-items-center" v-for="attachment in order.quality_assurance.attachments">
@@ -54,8 +54,8 @@
                         </div>
                         <div class="mgl-12">
                             <p class="text-light-black mb-0">{{ attachment.name }}</p>
-                            <p class="text-gray mb-0 fs-12">Uploaded: {{ order.quality_assurance.updated_by.name + ', ' +
-                                order.quality_assurance.updated_at }}</p>
+                            <p class="text-gray mb-0 fs-12">Uploaded: {{ orderData.quality_assurance.updated_by.name + ', ' +
+                                orderData.quality_assurance.updated_at }}</p>
                         </div>
                     </div>
                 </div>
@@ -100,7 +100,7 @@
                 </ValidationObserver>
                 <div class="group">
                     <p class="text-light-black mgb-12">Effective Date</p>
-                    <p class="mb-0 text-light-black fw-bold">{{ order.due_date }}</p>
+                    <p class="mb-0 text-light-black fw-bold">{{ orderData.due_date }}</p>
                 </div>
                 <div class="group">
                     <label for="" class="d-block mb-2 dashboard-label">Modify Effective date</label>
@@ -136,26 +136,28 @@
                 note: '',
                 files: [],
             },
+            orderData: [],
             message: '',
             filesCount: '',
             currentStep: 'create',
             alreadyQualityAssurance: 0,
         }),
         created() {
+            this.orderData = this.order
             this.getReportAnalysisData()
-            this.alreadyQualityAssurance = (JSON.parse(this.order.workflow_status)).qualityAssurance
+            this.alreadyQualityAssurance = (JSON.parse(this.orderData.workflow_status)).qualityAssurance
             this.alreadyQualityAssurance == 1 ? this.currentStep = 'view' : 'create'
         },
         methods: {
             getReportAnalysisData() {
-                this.qa.order_id = this.order.id
-                this.qa.effective_date = this.order.due_date
-                if (this.order.quality_assurance) {
-                    this.qa.qa_id = this.order.quality_assurance.id
-                    this.qa.note = this.order.quality_assurance.note
-                    this.qa.assigned_to = this.order.quality_assurance.assigned_to
-                    this.qa.assigned_name = this.order.quality_assurance.assignee.name
-                    this.qa.effective_date = this.order.quality_assurance.effective_date
+                this.qa.order_id = this.orderData.id
+                this.qa.effective_date = this.orderData.due_date
+                if (this.orderData.quality_assurance) {
+                    this.qa.qa_id = this.orderData.quality_assurance.id
+                    this.qa.note = this.orderData.quality_assurance.note
+                    this.qa.assigned_to = this.orderData.quality_assurance.assigned_to
+                    this.qa.assigned_name = this.orderData.quality_assurance.assignee.name
+                    this.qa.effective_date = this.orderData.quality_assurance.effective_date
                 }
             },
             saveQualityAssurance() {
@@ -165,6 +167,11 @@
                         this.$boston.post('save-quality-assurance', this.qa)
                             .then(res => {
                                 this.message = res.message
+                                this.orderData = res.data
+                                this.$root.$emit('wk_update', this.orderData)
+                                this.$root.$emit('wk_flow_menu', this.orderData)
+                                this.getReportAnalysisData()
+                                this.currentStep = 'view'
                                 setTimeout(() => {
                                     self.$refs.qualityAssuranceForm.reset();
                                     self.message = '';
@@ -181,7 +188,6 @@
             },
             editQualityAssurance() {
                 this.currentStep = 'edit'
-                console.log(this.currentStep)
             },
             updateQualityAssurance() {
                 let formData = new FormData();
@@ -197,6 +203,11 @@
                     }
                 }).then(res => {
                     this.message = res.message
+                    this.orderData = res.data
+                    this.$root.$emit('wk_update', this.orderData)
+                    this.$root.$emit('wk_flow_menu', this.orderData)
+                    this.getReportAnalysisData()
+                    this.currentStep = 'view'
                 }).catch(err => {
                     console.log(err)
                 })

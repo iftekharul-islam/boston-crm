@@ -114,6 +114,7 @@ trait CrmHelper {
             'report.trainee',
             'report.assignee',
             'report.creator',
+            'report.attachments',
             'reportRewrite.assignee',
             'analysis.assignee',
             'analysis.attachments',
@@ -121,6 +122,8 @@ trait CrmHelper {
             'initialReview.assignee',
             'workHisotry.user',
             'revission',
+            'submission.trainee',
+            'submission.deliveryMan',
             'qualityAssurance.assignee',
             'qualityAssurance.attachments',
             'qualityAssurance.updatedBy'

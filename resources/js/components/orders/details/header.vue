@@ -12,8 +12,7 @@
                     <select name="role" id="role" class="login-input role-error fw-bold" @change="changeOrderStatus($event)" v-model="order.status">
                         <option value="">Select</option>
                         <option value="1">Active</option>
-                        <option value="2">Cancel</option>
-                        <option value="3">Delete</option>
+                        <option value="14">Cancel</option>
                     </select>
                     <span class="icon-arrow-down bottom-arrow-icon text-gray"></span>
                 </div>
@@ -38,7 +37,7 @@ export default {
         copied: false
     }),
     created() {
-
+        // console.log(this.order);
     },
     methods: {
         changeOrderStatus(val){
