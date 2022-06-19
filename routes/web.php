@@ -186,6 +186,7 @@ Route::post('/upload-inspection-files/{id}', [OrderWorkflowController::class, 'u
 Route::post('/admin-report-preparation-create/{id}', [OrderWorkflowController::class, 'storeAdminReportPreparation'])->name('report.preparation.create');
 Route::post('/assignee-report-preparation-create/{id}', [OrderWorkflowController::class, 'storeAssigneeReportPreparation'])->name('assignee.preparation.create');
 Route::post('/report-analysis-create/{id}', [OrderWorkflowController::class, 'storeReportAnalysis'])->name('report.analysis.create');
+Route::post('/submission-create/{id}', [OrderWorkflowController::class, 'storeSubmission'])->name('submission.create');
 Route::post('rewrite-report/update/', [OrderWorkflowController::class, 'rewriteReport']);
 Route::post('revissin/add', [OrderWorkflowController::class, 'revissinAdd']);
 Route::post('revissin/edit', [OrderWorkflowController::class, 'revissinEdit']);

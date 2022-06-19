@@ -181,6 +181,10 @@ class Order extends Model implements HasMedia
     {
         return $this->hasMany(OrderWHistory::class,'order_id', 'id');
     }
+    public function submission()
+    {
+        return $this->hasOne(OrderWSubmission::class,'order_id', 'id');
+    }
 
     public function revission()
     {

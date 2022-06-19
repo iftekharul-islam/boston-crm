@@ -81,7 +81,7 @@
             <!-- Quality Assurance (E&O) -->
             <QualityAssurance :order="order" :users="users" v-if="isActive === 'quality-assurance'"></QualityAssurance>
             <!-- Submission -->
-            <Submission v-if="isActive === 'submission'"></Submission>
+            <Submission :order="order" :users="users" v-if="isActive === 'submission'"></Submission>
             <!-- Revision -->
             <Revision :order="orderData" v-if="isActive === 'revision'"></Revision>
           </div>
