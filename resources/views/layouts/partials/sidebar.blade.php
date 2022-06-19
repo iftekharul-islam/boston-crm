@@ -26,13 +26,13 @@
         {{--             </div>--}}
         {{--             <span class="icon-arrow-down ms-auto"></span>--}}
         {{--        </a>--}}
-        {{--        <a href="{{ url('/calls') }}" class="list-item d-flex align-items-center  text-white {{ (request()->is('calls')) ? 'active' : '' }}">--}}
-        {{--            <div class="d-inline-flex align-items-center">--}}
-        {{--                <span class="icon-call me-3 fs-3"><span class="path1"></span><span class="path2"></span></span>--}}
-        {{--                <span class="items-text"> {{ __('messages.dashboard_view.calls') }} </span>--}}
-        {{--             </div>--}}
-        {{--             <span class="icon-arrow-down ms-auto"></span>--}}
-        {{--        </a>--}}
+               <a href="{{ url('/call') }}" class="list-item d-flex align-items-center  text-white {{ (request()->is('calls')) ? 'active' : '' }}">
+                   <div class="d-inline-flex align-items-center">
+                       <span class="icon-call me-3 fs-3"><span class="path1"></span><span class="path2"></span></span>
+                       <span class="items-text"> {{ __('messages.dashboard_view.calls') }} </span>
+                    </div>
+                    <span class="icon-arrow-down ms-auto"></span>
+               </a>
         @if(in_array('view.client', $user_permissions ?? []) || $is_owner || $user_role == 'admin')
             <a href="{{ route('clients.index') }}"
                class="list-item d-flex align-items-center  text-white {{ (request()->is('clients*')) ? 'active' : '' }}">

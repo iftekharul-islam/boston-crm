@@ -358,18 +358,15 @@
 }
 .icon-messages .path1:before {
   content: "\e92a";
-  color: rgb(255, 255, 255);
   opacity: 0.4;
 }
 .icon-messages .path2:before {
   content: "\e92b";
   margin-left: -1em;
-  color: rgb(255, 255, 255);
 }
 .icon-messages .path3:before {
   content: "\e92c";
   margin-left: -1em;
-  color: rgb(255, 255, 255);
 }
 .icon-profile-circle .path1:before {
   content: "\e92d";
@@ -388,18 +385,15 @@
 }
 .icon-note .path1:before {
   content: "\e930";
-  color: rgb(255, 255, 255);
   opacity: 0.4;
 }
 .icon-note .path2:before {
   content: "\e931";
   margin-left: -1em;
-  color: rgb(255, 255, 255);
 }
 .icon-note .path3:before {
   content: "\e932";
   margin-left: -1em;
-  color: rgb(255, 255, 255);
 }
 .icon-note .path4:before {
   content: "\e933";
