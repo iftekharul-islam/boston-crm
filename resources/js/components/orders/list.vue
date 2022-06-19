@@ -2,7 +2,7 @@
     <div id="order-views">
         <div class="report-top d-flex justify-content-between mgb-32 flex-wrap">
             <div class="left chart-box-header-btn d-flex flex-wrap justify-content-between">
-                <button v-for="dCol, di in order.disableHeader" @click="addToTable(dCol)" :class="{ 'active' : checkColumnActive(dCol) }" class="chart-btn h-32 d-flex align-items-center justify-content-between mb-2" :key="di">
+                <button v-for="dCol, di in order.filterItems" class="chart-btn h-32 d-flex align-items-center justify-content-between mb-2" :key="di">
                     {{ dCol.title }}
                 </button>
             </div>
@@ -14,7 +14,7 @@
                 </select>
             </div>
         </div>
-        <Table :items="orderData" :sl-start="pages.pageData.from" :header="order.header">
+        <Table :items="orderData" :sl-start="pages.pageData.from" :header="order.header" @headClick="headerClick($event)">
             <template v-slot:amc_id="{item}">
                 {{ item.amc ? item.amc.name : '-' }}
             </template>
@@ -44,15 +44,28 @@
                 {{ item.property_info.search_address }}
             </template>
             <template v-slot:action="{item}">
-                <a :href="`orders/${item.id}/edit`" class="btn btn-success btn-sm" :data-key="item.id">
+                <a title="Edit order information" :href="`orders/${item.id}/edit`" class="btn btn-success btn-sm" :data-key="item.id">
                     <span onclick="roleUpdateOpen(2);" class="icon-edit cursor-pointer"><span class="path1"></span><span class="path2"></span></span>
                 </a>
-                <a :href="`orders/${item.id}`" class="btn btn-primary btn-sm" :data-key="item.id">
-                    <span onclick="roleUpdateOpen(2);" class="icon-eye cursor-pointer"><span class="path1"></span><span class="path2"></span></span>
+                <a title="View order information" :href="`orders/${item.id}`" class="view-btn" :data-key="item.id">
+                    <span onclick="roleUpdateOpen(2);" class="cursor-pointer">
+                        View
+                    </span>
                 </a>
+            </template>
+            <template v-slot:head_action="{item}">
+                <img src="/icons/column.svg" :tag="item.item" class="cursor-pointer">
+            </template>
+            <template v-slot:popup>
+                <transition name="fade" appear v-if="visibleColumnDropDown">
+                    <div class="column-list">
+                        <div class="col-item" @click="addToTable(item)" :class="{ 'active' : checkColumnActive(item) }" v-for="item, ci in order.disableHeader" :key="ci">{{ item.title }}</div>
+                    </div>
+                </transition>
             </template>
         </Table>
         <paginate align="center" :total-page="pages.pageData.last_page" @loadPage="loadPage($event)"></paginate>
+
     </div>
 </template>
 
@@ -69,6 +82,7 @@ export default {
     }, 
     data: () => ({
         orderData: [],
+        visibleColumnDropDown: false,
         pages: {
             acitvePage: 1,
             pageData: [],
@@ -78,18 +92,18 @@ export default {
         },
         order: {
             header: [
-                'Order No@client_order_no@center@center',
-                'Client Name@amc_id@center@center',
-                'Property Address@property_address@center@center',
-                'Appraiser@appraiser@center@center',
-                'Inspector@inspector@center@center',
-                'Inspection Date@inspection_date@center@center',
-                'Due date@due_date@center@center',
-                'Status@order_status@center@center',
+                'Order No@client_order_no@left@left',
+                'Client Name@amc_id@left@left',
+                'Property Address@property_address@left@left',
+                'Appraiser@appraiser@left@left',
+                'Inspector@inspector@left@left',
+                'Inspection Date@inspection_date@left@left',
+                'Due date@due_date@left@left',
+                'Status@order_status@left@left',
                 'Map It@map_it@center@center',
-                'Action@action@center@center',
+                'Action@action@center@left'
             ],
-            disableHeader: [
+            filterItems: [
                 {
                     title: "Appraiser (0)",
                     key: "appraiser"
@@ -111,46 +125,68 @@ export default {
                     key: "lat"
                 }
             ],
+
+            disableHeader: [
+                {
+                    title: "Serial No",
+                    key: "system_order_no"
+                },
+                {
+                    title: "Due Date",
+                    key: "due_date"
+                }
+            ]
  
         }
     }),
     created() {
         this.pages.pageData = this.data;
         this.orderData = this.data.data;
+
+        this.order.header.map( (ele) => {
+            let item = ele.split("@");
+            let checkDisable = this.order.disableHeader.find((ele) => ele.key == item[1]);
+            if (!checkDisable) {
+                this.order.disableHeader.push({
+                    title: item[0],
+                    key:  item[1]
+                });
+            }
+        });
     },
     methods: {
         checkColumnActive(val) {
-            // let getHeader = (this.order.header);
-            // let findActive = false;            
-            // for (let index in getHeader){
-            //     let ele = getHeader[index];
-            //     let key = ele.split("@");
-            //     if (key[1] && val.key == key[1]) {
-            //         findActive = val.key == key[1] ? true : false;
-            //         break;
-            //     }
-            // }
-            // return findActive;
+            let getHeader = (this.order.header);
+            let findActive = false;            
+            for (let index in getHeader){
+                let ele = getHeader[index];
+                let key = ele.split("@");
+                if (key[1] && val.key == key[1]) {
+                    findActive = val.key == key[1] ? true : false;
+                    break;
+                }
+            }
+            return findActive;
         },
         addToTable(val) {
-            // let getHeader = (this.order.header);
-            // let getIndex = getHeader.find( (ele) => {
-            //     let key = ele.split("@");
-            //     if(val.key == key[1]) {
-            //         return true;
-            //     }
-            // });
-            // if (!getIndex) {
-            //     this.order.header.splice( 3, 0, 
-            //         val.title + '@' + val.key + '@center@center'
-            //     );
-            // } else  {
-            //     let getIndexNo = this.order.header.findIndex(ele => {
-            //         return ele == getIndex;
-            //     });
-            //     this.order.header.splice(getIndexNo, 1);
-            // } 
-            // this.checkColumnActive(val)
+            let getHeader = (this.order.header);
+            let getIndex = getHeader.find( (ele) => {
+                let key = ele.split("@");
+                if(val.key == key[1]) {
+                    return true;
+                }
+            });
+            if (!getIndex) {
+                this.order.header.splice( 8, 0, 
+                    val.title + '@' + val.key + '@left@left'
+                );
+            } else  {
+                let getIndexNo = this.order.header.findIndex(ele => {
+                    return ele == getIndex;
+                });
+                this.order.header.splice(getIndexNo, 1);
+            } 
+            this.checkColumnActive(val)
         },
         loadPage(acitvePage = null){
             this.pages.acitvePage = acitvePage;
@@ -164,7 +200,13 @@ export default {
         // Search Table Data 
         searchData: _.debounce( function (event) {
             this.loadPage(this.pages.acitvePage, event.target.value);
-        }, 300)
+        }, 300),
+
+        headerClick(event) {
+            if (event.item == "action") {
+                this.visibleColumnDropDown = !this.visibleColumnDropDown;
+            }
+        }
     }
 }
 
@@ -173,5 +215,48 @@ export default {
 <style scoped>
 select.form-control {
     height: 38px;
+}
+.column-list {
+    position: absolute;
+    background: #fff;
+    min-width: 220px;
+    height: auto;
+    right: 0;
+    top: 40px;
+    box-shadow: 0 5px 10px 0px rgb(0 0 0 / 50%);
+    border-radius: 0.25rem;
+    overflow: hidden;
+    bottom: auto;
+}
+.column-list .col-item {
+    padding: 5px 5px 5px 30px;
+    cursor: pointer;
+    position: relative;
+}
+
+.column-list .col-item::after {
+    content: "";
+    position: absolute;
+    height: 15px;
+    width: 15px;
+    background: transparent;
+    border: thin solid #19b7a2;
+    left: 5px;
+    top: 50%;
+    border-radius: 0.5rem;
+    transform: translate(0, -50%);
+}
+.column-list .col-item.active::after {
+    background: #19b7a2;
+}
+.view-btn {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16px;
+    padding: 5px 12px;
+    color: #FFFFFF;
+    background: #7E829B;
+    border-radius: 0.9rem;
 }
 </style>
