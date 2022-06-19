@@ -62,7 +62,7 @@
                       <p class="mb-0">{{ item.revision_date | dateTime }}</p>
                     </div>
                     <div class="marked" :class="{'completed' : item.solution_details != '-' }">
-                      <a href="javascript:;" class="open fs-14">Open</a>
+                      <a href="javascript:;" class="open open-btn fs-14">Open</a>
                       <a href="" @click.prevent="openMarkAsDelivery(item, ir)" class="mark-delivery fs-14">Mark as delivered</a>
                     </div>
                     <div class="button-box ms-auto">
@@ -435,5 +435,6 @@ export default {
 .marked.completed .open {
     background: #F99A73;
     color: #fff;
+    display: none;
 }
 </style>
