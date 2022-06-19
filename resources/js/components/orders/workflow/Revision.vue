@@ -301,6 +301,7 @@ export default {
                 this.revisionData = res.data.revission;
                 this.addRevission = false;
                 this.$root.$emit('wk_flow_menu', res.data);
+                this.$root.$emit('wk_update', res.data);
               }).catch(err => {
                 console.log(err);
               });
@@ -317,6 +318,7 @@ export default {
                 this.revisionData = res.data.revission;
                 this.revisionData[index].open_solution = false;  
                 this.$root.$emit('wk_flow_menu', res.data);              
+                this.$root.$emit('wk_update', res.data);
             }
         }).catch(err => {
             console.log(err);
@@ -360,6 +362,7 @@ export default {
                 this.revisionData = res.data.revission;
                 this.revissionEdit = false;
                 this.$root.$emit('wk_flow_menu', res.data);
+                this.$root.$emit('wk_update', res.data);
             }
         }).catch(err => {
             console.log(err);
@@ -375,6 +378,7 @@ export default {
                   this.revisionData = res.data.revission;
                   this.editNotesModal = false;
                   this.$root.$emit('wk_flow_menu', res.data);
+                  this.$root.$emit('wk_update', res.data);
               }).catch(err => {
                 console.log(err);
               });
@@ -393,6 +397,7 @@ export default {
         }).then( (res) => {
             this.revisionData = res.data.revission;
             this.$root.$emit('wk_flow_menu', res.data);
+            this.$root.$emit('wk_update', res.data);
         }).catch(err => {
           console.log(err);
         });
