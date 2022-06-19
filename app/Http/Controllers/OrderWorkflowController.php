@@ -176,7 +176,10 @@ class OrderWorkflowController extends BaseController
         }
 
         $report = OrderWReport::where('order_id', $id)->first();
-        if ($report) {
+
+        if($report) {
+            $report->reviewed_by = $request->reviewed_by;
+            $report->creator_id = $request->creator_id;
             $report->assigned_to = $request->assigned_to;
             $report->trainee_id = $request->trainee_id;
             $report->note = $request->note;
@@ -186,27 +189,40 @@ class OrderWorkflowController extends BaseController
             if (isset($request['files']) && count($request['files'])) {
                 $this->savePreparationFiles($request->all(), $report->id);
             }
+          
+            $historyTitle = "Report preparation updated by " . $user->name . ' on Report preparation section.';
+        } else {
+            $newReport = new OrderWReport();
+            $newReport->order_id = $order->id;
+            $newReport->reviewed_by = $request->reviewed_by;
+            $newReport->creator_id = $request->creator_id;
+            $newReport->assigned_to = $request->assigned_to;
+            $newReport->trainee_id = $request->trainee_id;
+            $newReport->note = $request->note;
+            $newReport->created_by = $user->id;
+            $newReport->save();
 
             $historyTitle = "Report preparation updated data by " . $user->name . ' on Report preparation section.';
 
-            $workStatus = json_decode($order->workflow_status, true);
-            $workStatus['reportPreparation'] = 1;
-            $order->status = 4;
-            $order->workflow_status = json_encode($workStatus);
-            $order->save();
+            $historyTitle = "Report preparation created by " . $user->name . ' on Report preparation section.';
 
-            $this->addHistory($order, $user, $historyTitle, 'report-preparation');
-            $orderData = $this->orderDetails($id);
-            return [
-                'status' => 'success',
-                'data' => $orderData
-            ];
+            if (isset($request['files']) && count($request['files'])) {
+                $this->savePreparationFiles($request->all(), $newReport->id);
+            }
         }
+        $workStatus = json_decode($order->workflow_status, true);
+        $workStatus['reportPreparation'] = 1;
+        $order->status = 4;
+        $order->workflow_status = json_encode($workStatus);
+        $order->save();
 
-        return response()->json([
-            'error' => true,
-            'message' => 'Report not available'
-        ]);
+        $this->addHistory($order, $user, $historyTitle, 'report-preparation');
+        $orderData = $this->orderDetails($id);
+        return [
+            'status' => 'success',
+            'data' => $orderData
+        ];
+
     }
 
     public function savePreparationFiles($data, $id)
@@ -255,7 +271,8 @@ class OrderWorkflowController extends BaseController
                 $this->saveAnalysisFiles($request->all(), $analysis->id);
             }
 
-            $historyTitle = "Report analysis updated data by " . $user->name . ' on Report analysis and reviewed section.';
+            $historyTitle = "Report analysis updated by ".$user->name.' on Report analysis and reviewed section.';
+
         } else {
             $newAnalysis = new OrderWReportAnalysis();
             $newAnalysis->order_id = $id;
@@ -276,7 +293,7 @@ class OrderWorkflowController extends BaseController
                 $this->saveAnalysisFiles($request->all(), $id);
             }
 
-            $historyTitle = "Report analysis created data by " . $user->name . ' on Report analysis and reviewed section.';
+            $historyTitle = "Report analysis created by ".$user->name.' on Report analysis and reviewed section.';
         }
 
         $workStatus = json_decode($order->workflow_status, true);
@@ -506,7 +523,7 @@ class OrderWorkflowController extends BaseController
         $reWrite->revision_details = $get->revission;
         $reWrite->solution_details = "-";
         $reWrite->save();
-        $historyTitle = "Revission has been updated by " . $user->name;
+        $historyTitle = "Revision has been updated by ".$user->name;
 
         $workStatus = json_decode($order->workflow_status, true);
         $workStatus['revision'] = 1;
@@ -539,7 +556,7 @@ class OrderWorkflowController extends BaseController
         if (!$reWrite) {
             return response()->json([
                 'error' => true,
-                'message' => 'Order Revission Information Not Found'
+                'message' => 'Order Revision Information Not Found'
             ]);
         }
         $reWrite->updated_at = Carbon::now();
@@ -550,7 +567,7 @@ class OrderWorkflowController extends BaseController
         $reWrite->solution_details = $get->revission['solution_details_edited'];
         $reWrite->save();
 
-        $historyTitle = "Solution added for revission. Solution added by " . $user->name;
+        $historyTitle = "Solution added for revision. Solution added by ".$user->name;
 
         $workStatus = json_decode($order->workflow_status, true);
         $workStatus['revision'] = 1;
@@ -584,7 +601,7 @@ class OrderWorkflowController extends BaseController
         if (!$reWrite) {
             return response()->json([
                 'error' => true,
-                'message' => 'Order Revission Information Not Found'
+                'message' => 'Order Revision Information Not Found'
             ]);
         }
         $reWrite->updated_at = Carbon::now();
@@ -595,7 +612,8 @@ class OrderWorkflowController extends BaseController
         $reWrite->solution_details = $get->solution_details;
         $reWrite->save();
 
-        $historyTitle = "Revission marked as delivered by " . $user->name;
+        $historyTitle = "Revision marked as delivered by ".$user->name;
+
 
         $workStatus = json_decode($order->workflow_status, true);
         $workStatus['revision'] = 1;
@@ -629,12 +647,13 @@ class OrderWorkflowController extends BaseController
         if (!$reWrite) {
             return response()->json([
                 'error' => true,
-                'message' => 'Order Revission Information Not Found'
+                'message' => 'Order Revision Information Not Found'
             ]);
         }
         $reWrite->delete();
 
-        $historyTitle = "Revission has been deleted by " . $user->name;
+        $historyTitle = "Revision has been deleted by ".$user->name;
+
         $this->addHistory($order, $user, $historyTitle, 'revision');
         $orderData = $this->orderDetails($get->order_id);
 

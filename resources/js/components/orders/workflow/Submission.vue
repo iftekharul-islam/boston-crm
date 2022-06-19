@@ -79,7 +79,7 @@
           </div>
           <div class="group">
               <p class="text-light-black mgb-12">Delivery date</p>
-              <p class="mb-0 text-light-black fw-bold">{{ deliveryDate | dateTime}}</p>
+              <p class="mb-0 text-light-black fw-bold">{{ deliveryDate | onlyDate }}</p>
           </div>
           <div class="group">
               <div class="checkbox-group submission-check mgt-20">
