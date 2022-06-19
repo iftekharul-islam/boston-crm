@@ -155,13 +155,15 @@ export default {
   methods:{
     getScheduleData(){
         let data = this.order.inspection
-        this.scheduleData.schedule_id = data.id
-        this.scheduleData.order_id = data.order_id
-        this.scheduleData.appraiser_id = data.inspector_id
-        this.scheduleData.inspector_name = data.user.name
-        this.scheduleData.inspection_date_time = data.inspection_date_time
-        this.scheduleData.duration = data.duration
-        this.scheduleData.note = data.note
+        if(data){
+            this.scheduleData.schedule_id = data.id
+            this.scheduleData.order_id = data.order_id
+            this.scheduleData.appraiser_id = data.inspector_id
+            this.scheduleData.inspector_name = data.user.name
+            this.scheduleData.inspection_date_time = data.inspection_date_time
+            this.scheduleData.duration = data.duration
+            this.scheduleData.note = data.note
+        }
     },
     select2Features() {
         $(document).on("change", "#apprClientSelect", function(e){
@@ -174,12 +176,12 @@ export default {
         .then(res => {
             this.message = res.message;
             this.alreadyScheduled = 1;
-            setTimeout(() => {
+            setTimeout(function(){
                 this.$refs.scheduleForm.reset();
                 this.$bvModal.hide('schedule')
                 this.message = '';
             },3000);
-        }).bind(this)
+        })
     },
     editSchedule(){
         this.$bvModal.show('schedule')

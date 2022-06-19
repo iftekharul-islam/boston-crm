@@ -34,7 +34,13 @@ class OrderWorkflowController extends BaseController
     public function updateOrderSchedule(Request $request){
         $this->repository->updateOrderScheduleData($request->all());
         //work for set event on google calender
-        $this->service->setOrderSchedule($request->order_id);
+        //$this->service->setOrderSchedule($request->order_id);
+
+        $order = Order::find($request->order_id);
+        $user = auth()->user();
+        $historyTitle = "Order Schedule Created by " . $user->name;
+
+        $this->addHistory($order, $user, $historyTitle, 'scheduling');
 
         return response()->json(['message' => 'Schedule has been updated successfully']);
     }
@@ -185,7 +191,7 @@ class OrderWorkflowController extends BaseController
 
             return response()->json(['message' => 'Report Analysis updated successfully']);
         }
-        
+
         $new = new OrderWReportAnalysis();
         $new->order_id = $id;
         if($request->noteCheck == '1'){
@@ -246,14 +252,14 @@ class OrderWorkflowController extends BaseController
     public function rewriteReport(Request $get) {
         $order = Order::find($get->order_id);
         $user = auth()->user();
-        
+
         if(!$order){
             return response()->json([
                 'error' => true,
                 'message' => 'Order Information Not Found'
             ]);
         }
-        
+
         $reWrite = OrderWRewrite::where('order_id', $order->id)->first();
         if (!$reWrite) {
             $reWrite = new OrderWRewrite();
@@ -290,7 +296,7 @@ class OrderWorkflowController extends BaseController
     public function revissinAdd(Request $get) {
         $order = Order::find($get->order_id);
         $user = auth()->user();
-        
+
         if(!$order){
             return response()->json([
                 'error' => true,
@@ -330,7 +336,7 @@ class OrderWorkflowController extends BaseController
     public function revissinEdit(Request $get) {
         $order = Order::find($get->order_id);
         $user = auth()->user();
-        
+
         if(!$order){
             return response()->json([
                 'error' => true,
@@ -374,7 +380,7 @@ class OrderWorkflowController extends BaseController
     public function revissinSolutionAdd(Request $get) {
         $order = Order::find($get->order_id);
         $user = auth()->user();
-        
+
         if(!$order){
             return response()->json([
                 'error' => true,
@@ -418,7 +424,7 @@ class OrderWorkflowController extends BaseController
     public function revissinSolutionMarked(Request $get) {
         $order = Order::find($get->order_id);
         $user = auth()->user();
-        
+
         if(!$order){
             return response()->json([
                 'error' => true,
@@ -456,13 +462,13 @@ class OrderWorkflowController extends BaseController
         return [
             'status' => 'success',
             'data' => $orderData
-        ];        
+        ];
     }
 
     public function revissinSolutionDelete(Request $get) {
         $order = Order::find($get->order_id);
         $user = auth()->user();
-        
+
         if(!$order){
             return response()->json([
                 'error' => true,
@@ -488,7 +494,7 @@ class OrderWorkflowController extends BaseController
             $workStatus = json_decode($order->workflow_status, true);
             $workStatus['revision'] = 0;
             $order->workflow_status = json_encode($workStatus);
-            $order->save();            
+            $order->save();
         }
 
         return [
