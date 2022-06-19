@@ -105,10 +105,13 @@ class OrderWorkflowRepository extends BaseRepository
             $order_quality_assurance = OrderWQa::find($data['qa_id']);
             $order_quality_assurance->updated_by = Auth::user()->id;
             $order_quality_assurance->note = $data['note'];
-            foreach ($data['files'] as $file) {
-                $order_quality_assurance->addMedia($file)
-                    ->toMediaCollection('qa');
+                if(isset($data['files'])){
+                    foreach ($data['files'] as $file) {
+                    $order_quality_assurance->addMedia($file)
+                        ->toMediaCollection('qa');
+                }
             }
+
             $order_quality_assurance->save();
 
             return $order_quality_assurance;

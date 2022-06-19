@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\OrderWSubmission;
 use Carbon\Carbon;
 use App\Models\Order;
+use App\Models\OrderWQa;
 use App\Helpers\CrmHelper;
 use App\Models\OrderWReport;
 use Illuminate\Http\Request;
@@ -91,8 +92,8 @@ class OrderWorkflowController extends BaseController
         $orderData = $this->orderDetails($order->id);
 
         $order->forceFill([
-                'workflow_status->inspection' => 1,
-                'status' => 3
+            'workflow_status->inspection' => 1,
+            'status' => 3
         ])->save();
 
         return response([
@@ -320,30 +321,74 @@ class OrderWorkflowController extends BaseController
         }
 
         $this->addHistory($order, $user, $historyTitle, 'initial-review');
-        if ($request->is_review_done == 1){
+        if ($request->is_review_done == 1) {
             $order->status = 5;
         }
-        if($request->is_check_upload == 1){
+        if ($request->is_check_upload == 1) {
             $order->status = 6;
         }
 
         $orderData = $this->orderDetails($request->order_id);
-        return response()->json([
+        return [
             'message' => $message,
             'data' => $orderData
-        ]);
+        ];
     }
 
     public function saveQualityAssurance(Request $request)
     {
         $this->repository->saveQualityAssurance($request->all());
-        return response()->json(['message' => 'Quality Assurance saved successfully']);
+
+        $order = Order::find($request->order_id);
+        $user = auth()->user();
+        if ($request->qa_id > 0) {
+            $message = 'Quality Assurance updated successfully';
+            $historyTitle = 'Quality Assurance updated By ' . auth()->user()->name;
+        } else {
+            $message = 'Quality Assurance createded successfully';
+            $historyTitle = 'Quality Assurance created By ' . auth()->user()->name;
+        }
+
+        $this->addHistory($order, $user, $historyTitle, 'quality-assurance');
+
+        $order->forceFill([
+            'workflow_status->qualityAssurance' => 1,
+            'status' => 10
+        ])->save();
+
+        $orderData = $this->orderDetails($request->order_id);
+        return [
+            'message' => $message,
+            'data' => $orderData
+        ];
     }
 
     public function updateQualityAssurance(Request $request)
     {
         $this->repository->updateQualityAssurance($request->all());
-        return response()->json(['message' => 'Quality Assurance updated successfully']);
+        $order_qa = OrderWQa::find($request->qa_id);
+        $order = Order::find($order_qa->order_id);
+        $user = auth()->user();
+        if ($request->qa_id > 0) {
+            $message = 'Quality Assurance updated successfully';
+            $historyTitle = 'Quality Assurance updated By ' . auth()->user()->name;
+        } else {
+            $message = 'Quality Assurance createded successfully';
+            $historyTitle = 'Quality Assurance created By ' . auth()->user()->name;
+        }
+
+        $this->addHistory($order, $user, $historyTitle, 'quality-assurance');
+
+        $order->forceFill([
+            'workflow_status->qualityAssurance' => 1,
+            'status' => 10
+        ])->save();
+
+        $orderData = $this->orderDetails($order->id);
+        return [
+            'message' => $message,
+            'data' => $orderData
+        ];
     }
 
     public function rewriteReport(Request $get)
