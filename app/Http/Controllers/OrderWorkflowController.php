@@ -87,6 +87,9 @@ class OrderWorkflowController extends BaseController
 
         $orderData = $this->orderDetails($order->id);
 
+        $order->status = 3;
+        $order->save();
+
         return response([
             "file" => $data['media'],
             "data" => $orderData,
@@ -298,8 +301,26 @@ class OrderWorkflowController extends BaseController
     }
 
     public function saveInitialReview(Request $request){
+        $order = Order::find($request->order_id);
+        $user = auth()->user();
+        if($request->initial_review_id > 0){
+            $message = 'Initial Review updated successfully';
+            $historyTitle = 'Initial Review updated By ' . auth()->user()->name;
+        }else{
+            $message = 'Initial Review createded successfully';
+            $historyTitle = 'Initial Review created By ' . auth()->user()->name;
+        }
+
+        $this->addHistory($order, $user, $historyTitle, 'initial-review');
+
+        $orderData = $this->orderDetails($request->order_id);
         $this->repository->updateInitialReviewData($request->all());
-        return response()->json(['message' => 'Initial Review saved successfully']);
+
+
+        return response()->json([
+            'message' => $message,
+            'data' => $orderData
+        ]);
     }
 
     public function saveQualityAssurance(Request $request){
