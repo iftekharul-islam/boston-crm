@@ -82,6 +82,12 @@ class OrderWorkflowController extends BaseController
     public function uploadInspectionFiles(Request $request, $inspection_id)
     {
         $order_w_inspection = OrderWInspection::find($inspection_id);
+        if (!$order_w_inspection) {
+            return response([
+                "error" => true,
+                "message" => "Inspection Not Found"
+            ]);
+        }
         $data = $this->saveInspectionFiles($request->all(), $inspection_id);
         $order = Order::find($order_w_inspection->order_id);
         $user = auth()->user();
@@ -264,7 +270,7 @@ class OrderWorkflowController extends BaseController
                 $analysis->note = $request->note;
             }
             $analysis->assigned_to = $request->assigned_to;
-            $analysis->updated_by = auth()->user()->id;
+            $analysis->updated_by = $user->id;
             $analysis->save();
 
             if (isset($request['files']) && count($request['files'])) {
@@ -286,7 +292,8 @@ class OrderWorkflowController extends BaseController
                 $newAnalysis->note = $request->note;
             }
             $newAnalysis->assigned_to = $request->assigned_to;
-            $newAnalysis->created_by = auth()->user()->id;
+            $newAnalysis->created_by = $user->id;
+            $newAnalysis->updated_by = $user->id;
             $newAnalysis->save();
 
             if (isset($request['files']) && count($request['files'])) {

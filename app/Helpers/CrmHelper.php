@@ -187,4 +187,8 @@ trait CrmHelper {
         return $order;
     }
 
+    protected function order_list_relation() {
+        return ['user', 'amc', 'appraisalDetail', 'appraisalDetail.appraiser', 'appraisalDetail.getLoanType', 'lender', 'propertyInfo', 'inspection.user'];
+    }
+
 }

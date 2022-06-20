@@ -53,7 +53,8 @@ class Order extends Model implements HasMedia
         11 => "Ready for Submission/Delivery",
         12 => "Under Correction/Revision",
         13 => "Delivered",
-        14 => "Cancelled"
+        14 => "Cancelled",
+        15 => "Deleted"
     ];
 
     protected $fillable = [
@@ -190,4 +191,5 @@ class Order extends Model implements HasMedia
     {
         return $this->hasMany(OrderWRevision::class,'order_id', 'id');
     }
+
 }

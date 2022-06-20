@@ -140,21 +140,24 @@ export default {
         }
     }),
     created() {
-        this.pages.pageData = this.data;
-        this.orderData = this.data.data;
-
-        this.order.header.map( (ele) => {
-            let item = ele.split("@");
-            let checkDisable = this.order.disableHeader.find((ele) => ele.key == item[1]);
-            if (!checkDisable) {
-                this.order.disableHeader.push({
-                    title: item[0],
-                    key:  item[1]
-                });
-            }
-        });
+        this.initTableDate(this.data);
     },
     methods: {
+        initTableDate(data) {
+            this.pages.pageData = data;
+            this.orderData = data.data;
+
+            this.order.header.map( (ele) => {
+                let item = ele.split("@");
+                let checkDisable = this.order.disableHeader.find((ele) => ele.key == item[1]);
+                if (!checkDisable) {
+                    this.order.disableHeader.push({
+                        title: item[0],
+                        key:  item[1]
+                    });
+                }
+            });
+        },
         checkColumnActive(val) {
             let getHeader = (this.order.header);
             let findActive = false;            
