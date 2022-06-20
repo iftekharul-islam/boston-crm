@@ -23,6 +23,10 @@ class OrderWInspection extends Model implements HasMedia
         return $this->belongsTo(User::class,'inspector_id','id');
     }
 
+    public function createBy(){
+        return $this->belongsTo(User::class,'created_by','id');
+    }
+
     public function attachments()
     {
         return $this->media()->where('collection_name', '=', 'inspection');
