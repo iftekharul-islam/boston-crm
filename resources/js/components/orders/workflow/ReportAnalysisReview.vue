@@ -83,7 +83,7 @@
                 <p class="text-light-black mgb-12" v-if="fileData.files.length">{{ fileData.files.length }} Files</p>
             </div>
             <div class="text-end mgt-32">
-                <button class="button button-primary px-4 h-40 d-inline-flex align-items-center" @click="saveAssigneeData">Done</button>
+                <button class="button button-primary px-4 h-40 d-inline-flex align-items-center" @click="saveAssigneeData" :disabled="isUploading">Done</button>
             </div>
         </ValidationObserver>
     </div>
@@ -97,6 +97,7 @@ export default {
     users: Array,
   },
   data: () => ({
+    isUploading: false,
     orderData: [],
     isDataExists: true,
     assignToName: '',
@@ -116,9 +117,9 @@ export default {
       this.fileData.files = event.target.files
     },
     updateData(){
-      let report = !_.isEmpty(this.orderData.report) ? this.orderData.report : false;
-      if(report){
-        this.preNote = report.note
+      let initReview = !_.isEmpty(this.orderData.initial_review) ? this.orderData.initial_review : false;
+      if(initReview){
+        this.preNote = initReview.note
       }
       let analysis = !_.isEmpty(this.orderData.analysis) ? this.orderData.analysis : false;
       if(analysis){
@@ -139,6 +140,7 @@ export default {
       }
     },
     saveAssigneeData() {
+        this.isUploading = true
         this.$refs.assigneeForm.validate().then((status) => {
           if(status) {
             let formData = new FormData();
@@ -153,6 +155,7 @@ export default {
             this.$boston.post('report-analysis-create/'+ this.orderData.id, formData, { headers: {
                     'Content-Type': 'multipart/form-data'
                 }}).then(res => {
+                this.isUploading = false
                 this.fileData.file_type = ''
                 this.fileData.files = []
                 this.isDataExists = true
@@ -163,13 +166,14 @@ export default {
             }).catch(err => {
                 console.log('err', err)
             });
+          } else {
+              this.isUploading = false
           }
       })
     },
   },
   created() {
     this.orderData = this.order;
-    console.log(this.orderData)
     this.updateData()
   },
 }

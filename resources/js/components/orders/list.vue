@@ -2,9 +2,18 @@
     <div id="order-views" class="order-views">
         <div class="report-top d-flex justify-content-between mgb-32 flex-wrap">
             <div class="left chart-box-header-btn d-flex flex-wrap justify-content-between">
-                <button v-for="dCol, di in order.filterItems" class="chart-btn h-32 d-flex align-items-center justify-content-between mb-2" :key="di">
+                <button v-for="dCol, di in order.filterItems" class="chart-btn h-32 d-flex align-items-center justify-content-between mb-2" :key="di" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
                     {{ dCol.title }}
                 </button>
+                <!-- dropdown -->
+                <div class="dropdown-menu py-0 search-dropdown" aria-labelledby="dropdownMenuLink">
+                    <input type="text" class="search-input" placeholder="Search...">
+                    <ul class="p-0 m-0 search-results">
+                        <li class="results-item">Korim khan</li>
+                        <li class="results-item">Korim khan</li>
+                        <li class="results-item">Korim khan</li>
+                    </ul>
+                </div>
             </div>
             <div class="right d-flex">
                 <div class="search-box d-flex me-3 mb-3">
@@ -153,21 +162,24 @@ export default {
         }
     }),
     created() {
-        this.pages.pageData = this.data;
-        this.orderData = this.data.data;
-
-        this.order.header.map( (ele) => {
-            let item = ele.split("@");
-            let checkDisable = this.order.disableHeader.find((ele) => ele.key == item[1]);
-            if (!checkDisable) {
-                this.order.disableHeader.push({
-                    title: item[0],
-                    key:  item[1]
-                });
-            }
-        });
+        this.initTableDate(this.data);
     },
     methods: {
+        initTableDate(data) {
+            this.pages.pageData = data;
+            this.orderData = data.data;
+
+            this.order.header.map( (ele) => {
+                let item = ele.split("@");
+                let checkDisable = this.order.disableHeader.find((ele) => ele.key == item[1]);
+                if (!checkDisable) {
+                    this.order.disableHeader.push({
+                        title: item[0],
+                        key:  item[1]
+                    });
+                }
+            });
+        },
         checkColumnActive(val) {
             let getHeader = (this.order.header);
             let findActive = false;            

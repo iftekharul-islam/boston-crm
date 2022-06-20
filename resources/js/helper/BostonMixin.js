@@ -3,6 +3,11 @@ import Vue from "vue";
 const ConfirmDialogue = () =>
     import ( /* webpackChunkName: "ConfirmDialogue" */ "../src/ConfirmDialogue");
 
+const months = {
+    full: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+    short: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+}
+
 Vue.mixin({
     components: {
         "confirm-dialog": ConfirmDialogue
@@ -72,6 +77,19 @@ Vue.mixin({
             if(!RegExp.$1) {s += (s.length>0 ? '&' : '?') + kvp;};            
             let path = window.location.href.split('?')[0] + s;            
             history.pushState(null, null, path);
+        },
+        onlyDateFormate(date) {
+            if (date == null) {
+                return '-';
+            }
+            let d = new Date(Date.parse(date));
+            let month = d.getMonth();
+            let year = d.getFullYear();
+            let dates = d.getDate();
+        
+            let fullDate = `${year}-${month}-${dates}`;
+            console.log(fullDate);
+            return fullDate;
         }
     }
 });
