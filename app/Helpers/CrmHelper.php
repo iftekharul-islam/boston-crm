@@ -126,7 +126,8 @@ trait CrmHelper {
             'submission.deliveryMan',
             'qualityAssurance.assignee',
             'qualityAssurance.attachments',
-            'qualityAssurance.updatedBy'
+            'qualityAssurance.updatedBy',
+            'comlist'
         )->where('id', $id)->first();
     }
 
