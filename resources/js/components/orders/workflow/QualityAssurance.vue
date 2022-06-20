@@ -5,7 +5,7 @@
                 <div class="group">
                     <p class="text-light-black mgb-12">Instruction from previous step</p>
                     <p class="text-success">(Rewrite & send back)</p>
-                    <p class="mb-0 text-light-black fw-bold">{{ orderData.w.rewrite_note }}</p>
+                    <p class="mb-0 text-light-black fw-bold">{{ orderData.analysis.rewrite_note }}</p>
                 </div>
                 <div class="group">
                     <p class="text-success">(Check & Upload)</p>
@@ -41,8 +41,7 @@
                         </div>
                         <div class="mgl-12">
                             <p class="text-light-black mb-0">{{ attachment.name }}</p>
-                            <p class="text-gray mb-0 fs-12">Uploaded: {{ orderData.analysis.updated_by.name + ', ' +
-                                orderData.analysis.updated_at }}</p>
+                            <p class="text-gray mb-0 fs-12">Uploaded: {{ orderData.analysis.updated_by.name + ', ' + orderData.analysis.updated_at }}</p>
                         </div>
                     </div>
                 </div>
@@ -364,13 +363,17 @@
             comList: false,
         }),
         created() {
-            this.orderData = this.order
-            this.getReportAnalysisData()
-            this.alreadyQualityAssurance = (JSON.parse(this.orderData.workflow_status)).qualityAssurance
-            this.alreadyQualityAssurance == 1 ? this.currentStep = 'view' : 'create'
+            this.getReportAnalysisData(this.order)            
+            this.$root.$on('wk_update', (res) => {
+                this.getReportAnalysisData(res);
+            });
         },
         methods: {
-            getReportAnalysisData() {
+            getReportAnalysisData(order) {
+                this.orderData = order;
+                this.alreadyQualityAssurance = (JSON.parse(this.orderData.workflow_status)).qualityAssurance
+                this.alreadyQualityAssurance == 1 ? this.currentStep = 'view' : 'create'
+
                 this.qa.order_id = this.orderData.id
                 this.qa.effective_date = this.orderData.due_date
                 if (this.orderData.quality_assurance) {

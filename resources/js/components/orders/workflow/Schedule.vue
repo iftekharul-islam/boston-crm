@@ -4,11 +4,11 @@
             <a class="edit-btn"><span @click="editSchedule" class="icon-edit"><span class="path1"></span><span
                         class="path2"></span></span></a>
             <div class="group">
-                <p class="text-light-black mgb-12">Scheduled by</p>
+                <p class="text-light-black mgb-12">Appraiser</p>
                 <p class="mb-0 text-light-black fw-bold">{{ scheduleData.inspector_name }}</p>
             </div>
             <div class="group">
-                <p class="text-light-black mgb-12">Schedule Date and Time</p>
+                <p class="text-light-black mgb-12">Inspection Date and Time</p>
                 <p class="mb-0 text-light-black fw-bold">{{ scheduleData.inspection_date_time }}</p>
             </div>
             <div class="group">
