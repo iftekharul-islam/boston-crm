@@ -1,12 +1,12 @@
 <template>
   <div class="order-details__right col-md-4">
     <!-- History -->
-    <div class="order-details-box bg-white h-100">
+    <div class="order-details-box  bg-white h-100">
       <div class="box-header">
         <p class="fw-bold text-light-black fs-20 mb-0">History</p>
 
       </div>
-      <div class="box-body">        
+      <div class="box-body order-box-oveflow">        
         <template v-for="item, ai in history">
           <div class="fs-14 logItem" :key="ai">
             <div class="logby">

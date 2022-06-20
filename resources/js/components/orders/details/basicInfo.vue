@@ -10,7 +10,7 @@
         <div class="list__group">
           <p class="mb-0 left-side">Order no</p>
           <span>:</span>
-          <p class="right-side mb-0">{{ edited.client_order_no }}</p>
+          <p class="right-side mb-0 word-break">{{ edited.client_order_no }}</p>
         </div>
         <div class="list__group">
           <p class="mb-0 left-side">Due date</p>
