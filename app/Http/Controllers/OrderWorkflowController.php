@@ -202,7 +202,7 @@ class OrderWorkflowController extends BaseController
             if (isset($request['files']) && count($request['files'])) {
                 $this->savePreparationFiles($request->all(), $report->id);
             }
-          
+
             $historyTitle = "Report preparation updated by " . $user->name . ' on Report preparation section.';
         } else {
             $newReport = new OrderWReport();
@@ -756,6 +756,20 @@ class OrderWorkflowController extends BaseController
             'message' => $historyTitle,
             'status' => 'success',
             'data' => $orderData
+        ];
+    }
+
+    public function saveCom(Request $request,$id){
+        $this->repository->saveCom($request->all(),$id);
+        $orderData = $this->orderDetails($id);
+
+        $order = Order::find($id);
+        $user = auth()->user();
+        $historyTitle = "Com list added by " . auth()->user()->name;
+        $this->addHistory($order, $user, $historyTitle, 'quality-assurance');
+        return [
+            "message" => "Com list added successfully",
+            "data" => $orderData
         ];
     }
 }

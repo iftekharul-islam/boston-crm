@@ -1,157 +1,151 @@
 <template>
-    <div>
-        <div class="quality-assurance-item step-items">
-            <div v-if="currentStep == 'view' || currentStep == 'create'">
-                <div class="group">
-                    <p class="text-light-black mgb-12">Instruction from previous step</p>
-                    <p class="text-success">(Rewrite & send back)</p>
-                    <p class="mb-0 text-light-black fw-bold">{{ orderData.analysis ? orderData.analysis.rewrite_note : '-' }}</p>
-                </div>
-                <div class="group">
-                    <p class="text-success">(Check & Upload)</p>
-                    <p class="mb-0 text-light-black fw-bold">{{ orderData.analysis ? orderData.analysis.note : '-' }}</p>
-                </div>
-                <div v-if="currentStep == 'view'">
-                    <a class="edit-btn" v-if="(qa.note != '' || qa.note != null)" @click="editQualityAssurance"><span class="icon-edit"><span
-                                class="path1"></span><span class="path2"></span></span></a>
-                    <div class="group">
-                        <p class="text-light-black mgb-12">Instruction from this step</p>
-                        <p class="mb-0 text-light-black fw-bold">{{ qa.note }}</p>
-                    </div>
-                    <div class="group">
-                        <p class="text-light-black mgb-12">Assigned to</p>
-                        <p class="mb-0 text-light-black fw-bold">{{ qa.assigned_name }}</p>
-                    </div>
-                    <div class="group">
-                        <p class="text-light-black mgb-12">Original effective date</p>
-                        <p class="mb-0 text-light-black fw-bold">{{ this.orderData.due_date }}</p>
-                    </div>
-                    <div class="group">
-                        <p class="text-light-black mgb-12">Changed effective date</p>
-                        <p class="mb-0 text-light-black fw-bold">{{ qa.effective_date }}</p>
-                    </div>
-                    <br/>
-                    <br/>
-                </div>
-                <div class="group" v-if="orderData.analysis">
-                    <p class="text-light-black mgb-12">Files</p>
-                    <div class="d-flex align-items-center" v-for="attachment, ai in orderData.analysis.attachments" :key="ai">
-                        <div class="file-img">
-                            <img src="/img/pdf.png" alt="boston pdf image">
-                        </div>
-                        <div class="mgl-12">
-                            <p class="text-light-black mb-0">{{ attachment.name }}</p>
-                            <p class="text-gray mb-0 fs-12">Uploaded: {{ orderData.analysis.updated_by.name + ', ' + orderData.analysis.updated_at }}</p>
-                        </div>
-                    </div>
-                </div>
-                <!-- <button v-if="qa.note == null || qa.note == ''" class="button button-primary px-4 h-40 d-inline-flex align-items-center" @click="mapOpen = true">See Com</button> -->
+    <div class="quality-assurance-item step-items">
+        <!-- step 1 -->
+        <div v-if="currentStep == 'step1'">
+            <div class="group">
+                <p class="text-light-black mgb-12">Instruction from previous step</p>
+                <p class="text-success">(Rewrite & send back)</p>
+                <p class="mb-0 text-light-black fw-bold">{{ orderData.analysis.rewrite_note }}</p>
             </div>
-            <div v-if="((qa.note == '' || qa.note == null) && orderData.quality_assurance) || currentStep == 'edit'">
-                <div class="group" v-if="order.quality_assurance">
-                    <p class="text-light-black mgb-12">Files</p>
-                    <div class="d-flex align-items-center" v-for="attachment, ti in order.quality_assurance.attachments" :key="ti">
-                        <div class="file-img">
-                            <img src="/img/pdf.png" alt="boston pdf image">
-                        </div>
-                        <div class="mgl-12">
-                            <p class="text-light-black mb-0">{{ attachment.name }}</p>
-                            <p class="text-gray mb-0 fs-12">Uploaded: {{ orderData.quality_assurance.updated_by.name + ', ' +
-                                orderData.quality_assurance.updated_at }}</p>
-                        </div>
+            <div class="group">
+                <p class="text-success">(Check & Upload)</p>
+                <p class="mb-0 text-light-black fw-bold">{{ orderData.analysis.note }}</p>
+            </div>
+            <div class="group">
+                <p class="text-light-black mgb-12">Files</p>
+                <div class="d-flex align-items-center" v-for="attachment in orderData.analysis.attachments">
+                    <div class="file-img">
+                        <img src="/img/pdf.png" alt="boston pdf image">
+                    </div>
+                    <div class="mgl-12">
+                        <p class="text-light-black mb-0">{{ attachment.name }}</p>
+                        <p class="text-gray mb-0 fs-12">Uploaded: {{ orderData.analysis.updated_by.name + ', ' +
+                            orderData.analysis.updated_at }}</p>
                     </div>
                 </div>
             </div>
-            <div v-if="((qa.note == '' || qa.note == null) && currentStep == 'view') || currentStep == 'edit'">
-                <div class="group">
-                    <div class="position-relative file-upload">
-                        <input type="file" multiple v-on:change="addFiles">
-                        <label for="" class="py-2">Upload <span class="icon-upload ms-3 fs-20"><span
-                                    class="path1"></span><span class="path2"></span><span
-                                    class="path3"></span></span></label>
-                        <p v-if="filesCount > 0">{{ filesCount + 'files selected' }}</p>
-                    </div>
+            <ValidationObserver ref="qualityAssuranceForm">
+                <div class="mgb-32">
+                    <ValidationProvider class="group" name="Assigned to" rules="required" v-slot="{ errors }">
+                        <div :class="{ 'invalid-form' : errors[0] }">
+                            <label for="" class="d-block mb-2 dashboard-label">Assigned to<span
+                                    class="text-danger require"></span></label>
+                            <select class="dashboard-input w-100" v-model="qa.assigned_to">
+                                <option value="">Please select to assign</option>
+                                <option v-for="user in users" :key="user.id" :value="user.id">
+                                    {{ user.name }}
+                                </option>
+                            </select>
+                            <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                        </div>
+                    </ValidationProvider>
                 </div>
-                <div class="mgb-20">
-                    <label for="" class="mb-2 text-light-black d-inline-block">Add note</label>
-                    <div class="preparation-input w-100 position-relative">
-                        <textarea v-model="qa.note" cols="30" rows="3" class="w-100 dashboard-textarea"></textarea>
-                    </div>
-                </div>
-                <button class="button button-primary px-4 h-40 d-inline-flex align-items-center" @click="comList = true">Add comparable list for original photo</button>
-                <div class="text-end mgt-32">
-                    <button class="button button-primary px-4 h-40 d-inline-flex align-items-center"
-                        @click="updateQualityAssurance">Done</button>
-                </div>
+            </ValidationObserver>
+            <div class="group">
+                <p class="text-light-black mgb-12">Effective Date</p>
+                <p class="mb-0 text-light-black fw-bold">{{ orderData.due_date }}</p>
             </div>
-            <div v-if="currentStep == 'create'">
-                <ValidationObserver ref="qualityAssuranceForm">
-                    <div class="mgb-32">
-                        <ValidationProvider class="group" name="Assigned to" rules="required" v-slot="{ errors }">
-                            <div :class="{ 'invalid-form' : errors[0] }">
-                                <label for="" class="d-block mb-2 dashboard-label">Assigned to<span
-                                        class="text-danger require"></span></label>
-                                <select class="dashboard-input w-100" v-model="qa.assigned_to">
-                                    <option value="">Please select to assign</option>
-                                    <option v-for="user in users" :key="user.id" :value="user.id">
-                                        {{ user.name }}
-                                    </option>
-                                </select>
-                                <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
-                            </div>
-                        </ValidationProvider>
-                    </div>
-                </ValidationObserver>
-                <div class="group">
-                    <p class="text-light-black mgb-12">Effective Date</p>
-                    <p class="mb-0 text-light-black fw-bold">{{ orderData.due_date }}</p>
-                </div>
-                <div class="group">
-                    <label for="" class="d-block mb-2 dashboard-label">Modify Effective date</label>
-                    <v-date-picker v-model="qa.effective_date"
-                        :available-dates='{ start: qa.effective_date, end: null }'>
-                        <template class="position-relative" v-slot="{ inputValue, inputEvents }">
-                            <input class="dashboard-input w-100" :value="inputValue" v-on="inputEvents" />
-                        </template>
-                    </v-date-picker>
-                </div>
-                <div class="text-end mgt-32">
-                    <button class="button button-primary px-4 h-40 d-inline-flex align-items-center"
-                        @click="saveQualityAssurance">Save</button>
-                </div>
+            <div class="group">
+                <label for="" class="d-block mb-2 dashboard-label">Modify Effective date</label>
+                <v-date-picker v-model="qa.effective_date" :available-dates='{ start: qa.effective_date, end: null }'>
+                    <template class="position-relative" v-slot="{ inputValue, inputEvents }">
+                        <input class="dashboard-input w-100" :value="inputValue" v-on="inputEvents" />
+                    </template>
+                </v-date-picker>
+            </div>
+            <div class="text-end mgt-32">
+                <button class="button button-primary px-4 h-40 d-inline-flex align-items-center"
+                    @click="saveQualityAssurance">Save</button>
             </div>
         </div>
-        <!-- Com list -->
-        <div v-if="comList" class="com-list vue-modal">
-            <div class="content w-100 max-w-556">
-                <p class="fs-20 fw-bold mgb-20">COM list</p>
-                <div class="">
-                    <p class="mgb-8">Add new</p>
-                    <input type="text" class="dashboard-input w-100 gray-border">
-                    <div class="text-end">
-                        <span class="add primary-text fw-bold">
-                            <svg width="12" height="9" viewBox="0 0 12 9" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path
-                                    d="M4.29515 8.6053C4.05503 8.6053 3.82691 8.50925 3.65883 8.34117L0.261131 4.94347C-0.0870435 4.5953 -0.0870435 4.01901 0.261131 3.67084C0.609305 3.32266 1.18559 3.32266 1.53377 3.67084L4.29515 6.43222L10.4662 0.261131C10.8144 -0.0870435 11.3907 -0.0870435 11.7389 0.261131C12.087 0.609305 12.087 1.18559 11.7389 1.53377L4.93147 8.34117C4.76338 8.50925 4.53527 8.6053 4.29515 8.6053Z"
-                                    fill="#19B7A2" />
-                            </svg>
-                            Add</span>
+        <!-- step 2 -->
+        <div v-if="currentStep == 'step2'">
+            <div class="group">
+                <p class="text-light-black mgb-12">Instruction from previous step</p>
+                <p class="text-success">(Rewrite & send back)</p>
+                <p class="mb-0 text-light-black fw-bold">{{ orderData.analysis.rewrite_note }}</p>
+            </div>
+            <div class="group">
+                <p class="text-success">(Check & Upload)</p>
+                <p class="mb-0 text-light-black fw-bold">{{ orderData.analysis.note }}</p>
+            </div>
+            <div class="group">
+                <p class="text-light-black mgb-12">Files</p>
+                <div class="d-flex align-items-center" v-for="attachment in orderData.analysis.attachments">
+                    <div class="file-img">
+                        <img src="/img/pdf.png" alt="boston pdf image">
+                    </div>
+                    <div class="mgl-12">
+                        <p class="text-light-black mb-0">{{ attachment.name }}</p>
+                        <p class="text-gray mb-0 fs-12">Uploaded: {{ orderData.analysis.updated_by.name + ', ' +
+                            orderData.analysis.updated_at }}</p>
                     </div>
                 </div>
-                <!-- map name -->
-                <div class="map-name mgt-20">
-                    <div class="map-name-list d-flex justify-content-between">
-                        <p class="mb-0">30 Richard Id, Braintree MA 12563, USA</p>
-                        <span class="icon-trash fs-20 cursor-pointer"><span class="path1"></span><span
-                                class="path2"></span><span class="path3"></span><span class="path4"></span></span>
+            </div>
+            <div class="group">
+                <p class="text-light-black mgb-12">Assigned to</p>
+                <p class="mb-0 text-light-black fw-bold">{{ qa.assigned_name }}</p>
+            </div>
+            <div class="group">
+                <p class="text-light-black mgb-12">Original effective date</p>
+                <p class="mb-0 text-light-black fw-bold">{{ this.orderData.due_date }}</p>
+            </div>
+            <div class="group">
+                <p class="text-light-black mgb-12">Changed effective date</p>
+                <p class="mb-0 text-light-black fw-bold">{{ qa.effective_date }}</p>
+            </div>
+            <div class="group">
+                <div class="position-relative file-upload">
+                    <input type="file" multiple v-on:change="addFiles">
+                    <label for="" class="py-2">Upload <span class="icon-upload ms-3 fs-20"><span
+                                class="path1"></span><span class="path2"></span><span
+                                class="path3"></span></span></label>
+                    <p v-if="filesCount > 0">{{ filesCount + 'files selected' }}</p>
+                </div>
+            </div>
+            <div class="mgb-20">
+                <label for="" class="mb-2 text-light-black d-inline-block">Add note</label>
+                <div class="preparation-input w-100 position-relative">
+                    <textarea v-model="qa.note" cols="30" rows="3" class="w-100 dashboard-textarea"></textarea>
+                </div>
+            </div>
+            <button class="button button-primary px-4 h-40 d-inline-flex align-items-center" @click="comList = true">Add
+                comparable list for original photo</button>
+            <div class="text-end mgt-32">
+                <button type="button" class="button button-primary px-4 h-40 d-inline-flex align-items-center"
+                    @click="updateQualityAssurance">Done</button>
+            </div>
+            <!-- Com list -->
+            <div v-if="comList" class="com-list vue-modal">
+                <div class="content w-100 max-w-556">
+                    <p class="fs-20 fw-bold mgb-20">COM list</p>
+                    <p v-if="message" class="alert alert-success">{{ message }}</p>
+                    <div class="">
+                        <p class="mgb-8">Add new</p>
+                        <input type="text" @keyup="getLocation" id="com-input"
+                            class="dashboard-input w-100 gray-border">
+                        <div class="text-end" @click="addLocation">
+                            <span style="cursor:pointer" class="add primary-text fw-bold">
+                                <svg width="12" height="9" viewBox="0 0 12 9" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M4.29515 8.6053C4.05503 8.6053 3.82691 8.50925 3.65883 8.34117L0.261131 4.94347C-0.0870435 4.5953 -0.0870435 4.01901 0.261131 3.67084C0.609305 3.32266 1.18559 3.32266 1.53377 3.67084L4.29515 6.43222L10.4662 0.261131C10.8144 -0.0870435 11.3907 -0.0870435 11.7389 0.261131C12.087 0.609305 12.087 1.18559 11.7389 1.53377L4.93147 8.34117C4.76338 8.50925 4.53527 8.6053 4.29515 8.6053Z"
+                                        fill="#19B7A2" />
+                                </svg>
+                                Add</span>
+                        </div>
                     </div>
-                    <div class="map-name-list d-flex justify-content-between">
-                        <p class="mb-0">30 Richard Id, Braintree MA 12563, USA</p>
-                        <span class="icon-trash fs-20 cursor-pointer"><span class="path1"></span><span
-                                class="path2"></span><span class="path3"></span><span class="path4"></span></span>
-                    </div>
-                    <div class="map-name-outline mgb-20">
+                    <!-- map name -->
+                    <div class="map-name mgt-20">
+                        <div class="map-name-list d-flex justify-content-between" v-for="(address,index) in addresses"
+                            :id="address.id">
+                            <p class="mb-0">{{ address.address }}</p>
+                            <span @click="removeAddress(index)" class="icon-trash fs-20 cursor-pointer"><span
+                                    class="path1"></span><span class="path2"></span><span class="path3"></span><span
+                                    class="path4"></span></span>
+                        </div>
+
+                        <!-- <div class="map-name-outline mgb-20">
                         <span class="d-inline-block me-2">
                             <svg width="15" height="20" viewBox="0 0 15 20" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
@@ -177,161 +171,190 @@
                             <span class="icon-edit cursor-pointer"><span class="path1"></span><span
                                     class="path2"></span></span>
                         </span>
+                    </div> -->
                     </div>
-                </div>
-                <!-- button -->
-                <div class="text-end">
-                    <button class="button button-transparent" @click="comList = false">Close</button>
-                    <button class="button button-primary px-5">Save</button>
+                    <!-- button -->
+                    <div class="text-end">
+                        <button type="button" class="button button-transparent" @click="comList = false">Close</button>
+                        <button type="button" class="button button-primary px-5" @click="saveCom">Save</button>
+                    </div>
                 </div>
             </div>
         </div>
-        <!-- map -->
-        <div v-if="mapOpen" class="map-direction vue-modal">
-            <div class="content">
-                <div class="left bg-white">
-                    <div class="starting-point">
-                        <!-- assign -->
-                        <div class="mgb-32 group">
-                            <div>
-                                <label for="" class="d-block mb-2 dashboard-label">Assign to </label>
-                                <div class="position-relative">
-                                    <select name="" class="dashboard-input w-100 loan-type-select">
-                                        <option value="">Please Select a user</option>
-                                        <option>user.name </option>
-                                    </select>
-                                    <span class="icon-arrow-down bottom-arrow-icon"></span>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- starting point -->
-                        <div class=" group">
-                            <label for="" class="d-block mb-2 dashboard-label">Starting point</label>
-                            <input type="text" class="dashboard-input w-100 gray-border">
-                        </div>
+        <!-- step 3 -->
+        <div v-if="currentStep == 'step3'">
+            <a class="edit-btn" @click="editQualityAssurance"><span class="icon-edit"><span class="path1"></span><span
+                        class="path2"></span></span></a>
+            <div class="group">
+                <p class="text-light-black mgb-12">Instruction from previous step</p>
+                <p class="text-success">(Rewrite & send back)</p>
+                <p class="mb-0 text-light-black fw-bold">{{ orderData.analysis.rewrite_note }}</p>
+            </div>
+            <div class="group">
+                <p class="text-success">(Check & Upload)</p>
+                <p class="mb-0 text-light-black fw-bold">{{ orderData.analysis.note }}</p>
+            </div>
+            <div class="group">
+                <p class="text-light-black mgb-12">Files</p>
+                <div class="d-flex align-items-center" v-for="attachment in orderData.analysis.attachments">
+                    <div class="file-img">
+                        <img src="/img/pdf.png" alt="boston pdf image">
                     </div>
-                    <!-- destination -->
-                    <div class="destination mgt-32">
-                        <p class="text-600 mgb-12">Destination</p>
-                        <ul class="destination-list">
-                            <li class="destination-list-item">
-                                <span class="drag-dot">
-                                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <circle cx="2" cy="2" r="2" fill="#7E829B" />
-                                        <circle cx="2" cy="10" r="2" fill="#7E829B" />
-                                        <circle cx="10" cy="2" r="2" fill="#7E829B" />
-                                        <circle cx="10" cy="10" r="2" fill="#7E829B" />
-                                    </svg>
-                                </span>
-                                <input type="text" class="dashboard-input w-100 gray-border">
-                                <button class="button button-transparent p-0 del-icon">
-                                    <span class="icon-trash fs-20"><span class="path1"></span><span
-                                            class="path2"></span><span class="path3"></span><span
-                                            class="path4"></span></span>
-                                </button>
-                            </li>
-                            <li class="destination-list-item">
-                                <span class="drag-dot">
-                                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <circle cx="2" cy="2" r="2" fill="#7E829B" />
-                                        <circle cx="2" cy="10" r="2" fill="#7E829B" />
-                                        <circle cx="10" cy="2" r="2" fill="#7E829B" />
-                                        <circle cx="10" cy="10" r="2" fill="#7E829B" />
-                                    </svg>
-                                </span>
-                                <input type="text" class="dashboard-input w-100 gray-border">
-                                <button class="button button-transparent p-0 del-icon">
-                                    <span class="icon-trash fs-20"><span class="path1"></span><span
-                                            class="path2"></span><span class="path3"></span><span
-                                            class="path4"></span></span>
-                                </button>
-                            </li>
-                            <li class="destination-list-item">
-                                <span class="drag-dot">
-                                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <circle cx="2" cy="2" r="2" fill="#7E829B" />
-                                        <circle cx="2" cy="10" r="2" fill="#7E829B" />
-                                        <circle cx="10" cy="2" r="2" fill="#7E829B" />
-                                        <circle cx="10" cy="10" r="2" fill="#7E829B" />
-                                    </svg>
-                                </span>
-                                <input type="text" class="dashboard-input w-100 gray-border">
-                                <button class="button button-transparent p-0 del-icon">
-                                    <span class="icon-trash fs-20"><span class="path1"></span><span
-                                            class="path2"></span><span class="path3"></span><span
-                                            class="path4"></span></span>
-                                </button>
-                            </li>
-                        </ul>
-                        <div class="text-end">
-                            <button class="button button-transparent p-0 primary-text"><span class="icon-plus"></span>
-                                Add
-                                destination</button>
-                        </div>
-
-                    </div>
-                    <!-- time -->
-                    <div class="destination-time-space">
-                        <div class="destination-time d-flex">
-                            <div class="left d-flex me-2">
-                                <div class="logo mgr-12">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path
-                                            d="M15.51 2.83008H8.49C6 2.83008 5.45 4.07008 5.13 5.59008L4 11.0001H20L18.87 5.59008C18.55 4.07008 18 2.83008 15.51 2.83008Z"
-                                            stroke="white" stroke-width="1.5" stroke-linecap="round"
-                                            stroke-linejoin="round" />
-                                        <path
-                                            d="M21.9907 19.82C22.1007 20.99 21.1607 22 19.9607 22H18.0807C17.0007 22 16.8507 21.54 16.6607 20.97L16.4607 20.37C16.1807 19.55 16.0007 19 14.5607 19H9.44071C8.00071 19 7.79071 19.62 7.54071 20.37L7.34071 20.97C7.15071 21.54 7.00071 22 5.92071 22H4.04071C2.84071 22 1.90071 20.99 2.01071 19.82L2.57071 13.73C2.71071 12.23 3.00071 11 5.62071 11H18.3807C21.0007 11 21.2907 12.23 21.4307 13.73L21.9907 19.82Z"
-                                            stroke="white" stroke-width="1.5" stroke-linecap="round"
-                                            stroke-linejoin="round" />
-                                        <path d="M4 8H3" stroke="white" stroke-width="1.5" stroke-linecap="round"
-                                            stroke-linejoin="round" />
-                                        <path d="M21 8H20" stroke="white" stroke-width="1.5" stroke-linecap="round"
-                                            stroke-linejoin="round" />
-                                        <g opacity="0.4">
-                                            <path d="M12 3V5" stroke="white" stroke-width="1.5" stroke-linecap="round"
-                                                stroke-linejoin="round" />
-                                            <path d="M10.5 5H13.5" stroke="white" stroke-width="1.5"
-                                                stroke-linecap="round" stroke-linejoin="round" />
-                                        </g>
-                                        <path opacity="0.4" d="M6 15H9" stroke="white" stroke-width="1.5"
-                                            stroke-linecap="round" stroke-linejoin="round" />
-                                        <path opacity="0.4" d="M15 15H18" stroke="white" stroke-width="1.5"
-                                            stroke-linecap="round" stroke-linejoin="round" />
-                                    </svg>
-                                </div>
-                                <div class="">
-                                    <p class="fw-bold mb-0">Via MA-24 N</p>
-                                    <p class="text-gray fs-14 mb-0">60 min without traffic</p>
-                                </div>
-
-                            </div>
-                            <div class="right ms-auto">
-                                <div class="">
-                                    <p class="fw-bold mb-0">62 min</p>
-                                    <p class="text-gray fs-14 mb-0">100 km</p>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="mgl-12">
+                        <p class="text-light-black mb-0">{{ attachment.name }}</p>
+                        <p class="text-gray mb-0 fs-12">Uploaded: {{ orderData.analysis.updated_by.name + ', ' +
+                            orderData.analysis.updated_at }}</p>
                     </div>
                 </div>
-                <div class="right full-map position-relative">
-                    <button @click="mapOpen = false" class="button button-transparent x-btn p-0">
-                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M1 13L13 1" stroke="#2F415E" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round" />
-                            <path d="M13 13L1 1" stroke="#2F415E" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round" />
-                        </svg>
-                    </button>
-                    <iframe
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d116834.15093170418!2d90.34928581382016!3d23.78062065335469!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755b8b087026b81%3A0x8fa563bbdd5904c2!2sDhaka!5e0!3m2!1sen!2sbd!4v1655630336126!5m2!1sen!2sbd"
-                        width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
-                        referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+            <div class="group">
+                <p class="text-light-black mgb-12">Assigned to</p>
+                <p class="mb-0 text-light-black fw-bold">{{ qa.assigned_name }}</p>
+            </div>
+            <div class="group">
+                <p class="text-light-black mgb-12">Original effective date</p>
+                <p class="mb-0 text-light-black fw-bold">{{ this.orderData.due_date }}</p>
+            </div>
+            <div class="group">
+                <p class="text-light-black mgb-12">Changed effective date</p>
+                <p class="mb-0 text-light-black fw-bold">{{ qa.effective_date }}</p>
+            </div>
+            <div class="group">
+                <p class="text-light-black mgb-12">Files</p>
+                <div class="d-flex align-items-center" v-for="attachment in orderData.analysis.attachments">
+                    <div class="file-img">
+                        <img src="/img/pdf.png" alt="boston pdf image">
+                    </div>
+                    <div class="mgl-12">
+                        <p class="text-light-black mb-0">{{ attachment.name }}</p>
+                        <p class="text-gray mb-0 fs-12">Uploaded: {{ orderData.analysis.updated_by.name + ', ' +
+                            orderData.analysis.updated_at }}</p>
+                    </div>
+                </div>
+            </div>
+            <button v-if="showSeeCom" type="button"
+                class="button button-primary px-4 h-40 d-inline-flex align-items-center" @click="mapOpen = true">See
+                Com</button>
+            <!-- load see com -->
+            <div v-if="mapOpen" class="map-direction vue-modal">
+                <div class="content">
+                    <div class="left bg-white">
+                        <div class="starting-point">
+                            <!-- assign -->
+                            <ValidationObserver ref="seeComForm">
+                                <div class="mgb-32">
+                                    <ValidationProvider class="group" name="Assigned to" rules="required"
+                                        v-slot="{ errors }">
+                                        <div :class="{ 'invalid-form' : errors[0] }">
+                                            <label for="" class="d-block mb-2 dashboard-label">Assigned to<span
+                                                    class="text-danger require"></span></label>
+                                            <select class="dashboard-input w-100" v-model="qa.assigned_to">
+                                                <option value="">Please select to assign</option>
+                                                <option v-for="user in users" :key="user.id" :value="user.id">
+                                                    {{ user.name }}
+                                                </option>
+                                            </select>
+                                            <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                                        </div>
+                                    </ValidationProvider>
+                                </div>
+                            </ValidationObserver>
+                            <!-- starting point -->
+                            <div class=" group">
+                                <label for="" class="d-block mb-2 dashboard-label">Starting point</label>
+                                <input @keyup="getStartPoint" id="starting-point" type="text"
+                                    class="dashboard-input w-100 gray-border">
+                            </div>
+                        </div>
+                        <!-- destination -->
+                        <div class="destination mgt-32">
+                            <p class="text-600 mgb-12">Destination</p>
+                            <ul class="destination-list">
+                                <li class="destination-list-item" v-for="address in comAddresses">
+                                    <span class="drag-dot">
+                                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <circle cx="2" cy="2" r="2" fill="#7E829B" />
+                                            <circle cx="2" cy="10" r="2" fill="#7E829B" />
+                                            <circle cx="10" cy="2" r="2" fill="#7E829B" />
+                                            <circle cx="10" cy="10" r="2" fill="#7E829B" />
+                                        </svg>
+                                    </span>
+                                    <input type="text" :value="address.address"
+                                        class="dashboard-input w-100 gray-border" readonly>
+                                    <button class="button button-transparent p-0 del-icon">
+                                        <span class="icon-trash fs-20"><span class="path1"></span><span
+                                                class="path2"></span><span class="path3"></span><span
+                                                class="path4"></span></span>
+                                    </button>
+                                </li>
+                            </ul>
+                            <div class="text-end">
+                                <button class="button button-transparent p-0 primary-text"><span
+                                        class="icon-plus"></span>
+                                    Add
+                                    destination</button>
+                            </div>
+
+                        </div>
+                        <!-- time -->
+                        <div class="destination-time-space">
+                            <div class="destination-time d-flex">
+                                <div class="left d-flex me-2">
+                                    <div class="logo mgr-12">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M15.51 2.83008H8.49C6 2.83008 5.45 4.07008 5.13 5.59008L4 11.0001H20L18.87 5.59008C18.55 4.07008 18 2.83008 15.51 2.83008Z"
+                                                stroke="white" stroke-width="1.5" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                            <path
+                                                d="M21.9907 19.82C22.1007 20.99 21.1607 22 19.9607 22H18.0807C17.0007 22 16.8507 21.54 16.6607 20.97L16.4607 20.37C16.1807 19.55 16.0007 19 14.5607 19H9.44071C8.00071 19 7.79071 19.62 7.54071 20.37L7.34071 20.97C7.15071 21.54 7.00071 22 5.92071 22H4.04071C2.84071 22 1.90071 20.99 2.01071 19.82L2.57071 13.73C2.71071 12.23 3.00071 11 5.62071 11H18.3807C21.0007 11 21.2907 12.23 21.4307 13.73L21.9907 19.82Z"
+                                                stroke="white" stroke-width="1.5" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                            <path d="M4 8H3" stroke="white" stroke-width="1.5" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                            <path d="M21 8H20" stroke="white" stroke-width="1.5" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                            <g opacity="0.4">
+                                                <path d="M12 3V5" stroke="white" stroke-width="1.5"
+                                                    stroke-linecap="round" stroke-linejoin="round" />
+                                                <path d="M10.5 5H13.5" stroke="white" stroke-width="1.5"
+                                                    stroke-linecap="round" stroke-linejoin="round" />
+                                            </g>
+                                            <path opacity="0.4" d="M6 15H9" stroke="white" stroke-width="1.5"
+                                                stroke-linecap="round" stroke-linejoin="round" />
+                                            <path opacity="0.4" d="M15 15H18" stroke="white" stroke-width="1.5"
+                                                stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                    </div>
+                                    <div class="">
+                                        <p class="fw-bold mb-0">Via MA-24 N</p>
+                                        <p class="text-gray fs-14 mb-0">60 min without traffic</p>
+                                    </div>
+
+                                </div>
+                                <div class="right ms-auto">
+                                    <div class="">
+                                        <p class="fw-bold mb-0">62 min</p>
+                                        <p class="text-gray fs-14 mb-0">100 km</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="right full-map position-relative">
+                        <button @click="mapOpen = false" class="button button-transparent x-btn p-0">
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M1 13L13 1" stroke="#2F415E" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                                <path d="M13 13L1 1" stroke="#2F415E" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
+                        </button>
+                        <div id="map"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -354,28 +377,156 @@
                 note: '',
                 files: [],
             },
+            placeName: '',
+            placeLat: '',
+            placeLng: '',
+            addresses: [],
             orderData: [],
             message: '',
             filesCount: '',
-            currentStep: 'create',
+            currentStep: 'step1',
             alreadyQualityAssurance: 0,
             mapOpen: false,
             comList: false,
+            startingPointName: '',
+            startingPointLat: '',
+            startingPointLng: '',
+            showSeeCom: false,
+            comAddresses: []
         }),
         created() {
-            this.getReportAnalysisData(this.order)      
-
+            this.getReportAnalysisData(this.order)
             this.$root.$on('wk_update', (res) => {
                 this.getReportAnalysisData(res);
             });
-            
         },
         methods: {
-            getReportAnalysisData(order) {
-                this.orderData = order;
-                this.alreadyQualityAssurance = (JSON.parse(this.orderData.workflow_status)).qualityAssurance
-                this.alreadyQualityAssurance == 1 ? this.currentStep = 'view' : 'create'
+            initMap() {
+                const map = new google.maps.Map(document.getElementById("map"), {
+                    zoom: 3,
+                    center: { lat: 0, lng: -180 },
+                });
 
+                const flightPlanCoordinates = [
+                    { lat: 37.772, lng: -122.214 },
+                    { lat: 21.291, lng: -157.821 },
+                    { lat: -18.142, lng: 178.431 },
+                    { lat: -27.467, lng: 153.027 },
+                ];
+                const flightPath = new google.maps.Polyline({
+                    path: flightPlanCoordinates,
+                    geodesic: true,
+                    strokeColor: "#FF0000",
+                    strokeOpacity: 1.0,
+                    strokeWeight: 2,
+                });
+
+                flightPath.setMap(map);
+            },
+            getLocation() {
+                const center = { lat: 50.064192, lng: -130.605469 };
+                // Create a bounding box with sides ~10km away from the center point
+                const defaultBounds = {
+                    north: center.lat + 0.1,
+                    south: center.lat - 0.1,
+                    east: center.lng + 0.1,
+                    west: center.lng - 0.1,
+                };
+                //need to make dynamic if get time
+                const comInput = document.getElementById("com-input")
+
+                const options = {
+                    bounds: defaultBounds,
+                    componentRestrictions: { country: "us" },
+                    fields: ["formatted_address", "geometry"],
+                    strictBounds: false,
+                    types: ["establishment"],
+                };
+                const autocomplete = new google.maps.places.Autocomplete(comInput, options);
+
+                let self = this;
+                google.maps.event.addListener(autocomplete, 'place_changed', function () {
+                    var place = autocomplete.getPlace()
+                    if (comInput.value.length > 0) {
+                        self.placeName = place.formatted_address
+                        self.placeLat = place.geometry.location.lat()
+                        self.placeLng = place.geometry.location.lng()
+                    } else {
+                        return false
+                    }
+                })
+            },
+            getStartPoint() {
+                const center = { lat: 50.064192, lng: -130.605469 };
+                // Create a bounding box with sides ~10km away from the center point
+                const defaultBounds = {
+                    north: center.lat + 0.1,
+                    south: center.lat - 0.1,
+                    east: center.lng + 0.1,
+                    west: center.lng - 0.1,
+                };
+                const startingPoint = document.getElementById("starting-point")
+                const options = {
+                    bounds: defaultBounds,
+                    componentRestrictions: { country: "us" },
+                    fields: ["formatted_address", "geometry"],
+                    strictBounds: false,
+                    types: ["establishment"],
+                };
+                const autocomplete = new google.maps.places.Autocomplete(startingPoint, options);
+                let self = this;
+                google.maps.event.addListener(autocomplete, 'place_changed', function () {
+                    var place = autocomplete.getPlace()
+                    if (startingPoint.value.length > 0) {
+                        self.startingPointName = place.formatted_address
+                        self.startingPointLat = place.geometry.location.lat()
+                        self.startingPointLng = place.geometry.location.lng()
+                    } else {
+                        return false
+                    }
+                })
+            },
+            addLocation() {
+                if (this.placeName.length > 0) {
+                    this.addresses.push({ 'address': this.placeName, 'lat': this.placeLat, 'lng': this.placeLng })
+                    document.getElementById("com-input").value = ''
+                }
+                return false
+            },
+            removeAddress(index) {
+                this.addresses.splice(index, 1)
+            },
+            saveCom() {
+                this.$boston.post('save-com/' + this.orderData.id, this.addresses)
+                    .then(res => {
+                        let self = this
+                        this.orderData = res.data
+                        this.message = res.message
+                        this.alreadyHaveComList = false
+                        this.comAddresses = this.orderData.comlist
+                        this.$root.$emit('wk_update', this.orderData)
+                        this.$root.$emit('wk_flow_menu', this.orderData)
+                        this.showSeeCom = true
+                        setTimeout(() => {
+                            self.comList = false
+                            self.message = '';
+                        }, 3000);
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
+            },
+            getReportAnalysisData(order) {
+                this.orderData = order
+                this.alreadyQualityAssurance = (JSON.parse(this.orderData.workflow_status)).qualityAssurance
+                this.alreadyQualityAssurance == 1 ? this.currentStep = 'step2' : 'step1'
+                if (this.orderData.quality_assurance.note != undefined && this.orderData.quality_assurance.note != '') {
+                    this.currentStep = 'step3'
+                }
+                if (this.orderData.comlist[0].id != undefined) {
+                    this.showSeeCom = true
+                }
+                this.comAddresses = this.orderData.comlist
                 this.qa.order_id = this.orderData.id
                 this.qa.effective_date = this.orderData.due_date
                 if (this.orderData.quality_assurance) {
@@ -394,16 +545,15 @@
                             .then(res => {
                                 this.message = res.message
                                 this.orderData = res.data
-                                this.getReportAnalysisData(this.orderData);
                                 this.$root.$emit('wk_update', this.orderData)
                                 this.$root.$emit('wk_flow_menu', this.orderData)
-                                this.$root.$emit('wk_flow_toast', res);
-                                this.currentStep = 'view'
+                                this.getReportAnalysisData()
+                                this.currentStep = 'step2'
                                 setTimeout(() => {
-                                    self.$refs.qualityAssuranceForm.reset();
                                     self.message = '';
                                 }, 3000);
                             }).catch(err => {
+                                console.log(err)
                             })
                     }
                 })
@@ -413,7 +563,7 @@
                 this.filesCount = event.target.files.length
             },
             editQualityAssurance() {
-                this.currentStep = 'edit'
+                this.currentStep = 'step2'
             },
             updateQualityAssurance() {
                 let formData = new FormData();
@@ -430,15 +580,21 @@
                 }).then(res => {
                     this.message = res.message
                     this.orderData = res.data
-                    this.getReportAnalysisData(res.data);
                     this.$root.$emit('wk_update', this.orderData)
                     this.$root.$emit('wk_flow_menu', this.orderData)
-                    this.$root.$emit('wk_flow_toast', res);
-                    this.currentStep = 'view'
+                    this.getReportAnalysisData()
+                    this.currentStep = 'step3'
                 }).catch(err => {
+                    console.log(err)
                 })
 
             }
         }
     }
 </script>
+<style scoped>
+    #map {
+        height: 100%;
+        width: 100%;
+    }
+</style>
