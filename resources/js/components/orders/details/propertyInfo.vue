@@ -190,14 +190,12 @@ export default {
       }
       axios.post('update-property-info/'+ this.orderId, this.info)
           .then(res => {
-            console.log(res);
             that.message = res.data.message
             this.edited = Object.assign({}, this.info);
             setTimeout(function(){
               that.$bvModal.hide('property-info')
             }, 2000);
           }).catch(err => {
-            console.log(err)
       })
     },
   }

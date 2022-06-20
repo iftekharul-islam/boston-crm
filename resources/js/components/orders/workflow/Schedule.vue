@@ -42,23 +42,7 @@
                                 <div :class="{ 'invalid-form' : errors[0] }">
                                     <label for="" class="d-block mb-2 dashboard-label">Appraiser name <span
                                             class="text-danger require"></span></label>
-                                    <select id="apprClientSelect" class="dashboard-input w-100"
-                                        v-model="scheduleData.appraiser_id">
-                                        <option value="">Please select appraiser</option>
-                                        <option v-for="appraisar in appraisers" :key="appraisar.id"
-                                            :value="appraisar.id">
-                                            {{ appraisar.name }}
-                                        </option>
-                                    </select>
-                                    <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
-                                </div>
-                            </ValidationProvider>
-                            <ValidationProvider class="d-block mb-2 dashboard-label" name="Inspection date & time"
-                                rules="required" v-slot="{ errors }">
-                                <div :class="{ 'invalid-form' : errors[0] }">
-                                    <label for="" class="d-block mb-2 dashboard-label">Appraiser name <span
-                                            class="text-danger require"></span></label>
-                                    <select id="apprClientSelect" class="dashboard-input w-100"
+                                    <select id="apprClientSelect" class="dashboard-input w-100 select2"
                                         v-model="scheduleData.appraiser_id">
                                         <option value="">Please select appraiser</option>
                                         <option v-for="appraisar in appraisers" :key="appraisar.id"
@@ -197,6 +181,7 @@
                                 this.orderData = res.data;
                                 this.$root.$emit('wk_update', this.orderData);
                                 this.$root.$emit('wk_flow_menu', this.orderData);
+                                this.$root.$emit('wk_flow_toast', res);
                                 this.getScheduleData()
                                 let self = this;
                                 setTimeout(function () {

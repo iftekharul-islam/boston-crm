@@ -48,7 +48,7 @@
                 <!-- <button v-if="qa.note == null || qa.note == ''" class="button button-primary px-4 h-40 d-inline-flex align-items-center" @click="mapOpen = true">See Com</button> -->
             </div>
             <div v-if="((qa.note == '' || qa.note == null) && orderData.quality_assurance) || currentStep == 'edit'">
-                <div class="group">
+                <div class="group" v-if="order.quality_assurance">
                     <p class="text-light-black mgb-12">Files</p>
                     <div class="d-flex align-items-center" v-for="attachment, ti in order.quality_assurance.attachments" :key="ti">
                         <div class="file-img">
@@ -397,13 +397,13 @@
                                 this.getReportAnalysisData(this.orderData);
                                 this.$root.$emit('wk_update', this.orderData)
                                 this.$root.$emit('wk_flow_menu', this.orderData)
+                                this.$root.$emit('wk_flow_toast', res);
                                 this.currentStep = 'view'
                                 setTimeout(() => {
                                     self.$refs.qualityAssuranceForm.reset();
                                     self.message = '';
                                 }, 3000);
                             }).catch(err => {
-                                console.log(err)
                             })
                     }
                 })
@@ -433,9 +433,9 @@
                     this.getReportAnalysisData(res.data);
                     this.$root.$emit('wk_update', this.orderData)
                     this.$root.$emit('wk_flow_menu', this.orderData)
+                    this.$root.$emit('wk_flow_toast', res);
                     this.currentStep = 'view'
                 }).catch(err => {
-                    console.log(err)
                 })
 
             }

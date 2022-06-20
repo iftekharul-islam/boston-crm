@@ -138,15 +138,15 @@ export default {
                         'delivery_date': this.deliveryDate,
                         'is_trainee_signed': this.isAssineed,
                     }
-                    console.log('data', data)
                     this.$boston.post('submission-create/'+ this.orderData.id, data, { headers: {
                             'Content-Type': 'multipart/form-data'
                         }}).then(res => {
                         this.updateData(res.data);
                         this.$root.$emit('wk_update', this.orderData);
                         this.$root.$emit('wk_flow_menu', this.orderData);
+                        this.$root.$emit('wk_flow_toast', res);
                     }).catch(err => {
-                        console.log('err', err)
+                        
                     });
                 }
             })
