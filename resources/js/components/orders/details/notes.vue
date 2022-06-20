@@ -6,7 +6,7 @@
     <div class="box-body bg-white">
       <div class="note-chat">
 
-        <div class="chat-item" v-for="noteItem in notes" :key="noteItem.key">
+        <div class="chat-item" v-for="noteItem, ni in notes" :key="noteItem.key + ni">
           <div class="chat-name d-flex align-items-center">
             <img src="/img/dummy-profile.png" alt="boston chat image" class="img-fluid">
             <div class="ms-3">
@@ -42,7 +42,6 @@
         methods: {
           initNotes(order) {
               this.orderData = order;
-              console.log(order);
               this.notes.push({
                   key: 'provided_service',
                   title: "Provided Services",

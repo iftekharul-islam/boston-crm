@@ -126,15 +126,17 @@
         }),
         created() {
             this.getInitialReviewData(this.order);
+
             this.$root.$on("wk_update", (res) => {
                 this.getInitialReviewData(res);
             });
         },
         methods: {
             getInitialReviewData(order) {
-                this.orderData = order
+                this.orderData = order;
+                this.initialReview.order_id = this.orderData.id;
+
                 if (this.orderData.report) {
-                    this.initialReview.order_id = this.orderData.id
                     this.alreadyInitialReview = (JSON.parse(this.orderData.workflow_status)).initialReview
                     this.alreadyInitialReview == 1 ? this.currentStep = 'view' : 'create'
     
@@ -167,15 +169,14 @@
                                 this.orderData = res.data
                                 this.$root.$emit('wk_update', this.orderData)
                                 this.$root.$emit('wk_flow_menu', this.orderData)
-                                this.getInitialReviewData()
-                                console.log(this.currentStep)
+                                this.$root.$emit('wk_flow_toast', res);
+                                this.getInitialReviewData(res.data);
                                 this.currentStep = 'view'
                                 setTimeout(() => {
                                     self.$refs.initialReviewForm.reset();
                                     self.message = '';
                                 }, 3000);
                             }).catch(err => {
-                                console.log(err)
                             })
                     }
                 })

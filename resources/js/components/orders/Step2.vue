@@ -259,7 +259,6 @@ export default {
             that.step2.file = reader.result
         };
       this.step2.fileName = fileData.name
-      console.log(this.step2.fileName)
     },
     addEmail2() {
         this.$refs.addEmail2form.validate().then((status) => {

@@ -53,6 +53,7 @@ class OrderWorkflowController extends BaseController
 
         $orderData = $this->orderDetails($request->order_id);
         return [
+            'error' => false,
             'message' => $message,
             'data' => $orderData
         ];
@@ -105,6 +106,7 @@ class OrderWorkflowController extends BaseController
         return response([
             "file" => $data['media'],
             "data" => $orderData,
+            'error' => false,
             "message" => "inspection file uploaded successfully"
         ]);
     }
@@ -121,8 +123,11 @@ class OrderWorkflowController extends BaseController
                 ->toMediaCollection('inspection');
         }
         $inspection = OrderWInspection::with('attachments')->where('id', $inspection_id)->first();
+        $historyTitle = "Order Inspection File Has Been Saved";
 
         return [
+            'error' => false,
+            'message' => $historyTitle,
             'status' => true,
             'media' => $inspection->attachments,
         ];
@@ -164,6 +169,8 @@ class OrderWorkflowController extends BaseController
         $this->addHistory($order, $user, $historyTitle, 'report-preparation');
         $orderData = $this->orderDetails($id);
         return [
+            'error' => false,
+            'message' => $historyTitle,
             'status' => 'success',
             'data' => $orderData
         ];
@@ -225,6 +232,8 @@ class OrderWorkflowController extends BaseController
         $this->addHistory($order, $user, $historyTitle, 'report-preparation');
         $orderData = $this->orderDetails($id);
         return [
+            'error' => false,
+            'message' => $historyTitle,
             'status' => 'success',
             'data' => $orderData
         ];
@@ -312,6 +321,8 @@ class OrderWorkflowController extends BaseController
         $this->addHistory($order, $user, $historyTitle, 'report-analysis-review');
         $orderData = $this->orderDetails($id);
         return [
+            'error' => false,
+            'message' => $historyTitle,
             'status' => 'success',
             'data' => $orderData
         ];
@@ -333,8 +344,8 @@ class OrderWorkflowController extends BaseController
 
     public function saveInitialReview(Request $request)
     {
-        $this->repository->updateInitialReviewData($request->all());
         $order = Order::find($request->order_id);
+        $this->repository->updateInitialReviewData($request->all());
         $user = auth()->user();
         if ($request->initial_review_id > 0) {
             $message = 'Initial Review updated successfully';
@@ -354,6 +365,8 @@ class OrderWorkflowController extends BaseController
 
         $orderData = $this->orderDetails($request->order_id);
         return [
+            'error' => false,
+            'message' => $historyTitle,
             'message' => $message,
             'data' => $orderData
         ];
@@ -382,6 +395,8 @@ class OrderWorkflowController extends BaseController
 
         $orderData = $this->orderDetails($request->order_id);
         return [
+            'error' => false,
+            'message' => $historyTitle,
             'message' => $message,
             'data' => $orderData
         ];
@@ -410,6 +425,8 @@ class OrderWorkflowController extends BaseController
 
         $orderData = $this->orderDetails($order->id);
         return [
+            'error' => false,
+            'message' => $historyTitle,
             'message' => $message,
             'data' => $orderData
         ];
@@ -456,6 +473,8 @@ class OrderWorkflowController extends BaseController
         $orderData = $this->orderDetails($get->order_id);
 
         return [
+            'error' => false,
+            'message' => $historyTitle,
             'status' => 'success',
             'data' => $orderData
         ];
@@ -497,6 +516,8 @@ class OrderWorkflowController extends BaseController
         $this->addHistory($order, $user, $historyTitle, 'revision');
         $orderData = $this->orderDetails($get->order_id);
         return [
+            'error' => false,
+            'message' => $historyTitle,
             'status' => 'success',
             'data' => $orderData
         ];
@@ -542,6 +563,8 @@ class OrderWorkflowController extends BaseController
         $this->addHistory($order, $user, $historyTitle, 'revision');
         $orderData = $this->orderDetails($get->order_id);
         return [
+            'error' => false,
+            'message' => $historyTitle,
             'status' => 'success',
             'data' => $orderData
         ];
@@ -587,6 +610,8 @@ class OrderWorkflowController extends BaseController
         $orderData = $this->orderDetails($get->order_id);
 
         return [
+            'error' => false,
+            'message' => $historyTitle,
             'status' => 'success',
             'data' => $orderData
         ];
@@ -633,6 +658,8 @@ class OrderWorkflowController extends BaseController
         $orderData = $this->orderDetails($get->order_id);
 
         return [
+            'error' => false,
+            'message' => $historyTitle,
             'status' => 'success',
             'data' => $orderData
         ];
@@ -673,6 +700,8 @@ class OrderWorkflowController extends BaseController
         }
 
         return [
+            'error' => false,
+            'message' => $historyTitle,
             'status' => 'success',
             'data' => $orderData
         ];
@@ -723,6 +752,8 @@ class OrderWorkflowController extends BaseController
         $this->addHistory($order, $user, $historyTitle, 'submission');
         $orderData = $this->orderDetails($id);
         return [
+            'error' => false,
+            'message' => $historyTitle,
             'status' => 'success',
             'data' => $orderData
         ];

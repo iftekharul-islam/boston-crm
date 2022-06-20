@@ -106,16 +106,15 @@
                     this.fileData = []
                     this.orderData = res.data.data
                     this.message = res.data.message
-                    console.log(this.orderData)
                     this.$root.$emit('wk_update', this.orderData);
                     this.$root.$emit('wk_flow_menu', this.orderData);
+                    this.$root.$emit('wk_flow_toast', res);
                     this.inspectionData()
                     setTimeout(function () {
                         that.$bvModal.hide('upload-ins-files')
                         that.message = ''
                     }, 2000);
                 }).catch(err => {
-                    console.log(err)
                 })
             }
         },

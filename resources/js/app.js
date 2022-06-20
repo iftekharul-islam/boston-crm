@@ -17,6 +17,14 @@ import "./helper/config"
 import "./src/vue_component"
 import "./helper/BostonMixin"
 
+import VueToast from 'vue-toast-notification';
+import 'vue-toast-notification/dist/theme-sugar.css';
+Vue.use(VueToast, {
+    position: 'top-left',
+    duration: 8000
+});
+
+
 Vue.component('ValidationProvider', ValidationProvider)
 Vue.component('ValidationObserver', ValidationObserver)
 Vue.component('v-select', vSelect)
