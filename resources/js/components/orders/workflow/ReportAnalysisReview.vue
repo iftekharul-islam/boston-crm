@@ -1,6 +1,38 @@
 <template>
   <div class="report-analysis-item step-items">
-    <div v-if="isEditable">
+    <div v-if="isDataExists">
+        <a class="edit-btn" @click.prevent="isDataExists = false"><span class="icon-edit"><span class="path1"></span><span class="path2"></span></span></a>
+        <div class="group">
+            <p class="text-light-black mgb-12">Note from previous steps</p>
+            <p class="mb-0 text-light-black fw-bold">{{ this.preNote }}</p>
+        </div>
+        <div class="group" v-if="noteCheck == 1">
+            <p class="text-light-black mgb-12">Note from this step</p>
+            <a href="#" class="primary-text mb-2">(Rewrite & send back)</a>
+            <p class="mb-0 text-light-black fw-bold">{{ note }}</p>
+        </div>
+        <div class="group" v-if="noteCheck == 2">
+            <p class="text-light-black mgb-12">Note from this step</p>
+            <a href="#" class="primary-text mb-2">(Check & Upload)</a>
+            <p class="mb-0 text-light-black fw-bold">{{ note }}</p>
+        </div>
+        <div class="group">
+            <p class="text-light-black mgb-12">Assign to</p>
+            <p class="mb-0 text-light-black fw-bold">{{ assignToName }}</p>
+        </div>
+        <div class="group">
+            <p class="text-light-black mgb-12">Analysis file upload</p>
+            <div class="document">
+                <div class="row">
+                    <div class="d-flex align-items-center mb-3" v-for="(file, key) in dataFiles" :key="key">
+                        <img src="/img/pdf.svg" alt="boston profile" class="img-fluid">
+                        <span class="text-light-black d-inline-block mgl-12">{{ file.name }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div v-else>
         <ValidationObserver ref="assigneeForm">
             <div class="group">
                 <p class="text-light-black mgb-12">Note from previous steps</p>
@@ -55,39 +87,6 @@
             </div>
         </ValidationObserver>
     </div>
-    <div v-else>
-        <a class="edit-btn" @click="isEditable = true"><span class="icon-edit"><span class="path1"></span><span class="path2"></span></span></a>
-        <div class="group">
-            <p class="text-light-black mgb-12">Note from previous steps</p>
-            <p class="mb-0 text-light-black fw-bold">{{ this.preNote }}</p>
-        </div>
-        <div class="group" v-if="noteCheck == 1">
-            <p class="text-light-black mgb-12">Note from this step</p>
-            <a href="#" class="primary-text mb-2">(Rewrite & send back)</a>
-            <p class="mb-0 text-light-black fw-bold">{{ note }}</p>
-        </div>
-        <div class="group" v-if="noteCheck == 2">
-            <p class="text-light-black mgb-12">Note from this step</p>
-            <a href="#" class="primary-text mb-2">(Check & Upload)</a>
-            <p class="mb-0 text-light-black fw-bold">{{ note }}</p>
-        </div>
-        <div class="group">
-            <p class="text-light-black mgb-12">Assign to</p>
-            <p class="mb-0 text-light-black fw-bold">{{ assignToName }}</p>
-        </div>
-        <div class="group">
-            <p class="text-light-black mgb-12">Analysis file upload</p>
-            <div class="document">
-                <div class="row">
-                    <div class="d-flex align-items-center mb-3" v-for="file, ik in dataFiles" :key="ik">
-                        <img src="/img/pdf.svg" alt="boston profile" class="img-fluid">
-                        <span class="text-light-black d-inline-block mgl-12">{{ file.name }}</span>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
   </div>
 </template>
 <script>
@@ -99,7 +98,7 @@ export default {
   },
   data: () => ({
     orderData: [],
-    isEditable: true,
+    isDataExists: true,
     assignToName: '',
     assignTo: '',
     preNote: '',
@@ -136,7 +135,7 @@ export default {
           }
       }
       if(this.assignToName || this.note){
-          this.isEditable = false
+          this.isDataExists = true
       }
     },
     saveAssigneeData() {
@@ -154,8 +153,9 @@ export default {
             this.$boston.post('report-analysis-create/'+ this.orderData.id, formData, { headers: {
                     'Content-Type': 'multipart/form-data'
                 }}).then(res => {
-                this.fileData = []
-                this.isEditable = false
+                this.fileData.file_type = ''
+                this.fileData.files = []
+                this.isDataExists = true
                 this.orderData = res.data;
                 this.updateData();
                 this.$root.$emit('wk_update', this.orderData);
@@ -169,7 +169,7 @@ export default {
   },
   created() {
     this.orderData = this.order;
-    // console.log(this.orderData)
+    console.log(this.orderData)
     this.updateData()
   },
 }
