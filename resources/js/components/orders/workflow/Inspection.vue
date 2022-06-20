@@ -13,8 +13,8 @@
         <div class="group">
             <p class="text-light-black mgb-12">Inspection file upload</p>
             <div class="document">
-                <div class="row">
-                    <div class="d-flex align-items-center mb-3" v-for="file in dataFiles">
+                <div class="row" v-if="dataFiles.length">
+                    <div class="d-flex align-items-center mb-3" v-for="file, ki in dataFiles" :key="ki">
                         <img src="/img/pdf.svg" alt="boston profile" class="img-fluid">
                         <span class="text-light-black d-inline-block mgl-12">{{ file.name }}</span>
                     </div>
@@ -53,7 +53,7 @@
 </template>
 <script>
     export default {
-        name: 'Inspection',
+        name: 'inspection-workflow',
         props: {
             order: [],
         },
@@ -67,16 +67,18 @@
                 file_type: '',
                 files: [],
             },
+            name: null,
+            note: null,
             dataFiles: [],
             message: ''
         }),
         created() {
-            this.orderData = this.order
-            this.inspectionData()
+            this.inspectionData(this.order);
         },
         methods: {
-            inspectionData() {
-                if(this.orderData.inspection){
+            inspectionData(order) {
+                this.orderData = order;
+                if(this.orderData.inspection !== null){
                     this.id = this.orderData.inspection.id
                     this.note = this.orderData.inspection.note
                     this.name = this.orderData.inspection.user.name
@@ -100,22 +102,21 @@
                     headers: {
                         'Content-Type': 'multipart/form-data'
                     }
+                }).then(res => {
+                    this.fileData = []
+                    this.orderData = res.data.data
+                    this.message = res.data.message
+                    console.log(this.orderData)
+                    this.$root.$emit('wk_update', this.orderData);
+                    this.$root.$emit('wk_flow_menu', this.orderData);
+                    this.inspectionData()
+                    setTimeout(function () {
+                        that.$bvModal.hide('upload-ins-files')
+                        that.message = ''
+                    }, 2000);
+                }).catch(err => {
+                    console.log(err)
                 })
-                    .then(res => {
-                        this.fileData = []
-                        this.orderData = res.data.data
-                        this.message = res.data.message
-                        console.log(this.orderData)
-                        this.$root.$emit('wk_update', this.orderData);
-                        this.$root.$emit('wk_flow_menu', this.orderData);
-                        this.inspectionData()
-                        setTimeout(function () {
-                            that.$bvModal.hide('upload-ins-files')
-                            that.message = ''
-                        }, 2000);
-                    }).catch(err => {
-                        console.log(err)
-                    })
             }
         },
     }

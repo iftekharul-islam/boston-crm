@@ -115,7 +115,6 @@ export default {
   },  
   methods: {
       initData(order){
-          console.log(order.analysis);
           this.prev = order.analysis ?? [];
           this.current = order.report_rewrite ?? [];
 

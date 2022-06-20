@@ -112,7 +112,6 @@ export default {
     methods: {
         updateData(order){
             this.orderData = order;
-            console.log(this.orderData.submission);
             let qAssureance = !_.isEmpty(this.orderData.quality_assurance) ? this.orderData.quality_assurance : false;
             if(qAssureance){
                 this.qaName = !_.isEmpty(qAssureance.assignee) ? qAssureance.assignee.name : '';

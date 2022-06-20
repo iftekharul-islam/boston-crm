@@ -5,11 +5,11 @@
                 <div class="group">
                     <p class="text-light-black mgb-12">Instruction from previous step</p>
                     <p class="text-success">(Rewrite & send back)</p>
-                    <p class="mb-0 text-light-black fw-bold">{{ orderData.analysis.rewrite_note }}</p>
+                    <p class="mb-0 text-light-black fw-bold">{{ orderData.analysis ? orderData.analysis.rewrite_note : '-' }}</p>
                 </div>
                 <div class="group">
                     <p class="text-success">(Check & Upload)</p>
-                    <p class="mb-0 text-light-black fw-bold">{{ orderData.analysis.note }}</p>
+                    <p class="mb-0 text-light-black fw-bold">{{ orderData.analysis ? orderData.analysis.note : '-' }}</p>
                 </div>
                 <div v-if="currentStep == 'view'">
                     <a class="edit-btn" v-if="(qa.note != '' || qa.note != null)" @click="editQualityAssurance"><span class="icon-edit"><span
@@ -33,9 +33,9 @@
                     <br/>
                     <br/>
                 </div>
-                <div class="group">
+                <div class="group" v-if="orderData.analysis">
                     <p class="text-light-black mgb-12">Files</p>
-                    <div class="d-flex align-items-center" v-for="attachment in orderData.analysis.attachments">
+                    <div class="d-flex align-items-center" v-for="attachment, ai in orderData.analysis.attachments" :key="ai">
                         <div class="file-img">
                             <img src="/img/pdf.png" alt="boston pdf image">
                         </div>
@@ -50,7 +50,7 @@
             <div v-if="((qa.note == '' || qa.note == null) && orderData.quality_assurance) || currentStep == 'edit'">
                 <div class="group">
                     <p class="text-light-black mgb-12">Files</p>
-                    <div class="d-flex align-items-center" v-for="attachment in order.quality_assurance.attachments">
+                    <div class="d-flex align-items-center" v-for="attachment, ti in order.quality_assurance.attachments" :key="ti">
                         <div class="file-img">
                             <img src="/img/pdf.png" alt="boston pdf image">
                         </div>
@@ -363,10 +363,12 @@
             comList: false,
         }),
         created() {
-            this.getReportAnalysisData(this.order)            
+            this.getReportAnalysisData(this.order)      
+
             this.$root.$on('wk_update', (res) => {
                 this.getReportAnalysisData(res);
             });
+            
         },
         methods: {
             getReportAnalysisData(order) {
@@ -392,11 +394,10 @@
                             .then(res => {
                                 this.message = res.message
                                 this.orderData = res.data
+                                this.getReportAnalysisData(this.orderData);
                                 this.$root.$emit('wk_update', this.orderData)
                                 this.$root.$emit('wk_flow_menu', this.orderData)
-                                this.getReportAnalysisData()
                                 this.currentStep = 'view'
-                                console.log(this.currentStep,'qa'+this.qa.note)
                                 setTimeout(() => {
                                     self.$refs.qualityAssuranceForm.reset();
                                     self.message = '';
@@ -429,9 +430,9 @@
                 }).then(res => {
                     this.message = res.message
                     this.orderData = res.data
+                    this.getReportAnalysisData(res.data);
                     this.$root.$emit('wk_update', this.orderData)
                     this.$root.$emit('wk_flow_menu', this.orderData)
-                    this.getReportAnalysisData()
                     this.currentStep = 'view'
                 }).catch(err => {
                     console.log(err)

@@ -31,4 +31,8 @@ class OrderWQa extends Model implements HasMedia
     public function updatedBy(){
         return $this->belongsTo(User::class, 'updated_by', 'id');
     }
+    
+    public function updateBy() {
+        return $this->belongsTo(User::class,'created_by','id');
+    }
 }

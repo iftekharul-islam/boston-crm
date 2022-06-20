@@ -32,4 +32,9 @@ class OrderWReport extends Model implements HasMedia
     {
         return $this->media()->where('collection_name', '=', 'preparation');
     }
+
+    public function createBy()
+    {
+        return $this->belongsTo(User::class, 'created_by', 'id');
+    }
 }
