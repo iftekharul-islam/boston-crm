@@ -110,17 +110,20 @@ export default {
         qaName: ''
     }),
     methods: {
-        updateData(){
+        updateData(order){
+            this.orderData = order;
             let qAssureance = !_.isEmpty(this.orderData.quality_assurance) ? this.orderData.quality_assurance : false;
             if(qAssureance){
                 this.qaName = !_.isEmpty(qAssureance.assignee) ? qAssureance.assignee.name : '';
             }
             let submission = !_.isEmpty(this.orderData.submission) ? this.orderData.submission : false;
             if(submission){
+                this.traineeId = submission.trainee_id;
+                this.dManId = submission.delivery_man_id;
                 this.traineeName = !_.isEmpty(submission.trainee) ? submission.trainee.name : '';
                 this.dManName = !_.isEmpty(submission.delivery_man) ? submission.delivery_man.name : '';
                 this.isAssineed = submission.is_trainee_signed;
-                this.deliveryDate = submission.delivery_date;
+                this.deliveryDate = submission.delivery_date.split(" ")[0];
                 this.isEditable = false
             } else {
                 this.isEditable = true
@@ -135,26 +138,22 @@ export default {
                         'delivery_date': this.deliveryDate,
                         'is_trainee_signed': this.isAssineed,
                     }
-                    console.log('data', data)
                     this.$boston.post('submission-create/'+ this.orderData.id, data, { headers: {
                             'Content-Type': 'multipart/form-data'
                         }}).then(res => {
-                        console.log('res', res.data)
-                        this.orderData = res.data;
-                        this.updateData();
+                        this.updateData(res.data);
                         this.$root.$emit('wk_update', this.orderData);
                         this.$root.$emit('wk_flow_menu', this.orderData);
+                        this.$root.$emit('wk_flow_toast', res);
                     }).catch(err => {
-                        console.log('err', err)
+                        
                     });
                 }
             })
         },
     },
     created() {
-        this.orderData = this.order;
-        console.log(this.orderData)
-        this.updateData()
+        this.updateData(this.order);
     },
 }
 </script>

@@ -7,6 +7,20 @@ use App\Models\OrderWHistory;
 
 trait CrmHelper {
 
+    public function flowMenu(){
+        return [
+            "scheduling" => "scheduling",
+            "inspection" => "inspection",
+            "reportPreparation" => "report-preparation",
+            "initialReview" => "initial-review",
+            "reportAnalysisReview" => "report-analysis-review",
+            "reWritingReport" => "rewriting-report",
+            "qualityAssurance" => "quality-assurance",
+            "submission" => "submission",
+            "revision" => "revision"
+        ];
+    }
+
     public function getSystemOrderNumber() {
         $order = Order::latest()->first();
         $length = 8;
@@ -96,7 +110,7 @@ trait CrmHelper {
     }
 
     protected function orderDetails($id) {
-        return Order::with(
+        $order = Order::with(
             'amc',
             'lender',
             'user',
@@ -110,16 +124,21 @@ trait CrmHelper {
             'activityLog.user',
             'inspection.user',
             'inspection.attachments',
+            'inspection.createBy',
             'report.reviewer',
             'report.trainee',
+            'report.createBy',
             'report.assignee',
             'report.creator',
             'report.attachments',
             'reportRewrite.assignee',
+            'reportRewrite.updateBy',
             'analysis.assignee',
             'analysis.attachments',
             'analysis.updatedBy',
+            'analysis.updateBy',
             'initialReview.assignee',
+            'initialReview.createBy',
             'workHisotry.user',
             'revission',
             'submission.trainee',
@@ -129,6 +148,53 @@ trait CrmHelper {
             'qualityAssurance.updatedBy',
             'comlist'
         )->where('id', $id)->first();
+
+        return $this->checkActiveStep($order);
+    }
+
+    protected function checkActiveStep($order) {
+        $orderStatus = [
+            "orderCreate",
+            "scheduling",
+            "inspection",
+            "reportPreparation",
+            "initialReview",
+            "reportAnalysisReview",
+            "reWritingReport",
+            "qualityAssurance",
+            "submission",
+            "revision"
+        ];
+        $currentStep = 'scheduling';
+        $wkFlow = json_decode($order->workflow_status, true);
+        foreach($orderStatus as $item) {
+            if ($wkFlow[$item] == 0){
+                $currentStep = $this->flowMenu()[$item];
+                break;
+            } else if ($wkFlow[$item] == 1 && $item == "scheduling") {
+                $currentStep = "inspection";
+            } else if($wkFlow[$item] == 1 && $item == "inspection") {
+                $currentStep = "report-preparation";
+            } else if($wkFlow[$item] == 1 && $item == "report-preparation") {
+                $currentStep = "initial-review";
+            } else if($wkFlow[$item] == 1 && $item == "initial-review") {
+                $currentStep = "report-analysis-review";
+            } else if($wkFlow[$item] == 1 && $item == "report-analysis-review") {
+                $currentStep = "rewriting-report";
+            } else if($wkFlow[$item] == 1 && $item == "rewriting-report") {
+                $currentStep = "quality-assurance";
+            } else if($wkFlow[$item] == 1 && $item == "quality-assurance") {
+                $currentStep = "submission";
+            } else if($wkFlow[$item] == 1 && $item == "submission") {
+                $currentStep = "revision";
+            }
+        }
+        $order['currentStep'] = $currentStep;
+        return $order;
+    }
+
+    protected function order_list_relation() {
+        return ['user', 'amc', 'appraisalDetail', 'appraisalDetail.appraiser', 'appraisalDetail.getLoanType', 'lender', 'propertyInfo', 'inspection.user'];
     }
 
 }

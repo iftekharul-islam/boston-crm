@@ -23,6 +23,10 @@ class OrderWReportAnalysis extends Model implements HasMedia
         return $this->belongsTo(User::class, 'updated_by','id');
     }
 
+    public function updateBy(){
+        return $this->belongsTo(User::class, 'created_by','id');
+    }
+
     public function attachments()
     {
         return $this->media()->where('collection_name', '=', 'analysis');

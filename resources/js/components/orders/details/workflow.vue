@@ -13,49 +13,49 @@
               <span class="ball"><img src="/img/current-white.png" alt="current step boston"></span>
               <p class="mb-0">Order Creation</p>
             </div>
-            <div class="item" :class="{'complete' : status.scheduling === 1,'current' : (status.scheduling !== 1 && status.orderCreate === 1 ), 'activeStep' : isActive == 'scheduling' }" @click="changeTab('scheduling')">
+            <div class="item" :class="{'complete' : status.scheduling === 1,'current' : currentStep('scheduling'), 'activeStep' : isActive == 'scheduling' }" @click="changeTab('scheduling')">
               <span class="ball"><img src="/img/current-white.png" alt="current step boston"></span>
               <p class="mb-0">Scheduling</p>
             </div>
-            <div class="item" :class="{'complete' : status.inspection === 1,'current' : (status.inspection !== 1 && status.scheduling === 1 ), 'activeStep' : isActive == 'inspection'}" @click="changeTab('inspection')">
+            <div class="item" :class="{'complete' : status.inspection === 1,'current' : currentStep('inspection'), 'activeStep' : isActive == 'inspection'}" @click="changeTab('inspection')">
               <span class="ball"><img src="/img/current-white.png" alt="current step boston"></span>
               <p class="mb-0">Inspection</p>
             </div>
-            <div class="item" :class="{'complete' : status.reportPreparation === 1,'current' : (status.reportPreparation !== 1 && status.inspection === 1 ), 'activeStep' : isActive == 'report-preparation'}" @click="changeTab('report-preparation')">
+            <div class="item" :class="{'complete' : status.reportPreparation === 1,'current' : currentStep('report-preparation'), 'activeStep' : isActive == 'report-preparation'}" @click="changeTab('report-preparation')">
                 <span class="ball"><img src="/img/current-white.png" alt="current step boston"></span>
               <p class="mb-0">Report Preparation</p>
             </div>
-            <div class="item" :class="{'complete' : status.initialReview === 1, 'current' : (status.initialReview !== 1 && status.reportPreparation === 1 ), 'activeStep' : isActive == 'initial-review'}" @click="changeTab('initial-review')">
+            <div class="item" :class="{'complete' : status.initialReview === 1, 'current' : currentStep('initial-review'), 'activeStep' : isActive == 'initial-review'}" @click="changeTab('initial-review')">
               <span class="ball">
                   <img src="/img/current-white.png" alt="current step boston">
               </span>
               <p class="mb-0">Initial Review</p>
             </div>
-            <div class="item" :class="{'complete' : status.reportAnalysisReview === 1, 'current' : (status.reportAnalysisReview !== 1 && status.initialReview === 1 ), 'activeStep' : isActive == 'report-analysis-review'}" @click="changeTab('report-analysis-review')">
+            <div class="item" :class="{'complete' : status.reportAnalysisReview === 1, 'current' : currentStep('report-analysis-review'), 'activeStep' : isActive == 'report-analysis-review'}" @click="changeTab('report-analysis-review')">
               <span class="ball">
                   <img src="/img/current-white.png" alt="current step boston">
               </span>
               <p class="mb-0">Report Analysis and Review</p>
             </div>
-            <div class="item" :class="{ 'disable' : norewrite === 1, 'complete' : status.reWritingReport === 1,'current' : (status.reWritingReport !== 1 && status.reportAnalysisReview === 1 ), 'activeStep' : isActive == 'rewriting-report'}" @click="changeTab('rewriting-report', norewrite)">
+            <div class="item" :class="{ 'disable' : norewrite === 1, 'complete' : status.reWritingReport === 1,'current' : currentStep('rewriting-report'), 'activeStep' : isActive == 'rewriting-report'}" @click="changeTab('rewriting-report', norewrite)">
                   <span class="ball">
                       <img src="/img/current-white.png" alt="current step boston">
                   </span>
               <p class="mb-0">Re-writing the report</p>
             </div>
-            <div class="item" :class="{'complete' : status.qualityAssurance === 1, 'current' : (status.qualityAssurance !== 1 && status.reWritingReport === 1 ), 'activeStep' : isActive == 'quality-assurance'}" @click="changeTab('quality-assurance')">
+            <div class="item" :class="{'complete' : status.qualityAssurance === 1, 'current' : currentStep('quality-assurance'), 'activeStep' : isActive == 'quality-assurance'}" @click="changeTab('quality-assurance')">
                   <span class="ball">
                       <img src="/img/current-white.png" alt="current step boston">
                   </span>
               <p class="mb-0">Quality Assurance (E&O)</p>
             </div>
-            <div class="item" :class="{'complete' : status.submission === 1,'current' : (status.submission !== 1 && status.qualityAssurance === 1 ), 'activeStep' : isActive == 'submission'}" @click="changeTab('submission')">
+            <div class="item" :class="{'complete' : status.submission === 1,'current' : currentStep('submission'), 'activeStep' : isActive == 'submission'}" @click="changeTab('submission')">
                   <span class="ball">
                       <img src="/img/current-white.png" alt="current step boston">
                   </span>
               <p class="mb-0">Submission</p>
             </div>
-            <div class="item" :class="{'complete' : status.revision === 1,'current' : (status.revision !== 1 && status.submission === 1 ), 'activeStep' : isActive == 'revision'}" @click="changeTab('revision')">
+            <div class="item" :class="{'complete' : status.revision === 1,'current' : currentStep('revision'), 'activeStep' : isActive == 'revision'}" @click="changeTab('revision')">
                   <span class="ball">
                       <img src="/img/current-white.png" alt="current step boston">
                   </span>
@@ -132,9 +132,10 @@ export default {
     }
   },
   data: () => ({
-    isActive: 'order-create',
-    status: '',
-    myRole: '',
+      isActive: 'order-create',
+      status: '',
+      myRole: '',
+      orderData: [],
   }),
   created(){
       this.initOrder(this.order);
@@ -148,11 +149,28 @@ export default {
       this.$root.$on('wk_flow_menu', (res) => {
           this.initOrder(res);
       });
+
+      this.$root.$on('wk_flow_toast', (res) => {
+          this.$toast.open({
+              message: res.message,
+              type: res.error == true ? 'error' : 'success',
+          });
+      });
   },
+  mounted(){
+      
+  },  
   methods: {
+    currentStep(step){
+      if (this.orderData.currentStep == step) {
+          // this.isActive = step;
+          return true;
+      }
+    },
     initOrder(order) {
         this.orderData = order;
         this.status = JSON.parse(order.workflow_status) ?? [];
+        this.currentStep(this.orderData.currentStep);
     },
     updateRole() {
       if (this.role.length) {

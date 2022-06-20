@@ -395,17 +395,10 @@
             comAddresses: []
         }),
         created() {
-            this.orderData = this.order
-            this.getReportAnalysisData()
-            this.alreadyQualityAssurance = (JSON.parse(this.orderData.workflow_status)).qualityAssurance
-            this.alreadyQualityAssurance == 1 ? this.currentStep = 'step2' : 'step1'
-            if (this.orderData.quality_assurance.note != undefined && this.orderData.quality_assurance.note != '') {
-                this.currentStep = 'step3'
-            }
-            if (this.orderData.comlist[0].id != undefined) {
-                this.showSeeCom = true
-            }
-            this.comAddresses = this.orderData.comlist
+            this.getReportAnalysisData(this.order)
+            this.$root.$on('wk_update', (res) => {
+                this.getReportAnalysisData(res);
+            });
         },
         methods: {
             initMap() {
@@ -523,7 +516,17 @@
                         console.log(err)
                     })
             },
-            getReportAnalysisData() {
+            getReportAnalysisData(order) {
+                this.orderData = order
+                this.alreadyQualityAssurance = (JSON.parse(this.orderData.workflow_status)).qualityAssurance
+                this.alreadyQualityAssurance == 1 ? this.currentStep = 'step2' : 'step1'
+                if (this.orderData.quality_assurance.note != undefined && this.orderData.quality_assurance.note != '') {
+                    this.currentStep = 'step3'
+                }
+                if (this.orderData.comlist[0].id != undefined) {
+                    this.showSeeCom = true
+                }
+                this.comAddresses = this.orderData.comlist
                 this.qa.order_id = this.orderData.id
                 this.qa.effective_date = this.orderData.due_date
                 if (this.orderData.quality_assurance) {

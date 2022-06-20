@@ -71,7 +71,7 @@ class OrderApiController extends Controller
             if ($orderId == null) {
                 $order = new Order;
                 $order->created_at = Carbon::now();
-                $order->status = 1;
+                $order->status = 0;
             } else {
                 $order = Order::find($orderId);
                 if (!$order) {
@@ -95,6 +95,10 @@ class OrderApiController extends Controller
             $order->workflow_status = json_encode($order->workflow_steps);
             // return $order;
             $order->save();
+
+            if ($orderId == null) {
+                $this->addHistory($order, $user, "New order has been created by {$user->name}", 'order-create');
+            }
 
             $fhaCaseNo = $step['fhaCaseNo'];
             $loanNo = $step['loanNo'];

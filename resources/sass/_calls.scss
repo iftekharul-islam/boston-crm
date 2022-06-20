@@ -12,7 +12,11 @@
 }
 .calls {
     &__menu {
-        
+        .right {
+            @include for-min-1600 {
+                margin-left: auto;
+            }
+        }
     }
     &-search-input {
         border-top-right-radius: 0;
@@ -31,6 +35,9 @@
 .call-list {
     .call-list-item {
         margin-right: 20px;
+        @include for-max-1700 {
+            margin-right: 16px;
+        }
         &:nth-child(1) {
             width: 25px;
         }
@@ -39,21 +46,42 @@
         }
         &:nth-child(3) {
             width: 135px;
+            @include for-max-1800 {
+                width: 100px;
+            }
         }
         &:nth-child(4) {
-            width: 185px;
+            width: 225px;
+            @include for-max-1800 {
+                width: 170px;
+            }
+            @include for-max-1700 {
+                width: 100px;
+            }
         }
         &:nth-child(5) {
-            width: 100px;
+            width: 120px;
+            @include for-max-1800 {
+                width: 100px;
+            }
         }
         &:nth-child(6) {
             width: 100px;
+            @include for-max-1700 {
+                width: 70px;
+            }
         }
         &:nth-child(7) {
             width: 100px;
+            @include for-max-1700 {
+                width: 70px;
+            }
         }
         &:nth-child(8) {
             width: 150px;
+            @include for-max-1800 {
+                width: 100px;
+            }
         }
         &:nth-child(9) {
             width: 90px;
@@ -70,6 +98,43 @@
         .icon-list {
             margin-right: 12px;
         }
+        .button-transparent {
+            // transform: rotate(0deg);
+            &[aria-expanded="true"] {
+                transform: rotate(180deg);
+            }
+            &.collapsed {
+                // transform: rotate(180deg);
+            }
+        }
+        input[type='checkbox'] {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            opacity: 0;
+            &:checked {
+                ~ label {
+                    background: $primary;
+                    svg {
+                        display: block;
+                    }
+                }
+            }
+        }
+        label {
+            width: 20px;
+            height: 20px;
+            border: 1px solid $platinum;
+            border-radius: 4px;
+            cursor: pointer;
+            @include flex-center;
+            z-index: 9;
+            position: relative;
+            svg {
+                display: none;
+            }
+        }
     }
     &-header {
         display: flex;
@@ -84,9 +149,78 @@
         }
         
     }
+    .call-item {
+        border-bottom: 1px solid $platinum;
+        &:last-of-type {
+            border-bottom: 0;
+            .call-collapse {
+                border-bottom: 0;
+            }
+        }
+    }
     &-body {
         display: flex;
         align-items: flex-start;
         padding: 20px 0;
+        
+        .scheduled {
+            color: $success;
+            &::before {
+                content: '';
+                width: 8px;
+                height: 8px;
+                display: inline-block;
+                border-radius: 50%;
+                background: $success;
+                margin-right: 8px;
+            }
+        }
+    }
+    // collapse
+    .call-collapse {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 80px;
+        grid-gap: 32px;
+        padding-bottom: 20px;
+        border-bottom: 2px solid $primary;
+        .item {
+            border-radius: 4px;
+            padding: 4px 8px 12px 12px;
+            position: relative;
+            .call-badge {
+                position: absolute;
+                left: 0;
+                top: 0;
+                border-radius: 4px 0px;
+                font-size: 12px;
+                color: $white;
+                padding: 1px 5px;
+                font-weight: 600;
+            }
+            &.pending {
+                background: $pending;
+                .call-badge {
+                    background: $light-red;
+                }
+            }
+            &.solved {
+                background: $solved-bg;
+                .call-badge {
+                  
+                    background: $sky-blue;
+                }
+            }
+        }
+        .more-item {
+            background: $light-black;
+            border-radius: 4px;
+            @include flex-center;
+            flex-direction: column;
+        }
+    }
+    .text-ellips {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 }

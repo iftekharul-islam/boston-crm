@@ -79,14 +79,13 @@ class OrderController extends BaseController
                        ->orWhere("company_id", "LIKE", "%$data%")
                        ->orWhere("due_date", "LIKE", "%$data%")
                        ->orWhere("created_at", "LIKE", "%$data%");
-        })->with('user', 'amc', 'appraisalDetail',   'appraisalDetail.appraiser',
-        'appraisalDetail.getLoanType', 'lender', 'propertyInfo', 'inspection.user')
+        })->with($this->order_list_relation())
         ->where('company_id', $companyId)
         ->orderBy('id', 'desc')
         ->paginate($paginate);
         return $order;
     }
-
+    
     /**
      * Show the form for creating a new resource.
      *
@@ -149,8 +148,6 @@ class OrderController extends BaseController
         } else if( !isset($order->analysis->is_review_send_back)) {
             $noRewrite = 0;
         }
-
-        // return $order;
 
         $order->amc_file = $this->repository->getClientFile($order->amc_id);
         $order->lender_file = $this->repository->getClientFile($order->lender_id);

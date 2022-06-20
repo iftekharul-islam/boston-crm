@@ -103,7 +103,7 @@
 
                 <!-- add solution button -->
                 <div v-if="item.open_solution == false && item.solution_details == '-'" class="text-end mgt-28">
-                  <button @click="item.open_solution = true" class="button button-transparent primary-text p-0"> <span
+                  <button @click="item.open_solution = true; editRevision = false;" class="button button-transparent primary-text p-0"> <span
                       class="icon-plus primary-text"></span> <span class="ms-2 primary-text">Add solution</span></button>
                 </div>
                 <!-- add solution box -->
@@ -273,15 +273,21 @@ export default {
     }
   }),
   created(){
-      this.orderData = this.order;
-      this.revisionData = this.orderData.revission;
-      this.revissionKey = Math.floor(Math.random(10000) * 1000);
-
       this.$root.$on('open_revision', status => {
           this.revissionModal = status;
       });
+
+      this.initData(this.order);
+      this.$root.$on("wk_update", (res) => {
+          this.initData(res);
+      });
   },
   methods: {
+    initData(order) {
+        this.orderData = order;
+        this.revisionData = this.orderData.revission;
+        this.revissionKey = Math.floor(Math.random(10000) * 1000);
+    },
     revission() {
       this.revissionModal = !this.revissionModal
     },
@@ -290,6 +296,7 @@ export default {
         this.form.date = null;
         this.form.revission = null;
         this.addRevission = status;
+        this.revissionEdit = false;
     },
     revissionSubmit() {
         this.$refs.addRevission.validate().then((status) => {
@@ -302,8 +309,8 @@ export default {
                 this.addRevission = false;
                 this.$root.$emit('wk_flow_menu', res.data);
                 this.$root.$emit('wk_update', res.data);
+                this.$root.$emit('wk_flow_toast', res);
               }).catch(err => {
-                console.log(err);
               });
             }
         });
@@ -319,14 +326,16 @@ export default {
                 this.revisionData[index].open_solution = false;  
                 this.$root.$emit('wk_flow_menu', res.data);              
                 this.$root.$emit('wk_update', res.data);
+                this.$root.$emit('wk_flow_toast', res);
             }
         }).catch(err => {
-            console.log(err);
         });
     },
 
     solutionAdd() {
-      this.addSolution = !this.addSolution
+      this.addRevission = false;
+      this.addSolution = !this.addSolution;
+      this.revissionEdit = false;
     },
     editRevission() {
       // this.revissionEdit = !this.revissionEdit
@@ -335,6 +344,7 @@ export default {
         this.form.id = item.id;
         this.form.date = item.revision_date_format;
         this.form.revission = item.revision_details;
+        this.addRevission = false;
         this.editNotesModal = true;
     },
     openMarkAsDelivery(item, index, status = false) {
@@ -343,6 +353,7 @@ export default {
                 return false;
             }
         }
+        this.addRevission = false;
         this.revissionEdit = true;
 
         this.marked.id = item.id;
@@ -363,9 +374,9 @@ export default {
                 this.revissionEdit = false;
                 this.$root.$emit('wk_flow_menu', res.data);
                 this.$root.$emit('wk_update', res.data);
+                this.$root.$emit('wk_flow_toast', res);
             }
         }).catch(err => {
-            console.log(err);
         });
     },
     revissionEditSubmit() {
@@ -379,8 +390,8 @@ export default {
                   this.editNotesModal = false;
                   this.$root.$emit('wk_flow_menu', res.data);
                   this.$root.$emit('wk_update', res.data);
+                  this.$root.$emit('wk_flow_toast', res);
               }).catch(err => {
-                console.log(err);
               });
             }
         });
@@ -398,8 +409,9 @@ export default {
             this.revisionData = res.data.revission;
             this.$root.$emit('wk_flow_menu', res.data);
             this.$root.$emit('wk_update', res.data);
+            this.$root.$emit('wk_flow_toast', res);
         }).catch(err => {
-          console.log(err);
+          
         });
         this.$refs.popup.close();
     },

@@ -40,6 +40,7 @@ class Order extends Model implements HasMedia
     ];
 
     public const OrderStatus = [
+        0 => "Unstarted",
         1 => "Scheduled",
         2 => "Rescheduled",
         3 => "Inspected",
@@ -53,7 +54,8 @@ class Order extends Model implements HasMedia
         11 => "Ready for Submission/Delivery",
         12 => "Under Correction/Revision",
         13 => "Delivered",
-        14 => "Cancelled"
+        14 => "Cancelled",
+        15 => "Deleted"
     ];
 
     protected $fillable = [

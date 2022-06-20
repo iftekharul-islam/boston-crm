@@ -239,6 +239,10 @@
         border-radius: 0px 0px 8px 8px;
         height: 100%;
     }
+    .order-box-oveflow {
+        max-height: 850px;
+        overflow: auto;
+    }
 }
 
 .activity-order-details-box {
@@ -740,11 +744,16 @@ select {
         }
         .item.activeStep {
             p {
-                color: #0ea591;
+                color: #19b7a2;
             }
             span.ball {
-                background: #67e9d8;
-                border-color: #19b7a2;
+                background: #19b7a2;
+                border-color: #f6fdfc;
+            }
+        }
+        .item.activeStep.current {
+            p {
+                color: #fff;
             }
         }
     }
@@ -1330,4 +1339,52 @@ select {
 .fade-enter,
 .fade-leave-to {
     opacity: 0;
+}
+
+.order-views {
+    .search-box {
+        input {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+            &:focus {
+                outline: none;
+            }
+        }
+        .search-btn {
+            border: none;
+            outline: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 0px 4px 4px 0px;
+            background: $gray;
+            @include flex-center;
+        }
+    }
+}
+.per-page {
+    width: min-content !important;
+}
+.m-table-content {
+    table {
+        thead {
+            th {
+                &:first-of-type {
+                    max-width: 200px;
+                }
+            }
+        }
+        tbody {
+            tr {
+                td {
+                    &:first-of-type {
+                        max-width: 200px;
+                        >div {
+                            word-break: break-all;
+                        }
+                    }
+                }
+
+            }
+        }
+    }
 }

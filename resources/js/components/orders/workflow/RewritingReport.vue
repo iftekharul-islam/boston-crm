@@ -5,7 +5,7 @@
         <div class="re-writing-report-item step-items">
           <div class="group">
             <p class="text-light-black mgb-12">Note from previous stpes</p>
-            <p class="mb-0 text-light-black fw-bold" v-html="prev.note"></p>
+            <p class="mb-0 text-light-black fw-bold" v-html="prev.rewrite_note"></p>
           </div>
 
           <div class="group" v-if="current.note">
@@ -65,7 +65,7 @@
           <a class="edit-btn" @click="editable = false"><span class="icon-edit"><span class="path1"></span><span class="path2"></span></span></a>
           <div class="group">
             <p class="text-light-black mgb-12">Note from previous stpes</p>
-            <p class="mb-0 text-light-black fw-bold" v-html="prev.note"></p>
+            <p class="mb-0 text-light-black fw-bold" v-html="prev.rewrite_note"></p>
           </div>
           <div class="group">
             <p class="text-light-black mgb-12">Note from this step</p>
@@ -108,6 +108,10 @@ export default {
   created(){
       this.orderData = this.order;
       this.initData(this.orderData);
+
+      this.$root.$on("wk_update", (res) => {
+          this.initData(res);
+      });
   },  
   methods: {
       initData(order){
@@ -137,8 +141,9 @@ export default {
                     this.initData(this.orderData);
                     this.$root.$emit('wk_update', this.orderData);
                     this.$root.$emit('wk_flow_menu', this.orderData);
+                    this.$root.$emit('wk_flow_toast', res);
                 }).catch(err => {
-                    console.log('err', err)
+                    
                 });
             }
         })
