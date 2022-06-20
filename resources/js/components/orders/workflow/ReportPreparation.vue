@@ -175,7 +175,7 @@
                     <p class="text-light-black mgb-12" v-if="fileData.files.length">{{ fileData.files.length }} Files</p>
                 </div>
                 <div class="text-end mgt-32">
-                  <button class="button button-primary px-4 h-40 d-inline-flex align-items-center" @click="saveAssigneeData">Done</button>
+                  <button class="button button-primary px-4 h-40 d-inline-flex align-items-center" @click="saveAssigneeData" :disabled="isUploading">Done</button>
                 </div>
             </ValidationObserver>
         </div>
@@ -191,6 +191,7 @@ export default {
     order: [],
   },
   data: () => ({
+    isUploading: false,
     orderData: [],
     isEmpty: false,
     adminDataExist: true,
@@ -255,17 +256,23 @@ export default {
                         'Content-Type': 'multipart/form-data'
                     }
                 }).then(res => {
+                    this.isUploading = false
+                    this.fileData.files = []
                     this.orderData = res.data;
                     this.updateAdmin();
                     this.$root.$emit('wk_update', this.orderData);
                     this.$root.$emit('wk_flow_menu', this.orderData);
                 }).catch(err => {
+                    this.isUploading = false
                     console.log('err', err)
                 });
+            } else {
+                this.isUploading = false
             }
         })
     },
     saveAssigneeData() {
+        this.isUploading = true
         this.$refs.assigneeForm.validate().then((status) => {
           if(status) {
               let formData = new FormData();
@@ -282,6 +289,9 @@ export default {
             this.$boston.post('assignee-report-preparation-create/'+ this.orderData.id, formData, { headers: {
                     'Content-Type': 'multipart/form-data'
                 }}).then(res => {
+                this.isUploading = false
+                this.fileData.files = []
+                this.fileData.file_type = ''
                 this.orderData = res.data;
                 this.updateAdmin();
                 this.$root.$emit('wk_update', this.orderData);
@@ -289,6 +299,8 @@ export default {
             }).catch(err => {
                 console.log('err', err)
             });
+          } else {
+              this.isUploading = false
           }
       })
     },
