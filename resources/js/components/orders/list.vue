@@ -1,10 +1,19 @@
 <template>
     <div id="order-views">
-        <div class="report-top d-flex justify-content-between mgb-32 flex-wrap">
+        <div class="report-top d-flex justify-content-between mgb-32 flex-wrap dropdown">
             <div class="left chart-box-header-btn d-flex flex-wrap justify-content-between">
-                <button v-for="dCol, di in order.filterItems" class="chart-btn h-32 d-flex align-items-center justify-content-between mb-2" :key="di">
+                <button v-for="dCol, di in order.filterItems" class="chart-btn h-32 d-flex align-items-center justify-content-between mb-2" :key="di" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
                     {{ dCol.title }}
                 </button>
+                <!-- dropdown -->
+                <div class="dropdown-menu py-0 search-dropdown" aria-labelledby="dropdownMenuLink">
+                    <input type="text" class="search-input" placeholder="Search...">
+                    <ul class="p-0 m-0 search-results">
+                        <li class="results-item">Korim khan</li>
+                        <li class="results-item">Korim khan</li>
+                        <li class="results-item">Korim khan</li>
+                    </ul>
+                </div>
             </div>
             <div class="right d-flex">
                 <input type="text" v-model="pages.searchModel" @input="searchData($event)" class="me-3 mb-3 px-3 bdr-1 br-4 form-control gray-border" placeholder="Search...">
