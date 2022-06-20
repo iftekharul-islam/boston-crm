@@ -239,6 +239,10 @@
         border-radius: 0px 0px 8px 8px;
         height: 100%;
     }
+    .order-box-oveflow {
+        max-height: 850px;
+        overflow: auto;
+    }
 }
 
 .activity-order-details-box {
@@ -1337,32 +1341,49 @@ select {
     opacity: 0;
 }
 
-.search-dropdown {
-    width: 300px;
-    border: 1px solid $primary !important;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.08) !important;
-    .search-input {
-        height: 40px;
-        padding: 1px 16px;
-        border: none;
-        border-bottom: 1px solid $platinum;
-        border-top-left-radius: 4px;
-        border-top-right-radius: 4px;
-        width: 100%;
-        &:focus {
+.order-views {
+    .search-box {
+        input {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+            &:focus {
+                outline: none;
+            }
+        }
+        .search-btn {
+            border: none;
             outline: none;
-            border-bottom: 1px solid $primary;
+            width: 40px;
+            height: 40px;
+            border-radius: 0px 4px 4px 0px;
+            background: $gray;
+            @include flex-center;
         }
     }
-    .search-results {
-        list-style: none;
-        .results-item {
-            padding: 10px 16px;
-            color: $light-black;
-            cursor: pointer;
-            &:hover {
-                background: $primary;
-                color: $white;
+}
+.per-page {
+    width: min-content !important;
+}
+.m-table-content {
+    table {
+        thead {
+            th {
+                &:first-of-type {
+                    max-width: 200px;
+                }
+            }
+        }
+        tbody {
+            tr {
+                td {
+                    &:first-of-type {
+                        max-width: 200px;
+                        >div {
+                            word-break: break-all;
+                        }
+                    }
+                }
+
             }
         }
     }

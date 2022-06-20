@@ -271,7 +271,7 @@ export default {
     .m-table table tr td, 
     .m-table table thead th {
         /* border-left: thin solid #ccc; */
-        padding: 5px 5px;
+        padding: 16px 5px;
         font-size: 14px;
         transition: all 200ms linear;
         vertical-align: middle;
