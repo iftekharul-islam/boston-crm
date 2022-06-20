@@ -2,7 +2,7 @@
 @section('content')
    <div class="calls bg-platinum dashboard-space">
         <div class="bg-white pd-32">
-            <div class="calls__menu d-flex">
+            <div class="calls__menu d-flex flex-wrap">
                 <div class="left chart-box-header-btn d-flex flex-wrap me-3">
                     <button class="calls-btn h-40 d-flex align-items-center mb-2 active">Appraiser <span class="ms-2"> (88)</span></button>
                     <button class="calls-btn h-40 d-flex align-items-center mb-2">Appraiser <span class="ms-2"> (88)</span></button>
@@ -10,7 +10,7 @@
                     <button class="calls-btn h-40 d-flex align-items-center mb-2">Appraiser <span class="ms-2"> (88)</span></button>
                     <button class="calls-btn h-40 d-flex align-items-center mb-2">Appraiser <span class="ms-2"> (88)</span></button>
                 </div>
-                <div class="right d-flex ms-auto">
+                <div class="right d-flex">
                     <a href="#" class="primary-bg h-40 d-flex align-items-center mb-2 px-2 br-4 text-white me-3">Map selected orders <span class="ms-2">(32)</span></a>
                     <div class=" d-flex calls-search">
                         <input type="text" class="mb-3 px-3 bdr-1 br-4 gray-border calls-search-input h-40" placeholder="Search...">
@@ -46,29 +46,243 @@
                         </svg>                            
                     </span>
                 </div>
-                {{--  --}}
-                <div class="call-list-body">
-                    <span class="call-list-item">
-                        <input id="list-item-1" type="checkbox">
-                        <label for="list-item-1"></label>
-                    </span>
-                    <span class="call-list-item">56567456</span>
-                    <span class="call-list-item"><p class="mb-0 fw-bold">Petter lake</p></span>
-                    <span class="call-list-item"><p>1453 Dorchester Ave fevlpn ksdfkdsj amjad.</p></span>
-                    <span class="call-list-item">Kabir khan</span>
-                    <span class="call-list-item">Kabir khan</span>
-                    <span class="call-list-item">12.03.2022</span>
-                    <span class="call-list-item">12.03.2022, 3:00PM</span>
-                    <span class="call-list-item"><p>Scheduled</p></span>
-                    <span class="call-list-item">
-                        <a href="#" class="icon-list"><span class="icon-eye text-blue-eye fs-20"><span class="path1"></span><span class="path2"></span></span></a>
-                        <a href="#" class="icon-list"><span class="icon-note text-purple fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></span></a>
-                        <a href="#" class="icon-list"><span class="icon-messages2 primary-text fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span></span></a>
-                        <a href="#" class="icon-list"><span class="icon-calendar text-brown fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span class="path7"></span><span class="path8"></span></span></a>
-                        <a href="#" class="icon-list"> <span class="icon-messages text-yellow-msg  fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span></a>
-                        <a href="#" class="icon-list"><span class="icon-call text-light-red fs-20"><span class="path1"></span><span class="path2"></span></span></a>
-                        <button class="button button-transparent p-0"><span class="icon-arrow-bottom"></span></button>
-                    </span>
+                {{-- call item --}}
+                <div class="call-item">
+                    {{-- top part --}}
+                    <div class="call-list-body">
+                        <span class="call-list-item">
+                            <input id="list-item-1" type="checkbox">
+                            <label for="list-item-1">
+                                <svg width="12" height="10" viewBox="0 0 12 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M3.85561 9.43102C3.52966 9.43102 3.20372 9.31094 2.94639 9.05361L0.373124 6.48034C-0.124375 5.98284 -0.124375 5.1594 0.373124 4.6619C0.870622 4.1644 1.69407 4.1644 2.19157 4.6619L3.85561 6.32595L9.80843 0.373124C10.3059 -0.124375 11.1294 -0.124375 11.6269 0.373124C12.1244 0.870622 12.1244 1.69407 11.6269 2.19156L4.76483 9.05361C4.52466 9.31094 4.18156 9.43102 3.85561 9.43102Z" fill="white"/>
+                                </svg>
+                            </label>
+                        </span>
+                        <span class="call-list-item">56567456</span>
+                        <span class="call-list-item"><p class="mb-0 fw-bold text-ellips">Petter lake</p></span>
+                        <span class="call-list-item"><p class="mb-0 text-ellips">1453 Dorchester Ave fevlpn ksdfkdsj amjad.</p></span>
+                        <span class="call-list-item">Kabir khan</span>
+                        <span class="call-list-item">Kabir khan</span>
+                        <span class="call-list-item">12.03.2022</span>
+                        <span class="call-list-item">12.03.2022, 3:00PM</span>
+                        <span class="call-list-item"><p class="mb-0 scheduled">Scheduled</p></span>
+                        <span class="call-list-item">
+                            <a href="#" class="icon-list" ><span class="icon-eye text-blue-eye fs-20"><span class="path1"></span><span class="path2"></span></span></a>
+                            <a href="#" class="icon-list"><span class="icon-note text-purple fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></span></a>
+                            <a href="#" class="icon-list"><span class="icon-messages2 primary-text fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span></span></a>
+                            <a href="#" class="icon-list"><span class="icon-calendar text-brown fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span class="path7"></span><span class="path8"></span></span></a>
+                            <a href="#" class="icon-list"> <span class="icon-messages text-yellow-msg  fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span></a>
+                            <a href="#" class="icon-list"><span class="icon-call text-light-red fs-20"><span class="path1"></span><span class="path2"></span></span></a>
+                            <button class="button button-transparent p-0" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"><span class="icon-arrow-bottom"></span></button>
+                        </span>
+                    </div>
+                    {{-- collapse part --}}
+                    <div class="call-collapse collapse" id="collapseExample">
+                        <div class="item pending">
+                            <span class="call-badge">Pending</span>
+                            <p class="text-gray text-end fs-12">Today 12:10am</p>
+                            <p class="fs-14 mgt-12 mgb-12">He made payment but didnt get confirmation yet</p>
+                            <div class="d-flex justify-content-between">
+                                <p class="mb-0 fs-14"><span class="text-gray">Assigned to :</span> <b>Technical team</b></p>
+                                <a href="#">
+                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M13.491 1.66667H6.50768C3.47435 1.66667 1.66602 3.475 1.66602 6.50834V13.4833C1.66602 16.525 3.47435 18.3333 6.50768 18.3333H13.4827C16.516 18.3333 18.3243 16.525 18.3243 13.4917V6.50834C18.3327 3.475 16.5243 1.66667 13.491 1.66667Z" fill="white"/>
+                                        <path d="M13.9569 5.83333H9.9319C9.59023 5.83333 9.3069 6.11666 9.3069 6.45833C9.3069 6.8 9.59023 7.08333 9.9319 7.08333H12.4486L6.01523 13.5167C5.77357 13.7583 5.77357 14.1583 6.01523 14.4C6.14023 14.525 6.29857 14.5833 6.4569 14.5833C6.61523 14.5833 6.77357 14.525 6.89857 14.4L13.3319 7.96666V10.4833C13.3319 10.825 13.6152 11.1083 13.9569 11.1083C14.2986 11.1083 14.5819 10.825 14.5819 10.4833V6.45833C14.5819 6.11666 14.2986 5.83333 13.9569 5.83333Z" fill="#F97373"/>
+                                    </svg>                                    
+                                </a>
+                            </div>
+                        </div>
+                        <div class="item pending">
+                            <span class="call-badge">Pending</span>
+                            <p class="text-gray text-end fs-12">Today 12:10am</p>
+                            <p class="fs-14 mgt-12 mgb-12">He made payment but didnt get confirmation yet</p>
+                            <div class="d-flex justify-content-between">
+                                <p class="mb-0 fs-14"><span class="text-gray">Assigned to :</span> <b>Technical team</b></p>
+                                <a href="#">
+                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M13.491 1.66667H6.50768C3.47435 1.66667 1.66602 3.475 1.66602 6.50834V13.4833C1.66602 16.525 3.47435 18.3333 6.50768 18.3333H13.4827C16.516 18.3333 18.3243 16.525 18.3243 13.4917V6.50834C18.3327 3.475 16.5243 1.66667 13.491 1.66667Z" fill="white"/>
+                                        <path d="M13.9569 5.83333H9.9319C9.59023 5.83333 9.3069 6.11666 9.3069 6.45833C9.3069 6.8 9.59023 7.08333 9.9319 7.08333H12.4486L6.01523 13.5167C5.77357 13.7583 5.77357 14.1583 6.01523 14.4C6.14023 14.525 6.29857 14.5833 6.4569 14.5833C6.61523 14.5833 6.77357 14.525 6.89857 14.4L13.3319 7.96666V10.4833C13.3319 10.825 13.6152 11.1083 13.9569 11.1083C14.2986 11.1083 14.5819 10.825 14.5819 10.4833V6.45833C14.5819 6.11666 14.2986 5.83333 13.9569 5.83333Z" fill="#F97373"/>
+                                    </svg>                                    
+                                </a>
+                            </div>
+                        </div>
+                        <div class="item solved">
+                            <span class="call-badge">Solved</span>
+                            <p class="text-gray text-end fs-12">Today 12:10am</p>
+                            <p class="fs-14 mgt-12 mgb-12">He made payment but didnt get confirmation yet</p>
+                            <div class="d-flex justify-content-between">
+                                <p class="mb-0 fs-14"><span class="text-gray">Assigned to :</span> <b>Technical team</b></p>
+                                <a href="#">
+                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M13.491 1.66667H6.50768C3.47435 1.66667 1.66602 3.475 1.66602 6.50834V13.4833C1.66602 16.525 3.47435 18.3333 6.50768 18.3333H13.4827C16.516 18.3333 18.3243 16.525 18.3243 13.4917V6.50834C18.3327 3.475 16.5243 1.66667 13.491 1.66667Z" fill="white"/>
+                                        <path d="M13.9569 5.83333H9.9319C9.59023 5.83333 9.3069 6.11666 9.3069 6.45833C9.3069 6.8 9.59023 7.08333 9.9319 7.08333H12.4486L6.01523 13.5167C5.77357 13.7583 5.77357 14.1583 6.01523 14.4C6.14023 14.525 6.29857 14.5833 6.4569 14.5833C6.61523 14.5833 6.77357 14.525 6.89857 14.4L13.3319 7.96666V10.4833C13.3319 10.825 13.6152 11.1083 13.9569 11.1083C14.2986 11.1083 14.5819 10.825 14.5819 10.4833V6.45833C14.5819 6.11666 14.2986 5.83333 13.9569 5.83333Z" fill="#F97373"/>
+                                    </svg>                                    
+                                </a>
+                            </div>
+                        </div>
+                        <a href="#" class="item more-item">
+                           <p class="text-center mb-1 text-white">10</p>
+                           <p class="text-center text-white mb-0">More</p>
+                        </a>
+                    </div>
+                </div>
+                <div class="call-item">
+                    {{-- top part --}}
+                    <div class="call-list-body">
+                        <span class="call-list-item">
+                            <input id="list-item-2" type="checkbox">
+                            <label for="list-item-2">
+                                <svg width="12" height="10" viewBox="0 0 12 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M3.85561 9.43102C3.52966 9.43102 3.20372 9.31094 2.94639 9.05361L0.373124 6.48034C-0.124375 5.98284 -0.124375 5.1594 0.373124 4.6619C0.870622 4.1644 1.69407 4.1644 2.19157 4.6619L3.85561 6.32595L9.80843 0.373124C10.3059 -0.124375 11.1294 -0.124375 11.6269 0.373124C12.1244 0.870622 12.1244 1.69407 11.6269 2.19156L4.76483 9.05361C4.52466 9.31094 4.18156 9.43102 3.85561 9.43102Z" fill="white"/>
+                                </svg>
+                            </label>
+                        </span>
+                        <span class="call-list-item">56567456</span>
+                        <span class="call-list-item"><p class="mb-0 fw-bold text-ellips">Petter lake</p></span>
+                        <span class="call-list-item"><p class="mb-0 text-ellips">1453 Dorchester Ave fevlpn ksdfkdsj amjad.</p></span>
+                        <span class="call-list-item">Kabir khan</span>
+                        <span class="call-list-item">Kabir khan</span>
+                        <span class="call-list-item">12.03.2022</span>
+                        <span class="call-list-item">12.03.2022, 3:00PM</span>
+                        <span class="call-list-item"><p class="mb-0 scheduled">Scheduled</p></span>
+                        <span class="call-list-item">
+                            <a href="#" class="icon-list"><span class="icon-eye text-blue-eye fs-20"><span class="path1"></span><span class="path2"></span></span></a>
+                            <a href="#" class="icon-list"><span class="icon-note text-purple fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></span></a>
+                            <a href="#" class="icon-list"><span class="icon-messages2 primary-text fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span></span></a>
+                            <a href="#" class="icon-list"><span class="icon-calendar text-brown fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span class="path7"></span><span class="path8"></span></span></a>
+                            <a href="#" class="icon-list"> <span class="icon-messages text-yellow-msg  fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span></a>
+                            <a href="#" class="icon-list"><span class="icon-call text-light-red fs-20"><span class="path1"></span><span class="path2"></span></span></a>
+                            <button class="button button-transparent p-0" data-bs-toggle="collapse" data-bs-target="#collapseExample2" aria-expanded="false" aria-controls="collapseExample2"><span class="icon-arrow-bottom"></span></button>
+                        </span>
+                    </div>
+                    {{-- collapse part --}}
+                    <div class="call-collapse collapse" id="collapseExample2">
+                        <div class="item pending">
+                            <span class="call-badge">Pending</span>
+                            <p class="text-gray text-end fs-12">Today 12:10am</p>
+                            <p class="fs-14 mgt-12 mgb-12">He made payment but didnt get confirmation yet</p>
+                            <div class="d-flex justify-content-between">
+                                <p class="mb-0 fs-14"><span class="text-gray">Assigned to :</span> <b>Technical team</b></p>
+                                <a href="#">
+                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M13.491 1.66667H6.50768C3.47435 1.66667 1.66602 3.475 1.66602 6.50834V13.4833C1.66602 16.525 3.47435 18.3333 6.50768 18.3333H13.4827C16.516 18.3333 18.3243 16.525 18.3243 13.4917V6.50834C18.3327 3.475 16.5243 1.66667 13.491 1.66667Z" fill="white"/>
+                                        <path d="M13.9569 5.83333H9.9319C9.59023 5.83333 9.3069 6.11666 9.3069 6.45833C9.3069 6.8 9.59023 7.08333 9.9319 7.08333H12.4486L6.01523 13.5167C5.77357 13.7583 5.77357 14.1583 6.01523 14.4C6.14023 14.525 6.29857 14.5833 6.4569 14.5833C6.61523 14.5833 6.77357 14.525 6.89857 14.4L13.3319 7.96666V10.4833C13.3319 10.825 13.6152 11.1083 13.9569 11.1083C14.2986 11.1083 14.5819 10.825 14.5819 10.4833V6.45833C14.5819 6.11666 14.2986 5.83333 13.9569 5.83333Z" fill="#F97373"/>
+                                    </svg>                                    
+                                </a>
+                            </div>
+                        </div>
+                        <div class="item pending">
+                            <span class="call-badge">Pending</span>
+                            <p class="text-gray text-end fs-12">Today 12:10am</p>
+                            <p class="fs-14 mgt-12 mgb-12">He made payment but didnt get confirmation yet</p>
+                            <div class="d-flex justify-content-between">
+                                <p class="mb-0 fs-14"><span class="text-gray">Assigned to :</span> <b>Technical team</b></p>
+                                <a href="#">
+                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M13.491 1.66667H6.50768C3.47435 1.66667 1.66602 3.475 1.66602 6.50834V13.4833C1.66602 16.525 3.47435 18.3333 6.50768 18.3333H13.4827C16.516 18.3333 18.3243 16.525 18.3243 13.4917V6.50834C18.3327 3.475 16.5243 1.66667 13.491 1.66667Z" fill="white"/>
+                                        <path d="M13.9569 5.83333H9.9319C9.59023 5.83333 9.3069 6.11666 9.3069 6.45833C9.3069 6.8 9.59023 7.08333 9.9319 7.08333H12.4486L6.01523 13.5167C5.77357 13.7583 5.77357 14.1583 6.01523 14.4C6.14023 14.525 6.29857 14.5833 6.4569 14.5833C6.61523 14.5833 6.77357 14.525 6.89857 14.4L13.3319 7.96666V10.4833C13.3319 10.825 13.6152 11.1083 13.9569 11.1083C14.2986 11.1083 14.5819 10.825 14.5819 10.4833V6.45833C14.5819 6.11666 14.2986 5.83333 13.9569 5.83333Z" fill="#F97373"/>
+                                    </svg>                                    
+                                </a>
+                            </div>
+                        </div>
+                        <div class="item solved">
+                            <span class="call-badge">Solved</span>
+                            <p class="text-gray text-end fs-12">Today 12:10am</p>
+                            <p class="fs-14 mgt-12 mgb-12">He made payment but didnt get confirmation yet</p>
+                            <div class="d-flex justify-content-between">
+                                <p class="mb-0 fs-14"><span class="text-gray">Assigned to :</span> <b>Technical team</b></p>
+                                <a href="#">
+                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M13.491 1.66667H6.50768C3.47435 1.66667 1.66602 3.475 1.66602 6.50834V13.4833C1.66602 16.525 3.47435 18.3333 6.50768 18.3333H13.4827C16.516 18.3333 18.3243 16.525 18.3243 13.4917V6.50834C18.3327 3.475 16.5243 1.66667 13.491 1.66667Z" fill="white"/>
+                                        <path d="M13.9569 5.83333H9.9319C9.59023 5.83333 9.3069 6.11666 9.3069 6.45833C9.3069 6.8 9.59023 7.08333 9.9319 7.08333H12.4486L6.01523 13.5167C5.77357 13.7583 5.77357 14.1583 6.01523 14.4C6.14023 14.525 6.29857 14.5833 6.4569 14.5833C6.61523 14.5833 6.77357 14.525 6.89857 14.4L13.3319 7.96666V10.4833C13.3319 10.825 13.6152 11.1083 13.9569 11.1083C14.2986 11.1083 14.5819 10.825 14.5819 10.4833V6.45833C14.5819 6.11666 14.2986 5.83333 13.9569 5.83333Z" fill="#F97373"/>
+                                    </svg>                                    
+                                </a>
+                            </div>
+                        </div>
+                        <a href="#" class="item more-item">
+                           <p class="text-center mb-1 text-white">10</p>
+                           <p class="text-center text-white mb-0">More</p>
+                        </a>
+                    </div>
+                </div>
+                <div class="call-item">
+                    {{-- top part --}}
+                    <div class="call-list-body">
+                        <span class="call-list-item">
+                            <input id="list-item-3" type="checkbox">
+                            <label for="list-item-3">
+                                <svg width="12" height="10" viewBox="0 0 12 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M3.85561 9.43102C3.52966 9.43102 3.20372 9.31094 2.94639 9.05361L0.373124 6.48034C-0.124375 5.98284 -0.124375 5.1594 0.373124 4.6619C0.870622 4.1644 1.69407 4.1644 2.19157 4.6619L3.85561 6.32595L9.80843 0.373124C10.3059 -0.124375 11.1294 -0.124375 11.6269 0.373124C12.1244 0.870622 12.1244 1.69407 11.6269 2.19156L4.76483 9.05361C4.52466 9.31094 4.18156 9.43102 3.85561 9.43102Z" fill="white"/>
+                                </svg>
+                            </label>
+                        </span>
+                        <span class="call-list-item">56567456</span>
+                        <span class="call-list-item"><p class="mb-0 fw-bold text-ellips">Petter lake</p></span>
+                        <span class="call-list-item"><p class="mb-0 text-ellips">1453 Dorchester Ave fevlpn ksdfkdsj amjad.</p></span>
+                        <span class="call-list-item">Kabir khan</span>
+                        <span class="call-list-item">Kabir khan</span>
+                        <span class="call-list-item">12.03.2022</span>
+                        <span class="call-list-item">12.03.2022, 3:00PM</span>
+                        <span class="call-list-item"><p class="mb-0 scheduled">Scheduled</p></span>
+                        <span class="call-list-item">
+                            <a href="#" class="icon-list"><span class="icon-eye text-blue-eye fs-20"><span class="path1"></span><span class="path2"></span></span></a>
+                            <a href="#" class="icon-list"><span class="icon-note text-purple fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></span></a>
+                            <a href="#" class="icon-list"><span class="icon-messages2 primary-text fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span></span></a>
+                            <a href="#" class="icon-list"><span class="icon-calendar text-brown fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span class="path7"></span><span class="path8"></span></span></a>
+                            <a href="#" class="icon-list"> <span class="icon-messages text-yellow-msg  fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span></a>
+                            <a href="#" class="icon-list"><span class="icon-call text-light-red fs-20"><span class="path1"></span><span class="path2"></span></span></a>
+                            <button class="button button-transparent p-0" data-bs-toggle="collapse" data-bs-target="#collapseExample3" aria-expanded="false" aria-controls="collapseExample3"><span class="icon-arrow-bottom"></span></button>
+                        </span>
+                    </div>
+                    {{-- collapse part --}}
+                    <div class="call-collapse collapse" id="collapseExample3">
+                        <div class="item pending">
+                            <span class="call-badge">Pending</span>
+                            <p class="text-gray text-end fs-12">Today 12:10am</p>
+                            <p class="fs-14 mgt-12 mgb-12">He made payment but didnt get confirmation yet</p>
+                            <div class="d-flex justify-content-between">
+                                <p class="mb-0 fs-14"><span class="text-gray">Assigned to :</span> <b>Technical team</b></p>
+                                <a href="#">
+                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M13.491 1.66667H6.50768C3.47435 1.66667 1.66602 3.475 1.66602 6.50834V13.4833C1.66602 16.525 3.47435 18.3333 6.50768 18.3333H13.4827C16.516 18.3333 18.3243 16.525 18.3243 13.4917V6.50834C18.3327 3.475 16.5243 1.66667 13.491 1.66667Z" fill="white"/>
+                                        <path d="M13.9569 5.83333H9.9319C9.59023 5.83333 9.3069 6.11666 9.3069 6.45833C9.3069 6.8 9.59023 7.08333 9.9319 7.08333H12.4486L6.01523 13.5167C5.77357 13.7583 5.77357 14.1583 6.01523 14.4C6.14023 14.525 6.29857 14.5833 6.4569 14.5833C6.61523 14.5833 6.77357 14.525 6.89857 14.4L13.3319 7.96666V10.4833C13.3319 10.825 13.6152 11.1083 13.9569 11.1083C14.2986 11.1083 14.5819 10.825 14.5819 10.4833V6.45833C14.5819 6.11666 14.2986 5.83333 13.9569 5.83333Z" fill="#F97373"/>
+                                    </svg>                                    
+                                </a>
+                            </div>
+                        </div>
+                        <div class="item pending">
+                            <span class="call-badge">Pending</span>
+                            <p class="text-gray text-end fs-12">Today 12:10am</p>
+                            <p class="fs-14 mgt-12 mgb-12">He made payment but didnt get confirmation yet</p>
+                            <div class="d-flex justify-content-between">
+                                <p class="mb-0 fs-14"><span class="text-gray">Assigned to :</span> <b>Technical team</b></p>
+                                <a href="#">
+                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M13.491 1.66667H6.50768C3.47435 1.66667 1.66602 3.475 1.66602 6.50834V13.4833C1.66602 16.525 3.47435 18.3333 6.50768 18.3333H13.4827C16.516 18.3333 18.3243 16.525 18.3243 13.4917V6.50834C18.3327 3.475 16.5243 1.66667 13.491 1.66667Z" fill="white"/>
+                                        <path d="M13.9569 5.83333H9.9319C9.59023 5.83333 9.3069 6.11666 9.3069 6.45833C9.3069 6.8 9.59023 7.08333 9.9319 7.08333H12.4486L6.01523 13.5167C5.77357 13.7583 5.77357 14.1583 6.01523 14.4C6.14023 14.525 6.29857 14.5833 6.4569 14.5833C6.61523 14.5833 6.77357 14.525 6.89857 14.4L13.3319 7.96666V10.4833C13.3319 10.825 13.6152 11.1083 13.9569 11.1083C14.2986 11.1083 14.5819 10.825 14.5819 10.4833V6.45833C14.5819 6.11666 14.2986 5.83333 13.9569 5.83333Z" fill="#F97373"/>
+                                    </svg>                                    
+                                </a>
+                            </div>
+                        </div>
+                        <div class="item solved">
+                            <span class="call-badge">Solved</span>
+                            <p class="text-gray text-end fs-12">Today 12:10am</p>
+                            <p class="fs-14 mgt-12 mgb-12">He made payment but didnt get confirmation yet</p>
+                            <div class="d-flex justify-content-between">
+                                <p class="mb-0 fs-14"><span class="text-gray">Assigned to :</span> <b>Technical team</b></p>
+                                <a href="#">
+                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M13.491 1.66667H6.50768C3.47435 1.66667 1.66602 3.475 1.66602 6.50834V13.4833C1.66602 16.525 3.47435 18.3333 6.50768 18.3333H13.4827C16.516 18.3333 18.3243 16.525 18.3243 13.4917V6.50834C18.3327 3.475 16.5243 1.66667 13.491 1.66667Z" fill="white"/>
+                                        <path d="M13.9569 5.83333H9.9319C9.59023 5.83333 9.3069 6.11666 9.3069 6.45833C9.3069 6.8 9.59023 7.08333 9.9319 7.08333H12.4486L6.01523 13.5167C5.77357 13.7583 5.77357 14.1583 6.01523 14.4C6.14023 14.525 6.29857 14.5833 6.4569 14.5833C6.61523 14.5833 6.77357 14.525 6.89857 14.4L13.3319 7.96666V10.4833C13.3319 10.825 13.6152 11.1083 13.9569 11.1083C14.2986 11.1083 14.5819 10.825 14.5819 10.4833V6.45833C14.5819 6.11666 14.2986 5.83333 13.9569 5.83333Z" fill="#F97373"/>
+                                    </svg>                                    
+                                </a>
+                            </div>
+                        </div>
+                        <a href="#" class="item more-item">
+                           <p class="text-center mb-1 text-white">10</p>
+                           <p class="text-center text-white mb-0">More</p>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
