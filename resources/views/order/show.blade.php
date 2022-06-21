@@ -102,7 +102,6 @@
         }
     });
     $(".alertdissable").delay(3000).slideUp(1000);
-    // $("select").select2();
 </script>
 @endsection
 

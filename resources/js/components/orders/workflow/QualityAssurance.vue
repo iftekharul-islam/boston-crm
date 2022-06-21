@@ -5,7 +5,7 @@
             <div class="group">
                 <p class="text-light-black mgb-12">Instruction from previous step</p>
                 <p class="text-success">(Rewrite & send back)</p>
-                <p class="mb-0 text-light-black fw-bold">{{ orderData.analysis.rewrite_note }}</p>
+                <p class="mb-0 text-light-black fw-bold">{{ orderData.analysis ? orderData.analysis.rewrite_note : '-' }}</p>
             </div>
             <div class="group">
                 <p class="text-success">(Check & Upload)</p>
@@ -13,7 +13,7 @@
             </div>
             <div class="group">
                 <p class="text-light-black mgb-12">Files</p>
-                <div class="d-flex align-items-center" v-for="attachment in orderData.analysis.attachments">
+                <div class="d-flex align-items-center" v-for="attachment, indexKey in orderData.analysis.attachments" :key="indexKey">
                     <div class="file-img">
                         <img src="/img/pdf.png" alt="boston pdf image">
                     </div>
@@ -71,7 +71,7 @@
             </div>
             <div class="group">
                 <p class="text-light-black mgb-12">Files</p>
-                <div class="d-flex align-items-center" v-for="attachment in orderData.analysis.attachments">
+                <div class="d-flex align-items-center" v-for="attachment, indexKey in orderData.analysis.attachments" :key="indexKey">
                     <div class="file-img">
                         <img src="/img/pdf.png" alt="boston pdf image">
                     </div>
@@ -138,7 +138,7 @@
                     <!-- map name -->
                     <div class="map-name mgt-20">
                         <div class="map-name-list d-flex justify-content-between" v-for="(address,index) in addresses"
-                            :id="address.id">
+                            :id="address.id" :key="index">
                             <p class="mb-0">{{ address.address }}</p>
                             <span @click="removeAddress(index)" class="icon-trash fs-20 cursor-pointer"><span
                                     class="path1"></span><span class="path2"></span><span class="path3"></span><span
@@ -196,7 +196,7 @@
             </div>
             <div class="group">
                 <p class="text-light-black mgb-12">Files</p>
-                <div class="d-flex align-items-center" v-for="attachment in orderData.analysis.attachments">
+                <div class="d-flex align-items-center" v-for="attachment, indexKey in orderData.analysis.attachments" :key="indexKey">
                     <div class="file-img">
                         <img src="/img/pdf.png" alt="boston pdf image">
                     </div>
@@ -221,7 +221,7 @@
             </div>
             <div class="group">
                 <p class="text-light-black mgb-12">Files</p>
-                <div class="d-flex align-items-center" v-for="attachment in orderData.analysis.attachments">
+                <div class="d-flex align-items-center" v-for="attachment, indexKey in orderData.analysis.attachments" :key="indexKey">
                     <div class="file-img">
                         <img src="/img/pdf.png" alt="boston pdf image">
                     </div>
@@ -270,7 +270,7 @@
                         <div class="destination mgt-32">
                             <p class="text-600 mgb-12">Destination</p>
                             <ul class="destination-list">
-                                <li class="destination-list-item" v-for="address,index in comAddresses">
+                                <li class="destination-list-item" v-for="address,index in comAddresses" :key="index">
                                     <span class="drag-dot">
                                         <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
@@ -555,6 +555,7 @@
                         .then(res => {
                             self.orderData = res.data
                             self.$root.$emit('wk_update', self.orderData)
+                            this.$root.$emit('wk_flow_toast', res);
                             self.initMap()
                         })
                         .catch(err => {
@@ -578,6 +579,7 @@
                         this.orderData = res.data
                         this.comAddresses.splice(index, 1)
                         this.$root.$emit('wk_update', this.orderData)
+                        this.$root.$emit('wk_flow_toast', res);
                     })
                     .catch(err => {
                         console.error(err)
@@ -596,6 +598,7 @@
                         this.comAddresses = this.orderData.comlist
                         this.$root.$emit('wk_update', this.orderData)
                         this.$root.$emit('wk_flow_menu', this.orderData)
+                        this.$root.$emit('wk_flow_toast', res);
                         this.showSeeCom = true
                         setTimeout(() => {
                             self.comList = false
@@ -610,16 +613,19 @@
                 this.orderData = order
                 this.alreadyQualityAssurance = (JSON.parse(this.orderData.workflow_status)).qualityAssurance
                 this.alreadyQualityAssurance == 1 ? this.currentStep = 'step2' : 'step1'
-                if (this.alreadyQualityAssurance == 1 && this.orderData.quality_assurance.note) {
-                    this.currentStep = 'step3'
-                }
-                if (this.orderData.comlist[0].id != undefined) {
-                    this.showSeeCom = true
-                }
+
                 this.comAddresses = this.orderData.comlist
                 this.qa.order_id = this.orderData.id
                 this.qa.effective_date = this.orderData.due_date
+
+                if (this.comAddresses.length && this.orderData.comlist[0].id != undefined) {
+                    this.showSeeCom = true
+                }
+
                 if (this.orderData.quality_assurance) {
+                    if (this.alreadyQualityAssurance == 1 && this.orderData.quality_assurance.note) {
+                        this.currentStep = 'step3'
+                    }
                     this.qa.qa_id = this.orderData.quality_assurance.id
                     this.qa.note = this.orderData.quality_assurance.note
                     this.qa.assigned_to = this.orderData.quality_assurance.assigned_to
@@ -637,7 +643,8 @@
                                 this.orderData = res.data
                                 this.$root.$emit('wk_update', this.orderData)
                                 this.$root.$emit('wk_flow_menu', this.orderData)
-                                this.getReportAnalysisData()
+                                this.$root.$emit('wk_flow_toast', res);
+                                this.getReportAnalysisData(res.data);
                                 this.currentStep = 'step2'
                                 setTimeout(() => {
                                     self.message = '';
@@ -679,7 +686,8 @@
                     this.orderData = res.data
                     this.$root.$emit('wk_update', this.orderData)
                     this.$root.$emit('wk_flow_menu', this.orderData)
-                    this.getReportAnalysisData()
+                    this.$root.$emit('wk_flow_toast', res);
+                    this.getReportAnalysisData(res.data);
                     this.currentStep = 'step3'
                 }).catch(err => {
                     console.log(err)

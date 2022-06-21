@@ -41,6 +41,7 @@
         },
         methods: {
           initNotes(order) {
+              this.notes = [];
               this.orderData = order;
               this.notes.push({
                   key: 'provided_service',
@@ -49,7 +50,7 @@
                   user: order.user
               });
 
-              if ( order.report ) {
+              if ( order.inspection ) {
                 this.notes.push({
                     key: 'inspection_schedule',
                     title: "Inspection Schedule",

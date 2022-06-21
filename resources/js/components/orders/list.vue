@@ -21,17 +21,20 @@
             <div id="order-views" class="order-views">
                 <div class="report-top d-flex justify-content-between mgb-32 flex-wrap">
                     <div class="left chart-box-header-btn d-flex flex-wrap justify-content-between">
-                        <button v-for="dCol, di in order.filterItems" class="chart-btn h-32 d-flex align-items-center justify-content-between mb-2" :key="di" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-                            {{ dCol.title }}
-                        </button>
-                        <!-- dropdown -->
-                        <div class="dropdown-menu py-0 search-dropdown" aria-labelledby="dropdownMenuLink">
-                            <input type="text" class="search-input" placeholder="Search...">
-                            <ul class="p-0 m-0 search-results">
-                                <li class="results-item">Korim khan</li>
-                                <li class="results-item">Korim khan</li>
-                                <li class="results-item">Korim khan</li>
-                            </ul>
+                        <div class="item-btn-drop" v-for="dCol, di in order.filterItems" :key="di">
+                            <button class="chart-btn h-32 d-flex align-items-center justify-content-between mb-2" :key="di" :id="`dropdownMenuLink_${dCol.key}`" data-bs-toggle="dropdown" aria-expanded="false">
+                                {{ dCol.title }} ({{ showNumber(filterTypeValue[dCol.key]) }})
+                            </button>
+                            <!-- dropdown -->
+                            <div class="dropdown-menu py-0 search-dropdown" :aria-labelledby="`dropdownMenuLink_${dCol.key}`">
+                                <input type="text" class="search-input" @input="checkSearch($event.target.value, dCol)" placeholder="Search...">
+                                <ul class="p-0 m-0 search-results">
+                                    <li class="results-item" v-for="filter_item, fi in filterTypeValue[dCol.key]" :key="fi" @click="chooseFilterItem(filter_item, dCol.key)">
+                                        <span v-if="dCol.key == 'property_types'">{{ filter_item.form_type }}</span>
+                                        <span v-else>{{ filter_item.name }}</span>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                     <div class="right d-flex">
@@ -116,14 +119,17 @@
 import Table from "../../src/Table.vue"
 export default {
     props: [
-        'data', 'summary'
+        'data', 'summary', 'filterType'
     ],
     components: {
         Table
     },
     data: () => ({
         orderData: [],
+        filterDataBackup: [],
+        filterTypeValue: [],
         visibleColumnDropDown: false,
+        filterTypeBack: [],
         pages: {
             acitvePage: 1,
             pageData: [],
@@ -146,24 +152,24 @@ export default {
             ],
             filterItems: [
                 {
-                    title: "Appraiser (0)",
-                    key: "appraiser"
+                    title: "Appraiser",
+                    key: "appraisal_users"
                 },
                 {
-                    title: "Client (0)",
-                    key: "client"
+                    title: "Client",
+                    key: "client_users"
                 },
                 {
-                    title: "Loan Type (0)",
-                    key: "loanType"
+                    title: "Loan Type",
+                    key: "loan_types"
                 },
                 {
-                    title: "Report Type (0)",
+                    title: "Report Type",
                     key: "reportType"
                 },
                 {
-                    title: "Property Type (0)",
-                    key: "lat"
+                    title: "Property Type",
+                    key: "property_types"
                 }
             ],
 
@@ -182,6 +188,11 @@ export default {
     }),
     created() {
         this.initTableDate(this.data);
+        this.filterTypeValue = this.filterType;
+        localStorage.setItem('orderSearchType', JSON.stringify(this.filterType));
+    },
+    destroyed() {
+        localStorage.removeItem('orderSearchType');
     },
     methods: {
         updateOrderList(item) {
@@ -208,7 +219,6 @@ export default {
         initTableDate(data) {
             this.pages.pageData = data;
             this.orderData = data.data;
-
             this.order.header.map( (ele) => {
                 let item = ele.split("@");
                 let checkDisable = this.order.disableHeader.find((ele) => ele.key == item[1]);
@@ -271,6 +281,36 @@ export default {
             if (event.item == "action") {
                 this.visibleColumnDropDown = !this.visibleColumnDropDown;
             }
+        },
+        showNumber(data) {
+            if (typeof data == 'object') {
+                return Object.values(data).length;
+            } else if(typeof data == 'array') {
+                return data.length;
+            } else return 0;
+        },
+        checkSearch(value, dcol) {
+            if (value.length == 0) {
+                let filterBackup = JSON.parse(localStorage.getItem('orderSearchType'));
+                this.filterTypeValue = filterBackup;
+            } else {
+                let findData = this.filterTypeValue[dcol.key];
+                let searchData = [];
+                
+                if (dcol.key == 'property_types') {
+                    searchData = findData.filter((ele) => (ele.form_type).toLowerCase().match(value.toLowerCase()));
+                } else {
+                    searchData = findData.filter((ele) => (ele.name).toLowerCase().match(value.toLowerCase()));
+                }
+                this.filterTypeValue[dcol.key] = searchData;
+            }
+        },
+        chooseFilterItem(item, key) {
+            this.$boston.post('search/order/by/filter', { item, key }).then( (res) => {
+                this.initTableDate(res);
+            }).catch( (err) => {
+                console.log(err);
+            });
         }
     }
 }
@@ -323,5 +363,29 @@ select.form-control {
     color: #FFFFFF;
     background: #7E829B;
     border-radius: 0.9rem;
+}
+.search-results li {
+    list-style-type: none;
+    padding-top: 5px;
+    cursor: pointer;
+    transition: all 0.2s linear;
+}
+.search-dropdown {
+    box-shadow: 0 5px 10px rgb(0 0 0 / 20%);
+    padding: 10px;
+    padding-top: 10px!important;
+    padding-bottom: 10px!important;
+    border: unset;
+}
+.search-dropdown input {
+    margin-bottom: 10px;
+    padding: 5px;
+    border: unset;
+    background: #eee;
+    border-radius: 0.15rem;
+}
+.search-results li:hover {
+    transition: all 0.2s linear;
+    color: #19b7a2;
 }
 </style>

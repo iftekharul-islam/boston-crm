@@ -115,6 +115,7 @@ export default {
   },  
   methods: {
       initData(order){
+          console.log(order.analysis);
           this.prev = order.analysis ?? [];
           this.current = order.report_rewrite ?? [];
 
@@ -143,7 +144,7 @@ export default {
                     this.$root.$emit('wk_flow_menu', this.orderData);
                     this.$root.$emit('wk_flow_toast', res);
                 }).catch(err => {
-                    
+                    console.log('err', err)
                 });
             }
         })

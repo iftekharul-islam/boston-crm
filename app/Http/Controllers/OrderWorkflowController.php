@@ -407,6 +407,14 @@ class OrderWorkflowController extends BaseController
     {
         $this->repository->updateQualityAssurance($request->all());
         $order_qa = OrderWQa::find($request->qa_id);
+
+        if (!$order_qa) {
+            return response()->json([
+                'error' => true,
+                'message' => "There are no existing qa, or please reload once"
+            ]);
+        }
+
         $order = Order::find($order_qa->order_id);
         $user = auth()->user();
         if ($request->qa_id > 0) {
