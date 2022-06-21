@@ -107,7 +107,7 @@ class OrderWorkflowController extends BaseController
             "file" => $data['media'],
             "data" => $orderData,
             'error' => false,
-            "message" => "inspection file uploaded successfully"
+            "message" => "Inspection file uploaded successfully"
         ]);
     }
 

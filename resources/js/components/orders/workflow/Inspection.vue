@@ -22,33 +22,17 @@
             </div>
             <!-- upload -->
             <div class="position-relative file-upload mgt-20" v-if="editable">
-                <div v-b-modal.upload-ins-files class="position-relative file-upload document-upload">
-                    <label for="">Upload <img src="/img/upload.png" alt="boston profile"></label>
-                </div>
+                    <p class="text-light-black mgb-12">Files</p>
+                    <div class="position-relative file-upload">
+                        <input type="file" multiple v-on:change="addFiles">
+                        <label for="" class="py-2">Upload <span class="icon-upload ms-3 fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span></label>
+                    </div>
+                    <p class="text-light-black mgb-12" v-if="fileData.files.length">{{ fileData.files.length }} Files</p>
             </div>
         </div>
         <div class="text-end mgt-32" v-if="editable">
-            <button class="button button-primary px-4 h-40 d-inline-flex align-items-center">Save</button>
+            <button class="button button-primary px-4 h-40 d-inline-flex align-items-center" @click="saveInsFiles" :disabled="isUploading">Save</button>
         </div>
-        <b-modal id="upload-ins-files" size="lg" title="Uploads Inspection Files">
-            <div class="modal-body">
-                <b-alert v-if="message" show variant="success"><a href="#" class="alert-link">{{ message }}</a>
-                </b-alert>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="group">
-                            <label for="" class="d-block mb-2 dashboard-label">Select file <span
-                                    class="require"></span></label>
-                            <input type="file" multiple v-on:change="addFiles">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div slot="modal-footer">
-                <b-button variant="secondary" @click="$bvModal.hide('upload-ins-files')">Close</b-button>
-                <b-button variant="primary" @click="saveInsFiles">Save</b-button>
-            </div>
-        </b-modal>
     </div>
 </template>
 <script>
@@ -58,6 +42,7 @@
             order: [],
         },
         data: () => ({
+            isUploading: false,
             editable: true,
             orderData: [],
             fileData: {
@@ -70,7 +55,6 @@
             name: null,
             note: null,
             dataFiles: [],
-            message: ''
         }),
         created() {
             this.inspectionData(this.order);
@@ -90,6 +74,7 @@
                 this.fileData.files = event.target.files
             },
             saveInsFiles() {
+                this.isUploading = true
                 this.editable = false
                 let that = this
                 let formData = new FormData();
@@ -103,18 +88,17 @@
                         'Content-Type': 'multipart/form-data'
                     }
                 }).then(res => {
-                    this.fileData = []
+                    this.isUploading = false
+                    this.fileData.files = []
+                    this.fileData.file_type = ''
                     this.orderData = res.data.data
-                    this.message = res.data.message
                     this.$root.$emit('wk_update', this.orderData);
                     this.$root.$emit('wk_flow_menu', this.orderData);
-                    this.$root.$emit('wk_flow_toast', res);
-                    this.inspectionData()
-                    setTimeout(function () {
-                        that.$bvModal.hide('upload-ins-files')
-                        that.message = ''
-                    }, 2000);
+                    this.$root.$emit('wk_flow_toast', res.data);
+                    this.inspectionData(this.orderData)
                 }).catch(err => {
+                    console.log(err)
+                    this.isUploading = false
                 })
             }
         },
