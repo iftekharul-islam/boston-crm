@@ -1,93 +1,112 @@
 <template>
-    <div id="order-views" class="order-views">
-        <div class="report-top d-flex justify-content-between mgb-32 flex-wrap">
-            <div class="left chart-box-header-btn d-flex flex-wrap justify-content-between">
-                <button v-for="dCol, di in order.filterItems" class="chart-btn h-32 d-flex align-items-center justify-content-between mb-2" :key="di" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-                    {{ dCol.title }}
-                </button>
-                <!-- dropdown -->
-                <div class="dropdown-menu py-0 search-dropdown" aria-labelledby="dropdownMenuLink">
-                    <input type="text" class="search-input" placeholder="Search...">
-                    <ul class="p-0 m-0 search-results">
-                        <li class="results-item">Korim khan</li>
-                        <li class="results-item">Korim khan</li>
-                        <li class="results-item">Korim khan</li>
-                    </ul>
+    <div id="order-list-view">
+        <div class="open-archive d-flex">
+            <div class="open-archive-left">
+                <div class="d-flex flex-wrap">
+                    <div class="open-archive-box" v-for="(item, key) in summary" @click="updateOrderList(item)" :key="key">
+                        <button class="order-sml-box">
+                            <h5 class="mb-2 number">{{ item.total }}</h5>
+                            <p class="mb-0 text">{{ item.name }}</p>
+                            <span class="badges" :class="updateClass(item.name)"></span>
+                        </button>
+                    </div>
                 </div>
             </div>
-            <div class="right d-flex">
-                <div class="search-box d-flex me-3 mb-3">
-                    <input type="text" v-model="pages.searchModel" @input="searchData($event)" class=" px-3 bdr-1 br-4 gray-border" placeholder="Search...">
-                    <button class="search-btn">
-                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M7.33333 13.6667C10.8311 13.6667 13.6667 10.8311 13.6667 7.33333C13.6667 3.83553 10.8311 1 7.33333 1C3.83553 1 1 3.83553 1 7.33333C1 10.8311 3.83553 13.6667 7.33333 13.6667Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M17 17L13 13" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </button>
-                </div>
-              
-                <button class="button button-primary h-40 d-inline-flex align-items-center py-2">View daily report</button>
+            <div class="open-archive-btn">
+                <a href="/orders/create" class="button button-primary h-40 d-inline-flex align-items-center py-2">Add new order</a>
             </div>
         </div>
-        <Table :items="orderData" :sl-start="pages.pageData.from" :header="order.header" @headClick="headerClick($event)">
-            <template v-slot:amc_id="{item}">
-                {{ item.amc ? item.amc.name : '-' }}
-            </template>
-            <template v-slot:map_it="{item}">
-                <a target="_blank" :href="`https://www.google.com/maps/search/?api=1&query=${item.property_info ? item.property_info.search_address : ''}`" :data-key="item.id">
-                    <img src="/img/marker.png" class="img-fluid" style="height: 24px">
-                </a>
-            </template>
-            <template v-slot:inspector="{item}">
-                {{ item.inspection ? item.inspection.user.name : '-' }}
-            </template>
-            <template v-slot:due_date="{item}">
-                {{ item.due_date | onlyDate }}
-            </template>
-            <template v-slot:inspection_date="{item}">
-                {{ item.inspection ? item.inspection.inspection_date_time : '-' }}
-            </template>
-            <template v-slot:appraiser="{item}">
-                <template v-if="item.appraisal_detail">
-                    {{ item.appraisal_detail.appraiser ? item.appraisal_detail.appraiser.name : '-' }}
-                </template>
-                <template v-else>
-                    -
-                </template>
-            </template>
-             <template v-slot:property_address="{item}">
-                {{ item.property_info.search_address }}
-            </template>
-            <template v-slot:action="{item}">
-                <a title="Edit order information" :href="`orders/${item.id}/edit`" class="btn btn-success btn-sm d-none" :data-key="item.id">
-                    <span onclick="roleUpdateOpen(2);" class="icon-edit cursor-pointer"><span class="path1"></span><span class="path2"></span></span>
-                </a>
-                <a title="View order information" :href="`orders/${item.id}`" class="view-btn" :data-key="item.id">
-                    <span onclick="roleUpdateOpen(2);" class="cursor-pointer">
-                        View
-                    </span>
-                </a>
-            </template>
-            <template v-slot:head_action="{item}">
-                <img src="/icons/column.svg" :tag="item.item" class="cursor-pointer">
-            </template>
-            <template v-slot:popup>
-                <transition name="fade" appear v-if="visibleColumnDropDown">
-                    <div class="column-list">
-                        <div class="col-item" @click="addToTable(item)" :class="{ 'active' : checkColumnActive(item) }" v-for="item, ci in order.disableHeader" :key="ci">{{ item.title }}</div>
+        <br>
+        <div class="report bg-white">
+            <div id="order-views" class="order-views">
+                <div class="report-top d-flex justify-content-between mgb-32 flex-wrap">
+                    <div class="left chart-box-header-btn d-flex flex-wrap justify-content-between">
+                        <button v-for="dCol, di in order.filterItems" class="chart-btn h-32 d-flex align-items-center justify-content-between mb-2" :key="di" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                            {{ dCol.title }}
+                        </button>
+                        <!-- dropdown -->
+                        <div class="dropdown-menu py-0 search-dropdown" aria-labelledby="dropdownMenuLink">
+                            <input type="text" class="search-input" placeholder="Search...">
+                            <ul class="p-0 m-0 search-results">
+                                <li class="results-item">Korim khan</li>
+                                <li class="results-item">Korim khan</li>
+                                <li class="results-item">Korim khan</li>
+                            </ul>
+                        </div>
                     </div>
-                </transition>
-            </template>
-        </Table>
-        <div class="text-center d-flex justify-content-center">
-             <select @change="loadPage(pages.activePage)" name="paginate" class="form-control per-page" v-model="pages.paginate">
-                <option value="">Per page</option>
-                <option :value="item" :key="ik" v-for="item, ik in pages.perPages">{{ item }} Per page</option>
-            </select>
-         </div>
-        <paginate align="center" :total-page="pages.pageData.last_page" @loadPage="loadPage($event)"></paginate>
-         
+                    <div class="right d-flex">
+                        <div class="search-box d-flex me-3 mb-3">
+                            <input type="text" v-model="pages.searchModel" @input="searchData($event)" class=" px-3 bdr-1 br-4 gray-border" placeholder="Search...">
+                            <button class="search-btn">
+                                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M7.33333 13.6667C10.8311 13.6667 13.6667 10.8311 13.6667 7.33333C13.6667 3.83553 10.8311 1 7.33333 1C3.83553 1 1 3.83553 1 7.33333C1 10.8311 3.83553 13.6667 7.33333 13.6667Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M17 17L13 13" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </button>
+                        </div>
 
+                        <button class="button button-primary h-40 d-inline-flex align-items-center py-2">View daily report</button>
+                    </div>
+                </div>
+                <Table :items="orderData" :sl-start="pages.pageData.from" :header="order.header" @headClick="headerClick($event)">
+                    <template v-slot:amc_id="{item}">
+                        {{ item.amc ? item.amc.name : '-' }}
+                    </template>
+                    <template v-slot:map_it="{item}">
+                        <a target="_blank" :href="`https://www.google.com/maps/search/?api=1&query=${item.property_info ? item.property_info.search_address : ''}`" :data-key="item.id">
+                            <img src="/img/marker.png" class="img-fluid" style="height: 24px">
+                        </a>
+                    </template>
+                    <template v-slot:inspector="{item}">
+                        {{ item.inspection ? item.inspection.user.name : '-' }}
+                    </template>
+                    <template v-slot:due_date="{item}">
+                        {{ item.due_date | onlyDate }}
+                    </template>
+                    <template v-slot:inspection_date="{item}">
+                        {{ item.inspection ? item.inspection.inspection_date_time : '-' }}
+                    </template>
+                    <template v-slot:appraiser="{item}">
+                        <template v-if="item.appraisal_detail">
+                            {{ item.appraisal_detail.appraiser ? item.appraisal_detail.appraiser.name : '-' }}
+                        </template>
+                        <template v-else>
+                            -
+                        </template>
+                    </template>
+                    <template v-slot:property_address="{item}">
+                        {{ item.property_info.search_address }}
+                    </template>
+                    <template v-slot:action="{item}">
+                        <a title="Edit order information" :href="`orders/${item.id}/edit`" class="btn btn-success btn-sm d-none" :data-key="item.id">
+                            <span onclick="roleUpdateOpen(2);" class="icon-edit cursor-pointer"><span class="path1"></span><span class="path2"></span></span>
+                        </a>
+                        <a title="View order information" :href="`orders/${item.id}`" class="view-btn" :data-key="item.id">
+                            <span onclick="roleUpdateOpen(2);" class="cursor-pointer">
+                                View
+                            </span>
+                        </a>
+                    </template>
+                    <template v-slot:head_action="{item}">
+                        <img src="/icons/column.svg" :tag="item.item" class="cursor-pointer">
+                    </template>
+                    <template v-slot:popup>
+                        <transition name="fade" appear v-if="visibleColumnDropDown">
+                            <div class="column-list">
+                                <div class="col-item" @click="addToTable(item)" :class="{ 'active' : checkColumnActive(item) }" v-for="item, ci in order.disableHeader" :key="ci">{{ item.title }}</div>
+                            </div>
+                        </transition>
+                    </template>
+                </Table>
+                <div class="text-center d-flex justify-content-center">
+                    <select @change="loadPage(pages.activePage)" name="paginate" class="form-control per-page" v-model="pages.paginate">
+                        <option value="">Per page</option>
+                        <option :value="item" :key="ik" v-for="item, ik in pages.perPages">{{ item }} Per page</option>
+                    </select>
+                </div>
+                <paginate align="center" :total-page="pages.pageData.last_page" @loadPage="loadPage($event)"></paginate>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -97,11 +116,11 @@
 import Table from "../../src/Table.vue"
 export default {
     props: [
-        'data'
+        'data', 'summary'
     ],
     components: {
         Table
-    }, 
+    },
     data: () => ({
         orderData: [],
         visibleColumnDropDown: false,
@@ -158,13 +177,34 @@ export default {
                     key: "due_date"
                 }
             ]
- 
+
         }
     }),
     created() {
         this.initTableDate(this.data);
     },
     methods: {
+        updateOrderList(item) {
+            this.pages.acitvePage = 1
+            this.$boston.post('filter-list/order?page='+this.pages.acitvePage, { item: item, paginate: this.pages.paginate }).then( (res) => {
+                this.pages.pageData = res;
+                this.orderData = res.data;
+            }).catch( (err) => {
+                console.log(err);
+            });
+        },
+        updateClass(type) {
+            let firstRow = ['Due today', 'Due tomorrow', 'Appt Today', 'Appt Tomorrow', 'Overdue', 'Rush']
+            let badge = 'progress-badges'
+            if(type == 'Deleted' || type == 'Cancelled'){
+                badge = 'archive-badges'
+            } else if (type == 'Revisions' || type == 'Revised') {
+                badge = 'revision-badges'
+            } else if (_.includes(firstRow, type)) {
+                badge = 'open-badges';
+            }
+            return badge
+        },
         initTableDate(data) {
             this.pages.pageData = data;
             this.orderData = data.data;
@@ -182,7 +222,7 @@ export default {
         },
         checkColumnActive(val) {
             let getHeader = (this.order.header);
-            let findActive = false;            
+            let findActive = false;
             for (let index in getHeader){
                 let ele = getHeader[index];
                 let key = ele.split("@");
@@ -202,7 +242,7 @@ export default {
                 }
             });
             if (!getIndex) {
-                this.order.header.splice( 8, 0, 
+                this.order.header.splice( 8, 0,
                     val.title + '@' + val.key + '@left@left'
                 );
             } else  {
@@ -210,7 +250,7 @@ export default {
                     return ele == getIndex;
                 });
                 this.order.header.splice(getIndexNo, 1);
-            } 
+            }
             this.checkColumnActive(val)
         },
         loadPage(acitvePage = null){
@@ -222,7 +262,7 @@ export default {
                 console.log(err);
             });
         },
-        // Search Table Data 
+        // Search Table Data
         searchData: _.debounce( function (event) {
             this.loadPage(this.pages.acitvePage, event.target.value);
         }, 300),
