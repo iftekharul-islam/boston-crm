@@ -10,6 +10,7 @@ use App\Models\OrderWRewrite;
 use App\Models\OrderWRevision;
 use App\Models\AppraisalDetail;
 use App\Models\ProvidedService;
+use Illuminate\Support\Facades\Auth;
 use Spatie\MediaLibrary\HasMedia;
 use App\Models\OrderWInitialReview;
 use App\Models\OrderWReportAnalysis;
@@ -53,7 +54,9 @@ class Order extends Model implements HasMedia
         11 => "Ready for Submission/Delivery",
         12 => "Under Correction/Revision",
         13 => "Delivered",
-        14 => "Cancelled"
+        14 => "Cancelled",
+        15 => "Deleted",
+        16 => "Declined"
     ];
 
     protected $fillable = [

@@ -1,5 +1,25 @@
 <template>
     <div id="order-views">
+<!--        @foreach($orderSummary as $item)-->
+<!--        @php-->
+<!--        $firstRow = ['Due today', 'Due tomorrow', 'Appt Today', 'Appt Tomorrow', 'Overdue', 'Rush'];-->
+<!--        $badge = 'progress-badges';-->
+<!--        if($item['name'] == 'Deleted' || $item['name'] == 'Cancelled'){-->
+<!--        $badge = 'archive-badges';-->
+<!--        } elseif ($item['name'] == 'Revisions' || $item['name'] == 'Revised') {-->
+<!--        $badge = 'revision-badges';-->
+<!--        } elseif (in_array($item['name'], $firstRow)) {-->
+<!--        $badge = 'open-badges';-->
+<!--        }-->
+<!--        @endphp-->
+        <div class="open-archive-box" v-for="(item, key) in summary" :key="key">
+            <button class="order-sml-box">
+                <h5 class="mb-2 number">{{ item['total'] }}</h5>
+                <p class="mb-0 text">{{ item['name'] }}</p>
+                <span class="{{ $badge }} badges"></span>
+            </button>
+        </div>
+<!--        @endforeach-->
         <div class="report-top d-flex justify-content-between mgb-32 flex-wrap">
             <div class="left chart-box-header-btn d-flex flex-wrap justify-content-between">
                 <button v-for="dCol, di in order.filterItems" class="chart-btn h-32 d-flex align-items-center justify-content-between mb-2" :key="di">
@@ -75,11 +95,11 @@
 import Table from "../../src/Table.vue"
 export default {
     props: [
-        'data'
+        'data', 'summary'
     ],
     components: {
         Table
-    }, 
+    },
     data: () => ({
         orderData: [],
         visibleColumnDropDown: false,
@@ -136,7 +156,7 @@ export default {
                     key: "due_date"
                 }
             ]
- 
+
         }
     }),
     created() {
@@ -157,7 +177,7 @@ export default {
     methods: {
         checkColumnActive(val) {
             let getHeader = (this.order.header);
-            let findActive = false;            
+            let findActive = false;
             for (let index in getHeader){
                 let ele = getHeader[index];
                 let key = ele.split("@");
@@ -177,7 +197,7 @@ export default {
                 }
             });
             if (!getIndex) {
-                this.order.header.splice( 8, 0, 
+                this.order.header.splice( 8, 0,
                     val.title + '@' + val.key + '@left@left'
                 );
             } else  {
@@ -185,7 +205,7 @@ export default {
                     return ele == getIndex;
                 });
                 this.order.header.splice(getIndexNo, 1);
-            } 
+            }
             this.checkColumnActive(val)
         },
         loadPage(acitvePage = null){
@@ -197,7 +217,7 @@ export default {
                 console.log(err);
             });
         },
-        // Search Table Data 
+        // Search Table Data
         searchData: _.debounce( function (event) {
             this.loadPage(this.pages.acitvePage, event.target.value);
         }, 300),
