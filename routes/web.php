@@ -100,6 +100,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         [OrderController::class, 'orderUpdate'])->middleware('role_permission:update.order')->name('orders.update.single');
 
     Route::post('search/order', [OrderController::class, 'searchOrderData'])->middleware('role_permission:orders.index');
+    Route::post('filter-list/order', [OrderController::class, 'filterOrderData'])->middleware('role_permission:orders.index');
     Route::post('api/get/same/orders/by/street', [OrderApiController::class, 'getSameData']);
 
     //order details
