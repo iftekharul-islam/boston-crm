@@ -5,7 +5,8 @@
             <div class="group">
                 <p class="text-light-black mgb-12">Instruction from previous step</p>
                 <p class="text-success">(Rewrite & send back)</p>
-                <p class="mb-0 text-light-black fw-bold">{{ orderData.analysis ? orderData.analysis.rewrite_note : '-' }}</p>
+                <p class="mb-0 text-light-black fw-bold">{{ orderData.analysis ? orderData.analysis.rewrite_note : '-'
+                    }}</p>
             </div>
             <div class="group">
                 <p class="text-success">(Check & Upload)</p>
@@ -13,7 +14,8 @@
             </div>
             <div class="group" v-if="orderData.analysis">
                 <p class="text-light-black mgb-12">Files</p>
-                <div class="d-flex align-items-center" v-for="attachment, indexKey in orderData.analysis.attachments" :key="indexKey">
+                <div class="d-flex align-items-center" v-for="attachment, indexKey in orderData.analysis.attachments"
+                    :key="indexKey">
                     <div class="file-img">
                         <img src="/img/pdf.png" alt="boston pdf image">
                     </div>
@@ -71,7 +73,8 @@
             </div>
             <div class="group">
                 <p class="text-light-black mgb-12">Files</p>
-                <div class="d-flex align-items-center" v-for="attachment, indexKey in orderData.analysis.attachments" :key="indexKey">
+                <div class="d-flex align-items-center" v-for="attachment, indexKey in orderData.analysis.attachments"
+                    :key="indexKey">
                     <div class="file-img">
                         <img src="/img/pdf.png" alt="boston pdf image">
                     </div>
@@ -196,7 +199,8 @@
             </div>
             <div class="group">
                 <p class="text-light-black mgb-12">Files</p>
-                <div class="d-flex align-items-center" v-for="attachment, indexKey in orderData.analysis.attachments" :key="indexKey">
+                <div class="d-flex align-items-center" v-for="attachment, indexKey in orderData.analysis.attachments"
+                    :key="indexKey">
                     <div class="file-img">
                         <img src="/img/pdf.png" alt="boston pdf image">
                     </div>
@@ -221,7 +225,8 @@
             </div>
             <div class="group">
                 <p class="text-light-black mgb-12">Files</p>
-                <div class="d-flex align-items-center" v-for="attachment, indexKey in orderData.analysis.attachments" :key="indexKey">
+                <div class="d-flex align-items-center" v-for="attachment, indexKey in orderData.analysis.attachments"
+                    :key="indexKey">
                     <div class="file-img">
                         <img src="/img/pdf.png" alt="boston pdf image">
                     </div>
@@ -372,7 +377,13 @@
                                     stroke-linejoin="round" />
                             </svg>
                         </button>
-                        <div id="map"></div>
+                        <div id="map">
+                            <iframe
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d116834.15093170418!2d90.34928581382016!3d23.78062065335469!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755b8b087026b81%3A0x8fa563bbdd5904c2!2sDhaka!5e0!3m2!1sen!2sbd!4v1655630336126!5m2!1sen!2sbd"
+                                width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+                                referrerpolicy="no-referrer-when-downgrade">
+                            </iframe>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -430,7 +441,7 @@
                 });
                 var chicago = new google.maps.LatLng(41.850033, -87.6500523);
                 var mapOptions = {
-                    zoom: 7,
+                    zoom: 14,
                     center: chicago
                 }
                 var endAddress = '';
@@ -442,7 +453,6 @@
                         endAddress = this.comAddresses[i]['address']
                     }
                 }
-                console.log(this.wayPoints, endAddress, this.startingPointName)
 
                 var start = this.startingPointName;
                 var end = endAddress;
@@ -515,14 +525,16 @@
                 google.maps.event.addListener(autocomplete, 'place_changed', function () {
                     var place = autocomplete.getPlace()
                     if (startingPoint.value.length > 0) {
-                        self.startingPointName = place.formatted_address
-                        self.startingPointLat = place.geometry.location.lat()
-                        self.startingPointLng = place.geometry.location.lng()
-                        self.initMap()
+                        setTimeout(() => {
+                            self.startingPointName = place.formatted_address
+                            self.startingPointLat = place.geometry.location.lat()
+                            self.startingPointLng = place.geometry.location.lng()
+                            self.initMap()
+                        }, 1000)
                     } else {
                         return false
                     }
-                })
+                }.bind(this))
             },
             getDestination() {
                 const center = { lat: 50.064192, lng: -130.605469 };
@@ -542,25 +554,28 @@
                     types: ["establishment"],
                 };
                 const autocomplete = new google.maps.places.Autocomplete(destination, options);
-                let self = this;
                 google.maps.event.addListener(autocomplete, 'place_changed', function () {
                     var place = autocomplete.getPlace()
-                    var destination = {
-                        "order_id": self.orderData.id,
+                    var destinationObject = {
+                        "order_id": this.orderData.id,
                         "address": place.formatted_address,
                         "lat": place.geometry.location.lat(),
-                        "lon": place.geometry.location.lng()
+                        "lng": place.geometry.location.lng()
                     }
-                    this.$boston.post('/add-com/', destination)
-                        .then(res => {
-                            self.orderData = res.data
-                            self.$root.$emit('wk_update', self.orderData)
-                            this.$root.$emit('wk_flow_toast', res);
-                            self.initMap()
-                        })
-                        .catch(err => {
-                            console.log(err)
-                        })
+                    if (place.formatted_address != '') {
+                        this.$boston.post('add-com', destinationObject)
+                            .then(res => {
+                                this.orderData = res.data
+                                document.getElementById("destination").value = '';
+                                this.showDestination = false;
+                                this.initMap()
+                                this.$root.$emit('wk_update', this.orderData)
+                                this.$root.$emit('wk_flow_toast', res);
+                            })
+                            .catch(err => {
+                                console.log(err)
+                            })
+                    }
                 }.bind(this))
             },
             addLocation() {
@@ -577,8 +592,7 @@
                 this.$boston.post('delete-com/' + id)
                     .then(res => {
                         this.orderData = res.data
-                        this.comAddresses.splice(index, 1)
-                        this.$root.$emit('wk_update', this.orderData)
+                        this.$root.$emit('wk_update', res.data)
                         this.$root.$emit('wk_flow_toast', res);
                     })
                     .catch(err => {
@@ -665,9 +679,6 @@
             openComMap() {
                 this.mapOpen = true
                 let self = this
-                setTimeout(function () {
-                    self.initMap()
-                }, 5)
             },
             updateQualityAssurance() {
                 let formData = new FormData();

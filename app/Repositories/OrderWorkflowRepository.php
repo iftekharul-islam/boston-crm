@@ -134,8 +134,24 @@ class OrderWorkflowRepository extends BaseRepository
     }
 
     public function addCom($data){
-        dd($data);
-    }
+        $comSerial = OrderWCom::where('order_id',$data['order_id'])
+            ->orderBy('serial','desc')
+            ->first();
+        $com = new OrderWCom();
+        $com->order_id = $data['order_id'];
+        $com->address = $data['address'];
+        $com->lat = $data['lat'];
+        $com->lng = $data['lng'];
+        if($comSerial){
+            $com->serial = $comSerial->serial + 1;
+        }else{
+            $com->serial = 1;
+        }
+
+        $com->save();
+
+        return true;
+}
 
     public function deleteCom($id){
         $order_w_com = OrderWCom::find($id);

@@ -785,6 +785,11 @@ class OrderWorkflowController extends BaseController
     public function addCom(Request $request)
     {
         $this->repository->addCom($request->all());
+        $orderData = $this->orderDetails($request->order_id);
+        return [
+            "message" => 'Destination updated',
+            "data" => $orderData
+        ];
     }
 
     public function deleteCom(Request $request,$id)
