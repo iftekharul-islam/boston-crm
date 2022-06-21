@@ -370,6 +370,13 @@ select.form-control {
     cursor: pointer;
     transition: all 0.2s linear;
 }
+
+.search-results {
+    max-height: 250px;
+    overflow-x: auto;
+    overflow-y: auto;
+}
+
 .search-dropdown {
     box-shadow: 0 5px 10px rgb(0 0 0 / 20%);
     padding: 10px;
