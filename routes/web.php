@@ -182,6 +182,10 @@ Route::get('accept-new-user/{code}', [UserController::class, 'acceptInviteUser']
 Route::post('invite-user-update/{id}', [UserController::class, 'inviteUserUpdate'])->name('update.invite.user.profile');
 Route::get('/public-order/{id}', [OrderController::class, 'publicOrder'])->name('public.order');
 Route::post('/upload-order-files/{id}', [OrderController::class, 'uploadOrderFiles'])->name('order.file.upload');
+
+Route::post('/search/order/by/filter', [OrderController::class, 'searchOrderByFiltering'])->name('searchOrderByFiltering');
+
+
 //workflow
 Route::post('/upload-inspection-files/{id}', [OrderWorkflowController::class, 'uploadInspectionFiles'])->name('inspection.file.upload');
 Route::post('/admin-report-preparation-create/{id}', [OrderWorkflowController::class, 'storeAdminReportPreparation'])->name('report.preparation.create');

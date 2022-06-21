@@ -52,10 +52,24 @@ class OrderController extends BaseController
     public function index(Request $get) //: View|Factory|Application
     {
         $user = Auth::user();
-        $companyId = $user->getCompanyProfile()->company_id;
+        $company = $user->getCompanyProfile();
+        $companyId = $company->company_id;
+        
+        $appraisal_users = $this->repository->getUserByRoleWise(role: 'appraiser');
+        $property_types = $this->repository->getAppraisalTypes();
+        $loan_types = $this->repository->getLoanTypes();
+        $client_users = $this->repository->getClients();
+
+        $filterType = [
+            "appraisal_users" => $appraisal_users,
+            "property_types" => $property_types,
+            "loan_types" => $loan_types,
+            "client_users" => $client_users,
+        ];
+        
         $orderData = $this->searchOrderData($get, $user, $companyId);
         $orderSummary = $this->orderSummary($user, $companyId);
-        return view('order.index', compact('orderData', 'orderSummary'));
+        return view('order.index', compact('orderData', 'orderSummary', 'filterType'));
     }
 
     public function orderSummary($user = null, $companyId = null)
@@ -620,4 +634,36 @@ class OrderController extends BaseController
         ];
         $this->repository->addActivity($data);
     }
+
+    public function searchOrderByFiltering(Request $get) {
+        $id = $get->item['id'];
+        $item = $get->item;
+        if ($get->key == 'appraisal_users') {
+            $orderId = AppraisalDetail::where('appraiser_id', $id)->latest()->get()->pluck("order_id");
+            return $this->orderInformation($orderId);
+        } else if ($get->key == 'client_users') {
+            return Order::where(function($qry) use ($item, $id) {
+                if($item['client_type'] == 'both') {
+                    return $qry->where('amc_id', $id)->orWhere('lender_id', $id);
+                } else if($item['client_type'] === 'amc'){
+                    return $qry->where('amc_id', $id);
+                } else {
+                    return $qry->where('lender_id', $id);
+                }
+            })->with($this->order_list_relation())->orderBy('id', 'desc')->paginate(100);
+        } else if($get->key == "loan_types") {
+            $orderId = AppraisalDetail::where('loan_type', $id)->latest()->get()->pluck("order_id");
+            return $this->orderInformation($orderId);
+        } else if($get->key == "reportType") {
+
+        } else if($get->key = "property_types") {
+            $orderId = ProvidedService::whereJsonContains('appraiser_type_fee', ['typeId' => $id])->latest()->get()->pluck("order_id");
+            return $this->orderInformation($orderId);
+        }
+    }
+
+    protected function orderInformation($id) {
+        return Order::whereIn('id', $id)->with($this->order_list_relation())->orderBy('id', 'desc')->paginate(100);
+    }
+
 }

@@ -148,8 +148,8 @@
             this.getScheduleData()
         },
         mounted() {
-            $('select').select2();
-            this.select2Features();
+            // $('select').select2();
+            // this.select2Features();
             this.scheduleData.order_id = this.orderData.id
         },
         methods: {
