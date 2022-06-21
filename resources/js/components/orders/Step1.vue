@@ -66,7 +66,7 @@
               </span>
 
                 <ValidationProvider class="group" name="Loan type" rules="required" v-slot="{ errors }">
-                  <div :class="{ 'invalid-form' : errors[0] }">
+                  <div class="position-relative" :class="{ 'invalid-form' : errors[0] }">
                     <label for="" class="d-block mb-2 dashboard-label">Loan type </label>
                     <select name="" id="loanTypeSelect" class="dashboard-input w-100 loan-type-select" v-model="step1.loanType">
                       <option value="">Please Select Loan Type</option>
@@ -88,7 +88,7 @@
                 </ValidationProvider>
 
                 <ValidationProvider class="group" name="Appraiser name" rules="required" v-slot="{ errors }">
-                  <div :class="{ 'invalid-form' : errors[0] }">
+                  <div class="position-relative" :class="{ 'invalid-form' : errors[0] }">
                     <label for="" class="d-block mb-2 dashboard-label">Appraiser name <span
                         class="text-danger require"></span></label>
                       <select id="apprClientSelect" class="dashboard-input w-100" v-model="step1.appraiserName">

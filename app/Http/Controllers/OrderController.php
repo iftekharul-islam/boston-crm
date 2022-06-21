@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 use Psy\Util\Json;
 use App\Helpers\Helper;
 use App\Models\ActivityLog;
@@ -54,8 +55,200 @@ class OrderController extends BaseController
         $user = Auth::user();
         $companyId = $user->getCompanyProfile()->company_id;
         $orderData = $this->searchOrderData($get, $user, $companyId);
-        return view('order.index', compact('orderData'));
+        $orderSummary = $this->orderSummary($user, $companyId);
+        return view('order.index', compact('orderData', 'orderSummary'));
     }
+
+    public function orderSummary($user = null, $companyId = null)
+    {
+        if ($user == null){
+            $user = Auth::user();
+            $companyId = $user->getCompanyProfile()->company_id;
+        }
+        $orders = Order::where('company_id', $companyId)->orderBy('id', 'desc')->get();
+
+        $dueToday = [
+            'total' => 0,
+            'name' => 'Due today',
+            'ids' => [],
+        ];
+        $dueTomorrow = [
+            'total' => 0,
+            'name' => 'Due tomorrow',
+            'ids' => [],
+        ];
+        $apptToday = [
+            'total' => 0,
+            'name' => 'Appt Today',
+            'ids' => [],
+        ];
+        $apptTommorrow = [
+            'total' => 0,
+            'name' => 'Appt Tomorrow',
+            'ids' => [],
+        ];
+        $overDue = [
+            'total' => 0,
+            'name' => 'Overdue',
+            'ids' => [],
+        ];
+
+        $rush = [
+            'total' => 0,
+            'name' => 'Rush',
+            'ids' => [],
+        ];
+        $deleted = [
+            'total' => 0,
+            'name' => 'Deleted',
+            'ids' => [],
+        ];
+        $cancelled = [
+            'total' => 0,
+            'name' => 'Cancelled',
+            'ids' => [],
+        ];
+        $unstarted = [
+            'total' => 0,
+            'name' => 'Unstarted',
+            'ids' => [],
+        ];
+        $unassigned = [
+            'total' => 0,
+            'name' => 'Unassigned',
+            'ids' => [],
+        ];
+        $accepted = [
+            'total' => 0,
+            'name' => 'Accepted',
+            'ids' => [],
+        ];
+        $declined = [
+            'total' => 0,
+            'name' => 'Declined',
+            'ids' => [],
+        ];
+        $unscheduled = [
+            'total' => 0,
+            'name' => 'Unscheduled',
+            'ids' => [],
+        ];
+        $scheduled = [
+            'total' => 0,
+            'name' => 'Scheduled',
+            'ids' => [],
+        ];
+        $inspected = [
+            'total' => 0,
+            'name' => 'Inspected',
+            'ids' => [],
+        ];
+        $reportUploaded = [
+            'total' => 0,
+            'name' => 'Report uploaded',
+            'ids' => [],
+        ];
+        $revisions = [
+            'total' => 0,
+            'name' => 'Revisions',
+            'ids' => [],
+        ];
+        $revised = [
+            'total' => 0,
+            'name' => 'Revised',
+            'ids' => [],
+        ];
+        foreach ($orders as $order){
+            $workStatus = json_decode($order->workflow_status, true);
+
+            if ($order->status == 15) {
+                $deleted['total'] += 1;
+                $deleted['ids'][] = $order->id;
+                continue;
+            }
+            if ($order->status == 14) {
+                $cancelled['total'] += 1;
+                $cancelled['ids'][] = $order->id;
+                continue;
+            }
+            if ($order->status == 16) {
+                $declined['total'] += 1;
+                $declined['ids'][] = $order->id;
+            }
+            if ($order->rush){
+                $rush['total'] += 1;
+                $rush['ids'][] = $order->id;
+            }
+            if ($order->status == 0) {
+                $unstarted['total'] += 1;
+                $unstarted['ids'][] = $order->id;
+            }
+            if ($workStatus['scheduling']) {
+                $unassigned['total'] += 1;
+                $unassigned['ids'][] = $order->id;
+            }
+            if ($workStatus['scheduling'] == 0) {
+                $unscheduled['total'] += 1;
+                $unscheduled['ids'][] = $order->id;
+            }
+            if ($workStatus['scheduling'] == 1) {
+                $scheduled['total'] += 1;
+                $scheduled['ids'][] = $order->id;
+            }
+            if ($workStatus['inspection'] == 1) {
+                $inspected['total'] += 1;
+                $inspected['ids'][] = $order->id;
+            }
+            if ($workStatus['reportPreparation'] == 1) {
+                $reportUploaded['total'] += 1;
+                $reportUploaded['ids'][] = $order->id;
+            }
+            if ($workStatus['revision'] == 1) {
+                $revisions['total'] += 1;
+                $revisions['ids'][] = $order->id;
+            }
+            if ($workStatus['submission'] == 1) {
+                $revised['total'] += 1;
+                $revised['ids'][] = $order->id;
+            }
+            if (Carbon::today()->format('Y-m-d') == Carbon::parse($order->due_date)->format('Y-m-d')) {
+                $dueToday['total'] += 1;
+                $dueToday['ids'][] = $order->id;
+            }
+            if (Carbon::today()->addDay(1)->format('Y-m-d') == Carbon::parse($order->due_date)->format('Y-m-d')) {
+                $dueTomorrow['total'] += 1;
+                $dueTomorrow['ids'][] = $order->id;
+            }
+            if (Carbon::today()->format('Y-m-d') > Carbon::parse($order->due_date)->format('Y-m-d')) {
+                $overDue['total'] += 1;
+                $overDue['ids'][] = $order->id;
+            }
+
+        }
+
+        return [
+            $apptToday,
+            $apptTommorrow,
+            $deleted,
+            $cancelled,
+            $accepted,
+            $declined,
+            $rush,
+            $unstarted,
+            $unassigned,
+            $unscheduled,
+            $scheduled,
+            $inspected,
+            $reportUploaded,
+            $revisions,
+            $revised,
+            $dueToday,
+            $dueTomorrow,
+            $overDue
+        ];
+    }
+
+
 
     /**
      * Searching Order Data Request
@@ -85,7 +278,21 @@ class OrderController extends BaseController
         ->paginate($paginate);
         return $order;
     }
-    
+
+    /**
+     * @param Request $get
+     * @return mixed
+     */
+    public function filterOrderData(Request $get){
+        $ids = $get->item['ids'] ?? [];
+        $paginate = $get->paginate && $get->paginate > 0 ? $get->paginate : 10;
+        $order = Order::whereIn('id', $ids)->with($this->order_list_relation())
+        ->orderBy('id', 'desc')
+        ->paginate($paginate);
+
+        return $order;
+    }
+
     /**
      * Show the form for creating a new resource.
      *
