@@ -297,6 +297,7 @@ export default {
         this.form.revission = null;
         this.addRevission = status;
         this.revissionEdit = false;
+        this.editNotesModal = false;
     },
     revissionSubmit() {
         this.$refs.addRevission.validate().then((status) => {

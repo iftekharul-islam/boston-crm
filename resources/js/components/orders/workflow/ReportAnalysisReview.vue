@@ -121,7 +121,7 @@ export default {
       if(initReview){
         this.preNote = initReview.note
       }
-      let analysis = !_.isEmpty(this.orderData.analysis) ? this.orderData.analysis : false;
+      let analysis = this.orderData.analysis;
       if(analysis){
           this.assignTo = analysis.assigned_to
           this.assignToName = analysis.assignee.name

@@ -29,7 +29,8 @@ class OrderWReportAnalysis extends Model implements HasMedia
 
     public function attachments()
     {
-        return $this->media()->where('collection_name', '=', 'analysis');
+        $data = $this->media()->where('collection_name', '=', 'analysis');
+        return $data;
     }
 
 }
