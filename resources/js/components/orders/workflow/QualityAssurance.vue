@@ -613,7 +613,7 @@
                 this.orderData = order
                 this.alreadyQualityAssurance = (JSON.parse(this.orderData.workflow_status)).qualityAssurance
                 this.alreadyQualityAssurance == 1 ? this.currentStep = 'step2' : 'step1'
-                
+
                 this.comAddresses = this.orderData.comlist
                 this.qa.order_id = this.orderData.id
                 this.qa.effective_date = this.orderData.due_date
