@@ -124,23 +124,29 @@ trait CrmHelper {
             'activityLog.user',
             'inspection.user',
             'inspection.attachments',
+            'inspection.createBy',
             'report.reviewer',
             'report.trainee',
+            'report.createBy',
             'report.assignee',
             'report.creator',
             'report.attachments',
             'reportRewrite.assignee',
+            'reportRewrite.updateBy',
             'analysis.assignee',
             'analysis.attachments',
             'analysis.updatedBy',
+            'analysis.updateBy',
             'initialReview.assignee',
+            'initialReview.createBy',
             'workHisotry.user',
             'revission',
             'submission.trainee',
             'submission.deliveryMan',
             'qualityAssurance.assignee',
             'qualityAssurance.attachments',
-            'qualityAssurance.updatedBy'
+            'qualityAssurance.updatedBy',
+            'comlist'
         )->where('id', $id)->first();
 
         return $this->checkActiveStep($order);
@@ -185,6 +191,10 @@ trait CrmHelper {
         }
         $order['currentStep'] = $currentStep;
         return $order;
+    }
+
+    protected function order_list_relation() {
+        return ['user', 'amc', 'appraisalDetail', 'appraisalDetail.appraiser', 'appraisalDetail.getLoanType', 'lender', 'propertyInfo', 'inspection.user'];
     }
 
 }

@@ -41,6 +41,7 @@ class Order extends Model implements HasMedia
     ];
 
     public const OrderStatus = [
+        0 => "Unstarted",
         1 => "Scheduled",
         2 => "Rescheduled",
         3 => "Inspected",
@@ -192,5 +193,10 @@ class Order extends Model implements HasMedia
     public function revission()
     {
         return $this->hasMany(OrderWRevision::class,'order_id', 'id');
+    }
+
+    public function comlist()
+    {
+        return $this->hasMany(OrderWCom::class,'order_id', 'id');
     }
 }

@@ -126,32 +126,36 @@
         }),
         created() {
             this.getInitialReviewData(this.order);
+
             this.$root.$on("wk_update", (res) => {
                 this.getInitialReviewData(res);
             });
         },
         methods: {
             getInitialReviewData(order) {
-                this.orderData = order
-                this.initialReview.order_id = this.orderData.id
-                this.alreadyInitialReview = (JSON.parse(this.orderData.workflow_status)).initialReview
-                this.alreadyInitialReview == 1 ? this.currentStep = 'view' : 'create'
+                this.orderData = order;
+                this.initialReview.order_id = this.orderData.id;
 
-                this.initialReview.report_creator_name = this.orderData.report.creator.name
-                this.initialReview.report_reviewer_name = this.orderData.report.reviewer.name
-                this.initialReview.report_trainee_name = this.orderData.report.trainee.name
-                this.initialReview.report_note = this.orderData.report.note
-                if (this.orderData.initial_review) {
-                    this.initialReview.initial_review_id = this.orderData.initial_review.id
-                    this.initialReview.note = this.orderData.initial_review.note
-                    this.initialReview.assigned_name = this.orderData.initial_review.assignee.name
-                    this.initialReview.assigned_to = this.orderData.initial_review.assigned_to
-                    this.initialReview.is_review_done = this.orderData.initial_review.is_review_done
-                    this.initialReview.is_check_upload = this.orderData.initial_review.is_check_upload
-                    if(this.orderData.initial_review.is_review_done == 1){
-                        this.initialReview.checkbox = '1'
-                    }else{
-                        this.initialReview.checkbox = '2'
+                if (this.orderData.report) {
+                    this.alreadyInitialReview = (JSON.parse(this.orderData.workflow_status)).initialReview
+                    this.alreadyInitialReview == 1 ? this.currentStep = 'view' : 'create'
+    
+                    this.initialReview.report_creator_name = this.orderData.report.creator.name
+                    this.initialReview.report_reviewer_name = this.orderData.report.reviewer.name
+                    this.initialReview.report_trainee_name = this.orderData.report.trainee.name
+                    this.initialReview.report_note = this.orderData.report.note
+                    if (this.orderData.initial_review) {
+                        this.initialReview.initial_review_id = this.orderData.initial_review.id
+                        this.initialReview.note = this.orderData.initial_review.note
+                        this.initialReview.assigned_name = this.orderData.initial_review.assignee.name
+                        this.initialReview.assigned_to = this.orderData.initial_review.assigned_to
+                        this.initialReview.is_review_done = this.orderData.initial_review.is_review_done
+                        this.initialReview.is_check_upload = this.orderData.initial_review.is_check_upload
+                        if(this.orderData.initial_review.is_review_done == 1){
+                            this.initialReview.checkbox = '1'
+                        }else{
+                            this.initialReview.checkbox = '2'
+                        }
                     }
                 }
             },
@@ -165,15 +169,14 @@
                                 this.orderData = res.data
                                 this.$root.$emit('wk_update', this.orderData)
                                 this.$root.$emit('wk_flow_menu', this.orderData)
-                                this.getInitialReviewData()
-                                console.log(this.currentStep)
+                                this.$root.$emit('wk_flow_toast', res);
+                                this.getInitialReviewData(res.data);
                                 this.currentStep = 'view'
                                 setTimeout(() => {
                                     self.$refs.initialReviewForm.reset();
                                     self.message = '';
                                 }, 3000);
                             }).catch(err => {
-                                console.log(err)
                             })
                     }
                 })

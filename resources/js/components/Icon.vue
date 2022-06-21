@@ -362,7 +362,7 @@
 export default {
     name: 'icon',
     mounted() {
-        console.log('Component mounted.')
+        
     }
 }
 </script>

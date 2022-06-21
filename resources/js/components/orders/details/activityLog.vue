@@ -8,7 +8,7 @@
         <div class="fs-14 logItem" :key="ai">
           <div class="logby">
             <span>{{ activityLog.user.name }}</span>
-            <span>{{ activityLog.created_at | momentTime}}</span>
+            <span>{{ activityLog.created_at | momentTime }}</span>
           </div>
           <div class="logs">
             {{ activityLog.activity_text }}

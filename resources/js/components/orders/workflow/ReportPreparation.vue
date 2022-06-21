@@ -262,9 +262,9 @@ export default {
                     this.updateAdmin();
                     this.$root.$emit('wk_update', this.orderData);
                     this.$root.$emit('wk_flow_menu', this.orderData);
+                    this.$root.$emit('wk_flow_toast', res);
                 }).catch(err => {
                     this.isUploading = false
-                    console.log('err', err)
                 });
             } else {
                 this.isUploading = false
@@ -296,8 +296,8 @@ export default {
                 this.updateAdmin();
                 this.$root.$emit('wk_update', this.orderData);
                 this.$root.$emit('wk_flow_menu', this.orderData);
+                this.$root.$emit('wk_flow_toast', res);
             }).catch(err => {
-                console.log('err', err)
             });
           } else {
               this.isUploading = false

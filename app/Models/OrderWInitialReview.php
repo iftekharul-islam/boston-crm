@@ -16,4 +16,8 @@ class OrderWInitialReview extends Model
     public function assignee(){
         return $this->belongsTo(User::class,'assigned_to','id');
     }
+
+    public function createBy(){
+      return $this->belongsTo(User::class,'created_by','id');
+  }
 }

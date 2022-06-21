@@ -1,37 +1,32 @@
 <template>
-    <div id="order-views">
-<!--        @foreach($orderSummary as $item)-->
-<!--        @php-->
-<!--        $firstRow = ['Due today', 'Due tomorrow', 'Appt Today', 'Appt Tomorrow', 'Overdue', 'Rush'];-->
-<!--        $badge = 'progress-badges';-->
-<!--        if($item['name'] == 'Deleted' || $item['name'] == 'Cancelled'){-->
-<!--        $badge = 'archive-badges';-->
-<!--        } elseif ($item['name'] == 'Revisions' || $item['name'] == 'Revised') {-->
-<!--        $badge = 'revision-badges';-->
-<!--        } elseif (in_array($item['name'], $firstRow)) {-->
-<!--        $badge = 'open-badges';-->
-<!--        }-->
-<!--        @endphp-->
-        <div class="open-archive-box" v-for="(item, key) in summary" :key="key">
-            <button class="order-sml-box">
-                <h5 class="mb-2 number">{{ item['total'] }}</h5>
-                <p class="mb-0 text">{{ item['name'] }}</p>
-                <span class="{{ $badge }} badges"></span>
-            </button>
-        </div>
-<!--        @endforeach-->
+    <div id="order-views" class="order-views">
         <div class="report-top d-flex justify-content-between mgb-32 flex-wrap">
             <div class="left chart-box-header-btn d-flex flex-wrap justify-content-between">
-                <button v-for="dCol, di in order.filterItems" class="chart-btn h-32 d-flex align-items-center justify-content-between mb-2" :key="di">
+                <button v-for="dCol, di in order.filterItems" class="chart-btn h-32 d-flex align-items-center justify-content-between mb-2" :key="di" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
                     {{ dCol.title }}
                 </button>
+                <!-- dropdown -->
+                <div class="dropdown-menu py-0 search-dropdown" aria-labelledby="dropdownMenuLink">
+                    <input type="text" class="search-input" placeholder="Search...">
+                    <ul class="p-0 m-0 search-results">
+                        <li class="results-item">Korim khan</li>
+                        <li class="results-item">Korim khan</li>
+                        <li class="results-item">Korim khan</li>
+                    </ul>
+                </div>
             </div>
             <div class="right d-flex">
-                <input type="text" v-model="pages.searchModel" @input="searchData($event)" class="me-3 mb-3 px-3 bdr-1 br-4 form-control gray-border" placeholder="Search...">
-                <select @change="loadPage(pages.activePage)" name="paginate" class="form-control" v-model="pages.paginate">
-                    <option value="">Per page</option>
-                    <option :value="item" :key="ik" v-for="item, ik in pages.perPages">{{ item }} Per page</option>
-                </select>
+                <div class="search-box d-flex me-3 mb-3">
+                    <input type="text" v-model="pages.searchModel" @input="searchData($event)" class=" px-3 bdr-1 br-4 gray-border" placeholder="Search...">
+                    <button class="search-btn">
+                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M7.33333 13.6667C10.8311 13.6667 13.6667 10.8311 13.6667 7.33333C13.6667 3.83553 10.8311 1 7.33333 1C3.83553 1 1 3.83553 1 7.33333C1 10.8311 3.83553 13.6667 7.33333 13.6667Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M17 17L13 13" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </div>
+              
+                <button class="button button-primary h-40 d-inline-flex align-items-center py-2">View daily report</button>
             </div>
         </div>
         <Table :items="orderData" :sl-start="pages.pageData.from" :header="order.header" @headClick="headerClick($event)">
@@ -64,7 +59,7 @@
                 {{ item.property_info.search_address }}
             </template>
             <template v-slot:action="{item}">
-                <a title="Edit order information" :href="`orders/${item.id}/edit`" class="btn btn-success btn-sm" :data-key="item.id">
+                <a title="Edit order information" :href="`orders/${item.id}/edit`" class="btn btn-success btn-sm d-none" :data-key="item.id">
                     <span onclick="roleUpdateOpen(2);" class="icon-edit cursor-pointer"><span class="path1"></span><span class="path2"></span></span>
                 </a>
                 <a title="View order information" :href="`orders/${item.id}`" class="view-btn" :data-key="item.id">
@@ -84,7 +79,14 @@
                 </transition>
             </template>
         </Table>
+        <div class="text-center d-flex justify-content-center">
+             <select @change="loadPage(pages.activePage)" name="paginate" class="form-control per-page" v-model="pages.paginate">
+                <option value="">Per page</option>
+                <option :value="item" :key="ik" v-for="item, ik in pages.perPages">{{ item }} Per page</option>
+            </select>
+         </div>
         <paginate align="center" :total-page="pages.pageData.last_page" @loadPage="loadPage($event)"></paginate>
+         
 
     </div>
 </template>
@@ -160,21 +162,24 @@ export default {
         }
     }),
     created() {
-        this.pages.pageData = this.data;
-        this.orderData = this.data.data;
-
-        this.order.header.map( (ele) => {
-            let item = ele.split("@");
-            let checkDisable = this.order.disableHeader.find((ele) => ele.key == item[1]);
-            if (!checkDisable) {
-                this.order.disableHeader.push({
-                    title: item[0],
-                    key:  item[1]
-                });
-            }
-        });
+        this.initTableDate(this.data);
     },
     methods: {
+        initTableDate(data) {
+            this.pages.pageData = data;
+            this.orderData = data.data;
+
+            this.order.header.map( (ele) => {
+                let item = ele.split("@");
+                let checkDisable = this.order.disableHeader.find((ele) => ele.key == item[1]);
+                if (!checkDisable) {
+                    this.order.disableHeader.push({
+                        title: item[0],
+                        key:  item[1]
+                    });
+                }
+            });
+        },
         checkColumnActive(val) {
             let getHeader = (this.order.header);
             let findActive = false;

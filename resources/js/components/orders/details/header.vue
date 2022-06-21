@@ -11,8 +11,9 @@
                 <div class="position-relative">
                     <select name="role" id="role" class="login-input role-error fw-bold" @change="changeOrderStatus($event)" v-model="order.status">
                         <option value="">Select</option>
-                        <option value="1">Active</option>
+                        <option value="0">Active</option>
                         <option value="14">Cancel</option>
+                        <option value="15">Delete</option>
                     </select>
                     <span class="icon-arrow-down bottom-arrow-icon text-gray"></span>
                 </div>

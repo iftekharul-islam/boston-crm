@@ -14,7 +14,7 @@
       <div class="list__group">
         <p class="mb-0 left-side">Loan #</p>
         <span>:</span>
-        <p class="right-side mb-0">{{ edited.loan_no }}</p>
+        <p class="right-side mb-0 word-break">{{ edited.loan_no }}</p>
       </div>
       <div class="list__group">
         <p class="mb-0 left-side">Loan Type </p>
@@ -24,7 +24,7 @@
       <div class="list__group">
         <p class="mb-0 left-side">FHA Case</p>
         <span>:</span>
-        <p class="right-side mb-0">{{ edited.fha_case_no }}</p>
+        <p class="right-side mb-0 word-break">{{ edited.fha_case_no }}</p>
       </div>
     </div>
     <!-- modal -->

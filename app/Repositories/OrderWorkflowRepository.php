@@ -6,6 +6,8 @@ use Auth;
 use Carbon\Carbon;
 use App\Models\Order;
 use App\Models\OrderWQa;
+use App\Models\OrderWCom;
+use App\Models\OrderWComList;
 use App\Models\OrderWInspection;
 use App\Models\OrderWInitialReview;
 
@@ -26,13 +28,13 @@ class OrderWorkflowRepository extends BaseRepository
     public function updateOrderScheduleData($data): bool
     {
         $order = Order::find($data['order_id']);
-        if($data['schedule_id'] > 0){
+        if ($data['schedule_id'] > 0) {
             $order_workflow_schedule = OrderWInspection::find($data['schedule_id']);
             $order_workflow_schedule->updated_by = Auth::user()->id;
 
             $order->status = 2;
             $order->save();
-        }else{
+        } else {
             $order_workflow_schedule = new OrderWInspection();
             $order_workflow_schedule->created_by = Auth::user()->id;
 
@@ -49,7 +51,6 @@ class OrderWorkflowRepository extends BaseRepository
         $order_workflow_schedule->save();
 
         return $order_workflow_schedule ? true : false;
-
     }
 
     /**
@@ -105,8 +106,8 @@ class OrderWorkflowRepository extends BaseRepository
             $order_quality_assurance = OrderWQa::find($data['qa_id']);
             $order_quality_assurance->updated_by = Auth::user()->id;
             $order_quality_assurance->note = $data['note'];
-                if(isset($data['files'])){
-                    foreach ($data['files'] as $file) {
+            if (isset($data['files'])) {
+                foreach ($data['files'] as $file) {
                     $order_quality_assurance->addMedia($file)
                         ->toMediaCollection('qa');
                 }
@@ -116,5 +117,19 @@ class OrderWorkflowRepository extends BaseRepository
 
             return $order_quality_assurance;
         }
+    }
+
+    public function saveCom($data, $id)
+    {
+        for($i = 0; $i < count($data); $i++){
+            $com = new OrderWCom();
+            $com->order_id = $id;
+            $com->address = $data[$i]['address'];
+            $com->lat = $data[$i]['lat'];
+            $com->lng = $data[$i]['lng'];
+            $com->serial = $i+1;
+            $com->save();
+        }
+        return true;
     }
 }

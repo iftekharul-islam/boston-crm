@@ -128,7 +128,6 @@
             }.bind(this), 2000);
         })
         .catch( err =>{
-            console.log(err)
         })
       },
       addNewMod() {

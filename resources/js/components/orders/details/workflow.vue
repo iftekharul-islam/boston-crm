@@ -149,7 +149,17 @@ export default {
       this.$root.$on('wk_flow_menu', (res) => {
           this.initOrder(res);
       });
+
+      this.$root.$on('wk_flow_toast', (res) => {
+          this.$toast.open({
+              message: res.message,
+              type: res.error == true ? 'error' : 'success',
+          });
+      });
   },
+  mounted(){
+      
+  },  
   methods: {
     currentStep(step){
       if (this.orderData.currentStep == step) {

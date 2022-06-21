@@ -101,13 +101,8 @@
             }
         }
     });
-    $(".alert-message").delay(4000).fadeOut(1000);
-</script>
-@endsection
-
-@section("js")
-<script>
     $(".alertdissable").delay(3000).slideUp(1000);
+    $("select").select2();
 </script>
 @endsection
 
