@@ -132,4 +132,16 @@ class OrderWorkflowRepository extends BaseRepository
         }
         return true;
     }
+
+    public function addCom($data){
+        dd($data);
+    }
+
+    public function deleteCom($id){
+        $order_w_com = OrderWCom::find($id);
+        if($order_w_com){
+            $order_w_com->delete();
+        }
+        return true;
+    }
 }
