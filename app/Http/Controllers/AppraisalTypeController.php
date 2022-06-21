@@ -56,6 +56,7 @@ class AppraisalTypeController extends BaseController
             'form_type' => $request->form_type,
             'modified_form' => $request->modified_form,
             'condo_type' => $request->condo_type ? 1 : 0,
+            'is_full_appraisal' => $request->is_full_appraisal ? 1 : 0,
         ];
 
         $this->repository->create($appraisal_type_data);
@@ -91,6 +92,7 @@ class AppraisalTypeController extends BaseController
             'form_type' => $request->form_type,
             'modified_form' => $request->modified_form,
             'condo_type' => $request->condo_type ? 1 : 0,
+            'is_full_appraisal' => $request->is_full_appraisal ? 1 : 0,
         ];
         $this->repository->update(attributes: $appraisal_type_data, id: $id);
 
