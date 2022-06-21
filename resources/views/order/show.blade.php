@@ -18,7 +18,7 @@
 
         {{-- header --}}
         <order-header :order="{{ $order }}" :share-url="'{{ url('/public-order/'. base64_encode($order_id) ) }}'" :diff_in_days="{{ $diff_in_days }}" :diff_in_hours="{{ $diff_in_hours }}"></order-header>
-        
+
         {{-- <div class="row">
             <workflow :order="{{ $order }}" :norewrite="{{ $noRewrite }}" :appraisers="{{ $appraisers }}" :permissions="{{ json_encode($user_permissions) }}" :role="'{{ $user_role }}'" :users="{{ json_encode($all_users) }}"></workflow>
             <history :order="{{ $order }}"></history>

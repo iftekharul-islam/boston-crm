@@ -100,6 +100,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         [OrderController::class, 'orderUpdate'])->middleware('role_permission:update.order')->name('orders.update.single');
 
     Route::post('search/order', [OrderController::class, 'searchOrderData'])->middleware('role_permission:orders.index');
+    Route::post('filter-list/order', [OrderController::class, 'filterOrderData'])->middleware('role_permission:orders.index');
     Route::post('api/get/same/orders/by/street', [OrderApiController::class, 'getSameData']);
 
     //order details
@@ -127,6 +128,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/save-quality-assurance',[OrderWorkflowController::class,'saveQualityAssurance']);
     Route::post('/update-quality-assurance',[OrderWorkflowController::class,'updateQualityAssurance']);
     Route::post('/save-com/{id}',[OrderWorkflowController::class,'saveCom']);
+    Route::post('/add-com',[OrderWorkflowController::class,'addCom']);
+    Route::post('/delete-com/{id}',[OrderWorkflowController::class,'deleteCom']);
 
 
     //Appraisal Type

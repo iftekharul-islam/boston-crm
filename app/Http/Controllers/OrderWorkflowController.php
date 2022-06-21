@@ -6,16 +6,17 @@ use App\Models\OrderWSubmission;
 use Carbon\Carbon;
 use App\Models\Order;
 use App\Models\OrderWQa;
+use App\Models\OrderWcom;
 use App\Helpers\CrmHelper;
 use App\Models\OrderWReport;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use App\Models\OrderWRevision;
+use App\Models\OrderWRewrite;
 use App\Models\OrderWInspection;
 use Spatie\GoogleCalendar\Event;
 use Illuminate\Http\JsonResponse;
 use App\Models\OrderWReportAnalysis;
-use App\Models\OrderWRevision;
-use App\Models\OrderWRewrite;
 use App\Services\OrderWorkflowService;
 use App\Repositories\OrderWorkflowRepository;
 
@@ -107,7 +108,7 @@ class OrderWorkflowController extends BaseController
             "file" => $data['media'],
             "data" => $orderData,
             'error' => false,
-            "message" => "inspection file uploaded successfully"
+            "message" => "Inspection file uploaded successfully"
         ]);
     }
 
@@ -406,6 +407,14 @@ class OrderWorkflowController extends BaseController
     {
         $this->repository->updateQualityAssurance($request->all());
         $order_qa = OrderWQa::find($request->qa_id);
+
+        if (!$order_qa) {
+            return response()->json([
+                'error' => true,
+                'message' => "There are no existing qa, or please reload once"
+            ]);
+        }
+
         $order = Order::find($order_qa->order_id);
         $user = auth()->user();
         if ($request->qa_id > 0) {
@@ -769,6 +778,25 @@ class OrderWorkflowController extends BaseController
         $this->addHistory($order, $user, $historyTitle, 'quality-assurance');
         return [
             "message" => "Com list added successfully",
+            "data" => $orderData
+        ];
+    }
+
+    public function addCom(Request $request)
+    {
+        $this->repository->addCom($request->all());
+    }
+
+    public function deleteCom(Request $request,$id)
+    {
+        $order_w_com = OrderWcom::find($id);
+        $order = Order::find($order_w_com->order_id);
+        $orderData = $this->orderDetails($order->id);
+
+        $this->repository->deleteCom($id);
+
+        return [
+            "message" => 'Com deleted successfully',
             "data" => $orderData
         ];
     }

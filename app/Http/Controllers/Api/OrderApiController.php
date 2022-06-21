@@ -37,6 +37,13 @@ class OrderApiController extends Controller
             return response()->json(['error' => $error, 'messages' => $errorMessage]);
         }
 
+        $latitude = $step['lat'];
+        $longitude = $step['lng'];
+        
+        if (is_string($latitude) || is_string($longitude)) {
+            return response()->json(['error' => true, 'errorString' => true, 'messages' => "Please use a valid longitude and latitude"]);
+        }
+
         $orderProccess = DB::transaction( function() use ($step, $step2, $company, $get) {
             $amcClient = $step['amcClient'];
             $appraiserName = $step['appraiserName'];

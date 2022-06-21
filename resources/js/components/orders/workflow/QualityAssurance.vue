@@ -5,7 +5,7 @@
             <div class="group">
                 <p class="text-light-black mgb-12">Instruction from previous step</p>
                 <p class="text-success">(Rewrite & send back)</p>
-                <p class="mb-0 text-light-black fw-bold">{{ orderData.analysis.rewrite_note }}</p>
+                <p class="mb-0 text-light-black fw-bold">{{ orderData.analysis ? orderData.analysis.rewrite_note : '-' }}</p>
             </div>
             <div class="group">
                 <p class="text-success">(Check & Upload)</p>
@@ -13,7 +13,7 @@
             </div>
             <div class="group">
                 <p class="text-light-black mgb-12">Files</p>
-                <div class="d-flex align-items-center" v-for="attachment in orderData.analysis.attachments">
+                <div class="d-flex align-items-center" v-for="attachment, indexKey in orderData.analysis.attachments" :key="indexKey">
                     <div class="file-img">
                         <img src="/img/pdf.png" alt="boston pdf image">
                     </div>
@@ -71,7 +71,7 @@
             </div>
             <div class="group">
                 <p class="text-light-black mgb-12">Files</p>
-                <div class="d-flex align-items-center" v-for="attachment in orderData.analysis.attachments">
+                <div class="d-flex align-items-center" v-for="attachment, indexKey in orderData.analysis.attachments" :key="indexKey">
                     <div class="file-img">
                         <img src="/img/pdf.png" alt="boston pdf image">
                     </div>
@@ -138,7 +138,7 @@
                     <!-- map name -->
                     <div class="map-name mgt-20">
                         <div class="map-name-list d-flex justify-content-between" v-for="(address,index) in addresses"
-                            :id="address.id">
+                            :id="address.id" :key="index">
                             <p class="mb-0">{{ address.address }}</p>
                             <span @click="removeAddress(index)" class="icon-trash fs-20 cursor-pointer"><span
                                     class="path1"></span><span class="path2"></span><span class="path3"></span><span
@@ -196,7 +196,7 @@
             </div>
             <div class="group">
                 <p class="text-light-black mgb-12">Files</p>
-                <div class="d-flex align-items-center" v-for="attachment in orderData.analysis.attachments">
+                <div class="d-flex align-items-center" v-for="attachment, indexKey in orderData.analysis.attachments" :key="indexKey">
                     <div class="file-img">
                         <img src="/img/pdf.png" alt="boston pdf image">
                     </div>
@@ -221,7 +221,7 @@
             </div>
             <div class="group">
                 <p class="text-light-black mgb-12">Files</p>
-                <div class="d-flex align-items-center" v-for="attachment in orderData.analysis.attachments">
+                <div class="d-flex align-items-center" v-for="attachment, indexKey in orderData.analysis.attachments" :key="indexKey">
                     <div class="file-img">
                         <img src="/img/pdf.png" alt="boston pdf image">
                     </div>
@@ -233,7 +233,7 @@
                 </div>
             </div>
             <button v-if="showSeeCom" type="button"
-                class="button button-primary px-4 h-40 d-inline-flex align-items-center" @click="mapOpen = true">See
+                class="button button-primary px-4 h-40 d-inline-flex align-items-center" @click="openComMap">See
                 Com</button>
             <!-- load see com -->
             <div v-if="mapOpen" class="map-direction vue-modal">
@@ -260,7 +260,7 @@
                                 </div>
                             </ValidationObserver>
                             <!-- starting point -->
-                            <div class=" group">
+                            <div class="group">
                                 <label for="" class="d-block mb-2 dashboard-label">Starting point</label>
                                 <input @keyup="getStartPoint" id="starting-point" type="text"
                                     class="dashboard-input w-100 gray-border">
@@ -270,7 +270,7 @@
                         <div class="destination mgt-32">
                             <p class="text-600 mgb-12">Destination</p>
                             <ul class="destination-list">
-                                <li class="destination-list-item" v-for="address in comAddresses">
+                                <li class="destination-list-item" v-for="address,index in comAddresses" :key="index">
                                     <span class="drag-dot">
                                         <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
@@ -282,6 +282,25 @@
                                     </span>
                                     <input type="text" :value="address.address"
                                         class="dashboard-input w-100 gray-border" readonly>
+                                    <button @click="removeDestination(index,address.id)"
+                                        class="button button-transparent p-0 del-icon">
+                                        <span class="icon-trash fs-20"><span class="path1"></span><span
+                                                class="path2"></span><span class="path3"></span><span
+                                                class="path4"></span></span>
+                                    </button>
+                                </li>
+                                <li v-if="showDestination" class="destination-list-item">
+                                    <span class="drag-dot">
+                                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <circle cx="2" cy="2" r="2" fill="#7E829B" />
+                                            <circle cx="2" cy="10" r="2" fill="#7E829B" />
+                                            <circle cx="10" cy="2" r="2" fill="#7E829B" />
+                                            <circle cx="10" cy="10" r="2" fill="#7E829B" />
+                                        </svg>
+                                    </span>
+                                    <input @keyup="getDestination" type="text" id="destination"
+                                        class="dashboard-input w-100 gray-border">
                                     <button class="button button-transparent p-0 del-icon">
                                         <span class="icon-trash fs-20"><span class="path1"></span><span
                                                 class="path2"></span><span class="path3"></span><span
@@ -290,8 +309,8 @@
                                 </li>
                             </ul>
                             <div class="text-end">
-                                <button class="button button-transparent p-0 primary-text"><span
-                                        class="icon-plus"></span>
+                                <button type="button" @click="addDestination"
+                                    class="button button-transparent p-0 primary-text"><span class="icon-plus"></span>
                                     Add
                                     destination</button>
                             </div>
@@ -392,7 +411,9 @@
             startingPointLat: '',
             startingPointLng: '',
             showSeeCom: false,
-            comAddresses: []
+            comAddresses: [],
+            wayPoints: [],
+            showDestination: false,
         }),
         created() {
             this.getReportAnalysisData(this.order)
@@ -402,26 +423,42 @@
         },
         methods: {
             initMap() {
-                const map = new google.maps.Map(document.getElementById("map"), {
-                    zoom: 3,
-                    center: { lat: 0, lng: -180 },
+                var directionsService = new google.maps.DirectionsService();
+                var directionsRenderer = new google.maps.DirectionsRenderer({
+                    draggable: true,
+                    map
                 });
+                var chicago = new google.maps.LatLng(41.850033, -87.6500523);
+                var mapOptions = {
+                    zoom: 7,
+                    center: chicago
+                }
+                var endAddress = '';
+                for (var i = 0; i < this.comAddresses.length; i++) {
+                    this.wayPoints.push({
+                        'location': this.comAddresses[i]['address'], 'stopover': true
+                    })
+                    if (i == this.comAddresses.length - 1) {
+                        endAddress = this.comAddresses[i]['address']
+                    }
+                }
+                console.log(this.wayPoints, endAddress, this.startingPointName)
 
-                const flightPlanCoordinates = [
-                    { lat: 37.772, lng: -122.214 },
-                    { lat: 21.291, lng: -157.821 },
-                    { lat: -18.142, lng: 178.431 },
-                    { lat: -27.467, lng: 153.027 },
-                ];
-                const flightPath = new google.maps.Polyline({
-                    path: flightPlanCoordinates,
-                    geodesic: true,
-                    strokeColor: "#FF0000",
-                    strokeOpacity: 1.0,
-                    strokeWeight: 2,
+                var start = this.startingPointName;
+                var end = endAddress;
+                var request = {
+                    origin: start,
+                    destination: endAddress,
+                    waypoints: this.wayPoints,
+                    travelMode: 'DRIVING'
+                };
+                var map = new google.maps.Map(document.getElementById('map'), mapOptions);
+                directionsRenderer.setMap(map);
+                directionsService.route(request, function (result, status) {
+                    if (status == 'OK') {
+                        directionsRenderer.setDirections(result);
+                    }
                 });
-
-                flightPath.setMap(map);
             },
             getLocation() {
                 const center = { lat: 50.064192, lng: -130.605469 };
@@ -481,10 +518,50 @@
                         self.startingPointName = place.formatted_address
                         self.startingPointLat = place.geometry.location.lat()
                         self.startingPointLng = place.geometry.location.lng()
+                        self.initMap()
                     } else {
                         return false
                     }
                 })
+            },
+            getDestination() {
+                const center = { lat: 50.064192, lng: -130.605469 };
+                // Create a bounding box with sides ~10km away from the center point
+                const defaultBounds = {
+                    north: center.lat + 0.1,
+                    south: center.lat - 0.1,
+                    east: center.lng + 0.1,
+                    west: center.lng - 0.1,
+                };
+                const destination = document.getElementById("destination")
+                const options = {
+                    bounds: defaultBounds,
+                    componentRestrictions: { country: "us" },
+                    fields: ["formatted_address", "geometry"],
+                    strictBounds: false,
+                    types: ["establishment"],
+                };
+                const autocomplete = new google.maps.places.Autocomplete(destination, options);
+                let self = this;
+                google.maps.event.addListener(autocomplete, 'place_changed', function () {
+                    var place = autocomplete.getPlace()
+                    var destination = {
+                        "order_id": self.orderData.id,
+                        "address": place.formatted_address,
+                        "lat": place.geometry.location.lat(),
+                        "lon": place.geometry.location.lng()
+                    }
+                    this.$boston.post('/add-com/', destination)
+                        .then(res => {
+                            self.orderData = res.data
+                            self.$root.$emit('wk_update', self.orderData)
+                            this.$root.$emit('wk_flow_toast', res);
+                            self.initMap()
+                        })
+                        .catch(err => {
+                            console.log(err)
+                        })
+                }.bind(this))
             },
             addLocation() {
                 if (this.placeName.length > 0) {
@@ -496,6 +573,21 @@
             removeAddress(index) {
                 this.addresses.splice(index, 1)
             },
+            removeDestination(index, id) {
+                this.$boston.post('delete-com/' + id)
+                    .then(res => {
+                        this.orderData = res.data
+                        this.comAddresses.splice(index, 1)
+                        this.$root.$emit('wk_update', this.orderData)
+                        this.$root.$emit('wk_flow_toast', res);
+                    })
+                    .catch(err => {
+                        console.error(err)
+                    })
+            },
+            addDestination() {
+                this.showDestination = true
+            },
             saveCom() {
                 this.$boston.post('save-com/' + this.orderData.id, this.addresses)
                     .then(res => {
@@ -506,6 +598,7 @@
                         this.comAddresses = this.orderData.comlist
                         this.$root.$emit('wk_update', this.orderData)
                         this.$root.$emit('wk_flow_menu', this.orderData)
+                        this.$root.$emit('wk_flow_toast', res);
                         this.showSeeCom = true
                         setTimeout(() => {
                             self.comList = false
@@ -520,16 +613,19 @@
                 this.orderData = order
                 this.alreadyQualityAssurance = (JSON.parse(this.orderData.workflow_status)).qualityAssurance
                 this.alreadyQualityAssurance == 1 ? this.currentStep = 'step2' : 'step1'
-                if (this.orderData.quality_assurance.note != undefined && this.orderData.quality_assurance.note != '') {
-                    this.currentStep = 'step3'
-                }
-                if (this.orderData.comlist[0].id != undefined) {
-                    this.showSeeCom = true
-                }
+                
                 this.comAddresses = this.orderData.comlist
                 this.qa.order_id = this.orderData.id
                 this.qa.effective_date = this.orderData.due_date
+
+                if (this.comAddresses.length && this.orderData.comlist[0].id != undefined) {
+                    this.showSeeCom = true
+                }
+
                 if (this.orderData.quality_assurance) {
+                    if (this.alreadyQualityAssurance == 1 && this.orderData.quality_assurance.note) {
+                        this.currentStep = 'step3'
+                    }
                     this.qa.qa_id = this.orderData.quality_assurance.id
                     this.qa.note = this.orderData.quality_assurance.note
                     this.qa.assigned_to = this.orderData.quality_assurance.assigned_to
@@ -547,7 +643,8 @@
                                 this.orderData = res.data
                                 this.$root.$emit('wk_update', this.orderData)
                                 this.$root.$emit('wk_flow_menu', this.orderData)
-                                this.getReportAnalysisData()
+                                this.$root.$emit('wk_flow_toast', res);
+                                this.getReportAnalysisData(res.data);
                                 this.currentStep = 'step2'
                                 setTimeout(() => {
                                     self.message = '';
@@ -564,6 +661,13 @@
             },
             editQualityAssurance() {
                 this.currentStep = 'step2'
+            },
+            openComMap() {
+                this.mapOpen = true
+                let self = this
+                setTimeout(function () {
+                    self.initMap()
+                }, 5)
             },
             updateQualityAssurance() {
                 let formData = new FormData();
@@ -582,12 +686,12 @@
                     this.orderData = res.data
                     this.$root.$emit('wk_update', this.orderData)
                     this.$root.$emit('wk_flow_menu', this.orderData)
-                    this.getReportAnalysisData()
+                    this.$root.$emit('wk_flow_toast', res);
+                    this.getReportAnalysisData(res.data);
                     this.currentStep = 'step3'
                 }).catch(err => {
                     console.log(err)
                 })
-
             }
         }
     }

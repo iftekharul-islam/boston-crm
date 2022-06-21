@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 use Psy\Util\Json;
 use App\Helpers\Helper;
 use App\Models\ActivityLog;
@@ -123,7 +124,7 @@ class OrderController extends BaseController
         ];
         $unstarted = [
             'total' => 0,
-            'name' => 'Unstarted',
+            'name' => 'To be schedule',
             'ids' => [],
         ];
         $unassigned = [
@@ -220,10 +221,6 @@ class OrderController extends BaseController
                 $revisions['total'] += 1;
                 $revisions['ids'][] = $order->id;
             }
-            if ($workStatus['revision'] == 1) {
-                $revisions['total'] += 1;
-                $revisions['ids'][] = $order->id;
-            }
             if ($workStatus['submission'] == 1) {
                 $revised['total'] += 1;
                 $revised['ids'][] = $order->id;
@@ -295,7 +292,21 @@ class OrderController extends BaseController
         ->paginate($paginate);
         return $order;
     }
-    
+
+    /**
+     * @param Request $get
+     * @return mixed
+     */
+    public function filterOrderData(Request $get){
+        $ids = $get->item['ids'] ?? [];
+        $paginate = $get->paginate && $get->paginate > 0 ? $get->paginate : 10;
+        $order = Order::whereIn('id', $ids)->with($this->order_list_relation())
+        ->orderBy('id', 'desc')
+        ->paginate($paginate);
+
+        return $order;
+    }
+
     /**
      * Show the form for creating a new resource.
      *

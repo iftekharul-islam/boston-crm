@@ -3,14 +3,20 @@
         <div class="open-archive d-flex">
             <div class="open-archive-left">
                 <div class="d-flex flex-wrap">
-                    hello
+                    <div class="open-archive-box" v-for="(item, key) in summary" @click="updateOrderList(item)" :key="key">
+                        <button class="order-sml-box">
+                            <h5 class="mb-2 number">{{ item.total }}</h5>
+                            <p class="mb-0 text">{{ item.name }}</p>
+                            <span class="badges" :class="updateClass(item.name)"></span>
+                        </button>
+                    </div>
                 </div>
             </div>
             <div class="open-archive-btn">
                 <a href="/orders/create" class="button button-primary h-40 d-inline-flex align-items-center py-2">Add new order</a>
             </div>
-        </div>    
-        <br>        
+        </div>
+        <br>
         <div class="report bg-white">
             <div id="order-views" class="order-views">
                 <div class="report-top d-flex justify-content-between mgb-32 flex-wrap">
@@ -41,7 +47,7 @@
                                 </svg>
                             </button>
                         </div>
-                    
+
                         <button class="button button-primary h-40 d-inline-flex align-items-center py-2">View daily report</button>
                     </div>
                 </div>
@@ -189,6 +195,27 @@ export default {
         localStorage.removeItem('orderSearchType');
     },
     methods: {
+        updateOrderList(item) {
+            this.pages.acitvePage = 1
+            this.$boston.post('filter-list/order?page='+this.pages.acitvePage, { item: item, paginate: this.pages.paginate }).then( (res) => {
+                this.pages.pageData = res;
+                this.orderData = res.data;
+            }).catch( (err) => {
+                console.log(err);
+            });
+        },
+        updateClass(type) {
+            let firstRow = ['Due today', 'Due tomorrow', 'Appt Today', 'Appt Tomorrow', 'Overdue', 'Rush']
+            let badge = 'progress-badges'
+            if(type == 'Deleted' || type == 'Cancelled'){
+                badge = 'archive-badges'
+            } else if (type == 'Revisions' || type == 'Revised') {
+                badge = 'revision-badges'
+            } else if (_.includes(firstRow, type)) {
+                badge = 'open-badges';
+            }
+            return badge
+        },
         initTableDate(data) {
             this.pages.pageData = data;
             this.orderData = data.data;

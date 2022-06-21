@@ -11,16 +11,21 @@
           </div>
         </div>
         <div class="alert alert-danger alertBlocks" v-if="submitResult.error && submitResult.submit == false">
-            <div v-for="eItem, ki in submitResult.message" :key="ki">
-              <span v-for="erItem, ei in eItem" :key="ei + '0-0-1'">
-                * {{ erItem }}
-              </span>
-            </div>
-        </div>
-        <div class="alert alert-danger" v-if="submitResult.error && submitResult.submit">
+          <template v-if="submitResult.errorString == true">
             {{ submitResult.message }}
+          </template>
+          <template v-else>
+              <div v-for="eItem, ki in submitResult.message" :key="ki">
+                <span v-for="erItem, ei in eItem" :key="ei + '0-0-1'">
+                  * {{ erItem }}
+                </span>
+              </div>
+            </template>
         </div>
         <div class="alert alert-success" v-if="submitResult.submitStatus">
+            {{ submitResult.message }}
+        </div>
+        <div class="alert alert-danger" v-if="submitResult.error && submitResult.submit">
             {{ submitResult.message }}
         </div>
         <Step1 v-show="step === 1" :type="1" :order="[]"
@@ -69,6 +74,7 @@ export default {
       submitResult: {
           error: false,
           submitStatus: false,
+          errorString: false,
           message: [],
           submit: false,
       }
@@ -92,6 +98,9 @@ export default {
               this.submitResult.error = res.error;
               this.submitResult.submitStatus = false;
               this.submitResult.submit = false;
+              this.submitResult.errorString = res.errorString ?? false;
+
+              $("html, body").animate({ scrollTop: 0 }, "slow");
 
               if (res.submit && res.submit == true) {
                 this.submitResult.message = res.messages;
@@ -107,8 +116,6 @@ export default {
                   window.location.href = "/orders/"+res.orderId + "?r=create"
                 },500);
               }
-
-              $("html, body").animate({ scrollTop: 0 }, "slow");
           });
       });
   },
