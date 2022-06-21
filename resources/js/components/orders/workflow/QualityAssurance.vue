@@ -9,9 +9,9 @@
             </div>
             <div class="group">
                 <p class="text-success">(Check & Upload)</p>
-                <p class="mb-0 text-light-black fw-bold">{{ orderData.analysis.note }}</p>
+                <p class="mb-0 text-light-black fw-bold">{{ orderData.analysis ? orderData.analysis.note : '-' }}</p>
             </div>
-            <div class="group">
+            <div class="group" v-if="orderData.analysis">
                 <p class="text-light-black mgb-12">Files</p>
                 <div class="d-flex align-items-center" v-for="attachment, indexKey in orderData.analysis.attachments" :key="indexKey">
                     <div class="file-img">

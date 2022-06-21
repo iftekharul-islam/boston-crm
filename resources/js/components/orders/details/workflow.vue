@@ -182,10 +182,11 @@ export default {
           return false;
       }
       this.isActive = type;
+      this.addParam('wkf', type);
+      
       if (type == "revision") {
         this.$root.$emit('open_revision', true);
       }
-      this.addParam('wkf', type);
     }
   }
 }

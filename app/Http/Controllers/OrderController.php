@@ -197,31 +197,31 @@ class OrderController extends BaseController
                 $unstarted['total'] += 1;
                 $unstarted['ids'][] = $order->id;
             }
-            if ($workStatus['scheduling']) {
+            if (isset($workStatus['scheduling'])) {
                 $unassigned['total'] += 1;
                 $unassigned['ids'][] = $order->id;
             }
-            if ($workStatus['scheduling'] == 0) {
+            if (isset($workStatus['scheduling']) && $workStatus['scheduling'] == 0) {
                 $unscheduled['total'] += 1;
                 $unscheduled['ids'][] = $order->id;
             }
-            if ($workStatus['scheduling'] == 1) {
+            if (isset($workStatus['scheduling']) && $workStatus['scheduling'] == 1) {
                 $scheduled['total'] += 1;
                 $scheduled['ids'][] = $order->id;
             }
-            if ($workStatus['inspection'] == 1) {
+            if (isset($workStatus['inspection']) && $workStatus['inspection'] == 1) {
                 $inspected['total'] += 1;
                 $inspected['ids'][] = $order->id;
             }
-            if ($workStatus['reportPreparation'] == 1) {
+            if (isset($workStatus['reportPreparation']) && $workStatus['reportPreparation'] == 1) {
                 $reportUploaded['total'] += 1;
                 $reportUploaded['ids'][] = $order->id;
             }
-            if ($workStatus['revision'] == 1) {
+            if (isset($workStatus['revision']) && $workStatus['revision'] == 1) {
                 $revisions['total'] += 1;
                 $revisions['ids'][] = $order->id;
             }
-            if ($workStatus['submission'] == 1) {
+            if (isset($workStatus['submission']) && $workStatus['submission'] == 1) {
                 $revised['total'] += 1;
                 $revised['ids'][] = $order->id;
             }
