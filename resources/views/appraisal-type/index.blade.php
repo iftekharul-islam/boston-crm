@@ -5,16 +5,16 @@
         <div class="clients-box user-box clients-box-main bg-white">
             <div class="clients-top d-flex flex-wrap justify-content-between">
                 <p class="mb-0 text-light-black fs-20 text-600">Appraisal Types</p>
-                <a href="{{ route('appraisal-types.create') }}" class="button button-primary">Create appraisal type</a>
+                <a href="{{ route('appraisal-types.create') }}" class="button button-primary">Add appraisal type</a>
             </div>
-            <div class="clients-table user-table mt-4">
+            <div class="clients-table appraiser-type-table user-table mt-4">
                 <table class="table">
                     <thead>
                     <tr>
                         <th scope="col">Form Type</th>
                         <th scope="col">Modified Form</th>
                         <th scope="col">Condo Type</th>
-                        <th scope="col">Action</th>
+                        <th scope="col" class="text-end">Action</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -24,17 +24,17 @@
                             <td>{{ $appraisal_type->modified_form }}</td>
                             <td>{{ $appraisal_type->condo_type == 1 ? "Yes" : "No" }}</td>
                             <td>
-                                <div class="d-flex align-items-center">
+                                <div class="d-flex align-items-center justify-content-end">
                                     @if($is_owner || in_array('update.appraisaltype', $user_permissions))
-                                        <a href="{{ route('appraisal-types.edit', $appraisal_type->id) }}" class="me-3 text-light-black cursor-pointer">
-                                        <span class="icon-edit fs-20"><span class="path1"></span><span
+                                        <a href="{{ route('appraisal-types.edit', $appraisal_type->id) }}" class="me-3 text-light-black cursor-pointer action-icon">
+                                        <span class="icon-edit"><span class="path1"></span><span
                                                     class="path2"></span></span></a>
                                     @endif
                                     @if($is_owner || in_array('delete.appraisaltype', $user_permissions))
-                                        <a class="cursor-pointer text-light-black" data-id="{{ $appraisal_type->id }}"
+                                        <a class="cursor-pointer text-light-black action-icon" data-id="{{ $appraisal_type->id }}"
                                            data-action="{{ route('appraisal-types.destroy',$appraisal_type->id) }}"
                                            onclick="deleteConfirmation({{$appraisal_type->id}})"> <span
-                                                    class="icon-trash fs-20"><span class="path1"></span><span
+                                                    class="icon-trash"><span class="path1"></span><span
                                                         class="path2"></span><span class="path3"></span><span
                                                         class="path4"></span></span></a>
                                     @endif

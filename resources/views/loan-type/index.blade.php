@@ -5,14 +5,14 @@
         <div class="clients-box user-box clients-box-main bg-white">
             <div class="clients-top d-flex flex-wrap justify-content-between">
                 <p class="mb-0 text-light-black fs-20 text-600">Loan Types</p>
-                <a href="{{ route('loan-types.create') }}" class="button button-primary">Create loan type</a>
+                <a href="{{ route('loan-types.create') }}" class="button button-primary">Add loan type</a>
             </div>
-            <div class="clients-table user-table mt-4">
+            <div class="clients-table user-table appraiser-type-table mt-4">
                 <table class="table">
                     <thead>
                     <tr>
                         <th scope="col">Loan Type</th>
-                        <th scope="col">Action</th>
+                        <th scope="col" class="text-end">Action</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -20,17 +20,17 @@
                         <tr>
                             <td>{{ $loan_type->name }}</td>
                             <td>
-                                <div class="d-flex align-items-center">
+                                <div class="d-flex align-items-center justify-content-end">
                                     @if($is_owner || in_array('update.loantype', $user_permissions))
-                                        <a href="{{ route('loan-types.edit', $loan_type->id) }}" class="me-3 text-light-black cursor-pointer">
-                                        <span class="icon-edit fs-20"><span class="path1"></span><span
+                                        <a href="{{ route('loan-types.edit', $loan_type->id) }}" class="me-3 text-light-black cursor-pointer action-icon">
+                                        <span class="icon-edit"><span class="path1"></span><span
                                                     class="path2"></span></span></a>
                                     @endif
                                     @if($is_owner || in_array('delete.loantype', $user_permissions))
-                                        <a class="cursor-pointer text-light-black" data-id="{{ $loan_type->id }}"
+                                        <a class="cursor-pointer text-light-black action-icon" data-id="{{ $loan_type->id }}"
                                            data-action="{{ route('loan-types.destroy',$loan_type->id) }}"
                                            onclick="deleteConfirmation({{$loan_type->id}})"> <span
-                                                    class="icon-trash fs-20"><span class="path1"></span><span
+                                                    class="icon-trash"><span class="path1"></span><span
                                                         class="path2"></span><span class="path3"></span><span
                                                         class="path4"></span></span></a>
                                     @endif
