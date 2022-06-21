@@ -97,11 +97,11 @@
 import Table from "../../src/Table.vue"
 export default {
     props: [
-        'data'
+        'data', 'summary'
     ],
     components: {
         Table
-    }, 
+    },
     data: () => ({
         orderData: [],
         visibleColumnDropDown: false,
@@ -158,7 +158,7 @@ export default {
                     key: "due_date"
                 }
             ]
- 
+
         }
     }),
     created() {
@@ -182,7 +182,7 @@ export default {
         },
         checkColumnActive(val) {
             let getHeader = (this.order.header);
-            let findActive = false;            
+            let findActive = false;
             for (let index in getHeader){
                 let ele = getHeader[index];
                 let key = ele.split("@");
@@ -202,7 +202,7 @@ export default {
                 }
             });
             if (!getIndex) {
-                this.order.header.splice( 8, 0, 
+                this.order.header.splice( 8, 0,
                     val.title + '@' + val.key + '@left@left'
                 );
             } else  {
@@ -210,7 +210,7 @@ export default {
                     return ele == getIndex;
                 });
                 this.order.header.splice(getIndexNo, 1);
-            } 
+            }
             this.checkColumnActive(val)
         },
         loadPage(acitvePage = null){
@@ -222,7 +222,7 @@ export default {
                 console.log(err);
             });
         },
-        // Search Table Data 
+        // Search Table Data
         searchData: _.debounce( function (event) {
             this.loadPage(this.pages.acitvePage, event.target.value);
         }, 300),

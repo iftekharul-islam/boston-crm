@@ -26,7 +26,7 @@
               <div class="mgb-32">
                   <ValidationProvider class="group" name="Delivery man" rules="required" v-slot="{ errors }">
                       <div :class="{ 'invalid-form' : errors[0] }">
-                          <label for="" class="d-block mb-2 dashboard-label">Delivery man name </label>
+                          <label for="" class="d-block mb-2 dashboard-label">Delivery by </label>
                           <select name="" class="dashboard-input w-100 loan-type-select" v-model="dManId">
                               <option value="">Please Select a user</option>
                               <option v-for="user in users" :key="user.id" :value="user.id">
@@ -74,7 +74,7 @@
               <p class="mb-0 text-light-black fw-bold" v-else>Not assigned yet</p>
           </div>
           <div class="group">
-              <p class="text-light-black mgb-12">Delivery man name</p>
+              <p class="text-light-black mgb-12">Delivery by</p>
               <p class="mb-0 text-light-black fw-bold">{{ dManName }}</p>
           </div>
           <div class="group">
