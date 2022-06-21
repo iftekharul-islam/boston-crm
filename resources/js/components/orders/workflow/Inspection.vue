@@ -88,14 +88,16 @@
                         'Content-Type': 'multipart/form-data'
                     }
                 }).then(res => {
-                    this.isUploading = false
-                    this.fileData.files = []
-                    this.fileData.file_type = ''
-                    this.orderData = res.data.data
-                    this.$root.$emit('wk_update', this.orderData);
-                    this.$root.$emit('wk_flow_menu', this.orderData);
+                    if (res.error == false) {
+                        this.isUploading = false
+                        this.fileData.files = []
+                        this.fileData.file_type = ''
+                        this.orderData = res.data.data
+                        this.$root.$emit('wk_update', this.orderData);
+                        this.$root.$emit('wk_flow_menu', this.orderData);
+                        this.inspectionData(this.orderData)
+                    }
                     this.$root.$emit('wk_flow_toast', res.data);
-                    this.inspectionData(this.orderData)
                 }).catch(err => {
                     console.log(err)
                     this.isUploading = false
