@@ -24,7 +24,7 @@ class Client extends Model implements HasMedia, Auditable
         "address",
         "city",
         "state",
-        "country",
+        "processing_fee",
         "zip",
         "deducts_technology_fee",
         "fee_for_1004uad",
