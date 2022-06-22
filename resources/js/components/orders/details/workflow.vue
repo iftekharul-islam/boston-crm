@@ -37,7 +37,7 @@
               </span>
               <p class="mb-0">Report Analysis and Review</p>
             </div>
-            <div class="item" :class="{ 'disable' : norewrite === 1, 'complete' : status.reWritingReport === 1,'current' : currentStep('rewriting-report'), 'activeStep' : isActive == 'rewriting-report'}" @click="changeTab('rewriting-report', norewrite)">
+            <div class="item" :class="{ 'disable' : norewriteReport === 1, 'complete' : status.reWritingReport === 1,'current' : currentStep('rewriting-report'), 'activeStep' : isActive == 'rewriting-report'}" @click="changeTab('rewriting-report', norewriteReport)">
                   <span class="ball">
                       <img src="/img/current-white.png" alt="current step boston">
                   </span>
@@ -141,6 +141,8 @@ export default {
       this.initOrder(this.order);
       this.updateRole()
 
+      this.norewriteReport = this.norewrite;
+
       let getParams = this.params();
       if (getParams['wkf']) {
           this.changeTab(getParams['wkf']);
@@ -170,6 +172,17 @@ export default {
     initOrder(order) {
         this.orderData = order;
         this.status = JSON.parse(order.workflow_status) ?? [];
+        if (order.analysis){
+          let noRewrite = 1;
+          if (order.analysis.is_review_send_back && order.analysis.is_review_send_back == 1) {
+              noRewrite = 0;
+          } else if( order.analysis.is_review_send_back) {
+              noRewrite = 0;
+          } else if(order.analysis.rewrite_note && order.analysis.rewrite_note != null) {
+              noRewrite = 0;
+          }
+          this.norewriteReport = noRewrite;
+        }
         this.currentStep(this.orderData.currentStep);
     },
     updateRole() {

@@ -99,6 +99,11 @@
                                                     class="text-danger"></span></label>
                                         <input type="text" id="zip" name="zip" value="{{ $client->zip }}" class="dashboard-input w-100">
                                     </div>
+                                    <div class="group">
+                                        <label for="processing-fee" class="d-block mb-2 dashboard-label processing-fee-label">Processing Fee <span
+                                                    class="text-danger"></span></label>
+                                        <input type="number" onpaste="return false" min="0" onkeypress="return numbersOnly(event)" id="processing-fee" name="processing_fee" value="{{ $client->processing_fee }}" class="dashboard-input w-100">
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -278,6 +283,14 @@
                             return value.trim();
                         }
                     },
+                    processing_fee: {
+                        required: function () {
+                            return clientType === 'lender' || clientType === 'both'
+                        },
+                        normalizer: function (value) {
+                            return value.trim();
+                        }
+                    },
                     fee_for_1004uad: {
                         required: function () {
                             return clientType === 'amc' || clientType === 'both'
@@ -335,6 +348,9 @@
                     city: {
                         required: "City is required"
                     },
+                    processing_fee: {
+                        required: "Processing fee is required"
+                    },
                     fee_for_1004uad: {
                         required : "Technology fee for full appraisal(1004UAD) is required"
                     },
@@ -363,10 +379,10 @@
             });
             let clientType = $('#client-type').val();
             if(clientType === 'lender'){
-                $(".address-label, .city-label, .state-label, .zip-label").addClass('require');
-                $("#address,#city,#state,#zip").prop('required', true);
+                $(".address-label, .city-label, .state-label, .zip-label,.processing-fee-label").addClass('require');
+                $("#address,#city,#state,#zip,#processing-fee").prop('required', true);
             }else if(clientType === 'both'){
-                $(".address-label, .city-label, .state-label, .zip-label,.deducts-technology-fee-label, .fee-for-1004uad-label, .fee-for-1004d-label, .can-sign-label, .can-inspect-label").addClass('require');
+                $(".address-label, .city-label, .state-label, .zip-label,.processing-fee-label,.deducts-technology-fee-label, .fee-for-1004uad-label, .fee-for-1004d-label, .can-sign-label, .can-inspect-label").addClass('require');
             }else{
                 $(".deducts-technology-fee-label, .fee-for-1004UAD-label, .fee-for-1004D-label, .can-sign-label, .can-inspect-label").addClass('require');
                 $("#deducts-technology-fee, #fee-for-1004UAD, #fee-for-1004D-label ,#can-sign, #can-inspect").prop('required', true);
@@ -376,20 +392,20 @@
             e.preventDefault();
             let clientType = $(this).val();
             if (clientType === 'lender') {
-                $(".address-label, .city-label, .state-label, .zip-label").addClass('require');
+                $(".address-label, .city-label, .state-label, .zip-label,.processing-fee-label").addClass('require');
                 $("#address,#city,#state,#zip").prop('required', true);
 
                 $(".deducts-technology-fee-label, .fee-for-1004UAD-label, .fee-for-1004D-label, .can-sign-label, .can-inspect-label").removeClass('require');
                 $("#deducts-technology-fee, #fee-for-1004UAD, #fee-for-1004D-label ,#can-sign, #can-inspect").prop('required', false);
             }else if(clientType === 'both'){
-                $(".address-label, .city-label, .state-label, .zip-label,.deducts-technology-fee-label, .fee-for-1004UAD-label, .fee-for-1004D-label, .can-sign-label, .can-inspect-label").addClass('require');
-                $("#address,#city,#state,#zip,#deducts-technology-fee, #fee-for-1004UAD, #fee-for-1004D-label ,#can-sign, #can-inspect").prop('required', true);
+                $(".address-label, .city-label, .state-label, .zip-label,.processing-fee-label,.deducts-technology-fee-label, .fee-for-1004UAD-label, .fee-for-1004D-label, .can-sign-label, .can-inspect-label").addClass('require');
+                $("#address,#city,#state,#zip,#processing-fee,#deducts-technology-fee, #fee-for-1004UAD, #fee-for-1004D-label ,#can-sign, #can-inspect").prop('required', true);
             } else {
                 $(".deducts-technology-fee-label, .fee-for-1004UAD-label, .fee-for-1004D-label, .can-sign-label, .can-inspect-label").addClass('require');
                 $("#deducts-technology-fee, #fee-for-1004UAD, #fee-for-1004D-label ,#can-sign, #can-inspect").prop('required', true);
 
-                $(".address-label, .city-label, .state-label, .zip-label").removeClass('require');
-                $("#address,#city,#state,#zip").prop('required', false);
+                $(".address-label, .city-label, .state-label, .zip-label,.processing-fee-label").removeClass('require');
+                $("#address,#city,#state,#zip,#processing-fee").prop('required', false);
             }
         });
         $('#instruction').on('change',function() {

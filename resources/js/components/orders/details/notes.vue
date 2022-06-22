@@ -43,12 +43,15 @@
           initNotes(order) {
               this.notes = [];
               this.orderData = order;
-              this.notes.push({
-                  key: 'provided_service',
-                  title: "Provided Services",
-                  note: order.provider_service.note,
-                  user: order.user
-              });
+
+              if (order.provider_service) {
+                this.notes.push({
+                    key: 'provided_service',
+                    title: "Provided Services",
+                    note: order.provider_service.note,
+                    user: order.user
+                });
+              }
 
               if ( order.inspection ) {
                 this.notes.push({
