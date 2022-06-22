@@ -68,7 +68,7 @@
                 <p class="text-success">(Check & Upload)</p>
                 <p class="mb-0 text-light-black fw-bold">{{ analysisnote }}</p>
             </div>
-            <div class="group" v-if="analysis.attachments">
+            <div class="group" v-if="analysis">
                 <p class="text-light-black mgb-12">Files</p>
                 <div class="d-flex align-items-center" v-for="attachment, indexKey in analysis.attachments" :key="indexKey">
                     <div class="file-img">
@@ -193,7 +193,7 @@
                 <p class="text-success">(Check & Upload)</p>
                 <p class="mb-0 text-light-black fw-bold">{{ analysisnote }}</p>
             </div>
-            <div class="group">
+            <div class="group" v-if="orderData.analysis">
                 <p class="text-light-black mgb-12">Files</p>
                 <div class="d-flex align-items-center" v-for="attachment, indexKey in orderData.analysis.attachments"
                     :key="indexKey">
@@ -219,7 +219,7 @@
                 <p class="text-light-black mgb-12">Changed effective date</p>
                 <p class="mb-0 text-light-black fw-bold">{{ qa.effective_date }}</p>
             </div>
-            <div class="group" v-if="analysis.attachments">
+            <div class="group" v-if="analysis">
                 <p class="text-light-black mgb-12">Files</p>
                 <div class="d-flex align-items-center" v-for="attachment, indexKey in analysis.attachments" :key="indexKey">
                     <div class="file-img">
@@ -653,8 +653,15 @@
                     if (this.alreadyQualityAssurance == 1 && this.orderData.quality_assurance.note) {
                         this.currentStep = 'step3';
                     }
+
                     this.qa.qa_id = this.orderData.quality_assurance.id
-                    this.qa.note = this.orderData.quality_assurance.note
+                    
+                    if (this.orderData.quality_assurance.note === "null" || this.orderData.quality_assurance.note == "null" || this.orderData.quality_assurance.note === null || (typeof this.orderData.quality_assurance.note) == undefined) {
+                        
+                    } else {
+                        this.qa.note = this.orderData.quality_assurance.note;
+                    }
+                    
                     this.qa.assigned_to = this.orderData.quality_assurance.assigned_to
                     this.qa.assigned_name = this.orderData.quality_assurance.assignee.name
                     this.qa.effective_date = this.orderData.quality_assurance.effective_date
