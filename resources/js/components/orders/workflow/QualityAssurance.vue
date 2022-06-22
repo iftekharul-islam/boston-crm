@@ -5,22 +5,21 @@
             <div class="group">
                 <p class="text-light-black mgb-12">Instruction from previous step</p>
                 <p class="text-success">(Rewrite & send back)</p>
-                <p class="mb-0 text-light-black fw-bold">{{ orderData.analysis ? orderData.analysis.rewrite_note : '-' }}</p>
+                <p class="mb-0 text-light-black fw-bold">{{ rewrite_note }}</p>
             </div>
             <div class="group">
                 <p class="text-success">(Check & Upload)</p>
-                <p class="mb-0 text-light-black fw-bold">{{ orderData.analysis ? orderData.analysis.note : '-' }}</p>
+                <p class="mb-0 text-light-black fw-bold">{{ analysisnote }}</p>
             </div>
             <div class="group" v-if="orderData.analysis">
                 <p class="text-light-black mgb-12">Files</p>
-                <div class="d-flex align-items-center" v-for="attachment, indexKey in orderData.analysis.attachments" :key="indexKey">
+                <div class="d-flex align-items-center" v-for="attachment, indexKey in analysis.attachments" :key="indexKey">
                     <div class="file-img">
                         <img src="/img/pdf.png" alt="boston pdf image">
                     </div>
                     <div class="mgl-12">
                         <p class="text-light-black mb-0">{{ attachment.name }}</p>
-                        <p class="text-gray mb-0 fs-12">Uploaded: {{ orderData.analysis.updated_by.name + ', ' +
-                            orderData.analysis.updated_at }}</p>
+                        <p class="text-gray mb-0 fs-12">Uploaded: {{ analysis.updated_by.name + ', ' + analysis.updated_at }}</p>
                     </div>
                 </div>
             </div>
@@ -63,22 +62,21 @@
             <div class="group">
                 <p class="text-light-black mgb-12">Instruction from previous step</p>
                 <p class="text-success">(Rewrite & send back)</p>
-                <p class="mb-0 text-light-black fw-bold">{{ orderData.analysis.rewrite_note }}</p>
+                <p class="mb-0 text-light-black fw-bold">{{ rewrite_note }}</p>
             </div>
             <div class="group">
                 <p class="text-success">(Check & Upload)</p>
-                <p class="mb-0 text-light-black fw-bold">{{ orderData.analysis.note }}</p>
+                <p class="mb-0 text-light-black fw-bold">{{ analysisnote }}</p>
             </div>
-            <div class="group">
+            <div class="group" v-if="analysis.attachments">
                 <p class="text-light-black mgb-12">Files</p>
-                <div class="d-flex align-items-center" v-for="attachment, indexKey in orderData.analysis.attachments" :key="indexKey">
+                <div class="d-flex align-items-center" v-for="attachment, indexKey in analysis.attachments" :key="indexKey">
                     <div class="file-img">
                         <img src="/img/pdf.png" alt="boston pdf image">
                     </div>
                     <div class="mgl-12">
                         <p class="text-light-black mb-0">{{ attachment.name }}</p>
-                        <p class="text-gray mb-0 fs-12">Uploaded: {{ orderData.analysis.updated_by.name + ', ' +
-                            orderData.analysis.updated_at }}</p>
+                        <p class="text-gray mb-0 fs-12">Uploaded: {{ analysis.updated_by.name + ', ' + analysis.updated_at }}</p>
                     </div>
                 </div>
             </div>
@@ -185,27 +183,15 @@
         <div v-if="currentStep == 'step3'">
             <a class="edit-btn" @click="editQualityAssurance"><span class="icon-edit"><span class="path1"></span><span
                         class="path2"></span></span></a>
+            <a class="edit-btn-2" @click="reloadData()">Reload</a>
             <div class="group">
                 <p class="text-light-black mgb-12">Instruction from previous step</p>
                 <p class="text-success">(Rewrite & send back)</p>
-                <p class="mb-0 text-light-black fw-bold">{{ orderData.analysis.rewrite_note }}</p>
+                <p class="mb-0 text-light-black fw-bold">{{ rewrite_note }}</p>
             </div>
             <div class="group">
                 <p class="text-success">(Check & Upload)</p>
-                <p class="mb-0 text-light-black fw-bold">{{ orderData.analysis.note }}</p>
-            </div>
-            <div class="group">
-                <p class="text-light-black mgb-12">Files</p>
-                <div class="d-flex align-items-center" v-for="attachment, indexKey in orderData.analysis.attachments" :key="indexKey">
-                    <div class="file-img">
-                        <img src="/img/pdf.png" alt="boston pdf image">
-                    </div>
-                    <div class="mgl-12">
-                        <p class="text-light-black mb-0">{{ attachment.name }}</p>
-                        <p class="text-gray mb-0 fs-12">Uploaded: {{ orderData.analysis.updated_by.name + ', ' +
-                            orderData.analysis.updated_at }}</p>
-                    </div>
-                </div>
+                <p class="mb-0 text-light-black fw-bold">{{ analysisnote }}</p>
             </div>
             <div class="group">
                 <p class="text-light-black mgb-12">Assigned to</p>
@@ -219,16 +205,15 @@
                 <p class="text-light-black mgb-12">Changed effective date</p>
                 <p class="mb-0 text-light-black fw-bold">{{ qa.effective_date }}</p>
             </div>
-            <div class="group">
+            <div class="group" v-if="analysis.attachments">
                 <p class="text-light-black mgb-12">Files</p>
-                <div class="d-flex align-items-center" v-for="attachment, indexKey in orderData.analysis.attachments" :key="indexKey">
+                <div class="d-flex align-items-center" v-for="attachment, indexKey in analysis.attachments" :key="indexKey">
                     <div class="file-img">
                         <img src="/img/pdf.png" alt="boston pdf image">
                     </div>
                     <div class="mgl-12">
                         <p class="text-light-black mb-0">{{ attachment.name }}</p>
-                        <p class="text-gray mb-0 fs-12">Uploaded: {{ orderData.analysis.updated_by.name + ', ' +
-                            orderData.analysis.updated_at }}</p>
+                        <p class="text-gray mb-0 fs-12">Uploaded: {{ analysis.updated_by.name + ', ' + analysis.updated_at }}</p>
                     </div>
                 </div>
             </div>
@@ -396,6 +381,9 @@
                 note: '',
                 files: [],
             },
+            analysis: {},
+            rewrite_note: null,
+            analysisnote: null,
             placeName: '',
             placeLat: '',
             placeLng: '',
@@ -417,9 +405,14 @@
         }),
         created() {
             this.getReportAnalysisData(this.order)
+
             this.$root.$on('wk_update', (res) => {
-                this.getReportAnalysisData(res);
+                localStorage.setItem('qaItem', JSON.stringify(res));
+                this.getReportAnalysisData(res, true);
             });
+        },
+        destroyed(){
+            localStorage.removeItem('qaItem');
         },
         methods: {
             initMap() {
@@ -609,10 +602,21 @@
                         console.log(err)
                     })
             },
-            getReportAnalysisData(order) {
-                this.orderData = order
+            getReportAnalysisData(order, localstore) {
+                if (localstore == true) {
+                    let orderInfo = JSON.parse(localStorage.getItem('qaItem'));
+                    this.orderData = orderInfo;
+                } else {
+                    this.orderData = order;
+                }
                 this.alreadyQualityAssurance = (JSON.parse(this.orderData.workflow_status)).qualityAssurance
-                this.alreadyQualityAssurance == 1 ? this.currentStep = 'step2' : 'step1'
+                this.alreadyQualityAssurance == 1 ? this.currentStep = 'step2' : 'step1';
+                this.analysis = this.orderData.analysis;
+
+                if (this.orderData.analysis) {
+                    this.rewrite_note = this.orderData.analysis.rewrite_note;
+                    this.analysisnote = this.orderData.analysis.note;
+                }
 
                 this.comAddresses = this.orderData.comlist
                 this.qa.order_id = this.orderData.id
@@ -624,7 +628,7 @@
 
                 if (this.orderData.quality_assurance) {
                     if (this.alreadyQualityAssurance == 1 && this.orderData.quality_assurance.note) {
-                        this.currentStep = 'step3'
+                        this.currentStep = 'step3';
                     }
                     this.qa.qa_id = this.orderData.quality_assurance.id
                     this.qa.note = this.orderData.quality_assurance.note
@@ -632,6 +636,7 @@
                     this.qa.assigned_name = this.orderData.quality_assurance.assignee.name
                     this.qa.effective_date = this.orderData.quality_assurance.effective_date
                 }
+                this.analysis = this.orderData.analysis;
             },
             saveQualityAssurance() {
                 this.$refs.qualityAssuranceForm.validate().then((status) => {
@@ -668,6 +673,10 @@
                 setTimeout(function () {
                     self.initMap()
                 }, 5)
+            },
+            reloadData(){
+                // this.getReportAnalysisData(this.orderData, true);
+                window.location.reload();
             },
             updateQualityAssurance() {
                 let formData = new FormData();

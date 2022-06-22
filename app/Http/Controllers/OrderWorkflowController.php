@@ -87,7 +87,7 @@ class OrderWorkflowController extends BaseController
         if (!$order_w_inspection) {
             return response([
                 "error" => true,
-                "message" => "Inspection Not Found"
+                "message" => "Inspection Not Found, Please Update Schedule First"
             ]);
         }
         $data = $this->saveInspectionFiles($request->all(), $inspection_id);

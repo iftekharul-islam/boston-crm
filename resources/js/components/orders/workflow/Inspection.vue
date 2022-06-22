@@ -58,6 +58,9 @@
         }),
         created() {
             this.inspectionData(this.order);
+            this.$root.$emit('wk_update', (res) => {
+                this.inspectionData(res);
+            });
         },
         methods: {
             inspectionData(order) {
@@ -88,11 +91,12 @@
                         'Content-Type': 'multipart/form-data'
                     }
                 }).then(res => {
-                    if (res.error == false) {
+                    if (res.data.error == false) {
+                        console.log(res.data);
                         this.isUploading = false
                         this.fileData.files = []
-                        this.fileData.file_type = ''
-                        this.orderData = res.data.data
+                        this.fileData.file_type = '';
+                        this.orderData = res.data.data;
                         this.$root.$emit('wk_update', this.orderData);
                         this.$root.$emit('wk_flow_menu', this.orderData);
                         this.inspectionData(this.orderData)
