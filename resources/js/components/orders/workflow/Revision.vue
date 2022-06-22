@@ -3,7 +3,7 @@
     <div class="revission-modal">
       <div class="revission-content position-relative">
         <div class="header bg-gray d-flex align-items-center justify-content-between">
-          <p class="mb-0 fs-20 fw-bold text-white">Revission</p>
+          <p class="mb-0 fs-20 fw-bold text-white">Revision</p>
           <span class="cursor-pointer" @click="revission()">
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M1 17L17 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
@@ -14,14 +14,14 @@
         <div class="revission-body">
           <!-- add button -->
           <div class="revission-add text-end mb-3">
-            <button v-if="!addRevission" @click="revissionAdd(true)" class="button button-primary py-2 h-40 flex-center d-inline-flex">Add revission</button>
+            <button v-if="!addRevission" @click="revissionAdd(true)" class="button button-primary py-2 h-40 flex-center d-inline-flex">Add revision</button>
           </div>
           
           <ValidationObserver ref="addRevission">
             <!-- add revission form -->
             <transition v-if="addRevission" name="fade" appear>
               <div class="add-revission bg-white mgb-12">
-                <p>Add revission</p>
+                <p class="fs-20 fw-bold">Add revision</p>
                 <ValidationProvider name="Date & time" rules="required" v-slot="{ errors }">
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
                     <label>Date & time</label>
@@ -37,7 +37,7 @@
 
                 <ValidationProvider name="Revission details" rules="required" v-slot="{ errors }">
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
-                    <label for="revissionData">Revission details</label>
+                    <label for="revissionData">Revision details</label>
                     <textarea v-model="form.revission" id="revissionData" rows="5" class="dashboard-textarea w-100 gray-border"></textarea>
                     <span class="error-message">{{ errors[0] }}</span>
                   </div>
@@ -72,7 +72,7 @@
                             class="path1"></span><span class="path2"></span></span></button>
                     </div>
                   </div>
-                  <p class="mgb-12">Revission details</p>
+                  <p class="mgb-12">Revision details</p>
                   <p>{{ item.revision_details }}</p>
                 </div>
                 <!-- solution -->
@@ -113,7 +113,7 @@
                         <div class="group" :class="{ 'invalid-form' : errors[0] }">
                             <label class="mgb-8">Add solution</label>
                             <textarea name="" v-model="item.solution_details_edited" rows="5" class="dashboard-textarea w-100 gray-border"></textarea>
-                            <span class="error-message">{{ errors[0] }}</span>
+                            <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                         </div>
                       </ValidationProvider>
                       <div class="d-flex justify-content-end mgt-12">
@@ -140,7 +140,7 @@
 
             <template v-else>
               <div class="no-revission text-center">
-                There are no revission added yet.
+                <p class="fs-20 mb-0 fw-bold">There are no revision added yet.</p>
               </div>
             </template>
 
@@ -195,7 +195,7 @@
             <transition name="fade" v-if="editNotesModal" appear>
               <div class="edit-revission">
                   <ValidationObserver ref="editRevision">
-                      <p>Edit revission</p>
+                      <p class="fs-20 fw-bold">Edit revision</p>
                       <ValidationProvider name="Date & time" rules="required" v-slot="{ errors }">
                         <div class="group" :class="{ 'invalid-form' : errors[0] }">
                           <label>Date & time</label>
@@ -211,14 +211,14 @@
 
                       <ValidationProvider name="Revission details" rules="required" v-slot="{ errors }">
                         <div class="group" :class="{ 'invalid-form' : errors[0] }">
-                          <label for="revissionData">Revission details</label>
+                          <label for="revissionData">Revision details</label>
                           <textarea v-model="form.revission" id="revissionData" rows="5" class="dashboard-textarea w-100 gray-border"></textarea>
                           <span class="error-message">{{ errors[0] }}</span>
                         </div>
                       </ValidationProvider>
                       <div class="text-end">
                         <button @click="editNotesModal = false" class="button button-transparent px-5 h-40 flex-center">Close</button>
-                        <button @click="revissionEditSubmit" class="button button-primary px-5 h-40 flex-center d-inline-flex">Update Revission</button>
+                        <button @click="revissionEditSubmit" class="button button-primary px-5 h-40 flex-center d-inline-flex">Update Revision</button>
                       </div> 
                   </ValidationObserver> 
               </div>

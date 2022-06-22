@@ -21,12 +21,12 @@
             <p class="mb-0 text-light-black fw-bold">{{ assignToName }}</p>
         </div>
         <div class="group">
-            <p class="text-light-black mgb-12">Analysis file upload</p>
+            <p class="text-light-black mgb-12">Analysis files upload</p>
             <div class="document">
                 <div class="row">
                     <div class="d-flex align-items-center mb-3" v-for="(file, key) in dataFiles" :key="key">
                         <img src="/img/pdf.svg" alt="boston profile" class="img-fluid">
-                        <span class="text-light-black d-inline-block mgl-12">{{ file.name }}</span>
+                        <span class="text-light-black d-inline-block mgl-12 file-name">{{ file.name }}</span>
                     </div>
                 </div>
             </div>

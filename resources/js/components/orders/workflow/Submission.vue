@@ -58,7 +58,7 @@
                   </div>
               </div>
               <div class="text-end mgt-32">
-                  <button class="button button-primary px-4 h-40 d-inline-flex align-items-center" @click="saveAssigneeData">Done</button>
+                  <button class="button button-primary px-4 h-40 d-inline-flex align-items-center" @click="saveAssigneeData">Deliver</button>
               </div>
           </ValidationObserver>
       </div>
@@ -74,7 +74,7 @@
               <p class="mb-0 text-light-black fw-bold" v-else>Not assigned yet</p>
           </div>
           <div class="group">
-              <p class="text-light-black mgb-12">Delivery by</p>
+              <p class="text-light-black mgb-12">Delivered by</p>
               <p class="mb-0 text-light-black fw-bold">{{ dManName }}</p>
           </div>
           <div class="group">

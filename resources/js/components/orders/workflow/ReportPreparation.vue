@@ -77,7 +77,7 @@
                       <div class="row">
                           <div class="d-flex align-items-center mb-3" v-for="file in dataFiles">
                               <img src="/img/pdf.svg" alt="boston profile" class="img-fluid">
-                              <span class="text-light-black d-inline-block mgl-12">{{ file.name }}</span>
+                              <span class="text-light-black d-inline-block mgl-12 file-name">{{ file.name }}</span>
                           </div>
                       </div>
                   </div>
