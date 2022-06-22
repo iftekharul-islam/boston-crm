@@ -19,7 +19,7 @@
               <div :class="{ 'invalid-form' : errors[0] }">
                 <label for="" class="mb-2 text-light-black d-inline-block">Assign to</label>
                 <div class="preparation-input w-100 position-relative">
-                  <select v-model="assigned_to" class="w-100 dashboard-input">
+                  <select v-model="assigned_to" class="w-100 dashboard-input" data-live-search="true">
                     <option>Choose Assingee</option>
                     <option v-for="user in usersInfo" :key="user.id" :value="user.id">
                         {{ user.name }}
@@ -113,6 +113,9 @@ export default {
           this.initData(res);
       });
   },  
+  mounted() {
+      
+  },
   methods: {
       initData(order){
           console.log(order.analysis);

@@ -40,13 +40,10 @@
                             <ValidationProvider class="group d-block" name="Appraiser name" rules="required"
                                 v-slot="{ errors }">
                                 <div :class="{ 'invalid-form' : errors[0] }">
-                                    <label for="" class="d-block mb-2 dashboard-label">Appraiser name <span
-                                            class="text-danger require"></span></label>
-                                    <select id="apprClientSelect" class="dashboard-input w-100 select2"
-                                        v-model="scheduleData.appraiser_id">
+                                    <label for="" class="d-block mb-2 dashboard-label">Appraiser name <span class="text-danger require"></span></label>
+                                    <select id="apprClientSelect" class="dashboard-input w-100" v-model="scheduleData.appraiser_id">
                                         <option value="">Please select appraiser</option>
-                                        <option v-for="appraisar in appraisers" :key="appraisar.id"
-                                            :value="appraisar.id">
+                                        <option v-for="appraisar in appraisers" :key="appraisar.id" :value="appraisar.id">
                                             {{ appraisar.name }}
                                         </option>
                                     </select>
@@ -108,6 +105,7 @@
     import Calendar from 'v-calendar/lib/components/calendar.umd'
     import DatePicker from 'v-calendar/lib/components/date-picker.umd'
 
+
     Vue.component('VCalendar', Calendar)
     Vue.component('VDatePicker', DatePicker)
     export default {
@@ -148,8 +146,6 @@
             this.getScheduleData()
         },
         mounted() {
-            // $('select').select2();
-            // this.select2Features();
             this.scheduleData.order_id = this.orderData.id
         },
         methods: {
@@ -193,8 +189,9 @@
                 })
             },
             editSchedule() {
-                this.$bvModal.show('schedule')
-                this.getScheduleData()
+                this.$bvModal.show('schedule');
+                $("select").select2();
+                this.getScheduleData();
             },
         }
     }
