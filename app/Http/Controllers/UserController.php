@@ -20,6 +20,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use App\Models\User;
 
 class UserController extends BaseController
 {
@@ -27,7 +29,7 @@ class UserController extends BaseController
 	 protected UserService $userService;
 	 protected UserRepository $repository;
 	 protected UserProfileRepository $profileRepository;
-	 
+
 	 /**
 		* @param CompanyService        $company_service
 		* @param UserService           $user_service
@@ -46,7 +48,7 @@ class UserController extends BaseController
 			$this->repository        = $user_repository;
 			$this->profileRepository = $profile_repository;
 	 }
-	 
+
 	 /**
 		* Display a listing of the resource.
 		*
@@ -58,10 +60,10 @@ class UserController extends BaseController
 			$company       = $company_users['company'];
 			$users         = $company_users['users'];
 			$roles         = $this->service->getCompanyAllRoles();
-			
+
 			return view( 'user.index', compact( 'users', 'company', 'roles' ) );
 	 }
-	 
+
 	 /**
 		* Show the form for creating a new resource.
 		*
@@ -70,10 +72,10 @@ class UserController extends BaseController
 	 public function create(): View|Factory|Application
 	 {
 			$roles = $this->service->getCompanyAllRoles();
-			
+
 			return view( 'user.create', compact( 'roles' ) );
 	 }
-	 
+
 	 /**
 		* Store a newly created resource in storage.
 		*
@@ -91,10 +93,10 @@ class UserController extends BaseController
 				 ] )->syncWithCompany( $company, $request->get( 'role' ) )->createInvite( email: $request->get( 'email' ),
 					 code: $code )->sendMailToUser( code: $code );
 			} );
-			
+
 			return response()->json( [ 'success' => true ] );
 	 }
-	 
+
 	 /**
 		* @param int $id
 		*
@@ -106,10 +108,10 @@ class UserController extends BaseController
 			$company      = $user->companies()->first();
 			$roles        = $this->service->getCompanyAllRoles();
 			$company_user = CompanyUser::query()->where( 'company_id', $company->id )->where( 'user_id', $user->id )->first();
-			
+
 			return view( 'user.edit', compact( 'user', 'company_user', 'roles' ) );
 	 }
-	 
+
 	 /**
 		* @param UserUpdateRequest $request
 		* @param int               $id
@@ -122,10 +124,10 @@ class UserController extends BaseController
 			$company = $user->companies()->first();
 			CompanyUser::query()->where( 'company_id', $company->id )->where( 'user_id',
 				$user->id )->first()->update( [ 'role_id' => $request->get( 'role' ) ] );
-			
+
 			return response()->json( [ 'success' => true ] );
 	 }
-	 
+
 	 /**
 		* Remove the specified resource from storage.
 		*
@@ -137,7 +139,7 @@ class UserController extends BaseController
 	 {
 			return response()->json( [ 'success' => $this->repository->delete( $id ) ] );
 	 }
-	 
+
 	 /**
 		* Company user status change.
 		*
@@ -153,13 +155,13 @@ class UserController extends BaseController
 				 $company_user = CompanyUser::query()->where( 'company_id', $company->id )->where( 'user_id',
 					 $user->id )->first();
 				 $company_user->update( [ 'status' => ! $company_user->status ] );
-				 
+
 				 return response()->json( [ 'success' => true ] );
 			}
-			
+
 			return response()->json( [ 'success' => false ], 404 );
 	 }
-	 
+
 	 /**
 		* @param $code
 		*
@@ -171,13 +173,13 @@ class UserController extends BaseController
 			if ( $invite_user ) {
 				 $user    = $this->repository->findByEmail( email: $invite_user->email );
 				 $company = $user->companies()->first();
-				 
+
 				 return view( 'auth.invite-user-registration', compact( 'user', 'company' ) );
 			}
-			
+
 			return abort( 404 );
 	 }
-	 
+
 	 /**
 		* @param InviteUserUpdateRequest $request
 		* @param int                     $id
@@ -202,10 +204,10 @@ class UserController extends BaseController
 					 user_id: $user->id )->profileImage( request: $request, image: $request->file( 'image' ),
 					 user: $user )->deleteInvite( email: $user->email );
 			} );
-			
+
 			return redirect()->route( 'login' );
 	 }
-	 
+
 	 /**
 		* @return Application|Factory|View
 		*/
@@ -214,10 +216,10 @@ class UserController extends BaseController
 			$profile = $this->profileRepository->getAuthUserProfile();
 			$company = $this->service->getAuthUserCompany();
 			$user    = auth()->user();
-			
+
 			return view( 'user.user-profile', compact( 'profile', 'company', 'user' ) );
 	 }
-	 
+
 	 /**
 		* @param ProfileUpdateRequest $request
 		*
@@ -238,7 +240,14 @@ class UserController extends BaseController
 						 'phone'    => $request->get( 'phone' ),
 					 ], user_id: $user->id )->profileImage( request: $request, image: $request->file( 'image' ), user: $user );
 			} );
-			
+
 			return redirect()->route( 'profile' )->with('success', 'Profile Update successfully.');
 	 }
+
+     public function updateColor(Request $request,$id){
+        $user = User::find($id);
+        $user->color_id= $request->get('color_id');
+        $user->save();
+        return response()->json( [ 'success' => true ] );
+     }
 }

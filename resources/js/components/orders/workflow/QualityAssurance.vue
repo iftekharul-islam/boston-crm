@@ -101,12 +101,20 @@
                     <p v-if="filesCount > 0">{{ filesCount + 'files selected' }}</p>
                 </div>
             </div>
-            <div class="mgb-20">
-                <label for="" class="mb-2 text-light-black d-inline-block">Add note</label>
-                <div class="preparation-input w-100 position-relative">
-                    <textarea v-model="qa.note" cols="30" rows="3" class="w-100 dashboard-textarea"></textarea>
+            <ValidationObserver ref="qaUpdate">
+                <div class="mgb-20">
+                    <ValidationProvider class="group" name="Quality Assurance Note" rules="required" v-slot="{ errors }">
+                        <div :class="{ 'invalid-form' : errors[0] }">
+                            <label for="" class="mb-2 text-light-black d-inline-block">Add note</label>
+                            <div class="preparation-input w-100 position-relative">
+                                <textarea v-model="qa.note" cols="30" rows="3"
+                                    class="w-100 dashboard-textarea"></textarea>
+                            </div>
+                            <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                        </div>
+                    </ValidationProvider>
                 </div>
-            </div>
+            </ValidationObserver>
             <button class="button button-primary px-4 h-40 d-inline-flex align-items-center" @click="comList = true">Add
                 comparable list for original photo</button>
             <div class="text-end mgt-32">
@@ -706,27 +714,31 @@
                 window.location.reload();
             },
             updateQualityAssurance() {
-                let formData = new FormData();
-                for (let i = 0; i < this.qa.files.length; i++) {
-                    let file = this.qa.files[i];
-                    formData.append('files[' + i + ']', file);
-                }
-                formData.append('note', this.qa.note)
-                formData.append('qa_id', this.qa.qa_id)
-                this.$boston.post('update-quality-assurance', formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data'
+                this.$refs.qaUpdate.validate().then((status) => {
+                    if (status) {
+                        let formData = new FormData();
+                        for (let i = 0; i < this.qa.files.length; i++) {
+                            let file = this.qa.files[i];
+                            formData.append('files[' + i + ']', file);
+                        }
+                        formData.append('note', this.qa.note)
+                        formData.append('qa_id', this.qa.qa_id)
+                        this.$boston.post('update-quality-assurance', formData, {
+                            headers: {
+                                'Content-Type': 'multipart/form-data'
+                            }
+                        }).then(res => {
+                            this.message = res.message
+                            this.orderData = res.data
+                            this.$root.$emit('wk_update', this.orderData)
+                            this.$root.$emit('wk_flow_menu', this.orderData)
+                            this.$root.$emit('wk_flow_toast', res);
+                            this.getReportAnalysisData(res.data);
+                            this.currentStep = 'step3'
+                        }).catch(err => {
+                            console.log(err)
+                        })
                     }
-                }).then(res => {
-                    this.message = res.message
-                    this.orderData = res.data
-                    this.$root.$emit('wk_update', this.orderData)
-                    this.$root.$emit('wk_flow_menu', this.orderData)
-                    this.$root.$emit('wk_flow_toast', res);
-                    this.getReportAnalysisData(res.data);
-                    this.currentStep = 'step3'
-                }).catch(err => {
-                    console.log(err)
                 })
             }
         }

@@ -104,12 +104,12 @@ class OrderWorkflowController extends BaseController
 
         $orderData = $this->orderDetails($order->id);
 
-        return response([
+        return [
             "file" => $data['media'],
             "data" => $orderData,
             'error' => false,
             "message" => "Inspection file uploaded successfully"
-        ]);
+        ];
     }
 
     public function saveInspectionFiles($data, $inspection_id)
@@ -307,10 +307,10 @@ class OrderWorkflowController extends BaseController
             $newAnalysis->save();
 
             if (isset($request['files']) && count($request['files'])) {
-                $this->saveAnalysisFiles($request->all(), $id);
+                $this->saveAnalysisFiles($request->all(), $newAnalysis->id);
             }
 
-            $historyTitle = "Report analysis created by ".$user->name.' on Report analysis and reviewed section.';
+            $historyTitle = "Report analysis created by ".$user->name;
         }
 
         $workStatus = json_decode($order->workflow_status, true);
@@ -324,7 +324,6 @@ class OrderWorkflowController extends BaseController
         return [
             'error' => false,
             'message' => $historyTitle,
-            'status' => 'success',
             'data' => $orderData
         ];
     }
