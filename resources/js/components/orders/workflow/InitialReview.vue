@@ -51,7 +51,7 @@
                 <div class="mgb-32">
                     <ValidationProvider class="group" name="Assigned to" rules="required" v-slot="{ errors }">
                         <div :class="{ 'invalid-form' : errors[0] }">
-                            <label for="" class="d-block mb-2 dashboard-label">Assigned to<span
+                            <label for="" class="d-block mb-2 dashboard-label">Assign to<span
                                     class="text-danger require"></span></label>
                             <select class="dashboard-input w-100" v-model="initialReview.assigned_to">
                                 <option value="">Please select to assign</option>
@@ -67,7 +67,7 @@
                     <ValidationProvider class="d-block mb-2 dashboard-label" name="Notes" rules="required"
                         v-slot="{ errors }">
                         <div class="group" :class="{ 'invalid-form' : errors[0] }">
-                            <label for="" class="d-block mb-2 dashboard-label">Notes <span
+                            <label for="" class="d-block mb-2 dashboard-label">Add note <span
                                     class="text-danger require"></span></label>
                             <b-form-textarea v-model="initialReview.note" placeholder="Enter notes..." rows="2"
                                 cols="5">

@@ -8,6 +8,7 @@
     top: 0;
     padding: 20px;
     @include flex-center;
+    z-index: 9;
 }
 .map-direction  {
     .content {
@@ -20,6 +21,8 @@
             border-radius: 8px 0px 0px 8px;
             max-width: 360px;
             min-width: 360px;
+            max-height: 100%;
+            overflow: auto;
         }
         .full-map {
             width: 100%;
@@ -38,6 +41,10 @@
                 position: absolute;
                 right: 16px;
                 top: 20px;
+                z-index: 999;
+            }
+            .gm-control-active.gm-fullscreen-control {
+                display: none;
             }
         }
     }
@@ -119,5 +126,27 @@
     display: flex;
     p {
         max-width: 360px;
+    }
+}
+
+.document {
+    .file-name {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        word-break: break-all;
+    }
+}
+
+.no-schedule {
+    p {
+        text-align: center;
+        padding-top: 250px;
+    }
+}
+
+.no-revission {
+    p {
+        padding-top: 200px;
     }
 }
