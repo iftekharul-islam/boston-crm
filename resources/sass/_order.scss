@@ -720,7 +720,7 @@ select {
                 }
             }
             &.current {
-                background: $primary;
+                background: #b7191957;
                 .ball {
                     border-color: transparent;
                 }
@@ -729,7 +729,7 @@ select {
                 }
                 p {
                     font-weight: bold;
-                    color: $white;
+                    color: #942020;
                 }
             }
         }
@@ -752,6 +752,7 @@ select {
             }
         }
         .item.activeStep.current {
+            background: #19b7a2;
             p {
                 color: #fff;
             }

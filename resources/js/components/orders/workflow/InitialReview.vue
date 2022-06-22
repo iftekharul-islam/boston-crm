@@ -158,6 +158,7 @@
                         }
                     }
                 }
+                console.log(this.currentStep);
             },
             saveInitialReview() {
                 this.$refs.initialReviewForm.validate().then((status) => {

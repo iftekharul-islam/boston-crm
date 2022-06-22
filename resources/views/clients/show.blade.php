@@ -81,6 +81,11 @@
                                 <p class="right-side">{{ $client->zip }}</p>
                             </div>
                             <div class="personal-info__group">
+                                <p class="mb-0 left-side">Processing fee</p>
+                                <span>:</span>
+                                <p class="right-side">{{ $client->processing_fee }}</p>
+                            </div>
+                            <div class="personal-info__group">
                                 <p class="mb-0 left-side">Phone no</p>
                                 <span>:</span>
                                 <div class="right-side">

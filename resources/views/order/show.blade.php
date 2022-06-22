@@ -35,7 +35,7 @@
                 {{-- Contact --}}
                 <contact :order="{{ $order }}"  :order-id="'{{ $order_id }}'"></contact>
                 {{-- Inspection --}}
-                <inspection :order="{{ $order }}"  :order-id="'{{ $order_id }}'"></inspection>
+                <inspection :order="{{ $order }}" :appraisers="{{ $appraisers }}"></inspection>
                 {{-- Issues --}}
                 <issues></issues>
             </div>
@@ -86,7 +86,6 @@
 
 
 @section("js")
-
 <script>
     $(document).on("click", ".order-details-box .box-header", function(e){
         let body = $(this).parent().find('.box-body');

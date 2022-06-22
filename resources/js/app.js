@@ -3,8 +3,10 @@ window.Vue = require('vue').default
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+
 import vSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css';
+
 import VueSweetalert2 from 'vue-sweetalert2'
 import 'sweetalert2/dist/sweetalert2.min.css'
 
@@ -28,6 +30,9 @@ Vue.use(VueToast, {
 Vue.component('ValidationProvider', ValidationProvider)
 Vue.component('ValidationObserver', ValidationObserver)
 Vue.component('v-select', vSelect)
+
+const Select2 = () => import("./src/Select2");
+Vue.component('select-2', Select2);
 
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
