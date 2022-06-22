@@ -86,7 +86,6 @@
 
 
 @section("js")
-
 <script>
     $(document).on("click", ".order-details-box .box-header", function(e){
         let body = $(this).parent().find('.box-body');
