@@ -87,7 +87,7 @@ class OrderWorkflowController extends BaseController
         if (!$order_w_inspection) {
             return response([
                 "error" => true,
-                "message" => "Inspection Not Found, Please Update Schedule First"
+                "message" => "Please Create schedule first ! No schedule is set."
             ]);
         }
         $data = $this->saveInspectionFiles($request->all(), $inspection_id);
@@ -785,6 +785,11 @@ class OrderWorkflowController extends BaseController
     public function addCom(Request $request)
     {
         $this->repository->addCom($request->all());
+        $orderData = $this->orderDetails($request->order_id);
+        return [
+            "message" => 'Destination updated',
+            "data" => $orderData
+        ];
     }
 
     public function deleteCom(Request $request,$id)

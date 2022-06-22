@@ -14,6 +14,7 @@
                         <th scope="col">Form Type</th>
                         <th scope="col">Modified Form</th>
                         <th scope="col">Condo Type</th>
+                        <th scope="col">Is Full Appraisal</th>
                         <th scope="col" class="text-end">Action</th>
                     </tr>
                     </thead>
@@ -23,6 +24,7 @@
                             <td>{{ $appraisal_type->form_type }}</td>
                             <td>{{ $appraisal_type->modified_form }}</td>
                             <td>{{ $appraisal_type->condo_type == 1 ? "Yes" : "No" }}</td>
+                            <td>{{ $appraisal_type->is_full_appraisal == 1 ? "Yes" : "No" }}</td>
                             <td>
                                 <div class="d-flex align-items-center justify-content-end">
                                     @if($is_owner || in_array('update.appraisaltype', $user_permissions))

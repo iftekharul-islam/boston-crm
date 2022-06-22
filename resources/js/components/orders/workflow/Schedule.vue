@@ -37,7 +37,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <ValidationObserver ref="scheduleForm">
-                            <ValidationProvider class="group" name="Appraiser name" rules="required"
+                            <ValidationProvider class="group d-block" name="Appraiser name" rules="required"
                                 v-slot="{ errors }">
                                 <div :class="{ 'invalid-form' : errors[0] }">
                                     <label for="" class="d-block mb-2 dashboard-label">Appraiser name <span
@@ -53,7 +53,7 @@
                                     <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                                 </div>
                             </ValidationProvider>
-                            <ValidationProvider class="d-block mb-2 dashboard-label" name="Inspection date & time"
+                            <ValidationProvider class="d-block dashboard-label group" name="Inspection date & time"
                                 rules="required" v-slot="{ errors }">
                                 <div class="group" :class="{ 'invalid-form' : errors[0] }">
                                     <label for="" class="d-block mb-2 dashboard-label">Inspection date & time<span
@@ -68,7 +68,7 @@
                                     <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                                 </div>
                             </ValidationProvider>
-                            <ValidationProvider class="group" name="Duration" rules="required" v-slot="{ errors }">
+                            <ValidationProvider class="group d-block" name="Duration" rules="required" v-slot="{ errors }">
                                 <div :class="{ 'invalid-form' : errors[0] }">
                                     <label for="" class="d-block mb-2 dashboard-label">Duration <span
                                             class="text-danger require"></span></label>
@@ -82,12 +82,12 @@
                                     <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                                 </div>
                             </ValidationProvider>
-                            <ValidationProvider class="d-block mb-2 dashboard-label" name="Notes" rules="required"
+                            <ValidationProvider class="d-block dashboard-label group" name="Notes" rules="required"
                                 v-slot="{ errors }">
                                 <div class="group" :class="{ 'invalid-form' : errors[0] }">
                                     <label for="" class="d-block mb-2 dashboard-label">Notes <span
                                             class="text-danger require"></span></label>
-                                    <b-form-textarea v-model="scheduleData.note" placeholder="Enter notes..." rows="2"
+                                    <b-form-textarea class="dashboard-textarea" v-model="scheduleData.note" placeholder="Enter notes..." rows="2"
                                         cols="5">
                                     </b-form-textarea>
                                     <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
