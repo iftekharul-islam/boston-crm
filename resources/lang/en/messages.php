@@ -25,6 +25,7 @@ return [
 		'join_date'   => 'Join Date',
 		'role'        => 'Role',
 		'percentage'  => 'Percentage',
+		'color'  => 'Color',
 		'phone'       => 'Phone',
 		'address'     => 'Address',
 		'add_user'    => 'Add user',

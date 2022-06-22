@@ -22,16 +22,19 @@
             </div>
             <!-- upload -->
             <div class="position-relative file-upload mgt-20" v-if="editable">
-                    <p class="text-light-black mgb-12">Files</p>
-                    <div class="position-relative file-upload">
-                        <input type="file" multiple v-on:change="addFiles">
-                        <label for="" class="py-2">Upload <span class="icon-upload ms-3 fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span></label>
-                    </div>
-                    <p class="text-light-black mgb-12" v-if="fileData.files.length">{{ fileData.files.length }} Files</p>
+                <p class="text-light-black mgb-12">Files</p>
+                <div class="position-relative file-upload">
+                    <input type="file" multiple v-on:change="addFiles">
+                    <label for="" class="py-2">Upload <span class="icon-upload ms-3 fs-20"><span
+                                class="path1"></span><span class="path2"></span><span
+                                class="path3"></span></span></label>
+                </div>
+                <p class="text-light-black mgb-12" v-if="fileData.files.length">{{ fileData.files.length }} Files</p>
             </div>
         </div>
         <div class="text-end mgt-32" v-if="editable">
-            <button class="button button-primary px-4 h-40 d-inline-flex align-items-center" @click="saveInsFiles" :disabled="isUploading">Save</button>
+            <button class="button button-primary px-4 h-40 d-inline-flex align-items-center" @click="saveInsFiles"
+                :disabled="isUploading">Save</button>
         </div>
     </div>
 </template>
@@ -57,12 +60,12 @@
             dataFiles: [],
         }),
         created() {
-            this.inspectionData(this.order);
+            this.inspectionData(this.order)
         },
         methods: {
             inspectionData(order) {
                 this.orderData = order;
-                if(this.orderData.inspection !== null){
+                if (this.orderData.inspection !== null) {
                     this.id = this.orderData.inspection.id
                     this.note = this.orderData.inspection.note
                     this.name = this.orderData.inspection.user.name
@@ -83,21 +86,19 @@
                     formData.append('files[' + i + ']', file);
                 }
                 formData.append('file_type', this.fileData.file_type)
-                axios.post('upload-inspection-files/' + this.id, formData, {
+                this.$boston.post('upload-inspection-files/' + this.id, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data'
                     }
                 }).then(res => {
-                    if (res.error == false) {
-                        this.isUploading = false
-                        this.fileData.files = []
-                        this.fileData.file_type = ''
-                        this.orderData = res.data.data
-                        this.$root.$emit('wk_update', this.orderData);
-                        this.$root.$emit('wk_flow_menu', this.orderData);
-                        this.inspectionData(this.orderData)
-                    }
-                    this.$root.$emit('wk_flow_toast', res.data);
+                    this.isUploading = false
+                    this.fileData.files = []
+                    this.fileData.file_type = ''
+                    this.orderData = res.data
+                    this.$root.$emit('wk_update', res.data);
+                    this.$root.$emit('wk_flow_menu', res.data);
+                    this.$root.$emit('wk_flow_toast', res);
+                    this.inspectionData(res.data)
                 }).catch(err => {
                     console.log(err)
                     this.isUploading = false
