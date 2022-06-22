@@ -16,7 +16,7 @@
                 <div class="row" v-if="dataFiles.length">
                     <div class="d-flex align-items-center mb-3" v-for="file, ki in dataFiles" :key="ki">
                         <img src="/img/pdf.svg" alt="boston profile" class="img-fluid">
-                        <span class="text-light-black d-inline-block mgl-12">{{ file.name }}</span>
+                        <span class="text-light-black d-inline-block mgl-12 file-name">{{ file.name }}</span>
                     </div>
                 </div>
             </div>

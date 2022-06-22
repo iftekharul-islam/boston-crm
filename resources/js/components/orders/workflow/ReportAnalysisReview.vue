@@ -1,8 +1,39 @@
 <template>
-    <div class="report-analysis-item step-items">
-        <div v-if="isDataExists">
-            <a class="edit-btn" @click.prevent="isDataExists = false"><span class="icon-edit"><span
-                        class="path1"></span><span class="path2"></span></span></a>
+  <div class="report-analysis-item step-items">
+    <div v-if="isDataExists">
+        <a class="edit-btn" @click.prevent="isDataExists = false"><span class="icon-edit"><span class="path1"></span><span class="path2"></span></span></a>
+        <div class="group">
+            <p class="text-light-black mgb-12">Note from previous steps</p>
+            <p class="mb-0 text-light-black fw-bold">{{ this.preNote }}</p>
+        </div>
+        <div class="group" v-if="noteCheck == 1">
+            <p class="text-light-black mgb-12">Note from this step</p>
+            <a href="#" class="primary-text mb-2">(Rewrite & send back)</a>
+            <p class="mb-0 text-light-black fw-bold">{{ note }}</p>
+        </div>
+        <div class="group" v-if="noteCheck == 2">
+            <p class="text-light-black mgb-12">Note from this step</p>
+            <a href="#" class="primary-text mb-2">(Check & Upload)</a>
+            <p class="mb-0 text-light-black fw-bold">{{ note }}</p>
+        </div>
+        <div class="group">
+            <p class="text-light-black mgb-12">Assign to</p>
+            <p class="mb-0 text-light-black fw-bold">{{ assignToName }}</p>
+        </div>
+        <div class="group">
+            <p class="text-light-black mgb-12">Analysis files upload</p>
+            <div class="document">
+                <div class="row">
+                    <div class="d-flex align-items-center mb-3" v-for="(file, key) in dataFiles" :key="key">
+                        <img src="/img/pdf.svg" alt="boston profile" class="img-fluid">
+                        <span class="text-light-black d-inline-block mgl-12 file-name">{{ file.name }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div v-else>
+        <ValidationObserver ref="assigneeForm">
             <div class="group">
                 <p class="text-light-black mgb-12">Note from previous steps</p>
                 <p class="mb-0 text-light-black fw-bold">{{ this.preNote }}</p>

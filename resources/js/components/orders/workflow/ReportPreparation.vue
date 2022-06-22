@@ -18,7 +18,7 @@
             <ValidationProvider class="group" name="Report Creator" rules="required" v-slot="{ errors }">
               <div :class="{ 'invalid-form' : errors[0] }">
                 <label for="" class="d-block mb-2 dashboard-label">Report Creator </label>
-                <select name="" class="dashboard-input w-100 loan-type-select" v-model="creatorId">
+                <select name="" class="dashboard-input w-100 loan-type-select creatorId" v-model="creatorId">
                   <option value="">Please Select a user</option>
                   <option v-for="user in users" :key="user.id" :value="user.id">
                       {{ user.name }}
@@ -32,7 +32,7 @@
             <ValidationProvider class="group" name="Report Viewer" rules="required" v-slot="{ errors }">
               <div :class="{ 'invalid-form' : errors[0] }">
                 <label for="" class="d-block mb-2 dashboard-label">Report Viewer </label>
-                <select name="" class="dashboard-input w-100 loan-type-select" v-model="viewerId">
+                <select name="" class="dashboard-input w-100 loan-type-select viewerId" v-model="viewerId">
                   <option value="">Please Select a user</option>
                   <option v-for="user in users" :key="user.id" :value="user.id">
                       {{ user.name }}
@@ -50,7 +50,7 @@
     </div>
     <div v-else>
         <div v-if="dataExist">
-            <a class="edit-btn" @click="dataExist = false"><span class="icon-edit"><span class="path1"></span><span class="path2"></span></span></a>
+            <a class="edit-btn" @click="dataExist = false; initSelect2();"><span class="icon-edit"><span class="path1"></span><span class="path2"></span></span></a>
             <div class="group">
               <p class="text-light-black mgb-12">Report creator</p>
               <p class="mb-0 text-light-black fw-bold">{{ this.creator }}</p>
@@ -75,9 +75,9 @@
                   <p class="text-light-black mgb-12">Report preparation file upload</p>
                   <div class="document">
                       <div class="row">
-                          <div class="d-flex align-items-center mb-3" v-for="file in dataFiles">
+                          <div class="d-flex align-items-center mb-3" v-for="file, fi in dataFiles" :key="fi">
                               <img src="/img/pdf.svg" alt="boston profile" class="img-fluid">
-                              <span class="text-light-black d-inline-block mgl-12">{{ file.name }}</span>
+                              <span class="text-light-black d-inline-block mgl-12 file-name">{{ file.name }}</span>
                           </div>
                       </div>
                   </div>
@@ -103,7 +103,7 @@
                     <ValidationProvider class="group" name="Report Creator" rules="required" v-slot="{ errors }">
                         <div :class="{ 'invalid-form' : errors[0] }">
                             <label for="" class="d-block mb-2 dashboard-label">Report Creator </label>
-                            <select name="" class="dashboard-input w-100 loan-type-select" v-model="creatorId">
+                            <select name="" class="dashboard-input w-100 loan-type-select creatorId" @change="changeSelect('creatorId', $event.target.value)" v-model="creatorId">
                                 <option value="">Please Select a user</option>
                                 <option v-for="user in users" :key="user.id" :value="user.id">
                                     {{ user.name }}
@@ -117,7 +117,7 @@
                     <ValidationProvider class="group" name="Report Viewer" rules="required" v-slot="{ errors }">
                         <div :class="{ 'invalid-form' : errors[0] }">
                             <label for="" class="d-block mb-2 dashboard-label">Report Viewer </label>
-                            <select name="" class="dashboard-input w-100 loan-type-select" v-model="viewerId">
+                            <select name="" class="dashboard-input w-100 loan-type-select viewerId" @change="changeSelect('viewerId', $event.target.value)" v-model="viewerId">
                                 <option value="">Please Select a user</option>
                                 <option v-for="user in users" :key="user.id" :value="user.id">
                                     {{ user.name }}
@@ -131,7 +131,7 @@
                     <ValidationProvider class="group" name="Assign to" rules="required" v-slot="{ errors }">
                       <div :class="{ 'invalid-form' : errors[0] }">
                         <label for="" class="d-block mb-2 dashboard-label">Assign to </label>
-                        <select name="" class="dashboard-input w-100 loan-type-select" v-model="assignTo">
+                        <select name="" class="dashboard-input w-100 loan-type-select assignTo" v-model="assignTo" @change="changeSelect('assignTo', $event.target.value)">
                           <option value="">Please Select a user</option>
                           <option v-for="user in users" :key="user.id" :value="user.id">
                               {{ user.name }}
@@ -145,7 +145,7 @@
                     <ValidationProvider class="group" name="Trainee Selection" rules="required" v-slot="{ errors }">
                       <div :class="{ 'invalid-form' : errors[0] }">
                         <label for="" class="d-block mb-2 dashboard-label">Trainee Selection </label>
-                        <select name="" class="dashboard-input w-100 loan-type-select" v-model="traineeId">
+                        <select name="" class="dashboard-input w-100 loan-type-select traineeId" v-model="traineeId" @change="changeSelect('traineeId', $event.target.value)">
                           <option value="">Please Select a user</option>
                           <option v-for="user in users" :key="user.id" :value="user.id">
                               {{ user.name }}
@@ -308,6 +308,25 @@ export default {
       if (this.role == 'admin') {
         this.isAdmin = true
       }
+    },
+    changeSelect(type, value) {
+        
+    },
+    initSelect2() {
+      $("select").select2();
+      $(".creatorId").on("select2:select", function(e){
+        this.creatorId = e.target.value;
+      }.bind(this));
+      $(".viewerId").on("select2:select", function(e){
+        this.viewerId = e.target.value;
+      }.bind(this));
+      $(".assignTo").on("select2:select", function(e){
+        this.assignTo = e.target.value;
+      }.bind(this));
+      $(".traineeId").on("select2:select", function(e){
+        this.traineeId = e.target.value;
+      }.bind(this));
+
     }
   },
   created() {
@@ -315,5 +334,8 @@ export default {
       // this.updateRole();
       this.updateAdmin()
   },
+  mounted() {
+      this.initSelect2();
+  }
 }
 </script>

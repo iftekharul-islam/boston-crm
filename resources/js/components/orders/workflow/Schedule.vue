@@ -28,14 +28,14 @@
                 <p class="mb-0 text-light-black fw-bold">{{ edited.duration }}</p>
             </div>
         </div>
-        <div v-else class="scheduling-item step-items">
-            <p>Not yet scheduled, Click Schedule button to schedule the order</p>
-            <div class="text-end mgt-32">
+        <div v-else class="scheduling-item step-items no-schedule">
+             <div class="text-end mgt-32">
                 <button v-if="alreadyScheduled == 0" type="button" v-b-modal.schedule
                     class="button button-primary px-4 h-40 d-inline-flex align-items-center">Schedule
                 </button>
-
             </div>
+            <p class="fs-20 fw-bold">Not yet scheduled, Click Schedule button to schedule the order</p>
+           
         </div>
         <b-modal id="schedule" size="md" title="Schedule">
             <div class="modal-body">
@@ -45,16 +45,16 @@
                             <ValidationProvider class="group d-block" name="Appraiser name" rules="required"
                                 v-slot="{ errors }">
                                 <div :class="{ 'invalid-form' : errors[0] }">
-                                    <label for="" class="d-block mb-2 dashboard-label">Appraiser name <span
-                                            class="text-danger require"></span></label>
-                                    <select id="apprClientSelect" class="dashboard-input w-100 select2"
-                                        v-model="scheduleData.appraiser_id">
-                                        <option value="">Please select appraiser</option>
-                                        <option v-for="appraisar in appraisers" :key="appraisar.id"
-                                            :value="appraisar.id">
-                                            {{ appraisar.name }}
-                                        </option>
-                                    </select>
+                                    <label for="" class="d-block mb-2 dashboard-label">Appraiser name <span class="text-danger require"></span></label>
+                                     <div class="position-relative">
+                                        <select id="apprClientSelect" class="dashboard-input w-100" v-model="scheduleData.appraiser_id">
+                                            <option value="">Please select appraiser</option>
+                                            <option v-for="appraisar in appraisers" :key="appraisar.id" :value="appraisar.id">
+                                                {{ appraisar.name }}
+                                            </option>
+                                        </select>
+                                        <span class="icon-arrow-down bottom-arrow-icon"></span>
+                                    </div>
                                     <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                                 </div>
                             </ValidationProvider>
@@ -77,13 +77,16 @@
                                 <div :class="{ 'invalid-form' : errors[0] }">
                                     <label for="" class="d-block mb-2 dashboard-label">Duration <span
                                             class="text-danger require"></span></label>
-                                    <select class="dashboard-input w-100" v-model="scheduleData.duration">
-                                        <option value="">Please select duration</option>
-                                        <option v-for="duration in durations" :key="duration.duration"
-                                            :value="duration.duration">
-                                            {{ duration.duration }}
-                                        </option>
-                                    </select>
+                                    <div class="position-relative">
+                                        <select class="dashboard-input w-100" v-model="scheduleData.duration">
+                                            <option value="">Please select duration</option>
+                                            <option v-for="duration in durations" :key="duration.duration"
+                                                :value="duration.duration">
+                                                {{ duration.duration }}
+                                            </option>
+                                        </select>
+                                        <span class="icon-arrow-down bottom-arrow-icon"></span>
+                                    </div>
                                     <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                                 </div>
                             </ValidationProvider>
@@ -112,6 +115,7 @@
 <script>
     import Calendar from 'v-calendar/lib/components/calendar.umd'
     import DatePicker from 'v-calendar/lib/components/date-picker.umd'
+
 
     Vue.component('VCalendar', Calendar)
     Vue.component('VDatePicker', DatePicker)

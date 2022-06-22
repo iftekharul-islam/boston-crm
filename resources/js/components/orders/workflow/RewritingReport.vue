@@ -19,7 +19,7 @@
               <div :class="{ 'invalid-form' : errors[0] }">
                 <label for="" class="mb-2 text-light-black d-inline-block">Assign to</label>
                 <div class="preparation-input w-100 position-relative">
-                  <select v-model="assigned_to" class="w-100 dashboard-input">
+                  <select v-model="assigned_to" class="w-100 dashboard-input" data-live-search="true">
                     <option>Choose Assingee</option>
                     <option v-for="user in usersInfo" :key="user.id" :value="user.id">
                         {{ user.name }}
@@ -34,9 +34,9 @@
           <div class="group">
             <p class="text-light-black mgb-12">Files From Previous Step</p>
             <div class="row">
-              <div class="d-flex align-items-center mb-3" v-for="file, fileIndex in dataFiles" :key="fileIndex">
+              <div class="d-flex align-items-center mb-3 document" v-for="file, fileIndex in dataFiles" :key="fileIndex">
                   <img src="/img/pdf.svg" alt="boston profile" class="img-fluid">
-                  <span class="text-light-black d-inline-block mgl-12">{{ file.name }}</span>
+                  <span class="text-light-black d-inline-block mgl-12 file-name">{{ file.name }}</span>
               </div>
             </div>
           </div>
@@ -80,9 +80,9 @@
           <div class="group">
             <p class="text-light-black mgb-12">Files From Previous Step</p>
             <div class="row">
-              <div class="d-flex align-items-center mb-3" v-for="file, fileIndex in dataFiles" :key="fileIndex">
+              <div class="d-flex align-items-center mb-3 document" v-for="file, fileIndex in dataFiles" :key="fileIndex">
                   <img src="/img/pdf.svg" alt="boston profile" class="img-fluid">
-                  <span class="text-light-black d-inline-block mgl-12">{{ file.name }}</span>
+                  <span class="text-light-black d-inline-block mgl-12 file-name">{{ file.name }}</span>
               </div>
             </div>
           </div>
@@ -113,6 +113,9 @@ export default {
           this.initData(res);
       });
   },  
+  mounted() {
+      
+  },
   methods: {
       initData(order){
           console.log(order.analysis);
