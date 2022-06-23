@@ -152,16 +152,15 @@
         }),
         created() {
             this.alreadyScheduled = (JSON.parse(this.order.workflow_status)).scheduling
+            this.scheduleData.order_id = this.order.id
             this.getScheduleData(this.order)
         },
         methods: {
             getScheduleData(order) {
                 if (this.alreadyScheduled == 1) {
-
                     this.orderData = order
                     let data = this.orderData.inspection
                     this.scheduleData.schedule_id = data.id
-                    this.scheduleData.order_id = data.order_id
                     this.scheduleData.appraiser_id = data.inspector_id
                     this.scheduleData.inspector_name = data.user.name
                     this.scheduleData.inspection_date_time = data.inspection_date_time
@@ -181,6 +180,7 @@
             },
             saveSchedule() {
                 this.$refs.scheduleForm.validate().then((status) => {
+                    console.log(this.scheduleData)
                     if (status) {
                         this.$boston.post('update-order-schedule', this.scheduleData)
                             .then(res => {

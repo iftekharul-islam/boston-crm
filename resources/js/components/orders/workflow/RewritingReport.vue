@@ -69,7 +69,7 @@
           </div>
           <div class="group">
             <p class="text-light-black mgb-12">Note from this step</p>
-            <a href="#" class="primary-text mb-2">(Rewrite & send back)</a>
+            <p class="primary-text mb-2">(Rewrite & send back)</p>
             <p class="mb-0 text-light-black fw-bold" v-html="current.note"></p>
           </div>
           <div class="group">
@@ -99,7 +99,7 @@ export default {
       orderData: [],
       prev: [],
       current: [],
-      dataFiles: [], 
+      dataFiles: [],
       note: null,
       assigned_to: null,
       editable: false,
@@ -112,7 +112,7 @@ export default {
       this.$root.$on("wk_update", (res) => {
           this.initData(res);
       });
-  },  
+  },
   methods: {
       initData(order){
           console.log(order.analysis);
