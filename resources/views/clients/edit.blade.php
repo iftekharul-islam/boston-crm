@@ -104,6 +104,17 @@
                                                     class="text-danger"></span></label>
                                         <input type="number" onpaste="return false" min="0" onkeypress="return numbersOnly(event)" id="processing-fee" name="processing_fee" value="{{ $client->processing_fee }}" class="dashboard-input w-100">
                                     </div>
+                                    <div class="group">
+                                        <label for="com-required" class="d-block mb-2 dashboard-label com-required-label">Com Required</label>
+                                        <div class="position-relative">
+                                            <select name="com_required" value="{{ old('com_required') }}" id="com-required" class="dashboard-input w-100">
+                                                <option value="">Choose an option</option>
+                                                <option value="1" @if($client->com_required == 1) selected @endif>Yes</option>
+                                                <option value="0" @if($client->com_required == 0) selected @endif>No</option>
+                                            </select>
+                                            <span class="icon-arrow-down bottom-arrow-icon"></span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -285,7 +296,15 @@
                     },
                     processing_fee: {
                         required: function () {
-                            return clientType === 'lender' || clientType === 'both'
+                            return clientType === 'amc' || clientType === 'both'
+                        },
+                        normalizer: function (value) {
+                            return value.trim();
+                        }
+                    },
+                    com_required: {
+                        required: function () {
+                            return clientType === 'amc' || clientType === 'both'
                         },
                         normalizer: function (value) {
                             return value.trim();
@@ -351,6 +370,9 @@
                     processing_fee: {
                         required: "Processing fee is required"
                     },
+                    com_required: {
+                        required: "Is com required"
+                    },
                     fee_for_1004uad: {
                         required : "Technology fee for full appraisal(1004UAD) is required"
                     },
@@ -379,33 +401,33 @@
             });
             let clientType = $('#client-type').val();
             if(clientType === 'lender'){
-                $(".address-label, .city-label, .state-label, .zip-label,.processing-fee-label").addClass('require');
-                $("#address,#city,#state,#zip,#processing-fee").prop('required', true);
+                $(".address-label, .city-label, .state-label, .zip-label").addClass('require');
+                $("#address,#city,#state,#zip").prop('required', true);
             }else if(clientType === 'both'){
-                $(".address-label, .city-label, .state-label, .zip-label,.processing-fee-label,.deducts-technology-fee-label, .fee-for-1004uad-label, .fee-for-1004d-label, .can-sign-label, .can-inspect-label").addClass('require');
+                $(".address-label, .city-label, .state-label, .zip-label,.processing-fee-label,.com-required-label,.deducts-technology-fee-label, .fee-for-1004uad-label, .fee-for-1004d-label, .can-sign-label, .can-inspect-label").addClass('require');
             }else{
-                $(".deducts-technology-fee-label, .fee-for-1004UAD-label, .fee-for-1004D-label, .can-sign-label, .can-inspect-label").addClass('require');
-                $("#deducts-technology-fee, #fee-for-1004UAD, #fee-for-1004D-label ,#can-sign, #can-inspect").prop('required', true);
+                $(".deducts-technology-fee-label, .fee-for-1004UAD-label, .fee-for-1004D-label, .can-sign-label, .can-inspect-label,.processing-fee-label,.com-required").addClass('require');
+                $("#deducts-technology-fee, #fee-for-1004UAD, #fee-for-1004D-label ,#can-sign, #can-inspect,#processing-fee,#com-required").prop('required', true);
             }
         });
         $('#client-type').on('change', function (e) {
             e.preventDefault();
             let clientType = $(this).val();
             if (clientType === 'lender') {
-                $(".address-label, .city-label, .state-label, .zip-label,.processing-fee-label").addClass('require');
+                $(".address-label, .city-label, .state-label, .zip-label").addClass('require');
                 $("#address,#city,#state,#zip").prop('required', true);
 
-                $(".deducts-technology-fee-label, .fee-for-1004UAD-label, .fee-for-1004D-label, .can-sign-label, .can-inspect-label").removeClass('require');
-                $("#deducts-technology-fee, #fee-for-1004UAD, #fee-for-1004D-label ,#can-sign, #can-inspect").prop('required', false);
+                $(".deducts-technology-fee-label, .fee-for-1004UAD-label, .fee-for-1004D-label, .can-sign-label, .can-inspect-label,.processing-fee-label,.com-required").removeClass('require');
+                $("#deducts-technology-fee, #fee-for-1004UAD, #fee-for-1004D-label ,#can-sign, #can-inspect,#processing-fee,#com-required").prop('required', false);
             }else if(clientType === 'both'){
-                $(".address-label, .city-label, .state-label, .zip-label,.processing-fee-label,.deducts-technology-fee-label, .fee-for-1004UAD-label, .fee-for-1004D-label, .can-sign-label, .can-inspect-label").addClass('require');
-                $("#address,#city,#state,#zip,#processing-fee,#deducts-technology-fee, #fee-for-1004UAD, #fee-for-1004D-label ,#can-sign, #can-inspect").prop('required', true);
+                $(".address-label, .city-label, .state-label, .zip-label,.processing-fee-label,.com-required,.deducts-technology-fee-label, .fee-for-1004UAD-label, .fee-for-1004D-label, .can-sign-label, .can-inspect-label").addClass('require');
+                $("#address,#city,#state,#zip,#processing-fee,#com-required,#deducts-technology-fee, #fee-for-1004UAD, #fee-for-1004D-label ,#can-sign, #can-inspect").prop('required', true);
             } else {
-                $(".deducts-technology-fee-label, .fee-for-1004UAD-label, .fee-for-1004D-label, .can-sign-label, .can-inspect-label").addClass('require');
-                $("#deducts-technology-fee, #fee-for-1004UAD, #fee-for-1004D-label ,#can-sign, #can-inspect").prop('required', true);
+                $(".deducts-technology-fee-label, .fee-for-1004UAD-label, .fee-for-1004D-label, .can-sign-label, .can-inspect-label,.processing-fee-label,.com-required").addClass('require');
+                $("#deducts-technology-fee, #fee-for-1004UAD, #fee-for-1004D-label ,#can-sign, #can-inspect,#processing-fee,#com-required").prop('required', true);
 
-                $(".address-label, .city-label, .state-label, .zip-label,.processing-fee-label").removeClass('require');
-                $("#address,#city,#state,#zip,#processing-fee").prop('required', false);
+                $(".address-label, .city-label, .state-label, .zip-label").removeClass('require');
+                $("#address,#city,#state,#zip").prop('required', false);
             }
         });
         $('#instruction').on('change',function() {
