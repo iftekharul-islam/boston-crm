@@ -87,8 +87,7 @@ Vue.mixin({
             let year = d.getFullYear();
             let dates = d.getDate();
         
-            let fullDate = `${year}-${month}-${dates}`;
-            console.log(fullDate);
+            let fullDate = `${year}-${month + 1}-${dates}`;
             return fullDate;
         }
     }

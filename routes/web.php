@@ -202,6 +202,7 @@ Route::post('revissin/edit', [OrderWorkflowController::class, 'revissinEdit']);
 Route::post('revissin/solutions/add', [OrderWorkflowController::class, 'revissinSolutionAdd']);
 Route::post('revissin/solutions/marked', [OrderWorkflowController::class, 'revissinSolutionMarked']);
 Route::post('revissin/solutions/delete', [OrderWorkflowController::class, 'revissinSolutionDelete']);
+Route::post('check/client/order/no', [OrderWorkflowController::class, 'checkClientOrderNo']);
 
 
 //Route::get( "{slug}", [ WebApiController::class, 'home' ] )->where( 'slug', ".*" );

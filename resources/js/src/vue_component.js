@@ -47,6 +47,8 @@ const orderEdit = () =>
     import ( /*webpackChunkName: "orderEdit"*/ '../components/orders/edit')
 const orderPagination = () =>
     import ( /*webpackChunkName: "orderPagination"*/ './Pagination')
+const ShowOrderDetails = () =>
+    import ( /*webpackChunkName: "Show_order_details"*/ '../components/orders/show');
 
 Vue.component('clients-list', ClientList);
 Vue.component('order-create', orderCreate);
@@ -71,3 +73,4 @@ Vue.component('activity-log', activityLog);
 Vue.component('order-list', orderList);
 Vue.component('order-edit', orderEdit);
 Vue.component('paginate', orderPagination);
+Vue.component('show-order', ShowOrderDetails);

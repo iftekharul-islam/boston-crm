@@ -29,7 +29,7 @@
                 <ValidationProvider class="group" name="Contact No" :rules="{ 'required' : add.contact == null && step2.borrower_contact == false, min: 10, max: 12 }" v-slot="{ errors }">
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
                     <label for="" class="d-block mb-2 dashboard-label">Contact no <span class="text-danger require"></span></label>
-                    <input v-model="add.contact" @input="contactNumberChecking($event, 1)" type="text" class="dashboard-input w-100">
+                    <input v-model="add.contact" @input="contactNumberChecking($event, 1)" @blur="addContact" type="text" class="dashboard-input w-100">
                     <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                     <span v-if="invalidPhone1 == false" class="text-danger error-message">Invalid Phone Number</span>
                     <!-- new item -->
@@ -59,7 +59,7 @@
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
                     <label for="" class="d-block mb-2 dashboard-label">Email address <span
                         class="text-danger require"></span></label>
-                    <input v-model="add.email" type="text" class="dashboard-input w-100">
+                    <input v-model="add.email" type="text" class="dashboard-input w-100" @blur="addEmail">
                     <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                   
                     <div class="new-array-items">
@@ -111,7 +111,7 @@
                   <ValidationProvider class="group" name="Contact Number" :rules="{'required' : step2.contactSame == false && (step2.contact_number == false && add.contact2 == null), min: 10, max: 12 }" v-slot="{ errors }">
                     <div class="group" :class="{ 'invalid-form' : errors[0] }">
                       <label for="" class="d-block mb-2 dashboard-label">Contact no <span class="text-danger require"></span></label>
-                      <input :disabled="step2.contactSame == true" @input="contactNumberChecking($event, 2)" v-model="add.contact2" type="text" class="dashboard-input w-100">
+                      <input :disabled="step2.contactSame == true" @input="contactNumberChecking($event, 2)" @blur="addContact2" v-model="add.contact2" type="text" class="dashboard-input w-100">
                       <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                       <span v-if="invalidPhone2 == false" class="text-danger error-message">Invalid Phone Number</span>
                       
@@ -140,7 +140,7 @@
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
                     <label for="" class="d-block mb-2 dashboard-label">Email address <span
                         class="text-danger require"></span></label>
-                    <input :disabled="step2.contactSame == true" v-model="add.email2" type="text" class="dashboard-input w-100">
+                    <input :disabled="step2.contactSame == true" @blur="addEmail2" v-model="add.email2" type="text" class="dashboard-input w-100">
                     <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                     
                     <div class="new-array-items">

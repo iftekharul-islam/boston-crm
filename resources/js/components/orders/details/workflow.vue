@@ -9,11 +9,11 @@
         <div class="workflow-content">
           <!--          step list-->
           <div class="list">
-            <div class="item" :class="{'complete' : status.orderCreate === 1}" @click="changeTab('order-create')">
+            <div class="item" :class="{'complete' : status.orderCreate === 1, 'activeStep' : isActive == 'order-create' }" @click="changeTab('order-create')">
               <span class="ball"><img src="/img/current-white.png" alt="current step boston"></span>
               <p class="mb-0">Order Creation</p>
             </div>
-            <div class="item" :class="{'complete' : status.scheduling === 1,'current' : currentStep('scheduling'), 'activeStep' : isActive == 'scheduling' }" @click="changeTab('scheduling')">
+            <div class="item" :class="{'complete' : status.scheduling === 1, 'current' : currentStep('scheduling'), 'activeStep' : isActive == 'scheduling' }" @click="changeTab('scheduling')">
               <span class="ball"><img src="/img/current-white.png" alt="current step boston"></span>
               <p class="mb-0">Scheduling</p>
             </div>
@@ -138,6 +138,8 @@ export default {
       orderData: [],
   }),
   created(){
+      this.$store.commit('app/storeOrder', this.order);
+
       this.initOrder(this.order);
       this.updateRole()
 
@@ -153,7 +155,8 @@ export default {
       });
 
       this.$root.$on('wk_flow_toast', (res) => {
-          this.$store.commit('app/storeOrder', res.data)
+          this.$store.commit('app/storeOrder', res.data);
+          this.orderData = res.data;
           this.$toast.open({
               message: res.message,
               type: res.error == true ? 'error' : 'success',

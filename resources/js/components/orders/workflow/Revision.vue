@@ -25,12 +25,13 @@
                 <ValidationProvider name="Date & time" rules="required" v-slot="{ errors }">
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
                     <label>Date & time</label>
-                    <div class="position-relative">
-                      <input type="date" v-model="form.date" class="dashboard-input w-100 gray-border">
-                      <span class="icon-calendar icon"><span class="path1"></span><span class="path2"></span><span
-                          class="path3"></span><span class="path4"></span><span class="path5"></span><span
-                          class="path6"></span><span class="path7"></span><span class="path8"></span></span>
-                    </div>
+                      <!-- <input type="datetime" v-model="form.date" class="dashboard-input w-100 gray-border"> -->
+                      <v-date-picker mode="datetime" v-model="form.date">
+                        <template class="position-relative" v-slot="{ inputValue, inputEvents }">
+                            <input class="dashboard-input w-100" :value="inputValue"
+                                v-on="inputEvents" />
+                        </template>
+                      </v-date-picker>
                     <span class="error-message">{{ errors[0] }}</span>
                   </div>
                 </ValidationProvider>
@@ -169,7 +170,7 @@
                   </div>
                 </div>
                 <div class="group">
-                  <label for="" class="d-block mb-2 dashboard-label">Delivered by <span class="require"></span> </label>
+                  <label for="" class="d-block mb-2 dashboard-label">Delivered Date <span class="require"></span> </label>
                   <div class="position-relative">
                     <input type="date" v-model="marked.delivery_date" class="dashboard-input w-100 gray-border">
                     <span class="icon-calendar icon"><span class="path1"></span><span class="path2"></span><span
@@ -199,12 +200,12 @@
                       <ValidationProvider name="Date & time" rules="required" v-slot="{ errors }">
                         <div class="group" :class="{ 'invalid-form' : errors[0] }">
                           <label>Date & time</label>
-                          <div class="position-relative">
-                            <input type="date" v-model="form.date" class="dashboard-input w-100 gray-border">
-                            <span class="icon-calendar icon"><span class="path1"></span><span class="path2"></span><span
-                                class="path3"></span><span class="path4"></span><span class="path5"></span><span
-                                class="path6"></span><span class="path7"></span><span class="path8"></span></span>
-                          </div>
+                          <v-date-picker mode="datetime" v-model="form.date">
+                            <template class="position-relative" v-slot="{ inputValue, inputEvents }">
+                                <input class="dashboard-input w-100" :value="inputValue"
+                                    v-on="inputEvents" />
+                            </template>
+                          </v-date-picker>
                           <span class="error-message">{{ errors[0] }}</span>
                         </div>
                       </ValidationProvider>
@@ -277,7 +278,13 @@ export default {
           this.revissionModal = status;
       });
 
-      this.initData(this.order);
+      let order = this.order;
+      let localOrderData = this.$store.getters['app/orderDetails']
+      if(localOrderData){
+          order = localOrderData;
+      }
+      this.initData(order);
+
       this.$root.$on("wk_update", (res) => {
           this.initData(res);
       });
@@ -343,7 +350,7 @@ export default {
     }, 
     editNotes(item, index) {
         this.form.id = item.id;
-        this.form.date = item.revision_date_format;
+        this.form.date = item.revision_date;
         this.form.revission = item.revision_details;
         this.addRevission = false;
         this.editNotesModal = true;
@@ -449,5 +456,9 @@ export default {
     background: #F99A73;
     color: #fff;
     display: none;
+}
+input.dashboard-input.w-100 {
+    border: thin solid #888;
+    margin-top: 5px;
 }
 </style>

@@ -115,14 +115,18 @@
             message: '',
         }),
         created() {
-            this.updateData(this.order)
+            let order = this.order;
+            let localOrderData = this.$store.getters['app/orderDetails']
+            if(localOrderData){
+                order = localOrderData;
+            }
+            this.updateData(order)
         },
         methods: {
             addFiles(event) {
                 this.fileData.files = event.target.files
             },
             updateData(order) {
-                console.log(order)
                 this.orderData = order
                 let initReview = !_.isEmpty(this.orderData.initial_review) ? this.orderData.initial_review : false;
                 if (initReview) {

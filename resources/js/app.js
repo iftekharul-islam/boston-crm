@@ -16,7 +16,6 @@ import { ValidationObserver } from 'vee-validate'
 import storage from "./store/index"
 import * as boston from "./helper/boston"
 import "./helper/config"
-import "./src/vue_component"
 import "./helper/BostonMixin"
 
 import VueToast from 'vue-toast-notification';
@@ -31,9 +30,6 @@ Vue.component('ValidationProvider', ValidationProvider)
 Vue.component('ValidationObserver', ValidationObserver)
 Vue.component('v-select', vSelect)
 
-const Select2 = () => import("./src/Select2");
-Vue.component('select-2', Select2);
-
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
 Vue.use(VueSweetalert2)
@@ -42,6 +38,8 @@ Vue.config.productionTip = false
 Vue.prototype.$boston = boston
 
 axios.defaults.baseURL = window.origin
+
+import "./src/vue_component"
 
 const app = new Vue({
     el: '#app',
