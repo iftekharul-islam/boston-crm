@@ -35,7 +35,7 @@
                 </button>
             </div>
             <p class="fs-20 fw-bold">Not yet scheduled, Click Schedule button to schedule the order</p>
-           
+
         </div>
         <b-modal id="schedule" size="md" title="Schedule">
             <div class="modal-body">
@@ -187,12 +187,12 @@
             },
             saveSchedule() {
                 this.$refs.scheduleForm.validate().then((status) => {
-                    console.log(this.scheduleData)
                     if (status) {
                         this.$boston.post('update-order-schedule', this.scheduleData)
                             .then(res => {
                                 this.message = res.message;
                                 this.orderData = res.data;
+                                this.alreadyScheduled = 1
                                 this.$root.$emit('wk_update', res.data)
                                 this.$root.$emit('wk_flow_menu', res.data)
                                 this.$root.$emit('wk_flow_toast', res)
