@@ -34,8 +34,11 @@ export default {
     created(){
       let order = this.order;
       let localOrderData = this.$store.getters['app/orderDetails']
+
       if(localOrderData){
-          order = localOrderData;
+          if (order.work_hisotry) {
+              order = localOrderData;
+          }
       }
       
       this.history = order.work_hisotry;
