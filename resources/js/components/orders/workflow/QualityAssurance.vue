@@ -191,7 +191,6 @@
         <div v-if="currentStep == 'step3'">
             <a class="edit-btn" @click="editQualityAssurance"><span class="icon-edit"><span class="path1"></span><span
                         class="path2"></span></span></a>
-            <a class="edit-btn-2" @click="reloadData()">Reload</a>
             <div class="group">
                 <p class="text-light-black mgb-12">Instruction from previous step</p>
                 <p class="text-success">(Rewrite & send back)</p>
@@ -713,10 +712,6 @@
             openComMap() {
                 this.mapOpen = true
                 let self = this
-            },
-            reloadData(){
-                // this.getReportAnalysisData(this.orderData, true);
-                window.location.reload();
             },
             updateQualityAssurance() {
                 this.$refs.qaUpdate.validate().then((status) => {
