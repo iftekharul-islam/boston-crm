@@ -55,7 +55,7 @@ class OrderController extends BaseController
         $user = Auth::user();
         $company = $user->getCompanyProfile();
         $companyId = $company->company_id;
-        
+
         $appraisal_users = $this->repository->getUserByRoleWise(role: 'appraiser');
         $property_types = $this->repository->getAppraisalTypes();
         $loan_types = $this->repository->getLoanTypes();
@@ -67,7 +67,7 @@ class OrderController extends BaseController
             "loan_types" => $loan_types,
             "client_users" => $client_users,
         ];
-        
+
         $orderData = $this->searchOrderData($get, $user, $companyId);
         $orderSummary = $this->orderSummary($user, $companyId);
         return view('order.index', compact('orderData', 'orderSummary', 'filterType'));
@@ -447,11 +447,16 @@ class OrderController extends BaseController
      * @param $order_id
      * @return JsonResponse
      */
-    public function updateBasicInfo(Request $request, $order_id): JsonResponse
+    public function updateBasicInfo(Request $request, $order_id): JsonResponse|array
     {
-        $orderClient = Order::where('id', '!=', $request->id)->where('client_order_no', $request->client_order_no)->first();
+        $orderClient = Order::where('id', '!=', $request->id)
+            ->where('client_order_no', $request->client_order_no)
+            ->first();
         if ($orderClient) {
-            return response()->json([ 'error' => true, "message" => "This client order number already exists, change it."]);
+            return response()->json([
+                'error' => true,
+                "message" => "This client order number already exists, change it."
+            ]);
         }
         $this->repository->updateBasicInfo($order_id, $request->all());
 
@@ -462,7 +467,15 @@ class OrderController extends BaseController
         ];
 
         $this->repository->addActivity($data);
-        return response()->json(['error' => false, "message" => "Basic info updated successfully !"]);
+
+        $orderData = $this->orderDetails($request->id);
+
+        return [
+            'error' => false,
+            'message' => 'Basic info updated successfully !',
+            'status' => 'success',
+            'data' => $orderData
+        ];
     }
 
     /**
