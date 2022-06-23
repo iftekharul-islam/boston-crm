@@ -528,8 +528,6 @@ class OrderController extends BaseController
             'status' => 'success',
             'data' => $orderData
         ];
-
-//        return response()->json(['message' => 'Client info updated successfully']);
     }
 
     /**
