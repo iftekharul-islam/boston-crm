@@ -85,11 +85,11 @@ export default {
                 this.step2Data = res.data;
             }
         });
-        
+
         this.$root.$on("updateProviderData", (res) => {
             this.providedData = res;
         });
-        
+
         this.$root.$on("submitOrder", (response) => {
             this.$boston.apiPost('store/order', {'step1' : this.step1Data, order: this.order, type: response, 'step2' : this.step2Data, 'company': this.company, 'providedData' : this.providedData, 'user_id': this.user_id }).then(res => {
                 this.submitResult.error = res.error;
@@ -105,7 +105,7 @@ export default {
                       window.location.href = "/orders/"+this.order.id + "?r=create"
                     },500);
                 }
-                
+
                 $("html, body").animate({ scrollTop: 0 }, 100);
             });
         });
