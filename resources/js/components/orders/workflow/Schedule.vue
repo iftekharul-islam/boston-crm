@@ -4,20 +4,28 @@
             <a class="edit-btn"><span @click="editSchedule" class="icon-edit"><span class="path1"></span><span
                         class="path2"></span></span></a>
             <div class="group">
-                <p class="text-light-black mgb-12">Appraiser</p>
-                <p class="mb-0 text-light-black fw-bold">{{ scheduleData.inspector_name }}</p>
+                <p class="text-light-black mgb-12">Schedule By</p>
+                <p class="mb-0 text-light-black fw-bold">{{ edited.created_by }}</p>
             </div>
             <div class="group">
-                <p class="text-light-black mgb-12">Inspection Date and Time</p>
-                <p class="mb-0 text-light-black fw-bold">{{ scheduleData.inspection_date_time }}</p>
+                <p class="text-light-black mgb-12">Schedule Date</p>
+                <p class="mb-0 text-light-black fw-bold">{{ edited.created_at }}</p>
             </div>
             <div class="group">
                 <p class="text-light-black mgb-12">Instruction or Note for Inspection</p>
-                <p class="mb-0 text-light-black fw-bold">{{ scheduleData.note }}</p>
+                <p class="mb-0 text-light-black fw-bold">{{ edited.note }}</p>
+            </div>
+             <div class="group">
+                <p class="text-light-black mgb-12">Appraiser</p>
+                <p class="mb-0 text-light-black fw-bold">{{ edited.inspector_name }}</p>
+            </div>
+            <div class="group">
+                <p class="text-light-black mgb-12">Inspection Date and Time</p>
+                <p class="mb-0 text-light-black fw-bold">{{ edited.inspection_date_time_formatted }}</p>
             </div>
             <div class="group">
                 <p class="text-light-black mgb-12">Duration</p>
-                <p class="mb-0 text-light-black fw-bold">{{ scheduleData.duration }}</p>
+                <p class="mb-0 text-light-black fw-bold">{{ edited.duration }}</p>
             </div>
         </div>
         <div v-else class="scheduling-item step-items no-schedule">
@@ -31,9 +39,6 @@
         </div>
         <b-modal id="schedule" size="md" title="Schedule">
             <div class="modal-body">
-                <b-alert v-if="message" show variant="success">
-                    <a href="#" class="alert-link">{{ message }}</a>
-                </b-alert>
                 <div class="row">
                     <div class="col-md-12">
                         <ValidationObserver ref="scheduleForm">
@@ -124,7 +129,6 @@
             appraisers: [],
         },
         data: () => ({
-            message: '',
             orderData: [],
             scheduleData: {
                 schedule_id: 0,
@@ -132,8 +136,11 @@
                 appraiser_id: '',
                 inspector_name: '',
                 inspection_date_time: '',
+                inspection_date_time_formatted:'',
                 duration: '',
-                note: ''
+                note: '',
+                created_by:'',
+                created_at:''
             },
             alreadyScheduled: 0,
             durations: [
@@ -148,26 +155,28 @@
                 { 'duration': '55 minutes' },
                 { 'duration': '60 minutes' },
             ],
+            edited: {}
         }),
         created() {
-            this.orderData = this.order
-            this.alreadyScheduled = (JSON.parse(this.orderData.workflow_status)).scheduling
-            this.getScheduleData()
-        },
-        mounted() {
-            this.scheduleData.order_id = this.orderData.id
+            this.alreadyScheduled = (JSON.parse(this.order.workflow_status)).scheduling
+            this.scheduleData.order_id = this.order.id
+            this.getScheduleData(this.order)
         },
         methods: {
-            getScheduleData() {
-                let data = this.orderData.inspection
-                if (data) {
+            getScheduleData(order) {
+                if (this.alreadyScheduled == 1) {
+                    this.orderData = order
+                    let data = this.orderData.inspection
                     this.scheduleData.schedule_id = data.id
-                    this.scheduleData.order_id = data.order_id
                     this.scheduleData.appraiser_id = data.inspector_id
                     this.scheduleData.inspector_name = data.user.name
                     this.scheduleData.inspection_date_time = data.inspection_date_time
+                    this.scheduleData.inspection_date_time_formatted = data.inspection_date_time_formatted
                     this.scheduleData.duration = data.duration
                     this.scheduleData.note = data.note
+                    this.scheduleData.created_at = data.created_at
+                    this.scheduleData.created_by = data.create_by.name
+                    this.edited = Object.assign({}, this.scheduleData)
                 }
             },
             select2Features() {
@@ -178,29 +187,24 @@
             },
             saveSchedule() {
                 this.$refs.scheduleForm.validate().then((status) => {
+                    console.log(this.scheduleData)
                     if (status) {
                         this.$boston.post('update-order-schedule', this.scheduleData)
                             .then(res => {
                                 this.message = res.message;
-                                this.alreadyScheduled = 1;
                                 this.orderData = res.data;
-                                this.$root.$emit('wk_update', this.orderData);
-                                this.$root.$emit('wk_flow_menu', this.orderData);
-                                this.$root.$emit('wk_flow_toast', res);
-                                this.getScheduleData()
-                                let self = this;
-                                setTimeout(function () {
-                                    self.$bvModal.hide('schedule')
-                                    self.message = '';
-                                }, 2000);
+                                this.$root.$emit('wk_update', res.data)
+                                this.$root.$emit('wk_flow_menu', res.data)
+                                this.$root.$emit('wk_flow_toast', res)
+                                this.getScheduleData(res.data)
+                                this.$bvModal.hide('schedule')
                             })
                     }
                 })
             },
             editSchedule() {
-                this.$bvModal.show('schedule');
-                $("select").select2();
-                this.getScheduleData();
+                this.$bvModal.show('schedule')
+                this.getScheduleData(this.order)
             },
         }
     }

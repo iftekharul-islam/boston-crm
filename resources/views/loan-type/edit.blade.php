@@ -1,18 +1,18 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container">
-        <div class="row">
-            <div class="col-6 mx-auto">
+    <div class="bg-platinum dashboard-space">
+        <div class="add-appraiser bg-white pd-32 br-8">
+            <div class="bg-platinum max-w-488 pd-32 br-8">
                 <form action="{{ route('loan-types.update', $loan_type->id) }}" method="POST">
                     @csrf
                     @method('PUT')
 
-                    <div class="form-group mb-2">
-                        <label for="exampleInputEmail1">Loan type</label>
+                    <div class="form-group group">
+                        <label class="d-block" for="exampleInputEmail1">Loan type</label>
                         <input type="text"
                                name="name"
-                               class="form-control @error('name') is-invalid @enderror"
+                               class="dashboard-input w-100 @error('name') is-invalid @enderror"
                                id="name"
                                placeholder="Enter loan type"
                                value="{{ $loan_type->name }}">
@@ -22,7 +22,9 @@
                                     </span>
                         @enderror
                     </div>
-                    <button type="submit" class="btn btn-primary mt-2">Submit</button>
+                    <div class="text-end mgt-32">
+                        <button type="submit" class="button button-primary">Submit</button>
+                    </div>
                 </form>
             </div>
         </div>

@@ -51,6 +51,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         [UserController::class, 'destroy'])->middleware('role_permission:delete.user')->name('users.destroy');
     Route::get('profiles', [UserController::class, 'getProfile'])->name('profile');
     Route::post('profiles', [UserController::class, 'updateProfile'])->name('profile.update');
+    Route::post('update-color/{id}',[UserController::class, 'updateColor']);
     //Role Controller
     Route::get('roles',
         [RoleController::class, 'index'])->middleware('role_permission:view.role')->name('roles.index');
