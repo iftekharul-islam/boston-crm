@@ -22,6 +22,19 @@
                                     </span>
                         @enderror
                     </div>
+                    <div class="form-group mb-2 mt-2">
+                        <label for="exampleInputEmail1">Is FHA :</label>
+                        <div class="mgb-32 d-flex align-items-center mt-2">
+                            <div class="checkbox-group review-check mgr-20">
+                                <input type="radio" class="checkbox-input check-data" name="is_fha" value="1" {{ $loan_type->is_fha == 1 ? 'checked' : '' }}>
+                                <label for="" class="checkbox-label text-capitalize">Yes</label>
+                            </div>
+                            <div class="checkbox-group review-check">
+                                <input type="radio" class="checkbox-input check-data" name="is_fha" value="0" {{ $loan_type->is_fha == 0 ? 'checked' : '' }}>
+                                <label for="" class="checkbox-label text-capitalize">No</label>
+                            </div>
+                        </div>
+                    </div>
                     <div class="text-end mgt-32">
                         <button type="submit" class="button button-primary">Submit</button>
                     </div>
