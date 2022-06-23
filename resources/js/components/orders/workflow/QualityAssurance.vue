@@ -115,7 +115,7 @@
                     </ValidationProvider>
                 </div>
             </ValidationObserver>
-            <button class="button button-primary px-4 h-40 d-inline-flex align-items-center" @click="comList = true">Add
+            <button v-if="canAddCom" class="button button-primary px-4 h-40 d-inline-flex align-items-center" @click="comList = true">Add
                 comparable list for original photo</button>
             <div class="text-end mgt-32">
                 <button type="button" class="button button-primary px-4 h-40 d-inline-flex align-items-center"
@@ -430,6 +430,7 @@
             comAddresses: [],
             wayPoints: [],
             showDestination: false,
+            canAddCom: false,
         }),
         created() {
             let order = this.order;
@@ -646,6 +647,7 @@
                 }
                 this.alreadyQualityAssurance = (JSON.parse(this.orderData.workflow_status)).qualityAssurance
                 this.alreadyQualityAssurance == 1 ? this.currentStep = 'step2' : 'step1';
+                this.orderData.amc.com_required == '1' ? this.canAddCom = true : false
                 this.analysis = this.orderData.analysis;
 
                 if (this.orderData.analysis) {
@@ -656,7 +658,6 @@
                 this.comAddresses = this.orderData.comlist
                 this.qa.order_id = this.orderData.id
                 this.qa.effective_date = this.orderData.due_date
-
                 if (this.comAddresses.length && this.orderData.comlist[0].id != undefined) {
                     this.showSeeCom = true
                 }
@@ -667,13 +668,13 @@
                     }
 
                     this.qa.qa_id = this.orderData.quality_assurance.id
-                    
+
                     if (this.orderData.quality_assurance.note === "null" || this.orderData.quality_assurance.note == "null" || this.orderData.quality_assurance.note === null || (typeof this.orderData.quality_assurance.note) == undefined) {
-                        
+
                     } else {
                         this.qa.note = this.orderData.quality_assurance.note;
                     }
-                    
+
                     this.qa.assigned_to = this.orderData.quality_assurance.assigned_to
                     this.qa.assigned_name = this.orderData.quality_assurance.assignee.name
                     this.qa.effective_date = this.orderData.quality_assurance.effective_date
