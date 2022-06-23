@@ -80,7 +80,7 @@
                                             class="dashboard-input w-100 loan-type-select" v-model="step1.loanType">
                                             <option value="">Please Select Loan Type</option>
                                             <option v-for="loan_type in loanTypes" :key="loan_type.id"
-                                                :value="loan_type.id">
+                                                :value="loan_type.id" :data-fha="loan_type.is_fha">
                                                 {{ loan_type.name }}
                                             </option>
                                         </select>
@@ -88,11 +88,11 @@
                                     </div>
                                 </ValidationProvider>
 
-                                <ValidationProvider class="group" name="FHA case no" rules="required"
+                                <ValidationProvider class="group" name="FHA case no" :rules="{ required: this.fhaExists == 1 }"
                                     v-slot="{ errors }">
                                     <div :class="{ 'invalid-form' : errors[0] }">
                                         <label for="" class="d-block mb-2 dashboard-label">FHA case no <span
-                                                class="text-danger require" v-if="step1.loanType"></span></label>
+                                                class="text-danger require" v-if="fhaExists == 1"></span></label>
                                         <input type="text" class="dashboard-input w-100" v-model="step1.fhaCaseNo">
                                         <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                                     </div>
@@ -268,7 +268,6 @@
                             </div>
                         </ValidationProvider>
                     </div>
-
                 </div>
                 <div class="col-md-8 ">
                     <div class="form-box">
@@ -432,6 +431,7 @@
         },
         data() {
             return {
+                fhaExists: 0,
                 showStreetAddress: false,
                 streetAddress: [],
                 dateIssue: {
@@ -514,6 +514,10 @@
             this.select2Features();
         },
         methods: {
+            updateLoanType(event){
+                console.log(event.target.value)
+                this.step1.loanType = null
+            },
             select2Features() {
                 $(document).on("change", "#providerTypeFee", function (e) {
                     let value = e.target.value;
@@ -527,6 +531,8 @@
                 $("#loanTypeSelect").on("select2:select", function (e) {
                     let value = e.target.value;
                     this.step1.loanType = value;
+                    this.fhaExists = e.target.selectedOptions[0].dataset.fha
+                    console.log(this.fhaExists)
                 }.bind(this));
 
                 $(document).on("change", "#amcClientSelect", function (e) {
@@ -691,7 +697,6 @@
                     this.providerTypes.error.fee = false;
                 }
             },
-
             calculateTechnologyFee(e) {
                 //technologyFee caculation
                 let uad = e.target.selectedOptions[0].dataset.uad
