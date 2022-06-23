@@ -368,6 +368,8 @@ class OrderController extends BaseController
             $noRewrite = 0;
         } else if( !isset($order->analysis->is_review_send_back)) {
             $noRewrite = 0;
+        } else if(isset($order->analysis->rewrite_note) && $order->analysis->rewrite_note != null) {
+            $noRewrite = 0;
         }
 
         $order->amc_file = $this->repository->getClientFile($order->amc_id);

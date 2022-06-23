@@ -7,7 +7,7 @@
          </button>
         <button class="page-item" :class="`${activePage == 1 ?  'active-page' : ''}`" title="Page 1" @click="choosePage(1)">1</button>
         <span v-for="page, ik in allPage" :key="ik">
-            <button v-if="page > 1" :title="`Page ${page}`" :class="`${activePage == page ?  'active-page' : ''}`" @click="choosePage(page)">{{ page }}</button>
+            <button class="page-item" v-if="page > 1" :title="`Page ${page}`" :class="`${activePage == page ?  'active-page' : ''}`" @click="choosePage(page)">{{ page }}</button>
         </span>
         <button class="page-item" v-if="totalPage > 1" :class="`${activePage == totalPage ?  'active-page' : ''}`" :title="`Page ${totalPage}`" @click="choosePage(totalPage)">{{ totalPage }}</button>
         <button class="page-item" title="Next" :disabled="activePage == totalPage" @click="choosePage(activePage+1)"> 
@@ -100,6 +100,9 @@ export default {
 .paginate-box .page-item:last-of-type {
     margin-right: 0;
 }
+.dashboard-main .paginate-box span .page-item {
+    margin-right: 12px;
+            }
 
 .paginate-box .page-item:hover {
     transition: all 200ms linear;

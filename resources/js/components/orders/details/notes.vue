@@ -11,7 +11,7 @@
             <img src="/img/dummy-profile.png" alt="boston chat image" class="img-fluid">
             <div class="ms-3">
               <p class="text-600 mb-1">{{ noteItem.user ? noteItem.user.name : '-' }}</p>
-              <span class="text-gray">{{ noteItem.user ? noteItem.user.email : '-' }}</span>
+              <span class="text-gray chat-mail">{{ noteItem.user ? noteItem.user.email : '-' }}</span>
             </div>
           </div>
           <div class="d-inline-block message">
@@ -43,12 +43,15 @@
           initNotes(order) {
               this.notes = [];
               this.orderData = order;
-              this.notes.push({
-                  key: 'provided_service',
-                  title: "Provided Services",
-                  note: order.provider_service.note,
-                  user: order.user
-              });
+
+              if (order.provider_service) {
+                this.notes.push({
+                    key: 'provided_service',
+                    title: "Provided Services",
+                    note: order.provider_service.note,
+                    user: order.user
+                });
+              }
 
               if ( order.inspection ) {
                 this.notes.push({
