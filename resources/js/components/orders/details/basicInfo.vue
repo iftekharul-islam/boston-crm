@@ -37,7 +37,7 @@
                         class="text-danger require"></span></label>
                     <v-date-picker
                         v-model="orderData.due_date"
-                        :available-dates='{ start: new Date(), end: null }'>
+                        :available-dates='{ start: new Date(), end: null }'  @input="checkDateInput(orderData.due_date, 2)">
                       <template class="position-relative" v-slot="{ inputValue, inputEvents }">
                         <input
                             class="dashboard-input w-100"
@@ -65,10 +65,10 @@
               <div class="group">
                 <ValidationProvider class="d-block mb-2 dashboard-label" name="Order receive date" rules="required"
                                     v-slot="{ errors }">
-                  <div class="group" :class="{ 'invalid-form' : errors[0] }">
+                    <div :class="{ 'invalid-form' : (errors[0] || dateIssue.status) }">
                     <label for="" class="d-block mb-2 dashboard-label">Received date <span
                         class="text-danger require"></span></label>
-                    <v-date-picker v-model="orderData.received_date">
+                    <v-date-picker v-model="orderData.received_date"  @input="checkDateInput(orderData.received_date, 1)">
                       <template class="position-relative" v-slot="{ inputValue, inputEvents }">
                         <input
                             class="dashboard-input w-100"
@@ -78,6 +78,7 @@
                       </template>
                     </v-date-picker>
                     <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                    <span v-if="dateIssue.status" class="error-message">{{ dateIssue.message }}</span>
                   </div>
                 </ValidationProvider>
               </div>
@@ -107,6 +108,10 @@ export default {
   data() {
     return {
         oldOrderNo: false,
+        dateIssue: {
+            status: false,
+            message: "Received Date Must Be Smaller Than Due Date"
+        },
       orderData: {
         client_order_no: '',
         due_date: new Date(),
@@ -126,6 +131,25 @@ export default {
     this.getBasicInfo(this.order);
   },
   methods: {
+    checkDateInput(value, type) {
+          this.dateIssue.status = false;
+          var date = new Date(value);
+          if (type == 1) {
+              if (this.orderData.due_date) {
+                  let dueDate = new Date(this.orderData.due_date);
+                  if (dueDate < date) {
+                      this.dateIssue.status = true;
+                  }
+              }
+          } else {
+              if (this.orderData.received_date) {
+                  let receiveDate = new Date(this.orderData.received_date);
+                  if (receiveDate > date) {
+                      this.dateIssue.status = true;
+                  }
+              }
+          }
+      },
     getBasicInfo(order) {
       let orderData = order
       this.orderData.client_order_no = orderData.client_order_no
