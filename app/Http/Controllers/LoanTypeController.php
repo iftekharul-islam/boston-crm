@@ -51,9 +51,8 @@ class LoanTypeController extends BaseController
      *
      * @return RedirectResponse
      */
-    public function store(LoanTypeCreateRequest $request)
+    public function store(LoanTypeCreateRequest $request): RedirectResponse
     {
-//        return $request->all();
         $loan_type_data = [
             'company_id' => auth()->user()->companies()->first()->id,
             'name' => $request->name,
