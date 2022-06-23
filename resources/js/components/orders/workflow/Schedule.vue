@@ -158,12 +158,18 @@
             edited: {}
         }),
         created() {
-            this.alreadyScheduled = (JSON.parse(this.order.workflow_status)).scheduling
-            this.scheduleData.order_id = this.order.id
-            this.getScheduleData(this.order)
+            let order = this.order;
+            let localOrderData = this.$store.getters['app/orderDetails']
+            if(localOrderData){
+                order = localOrderData;
+            }
+            this.getScheduleData(order)
         },
         methods: {
             getScheduleData(order) {
+                this.alreadyScheduled = (JSON.parse(order.workflow_status)).scheduling
+                this.scheduleData.order_id = order.id
+
                 if (this.alreadyScheduled == 1) {
                     this.orderData = order
                     let data = this.orderData.inspection

@@ -67,7 +67,7 @@ Vue.filter('onlyDate', (date) => {
     let year = d.getFullYear();
     let dates = d.getDate();
 
-    let fullDate = `${decimalNumber(dates)}-${decimalNumber(d.getMonth())}-${year}`;
+    let fullDate = `${decimalNumber(dates)}-${decimalNumber(d.getMonth() + 1)}-${year}`;
     return fullDate;
 });
 

@@ -330,8 +330,12 @@ export default {
     }
   },
   created() {
-      this.orderData = this.order;
-      // this.updateRole();
+      let order = this.order;
+      let localOrderData = this.$store.getters['app/orderDetails']
+      if(localOrderData){
+          order = localOrderData;
+      }
+      this.orderData = order;
       this.updateAdmin()
   },
   mounted() {

@@ -167,6 +167,7 @@ trait CrmHelper {
         ];
         $currentStep = 'scheduling';
         $wkFlow = json_decode($order->workflow_status, true);
+
         foreach($orderStatus as $item) {
             if ($wkFlow[$item] == 0){
                 $currentStep = $this->flowMenu()[$item];
@@ -179,7 +180,7 @@ trait CrmHelper {
                 $currentStep = "initial-review";
             } else if($wkFlow[$item] == 1 && $item == "initial-review") {
                 $currentStep = "report-analysis-review";
-            } else if($wkFlow[$item] == 1 && $item == "report-analysis-review") {
+            } else if($wkFlow[$item] == 1 && $item == "report-analysis-review" && $order->analysis->is_review_send_back == 1) {
                 $currentStep = "rewriting-report";
             } else if($wkFlow[$item] == 1 && $item == "rewriting-report") {
                 $currentStep = "quality-assurance";
@@ -190,6 +191,9 @@ trait CrmHelper {
             }
         }
         $order['currentStep'] = $currentStep;
+        if ($currentStep == "revision" && $order->revission->count() > 0) {
+            $order['currentStep'] = false;
+        }
         return $order;
     }
 

@@ -106,8 +106,12 @@ export default {
   }),
   inject: ['usersInfo'],
   created(){
-      this.orderData = this.order;
-      this.initData(this.orderData);
+      let order = this.order;
+      let localOrderData = this.$store.getters['app/orderDetails']
+      if(localOrderData){
+          order = localOrderData;
+      }
+      this.initData(order);
 
       this.$root.$on("wk_update", (res) => {
           this.initData(res);
@@ -115,7 +119,7 @@ export default {
   },
   methods: {
       initData(order){
-          console.log(order.analysis);
+          this.orderData = order;
           this.prev = order.analysis ?? [];
           this.current = order.report_rewrite ?? [];
 

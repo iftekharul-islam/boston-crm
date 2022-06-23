@@ -723,6 +723,7 @@ select {
                 background: #b7191957;
                 .ball {
                     border-color: transparent;
+                    background-color: #942020;
                 }
                 img {
                     display: block;
@@ -743,8 +744,9 @@ select {
             }
         }
         .item.activeStep {
+            background: #19b7a2;
             p {
-                color: #19b7a2;
+                color: #fff;
             }
             span.ball {
                 background: #19b7a2;
@@ -753,6 +755,12 @@ select {
         }
         .item.activeStep.current {
             background: #19b7a2;
+            p {
+                color: #fff;
+            }
+        }
+        .item.disable.current {
+            background: rgb(189 189 189);
             p {
                 color: #fff;
             }

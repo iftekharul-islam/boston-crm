@@ -32,8 +32,13 @@ export default {
         history: []
     }),
     created(){
-      this.history = this.order.work_hisotry;
-
+      let order = this.order;
+      let localOrderData = this.$store.getters['app/orderDetails']
+      if(localOrderData){
+          order = localOrderData;
+      }
+      
+      this.history = order.work_hisotry;
       this.$root.$on('wk_update', (res) => {
           this.history = res.work_hisotry;
       });
