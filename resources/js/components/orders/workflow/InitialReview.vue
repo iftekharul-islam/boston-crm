@@ -125,7 +125,12 @@
             currentStep: 'create',
         }),
         created() {
-            this.getInitialReviewData(this.order);
+            let order = this.order;
+            let localOrderData = this.$store.getters['app/orderDetails']
+            if(localOrderData){
+                order = localOrderData;
+            }
+            this.getInitialReviewData(order);
 
             this.$root.$on("wk_update", (res) => {
                 this.getInitialReviewData(res);
@@ -158,7 +163,6 @@
                         }
                     }
                 }
-                console.log(this.currentStep);
             },
             saveInitialReview() {
                 this.$refs.initialReviewForm.validate().then((status) => {

@@ -66,7 +66,12 @@
             dataFiles: [],
         }),
         created() {
-            this.inspectionData(this.order)
+            let order = this.order;
+            let localOrderData = this.$store.getters['app/orderDetails']
+            if(localOrderData){
+                order = localOrderData;
+            }
+            this.inspectionData(order);
         },
         methods: {
             inspectionData(order) {
@@ -99,7 +104,6 @@
                         'Content-Type': 'multipart/form-data'
                     }
                 }).then(res => {
-                    console.log(res)
                     this.isUploading = false
                     this.editable = false
                     if (res.error) {

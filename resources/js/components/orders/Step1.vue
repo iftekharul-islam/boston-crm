@@ -10,11 +10,12 @@
                             <div class="left max-w-424 w-100 me-3">
 
                                 <ValidationProvider class="group" name="Order no" rules="required" v-slot="{ errors }">
-                                    <div :class="{ 'invalid-form' : errors[0] }">
+                                    <div :class="{ 'invalid-form' : errors[0] || oldOrderNo }">
                                         <label for="" class="d-block mb-2 dashboard-label">Client order no <span
                                                 class="text-danger require"></span></label>
-                                        <input type="text" class="dashboard-input w-100" v-model="step1.clientOrderNo">
+                                        <input type="text" class="dashboard-input w-100" @change="checkclientOrderNo($event)" v-model="step1.clientOrderNo">
                                         <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                                        <span v-if="oldOrderNo" class="error-message">This client order no. has been taken.</span>
                                     </div>
                                 </ValidationProvider>
 
@@ -431,6 +432,7 @@
         },
         data() {
             return {
+                oldOrderNo: false,
                 fhaExists: 0,
                 showStreetAddress: false,
                 streetAddress: [],
@@ -940,7 +942,18 @@
                         }
                     }
                 }
-            }
+            }, 
+            
+            checkclientOrderNo: _.debounce( function (event) {
+                let value = event.target.value;
+                this.oldOrderNo = false;
+                this.$boston.post('/check/client/order/no', {'client_no' : value}).then((res) => {
+                    console.log(res);
+                    this.oldOrderNo = res;
+                }).catch(err => {
+                    console.log(err);
+                });
+            }, 300),
 
         },
         watch: {

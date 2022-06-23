@@ -432,8 +432,12 @@
             showDestination: false,
         }),
         created() {
-            this.getReportAnalysisData(this.order)
-
+            let order = this.order;
+            let localOrderData = this.$store.getters['app/orderDetails']
+            if(localOrderData){
+                order = localOrderData;
+            }
+            this.getReportAnalysisData(order)
             this.$root.$on('wk_update', (res) => {
                 localStorage.setItem('qaItem', JSON.stringify(res));
                 this.getReportAnalysisData(res, true);

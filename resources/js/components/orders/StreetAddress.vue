@@ -29,7 +29,7 @@
                                 <td>{{ item.amc.name }}</td>
                                 <td>
                                     <div class="dot"></div>
-                                    Scheduled
+                                    {{ item.order_status }}
                                 </td>
                             </tr>
 

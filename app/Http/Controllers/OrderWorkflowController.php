@@ -803,4 +803,14 @@ class OrderWorkflowController extends BaseController
             "data" => $orderData
         ];
     }
+
+    public function checkClientOrderNo(Request $get) {
+        $old = Order::where('client_order_no', $get->client_no)->first();
+        if ($old) {
+            return response()->json(true);
+        } else {
+            return response()->json(false);
+        }
+    }
+
 }

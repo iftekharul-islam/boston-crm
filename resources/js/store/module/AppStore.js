@@ -5,7 +5,7 @@ const vuexLocal = new VuexPersistence({
 })
 function getOrderDetails() {
     let data = localStorage.getItem('orderDetails')
-    if(data){
+    if(data && data !== undefined && data != 'undefined'){
         return JSON.parse(data)
     }
     return null
@@ -23,7 +23,7 @@ const appStore = {
     mutations: {
         storeOrder(state, value) {
             localStorage.setItem('orderDetails', JSON.stringify(value))
-            state.orderDetails = value
+            state.orderDetails = value;
         },
     },
     actions: {
