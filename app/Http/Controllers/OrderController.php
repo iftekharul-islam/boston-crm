@@ -516,10 +516,18 @@ class OrderController extends BaseController
         return response()->json(["message" => "Appraisal info updated successfully"]);
     }
 
-    public function updateClientInfo(Request $request,$order_id): JsonResponse
+    public function updateClientInfo(Request $request,$order_id)
     {
         $this->repository->updateClientDetails($order_id,$request->all());
-        return response()->json(['message' => 'Client info updated successfully']);
+
+        $orderData = $this->orderDetails($order_id);
+
+        return [
+            'error' => false,
+            'message' => 'Basic info updated successfully !',
+            'status' => 'success',
+            'data' => $orderData
+        ];
     }
 
     /**

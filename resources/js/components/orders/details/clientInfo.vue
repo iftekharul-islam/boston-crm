@@ -115,17 +115,18 @@ export default {
     }
   },
   created() {
-    this.getClientInfo();
+    this.getClientInfo(this.order);
   },
   methods: {
-    getClientInfo() {
-        this.amc_id = this.order.amc.id
-        this.amc_file = this.order.amc_file
-        this.amc_name = this.order.amc.name
-        this.lender_id = this.order.lender.id
-        this.lender_file = this.order.lender_file
-        this.lender_name = this.order.lender.name
-        this.lender_address = this.order.lender.address
+    getClientInfo(order) {
+        let orderDetails = order
+        this.amc_id = orderDetails.amc.id
+        this.amc_file = orderDetails.amc_file
+        this.amc_name = orderDetails.amc.name
+        this.lender_id = orderDetails.lender.id
+        this.lender_file = orderDetails.lender_file
+        this.lender_name = orderDetails.lender.name
+        this.lender_address = orderDetails.lender.address
     },
     changeFileLender(e) {
       this.lenderNewFile = e.target.files[0]
@@ -146,6 +147,7 @@ export default {
 
       axios.post('update-client-info/' + this.orderId, formData)
           .then(res => {
+            this.getClientInfo(res.data.data)
             that.message = res.data.message
             setTimeout(function () {
               that.$bvModal.hide('client-info')
