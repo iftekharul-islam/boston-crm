@@ -35,7 +35,7 @@
                 </button>
             </div>
             <p class="fs-20 fw-bold">Not yet scheduled, Click Schedule button to schedule the order</p>
-           
+
         </div>
         <b-modal id="schedule" size="md" title="Schedule">
             <div class="modal-body">
@@ -45,11 +45,14 @@
                             <ValidationProvider class="group d-block" name="Appraiser name" rules="required"
                                 v-slot="{ errors }">
                                 <div :class="{ 'invalid-form' : errors[0] }">
-                                    <label for="" class="d-block mb-2 dashboard-label">Appraiser name <span class="text-danger require"></span></label>
-                                     <div class="position-relative">
-                                        <select id="apprClientSelect" class="dashboard-input w-100" v-model="scheduleData.appraiser_id">
+                                    <label for="" class="d-block mb-2 dashboard-label">Appraiser name <span
+                                            class="text-danger require"></span></label>
+                                    <div class="position-relative">
+                                        <select id="apprClientSelect" class="dashboard-input w-100"
+                                            v-model="scheduleData.appraiser_id">
                                             <option value="">Please select appraiser</option>
-                                            <option v-for="appraisar in appraisers" :key="appraisar.id" :value="appraisar.id">
+                                            <option v-for="appraisar in appraisers" :key="appraisar.id"
+                                                :value="appraisar.id">
                                                 {{ appraisar.name }}
                                             </option>
                                         </select>
@@ -156,16 +159,15 @@
         }),
         created() {
             this.alreadyScheduled = (JSON.parse(this.order.workflow_status)).scheduling
+            this.scheduleData.order_id = this.order.id
             this.getScheduleData(this.order)
         },
         methods: {
             getScheduleData(order) {
                 if (this.alreadyScheduled == 1) {
-
                     this.orderData = order
                     let data = this.orderData.inspection
                     this.scheduleData.schedule_id = data.id
-                    this.scheduleData.order_id = data.order_id
                     this.scheduleData.appraiser_id = data.inspector_id
                     this.scheduleData.inspector_name = data.user.name
                     this.scheduleData.inspection_date_time = data.inspection_date_time
@@ -190,6 +192,7 @@
                             .then(res => {
                                 this.message = res.message;
                                 this.orderData = res.data;
+                                this.alreadyScheduled = 1
                                 this.$root.$emit('wk_update', res.data)
                                 this.$root.$emit('wk_flow_menu', res.data)
                                 this.$root.$emit('wk_flow_toast', res)
