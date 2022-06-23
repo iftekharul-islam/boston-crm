@@ -45,11 +45,14 @@
                             <ValidationProvider class="group d-block" name="Appraiser name" rules="required"
                                 v-slot="{ errors }">
                                 <div :class="{ 'invalid-form' : errors[0] }">
-                                    <label for="" class="d-block mb-2 dashboard-label">Appraiser name <span class="text-danger require"></span></label>
-                                     <div class="position-relative">
-                                        <select id="apprClientSelect" class="dashboard-input w-100" v-model="scheduleData.appraiser_id">
+                                    <label for="" class="d-block mb-2 dashboard-label">Appraiser name <span
+                                            class="text-danger require"></span></label>
+                                    <div class="position-relative">
+                                        <select id="apprClientSelect" class="dashboard-input w-100"
+                                            v-model="scheduleData.appraiser_id">
                                             <option value="">Please select appraiser</option>
-                                            <option v-for="appraisar in appraisers" :key="appraisar.id" :value="appraisar.id">
+                                            <option v-for="appraisar in appraisers" :key="appraisar.id"
+                                                :value="appraisar.id">
                                                 {{ appraisar.name }}
                                             </option>
                                         </select>
