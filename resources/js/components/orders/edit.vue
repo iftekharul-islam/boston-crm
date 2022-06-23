@@ -5,8 +5,7 @@
         <div class="d-flex align-items-center justify-content-between">
           <p class="fw-bold">Edit Order # <strong class="text-success">{{ order.system_order_no }}</strong></p>
           <div class="step">
-            <button @click="gotoStep(1)" class="step-btn pointer"
-                    :class="{'active': step === 1}">Step 1</button>
+            <button @click="gotoStep(1)" class="step-btn pointer" :class="{'active': step === 1}">Step 1</button>
             <button @click="gotoStep(2)" class="step-btn" :class="{'active': step === 2}">Step 2</button>
           </div>
         </div>
@@ -20,7 +19,8 @@
         <div class="alert alert-success" v-if="submitResult.submitStatus">
             {{ submitResult.message }}
         </div>
-        <Step1 v-show="step === 1" :type="2"
+        <Step1 v-show="step === 1" 
+                :type="2"
                 :order="order"
                 @step-change-active="stepChangeActiveStatus"
                 :order-list-url="orderList"
@@ -30,6 +30,7 @@
                 :loan-types="loanTypes"
                 :amc-clients="amcClients"
                 :lender-clients="lenderClients"/>
+               
         <Step2 v-show="step === 2" :type="2" :order="order"/>
       </div>
     </div>

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <order-edit :order="{{ $order }}" 
+    <order-edit-vue :order="{{ $order }}" 
                 :order-list="'{{ route('orders.index') }}'"
                 :user_id="{{ $userID }}"
                 :appraisal-users="{{ $appraisal_users }}"
