@@ -12,6 +12,7 @@
                     <thead>
                     <tr>
                         <th scope="col">Loan Type</th>
+                        <th scope="col">Is FHA</th>
                         <th scope="col" class="text-end">Action</th>
                     </tr>
                     </thead>
@@ -19,6 +20,7 @@
                     @foreach($loan_types ?? [] as $loan_type)
                         <tr>
                             <td>{{ $loan_type->name }}</td>
+                            <td>{{ $loan_type->is_fha ? 'Yes' : 'No' }}</td>
                             <td>
                                 <div class="d-flex align-items-center justify-content-end">
                                     @if($is_owner || in_array('update.loantype', $user_permissions))
