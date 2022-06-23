@@ -53,11 +53,12 @@
               <div class="group">
                 <ValidationProvider class="d-block mb-2 dashboard-label" name="Client order no" rules="required"
                                     v-slot="{ errors }">
-                  <div class="group" :class="{ 'invalid-form' : errors[0] }">
+                    <div :class="{ 'invalid-form' : errors[0] || oldOrderNo }">
                     <label for="" class="d-block mb-2 dashboard-label">CLient order no <span
                         class="text-danger require"></span></label>
-                    <input type="text" v-model="orderData.client_order_no" class="dashboard-input w-100">
+                    <input type="text" v-model="orderData.client_order_no" class="dashboard-input w-100" @input="checkclientOrderNo($event)">
                     <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                      <span v-if="oldOrderNo" class="error-message">This client order no. has been taken.</span>
                   </div>
                 </ValidationProvider>
               </div>
@@ -105,6 +106,7 @@ export default {
   components: {},
   data() {
     return {
+        oldOrderNo: false,
       orderData: {
         client_order_no: '',
         due_date: new Date(),
@@ -157,6 +159,16 @@ export default {
           console.log(err)
       });
     },
+      checkclientOrderNo: _.debounce( function (event) {
+          let value = event.target.value;
+          this.oldOrderNo = false;
+          this.$boston.post('/check/client/order/no', {'client_no' : value}).then((res) => {
+              console.log(res);
+              this.oldOrderNo = res;
+          }).catch(err => {
+              console.log(err);
+          });
+      }, 300),
   }
 }
 </script>
