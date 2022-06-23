@@ -125,7 +125,6 @@
             <div v-if="comList" class="com-list vue-modal">
                 <div class="content w-100 max-w-556">
                     <p class="fs-20 fw-bold mgb-20">COM list</p>
-                    <p v-if="message" class="alert alert-success">{{ message }}</p>
                     <div class="">
                         <p class="mgb-8">Add new</p>
                         <input type="text" @keyup="getLocation" id="com-input"
@@ -416,7 +415,6 @@
             placeLng: '',
             addresses: [],
             orderData: [],
-            message: '',
             filesCount: '',
             currentStep: 'step1',
             alreadyQualityAssurance: 0,
@@ -621,7 +619,6 @@
                     .then(res => {
                         let self = this
                         this.orderData = res.data
-                        this.message = res.message
                         this.alreadyHaveComList = false
                         this.comAddresses = this.orderData.comlist
                         this.$root.$emit('wk_update', this.orderData)
@@ -630,8 +627,7 @@
                         this.showSeeCom = true
                         setTimeout(() => {
                             self.comList = false
-                            self.message = '';
-                        }, 3000);
+                        }, 1000);
                     })
                     .catch(err => {
                         console.log(err)
@@ -686,16 +682,12 @@
                         let self = this
                         this.$boston.post('save-quality-assurance', this.qa)
                             .then(res => {
-                                this.message = res.message
                                 this.orderData = res.data
                                 this.$root.$emit('wk_update', this.orderData)
                                 this.$root.$emit('wk_flow_menu', this.orderData)
                                 this.$root.$emit('wk_flow_toast', res);
                                 this.getReportAnalysisData(res.data);
                                 this.currentStep = 'step2'
-                                setTimeout(() => {
-                                    self.message = '';
-                                }, 3000);
                             }).catch(err => {
                                 console.log(err)
                             })
@@ -728,7 +720,6 @@
                                 'Content-Type': 'multipart/form-data'
                             }
                         }).then(res => {
-                            this.message = res.message
                             this.orderData = res.data
                             this.$root.$emit('wk_update', this.orderData)
                             this.$root.$emit('wk_flow_menu', this.orderData)
