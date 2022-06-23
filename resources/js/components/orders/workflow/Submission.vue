@@ -111,6 +111,10 @@ export default {
     }),
     methods: {
         updateData(order){
+            let localOrderData = this.$store.getters['app/orderDetails']
+            if(localOrderData){
+                order = localOrderData
+            }
             this.orderData = order;
             let qAssureance = !_.isEmpty(this.orderData.quality_assurance) ? this.orderData.quality_assurance : false;
             if(qAssureance){
@@ -141,19 +145,22 @@ export default {
                     this.$boston.post('submission-create/'+ this.orderData.id, data, { headers: {
                             'Content-Type': 'multipart/form-data'
                         }}).then(res => {
+                        console.log(res.data)
                         this.updateData(res.data);
                         this.$root.$emit('wk_update', this.orderData);
                         this.$root.$emit('wk_flow_menu', this.orderData);
                         this.$root.$emit('wk_flow_toast', res);
                     }).catch(err => {
-                        
+
                     });
                 }
             })
         },
     },
     created() {
+        console.log(this.order)
         this.updateData(this.order);
+
     },
 }
 </script>

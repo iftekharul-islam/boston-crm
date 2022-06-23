@@ -717,7 +717,6 @@ class OrderWorkflowController extends BaseController
 
     public function storeSubmission(Request $request, $id)
     {
-        logger($request->all());
         $order = Order::find($id);
         $user = auth()->user();
 

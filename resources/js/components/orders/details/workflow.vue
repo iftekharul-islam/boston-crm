@@ -153,6 +153,7 @@ export default {
       });
 
       this.$root.$on('wk_flow_toast', (res) => {
+          this.$store.commit('app/storeOrder', res.data)
           this.$toast.open({
               message: res.message,
               type: res.error == true ? 'error' : 'success',
@@ -160,8 +161,8 @@ export default {
       });
   },
   mounted(){
-      
-  },  
+
+  },
   methods: {
     currentStep(step){
       if (this.orderData.currentStep == step) {
@@ -196,7 +197,7 @@ export default {
       }
       this.isActive = type;
       this.addParam('wkf', type);
-      
+
       if (type == "revision") {
         this.$root.$emit('open_revision', true);
       }
