@@ -515,7 +515,6 @@
         },
         methods: {
             updateLoanType(event){
-                console.log(event.target.value)
                 this.step1.loanType = null
             },
             select2Features() {
@@ -523,7 +522,6 @@
                     let value = e.target.value;
                     this.providerTypes.default.type = value;
                     this.checkProviderValidation(e, 1);
-                    console.log(this.providerTypes)
                     this.isFullAppraisal = e.target.selectedOptions[0].dataset.full
                 }.bind(this));
 
@@ -532,7 +530,6 @@
                     let value = e.target.value;
                     this.step1.loanType = value;
                     this.fhaExists = e.target.selectedOptions[0].dataset.fha
-                    console.log(this.fhaExists)
                 }.bind(this));
 
                 $(document).on("change", "#amcClientSelect", function (e) {
@@ -697,13 +694,12 @@
                     this.providerTypes.error.fee = false;
                 }
             },
+            //technologyFee caculation
             calculateTechnologyFee(e) {
-                //technologyFee caculation
                 let uad = e.target.selectedOptions[0].dataset.uad
                 let d = e.target.selectedOptions[0].dataset.d
                 let processingFee = e.target.selectedOptions[0].dataset.processing
                 this.isFullAppraisal == 1 ? this.step1.technologyFee = uad : this.step1.technologyFee = d
-                console.log(processingFee)
                 if (processingFee != '' && processingFee > 0) {
                     let technologyFee = parseFloat(parseFloat(this.step1.technologyFee) + parseFloat(this.providerTypes.totalAmount * (processingFee / 100)))
                     this.step1.technologyFee = technologyFee
@@ -814,7 +810,7 @@
 
                     places.forEach((place) => {
                         if (!place.geometry || !place.geometry.location) {
-                            console.log("Returned place contains no geometry");
+                            console.error("Returned place contains no geometry");
                             return;
                         }
 

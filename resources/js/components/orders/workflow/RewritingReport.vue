@@ -134,7 +134,7 @@ export default {
                   'assigned_to': this.assigned_to,
                   'order_id' : this.orderData.id
                 }
-                this.$boston.post('rewrite-report/update/', data, { headers: {
+                this.$boston.post('rewrite-report/update', data, { headers: {
                         'Content-Type': 'multipart/form-data'
                     }}).then(res => {
                     this.orderData = res.data;
