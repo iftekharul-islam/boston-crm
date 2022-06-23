@@ -63,6 +63,7 @@
                     </div>
                 </div>
             </div>
+        </ValidationObserver>
         </div>
         <div v-else>
             <ValidationObserver ref="assigneeForm">
