@@ -181,8 +181,8 @@ class OrderRepository extends BaseRepository
     {
         return Order::query()->where('id', $order_id)->update([
             "client_order_no" => $data["client_order_no"],
-            "received_date" => Carbon::parse($data["received_date"])->format('Y-m-d'),
-            "due_date" => Carbon::parse($data["due_date"])->format('Y-m-d')
+            "received_date" => Carbon::parse($data["received_date"])->addDay(1)->format('Y-m-d'),
+            "due_date" => Carbon::parse($data["due_date"])->addDay(1)->format('Y-m-d')
         ]);
     }
 

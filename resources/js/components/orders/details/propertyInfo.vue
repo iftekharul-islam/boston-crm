@@ -146,7 +146,7 @@ export default {
     }
   },
   created() {
-    this.getPropertyInfo();
+    this.getPropertyInfo(this.order);
   },
   mounted() {
 

@@ -121,28 +121,37 @@ export default {
     }
   },
   created() {
-    this.getBasicInfo();
+    this.getBasicInfo(this.order);
   },
   methods: {
-    getBasicInfo() {
-      this.orderData.client_order_no = this.order.client_order_no
-      this.orderData.due_date = this.order.due_date
-      this.orderData.received_date = this.order.received_date
+    getBasicInfo(order) {
+      let orderData = order
+      this.orderData.client_order_no = orderData.client_order_no
+      this.orderData.due_date = orderData.due_date
+      this.orderData.received_date = orderData.received_date
       this.edited = Object.assign({}, this.orderData);
     },
     updateBasicInfoData(){
       let that = this
       axios.post('update-basic-info/'+ this.orderId,this.orderData)
         .then(res => {
-          this.message = res.data.message
-          this.errorStatus = res.data.error;
-          if (this.errorStatus) {
-
-          }else {
-              setTimeout(function(){
-                that.$bvModal.hide('basic-info');
-                that.message = '';
-              }, 5000);
+          //   this.$root.$emit('wk_update', res.data.data)
+          //   this.$root.$emit('wk_flow_menu', res.data.data)
+          //   this.$root.$emit('wk_flow_toast', res.data)
+          // this.message = res.data.message
+          // this.errorStatus = res.data.error;
+          if (this.error) {
+              this.$root.$emit('wk_flow_toast', res.data)
+          } else {
+              this.getBasicInfo(res.data.data);
+              this.$root.$emit('wk_update', res.data.data)
+              this.$root.$emit('wk_flow_menu', res.data.data)
+              this.$root.$emit('wk_flow_toast', res.data)
+              this.$bvModal.hide('basic-info');
+              // setTimeout(function(){
+              //   that.$bvModal.hide('basic-info');
+              //   that.message = '';
+              // }, 5000);
           }
         }).catch(err => {
           console.log(err)
