@@ -34,23 +34,23 @@
       <div class="modal-body brrower-modal-body">
         <div class="row">
           <div class="col-12">
-            <ValidationProvider name="Contact Info" rules="required" v-slot="{ errors }">
+            <ValidationProvider class="d-block group" name="Contact Info" rules="required" v-slot="{ errors }">
               <div class="group" :class="{ 'invalid-form' : errors[0] }">
-                <label for="" class="d-block mb-2 dashboard-label">Contact <span
+                <label for="" class="d-block mb-2 dashboard-label">Contact name <span
                     class="text-danger require"></span></label>
-                <textarea v-model="contact_info" class="dashboard-textarea w-100" id="" cols="30" rows="3"></textarea>
-                <span class="error-message">{{ errors[0] }}</span>
+                <input v-model="contact_info" class="dashboard-input w-100" id="" >
+                <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
               </div>
             </ValidationProvider>
 
-            <ValidationObserver ref="addContactForm">
+            <ValidationObserver class="d-block group" ref="addContactForm">
                 <ValidationProvider name="Contact Number" :rules="{'required' : add.contact == null && contact_number == false, min: 10, max: 12}" v-slot="{ errors }">
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
-                    <label for="" class="d-block mb-2 dashboard-label">Contact no <span class="text-danger require"></span></label>
+                    <label for="" class="d-block mb-2 dashboard-label">Phone <span class="text-danger require"></span></label>
                     <input v-model="add.contact" @input="contactNumberChecking($event, 1)" type="text" class="dashboard-input w-100">
-                    <span class="error-message">{{ errors[0] }}</span>
-                    <div class="text-end mgb-20">
-                      <button class="add-more " @click="addContact">
+                    <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                    <div class="mgt-12">
+                      <button class="add-more" @click="addContact">
                         <span class="icon-plus"></span> Add
                       </button>
                     </div>
@@ -58,8 +58,8 @@
                       <div class="items" v-for="item, ki in contact_number_s" :key="ki">
                         <div class="item-content"> {{ item }} </div>
                         <div class="item-remove">
-                          <button class="btn btn-sm btn-danger" @click="removeItem(ki, 'contact')">
-                            Remove
+                          <button class="button button-transparent p-1" @click="removeItem(ki, 'contact')">
+                            <span class="icon-trash fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></span>
                           </button>
                         </div>
                       </div>
@@ -67,15 +67,15 @@
                   </div>
                 </ValidationProvider>
             </ValidationObserver>
-            <div class="divider"></div>
-            <ValidationObserver ref="addEmailForm">
+
+            <ValidationObserver class="d-block group" ref="addEmailForm">
                 <ValidationProvider name="Contact Email Address" :rules="{'required' : email_address == false || (email_address == true && add.email == null)}" v-slot="{ errors }">
                 <div class="group" :class="{ 'invalid-form' : errors[0] }">
-                  <label for="" class="d-block mb-2 dashboard-label">Email address <span
+                  <label for="" class="d-block mb-2 dashboard-label">Email <span
                       class="text-danger require"></span></label>
                   <input v-model="add.email" type="text" class="dashboard-input w-100">
-                  <span class="error-message">{{ errors[0] }}</span>
-                  <div class="text-end mgb-20">
+                  <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                  <div class="mgt-12">
                     <button class="add-more" @click="addEmail">
                       <span class="icon-plus"></span> Add
                     </button>
@@ -84,8 +84,8 @@
                     <div class="items" v-for="item, ki in email_address_s" :key="ki">
                       <div class="item-content"> {{ item }} </div>
                       <div class="item-remove">
-                        <button class="btn btn-sm btn-danger" @click="removeItem(ki, 'email')">
-                          Remove
+                        <button class="button button-transparent p-1" @click="removeItem(ki, 'email')">
+                          <span class="icon-trash fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></span>
                         </button>
                       </div>
                     </div>
@@ -236,9 +236,6 @@
 .new-array-items .items {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 10px;
-    border-bottom: thin solid #ddd;
-    padding-bottom: 10px;
 }
 .new-array-items .items:nth-last-child(1) {
     margin-bottom: 0px;

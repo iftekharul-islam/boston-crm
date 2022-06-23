@@ -775,8 +775,8 @@ select {
             background: $white;
             @include flex-center;
             position: absolute;
-            right: 20px;
-            top: 12px;
+            right: 10px;
+            top: -5px;
             border: 1px solid transparent;
             cursor: pointer;
         }
@@ -858,7 +858,7 @@ select {
     background: $platinum;
     border-radius: 8px;
     padding: 6px 20px;
-    max-width: 300px;
+    max-width: 400px;
     p {
         color: $light-black;
     }
@@ -896,12 +896,20 @@ select {
 .chat-name {
     width: 240px;
     margin-right: 16px;
+    @include for-max-1399 {
+        min-width: 190px;
+        width: 190px;
+    }
     .chat-mail {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
         max-width: 180px;
         display: inline-block;
+        @include for-max-1399 {
+            max-width: 140px;
+        }
+        
     }
     img {
         width: 40px;
@@ -943,6 +951,15 @@ select {
     }
     .modal-body {
         padding: 0;
+        .list_groups {
+            .left-side {
+                p {
+                    &:first-of-type {
+                        width: 150px;
+                    }
+                }
+            }
+        }
     }
     .modal-footer {
         padding: 0;
@@ -993,7 +1010,8 @@ select {
     }
 }
 
-#contact-info {
+#contact-info,
+#provided-services {
     .modal-dialog {
         max-width: 456px;
     }
@@ -1098,6 +1116,15 @@ select {
         background: $white;
         border-radius: 4px;
         margin-top: 12px;
+    }
+}
+#borrower-info,
+#contact-info {
+    .new-array-items {
+        .items {
+            background: $platinum;
+            border: none;
+        }
     }
 }
 
