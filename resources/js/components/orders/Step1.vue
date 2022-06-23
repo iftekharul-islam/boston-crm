@@ -81,7 +81,7 @@
                                             class="dashboard-input w-100 loan-type-select" v-model="step1.loanType">
                                             <option value="">Please Select Loan Type</option>
                                             <option v-for="loan_type in loanTypes" :key="loan_type.id"
-                                                :value="loan_type.id">
+                                                :value="loan_type.id" :data-fha="loan_type.is_fha">
                                                 {{ loan_type.name }}
                                             </option>
                                         </select>
@@ -89,11 +89,11 @@
                                     </div>
                                 </ValidationProvider>
 
-                                <ValidationProvider class="group" name="FHA case no" rules="required"
+                                <ValidationProvider class="group" name="FHA case no" :rules="{ required: this.fhaExists == 1 }"
                                     v-slot="{ errors }">
                                     <div :class="{ 'invalid-form' : errors[0] }">
                                         <label for="" class="d-block mb-2 dashboard-label">FHA case no <span
-                                                class="text-danger require" v-if="step1.loanType"></span></label>
+                                                class="text-danger require" v-if="fhaExists == 1"></span></label>
                                         <input type="text" class="dashboard-input w-100" v-model="step1.fhaCaseNo">
                                         <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                                     </div>
@@ -164,7 +164,8 @@
                                                             <select id="providerTypeFee" class="dashboard-input w-100"
                                                                 v-model="providerTypes.default.type">
                                                                 <option value="">Choose Provided Service</option>
-                                                                <option :value="item.id" :data-full="item.is_full_appraisal" :key="ki"
+                                                                <option :value="item.id"
+                                                                    :data-full="item.is_full_appraisal" :key="ki"
                                                                     v-for="item, ki in appraisalTypes">{{ item.form_type
                                                                     }}</option>
                                                             </select>
@@ -228,7 +229,9 @@
                                     <select id="amcClientSelect" class="dashboard-input w-100 select2"
                                         v-model="step1.amcClient">
                                         <option value="">Choose Amc Client</option>
-                                        <option :value="item.id" :key="ik" v-for="item, ik in amcClients" :data-uad="item.fee_for_1004uad" :data-d="item.fee_for_1004d">{{ item.name
+                                        <option :value="item.id" :key="ik" v-for="item, ik in amcClients"
+                                            :data-uad="item.fee_for_1004uad" :data-d="item.fee_for_1004d"
+                                            :data-processing="item.processing_fee">{{ item.name
                                             }}</option>
                                     </select>
                                     <span class="icon-arrow-down bottom-arrow-icon"></span>
@@ -255,7 +258,9 @@
                                     <select id="lenderClientSelect" class="dashboard-input w-100"
                                         v-model="step1.lender">
                                         <option value="">Choose Lender</option>
-                                        <option :value="item.id" :key="ik" v-for="item, ik in lenderClients" :data-uad="item.fee_for_1004uad" :data-d="item.fee_for_1004d">{{
+                                        <option :value="item.id" :key="ik" v-for="item, ik in lenderClients"
+                                            :data-uad="item.fee_for_1004uad" :data-d="item.fee_for_1004d"
+                                            :data-processing="item.processing_fee">{{
                                             item.name }}</option>
                                     </select>
                                     <span class="icon-arrow-down bottom-arrow-icon"></span>
@@ -264,7 +269,6 @@
                             </div>
                         </ValidationProvider>
                     </div>
-
                 </div>
                 <div class="col-md-8 ">
                     <div class="form-box">
@@ -429,6 +433,7 @@
         data() {
             return {
                 oldOrderNo: false,
+                fhaExists: 0,
                 showStreetAddress: false,
                 streetAddress: [],
                 dateIssue: {
@@ -490,7 +495,8 @@
                     currentPlace: null,
                     markerIcon: "",
                     data: [],
-                }
+                },
+                isFullAppraisal: 0
             }
         },
         created() {
@@ -510,20 +516,25 @@
             this.select2Features();
         },
         methods: {
+            updateLoanType(event){
+                console.log(event.target.value)
+                this.step1.loanType = null
+            },
             select2Features() {
-                var changeCount = 0;
-                var isFullAppraisal = 0;
                 $(document).on("change", "#providerTypeFee", function (e) {
                     let value = e.target.value;
                     this.providerTypes.default.type = value;
                     this.checkProviderValidation(e, 1);
-                    isFullAppraisal = e.target.selectedOptions[0].dataset.full
+                    console.log(this.providerTypes)
+                    this.isFullAppraisal = e.target.selectedOptions[0].dataset.full
                 }.bind(this));
 
 
                 $("#loanTypeSelect").on("select2:select", function (e) {
                     let value = e.target.value;
                     this.step1.loanType = value;
+                    this.fhaExists = e.target.selectedOptions[0].dataset.fha
+                    console.log(this.fhaExists)
                 }.bind(this));
 
                 $(document).on("change", "#amcClientSelect", function (e) {
@@ -544,10 +555,8 @@
                     if (changeLender) {
                         $("#lenderClientSelect").val(this.step1.lender).trigger('change');
                     }
-                    //technologyFee caculation
-                    let uad = e.target.selectedOptions[0].dataset.uad
-                    let d = e.target.selectedOptions[0].dataset.d
-                    isFullAppraisal == 1 ? this.step1.technologyFee = uad : this.step1.technologyFee = d
+                    this.calculateTechnologyFee(e)
+
                 }.bind(this));
 
                 $("#lenderClientSelect").on("select2:select", function (e) {
@@ -559,17 +568,13 @@
                     if (findObject && findObject.client_type == "both") {
                         this.step1.amcClient = id;
                         changeLender = true;
-                        let uad = e.target.selectedOptions[0].dataset.uad
-                        let d = e.target.selectedOptions[0].dataset.d
-                        isFullAppraisal == 1 ? this.step1.technologyFee = uad : this.step1.technologyFee = d
+                        this.calculateTechnologyFee(e)
                     } else {
                         let checkAmcId = this.amcClients.find(ele => ele.id == this.step1.amcClient);
                         if (checkAmcId && checkAmcId.client_type == "both") {
                             this.step1.amcClient = null;
                             changeLender = true;
-                            let uad = e.target.selectedOptions[0].dataset.uad
-                            let d = e.target.selectedOptions[0].dataset.d
-                            isFullAppraisal == 1 ? this.step1.technologyFee = uad : this.step1.technologyFee = d
+                            this.calculateTechnologyFee(e)
                         }
                     }
                     if (changeLender) {
@@ -692,6 +697,18 @@
                     this.providerTypes.error.fee = true;
                 } else {
                     this.providerTypes.error.fee = false;
+                }
+            },
+            calculateTechnologyFee(e) {
+                //technologyFee caculation
+                let uad = e.target.selectedOptions[0].dataset.uad
+                let d = e.target.selectedOptions[0].dataset.d
+                let processingFee = e.target.selectedOptions[0].dataset.processing
+                this.isFullAppraisal == 1 ? this.step1.technologyFee = uad : this.step1.technologyFee = d
+                console.log(processingFee)
+                if (processingFee != '' && processingFee > 0) {
+                    let technologyFee = parseFloat(parseFloat(this.step1.technologyFee) + parseFloat(this.providerTypes.totalAmount * (processingFee / 100)))
+                    this.step1.technologyFee = technologyFee
                 }
             },
             remoteProviderType(item, index) {

@@ -33,7 +33,8 @@ class Client extends Model implements HasMedia, Auditable
         "can_inspect",
         "instruction",
         "company_id",
-        "created_by"
+        "created_by",
+        "com_required"
     ];
 
     public function setEmailAttribute($value)

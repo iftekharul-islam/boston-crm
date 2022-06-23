@@ -11,9 +11,9 @@ class LoanType extends Model implements Auditable
 {
 	 use SoftDeletes;
 	 use \OwenIt\Auditing\Auditable;
-	 
-	 protected $fillable = ['company_id', 'name'];
-	 
+
+	 protected $fillable = ['company_id', 'name', 'is_fha'];
+
 	 /**
 		* @return BelongsTo
 		*/

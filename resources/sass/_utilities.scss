@@ -1737,6 +1737,9 @@ html {
   .inline-flex-center {
     @include inline-flex-center;
   }
+  .flex-1 {
+    flex: 1;
+  }
   .underline {
     text-decoration: underline !important;
   }

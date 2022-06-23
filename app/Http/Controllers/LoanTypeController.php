@@ -56,6 +56,7 @@ class LoanTypeController extends BaseController
         $loan_type_data = [
             'company_id' => auth()->user()->companies()->first()->id,
             'name' => $request->name,
+            'is_fha' => $request->is_fha
         ];
         $this->repository->create($loan_type_data);
 

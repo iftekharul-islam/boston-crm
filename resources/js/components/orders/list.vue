@@ -328,31 +328,47 @@ select.form-control {
     height: auto;
     right: 0;
     top: 40px;
-    box-shadow: 0 5px 10px 0px rgb(0 0 0 / 50%);
-    border-radius: 0.25rem;
+    border: 1px solid rgba(25, 183, 162, 0.5);
+    box-shadow: 0px 4px 12px 4px rgba(0, 0, 0, 0.08);
+    border-radius: 8px;
     overflow: hidden;
     bottom: auto;
+    padding: 20px;
 }
 .column-list .col-item {
-    padding: 5px 5px 5px 30px;
+    padding: 0px 0px 0px 40px;
     cursor: pointer;
     position: relative;
+    margin-bottom: 12px;
 }
 
 .column-list .col-item::after {
     content: "";
     position: absolute;
-    height: 15px;
-    width: 15px;
+    height: 24px;
+    width: 24px;
     background: transparent;
-    border: thin solid #19b7a2;
+    border: 1px solid #19B7A2;
     left: 5px;
     top: 50%;
-    border-radius: 0.5rem;
+    border-radius: 4px;
     transform: translate(0, -50%);
 }
 .column-list .col-item.active::after {
     background: #19b7a2;
+}
+.column-list .col-item.active::before {
+    content: '';
+    display: inline-block;
+    transform: rotate(45deg);
+    height: 15px;
+    width: 8px;
+    border-bottom: 3px solid #ffffff;
+    border-right: 3px solid #ffffff;
+    position: absolute;
+    left: 13px;
+    z-index: 9;
+    top: 4px;
 }
 .view-btn {
     font-style: normal;
