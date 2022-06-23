@@ -40,29 +40,29 @@
           <div class="row">
             <div class="col-12">
 
-              <ValidationProvider name="Borrower Name" rules="required" v-slot="{ errors }">
+              <ValidationProvider class="group d-block" name="Borrower Name" rules="required" v-slot="{ errors }">
                 <div class="group" :class="{ 'invalid-form' : errors[0] }">
                   <label for="" class="d-block mb-2 dashboard-label">Borrower name <span class="require"></span></label>
                   <input type="text" v-model="borrower_name"  class="dashboard-input w-100">
-                  <span class="error-message">{{ errors[0] }}</span>
+                  <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
               </div>
               </ValidationProvider>
 
-              <ValidationProvider name="Co-borrower Name" rules="required" v-slot="{ errors }">
+              <ValidationProvider class="group d-block" name="Co-borrower Name" rules="required" v-slot="{ errors }">
                 <div class="group" :class="{ 'invalid-form' : errors[0] }">
                   <label for="" class="d-block mb-2 dashboard-label">Co-borrower name <span class="require"></span></label>
                   <input type="text" v-model="co_borrower_name" class="dashboard-input w-100">
-                    <span class="error-message">{{ errors[0] }}</span>
+                    <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                 </div>
               </ValidationProvider>
 
-              <ValidationObserver ref="addContactForm">
-                <ValidationProvider name="Contact No" :rules="{ 'required' : add.contact == null && borrower_contact == false, min: 10, max: 12 }" v-slot="{ errors }">
+              <ValidationObserver class="group d-block" ref="addContactForm">
+                <ValidationProvider  name="Contact No" :rules="{ 'required' : add.contact == null && borrower_contact == false, min: 10, max: 12 }" v-slot="{ errors }">
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
                     <label for="" class="d-block mb-2 dashboard-label">Contact no <span class="text-danger require"></span></label>
                     <input v-model="add.contact" type="text" class="dashboard-input w-100" @input="contactNumberChecking($event, 1)">
-                    <span class="error-message">{{ errors[0] }}</span>
-                    <div class="text-end mgb-20">
+                    <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                    <div class=" mgb-10 mgt-12">
                       <button class="add-more " @click="addContact">
                         <span class="icon-plus"></span> Add
                       </button>
@@ -71,8 +71,8 @@
                       <div class="items" v-for="item, ki in borrower_contact_s" :key="ki">
                         <div class="item-content"> {{ item }} </div>
                         <div class="item-remove">
-                          <button class="btn btn-sm btn-danger" @click="removeItem(ki, 'contact')">
-                            Remove
+                          <button class="button button-transparent p-1" @click="removeItem(ki, 'contact')">
+                             <span class="icon-trash fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></span>
                           </button>
                         </div>
                       </div>
@@ -81,16 +81,14 @@
                 </ValidationProvider>
               </ValidationObserver>
 
-              <div class="divider"></div>
-
-               <ValidationObserver ref="addEmailForm">
-                <ValidationProvider name="Email Address" :rules="{ 'required' : add.email == null && borrower_email == false }" v-slot="{ errors }">
+               <ValidationObserver class="group d-block" ref="addEmailForm">
+                <ValidationProvider  name="Email Address" :rules="{ 'required' : add.email == null && borrower_email == false }" v-slot="{ errors }">
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
                     <label for="" class="d-block mb-2 dashboard-label">Email address <span
                         class="text-danger require"></span></label>
                     <input v-model="add.email" type="text" class="dashboard-input w-100">
-                    <span class="error-message">{{ errors[0] }}</span>
-                    <div class="text-end mgb-20">
+                    <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                    <div class="mgb-10 mgt-10">
                       <button class="add-more" @click="addEmail">
                         <span class="icon-plus"></span> Add
                       </button>
@@ -99,8 +97,8 @@
                       <div class="items" v-for="item, ki in borrower_email_s" :key="ki">
                         <div class="item-content"> {{ item }} </div>
                         <div class="item-remove">
-                          <button class="btn btn-sm btn-danger" @click="removeItem(ki, 'email')">
-                            Remove
+                          <button class="button button-transparent p-1" @click="removeItem(ki, 'email')">
+                           <span class="icon-trash fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></span>
                           </button>
                         </div>
                       </div>
@@ -238,9 +236,7 @@
 .new-array-items .items {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 10px;
     border-bottom: thin solid #ddd;
-    padding-bottom: 10px;
 }
 .new-array-items .items:nth-last-child(1) {
     margin-bottom: 0px;

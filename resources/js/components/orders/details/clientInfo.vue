@@ -50,7 +50,7 @@
               <input type="file" @change="changeFileAmc">
               <label for="">Upload <span class="icon-upload ms-3 fs-20"><span class="path1"></span><span
                   class="path2"></span><span class="path3"></span></span></label>
-              <span class="text-primary">{{ amcFileName }}</span>
+              <span class="primary-text">{{ amcFileName }}</span>
             </div>
           </div>
           <div class="divider"></div>
@@ -77,7 +77,7 @@
                 <input type="file" @change="changeFileLender">
                 <label for="">Upload <span class="icon-upload ms-3 fs-20"><span class="path1"></span><span
                     class="path2"></span><span class="path3"></span></span></label>
-                <span class="text-primary">{{ lenderFileName }}</span>
+                <span class="primary-text">{{ lenderFileName }}</span>
               </div>
             </div>
           </div>

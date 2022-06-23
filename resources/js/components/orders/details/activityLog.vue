@@ -50,7 +50,6 @@
   }
   
   .logItem .logby {
-    font-size: 10px;
     font-weight: bold;
     color: rgb(43, 75, 216);
     display: flex;
