@@ -85,10 +85,11 @@ class LoanTypeController extends BaseController
      *
      * @return RedirectResponse
      */
-    public function update(LoanTypeCreateRequest $request, int $id): RedirectResponse
+    public function update(LoanTypeCreateRequest $request, int $id)
     {
         $loan_type_data = [
             'name' => $request->name,
+            'is_fha' => $request->is_fha
         ];
         $this->repository->update(attributes: $loan_type_data, id: $id);
 
