@@ -9,12 +9,12 @@
         </div>
         <div class="group" v-if="noteCheck == 1">
             <p class="text-light-black mgb-12">Note from this step</p>
-            <a href="#" class="primary-text mb-2">(Rewrite & send back)</a>
+            <p href="#" class="primary-text mb-2">(Rewrite & send back)</p>
             <p class="mb-0 text-light-black fw-bold">{{ note }}</p>
         </div>
         <div class="group" v-if="noteCheck == 2">
             <p class="text-light-black mgb-12">Note from this step</p>
-            <a href="#" class="primary-text mb-2">(Check & Upload)</a>
+            <p href="#" class="primary-text mb-2">(Check & Upload)</p>
             <p class="mb-0 text-light-black fw-bold">{{ note }}</p>
         </div>
         <div class="group">
