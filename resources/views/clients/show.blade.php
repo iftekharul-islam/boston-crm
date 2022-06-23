@@ -83,7 +83,12 @@
                             <div class="personal-info__group">
                                 <p class="mb-0 left-side">Processing fee</p>
                                 <span>:</span>
-                                <p class="right-side">{{ $client->processing_fee }}</p>
+                                <p class="right-side">{{ $client->processing_fee .'%'}}</p>
+                            </div>
+                            <div class="personal-info__group">
+                                <p class="mb-0 left-side">Com required</p>
+                                <span>:</span>
+                                <p class="right-side">{{ $client->com_required == 1 ? 'Yes' : 'No' }}</p>
                             </div>
                             <div class="personal-info__group">
                                 <p class="mb-0 left-side">Phone no</p>

@@ -83,6 +83,17 @@
                                                     class="text-danger"></span></label>
                                         <input type="number" onpaste="return false" min="0" onkeypress="return numbersOnly(event)" id="processing-fee" name="processing_fee" value="{{ old('processing_fee') }}" class="dashboard-input w-100">
                                     </div>
+                                    <div class="group">
+                                        <label for="com-required" class="d-block mb-2 dashboard-label com-required-label">Com Required</label>
+                                        <div class="position-relative">
+                                            <select name="com_required" value="{{ old('com_required') }}" id="com-required" class="dashboard-input w-100">
+                                                <option value="">Choose an option</option>
+                                                <option value="1">Yes</option>
+                                                <option value="0">No</option>
+                                            </select>
+                                            <span class="icon-arrow-down bottom-arrow-icon"></span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -199,19 +210,19 @@
                 if (clientType === 'lender') {
                     removeError();
 
-                    $(".address-label, .city-label, .state-label, .zip-label,.processing-fee-label").addClass('require');
+                    $(".address-label, .city-label, .state-label, .zip-label").addClass('require');
 
-                    $(".deducts-technology-fee-label, .fee-for-1004uad-label, .fee-for-1004d-label, .can-sign-label, .can-inspect-label").removeClass('require');
+                    $(".deducts-technology-fee-label, .fee-for-1004uad-label, .fee-for-1004d-label, .can-sign-label, .can-inspect-label,.processing-fee-label,.com-required-label").removeClass('require');
                 }else if(clientType === 'both'){
                     removeError();
 
-                    $(".address-label, .city-label, .state-label, .zip-label,.processing-fee-label,.deducts-technology-fee-label, .fee-for-1004uad-label, .fee-for-1004d-label, .can-sign-label, .can-inspect-label").addClass('require');
+                    $(".address-label, .city-label, .state-label, .zip-label,.deducts-technology-fee-label, .fee-for-1004uad-label, .fee-for-1004d-label, .can-sign-label, .can-inspect-label,.com-required-label,.processing-fee-label,").addClass('require');
                 } else {
                     removeError();
 
-                    $(".deducts-technology-fee-label, .fee-for-1004uad-label, .fee-for-1004d-label, .can-sign-label, .can-inspect-label").addClass('require');
+                    $(".deducts-technology-fee-label, .fee-for-1004uad-label, .fee-for-1004d-label, .can-sign-label, .can-inspect-label,.processing-fee-label,.com-required-label").addClass('require');
 
-                    $(".address-label, .city-label, .state-label, .zip-label,.processing-fee-label").removeClass('require');
+                    $(".address-label, .city-label, .state-label, .zip-label").removeClass('require');
 
                 }
             });
@@ -274,7 +285,15 @@
                     },
                     processing_fee: {
                         required: function () {
-                            return clientType === 'lender' || clientType === 'both'
+                            return clientType === 'amc' || clientType === 'both'
+                        },
+                        normalizer: function (value) {
+                            return value.trim();
+                        }
+                    },
+                    com_required: {
+                        required: function () {
+                            return clientType === 'amc' || clientType === 'both'
                         },
                         normalizer: function (value) {
                             return value.trim();
@@ -342,6 +361,9 @@
                     },
                     processing_fee: {
                         required: "Processing fee is required"
+                    },
+                    com_required: {
+                        required: "Is Com required ?"
                     },
                     fee_for_1004uad: {
                         required : "Technology fee for full appraisal(1004UAD) is required",
