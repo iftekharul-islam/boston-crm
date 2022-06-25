@@ -20,16 +20,18 @@ import "./helper/config"
 import "./helper/BostonMixin"
 
 import VueToast from 'vue-toast-notification';
+import draggable from 'vuedraggable'
 import 'vue-toast-notification/dist/theme-sugar.css';
 Vue.use(VueToast, {
     position: 'top-left',
     duration: 8000
 });
 
-
+Vue.use(draggable)
 Vue.component('ValidationProvider', ValidationProvider)
 Vue.component('ValidationObserver', ValidationObserver)
 Vue.component('v-select', vSelect)
+Vue.component('draggable', draggable)
 
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
