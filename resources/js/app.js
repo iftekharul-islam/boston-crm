@@ -7,6 +7,8 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import vSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css';
 
+import MSelect from "./src/select/MSelect";
+
 import VueSweetalert2 from 'vue-sweetalert2'
 import 'sweetalert2/dist/sweetalert2.min.css'
 
@@ -33,6 +35,7 @@ Vue.component('v-select', vSelect)
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
 Vue.use(VueSweetalert2)
+Vue.use(MSelect);
 
 Vue.config.productionTip = false
 Vue.prototype.$boston = boston

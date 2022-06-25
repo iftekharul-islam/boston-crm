@@ -53,12 +53,13 @@
                         <div :class="{ 'invalid-form' : errors[0] }">
                             <label for="" class="d-block mb-2 dashboard-label">Assign to<span
                                     class="text-danger require"></span></label>
-                            <select class="dashboard-input w-100" v-model="initialReview.assigned_to">
+                            <!-- <select class="dashboard-input w-100" v-model="initialReview.assigned_to">
                                 <option value="">Please select to assign</option>
                                 <option v-for="user in users" :key="user.id" :value="user.id">
                                     {{ user.name }}
                                 </option>
-                            </select>
+                            </select> -->
+                            <m-select theme="blue" :options="users" object item-text="name" item-value="id" v-model="initialReview.assigned_to"></m-select>
                             <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                         </div>
                     </ValidationProvider>

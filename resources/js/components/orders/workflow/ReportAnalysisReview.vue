@@ -44,12 +44,13 @@
                 <ValidationProvider class="group" name="Assign to" rules="required" v-slot="{ errors }">
                     <div :class="{ 'invalid-form' : errors[0] }">
                         <label for="" class="d-block mb-2 dashboard-label">Assign to </label>
-                        <select name="" class="dashboard-input w-100 loan-type-select" v-model="assignTo">
+                        <!-- <select name="" class="dashboard-input w-100 loan-type-select" v-model="assignTo">
                             <option value="">Please Select a user</option>
                             <option v-for="user in users" :key="user.id" :value="user.id">
                                 {{ user.name }}
                             </option>
-                        </select>
+                        </select> -->
+                        <m-select theme="blue" :options="users" object item-text="name" item-value="id" v-model="assignTo"></m-select>
                         <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                     </div>
                 </ValidationProvider>
