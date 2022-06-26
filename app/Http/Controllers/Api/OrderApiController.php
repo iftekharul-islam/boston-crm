@@ -105,6 +105,7 @@ class OrderApiController extends Controller
             }
 
             $fhaCaseNo = $step['fhaCaseNo'];
+            $propertyType = $step['propertyType'];
             $loanNo = $step['loanNo'];
             $technologyFee = $step['technologyFee'];
             $loanType = $step['loanType'];
@@ -130,6 +131,7 @@ class OrderApiController extends Controller
             $apprlDetails->loan_type = isset($loanType['id']) ? $loanType['id'] : $loanType;
             $apprlDetails->technology_fee = $technologyFee;
             $apprlDetails->fha_case_no = $fhaCaseNo;
+            $apprlDetails->property_type = $propertyType;
             $apprlDetails->save();
 
 

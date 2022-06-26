@@ -10,6 +10,7 @@
             :appraisal-types="{{ $appraisal_types }}"
             :loan-types="{{ $loan_types }}"
             :amc-clients="{{ $amc_clients }}"
-            :lender-clients="{{ $lender_clients }}">
+            :lender-clients="{{ $lender_clients }}"
+            :property-types="{{ $property_types }}">
     </order-create>
 @endsection

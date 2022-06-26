@@ -41,7 +41,7 @@
             </div>
             <div class="order-details__right col-md-6">
                 {{-- Appraisal Details --}}
-                <appraisal-details :order="{{ $order }}" :appraisers="{{ $appraisers }}" :loan-types="{{ $loan_types }}" :order-id="'{{ $order_id }}'"></appraisal-details>
+                <appraisal-details :order="{{ $order }}" :property-types="{{ $property_types }}" :appraisers="{{ $appraisers }}" :loan-types="{{ $loan_types }}" :order-id="'{{ $order_id }}'"></appraisal-details>
                 {{-- Provided Services --}}
                 <provided-services :order="{{ $order }}" :appraisal-types="{{ $appraisal_types }}" :order-id="'{{ $order_id }}'"></provided-services>
                 {{-- Client --}}

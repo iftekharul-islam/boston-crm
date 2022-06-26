@@ -14,6 +14,7 @@ use App\Models\Order;
 use App\Helpers\CrmHelper;
 use Illuminate\Support\Js;
 use App\Models\ContactInfo;
+use App\Models\PropertyType;
 use App\Models\BorrowerInfo;
 use App\Models\PropertyInfo;
 use Illuminate\Http\Request;
@@ -325,8 +326,9 @@ class OrderController extends BaseController
 
         $company = auth()->user()->companies()->first();
         $userID = auth()->user()->id;
+        $property_types = PropertyType::all();
 
-        $data = compact('system_order_no', 'userID', 'company', 'appraisal_users', 'appraisal_types', 'loan_types', 'amc_clients', 'lender_clients');
+        $data = compact('system_order_no', 'userID', 'company', 'appraisal_users', 'appraisal_types', 'loan_types', 'amc_clients', 'lender_clients','property_types');
 
         if ($get->array && $get->array == 'true') {
             return $data;
@@ -381,8 +383,9 @@ class OrderController extends BaseController
         $diff_in_days = Carbon::parse($order_due_date->due_date)->diffInDays();
         $diff_in_hours = Carbon::parse($order_due_date->due_date)->diffInHours();
         $all_users = $this->repository->getUserExpectRole(role: 'admin');
+        $property_types = PropertyType::all();
 
-        return view('order.show', compact('all_users', 'noRewrite', 'order_file_types', 'order_files', 'order', 'diff_in_days', 'diff_in_hours','appraisers','appraisal_types','loan_types','all_amc','all_lender'));
+        return view('order.show', compact('all_users', 'noRewrite', 'order_file_types', 'order_files', 'order', 'diff_in_days', 'diff_in_hours','appraisers','appraisal_types','loan_types','all_amc','all_lender','property_types'));
     }
 
     /**
@@ -413,7 +416,8 @@ class OrderController extends BaseController
                 'contactInfo'
             )->where('id', $id)->first();
         $order->file = $this->repository->getOrderFile($id);
-        return view('order.edit',compact('order', 'appraisal_users', 'amc_clients', 'lender_clients', 'appraisal_types', 'loan_types', 'client_users', 'company', 'userID'));
+        $property_types = PropertyType::all();
+        return view('order.edit',compact('order', 'appraisal_users', 'amc_clients', 'lender_clients', 'appraisal_types', 'loan_types', 'client_users', 'company', 'userID','property_types'));
     }
 
     /**
