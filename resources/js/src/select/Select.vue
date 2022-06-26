@@ -107,10 +107,15 @@ export default {
     mounted() {
         document.addEventListener('click', (e) => {
             let target = e.target;
-            let container = document.querySelector(".vue-select");
-            if (!container.contains(target)) {
+            let el = this.$refs["vue-select"];
+            
+            if (!(el == target || el.contains(target))) {
                 this.closeBox(true);
             }
+
+            // if (!container.contains(target)) {
+            //     this.closeBox(true);
+            // }
         });
     },
     methods : {
