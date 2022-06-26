@@ -49,21 +49,20 @@ export default {
     }),
     created() {
         let order = this.order;
-        this.inspectionData(order);
+        this.fetchData(order);
         this.$root.$on('update_modal', () => {
             this.isModal = false
         })
         this.$root.$on('call_log_update', (res) => {
             this.isModal = false
-            this.inspectionData(res);
+            this.fetchData(res);
         });
     },
     methods: {
-        inspectionData(order) {
+        fetchData(order) {
             this.orderData = order
             this.id = this.orderData.id
             this.logs = !_.isEmpty(this.orderData.call_log) ? this.orderData.call_log : []
-            console.log(this.logs)
         },
 
     }
