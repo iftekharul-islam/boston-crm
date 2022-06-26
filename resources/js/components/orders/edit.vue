@@ -19,7 +19,7 @@
         <div class="alert alert-success" v-if="submitResult.submitStatus">
             {{ submitResult.message }}
         </div>
-        <Step1 v-show="step === 1" 
+        <Step1 v-show="step === 1"
                 :type="2"
                 :order="order"
                 @step-change-active="stepChangeActiveStatus"
@@ -29,8 +29,9 @@
                 :appraisal-types="appraisalTypes"
                 :loan-types="loanTypes"
                 :amc-clients="amcClients"
-                :lender-clients="lenderClients"/>
-               
+                :lender-clients="lenderClients"
+                :property-types="propertyTypes"/>
+
         <Step2 v-show="step === 2" :type="2" :order="order"/>
       </div>
     </div>
@@ -53,6 +54,7 @@ export default {
     loanTypes: [],
     amcClients: [],
     lenderClients: [],
+    propertyTypes: [],
   },
   components: {
     Step1,
