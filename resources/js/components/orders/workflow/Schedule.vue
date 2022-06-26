@@ -47,7 +47,7 @@
                                 <div :class="{ 'invalid-form' : errors[0] }">
                                     <label for="" class="d-block mb-2 dashboard-label">Appraiser name <span
                                             class="text-danger require"></span></label>
-                                    <div class="position-relative">
+                                    <!-- <div class="position-relative">
                                         <select id="apprClientSelect" class="dashboard-input w-100"
                                             v-model="scheduleData.appraiser_id">
                                             <option value="">Please select appraiser</option>
@@ -57,7 +57,8 @@
                                             </option>
                                         </select>
                                         <span class="icon-arrow-down bottom-arrow-icon"></span>
-                                    </div>
+                                    </div> -->
+                                    <m-select :options="appraisers" object item-value="id" item-text="name" v-model="scheduleData.appraiser_id"></m-select>
                                     <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                                 </div>
                             </ValidationProvider>
@@ -80,7 +81,7 @@
                                 <div :class="{ 'invalid-form' : errors[0] }">
                                     <label for="" class="d-block mb-2 dashboard-label">Duration <span
                                             class="text-danger require"></span></label>
-                                    <div class="position-relative">
+                                    <!-- <div class="position-relative">
                                         <select class="dashboard-input w-100" v-model="scheduleData.duration">
                                             <option value="">Please select duration</option>
                                             <option v-for="duration in durations" :key="duration.duration"
@@ -89,7 +90,8 @@
                                             </option>
                                         </select>
                                         <span class="icon-arrow-down bottom-arrow-icon"></span>
-                                    </div>
+                                    </div> -->
+                                    <m-select :options="durations" object item-text="duration" item-value="duration" v-model="scheduleData.duration"></m-select>
                                     <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                                 </div>
                             </ValidationProvider>

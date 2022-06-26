@@ -67,11 +67,11 @@
                         <span class="call-list-item">12.03.2022, 3:00PM</span>
                         <span class="call-list-item"><p class="mb-0 scheduled">Scheduled</p></span>
                         <span class="call-list-item">
-                            <a href="#" class="icon-list" ><span class="icon-eye text-blue-eye fs-20"><span class="path1"></span><span class="path2"></span></span></a>
-                            <a href="#" class="icon-list"><span class="icon-note text-purple fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></span></a>
-                            <a href="#" class="icon-list"><span  class="icon-messages2 primary-text fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span></span></a>
-                            <a href="#" class="icon-list"><span class="icon-calendar text-brown fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span class="path7"></span><span class="path8"></span></span></a>
-                            <a href="#" class="icon-list"> <span class="icon-messages text-yellow-msg  fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span></a>
+                            <a href="#" class="icon-list" data-bs-placement="bottom" title="Details"><span class="icon-eye text-blue-eye fs-20"><span class="path1"></span><span class="path2"></span></span></a>
+                            <a href="#" ata-bs-toggle="tooltip" data-bs-placement="bottom" title="Quick view" class="icon-list quick-view-icon" data-bs-toggle="modal" data-bs-target="#exampleModal"><span class="icon-note text-purple fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></span></a>
+                            <a href="#" class="icon-list" data-bs-placement="bottom" title="Call log"><span class="icon-messages2 primary-text fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span></span></a>
+                            <a href="#" class="icon-list" data-bs-placement="bottom" title="Schedule"><span class="icon-calendar text-brown fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span class="path7"></span><span class="path8"></span></span></a>
+                            <a href="#" class="icon-list"  data-bs-placement="bottom" title="Email & SMS"> <span class="icon-messages text-yellow-msg  fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span></a>
                             <a href="#" class="icon-list"><span class="icon-call text-light-red fs-20"><span class="path1"></span><span class="path2"></span></span></a>
                             <button class="button button-transparent p-0" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"><span class="icon-arrow-bottom"></span></button>
                         </span>
@@ -124,6 +124,102 @@
                            <p class="text-center mb-1 text-white">10</p>
                            <p class="text-center text-white mb-0">More</p>
                         </a>
+                    </div>
+                    {{-- quick view --}}
+                    <div class="modal fade quick-view-modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog h-100">
+                          <div class="modal-content h-100 p-0">
+                            <div class="bg-gray pdl-32 pdr-22 d-flex align-items-center justify-content-between h-60 min-h-60 header-modal">
+                              <h5 class="fs-20 fw-bold text-white mb-0" id="exampleModalLabel">Quickview</h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body h-100 overflow-auto">
+                              <p class="mb-3 fw-bold">Client info</p>
+                              <div class="modal-item">
+                                <p class="mb-0">AMC name</p>
+                                <span>:</span>
+                                <p class="mb-0 text-600">EStreet Appraisal Management
+                                    Company, LLC</p>
+                              </div>
+                              <a href="#" class="primary-text underline text-600 mgb-24 d-inline-block">AMC requirements</a>
+                              <div class="modal-item">
+                                <p class="mb-0">AMC name</p>
+                                <span>:</span>
+                                <p class="mb-0 text-600">EStreet Appraisal Management
+                                    Company, LLC</p>
+                              </div>
+                              <div class="modal-item">
+                                <p class="mb-0">AMC name</p>
+                                <span>:</span>
+                                <p class="mb-0 text-600">EStreet Appraisal Management
+                                    Company, LLC</p>
+                              </div>
+                              <a href="#" class="primary-text underline text-600 d-inline-block">Lender requirements</a>
+                              <div class="mgt-32">
+                                <p class="mb-3 text-600">Property info</p>
+                                <div class="modal-item">
+                                    <p class="mb-0">Property address</p>
+                                    <span>:</span>
+                                    <p class="mb-0 text-600">EStreet Appraisal Management
+                                        Company, LLC</p>
+                                  </div>
+                                  <div class="modal-item">
+                                    <p class="mb-0">Property address</p>
+                                    <span>:</span>
+                                    <p class="mb-0 text-700 fs-20 primary-text">EStreet Appraisal Management
+                                        Company, LLC</p>
+                                  </div>
+                                  <div class="modal-item">
+                                    <p class="mb-0">Due date</p>
+                                    <span>:</span>
+                                    <p class="mb-0 text-600">33-33-33</p>
+                                  </div>
+                                  <div class="modal-item">
+                                    <p class="mb-0">Order no</p>
+                                    <span>:</span>
+                                    <p class="mb-0 text-600">4654765765</p>
+                                  </div>
+                                  <div class="modal-item">
+                                    <p class="mb-0">Order receive date</p>
+                                    <span>:</span>
+                                    <p class="mb-0 text-600">40-89-32</p>
+                                  </div>
+                                  <div class="mgt-32">
+                                    <p class="mb-3 text-600 ">Contact info</p>
+                                    <div class="modal-item">
+                                        <p class="mb-0">Contact name</p>
+                                        <span>:</span>
+                                        <p class="mb-0 text-600">Abid ali ahmede</p>
+                                      </div>
+                                      <div class="modal-item">
+                                        <p class="mb-0">Phone</p>
+                                        <span>:</span>
+                                        <p class="mb-0 text-600">35465765565</p>
+                                      </div>
+                                      <div class="modal-item">
+                                        <p class="mb-0">Email</p>
+                                        <span>:</span>
+                                        <p class="mb-0 text-600">exmplll@mail.com</p>
+                                      </div>
+                                  </div>
+                              </div>
+                              {{-- notes --}}
+                              <div class="mt-3">
+                                <p class="text-700 mb-3">Notes</p>
+                                <p class="note-text mb-3 text-700">Lorem ipsum, or lipsum as it is sometimes known, is dummy text used
+                                    in laying out print, graphic or web designs. The passage is attributed
+                                    to an unknown</p>
+                                <p class="note-text text-700">Lorem ipsum, or lipsum as it is sometimes known, is dummy text used
+                                        in laying out print, graphic or web designs. The passage is attributed
+                                        to an unknown</p>
+                              </div>
+                            </div>
+                            {{-- <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                              <button type="button" class="btn btn-primary">Save changes</button>
+                            </div> --}}
+                          </div>
+                        </div>
                     </div>
                 </div>
                 <div class="call-item">

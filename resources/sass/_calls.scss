@@ -224,3 +224,36 @@
         text-overflow: ellipsis;
     }
 }
+
+.quick-view-modal {
+    padding: 20px;
+    .modal-dialog {
+        margin: 0 0 0 auto;
+        max-width: 680px;
+        .modal-content {
+            border: none;
+            border-radius: 8px;
+            .header-modal {
+                border-radius: 8px 8px 0px 0px;
+            }
+            .modal-body {
+                padding: 24px 32px;
+                .modal-item {
+                    display: flex;
+                    margin-bottom: 16px;
+                    p {
+                        &:first-of-type {
+                            width: 145px;
+                            min-width: 145px;
+                        }
+                        
+                    }
+                    span {
+                        margin: 0 8px;
+                        display: inline-block;
+                    }
+                }
+            }
+        }
+    }
+}

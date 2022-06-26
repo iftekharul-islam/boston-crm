@@ -1700,10 +1700,15 @@ html {
   .h-40 {
     height: 40px;
   }
+  .h-60 {
+    height: 60px;
+  }
   .h-64 {
     height: 64px;
   }
-
+  .min-h-60 {
+    min-height: 60px;
+  }
   // font family
   .avetra-regular {
     font-family: "averta-regular";

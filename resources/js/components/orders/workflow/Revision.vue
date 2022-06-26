@@ -151,23 +151,25 @@
                 <p class="mgb-22 fs-20 fw-bold">Mark as delivered</p>
                 <div class="group">
                   <label for="" class="d-block mb-2 dashboard-label">Completed by <span class="require"></span> </label>
-                  <div class="position-relative">
+                  <!-- <div class="position-relative">
                     <select name="" id="" v-model="marked.completed_by" class="dashboard-input gray-border w-100">
                       <option value="">Select one</option>
                       <option :value="item.id" :key="ui" v-for="item, ui in usersInfo">{{ item.name }}</option>
                     </select>
                     <span class="icon-arrow-down bottom-arrow-icon"></span>
-                  </div>
+                  </div> -->
+                  <m-select theme="blue" :options="usersInfo" object item-text="name" item-value="id" v-model="marked.completed_by"></m-select>
                 </div>
                 <div class="group">
                   <label for="" class="d-block mb-2 dashboard-label">Delivered by <span class="require"></span> </label>
-                  <div class="position-relative">
+                  <!-- <div class="position-relative">
                     <select name="" v-model="marked.delivered_by" id="" class="dashboard-input gray-border w-100">
                       <option value="">Select one</option>
                       <option :value="item.id" :key="ui" v-for="item, ui in usersInfo">{{ item.name }}</option>
                     </select>
                     <span class="icon-arrow-down bottom-arrow-icon"></span>
-                  </div>
+                  </div> -->
+                  <m-select theme="blue" :options="usersInfo" object item-text="name" item-value="id" v-model="marked.delivered_by"></m-select>
                 </div>
                 <div class="group">
                   <label for="" class="d-block mb-2 dashboard-label">Delivered Date <span class="require"></span> </label>

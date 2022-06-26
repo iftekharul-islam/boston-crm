@@ -36,7 +36,8 @@
                :appraisal-types="appraisalTypes"
                :loan-types="loanTypes"
                :amc-clients="amcClients"
-               :lender-clients="lenderClients"/>
+               :lender-clients="lenderClients"
+               :property-types="propertyTypes"/>
         <Step2 v-show="step === 2" :type="1" :order="[]"/>
       </div>
     </div>
@@ -58,6 +59,7 @@ export default {
     company: [],
     amcClients: [],
     lenderClients: [],
+    propertyTypes: [],
     user_id: null
   },
   components: {
@@ -88,11 +90,11 @@ export default {
             this.step2Data = res.data;
           }
       });
-      
+
       this.$root.$on("updateProviderData", (res) => {
           this.providedData = res;
       });
-      
+
       this.$root.$on("submitOrder", (res) => {
           this.$boston.apiPost('store/order', {'step1' : this.step1Data, order: [], type: false, 'step2' : this.step2Data, 'company': this.company, 'providedData' : this.providedData, 'user_id': this.user_id }).then(res => {
               this.submitResult.error = res.error;
