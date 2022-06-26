@@ -146,7 +146,8 @@ trait CrmHelper {
             'qualityAssurance.assignee',
             'qualityAssurance.attachments',
             'qualityAssurance.updatedBy',
-            'comlist'
+            'comlist',
+            'callLog.caller'
         )->where('id', $id)->first();
 
         return $this->checkActiveStep($order);
