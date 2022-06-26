@@ -106,6 +106,7 @@ export default {
     },
     mounted() {
         document.addEventListener('click', (e) => {
+            let target = e.target;
             let container = this.$refs['vue-select'];
             if (!container.contains(target)) {
                 this.closeBox(true);
