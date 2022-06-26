@@ -6,7 +6,6 @@ use Auth;
 use Carbon\Carbon;
 use App\Models\Order;
 use App\Models\OrderWQa;
-use App\Models\OrderWCom;
 use App\Models\OrderWComList;
 use App\Models\OrderWInspection;
 use App\Models\OrderWInitialReview;
@@ -121,43 +120,12 @@ class OrderWorkflowRepository extends BaseRepository
 
     public function saveCom($data, $id)
     {
-        for($i = 0; $i < count($data); $i++){
-            $com = new OrderWCom();
-            $com->order_id = $id;
-            $com->address = $data[$i]['address'];
-            $com->lat = $data[$i]['lat'];
-            $com->lng = $data[$i]['lng'];
-            $com->serial = $i+1;
-            $com->save();
-        }
-        return true;
-    }
-
-    public function addCom($data){
-        $comSerial = OrderWCom::where('order_id',$data['order_id'])
-            ->orderBy('serial','desc')
-            ->first();
-        $com = new OrderWCom();
-        $com->order_id = $data['order_id'];
-        $com->address = $data['address'];
-        $com->lat = $data['lat'];
-        $com->lng = $data['lng'];
-        if($comSerial){
-            $com->serial = $comSerial->serial + 1;
-        }else{
-            $com->serial = 1;
-        }
-
+        $com = new OrderWComList();
+        $com->order_id = $id;
+        $com->destination = json_encode($data);
         $com->save();
 
-        return true;
-}
-
-    public function deleteCom($id){
-        $order_w_com = OrderWCom::find($id);
-        if($order_w_com){
-            $order_w_com->delete();
-        }
-        return true;
+        return $com;
     }
+
 }
