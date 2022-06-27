@@ -38,13 +38,8 @@
                                 <div class="position-relative" :class="{ 'invalid-form' : errors[0] }">
                                     <label for="" class="d-block mb-2 dashboard-label">AMC Name <span
                                             class="require"></span></label>
-                                    <b-form-select v-model="amc_id" :options="allAmc" value-field="id" text-field="name"
-                                        class="dashboard-input w-100">
-                                        <template #first>
-                                            <b-form-select-option value="" disabled>-- Please select an option --
-                                            </b-form-select-option>
-                                        </template>
-                                    </b-form-select>
+                                    <m-select v-model="amc_id" @change="changeClientType('amc', $event)"
+                                        :options="allAmc" object item-value="id" item-text="name"></m-select>
                                     <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                                 </div>
                             </ValidationProvider>
@@ -68,7 +63,8 @@
                                 <div class="position-relative" :class="{ 'invalid-form' : errors[0] }">
                                     <label for="" class="d-block mb-2 dashboard-label">Lender Name <span
                                             class="require"></span></label>
-                                    <m-select v-model="lender_id" @change="changeClientType('lender', $event)" :options="allLender" object item-value="id" item-text="name"></m-select>
+                                    <m-select v-model="lender_id" @change="changeClientType('lender', $event)"
+                                        :options="allLender" object item-value="id" item-text="name"></m-select>
                                     <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                                 </div>
                             </ValidationProvider>
@@ -142,6 +138,19 @@
                 this.amcNewFile = e.target.files[0]
                 this.amcFileName = e.target.files[0].name
             },
+            changeClientType(type, value) {
+                if (type == 'amc') {
+                    let amcDetails = this.allAmc.find(ele => ele.id == value);
+                    if (amcDetails.client_type == 'both') {
+                        this.lender_id = amcDetails.id;
+                    }
+                } else {
+                    let lenderDetails = this.allLender.find(ele => ele.id == value);
+                    if (lenderDetails.client_type == 'both') {
+                        this.amc_id = lenderDetails.id;
+                    }
+                }
+            },
             saveClient() {
                 let formData = new FormData()
                 formData.append('amc_id', this.amc_id)
@@ -167,66 +176,6 @@
             }
         }
     }
-  },
-  created() {
-    this.getClientInfo(this.order);
-  },
-  methods: {
-    getClientInfo(order) {
-        let orderDetails = order
-        this.amc_id = orderDetails.amc.id
-        this.amc_file = orderDetails.amc_file
-        this.amc_name = orderDetails.amc.name
-        this.lender_id = orderDetails.lender.id
-        this.lender_file = orderDetails.lender_file
-        this.lender_name = orderDetails.lender.name
-        this.lender_address = orderDetails.lender.address
-    },
-    changeFileLender(e) {
-      this.lenderNewFile = e.target.files[0]
-      this.lenderFileName = e.target.files[0].name
-    },
-    changeFileAmc(e) {
-      this.amcNewFile = e.target.files[0]
-      this.amcFileName = e.target.files[0].name
-    },
-    changeClientType(type, value) {
-      if (type == 'amc') {
-        let amcDetails = this.allAmc.find(ele => ele.id == value);
-        if (amcDetails.client_type == 'both') {
-            this.lender_id = amcDetails.id;
-        }
-      } else {
-        let lenderDetails = this.allLender.find(ele => ele.id == value);
-        if (lenderDetails.client_type == 'both') {
-          this.amc_id = lenderDetails.id;
-        }
-      }
-    },
-    saveClient() {
-      let that = this
-      let formData = new FormData()
-      formData.append('amc_id', this.amc_id)
-      formData.append('lender_id', this.lender_id)
-      formData.append('address', this.lender_address)
-      formData.append('amc_file', this.amcNewFile)
-      formData.append('lender_file', this.lenderNewFile)
-
-      axios.post('update-client-info/' + this.orderId, formData)
-          .then(res => {
-            this.getClientInfo(res.data.data)
-            that.message = res.data.message
-            this.$toast.open({
-                message: that.message,
-                type: res.error == true ? 'error' : 'success',
-            });
-            that.$bvModal.hide('client-info');
-          }).catch(err => {
-
-          })
-    }
-  }
-}
 </script>
 
 <style scoped>
