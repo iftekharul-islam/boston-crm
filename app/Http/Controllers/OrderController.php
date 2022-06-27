@@ -523,9 +523,7 @@ class OrderController extends BaseController
     public function updateClientInfo(Request $request,$order_id)
     {
         $this->repository->updateClientDetails($order_id,$request->all());
-
         $orderData = $this->orderDetails($order_id);
-
         return [
             'error' => false,
             'message' => 'Basic info updated successfully !',
@@ -671,6 +669,12 @@ class OrderController extends BaseController
             "order_id" => $order->id
         ];
         $this->repository->addActivity($data);
+        $order = $this->orderDetails($order->id);
+        return response()->json([
+            "error" => false,
+            "message" => $returnMessage,
+            'order' => $order,
+        ]);
     }
 
     public function searchOrderByFiltering(Request $get) {

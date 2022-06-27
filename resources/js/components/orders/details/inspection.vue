@@ -36,14 +36,7 @@
                                 <div :class="{ 'invalid-form' : errors[0] }">
                                     <label for="" class="d-block mb-2 dashboard-label">Appraiser name <span
                                             class="text-danger require"></span></label>
-                                    <select id="apprClientSelect" class="dashboard-input w-100 select2"
-                                        v-model="inspection.appraiser_id">
-                                        <option value="">Please select appraiser</option>
-                                        <option v-for="appraisar in appraisers" :key="appraisar.id"
-                                            :value="appraisar.id">
-                                            {{ appraisar.name }}
-                                        </option>
-                                    </select>
+                                    <m-select v-model="inspection.appraiser_id" :options="appraisers" item-value="id" item-text="name" object></m-select>
                                     <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                                 </div>
                             </ValidationProvider>
@@ -66,13 +59,14 @@
                                 <div :class="{ 'invalid-form' : errors[0] }">
                                     <label for="" class="d-block mb-2 dashboard-label">Duration <span
                                             class="text-danger require"></span></label>
-                                    <select class="dashboard-input w-100" v-model="inspection.duration">
+                                    <!-- <select class="dashboard-input w-100" v-model="inspection.duration">
                                         <option value="">Please select duration</option>
                                         <option v-for="duration in durations" :key="duration.duration"
                                             :value="duration.duration">
                                             {{ duration.duration }}
                                         </option>
-                                    </select>
+                                    </select> -->
+                                    <m-select v-model="inspection.duration" :options="durations" item-value="duration" item-text="duration" object></m-select>
                                     <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                                 </div>
                             </ValidationProvider>
@@ -169,9 +163,7 @@
                                 this.$root.$emit('wk_update', this.orderData);
                                 this.$root.$emit('wk_flow_menu', this.orderData);
                                 this.$root.$emit('wk_flow_toast', res);
-                                setTimeout(function () {
-                                    this.$bvModal.hide('inspection')
-                                }.bind(this), 2000);
+                                this.$bvModal.hide('inspection')
                             })
                     }
                 })

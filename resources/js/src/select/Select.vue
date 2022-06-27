@@ -78,30 +78,7 @@ export default {
         this.setKey = Math.floor(Math.random(10000) * 1000);
         this.interSearch = "";
         this.items = this.options;
-
-        if (this.$props.object !== undefined) {
-            this.returnObject = true;
-        }
-        if (this.$props.itemValue === undefined) {
-            this.itemValue = this.itemText;
-        }
-        if (this.$props.multiSelect !== undefined) {
-            this.multiple = true;
-        }
-        
-        let findItem = null;
-        if (this.returnObject == true) {
-            let modelDataFilter = this.$attrs.modelData;
-            if(typeof this.$attrs.modelData == 'object') {
-                modelDataFilter = this.$attrs.modelData[this.itemValue];
-            }
-            findItem = this.items.find( (ele) => ele[this.itemValue] == modelDataFilter );
-        } else {
-            findItem = this.items.find( (ele) => ele == this.$attrs.modelData );
-        }
-        if (findItem || this.multiple) {
-            this.initalCurrentValue();
-        }
+        this.initCurrentData(this.$props, this.$attrs);
         this.setTheme();
     },
     mounted() {
@@ -119,6 +96,30 @@ export default {
         });
     },
     methods : {
+        initCurrentData(props, attr) {
+            if (props.object !== undefined) {
+                this.returnObject = true;
+            }
+            if (props.itemValue === undefined) {
+                this.itemValue = this.itemText;
+            }
+            if (props.multiSelect !== undefined) {
+                this.multiple = true;
+            }        
+            let findItem = null;
+            if (this.returnObject == true) {
+                let modelDataFilter = attr.modelData;
+                if(typeof attr.modelData == 'object') {
+                    modelDataFilter = attr.modelData ? attr.modelData[this.itemValue] : [];
+                }
+                findItem = this.items.find( (ele) => ele[this.itemValue] == modelDataFilter );
+            } else {
+                findItem = this.items.find( (ele) => ele == attr.modelData );
+            }
+            if (findItem || this.multiple) {
+                this.initalCurrentValue();
+            }
+        },
         setTheme(theme = null) {
             if (theme == null) theme = this.$props.theme;
             if (theme !== undefined || theme != null) {
@@ -305,8 +306,17 @@ export default {
         }
     },
     watch: {
-        currentValue: function(val){
-           
+        $attrs : {
+            handler(val) {
+                this.initCurrentData(this.$props, val);
+            }, 
+            deep: true
+        },
+        $props : {
+            handler(val) {
+                this.initCurrentData(val, this.$attrs);
+            }, 
+            deep: true
         }
     }
 }
