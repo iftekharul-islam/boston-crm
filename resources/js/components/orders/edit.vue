@@ -5,8 +5,7 @@
         <div class="d-flex align-items-center justify-content-between">
           <p class="fw-bold">Edit Order # <strong class="text-success">{{ order.system_order_no }}</strong></p>
           <div class="step">
-            <button @click="gotoStep(1)" class="step-btn pointer"
-                    :class="{'active': step === 1}">Step 1</button>
+            <button @click="gotoStep(1)" class="step-btn pointer" :class="{'active': step === 1}">Step 1</button>
             <button @click="gotoStep(2)" class="step-btn" :class="{'active': step === 2}">Step 2</button>
           </div>
         </div>
@@ -20,7 +19,8 @@
         <div class="alert alert-success" v-if="submitResult.submitStatus">
             {{ submitResult.message }}
         </div>
-        <Step1 v-show="step === 1" :type="2"
+        <Step1 v-show="step === 1"
+                :type="2"
                 :order="order"
                 @step-change-active="stepChangeActiveStatus"
                 :order-list-url="orderList"
@@ -29,7 +29,9 @@
                 :appraisal-types="appraisalTypes"
                 :loan-types="loanTypes"
                 :amc-clients="amcClients"
-                :lender-clients="lenderClients"/>
+                :lender-clients="lenderClients"
+                :property-types="propertyTypes"/>
+
         <Step2 v-show="step === 2" :type="2" :order="order"/>
       </div>
     </div>
@@ -52,6 +54,7 @@ export default {
     loanTypes: [],
     amcClients: [],
     lenderClients: [],
+    propertyTypes: [],
   },
   components: {
     Step1,
@@ -85,11 +88,11 @@ export default {
                 this.step2Data = res.data;
             }
         });
-        
+
         this.$root.$on("updateProviderData", (res) => {
             this.providedData = res;
         });
-        
+
         this.$root.$on("submitOrder", (response) => {
             this.$boston.apiPost('store/order', {'step1' : this.step1Data, order: this.order, type: response, 'step2' : this.step2Data, 'company': this.company, 'providedData' : this.providedData, 'user_id': this.user_id }).then(res => {
                 this.submitResult.error = res.error;
@@ -105,7 +108,7 @@ export default {
                       window.location.href = "/orders/"+this.order.id + "?r=create"
                     },500);
                 }
-                
+
                 $("html, body").animate({ scrollTop: 0 }, 100);
             });
         });

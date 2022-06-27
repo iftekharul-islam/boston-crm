@@ -13,13 +13,15 @@
             </div>
             <div class="group" v-if="orderData.analysis">
                 <p class="text-light-black mgb-12">Files</p>
-                <div class="d-flex align-items-center" v-for="attachment, indexKey in analysis.attachments" :key="indexKey">
+                <div class="d-flex align-items-center" v-for="attachment, indexKey in analysis.attachments"
+                    :key="indexKey">
                     <div class="file-img">
                         <img src="/img/pdf.png" alt="boston pdf image">
                     </div>
                     <div class="mgl-12">
                         <p class="text-light-black mb-0">{{ attachment.name }}</p>
-                        <p class="text-gray mb-0 fs-12">Uploaded: {{ analysis.updated_by.name + ', ' + analysis.updated_at }}</p>
+                        <p class="text-gray mb-0 fs-12">Uploaded: {{ analysis.updated_by.name + ', ' +
+                            analysis.updated_at }}</p>
                     </div>
                 </div>
             </div>
@@ -71,13 +73,15 @@
             </div>
             <div class="group" v-if="analysis">
                 <p class="text-light-black mgb-12">Files</p>
-                <div class="d-flex align-items-center" v-for="attachment, indexKey in analysis.attachments" :key="indexKey">
+                <div class="d-flex align-items-center" v-for="attachment, indexKey in analysis.attachments"
+                    :key="indexKey">
                     <div class="file-img">
                         <img src="/img/pdf.png" alt="boston pdf image">
                     </div>
                     <div class="mgl-12">
                         <p class="text-light-black mb-0">{{ attachment.name }}</p>
-                        <p class="text-gray mb-0 fs-12">Uploaded: {{ analysis.updated_by.name + ', ' + analysis.updated_at }}</p>
+                        <p class="text-gray mb-0 fs-12">Uploaded: {{ analysis.updated_by.name + ', ' +
+                            analysis.updated_at }}</p>
                     </div>
                 </div>
             </div>
@@ -104,7 +108,8 @@
             </div>
             <ValidationObserver ref="qaUpdate">
                 <div class="mgb-20">
-                    <ValidationProvider class="group" name="Quality Assurance Note" rules="required" v-slot="{ errors }">
+                    <ValidationProvider class="group" name="Quality Assurance Note" rules="required"
+                        v-slot="{ errors }">
                         <div :class="{ 'invalid-form' : errors[0] }">
                             <label for="" class="mb-2 text-light-black d-inline-block">Add note</label>
                             <div class="preparation-input w-100 position-relative">
@@ -116,7 +121,8 @@
                     </ValidationProvider>
                 </div>
             </ValidationObserver>
-            <button v-if="canAddCom" class="button button-primary px-4 h-40 d-inline-flex align-items-center" @click="comList = true">Add
+            <button v-if="canAddCom" class="button button-primary px-4 h-40 d-inline-flex align-items-center"
+                @click="comList = true">Add
                 comparable list for original photo</button>
             <div class="text-end mgt-32">
                 <button type="button" class="button button-primary px-4 h-40 d-inline-flex align-items-center"
@@ -126,7 +132,6 @@
             <div v-if="comList" class="com-list vue-modal">
                 <div class="content w-100 max-w-556">
                     <p class="fs-20 fw-bold mgb-20">COM list</p>
-                    <p v-if="message" class="alert alert-success">{{ message }}</p>
                     <div class="">
                         <p class="mgb-8">Add new</p>
                         <input type="text" @keyup="getLocation" id="com-input"
@@ -229,18 +234,20 @@
             </div>
             <div class="group" v-if="analysis">
                 <p class="text-light-black mgb-12">Files</p>
-                <div class="d-flex align-items-center" v-for="attachment, indexKey in analysis.attachments" :key="indexKey">
+                <div class="d-flex align-items-center" v-for="attachment, indexKey in analysis.attachments"
+                    :key="indexKey">
                     <div class="file-img">
                         <img src="/img/pdf.png" alt="boston pdf image">
                     </div>
                     <div class="mgl-12">
                         <p class="text-light-black mb-0">{{ attachment.name }}</p>
-                        <p class="text-gray mb-0 fs-12">Uploaded: {{ analysis.updated_by.name + ', ' + analysis.updated_at }}</p>
+                        <p class="text-gray mb-0 fs-12">Uploaded: {{ analysis.updated_by.name + ', ' +
+                            analysis.updated_at }}</p>
                     </div>
                 </div>
             </div>
             <button v-if="showSeeCom" type="button"
-                class="button button-primary px-4 h-40 d-inline-flex align-items-center" @click="openComMap">See
+                class="button button-primary px-4 h-40 d-inline-flex align-items-center" @click="mapOpen = true">See
                 Com</button>
             <!-- load see com -->
             <div v-if="mapOpen" class="map-direction vue-modal">
@@ -277,8 +284,9 @@
                         <!-- destination -->
                         <div class="destination mgt-32">
                             <p class="text-600 mgb-12">Destination</p>
-                            <ul class="destination-list">
-                                <li class="destination-list-item" v-for="address,index in comAddresses" :key="index">
+                            <draggable v-model="comAddresses" @start="drag=true" @end="drag=false"
+                                :component-data="getComponentData()">
+                                <!-- <li v-if="isStartAddress" class="destination-list-item" v-for="item,index in comAddresses.splice(1)" :key="index">
                                     <span class="drag-dot">
                                         <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
@@ -288,41 +296,42 @@
                                             <circle cx="10" cy="10" r="2" fill="#7E829B" />
                                         </svg>
                                     </span>
-                                    <input type="text" :value="address.address"
-                                        class="dashboard-input w-100 gray-border" readonly>
-                                    <button @click="removeDestination(index,address.id)"
+                                    <input type="text" :value="item.address" class="dashboard-input w-100 gray-border"
+                                        readonly>
+                                    <button @click="removeDestination(index)"
+                                        class="button button-transparent p-0 del-icon">
+                                        <span class="icon-trash fs-20"><span class="path1"></span><span
+                                                class="path2"></span><span class="path3"></span><span
+                                                class="path4"></span></span>
+                                    </button>
+                                </li> -->
+                                <li class="destination-list-item" v-for="item,index in comAddresses" :key="index">
+                                    <span class="drag-dot">
+                                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <circle cx="2" cy="2" r="2" fill="#7E829B" />
+                                            <circle cx="2" cy="10" r="2" fill="#7E829B" />
+                                            <circle cx="10" cy="2" r="2" fill="#7E829B" />
+                                            <circle cx="10" cy="10" r="2" fill="#7E829B" />
+                                        </svg>
+                                    </span>
+                                    <input type="text" :value="item.address" class="dashboard-input w-100 gray-border"
+                                        readonly>
+                                    <button @click="removeDestination(index)"
                                         class="button button-transparent p-0 del-icon">
                                         <span class="icon-trash fs-20"><span class="path1"></span><span
                                                 class="path2"></span><span class="path3"></span><span
                                                 class="path4"></span></span>
                                     </button>
                                 </li>
-                                <li v-if="showDestination" class="destination-list-item">
-                                    <span class="drag-dot">
-                                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <circle cx="2" cy="2" r="2" fill="#7E829B" />
-                                            <circle cx="2" cy="10" r="2" fill="#7E829B" />
-                                            <circle cx="10" cy="2" r="2" fill="#7E829B" />
-                                            <circle cx="10" cy="10" r="2" fill="#7E829B" />
-                                        </svg>
-                                    </span>
-                                    <input @keyup="getDestination" type="text" id="destination"
-                                        class="dashboard-input w-100 gray-border">
-                                    <button class="button button-transparent p-0 del-icon">
-                                        <span class="icon-trash fs-20"><span class="path1"></span><span
-                                                class="path2"></span><span class="path3"></span><span
-                                                class="path4"></span></span>
-                                    </button>
+                                <li class="destination-list-item">
+                                    <input @keyup="getDestination" placeholder="Enter any destination" type="text"
+                                        id="destination" class="dashboard-input w-100 gray-border">
                                 </li>
-                            </ul>
-                            <div class="text-end">
-                                <button type="button" @click="addDestination"
-                                    class="button button-transparent p-0 primary-text"><span class="icon-plus"></span>
-                                    Add
-                                    destination</button>
-                            </div>
-
+                            </draggable>
+                        </div>
+                        <div>
+                            <button class="btn btn-primary">Save</button>
                         </div>
                         <!-- time -->
                         <div class="destination-time-space">
@@ -356,15 +365,14 @@
                                         </svg>
                                     </div>
                                     <div class="">
-                                        <p class="fw-bold mb-0">Via MA-24 N</p>
-                                        <p class="text-gray fs-14 mb-0">60 min without traffic</p>
+                                        <p class="fw-bold mb-0">{{ summary }}</p>
                                     </div>
 
                                 </div>
                                 <div class="right ms-auto">
                                     <div class="">
-                                        <p class="fw-bold mb-0">62 min</p>
-                                        <p class="text-gray fs-14 mb-0">100 km</p>
+                                        <p class="fw-bold mb-0">{{ totalTime + ' Min' }}</p>
+                                        <p class="text-gray fs-14 mb-0">{{ totalDistance + ' Mi' }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -418,37 +426,47 @@
             placeLng: '',
             addresses: [],
             orderData: [],
-            message: '',
             filesCount: '',
             currentStep: 'step1',
             alreadyQualityAssurance: 0,
             mapOpen: false,
             comList: false,
-            startingPointName: '',
-            startingPointLat: '',
-            startingPointLng: '',
             showSeeCom: false,
             comAddresses: [],
             wayPoints: [],
-            showDestination: false,
             canAddCom: false,
+            summary: 'No Route Found',
+            totalDistance: 0,
+            totalTime: 0,
+            startAddress: '',
+            isStartAddress: false,
         }),
         created() {
             let order = this.order;
             let localOrderData = this.$store.getters['app/orderDetails']
-            if(localOrderData){
+            if (localOrderData) {
                 order = localOrderData;
             }
             this.getReportAnalysisData(order)
             this.$root.$on('wk_update', (res) => {
-                localStorage.setItem('qaItem', JSON.stringify(res));
-                this.getReportAnalysisData(res, true);
-            });
+                localStorage.setItem('qaItem', JSON.stringify(res))
+                this.getReportAnalysisData(res, true)
+            })
         },
-        destroyed(){
+        destroyed() {
             localStorage.removeItem('qaItem');
         },
         methods: {
+            handleChange() {
+                this.initMap()
+            },
+            getComponentData() {
+                return {
+                    on: {
+                        change: this.handleChange,
+                    },
+                }
+            },
             initMap() {
                 var directionsService = new google.maps.DirectionsService();
                 var directionsRenderer = new google.maps.DirectionsRenderer({
@@ -460,17 +478,23 @@
                     zoom: 14,
                     center: chicago
                 }
-                var endAddress = '';
+                var endAddress = ''
+                var startAddress = ''
+                this.wayPoints = []
                 for (var i = 0; i < this.comAddresses.length; i++) {
-                    this.wayPoints.push({
-                        'location': this.comAddresses[i]['address'], 'stopover': true
-                    })
+                    if (i != 0 && i != this.comAddresses.length - 1)
+                        this.wayPoints.push({
+                            'location': this.comAddresses[i]['address'], 'stopover': true
+                        })
+                    if (i == 0) {
+                        startAddress = this.comAddresses[i]['address']
+                    }
                     if (i == this.comAddresses.length - 1) {
                         endAddress = this.comAddresses[i]['address']
                     }
                 }
 
-                var start = this.startingPointName;
+                var start = startAddress;
                 var end = endAddress;
                 var request = {
                     origin: start,
@@ -482,9 +506,18 @@
                 directionsRenderer.setMap(map);
                 directionsService.route(request, function (result, status) {
                     if (status == 'OK') {
-                        directionsRenderer.setDirections(result);
+                        directionsRenderer.setDirections(result)
+                        var totalTime = 0;
+                        var totalDistance = 0;
+                        this.summary = result.routes[0].summary
+                        for (var i = 0; i < result.routes[0].legs.length; i++) {
+                            totalTime += result.routes[0].legs[i].duration['value']
+                            totalDistance += result.routes[0].legs[i].distance['value']
+                        }
+                        this.totalTime = parseInt(totalTime / 60);
+                        this.totalDistance = parseFloat(totalDistance / 1609.34).toFixed(2);
                     }
-                });
+                }.bind(this));
             },
             getLocation() {
                 const center = { lat: 50.064192, lng: -130.605469 };
@@ -541,12 +574,10 @@
                 google.maps.event.addListener(autocomplete, 'place_changed', function () {
                     var place = autocomplete.getPlace()
                     if (startingPoint.value.length > 0) {
-                        setTimeout(() => {
-                            self.startingPointName = place.formatted_address
-                            self.startingPointLat = place.geometry.location.lat()
-                            self.startingPointLng = place.geometry.location.lng()
-                            self.initMap()
-                        }, 1000)
+                        this.startAddress = {'address': place.formatted_address, 'lat': place.geometry.location.lat(), 'lng': place.geometry.location.lng()}
+                        this.comAddresses.unshift(this.startAddress)
+                        this.initMap()
+                        this.isStartAddress = true
                     } else {
                         return false
                     }
@@ -573,25 +604,13 @@
                 google.maps.event.addListener(autocomplete, 'place_changed', function () {
                     var place = autocomplete.getPlace()
                     var destinationObject = {
-                        "order_id": this.orderData.id,
                         "address": place.formatted_address,
                         "lat": place.geometry.location.lat(),
                         "lng": place.geometry.location.lng()
                     }
-                    if (place.formatted_address != '') {
-                        this.$boston.post('add-com', destinationObject)
-                            .then(res => {
-                                this.orderData = res.data
-                                document.getElementById("destination").value = '';
-                                this.showDestination = false;
-                                this.initMap()
-                                this.$root.$emit('wk_update', this.orderData)
-                                this.$root.$emit('wk_flow_toast', res);
-                            })
-                            .catch(err => {
-                                console.log(err)
-                            })
-                    }
+                    this.comAddresses.push(destinationObject)
+                    destination.value = ''
+                    this.initMap()
                 }.bind(this))
             },
             addLocation() {
@@ -604,36 +623,28 @@
             removeAddress(index) {
                 this.addresses.splice(index, 1)
             },
-            removeDestination(index, id) {
-                this.$boston.post('delete-com/' + id)
-                    .then(res => {
-                        this.orderData = res.data
-                        this.$root.$emit('wk_update', res.data)
-                        this.$root.$emit('wk_flow_toast', res);
-                    })
-                    .catch(err => {
-                        console.error(err)
-                    })
-            },
-            addDestination() {
-                this.showDestination = true
+            removeDestination(index) {
+                if (index == 0) {
+                    return false
+                }
+                this.comAddresses.splice(index, 1)
+                this.initMap()
             },
             saveCom() {
                 this.$boston.post('save-com/' + this.orderData.id, this.addresses)
                     .then(res => {
                         let self = this
                         this.orderData = res.data
-                        this.message = res.message
                         this.alreadyHaveComList = false
-                        this.comAddresses = this.orderData.comlist
+                        this.comAddresses = JSON.parse(this.orderData.comlist.destination)
                         this.$root.$emit('wk_update', this.orderData)
                         this.$root.$emit('wk_flow_menu', this.orderData)
                         this.$root.$emit('wk_flow_toast', res);
                         this.showSeeCom = true
+                        this.initMap()
                         setTimeout(() => {
                             self.comList = false
-                            self.message = '';
-                        }, 3000);
+                        }, 1000);
                     })
                     .catch(err => {
                         console.log(err)
@@ -655,11 +666,12 @@
                     this.rewrite_note = this.orderData.analysis.rewrite_note;
                     this.analysisnote = this.orderData.analysis.note;
                 }
-
-                this.comAddresses = this.orderData.comlist
-                this.qa.order_id = this.orderData.id
+                if(this.orderData.comlist){
+                    this.comAddresses = JSON.parse(this.orderData.comlist.destination)
+                }
+                this.qa.order_id = order.id
                 this.qa.effective_date = this.orderData.due_date
-                if (this.comAddresses.length && this.orderData.comlist[0].id != undefined) {
+                if (this.orderData.comlist) {
                     this.showSeeCom = true
                 }
 
@@ -688,16 +700,12 @@
                         let self = this
                         this.$boston.post('save-quality-assurance', this.qa)
                             .then(res => {
-                                this.message = res.message
                                 this.orderData = res.data
                                 this.$root.$emit('wk_update', this.orderData)
                                 this.$root.$emit('wk_flow_menu', this.orderData)
                                 this.$root.$emit('wk_flow_toast', res);
                                 this.getReportAnalysisData(res.data);
                                 this.currentStep = 'step2'
-                                setTimeout(() => {
-                                    self.message = '';
-                                }, 3000);
                             }).catch(err => {
                                 console.log(err)
                             })
@@ -710,10 +718,6 @@
             },
             editQualityAssurance() {
                 this.currentStep = 'step2'
-            },
-            openComMap() {
-                this.mapOpen = true
-                let self = this
             },
             updateQualityAssurance() {
                 this.$refs.qaUpdate.validate().then((status) => {
@@ -730,7 +734,6 @@
                                 'Content-Type': 'multipart/form-data'
                             }
                         }).then(res => {
-                            this.message = res.message
                             this.orderData = res.data
                             this.$root.$emit('wk_update', this.orderData)
                             this.$root.$emit('wk_flow_menu', this.orderData)

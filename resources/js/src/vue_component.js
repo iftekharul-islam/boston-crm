@@ -44,11 +44,11 @@ const activityLog = () =>
 const orderList = () =>
     import ( /*webpackChunkName: "orderList"*/ '../components/orders/list')
 const orderEdit = () =>
-    import ( /*webpackChunkName: "orderEdit"*/ '../components/orders/edit')
+    import ( /*webpackChunkName: "orderEdit"*/ '../components/orders/edit.vue')
 const orderPagination = () =>
     import ( /*webpackChunkName: "orderPagination"*/ './Pagination')
-const ShowOrderDetails = () =>
-    import ( /*webpackChunkName: "Show_order_details"*/ '../components/orders/show');
+const addCallLog = () =>
+    import ( /*webpackChunkName: "orderPagination"*/ '../components/orders/AddCallLog')
 
 Vue.component('clients-list', ClientList);
 Vue.component('order-create', orderCreate);
@@ -71,6 +71,6 @@ Vue.component('invoice', invoice);
 Vue.component('notes', notes);
 Vue.component('activity-log', activityLog);
 Vue.component('order-list', orderList);
-Vue.component('order-edit', orderEdit);
+Vue.component('order-edit-vue', orderEdit);
 Vue.component('paginate', orderPagination);
-Vue.component('show-order', ShowOrderDetails);
+Vue.component('add-call-log', addCallLog);

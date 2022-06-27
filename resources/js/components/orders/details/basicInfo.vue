@@ -37,7 +37,7 @@
                         class="text-danger require"></span></label>
                     <v-date-picker
                         v-model="orderData.due_date"
-                        :available-dates='{ start: new Date(), end: null }'>
+                        :available-dates='{ start: new Date(), end: null }'  @input="checkDateInput(orderData.due_date, 2)">
                       <template class="position-relative" v-slot="{ inputValue, inputEvents }">
                         <input
                             class="dashboard-input w-100"
@@ -53,21 +53,22 @@
               <div class="group">
                 <ValidationProvider class="d-block mb-2 dashboard-label" name="Client order no" rules="required"
                                     v-slot="{ errors }">
-                  <div class="group" :class="{ 'invalid-form' : errors[0] }">
+                    <div :class="{ 'invalid-form' : errors[0] || oldOrderNo }">
                     <label for="" class="d-block mb-2 dashboard-label">CLient order no <span
                         class="text-danger require"></span></label>
-                    <input type="text" v-model="orderData.client_order_no" class="dashboard-input w-100">
+                    <input type="text" v-model="orderData.client_order_no" class="dashboard-input w-100" @input="checkclientOrderNo($event)">
                     <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                      <span v-if="oldOrderNo" class="error-message">This client order no. has been taken.</span>
                   </div>
                 </ValidationProvider>
               </div>
               <div class="group">
                 <ValidationProvider class="d-block mb-2 dashboard-label" name="Order receive date" rules="required"
                                     v-slot="{ errors }">
-                  <div class="group" :class="{ 'invalid-form' : errors[0] }">
+                    <div :class="{ 'invalid-form' : (errors[0] || dateIssue.status) }">
                     <label for="" class="d-block mb-2 dashboard-label">Received date <span
                         class="text-danger require"></span></label>
-                    <v-date-picker v-model="orderData.received_date">
+                    <v-date-picker v-model="orderData.received_date"  @input="checkDateInput(orderData.received_date, 1)">
                       <template class="position-relative" v-slot="{ inputValue, inputEvents }">
                         <input
                             class="dashboard-input w-100"
@@ -77,6 +78,7 @@
                       </template>
                     </v-date-picker>
                     <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                    <span v-if="dateIssue.status" class="error-message">{{ dateIssue.message }}</span>
                   </div>
                 </ValidationProvider>
               </div>
@@ -105,6 +107,11 @@ export default {
   components: {},
   data() {
     return {
+        oldOrderNo: false,
+        dateIssue: {
+            status: false,
+            message: "Received Date Must Be Smaller Than Due Date"
+        },
       orderData: {
         client_order_no: '',
         due_date: new Date(),
@@ -124,6 +131,25 @@ export default {
     this.getBasicInfo(this.order);
   },
   methods: {
+    checkDateInput(value, type) {
+          this.dateIssue.status = false;
+          var date = new Date(value);
+          if (type == 1) {
+              if (this.orderData.due_date) {
+                  let dueDate = new Date(this.orderData.due_date);
+                  if (dueDate < date) {
+                      this.dateIssue.status = true;
+                  }
+              }
+          } else {
+              if (this.orderData.received_date) {
+                  let receiveDate = new Date(this.orderData.received_date);
+                  if (receiveDate > date) {
+                      this.dateIssue.status = true;
+                  }
+              }
+          }
+      },
     getBasicInfo(order) {
       let orderData = order
       this.orderData.client_order_no = orderData.client_order_no
@@ -135,11 +161,6 @@ export default {
       let that = this
       axios.post('update-basic-info/'+ this.orderId,this.orderData)
         .then(res => {
-          //   this.$root.$emit('wk_update', res.data.data)
-          //   this.$root.$emit('wk_flow_menu', res.data.data)
-          //   this.$root.$emit('wk_flow_toast', res.data)
-          // this.message = res.data.message
-          // this.errorStatus = res.data.error;
           if (this.error) {
               this.$root.$emit('wk_flow_toast', res.data)
           } else {
@@ -148,15 +169,21 @@ export default {
               this.$root.$emit('wk_flow_menu', res.data.data)
               this.$root.$emit('wk_flow_toast', res.data)
               this.$bvModal.hide('basic-info');
-              // setTimeout(function(){
-              //   that.$bvModal.hide('basic-info');
-              //   that.message = '';
-              // }, 5000);
           }
         }).catch(err => {
           console.log(err)
       });
     },
+      checkclientOrderNo: _.debounce( function (event) {
+          let value = event.target.value;
+          this.oldOrderNo = false;
+          this.$boston.post('/check/client/order/no', {'client_no' : value}).then((res) => {
+              console.log(res);
+              this.oldOrderNo = res;
+          }).catch(err => {
+              console.log(err);
+          });
+      }, 300),
   }
 }
 </script>

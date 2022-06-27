@@ -43,7 +43,7 @@
                             <path d="M9.56388 7.08L6.86387 9.78C6.68387 9.96 6.45588 10.044 6.22788 10.044C5.99988 10.044 5.75988 9.96 5.59188 9.78L4.69188 8.88C4.33187 8.532 4.33187 7.956 4.69188 7.608C5.03988 7.26 5.60388 7.26 5.96388 7.608L6.22788 7.872L8.29188 5.808C8.63987 5.46 9.20388 5.46 9.56388 5.808C9.91188 6.156 9.91188 6.732 9.56388 7.08Z" fill="#2F415E"/>
                             <path d="M19.5727 16.644C19.5727 17.136 19.1767 17.544 18.6727 17.544H12.3727C11.8807 17.544 11.4727 17.136 11.4727 16.644C11.4727 16.152 11.8807 15.744 12.3727 15.744H18.6727C19.1767 15.744 19.5727 16.152 19.5727 16.644Z" fill="#2F415E"/>
                             <path d="M9.56388 15.48L6.86387 18.18C6.68387 18.36 6.45588 18.444 6.22788 18.444C5.99988 18.444 5.75988 18.36 5.59188 18.18L4.69188 17.28C4.33187 16.932 4.33187 16.356 4.69188 16.008C5.03988 15.66 5.60388 15.66 5.96388 16.008L6.22788 16.272L8.29188 14.208C8.63987 13.86 9.20388 13.86 9.56388 14.208C9.91188 14.556 9.91188 15.132 9.56388 15.48Z" fill="#2F415E"/>
-                        </svg>                            
+                        </svg>
                     </span>
                 </div>
                 {{-- call item --}}
@@ -67,11 +67,11 @@
                         <span class="call-list-item">12.03.2022, 3:00PM</span>
                         <span class="call-list-item"><p class="mb-0 scheduled">Scheduled</p></span>
                         <span class="call-list-item">
-                            <a href="#" class="icon-list" ><span class="icon-eye text-blue-eye fs-20"><span class="path1"></span><span class="path2"></span></span></a>
-                            <a href="#" class="icon-list"><span class="icon-note text-purple fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></span></a>
-                            <a href="#" class="icon-list"><span class="icon-messages2 primary-text fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span></span></a>
-                            <a href="#" class="icon-list"><span class="icon-calendar text-brown fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span class="path7"></span><span class="path8"></span></span></a>
-                            <a href="#" class="icon-list"> <span class="icon-messages text-yellow-msg  fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span></a>
+                            <a href="#" class="icon-list" data-bs-placement="bottom" title="Details"><span class="icon-eye text-blue-eye fs-20"><span class="path1"></span><span class="path2"></span></span></a>
+                            <a href="#" ata-bs-toggle="tooltip" data-bs-placement="bottom" title="Quick view" class="icon-list quick-view-icon" data-bs-toggle="modal" data-bs-target="#exampleModal"><span class="icon-note text-purple fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></span></a>
+                            <a href="#" class="icon-list" data-bs-placement="bottom" title="Call log"><span class="icon-messages2 primary-text fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span></span></a>
+                            <a href="#" class="icon-list" data-bs-placement="bottom" title="Schedule"><span class="icon-calendar text-brown fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span class="path7"></span><span class="path8"></span></span></a>
+                            <a href="#" class="icon-list"  data-bs-placement="bottom" title="Email & SMS"> <span class="icon-messages text-yellow-msg  fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span></a>
                             <a href="#" class="icon-list"><span class="icon-call text-light-red fs-20"><span class="path1"></span><span class="path2"></span></span></a>
                             <button class="button button-transparent p-0" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"><span class="icon-arrow-bottom"></span></button>
                         </span>
@@ -88,7 +88,7 @@
                                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M13.491 1.66667H6.50768C3.47435 1.66667 1.66602 3.475 1.66602 6.50834V13.4833C1.66602 16.525 3.47435 18.3333 6.50768 18.3333H13.4827C16.516 18.3333 18.3243 16.525 18.3243 13.4917V6.50834C18.3327 3.475 16.5243 1.66667 13.491 1.66667Z" fill="white"/>
                                         <path d="M13.9569 5.83333H9.9319C9.59023 5.83333 9.3069 6.11666 9.3069 6.45833C9.3069 6.8 9.59023 7.08333 9.9319 7.08333H12.4486L6.01523 13.5167C5.77357 13.7583 5.77357 14.1583 6.01523 14.4C6.14023 14.525 6.29857 14.5833 6.4569 14.5833C6.61523 14.5833 6.77357 14.525 6.89857 14.4L13.3319 7.96666V10.4833C13.3319 10.825 13.6152 11.1083 13.9569 11.1083C14.2986 11.1083 14.5819 10.825 14.5819 10.4833V6.45833C14.5819 6.11666 14.2986 5.83333 13.9569 5.83333Z" fill="#F97373"/>
-                                    </svg>                                    
+                                    </svg>
                                 </a>
                             </div>
                         </div>
@@ -102,7 +102,7 @@
                                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M13.491 1.66667H6.50768C3.47435 1.66667 1.66602 3.475 1.66602 6.50834V13.4833C1.66602 16.525 3.47435 18.3333 6.50768 18.3333H13.4827C16.516 18.3333 18.3243 16.525 18.3243 13.4917V6.50834C18.3327 3.475 16.5243 1.66667 13.491 1.66667Z" fill="white"/>
                                         <path d="M13.9569 5.83333H9.9319C9.59023 5.83333 9.3069 6.11666 9.3069 6.45833C9.3069 6.8 9.59023 7.08333 9.9319 7.08333H12.4486L6.01523 13.5167C5.77357 13.7583 5.77357 14.1583 6.01523 14.4C6.14023 14.525 6.29857 14.5833 6.4569 14.5833C6.61523 14.5833 6.77357 14.525 6.89857 14.4L13.3319 7.96666V10.4833C13.3319 10.825 13.6152 11.1083 13.9569 11.1083C14.2986 11.1083 14.5819 10.825 14.5819 10.4833V6.45833C14.5819 6.11666 14.2986 5.83333 13.9569 5.83333Z" fill="#F97373"/>
-                                    </svg>                                    
+                                    </svg>
                                 </a>
                             </div>
                         </div>
@@ -116,7 +116,7 @@
                                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M13.491 1.66667H6.50768C3.47435 1.66667 1.66602 3.475 1.66602 6.50834V13.4833C1.66602 16.525 3.47435 18.3333 6.50768 18.3333H13.4827C16.516 18.3333 18.3243 16.525 18.3243 13.4917V6.50834C18.3327 3.475 16.5243 1.66667 13.491 1.66667Z" fill="white"/>
                                         <path d="M13.9569 5.83333H9.9319C9.59023 5.83333 9.3069 6.11666 9.3069 6.45833C9.3069 6.8 9.59023 7.08333 9.9319 7.08333H12.4486L6.01523 13.5167C5.77357 13.7583 5.77357 14.1583 6.01523 14.4C6.14023 14.525 6.29857 14.5833 6.4569 14.5833C6.61523 14.5833 6.77357 14.525 6.89857 14.4L13.3319 7.96666V10.4833C13.3319 10.825 13.6152 11.1083 13.9569 11.1083C14.2986 11.1083 14.5819 10.825 14.5819 10.4833V6.45833C14.5819 6.11666 14.2986 5.83333 13.9569 5.83333Z" fill="#F97373"/>
-                                    </svg>                                    
+                                    </svg>
                                 </a>
                             </div>
                         </div>
@@ -124,6 +124,102 @@
                            <p class="text-center mb-1 text-white">10</p>
                            <p class="text-center text-white mb-0">More</p>
                         </a>
+                    </div>
+                    {{-- quick view --}}
+                    <div class="modal fade quick-view-modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog h-100">
+                          <div class="modal-content h-100 p-0">
+                            <div class="bg-gray pdl-32 pdr-22 d-flex align-items-center justify-content-between h-60 min-h-60 header-modal">
+                              <h5 class="fs-20 fw-bold text-white mb-0" id="exampleModalLabel">Quickview</h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body h-100 overflow-auto">
+                              <p class="mb-3 fw-bold">Client info</p>
+                              <div class="modal-item">
+                                <p class="mb-0">AMC name</p>
+                                <span>:</span>
+                                <p class="mb-0 text-600">EStreet Appraisal Management
+                                    Company, LLC</p>
+                              </div>
+                              <a href="#" class="primary-text underline text-600 mgb-24 d-inline-block">AMC requirements</a>
+                              <div class="modal-item">
+                                <p class="mb-0">AMC name</p>
+                                <span>:</span>
+                                <p class="mb-0 text-600">EStreet Appraisal Management
+                                    Company, LLC</p>
+                              </div>
+                              <div class="modal-item">
+                                <p class="mb-0">AMC name</p>
+                                <span>:</span>
+                                <p class="mb-0 text-600">EStreet Appraisal Management
+                                    Company, LLC</p>
+                              </div>
+                              <a href="#" class="primary-text underline text-600 d-inline-block">Lender requirements</a>
+                              <div class="mgt-32">
+                                <p class="mb-3 text-600">Property info</p>
+                                <div class="modal-item">
+                                    <p class="mb-0">Property address</p>
+                                    <span>:</span>
+                                    <p class="mb-0 text-600">EStreet Appraisal Management
+                                        Company, LLC</p>
+                                  </div>
+                                  <div class="modal-item">
+                                    <p class="mb-0">Property address</p>
+                                    <span>:</span>
+                                    <p class="mb-0 text-700 fs-20 primary-text">EStreet Appraisal Management
+                                        Company, LLC</p>
+                                  </div>
+                                  <div class="modal-item">
+                                    <p class="mb-0">Due date</p>
+                                    <span>:</span>
+                                    <p class="mb-0 text-600">33-33-33</p>
+                                  </div>
+                                  <div class="modal-item">
+                                    <p class="mb-0">Order no</p>
+                                    <span>:</span>
+                                    <p class="mb-0 text-600">4654765765</p>
+                                  </div>
+                                  <div class="modal-item">
+                                    <p class="mb-0">Order receive date</p>
+                                    <span>:</span>
+                                    <p class="mb-0 text-600">40-89-32</p>
+                                  </div>
+                                  <div class="mgt-32">
+                                    <p class="mb-3 text-600 ">Contact info</p>
+                                    <div class="modal-item">
+                                        <p class="mb-0">Contact name</p>
+                                        <span>:</span>
+                                        <p class="mb-0 text-600">Abid ali ahmede</p>
+                                      </div>
+                                      <div class="modal-item">
+                                        <p class="mb-0">Phone</p>
+                                        <span>:</span>
+                                        <p class="mb-0 text-600">35465765565</p>
+                                      </div>
+                                      <div class="modal-item">
+                                        <p class="mb-0">Email</p>
+                                        <span>:</span>
+                                        <p class="mb-0 text-600">exmplll@mail.com</p>
+                                      </div>
+                                  </div>
+                              </div>
+                              {{-- notes --}}
+                              <div class="mt-3">
+                                <p class="text-700 mb-3">Notes</p>
+                                <p class="note-text mb-3 text-700">Lorem ipsum, or lipsum as it is sometimes known, is dummy text used
+                                    in laying out print, graphic or web designs. The passage is attributed
+                                    to an unknown</p>
+                                <p class="note-text text-700">Lorem ipsum, or lipsum as it is sometimes known, is dummy text used
+                                        in laying out print, graphic or web designs. The passage is attributed
+                                        to an unknown</p>
+                              </div>
+                            </div>
+                            {{-- <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                              <button type="button" class="btn btn-primary">Save changes</button>
+                            </div> --}}
+                          </div>
+                        </div>
                     </div>
                 </div>
                 <div class="call-item">
@@ -167,7 +263,7 @@
                                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M13.491 1.66667H6.50768C3.47435 1.66667 1.66602 3.475 1.66602 6.50834V13.4833C1.66602 16.525 3.47435 18.3333 6.50768 18.3333H13.4827C16.516 18.3333 18.3243 16.525 18.3243 13.4917V6.50834C18.3327 3.475 16.5243 1.66667 13.491 1.66667Z" fill="white"/>
                                         <path d="M13.9569 5.83333H9.9319C9.59023 5.83333 9.3069 6.11666 9.3069 6.45833C9.3069 6.8 9.59023 7.08333 9.9319 7.08333H12.4486L6.01523 13.5167C5.77357 13.7583 5.77357 14.1583 6.01523 14.4C6.14023 14.525 6.29857 14.5833 6.4569 14.5833C6.61523 14.5833 6.77357 14.525 6.89857 14.4L13.3319 7.96666V10.4833C13.3319 10.825 13.6152 11.1083 13.9569 11.1083C14.2986 11.1083 14.5819 10.825 14.5819 10.4833V6.45833C14.5819 6.11666 14.2986 5.83333 13.9569 5.83333Z" fill="#F97373"/>
-                                    </svg>                                    
+                                    </svg>
                                 </a>
                             </div>
                         </div>
@@ -181,7 +277,7 @@
                                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M13.491 1.66667H6.50768C3.47435 1.66667 1.66602 3.475 1.66602 6.50834V13.4833C1.66602 16.525 3.47435 18.3333 6.50768 18.3333H13.4827C16.516 18.3333 18.3243 16.525 18.3243 13.4917V6.50834C18.3327 3.475 16.5243 1.66667 13.491 1.66667Z" fill="white"/>
                                         <path d="M13.9569 5.83333H9.9319C9.59023 5.83333 9.3069 6.11666 9.3069 6.45833C9.3069 6.8 9.59023 7.08333 9.9319 7.08333H12.4486L6.01523 13.5167C5.77357 13.7583 5.77357 14.1583 6.01523 14.4C6.14023 14.525 6.29857 14.5833 6.4569 14.5833C6.61523 14.5833 6.77357 14.525 6.89857 14.4L13.3319 7.96666V10.4833C13.3319 10.825 13.6152 11.1083 13.9569 11.1083C14.2986 11.1083 14.5819 10.825 14.5819 10.4833V6.45833C14.5819 6.11666 14.2986 5.83333 13.9569 5.83333Z" fill="#F97373"/>
-                                    </svg>                                    
+                                    </svg>
                                 </a>
                             </div>
                         </div>
@@ -195,7 +291,7 @@
                                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M13.491 1.66667H6.50768C3.47435 1.66667 1.66602 3.475 1.66602 6.50834V13.4833C1.66602 16.525 3.47435 18.3333 6.50768 18.3333H13.4827C16.516 18.3333 18.3243 16.525 18.3243 13.4917V6.50834C18.3327 3.475 16.5243 1.66667 13.491 1.66667Z" fill="white"/>
                                         <path d="M13.9569 5.83333H9.9319C9.59023 5.83333 9.3069 6.11666 9.3069 6.45833C9.3069 6.8 9.59023 7.08333 9.9319 7.08333H12.4486L6.01523 13.5167C5.77357 13.7583 5.77357 14.1583 6.01523 14.4C6.14023 14.525 6.29857 14.5833 6.4569 14.5833C6.61523 14.5833 6.77357 14.525 6.89857 14.4L13.3319 7.96666V10.4833C13.3319 10.825 13.6152 11.1083 13.9569 11.1083C14.2986 11.1083 14.5819 10.825 14.5819 10.4833V6.45833C14.5819 6.11666 14.2986 5.83333 13.9569 5.83333Z" fill="#F97373"/>
-                                    </svg>                                    
+                                    </svg>
                                 </a>
                             </div>
                         </div>
@@ -246,7 +342,7 @@
                                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M13.491 1.66667H6.50768C3.47435 1.66667 1.66602 3.475 1.66602 6.50834V13.4833C1.66602 16.525 3.47435 18.3333 6.50768 18.3333H13.4827C16.516 18.3333 18.3243 16.525 18.3243 13.4917V6.50834C18.3327 3.475 16.5243 1.66667 13.491 1.66667Z" fill="white"/>
                                         <path d="M13.9569 5.83333H9.9319C9.59023 5.83333 9.3069 6.11666 9.3069 6.45833C9.3069 6.8 9.59023 7.08333 9.9319 7.08333H12.4486L6.01523 13.5167C5.77357 13.7583 5.77357 14.1583 6.01523 14.4C6.14023 14.525 6.29857 14.5833 6.4569 14.5833C6.61523 14.5833 6.77357 14.525 6.89857 14.4L13.3319 7.96666V10.4833C13.3319 10.825 13.6152 11.1083 13.9569 11.1083C14.2986 11.1083 14.5819 10.825 14.5819 10.4833V6.45833C14.5819 6.11666 14.2986 5.83333 13.9569 5.83333Z" fill="#F97373"/>
-                                    </svg>                                    
+                                    </svg>
                                 </a>
                             </div>
                         </div>
@@ -260,7 +356,7 @@
                                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M13.491 1.66667H6.50768C3.47435 1.66667 1.66602 3.475 1.66602 6.50834V13.4833C1.66602 16.525 3.47435 18.3333 6.50768 18.3333H13.4827C16.516 18.3333 18.3243 16.525 18.3243 13.4917V6.50834C18.3327 3.475 16.5243 1.66667 13.491 1.66667Z" fill="white"/>
                                         <path d="M13.9569 5.83333H9.9319C9.59023 5.83333 9.3069 6.11666 9.3069 6.45833C9.3069 6.8 9.59023 7.08333 9.9319 7.08333H12.4486L6.01523 13.5167C5.77357 13.7583 5.77357 14.1583 6.01523 14.4C6.14023 14.525 6.29857 14.5833 6.4569 14.5833C6.61523 14.5833 6.77357 14.525 6.89857 14.4L13.3319 7.96666V10.4833C13.3319 10.825 13.6152 11.1083 13.9569 11.1083C14.2986 11.1083 14.5819 10.825 14.5819 10.4833V6.45833C14.5819 6.11666 14.2986 5.83333 13.9569 5.83333Z" fill="#F97373"/>
-                                    </svg>                                    
+                                    </svg>
                                 </a>
                             </div>
                         </div>
@@ -274,7 +370,7 @@
                                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M13.491 1.66667H6.50768C3.47435 1.66667 1.66602 3.475 1.66602 6.50834V13.4833C1.66602 16.525 3.47435 18.3333 6.50768 18.3333H13.4827C16.516 18.3333 18.3243 16.525 18.3243 13.4917V6.50834C18.3327 3.475 16.5243 1.66667 13.491 1.66667Z" fill="white"/>
                                         <path d="M13.9569 5.83333H9.9319C9.59023 5.83333 9.3069 6.11666 9.3069 6.45833C9.3069 6.8 9.59023 7.08333 9.9319 7.08333H12.4486L6.01523 13.5167C5.77357 13.7583 5.77357 14.1583 6.01523 14.4C6.14023 14.525 6.29857 14.5833 6.4569 14.5833C6.61523 14.5833 6.77357 14.525 6.89857 14.4L13.3319 7.96666V10.4833C13.3319 10.825 13.6152 11.1083 13.9569 11.1083C14.2986 11.1083 14.5819 10.825 14.5819 10.4833V6.45833C14.5819 6.11666 14.2986 5.83333 13.9569 5.83333Z" fill="#F97373"/>
-                                    </svg>                                    
+                                    </svg>
                                 </a>
                             </div>
                         </div>

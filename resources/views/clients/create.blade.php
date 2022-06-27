@@ -216,7 +216,7 @@
                 }else if(clientType === 'both'){
                     removeError();
 
-                    $(".address-label, .city-label, .state-label, .zip-label,.deducts-technology-fee-label, .fee-for-1004uad-label, .fee-for-1004d-label, .can-sign-label, .can-inspect-label,.com-required-label,.processing-fee-label,").addClass('require');
+                    $(".address-label, .city-label, .state-label, .zip-label,.deducts-technology-fee-label, .fee-for-1004uad-label, .fee-for-1004d-label, .can-sign-label, .can-inspect-label,.com-required-label,.processing-fee-label").addClass('require');
                 } else {
                     removeError();
 

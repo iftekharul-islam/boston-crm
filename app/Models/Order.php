@@ -197,6 +197,11 @@ class Order extends Model implements HasMedia
 
     public function comlist()
     {
-        return $this->hasMany(OrderWCom::class,'order_id', 'id');
+        return $this->hasOne(OrderWComList::class,'order_id', 'id');
+    }
+
+    public function callLog()
+    {
+        return $this->hasMany(CallLog::class,'order_id', 'id');
     }
 }

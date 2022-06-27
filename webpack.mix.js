@@ -29,7 +29,6 @@ mix.js('resources/js/app.js', 'public/js')
             new NodePolyfillPlugin()
         ],
         output: {
-            // This option will be available on production mode
             publicPath: '/',
             chunkFilename: 'assets/template/[name].[chunkhash].js',
         },

@@ -112,6 +112,22 @@
                                         <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                                     </div>
                                 </ValidationProvider>
+                                <ValidationProvider class="group" name="Property type" rules="required"
+                                    v-slot="{ errors }">
+                                    <div class="position-relative" :class="{ 'invalid-form' : errors[0] }">
+                                        <label for="" class="d-block mb-2 dashboard-label">Property Type <span
+                                                class="text-danger require"></span></label>
+                                        <select id="propertyTypeSelect" class="dashboard-input w-100"
+                                            v-model="step1.propertyType">
+                                            <option value="">Please select property type</option>
+                                            <option v-for="propertyType in propertyTypes" :key="propertyType.id"
+                                                :value="propertyType.id">
+                                                {{ propertyType.type }}
+                                            </option>
+                                        </select>
+                                        <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                                    </div>
+                                </ValidationProvider>
                             </div>
                         </div>
                     </div>
@@ -409,7 +425,7 @@
             type: null,
             amcClients: [],
             lenderClients: [],
-
+            propertyTypes:[]
         },
         data() {
             return {
@@ -435,6 +451,7 @@
                     receiveDate: '',
                     technologyFee: 0,
                     fhaCaseNo: '',
+                    propertyType:'',
                     appraiserName: null,
                     dueDate: '',
                     appraiserType: '',
@@ -507,7 +524,10 @@
                     this.checkProviderValidation(e, 1);
                     this.isFullAppraisal = e.target.selectedOptions[0].dataset.full
                 }.bind(this));
-
+                 $("#propertyTypeSelect").on("select2:select", function (e) {
+                    let value = e.target.value;
+                    this.step1.propertyType = value;
+                }.bind(this));
 
                 $("#loanTypeSelect").on("select2:select", function (e) {
                     let value = e.target.value;
@@ -713,7 +733,6 @@
             setOrderValue() {
                 let receivedDate = this.formateDate(this.order.received_date);
                 let dueDate = this.formateDate(this.order.due_date);
-
                 let step1 = {
                     clientOrderNo: this.order.client_order_no,
                     unitNo: this.order.property_info.unit_no,
@@ -724,6 +743,7 @@
                     dueDate: dueDate,
                     technologyFee: this.order.appraisal_detail.technology_fee,
                     fhaCaseNo: this.order.appraisal_detail.fha_case_no,
+                    propertyType: this.order.appraisal_detail.property_type,
                     appraiserName: this.order.appraisal_detail.appraiser_id,
                     appraiserType: '',
                     amcClient: this.order.amc.id,
@@ -916,8 +936,8 @@
                         }
                     }
                 }
-            }, 
-            
+            },
+
             checkclientOrderNo: _.debounce( function (event) {
                 let value = event.target.value;
                 this.oldOrderNo = false;

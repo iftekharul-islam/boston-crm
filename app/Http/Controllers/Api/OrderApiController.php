@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\LoanType;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Order;
@@ -31,6 +32,7 @@ class OrderApiController extends Controller
         $errorChecking = $this->getErrorMessage($get);
         $error = $errorChecking['error'];
         $errorMessage = $errorChecking['message'];
+        
         if ($error == true) {
             return response()->json(['error' => $error, 'messages' => $errorMessage]);
         }
@@ -38,7 +40,7 @@ class OrderApiController extends Controller
         $orderProccess = DB::transaction( function() use ($step, $step2, $company, $get) {
             $amcClient = $step['amcClient'];
             $appraiserName = $step['appraiserName'];
-            
+
             try {
                 $dueDate = Carbon::parse($step['dueDate']);
                 $receiveDate = Carbon::parse($step['receiveDate']);
@@ -99,6 +101,7 @@ class OrderApiController extends Controller
             }
 
             $fhaCaseNo = $step['fhaCaseNo'];
+            $propertyType = $step['propertyType'];
             $loanNo = $step['loanNo'];
             $technologyFee = $step['technologyFee'];
             $loanType = $step['loanType'];
@@ -117,13 +120,14 @@ class OrderApiController extends Controller
             }
 
             $appraiserName = isset($appraiserName['id']) ? $appraiserName['id'] : $appraiserName;
-            
+
             $apprlDetails->appraiser_id = $appraiserName;
             $apprlDetails->order_id = $order->id;
             $apprlDetails->loan_no = $loanNo;
             $apprlDetails->loan_type = isset($loanType['id']) ? $loanType['id'] : $loanType;
             $apprlDetails->technology_fee = $technologyFee;
             $apprlDetails->fha_case_no = $fhaCaseNo;
+            $apprlDetails->property_type = $propertyType;
             $apprlDetails->save();
 
 
@@ -265,7 +269,7 @@ class OrderApiController extends Controller
                 "activity_text" => $message,
                 "activity_by" => $user->id,
                 "order_id" => $order->id
-            ];      
+            ];
             ActivityLog::create($data);
 
             return response()->json([
@@ -321,7 +325,15 @@ class OrderApiController extends Controller
         ];
 
         foreach ($array_filter as $item) {
-            if ($step[$item] == null) {
+            if($item == 'fhaCaseNo'){
+                $loanType = LoanType::where('id', $step['loanType'])->first();
+                if($loanType && $loanType->is_fha){
+                    if ($step[$item] == null) {
+                        $error = true;
+                        array_push($errorMessage['step1'], $this->recTitle($item)." is missing");
+                    }
+                }
+            } elseif ($step[$item] == null) {
                 $error = true;
                 array_push($errorMessage['step1'], $this->recTitle($item)." is missing");
             }

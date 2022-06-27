@@ -790,20 +790,6 @@ class OrderWorkflowController extends BaseController
         ];
     }
 
-    public function deleteCom(Request $request,$id)
-    {
-        $order_w_com = OrderWcom::find($id);
-        $order = Order::find($order_w_com->order_id);
-        $orderData = $this->orderDetails($order->id);
-
-        $this->repository->deleteCom($id);
-
-        return [
-            "message" => 'Com deleted successfully',
-            "data" => $orderData
-        ];
-    }
-
     public function checkClientOrderNo(Request $get) {
         $old = Order::where('client_order_no', $get->client_no)->first();
         if ($old) {
