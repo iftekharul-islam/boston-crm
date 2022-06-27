@@ -447,9 +447,9 @@
             }
             this.getReportAnalysisData(order)
             this.$root.$on('wk_update', (res) => {
-                localStorage.setItem('qaItem', JSON.stringify(res));
-                this.getReportAnalysisData(res, true);
-            });
+                localStorage.setItem('qaItem', JSON.stringify(res))
+                this.getReportAnalysisData(res, true)
+            })
         },
         destroyed() {
             localStorage.removeItem('qaItem');
@@ -664,9 +664,10 @@
                     this.rewrite_note = this.orderData.analysis.rewrite_note;
                     this.analysisnote = this.orderData.analysis.note;
                 }
-
-                this.comAddresses = JSON.parse(this.orderData.comlist.destination)
-                this.qa.order_id = this.orderData.id
+                if(this.orderData.comlist){
+                    this.comAddresses = JSON.parse(this.orderData.comlist.destination)
+                }
+                this.qa.order_id = order.id
                 this.qa.effective_date = this.orderData.due_date
                 if (this.orderData.comlist) {
                     this.showSeeCom = true
