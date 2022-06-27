@@ -68,9 +68,9 @@
                         <span class="call-list-item"><p class="mb-0 scheduled">Scheduled</p></span>
                         <span class="call-list-item">
                             <a href="#" class="icon-list" data-bs-placement="bottom" title="Details"><span class="icon-eye text-blue-eye fs-20"><span class="path1"></span><span class="path2"></span></span></a>
-                            <a href="#" ata-bs-toggle="tooltip" data-bs-placement="bottom" title="Quick view" class="icon-list quick-view-icon" data-bs-toggle="modal" data-bs-target="#exampleModal"><span class="icon-note text-purple fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></span></a>
+                            <a href="#" ata-bs-toggle="tooltip" data-bs-placement="bottom" title="Quick view" class="icon-list quick-view-icon" data-bs-toggle="modal" data-bs-target="#quickViewModal"><span class="icon-note text-purple fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></span></a>
                             <a href="#" class="icon-list" data-bs-placement="bottom" title="Call log"><span class="icon-messages2 primary-text fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span></span></a>
-                            <a href="#" class="icon-list" data-bs-placement="bottom" title="Schedule"><span class="icon-calendar text-brown fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span class="path7"></span><span class="path8"></span></span></a>
+                            <a href="#" class="icon-list" data-bs-placement="bottom" title="Schedule"><span class="icon-calendar text-brown fs-20" data-bs-toggle="modal" data-bs-target="#scheduleModal"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span class="path7"></span><span class="path8"></span></span></a>
                             <a href="#" class="icon-list"  data-bs-placement="bottom" title="Email & SMS"> <span class="icon-messages text-yellow-msg  fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span></a>
                             <a href="#" class="icon-list"><span class="icon-call text-light-red fs-20"><span class="path1"></span><span class="path2"></span></span></a>
                             <button class="button button-transparent p-0" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"><span class="icon-arrow-bottom"></span></button>
@@ -126,11 +126,11 @@
                         </a>
                     </div>
                     {{-- quick view --}}
-                    <div class="modal fade quick-view-modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal fade quick-view-modal" id="quickViewModal" tabindex="-1" aria-labelledby="quickViewModalLabel" aria-hidden="true">
                         <div class="modal-dialog h-100">
                           <div class="modal-content h-100 p-0">
                             <div class="bg-gray pdl-32 pdr-22 d-flex align-items-center justify-content-between h-60 min-h-60 header-modal">
-                              <h5 class="fs-20 fw-bold text-white mb-0" id="exampleModalLabel">Quickview</h5>
+                              <h5 class="fs-20 fw-bold text-white mb-0" id="quickViewModalLabel">Quickview</h5>
                               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body h-100 overflow-auto">
@@ -218,6 +218,54 @@
                               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                               <button type="button" class="btn btn-primary">Save changes</button>
                             </div> --}}
+                          </div>
+                        </div>
+                    </div>
+                    {{-- Schedule --}}
+                    <div class="modal fade schedule-modal" id="scheduleModal" tabindex="-1" aria-labelledby="scheduleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog h-100">
+                          <div class="modal-content ">
+                            <div class="modal-body h-100 overflow-auto">
+                                <p class="mgb-22 fs-20 text-600">Schedule</p>
+                              <div class="group">
+                                <label for="" class="d-block mb-1">Appraiser II</label>
+                                <div class="position-relative">
+                                    <select name="" class="dashboard-input w-100" id="">
+                                        <option value="">hello</option>
+                                    </select>
+                                    <span class="icon-arrow-down bottom-arrow-icon"></span>
+                                </div>
+                              </div>
+                              <div class="group">
+                                <label for="" class="d-block mb-1">Inspection date & time</label>
+                                <div class="position-relative">
+                                    <input type="date" class="dashboard-input w-100">
+                                    <span class="icon-calendar icon"><span class="path1"></span><span
+                                    class="path2"></span><span class="path3"></span><span
+                                    class="path4"></span><span class="path5"></span><span
+                                    class="path6"></span><span class="path7"></span><span
+                                    class="path8"></span></span>
+                                </div>
+                              </div>
+                              <div class="group">
+                                <label for="" class="d-block mb-1">Duration</label>
+                                <div class="position-relative">
+                                    <select name="" class="dashboard-input w-100" id="">
+                                        <option value="">hello</option>
+                                    </select>
+                                    <span class="icon-arrow-down bottom-arrow-icon"></span>
+                                </div>
+                              </div>
+                              <div class="group">
+                                <label for="" class="d-block mb-1">Notes</label>
+                                <textarea name="" class="dashboard-textarea w-100" id="" cols="30" rows="5"></textarea>
+                              </div>
+
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="button button-transparent " data-bs-dismiss="modal">Close</button>
+                              <button type="button" class="button button-primary px-5">Save</button>
+                            </div>
                           </div>
                         </div>
                     </div>
