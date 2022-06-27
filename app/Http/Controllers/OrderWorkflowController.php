@@ -601,6 +601,7 @@ class OrderWorkflowController extends BaseController
         $reWrite->updated_by = $user->id;
         $reWrite->completed_by = $user->id;
         $reWrite->delivered_by = $user->id;
+        $reWrite->status = 1;
         $reWrite->delivery_date = Carbon::now();
         $reWrite->solution_details = $get->revission['solution_details_edited'];
         $reWrite->save();
@@ -647,6 +648,7 @@ class OrderWorkflowController extends BaseController
         $reWrite->updated_at = Carbon::now();
         $reWrite->updated_by = $user->id;
         $reWrite->completed_by = $get->completed_by;
+        $reWrite->status = 1;
         $reWrite->delivered_by = $get->delivered_by;
         $reWrite->delivery_date = Carbon::parse($get->delivery_date);
         $reWrite->solution_details = $get->solution_details;

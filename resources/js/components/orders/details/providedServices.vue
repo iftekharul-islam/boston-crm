@@ -28,80 +28,43 @@
               <div class="col-md-12">
                 
                 <ValidationObserver class="" ref="orderForm">
-                    <div class="d-flex mgb-32">
-                      <ValidationProvider class="mgr-32 flex-1" name="Appraiser Type" rules="required" v-slot="{ errors }">
-                        <div class="group" :class="{ 'invalid-form' : errors[0] }">
+                    <div class="d-flex justify-content-between provided-service align-items-center" v-for="item, ik in servicesData" :key="ik">
+                      <div class="group mgb-10">
+                        <div class="pr-2">
+                          <label for="" class="d-block dashboard-label">Appraiser Type <span class="require"></span></label>
+                          <m-select v-model="item.typeId" :options="appraisalTypes" item-value="id" item-text="form_type" object></m-select>
+                        </div>
+                      </div>
+                      <div class="group mgb-10">
+                        <label for="" class="d-block dashboard-label">Appraisal Fee <span class="require"></span></label>
+                        <input type="text" v-model="item.fee" class="dashboard-input w-100">
+                      </div>
+                      <div class="right-btn">
+                        <button class="button button-primry p-1" @click="remoteProviderType(item, ik)">
+                          <span class="icon-trash fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></span>
+                        </button>
+                      </div>
+                    </div>
+                    <div class="d-flex mgb-32 justify-content-between provided-service" v-if="servicesData.length < appraisalTypes.length">
+                      <div class="group">
+                        <div class="pr-2">
                           <label for="" class="d-block mb-2 dashboard-label">Appraiser Type <span class="require"></span></label>
-                          <div class="position-relative">
-                              <b-form-select
-                                v-model="add.serviceType"
-                                :options="appraisalTypes"
-                                value-field="id"
-                                text-field="form_type"
-                                class="dashboard-input w-100">
-                              <template #first>
-                                <b-form-select-option value="" disabled>Please select an option</b-form-select-option>
-                              </template>
-                            </b-form-select>
-                            <span class="icon-arrow-down bottom-arrow-icon"></span>
-                          </div>
-                          <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                          <m-select v-model="add.serviceType" @change="addNewMod" :options="appraisalTypes" item-value="id" item-text="form_type" object></m-select>
                         </div>
-                      </ValidationProvider>
-                      <ValidationProvider class="flex-1" name="Appraisal Fee" rules="required" v-slot="{ errors }">
-                        <div class="group" :class="{ 'invalid-form' : errors[0] }">
-                          <label for="" class="d-block mb-2 dashboard-label">Appraisal Fee <span class="require"></span></label>
-                          <input type="text" v-model="add.serviceFee" class="dashboard-input w-100">
-                          <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
-                        </div>
-                      </ValidationProvider>
-                    </div>
-                    <!-- appraiser name -->
-                    <div class="d-flex mgb-32">
-                      <div class="mgr-32 flex-1">
-                          <label for="" class="d-block mb-2 dashboard-label">Appraiser name <span class="require"></span></label>
-                          <div class="position-relative">
-                            <select name="" id="" class="dashboard-input w-100">
-                              <option value="">fdgfd</option>
-                            </select>
-                             <span class="icon-arrow-down bottom-arrow-icon"></span>
-                          </div>
                       </div>
-                      <div class="flex-1">
-                        <label for="" class="d-block mb-2 dashboard-label">Appraiser Fee <span class="require"></span></label>
-                        <input type="text" class="dashboard-input w-100">
+                      <div class="group">
+                        <label for="" class="d-block mb-2 dashboard-label">Appraisal Fee <span class="require"></span></label>
+                        <input type="text" @blur="addNewMod" v-model="add.serviceFee" class="dashboard-input w-100">
                       </div>
-
                     </div>
-
-                    <div class="d-flex mgb-32">
+                    <div class="d-flex mgb-32" v-if="servicesData.length < appraisalTypes.length">
                       <button class="button button-transparent p-0" @click="addNewMod"><span class="icon-plus"></span> Add more</button>
                     </div>
                 </ValidationObserver>
               </div>
-              <ValidationProvider class="" name="Note" rules="required" v-slot="{ errors }">
-                  <div class="group" :class="{ 'invalid-form' : errors[0] }">
-                    <label for="" class="d-block mb-2 dashboard-label">Note <span class="require"></span></label>
-                    <textarea type="text" v-model="note" class="dashboard-input w-100" style="min-height: 100px"></textarea>
-                    <span class="error-message">{{ errors[0] }}</span>
-                  </div>
-                </ValidationProvider>
-
-              <!-- <div class="divider"></div> -->
-               <div class="list_groups" v-for="item, ik in servicesData" :key="ik">
-                <div class="left-side">
-                  <p class="mb-0">Appraiser Type:</p>
-                  <p class="mb-0"><strong class="primary-text">{{ item.type }}</strong></p>
-                </div>
-                <div class="left-side">
-                  <p class="mb-0"> Fee:</p>
-                  <p class="mb-0"><strong class="primary-text">${{ item.fee }}</strong></p>
-                </div>
-                <p class="right-side mb-0">
-                  <button class="button button-primry p-1" @click="remoteProviderType(item, ik)">
-                    <span class="icon-trash fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></span>
-                  </button>
-                </p>
+              <div class="group">
+                <label for="" class="d-block mb-2 dashboard-label">Note</label>
+                <textarea type="text" v-model="note" class="dashboard-input w-100" style="min-height: 100px"></textarea>
               </div>
             </div>
           </div> 
@@ -122,6 +85,7 @@
     data(){
       return{
         services: [],
+        orderData: [],
         servicesData: [],
         servicesFee: null,
         note: null,
@@ -138,6 +102,7 @@
     },
     methods:{
       getProvidedServices(){
+          this.orderData = this.order;
           this.services = this.order.provider_service;
           this.servicesData = JSON.parse(this.services.appraiser_type_fee);
           this.servicesFee = this.order.provider_service.total_fee;
@@ -150,44 +115,47 @@
             note: this.note,
             order: this.order
         }).then( res => {
-            this.message = res.messages;
-            setTimeout(function(){
-              this.$bvModal.hide('provided-services')
-              this.message = ''
-            }.bind(this), 2000);
+            this.$toast.open({
+                message: res.message,
+                type: res.error == true ? 'error' : 'success',
+            });
+            if (res.error == false) {
+                this.orderData = res.order;
+                this.$emit('updateSection', {section: 'providedService', data: this.orderData});
+                this.$bvModal.hide('provided-services');
+                this.checkProviderBalance();  
+            }
         })
         .catch( err =>{
         })
       },
       addNewMod() {
-          this.$refs.orderForm.validate().then(status => {
-            let newType = this.add.serviceType;
-            let newFee = this.add.serviceFee;
-            if (newType && newFee) {
-                let appType = [];
-                for (let i in this.appraisalTypes) {
-                    let appritem = this.appraisalTypes[i];
-                    if (appritem.id == newType) {
-                        appType = appritem;
-                    }
-                }
-                if ( appType.condo_type == 1) {
-                  this.condoType = true;
-                }
-                let checkOld = ( this.servicesData ).find((ele) =>  ele.typeId == newType);
-                if (!checkOld) {              
-                  this.servicesData.push({
-                      typeId: appType.id,
-                      type: appType.form_type,
-                      fee: newFee
-                  });
-                }
-                this.add.serviceType = null;
-                this.add.serviceFee = null;
-                this.checkProviderBalance();
-                this.$refs.orderForm.reset();
-            }
-          });
+          let newType = this.add.serviceType;
+          let newFee = this.add.serviceFee;
+          if (newType && newFee) {
+              let appType = [];
+              for (let i in this.appraisalTypes) {
+                  let appritem = this.appraisalTypes[i];
+                  if (appritem.id == newType) {
+                      appType = appritem;
+                  }
+              }
+              if ( appType.condo_type == 1) {
+                this.condoType = true;
+              }
+              let checkOld = ( this.servicesData ).find((ele) =>  ele.typeId == newType);
+              if (!checkOld) {              
+                this.servicesData.push({
+                    typeId: appType.id,
+                    type: appType.form_type,
+                    fee: newFee
+                });
+              }
+              this.checkProviderBalance();
+              this.add.serviceType = null;
+              this.add.serviceFee = null;
+              this.$refs.orderForm.reset();
+          }
       },
       remoteProviderType(item, index) {
         this.servicesData.splice(index, 1);
@@ -220,5 +188,15 @@
     background: transparent;
     padding-top: 20px;
     margin-top: 20px;
+}
+.provided-service .group {
+  flex: 0 40%;
+}
+.provided-service .group:nth-child(1) {
+  flex: 0 60%;
+  padding-right: 10px;
+}
+.provided-service .group:nth-child(2) {
+  padding-right: 10px;
 }
 </style>

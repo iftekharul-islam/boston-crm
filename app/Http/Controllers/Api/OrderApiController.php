@@ -341,7 +341,7 @@ class OrderApiController extends Controller
 
         $array_filter2 = [
             "borrower_name",
-            "co_borrower_name"
+            // "co_borrower_name"
         ];
 
         foreach ($array_filter2 as $item) {

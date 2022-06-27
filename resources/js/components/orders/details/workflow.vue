@@ -169,7 +169,6 @@ export default {
   methods: {
     currentStep(step){
       if (this.orderData.currentStep == step) {
-          // this.isActive = step;
           return true;
       }
     },

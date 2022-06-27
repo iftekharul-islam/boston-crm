@@ -44,7 +44,7 @@ trait CrmHelper {
         if ($type == "borrower") {
             $array_filter2 = [
                 "borrower_name",
-                "co_borrower_name"
+                // "co_borrower_name"
             ];
             foreach ($array_filter2 as $item) {
                 if ($get->{$item} == null) {

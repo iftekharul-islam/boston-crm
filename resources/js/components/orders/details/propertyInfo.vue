@@ -55,53 +55,83 @@
     <b-modal id="property-info" size="lg" title="Edit Basic Information">
       <div class="modal-body">
         <b-alert v-if="message" show variant="success"><a href="#" class="alert-link">{{ message }}</a></b-alert>
-        <div class="row">
-          <div class="col-md-6">
-            <div class="group">
-              <label for="" class="d-block mb-2 dashboard-label">Search address <span class="require"></span></label>
-              <input type="text" ref="searchMapLocation" v-model="info.search_address" class="dashboard-input w-100">
+        <ValidationObserver ref="clientPropertyName">
+          <div class="row">
+            <div class="col-md-6">
+              <ValidationProvider rules="required" name="Search Address" v-slot="{ errors }">
+                <div class="group" :class="{ 'invalid-form' : errors[0] }">
+                  <label for="" class="d-block mb-2 dashboard-label">Search address <span class="require"></span></label>
+                  <input type="text" ref="searchMapLocation" v-model="info.search_address" class="dashboard-input w-100">
+                  <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                </div>
+              </ValidationProvider>
+
+              <ValidationProvider rules="required" name="Street name" v-slot="{ errors }">
+                <div class="group" :class="{ 'invalid-form' : errors[0] }">
+                  <label for="" class="d-block mb-2 dashboard-label">Street name <span class="require"></span></label>
+                  <input type="text" v-model="info.street_name" class="dashboard-input w-100">
+                  <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                </div>
+              </ValidationProvider>
+              <ValidationProvider rules="required" name="City name" v-slot="{ errors }">
+                <div class="group" :class="{ 'invalid-form' : errors[0] }">
+                  <label for="" class="d-block mb-2 dashboard-label">City name <span class="require"></span></label>
+                  <input type="text" v-model="info.city_name" class="dashboard-input w-100">
+                  <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                </div>
+              </ValidationProvider>
+              <ValidationProvider rules="required" name="State name" v-slot="{ errors }">
+                <div class="group" :class="{ 'invalid-form' : errors[0] }">
+                  <label for="" class="d-block mb-2 dashboard-label">State name <span class="require"></span></label>
+                  <input type="text" v-model="info.state_name" class="dashboard-input w-100">
+                  <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                </div>
+              </ValidationProvider>
+              <div class="divider"></div>
+              <div class="group">
+                <small>Edit with map location:</small>
+                <a :href="`/orders/${order.id}/edit`" class="btn btn-sm btn-primary">Edit Here</a>
+              </div>
             </div>
-            <div class="group">
-              <label for="" class="d-block mb-2 dashboard-label">Street name <span class="require"></span></label>
-              <input type="text" v-model="info.street_name" class="dashboard-input w-100">
-            </div>
-            <div class="group">
-              <label for="" class="d-block mb-2 dashboard-label">City name <span class="require"></span></label>
-              <input type="text" v-model="info.city_name" class="dashboard-input w-100">
-            </div>
-            <div class="group">
-              <label for="" class="d-block mb-2 dashboard-label">State name <span class="require"></span></label>
-              <input type="text" v-model="info.state_name" class="dashboard-input w-100">
-            </div>
-            <div class="divider"></div>
-            <div class="group">
-              <small>Edit with map location:</small>
-              <a :href="`/orders/${order.id}/edit`" class="btn btn-sm btn-primary">Edit Here</a>
+            <div class="col-md-6">
+              <ValidationProvider :rules="{'required' : condoType }" name="Unit #" v-slot="{ errors }">
+                <div class="group" :class="{ 'invalid-form' : errors[0] }">
+                  <label for="" class="d-block mb-2 dashboard-label">Unit # <span v-if="condoType" class="require"></span></label>
+                  <input type="text" v-model="info.unit_no" class="dashboard-input w-100">
+                  <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                </div>
+              </ValidationProvider>
+              <ValidationProvider rules="required" name="County" v-slot="{ errors }">
+                <div class="group" :class="{ 'invalid-form' : errors[0] }">
+                  <label for="" class="d-block mb-2 dashboard-label">County <span class="require"></span></label>
+                  <input type="text" v-model="info.country" class="dashboard-input w-100">
+                  <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                </div>
+              </ValidationProvider>
+              <ValidationProvider rules="required" name="Zip" v-slot="{ errors }">
+                <div class="group" :class="{ 'invalid-form' : errors[0] }">
+                  <label for="" class="d-block mb-2 dashboard-label">Zip <span class="require"></span></label>
+                  <input type="text" v-model="info.zip" class="dashboard-input w-100">
+                  <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                </div>
+              </ValidationProvider>
+              <ValidationProvider rules="required" name="Latitude" v-slot="{ errors }">
+                <div class="group" :class="{ 'invalid-form' : errors[0] }">
+                  <label for="" class="d-block mb-2 dashboard-label">Latitude <span class="require"></span></label>
+                  <input type="text" v-model="info.latitude" class="dashboard-input w-100">
+                  <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                </div>
+              </ValidationProvider>
+              <ValidationProvider rules="required" name="Longitude" v-slot="{ errors }">
+                <div class="group" :class="{ 'invalid-form' : errors[0] }">
+                  <label for="" class="d-block mb-2 dashboard-label">Longitude <span class="require"></span></label>
+                  <input type="text" v-model="info.longitude" class="dashboard-input w-100">
+                  <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                </div>
+              </ValidationProvider>
             </div>
           </div>
-          <div class="col-md-6">
-            <div class="group">
-              <label for="" class="d-block mb-2 dashboard-label">Unit # <span v-if="condoType" class="require"></span></label>
-              <input type="text" v-model="info.unit_no" class="dashboard-input w-100">
-            </div>
-            <div class="group">
-              <label for="" class="d-block mb-2 dashboard-label">County <span class="require"></span></label>
-              <input type="text" v-model="info.country" class="dashboard-input w-100">
-            </div>
-            <div class="group">
-              <label for="" class="d-block mb-2 dashboard-label">Zip <span class="require"></span></label>
-              <input type="text" v-model="info.zip" class="dashboard-input w-100">
-            </div>
-            <div class="group">
-              <label for="" class="d-block mb-2 dashboard-label">Latitude <span class="require"></span></label>
-              <input type="text" v-model="info.latitude" class="dashboard-input w-100">
-            </div>
-            <div class="group">
-              <label for="" class="d-block mb-2 dashboard-label">Longitude <span class="require"></span></label>
-              <input type="text" v-model="info.longitude" class="dashboard-input w-100">
-            </div>
-          </div>
-        </div>
+        </ValidationObserver>
       </div>
       <div slot="modal-footer">
         <b-button variant="secondary" @click="closeModal">Close</b-button>
@@ -188,16 +218,29 @@ export default {
       if (this.condoType == true && (this.info.unit_no == null || this.info.unit_no == "") ) {
           return false;
       }
-      axios.post('update-property-info/'+ this.orderId, this.info)
-          .then(res => {
-            that.message = res.data.message
-            this.edited = Object.assign({}, this.info);
-            setTimeout(function(){
-              that.$bvModal.hide('property-info')
-            }, 2000);
-          }).catch(err => {
-      })
+      this.$refs.clientPropertyName.validate().then((status) => {
+          if (status) {
+              axios.post('update-property-info/'+ this.orderId, this.info)
+                  .then(res => {
+                    that.message = res.data.message
+                    this.edited = Object.assign({}, this.info);
+                    this.$toast.open({
+                        message: that.message,
+                        type: res.data.error == true ? 'error' : 'success',
+                    });
+                    
+                    that.$bvModal.hide('property-info');
+                  }).catch(err => {
+              })
+          }
+      });
     },
   }
 }
 </script>
+
+<style scoped>
+.group {
+  margin-bottom: 15px;
+}
+</style>

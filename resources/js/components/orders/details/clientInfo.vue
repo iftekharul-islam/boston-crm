@@ -12,7 +12,7 @@
           <span>:</span>
           <p class="right-side mb-0">{{ amc_name }}</p>
         </div>
-        <a v-if="amc_file != ''" :href="amc_file" target="_blank" class="underline primary-text text-600">AMC requirements</a>
+        <a v-if="amc_file != null || amc_file != ''" :href="amc_file" :download="amc_file" class="underline primary-text text-600">AMC requirements</a>
         <a v-else :href="'#'" class="secondary-text text-gray">AMC requirements</a>
       </div>
       <div class="list">
@@ -21,7 +21,7 @@
           <span>:</span>
           <p class="right-side mb-0">{{ lender_name }}</p>
         </div>
-        <a v-if="lender_file != ''" :href="lender_file" target="_blank" class="underline primary-text text-600">Lender requirements</a>
+        <a v-if="lender_file != null || lender_file != ''" :href="lender_file" :download="lender_file" class="underline primary-text text-600">Lender requirements</a>
         <a v-else :href="'#'" class="text-gray">Lender requirements</a>
       </div>
     </div>
@@ -33,16 +33,7 @@
           <div class="col-md-12">
             <div class="group">
               <label for="" class="d-block mb-2 dashboard-label">AMC Name <span class="require"></span></label>
-              <b-form-select
-                  v-model="amc_id"
-                  :options="allAmc"
-                  value-field="id"
-                  text-field="name"
-                  class="dashboard-input w-100">
-                <template #first>
-                  <b-form-select-option value="" disabled>-- Please select an option --</b-form-select-option>
-                </template>
-              </b-form-select>
+              <m-select v-model="amc_id" :options="allAmc" @change="changeClientType('amc', $event)" object item-value="id" item-text="name"></m-select>
             </div>
             <a :href="amc_file" target="_blank" class="primary-text fw-bold my-3 d-block underline">AMC
               requirements</a>
@@ -57,16 +48,7 @@
           <div class="col-md-12">
             <div class="group">
               <label for="" class="d-block mb-2 dashboard-label">Lender Name <span class="require"></span></label>
-              <b-form-select
-                  v-model="lender_id"
-                  :options="allLender"
-                  value-field="id"
-                  text-field="name"
-                  class="dashboard-input w-100">
-                <template #first>
-                  <b-form-select-option value="" disabled>-- Please select an option --</b-form-select-option>
-                </template>
-              </b-form-select>
+              <m-select v-model="lender_id" @change="changeClientType('lender', $event)" :options="allLender" object item-value="id" item-text="name"></m-select>
             </div>
             <div class="group">
               <label for="" class="d-block mb-2 dashboard-label">Lender address</label>
@@ -136,6 +118,19 @@ export default {
       this.amcNewFile = e.target.files[0]
       this.amcFileName = e.target.files[0].name
     },
+    changeClientType(type, value) {
+      if (type == 'amc') {
+        let amcDetails = this.allAmc.find(ele => ele.id == value);
+        if (amcDetails.client_type == 'both') {
+            this.lender_id = amcDetails.id;
+        }
+      } else {
+        let lenderDetails = this.allLender.find(ele => ele.id == value);
+        if (lenderDetails.client_type == 'both') {
+          this.amc_id = lenderDetails.id;
+        }
+      }
+    },
     saveClient() {
       let that = this
       let formData = new FormData()
@@ -149,13 +144,14 @@ export default {
           .then(res => {
             this.getClientInfo(res.data.data)
             that.message = res.data.message
-            setTimeout(function () {
-              that.$bvModal.hide('client-info')
-              that.message = ''
-            }, 2000);
+            this.$toast.open({
+                message: that.message,
+                type: res.error == true ? 'error' : 'success',
+            });
+            that.$bvModal.hide('client-info');
           }).catch(err => {
-        console.log(err)
-      })
+
+          })
     }
   }
 }

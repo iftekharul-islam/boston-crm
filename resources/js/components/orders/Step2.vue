@@ -16,13 +16,12 @@
                   <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                 </div>
               </ValidationProvider>
-              <ValidationProvider class="group" name="Co Borrower Name" rules="required" v-slot="{ errors }">
-                <div class="group" :class="{ 'invalid-form' : errors[0] }">
-                <label for="" class="d-block mb-2 dashboard-label">Co-borrower name</label>
-                <input type="text" v-model="step2.co_borrower_name" class="dashboard-input w-100">
-                <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+              <div class="mt-3">
+                <div class="group">
+                    <label for="" class="d-block mb-2 dashboard-label">Co-borrower name</label>
+                    <input type="text" v-model="step2.co_borrower_name" class="dashboard-input w-100">
+                  </div>
               </div>
-              </ValidationProvider>
             </div>
             <div class="middle max-w-424 w-100 me-3">
               <ValidationObserver ref="addContactForm">
