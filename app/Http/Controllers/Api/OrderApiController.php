@@ -28,20 +28,11 @@ class OrderApiController extends Controller
         $step2 = $get->step2;
         $company = $get->company;
 
-        $providedData = $get->providedData;
-
         $errorChecking = $this->getErrorMessage($get);
         $error = $errorChecking['error'];
         $errorMessage = $errorChecking['message'];
         if ($error == true) {
             return response()->json(['error' => $error, 'messages' => $errorMessage]);
-        }
-
-        $latitude = $step['lat'];
-        $longitude = $step['lng'];
-        
-        if (is_string($latitude) || is_string($longitude)) {
-            return response()->json(['error' => true, 'errorString' => true, 'messages' => "Please use a valid longitude and latitude"]);
         }
 
         $orderProccess = DB::transaction( function() use ($step, $step2, $company, $get) {
@@ -310,7 +301,7 @@ class OrderApiController extends Controller
 
         $array_filter = [
             "clientOrderNo",
-            "loanNo",
+            // "loanNo",
             "loanType",
             "receiveDate",
             "fhaCaseNo",
@@ -318,7 +309,7 @@ class OrderApiController extends Controller
             "dueDate",
             "amcClient",
             "lender",
-            "note",
+            // "note",
             "searchAddress",
             "state",
             "city",
