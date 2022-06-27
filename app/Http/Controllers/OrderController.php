@@ -508,7 +508,7 @@ class OrderController extends BaseController
      * @param $order_id
      * @return JsonResponse
      */
-    public function updateAppraisalInfo(Request $request, $order_id): JsonResponse
+    public function updateAppraisalInfo(Request $request, $order_id)
     {
         $this->repository->updateAppraisalInfo($order_id, $request->all());
         $data = [
@@ -518,7 +518,11 @@ class OrderController extends BaseController
         ];
 
         $this->repository->addActivity($data);
-        return response()->json(["message" => "Appraisal info updated successfully"]);
+        $orderData = $this->orderDetails($order_id);
+        return [
+            "message" => "Appraisal info updated successfully",
+            "data" => $orderData
+        ];
     }
 
     public function updateClientInfo(Request $request, $order_id)
@@ -526,12 +530,23 @@ class OrderController extends BaseController
         $this->repository->updateClientDetails($order_id, $request->all());
 
         $orderData = $this->orderDetails($order_id);
+        $order= Order::find($order_id);
+        $data = [
+            "activity_text" => "Client info has been updated",
+            "activity_by" => Auth::id(),
+            "order_id" => $order_id
+        ];
+        $amc_file = $this->repository->getClientFile($order->amc_id);
+        $lender_file = $this->repository->getClientFile($order->lender_id);
+        $this->repository->addActivity($data);
 
         return [
             'error' => false,
-            'message' => 'Basic info updated successfully !',
+            'message' => 'Client info updated successfully !',
             'status' => 'success',
-            'data' => $orderData
+            'data' => $orderData,
+            'amc_file' => $amc_file,
+            'lender_file' => $lender_file
         ];
     }
 
