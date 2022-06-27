@@ -12,8 +12,7 @@
                 <label for="role" class="d-block text-light-black me-3">{{ currentStatus }}</label>
                 <div class="position-relative">
                     <a href="javascript:;"
-                        class="button button-success h-40 d-inline-flex align-items-center mgr-20"><span>{{order.order_status
-                            }}</span></a>
+                        class="button button-success h-40 d-inline-flex align-items-center mgr-20"><span>{{ $store.state.app.orderDetails.order_status }}</span></a>
                     <!-- <select name="role" id="role" class="login-input role-error fw-bold" @change="changeOrderStatus($event)" v-model="order.status">
                         <option value="">Select</option>
                         <option value="0">Active</option>

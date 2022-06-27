@@ -133,13 +133,18 @@
                 { 'duration': '55 minutes' },
                 { 'duration': '60 minutes' },
             ],
+            storeData: []
         }),
         created() {
-            this.getInspectionData()
+            this.getInspectionData(this.order);
+            this.$root.$on('wk_flow_toast', (res) => {
+                this.orderData = res.data;
+                this.getInspectionData(this.orderData);
+            });
         },
         methods: {
-            getInspectionData() {
-                this.orderData = this.order
+            getInspectionData(order) {
+                this.orderData = order
                 this.isScheduled = (JSON.parse(this.orderData.workflow_status)).scheduling == 1 ? 1 : 0
                 if (this.isScheduled == 1) {
                     this.inspection.order_id = this.orderData.id
