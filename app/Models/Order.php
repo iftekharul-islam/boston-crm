@@ -204,4 +204,9 @@ class Order extends Model implements HasMedia
     {
         return $this->hasMany(CallLog::class,'order_id', 'id');
     }
+
+    public function tickets()
+    {
+        return $this->hasMany(Ticket::class,'order_id', 'id');
+    }
 }
