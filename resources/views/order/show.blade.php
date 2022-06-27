@@ -37,7 +37,7 @@
                 {{-- Inspection --}}
                 <inspection :order="{{ $order }}" :appraisers="{{ $appraisers }}"></inspection>
                 {{-- Issues --}}
-                <issues></issues>
+                <issues :order="{{ $order }}"></issues>
             </div>
             <div class="order-details__right col-md-6">
                 {{-- Appraisal Details --}}

@@ -8,7 +8,7 @@
                 <borrower :order="order"  :order-id="order_id"></borrower>
                 <contact :order="order"  :order-id="order_id"></contact>
                 <inspection :order="order" :appraisers="appraisers"></inspection>
-                <issues></issues>
+                <issues :order="order"></issues>
             </div>
             <div class="order-details__right col-md-6">
                 <appraisal-details :order="order" :appraisers="appraisers" :loan-types="loan_types" :order-id="order_id"></appraisal-details>
