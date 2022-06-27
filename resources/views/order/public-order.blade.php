@@ -23,16 +23,16 @@
                         <p class="fs-20 text-600 text-light-black mb-3">Upload Order Files </p>
                     </div>
                     <div class="col-md-4">
-                        <select class="form-control" name="file_type">
-                            <option> Select a type</option>
+                        <select class="form-control" name="file_type" required>
+                            <option value="">Select a type</option>
                             @foreach($order_types as $type)
                                 <option value="{{ $type }}">{{ $type }}</option>
                             @endforeach
                         </select>
                     </div>
                     <input type="hidden" name="public">
-                    <div class="col-md-4">
-                        <input class="form-control" type="file" name="files[]" multiple>
+                    <div class="col-md-4 mt-4 mb-4">
+                        <input class="form-control" type="file" name="files[]" multiple required>
                     </div>
                     <div class="py-3 bg-platinum d-flex justify-content-end px-3 box-footer">
                         <button class="button button-primary px-5">Submit</button>
