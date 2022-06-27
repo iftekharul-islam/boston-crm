@@ -8,14 +8,14 @@
 
         <div class="chat-item" v-for="noteItem, ni in notes" :key="noteItem.key + ni">
           <div class="chat-name d-flex align-items-center">
-            <img src="/img/dummy-profile.png" alt="boston chat image" class="img-fluid">
+            <img v-if="noteItem.user.thumb" :src="noteItem.user.thumb" alt="boston chat image" class="img-fluid"/>
+            <img v-else src="/img/user.png" alt="boston chat image" class="img-fluid"/>
             <div class="ms-3">
-              <p class="text-600 mb-1">{{ noteItem.user ? noteItem.user.name : '-' }}</p>
-              <span class="text-gray chat-mail">{{ noteItem.user ? noteItem.user.email : '-' }}</span>
+              <p class="text-600 mb-0">{{ noteItem.user ? noteItem.user.name : '-' }}</p>
+              {{ noteItem.title }}
             </div>
           </div>
           <div class="d-inline-block message">
-            <small>{{ noteItem.title }}</small>
             <p class="mb-0 ">{{ noteItem.note }}</p>
           </div>
         </div>
@@ -72,12 +72,14 @@
               }
 
               if ( order.analysis ) {
-                  this.notes.push({
-                      key: 'analysis',
-                      title: "Report Analysys",
-                      note: order.analysis.note,
-                      user: order.analysis.update_by
-                  });
+                  if (order.analysis.note) {
+                    this.notes.push({
+                        key: 'analysis',
+                        title: "Report Analysys",
+                        note: order.analysis.note,
+                        user: order.analysis.update_by
+                    });
+                  }
                   if (order.analysis.rewrite_note) {
                     this.notes.push({
                         key: 'analysis_rewrite',

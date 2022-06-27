@@ -22,7 +22,7 @@ class User extends Authenticatable implements HasMedia
     use HasApiTokens, HasFactory, Notifiable, InteractsWithMedia, HasRoles;
 
 
-    protected $appends = ['colors'];
+    protected $appends = ['colors', 'thumb'];
     /**
      * The attributes that are mass assignable.
      *
@@ -136,5 +136,14 @@ class User extends Authenticatable implements HasMedia
     public function getCompanyProfile()
     {
         return CompanyUser::where('user_id', $this->id)->first();
+    }
+
+    public function getThumbAttribute() {
+        $profile = $this->getMedia('profiles');
+        if ($profile->count() > 0) {
+            return $this->getMedia('profiles')[0]->getUrl();
+        } else {
+            return null;
+        }
     }
 }

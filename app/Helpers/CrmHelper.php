@@ -44,7 +44,7 @@ trait CrmHelper {
         if ($type == "borrower") {
             $array_filter2 = [
                 "borrower_name",
-                "co_borrower_name"
+                // "co_borrower_name"
             ];
             foreach ($array_filter2 as $item) {
                 if ($get->{$item} == null) {
@@ -146,7 +146,8 @@ trait CrmHelper {
             'qualityAssurance.assignee',
             'qualityAssurance.attachments',
             'qualityAssurance.updatedBy',
-            'comlist'
+            'comlist',
+            'callLog.caller'
         )->where('id', $id)->first();
 
         return $this->checkActiveStep($order);

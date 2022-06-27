@@ -29,17 +29,13 @@ class OrderApiController extends Controller
         $step2 = $get->step2;
         $company = $get->company;
 
-        $providedData = $get->providedData;
-
         $errorChecking = $this->getErrorMessage($get);
         $error = $errorChecking['error'];
         $errorMessage = $errorChecking['message'];
+        
         if ($error == true) {
             return response()->json(['error' => $error, 'messages' => $errorMessage]);
         }
-
-        $latitude = $step['lat'];
-        $longitude = $step['lng'];
 
         $orderProccess = DB::transaction( function() use ($step, $step2, $company, $get) {
             $amcClient = $step['amcClient'];
@@ -309,7 +305,7 @@ class OrderApiController extends Controller
 
         $array_filter = [
             "clientOrderNo",
-            "loanNo",
+            // "loanNo",
             "loanType",
             "receiveDate",
             "fhaCaseNo",
@@ -317,7 +313,7 @@ class OrderApiController extends Controller
             "dueDate",
             "amcClient",
             "lender",
-            "note",
+            // "note",
             "searchAddress",
             "state",
             "city",
@@ -345,7 +341,7 @@ class OrderApiController extends Controller
 
         $array_filter2 = [
             "borrower_name",
-            "co_borrower_name"
+            // "co_borrower_name"
         ];
 
         foreach ($array_filter2 as $item) {

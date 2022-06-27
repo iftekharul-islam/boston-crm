@@ -103,12 +103,13 @@
                     <ValidationProvider class="group" name="Report Creator" rules="required" v-slot="{ errors }">
                         <div :class="{ 'invalid-form' : errors[0] }">
                             <label for="" class="d-block mb-2 dashboard-label">Report Creator </label>
-                            <select name="" class="dashboard-input w-100 loan-type-select creatorId" @change="changeSelect('creatorId', $event.target.value)" v-model="creatorId">
+                            <!-- <select name="" class="dashboard-input w-100 loan-type-select creatorId" @change="changeSelect('creatorId', $event.target.value)" v-model="creatorId">
                                 <option value="">Please Select a user</option>
                                 <option v-for="user in users" :key="user.id" :value="user.id">
                                     {{ user.name }}
                                 </option>
-                            </select>
+                            </select> -->
+                            <m-select :options="users" object item-text="name" item-value="id" v-model="creatorId"></m-select>
                             <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                         </div>
                     </ValidationProvider>
@@ -117,12 +118,13 @@
                     <ValidationProvider class="group" name="Report Viewer" rules="required" v-slot="{ errors }">
                         <div :class="{ 'invalid-form' : errors[0] }">
                             <label for="" class="d-block mb-2 dashboard-label">Report Viewer </label>
-                            <select name="" class="dashboard-input w-100 loan-type-select viewerId" @change="changeSelect('viewerId', $event.target.value)" v-model="viewerId">
+                            <!-- <select name="" class="dashboard-input w-100 loan-type-select viewerId" @change="changeSelect('viewerId', $event.target.value)" v-model="viewerId">
                                 <option value="">Please Select a user</option>
                                 <option v-for="user in users" :key="user.id" :value="user.id">
                                     {{ user.name }}
                                 </option>
-                            </select>
+                            </select> -->
+                            <m-select :options="users" object item-text="name" item-value="id" v-model="viewerId"></m-select>
                             <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                         </div>
                     </ValidationProvider>
@@ -131,12 +133,13 @@
                     <ValidationProvider class="group" name="Assign to" rules="required" v-slot="{ errors }">
                       <div :class="{ 'invalid-form' : errors[0] }">
                         <label for="" class="d-block mb-2 dashboard-label">Assign to </label>
-                        <select name="" class="dashboard-input w-100 loan-type-select assignTo" v-model="assignTo" @change="changeSelect('assignTo', $event.target.value)">
+                        <!-- <select name="" class="dashboard-input w-100 loan-type-select assignTo" v-model="assignTo" @change="changeSelect('assignTo', $event.target.value)">
                           <option value="">Please Select a user</option>
                           <option v-for="user in users" :key="user.id" :value="user.id">
                               {{ user.name }}
                           </option>
-                        </select>
+                        </select> -->
+                        <m-select :options="users" object item-text="name" item-value="id" v-model="assignTo"></m-select>
                         <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                       </div>
                     </ValidationProvider>
@@ -145,12 +148,13 @@
                     <ValidationProvider class="group" name="Trainee Selection" rules="required" v-slot="{ errors }">
                       <div :class="{ 'invalid-form' : errors[0] }">
                         <label for="" class="d-block mb-2 dashboard-label">Trainee Selection </label>
-                        <select name="" class="dashboard-input w-100 loan-type-select traineeId" v-model="traineeId" @change="changeSelect('traineeId', $event.target.value)">
+                        <!-- <select name="" class="dashboard-input w-100 loan-type-select traineeId" v-model="traineeId" @change="changeSelect('traineeId', $event.target.value)">
                           <option value="">Please Select a user</option>
                           <option v-for="user in users" :key="user.id" :value="user.id">
                               {{ user.name }}
                           </option>
-                        </select>
+                        </select> -->
+                        <m-select theme="blue" :options="users" object item-text="name" item-value="id" v-model="traineeId"></m-select>
                         <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                       </div>
                     </ValidationProvider>
@@ -313,20 +317,19 @@ export default {
         
     },
     initSelect2() {
-      $("select").select2();
-      $(".creatorId").on("select2:select", function(e){
-        this.creatorId = e.target.value;
-      }.bind(this));
-      $(".viewerId").on("select2:select", function(e){
-        this.viewerId = e.target.value;
-      }.bind(this));
-      $(".assignTo").on("select2:select", function(e){
-        this.assignTo = e.target.value;
-      }.bind(this));
-      $(".traineeId").on("select2:select", function(e){
-        this.traineeId = e.target.value;
-      }.bind(this));
-
+      // $("select").select2();
+      // $(".creatorId").on("select2:select", function(e){
+      //   this.creatorId = e.target.value;
+      // }.bind(this));
+      // $(".viewerId").on("select2:select", function(e){
+      //   this.viewerId = e.target.value;
+      // }.bind(this));
+      // $(".assignTo").on("select2:select", function(e){
+      //   this.assignTo = e.target.value;
+      // }.bind(this));
+      // $(".traineeId").on("select2:select", function(e){
+      //   this.traineeId = e.target.value;
+      // }.bind(this));
     }
   },
   created() {

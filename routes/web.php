@@ -17,6 +17,7 @@ use App\Http\Controllers\VerificationController;
 use App\Http\Controllers\AppraisalTypeController;
 use App\Http\Controllers\OrderWorkflowController;
 use App\Http\Controllers\CallController;
+use App\Http\Controllers\CallLogController;
 
 /*
 |--------------------------------------------------------------------------
@@ -106,6 +107,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     //order details
     Route::get('save-order-data', [OrderController::class, 'saveOrderData']);
+
+    //call log
+    Route::get('call-log/{order_id}', [CallLogController::class, 'index'])->middleware('role_permission:view.order')->name('call.log');
+    Route::post('call-log/{order_id}', [CallLogController::class, 'store'])->middleware('role_permission:view.order')->name('call.log.store');
 
 //    Route::get('/get-basic-info/{id}',[OrderController::class,'getBasicInfo'])->middleware('role_permission:view.order');
 //    Route::get('/get-appraisal-info/{id}',[OrderController::class,'getAppraisalInfo'])->middleware('role_permission:view.order');

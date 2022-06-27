@@ -19,13 +19,10 @@
                                     </div>
                                 </ValidationProvider>
 
-                                <ValidationProvider class="group" name="Loan no" rules="required" v-slot="{ errors }">
-                                    <div :class="{ 'invalid-form' : errors[0] }">
-                                        <label for="" class="d-block mb-2 dashboard-label">Loan no</label>
-                                        <input type="text" class="dashboard-input w-100" v-model="step1.loanNo">
-                                        <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
-                                    </div>
-                                </ValidationProvider>
+                                <div class="group mb-3">
+                                    <label for="" class="d-block mb-2 dashboard-label">Loan no</label>
+                                    <input type="text" class="dashboard-input w-100" v-model="step1.loanNo">
+                                </div>
 
 
                                 <ValidationProvider class="group" name="Received date" rules="required"
@@ -167,44 +164,32 @@
                                 </div>
                                 <!-- input box and new add -->
                                 <div class="col-12">
-                                    <ValidationObserver ref="providerServices">
-                                        <div class="row">
-                                            <div class="col-6">
-                                                <ValidationProvider name="Appraiser Type"
-                                                    :rules="{'required' : (providerTypes.error.type == true || this.proviedServicePass == false)}"
-                                                    v-slot="{ errors }">
-                                                    <div class="group" :class="{ 'invalid-form': errors[0] }">
-                                                        <label for="" class="d-block mb-2 dashboard-label">Appraiser
-                                                            type </label>
-                                                        <div class="position-relative borderless-select">
-                                                            <select id="providerTypeFee" class="dashboard-input w-100"
-                                                                v-model="providerTypes.default.type">
-                                                                <option value="">Choose Provided Service</option>
-                                                                <option :value="item.id"
-                                                                    :data-full="item.is_full_appraisal" :key="ki"
-                                                                    v-for="item, ki in appraisalTypes">{{ item.form_type
-                                                                    }}</option>
-                                                            </select>
-                                                            <span class="icon-arrow-down bottom-arrow-icon"></span>
-                                                        </div>
-                                                    </div>
-                                                </ValidationProvider>
-
-                                            </div>
-                                            <div class="col-6">
-                                                <ValidationProvider name="Fee"
-                                                    :rules="{'required' : (providerTypes.error.fee == true || this.proviedServicePass == false) }"
-                                                    v-slot="{ errors }">
-                                                    <div class="group" :class="{ 'invalid-form': errors[0] }">
-                                                        <label for="" class="d-block mb-2 dashboard-label">Fee </label>
-                                                        <input @input="checkProviderValidation($event, 2)" type="number"
-                                                            step="any" class="dashboard-input w-100"
-                                                            v-model="providerTypes.default.fee">
-                                                    </div>
-                                                </ValidationProvider>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="group" :class="{ 'invalid-form': providerTypes.error.type == true }">
+                                                <label for="" class="d-block mb-2 dashboard-label">Appraiser
+                                                    type </label>
+                                                <div class="position-relative borderless-select">
+                                                    <select id="providerTypeFee" class="dashboard-input w-100"
+                                                        v-model="providerTypes.default.type">
+                                                        <option value="">Choose Provided Service</option>
+                                                        <option :value="item.id"
+                                                            :data-full="item.is_full_appraisal" :key="ki"
+                                                            v-for="item, ki in appraisalTypes">{{ item.form_type
+                                                            }}</option>
+                                                    </select>
+                                                    <span class="icon-arrow-down bottom-arrow-icon"></span>
+                                                </div>
                                             </div>
                                         </div>
-                                    </ValidationObserver>
+                                        <div class="col-6">
+                                            <div class="group" :class="{ 'invalid-form': providerTypes.error.fee == true }">
+                                                <label for="" class="d-block mb-2 dashboard-label">Fee </label>
+                                                <input @input="checkProviderValidation($event, 2)" type="number"
+                                                    step="any" class="dashboard-input w-100" v-model="providerTypes.default.fee" @blur="addFee">
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div class="col-12 text-end mt-3">
@@ -216,15 +201,11 @@
 
                         </div>
                         <div class="mt-auto">
-                            <ValidationProvider name="Provided Note"
-                                :rules="{'required' : (step1.note == null || step1.note == '')}" v-slot="{ errors }">
-                                <div class="group" :class="{ 'invalid-form' : errors[0] }">
-                                    <label for="" class="d-block mb-2 dashboard-label">Note <span
-                                            class="text-danger require"></span></label>
-                                    <textarea name="" id="" rows="7" class="dashboard-textarea w-100"
-                                        v-model="step1.note"></textarea>
-                                </div>
-                            </ValidationProvider>
+                            <div class="group">
+                                <label for="" class="d-block mb-2 dashboard-label">Note</label>
+                                <textarea name="" id="" rows="7" class="dashboard-textarea w-100"
+                                    v-model="step1.note"></textarea>
+                            </div>
                             <h3 class="text-light-black fw-bold mgt-40">Total fee : <span> $ {{
                                     providerTypes.totalAmount }} </span></h3>
                         </div>
@@ -499,7 +480,7 @@
                         fee: null,
                     },
                     error: {
-                        type: true,
+                        type: false,
                         fee: false
                     },
                     extra: [],
@@ -613,7 +594,7 @@
 
             nextStep() {
                 this.$refs.orderForm.validate().then((status) => {
-                    if (status && this.proviedServicePass == true && !this.dateIssue.status) {
+                    if (status && this.providerTypes.extra.length && !this.dateIssue.status) {
                         this.stepActive = true;
                         this.stepChangeActive();
                     } else {
@@ -635,54 +616,54 @@
                 this.fahCaseNoErrorMsg = '';
             },
             addFee() {
-                this.$refs.providerServices.validate().then((status) => {
-                    if (status) {
-                        let newType = this.providerTypes.default.type;
-                        let newFee = this.providerTypes.default.fee;
-                        this.setNewFee(newType, newFee);
-                    }
-                });
+                let newType = this.providerTypes.default.type;
+                let newFee = this.providerTypes.default.fee;
+                this.providerTypes.error.type = false;
+                this.providerTypes.error.fee = false;
+                if (newType == null) {
+                    this.providerTypes.error.type = true;
+                } 
+                if (newFee == null) {
+                    this.providerTypes.error.fee = true;
+                } 
+                
+                if (newType && newFee) {
+                    this.setNewFee(newType, newFee);
+                }
             },
 
             setNewFee(newType, newFee) {
-                if (newType && newFee) {
-                    let appType = newType;
-
-                    if (newType.id) {
-                        appType = newType;
-                    } else {
-                        for (let i in this.appraisalTypes) {
-                            let appritem = this.appraisalTypes[i];
-                            if (appritem.id == newType) {
-                                appType = appritem;
-                            }
+                let appType = newType;
+                if (newType.id) {
+                    appType = newType;
+                } else {
+                    for (let i in this.appraisalTypes) {
+                        let appritem = this.appraisalTypes[i];
+                        if (appritem.id == newType) {
+                            appType = appritem;
                         }
                     }
-
-                    if (appType.condo_type == 1) {
-                        this.condoType = true;
-                    }
-                    let checkOld = (this.providerTypes.extra).find((ele) => ele.typeId == appType.id);
-                    if (!checkOld && appType.id) {
-                        this.providerTypes.extra.push({
-                            typeId: appType.id,
-                            type: appType.form_type,
-                            fee: newFee
-                        });
-                    }
-                    this.providerTypes.default.type = null;
-                    this.providerTypes.default.fee = null;
-                    this.providerTypes.error.type = false;
-                    this.providerTypes.error.fee = false;
-                    this.checkProviderBalance();
-                } else {
-                    if (this.providerTypes.default.type == null) {
-                        this.providerTypes.error.type = true;
-                    }
-                    if (this.providerTypes.default.fee == null) {
-                        this.providerTypes.error.fee = true;
-                    }
                 }
+
+                if (appType.condo_type == 1) {
+                    this.condoType = true;
+                }
+                let checkOld = (this.providerTypes.extra).find((ele) => ele.typeId == appType.id);
+                if (!checkOld && appType.id) {
+                    this.providerTypes.extra.push({
+                        typeId: appType.id,
+                        type: appType.form_type,
+                        fee: newFee
+                    });
+                }
+                
+                this.providerTypes.default.type = null;
+                this.providerTypes.default.fee = null;
+                this.providerTypes.error.type = false;
+                this.providerTypes.error.fee = false;
+
+                $("#providerTypeFee").val(this.providerTypes.default.type).trigger('change');
+                this.checkProviderBalance();
                 this.$root.$emit("updateProviderData", this.providerTypes);
             },
 
@@ -698,21 +679,18 @@
                 });
                 this.providerTypes.totalAmount = totalfee;
                 this.condoType = checkCondoType;
-                this.proviedServicePass = false;
-                if (this.providerTypes.extra.length > 0) {
-                    this.proviedServicePass = true;
+
+                if (this.providerTypes.extra.length <= 0) {
+                    this.providerTypes.error.type = true;
+                    this.providerTypes.error.fee = true;
                 }
             },
 
             checkProviderValidation(event, type) {
-                if (type == 2 && this.providerTypes.default.type == null) {
-                    this.providerTypes.error.type = true;
-                } else {
+                if (type == 2 && this.providerTypes.default.type != null) {
                     this.providerTypes.error.type = false;
                 }
-                if (type == 1 && this.providerTypes.default.fee == null) {
-                    this.providerTypes.error.fee = true;
-                } else {
+                if (type == 1 && this.providerTypes.default.fee != null) {
                     this.providerTypes.error.fee = false;
                 }
             },

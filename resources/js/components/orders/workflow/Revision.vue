@@ -147,49 +147,55 @@
 
             <!-- edit revission -->
             <transition name="fade" v-if="revissionEdit" :key="revissionKey" appear>
-              <div class="edit-revission">
-                <p class="mgb-22 fs-20 fw-bold">Mark as delivered</p>
-                <div class="group">
-                  <label for="" class="d-block mb-2 dashboard-label">Completed by <span class="require"></span> </label>
-                  <div class="position-relative">
-                    <select name="" id="" v-model="marked.completed_by" class="dashboard-input gray-border w-100">
-                      <option value="">Select one</option>
-                      <option :value="item.id" :key="ui" v-for="item, ui in usersInfo">{{ item.name }}</option>
-                    </select>
-                    <span class="icon-arrow-down bottom-arrow-icon"></span>
+              <ValidationObserver ref="markDelivery">
+                <div class="edit-revission">
+                  <p class="mgb-22 fs-20 fw-bold">Mark as delivered</p>
+                  <ValidationProvider rules="required" name="Completed By" v-slot="{errors}">
+                    <div class="group" :class="{'invalid-form' : errors[0]}">
+                      <label for="" class="d-block mb-2 dashboard-label">Completed by <span class="require"></span> </label>
+                      <m-select :class="{'required' : errors[0] }" theme="blue" :options="usersInfo" object item-text="name" item-value="id" v-model="marked.completed_by"></m-select>
+                      <span class="error-message">{{ errors[0] }}</span>
+                    </div>
+                  </ValidationProvider>
+
+                  <ValidationProvider rules="required" name="Delivered By" v-slot="{errors}">
+                  <div class="group" :class="{'invalid-form' : errors[0]}">
+                    <label for="" class="d-block mb-2 dashboard-label">Delivered by <span class="require"></span> </label>
+                    <m-select :class="{'required' : errors[0] }" theme="blue" :options="usersInfo" object item-text="name" item-value="id" v-model="marked.delivered_by"></m-select>
+                    <span class="error-message">{{ errors[0] }}</span>
+                  </div>
+                  </ValidationProvider>
+
+                  <ValidationProvider rules="required" name="Delivered Date" v-slot="{errors}">
+                  <div class="group" :class="{'invalid-form' : errors[0]}">
+                    <label for="" class="d-block mb-2 dashboard-label">Delivered Date <span class="require"></span> </label>
+                    <div class="position-relative">
+                      <input type="date" v-model="marked.delivery_date" class="dashboard-input w-100 gray-border">
+                      <span class="icon-calendar icon"><span class="path1"></span><span class="path2"></span><span
+                          class="path3"></span><span class="path4"></span><span class="path5"></span><span
+                          class="path6"></span><span class="path7"></span><span class="path8"></span></span>
+                    </div>
+                    <span class="error-message">{{ errors[0] }}</span>
+                  </div>
+                  </ValidationProvider>
+
+                  <ValidationProvider rules="required" name="Add solution" v-slot="{errors}">
+                  <div class="group" :class="{'invalid-form' : errors[0]}">
+                    <label for="" class="mb-2 text-light-black d-inline-block">Add solution <span
+                        class="require"></span></label>
+                    <div class="preparation-input w-100 position-relative">
+                      <textarea name="" v-model="marked.solution_details" id="" cols="30" rows="3" class="w-100 dashboard-textarea"></textarea>
+                    </div>
+                    <span class="error-message">{{ errors[0] }}</span>
+                  </div>
+                  </ValidationProvider>
+
+                  <div class="text-end">
+                    <button @click="revissionEdit = false" class="button button-transparent px-5 h-40 flex-center">Close</button>
+                    <button @click="saveAsMarked" class="button button-primary px-5 h-40 flex-center d-inline-flex">Mark</button>
                   </div>
                 </div>
-                <div class="group">
-                  <label for="" class="d-block mb-2 dashboard-label">Delivered by <span class="require"></span> </label>
-                  <div class="position-relative">
-                    <select name="" v-model="marked.delivered_by" id="" class="dashboard-input gray-border w-100">
-                      <option value="">Select one</option>
-                      <option :value="item.id" :key="ui" v-for="item, ui in usersInfo">{{ item.name }}</option>
-                    </select>
-                    <span class="icon-arrow-down bottom-arrow-icon"></span>
-                  </div>
-                </div>
-                <div class="group">
-                  <label for="" class="d-block mb-2 dashboard-label">Delivered Date <span class="require"></span> </label>
-                  <div class="position-relative">
-                    <input type="date" v-model="marked.delivery_date" class="dashboard-input w-100 gray-border">
-                    <span class="icon-calendar icon"><span class="path1"></span><span class="path2"></span><span
-                        class="path3"></span><span class="path4"></span><span class="path5"></span><span
-                        class="path6"></span><span class="path7"></span><span class="path8"></span></span>
-                  </div>
-                </div>
-                <div class="group">
-                  <label for="" class="mb-2 text-light-black d-inline-block">Add solution <span
-                      class="require"></span></label>
-                  <div class="preparation-input w-100 position-relative">
-                    <textarea name="" v-model="marked.solution_details" id="" cols="30" rows="3" class="w-100 dashboard-textarea"></textarea>
-                  </div>
-                </div>
-                <div class="text-end">
-                  <button @click="revissionEdit = false" class="button button-transparent px-5 h-40 flex-center">Close</button>
-                  <button @click="saveAsMarked" class="button button-primary px-5 h-40 flex-center d-inline-flex">Mark</button>
-                </div>
-              </div>
+              </ValidationObserver>
             </transition>
 
             <!-- Edit notes -->
@@ -365,7 +371,7 @@ export default {
         this.revissionEdit = true;
 
         this.marked.id = item.id;
-        this.marked.solution_details = item.solution_details;
+        this.marked.solution_details = item.solution_details.replace('-', '');
         this.marked.delivered_by = item.delivered_by;
         this.marked.completed_by = item.completed_by;
         this.marked.delivery_date = item.delivery_date_format;
@@ -373,19 +379,23 @@ export default {
         $(".revission-modal .revission-content").animate({scrollTop: 100}, 500);
     },
     saveAsMarked() {
-        this.$boston.post('revissin/solutions/marked', {
-          'order_id' : this.orderData.id,
-          ...this.marked
-        }).then( (res) => {
-            if (res.status == 'success') {
-                this.revisionData = res.data.revission;
-                this.revissionEdit = false;
-                this.$root.$emit('wk_flow_menu', res.data);
-                this.$root.$emit('wk_update', res.data);
-                this.$root.$emit('wk_flow_toast', res);
-            }
-        }).catch(err => {
-        });
+      this.$refs.markDelivery.validate().then((status) => {
+          if (status) {
+            this.$boston.post('revissin/solutions/marked', {
+              'order_id' : this.orderData.id,
+              ...this.marked
+            }).then( (res) => {
+                if (res.status == 'success') {
+                    this.revisionData = res.data.revission;
+                    this.revissionEdit = false;
+                    this.$root.$emit('wk_flow_menu', res.data);
+                    this.$root.$emit('wk_update', res.data);
+                    this.$root.$emit('wk_flow_toast', res);
+                }
+            }).catch(err => {
+            });
+          }
+      });
     },
     revissionEditSubmit() {
         this.$refs.editRevision.validate().then((status) => {

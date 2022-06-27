@@ -539,7 +539,6 @@ class OrderController extends BaseController
         $amc_file = $this->repository->getClientFile($order->amc_id);
         $lender_file = $this->repository->getClientFile($order->lender_id);
         $this->repository->addActivity($data);
-
         return [
             'error' => false,
             'message' => 'Client info updated successfully !',
@@ -702,6 +701,12 @@ class OrderController extends BaseController
             "order_id" => $order->id
         ];
         $this->repository->addActivity($data);
+        $order = $this->orderDetails($order->id);
+        return response()->json([
+            "error" => false,
+            "message" => $returnMessage,
+            'order' => $order,
+        ]);
     }
 
     public function searchOrderByFiltering(Request $get)

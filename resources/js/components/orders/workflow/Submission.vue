@@ -6,12 +6,13 @@
                   <ValidationProvider class="group" name="Trainee Selection" rules="required" v-slot="{ errors }">
                       <div :class="{ 'invalid-form' : errors[0] }">
                           <label for="" class="d-block mb-2 dashboard-label">Trainee name </label>
-                          <select name="" class="dashboard-input w-100 loan-type-select" v-model="traineeId">
+                          <!-- <select name="" class="dashboard-input w-100 loan-type-select" v-model="traineeId">
                               <option value="">Please Select a user</option>
                               <option v-for="user in users" :key="user.id" :value="user.id">
                                   {{ user.name }}
                               </option>
-                          </select>
+                          </select> -->
+                          <m-select theme="blue" :options="users" object item-text="name" item-value="id" v-model="traineeId"></m-select>
                           <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                       </div>
                   </ValidationProvider>
@@ -27,12 +28,13 @@
                   <ValidationProvider class="group" name="Delivery man" rules="required" v-slot="{ errors }">
                       <div :class="{ 'invalid-form' : errors[0] }">
                           <label for="" class="d-block mb-2 dashboard-label">Delivery by </label>
-                          <select name="" class="dashboard-input w-100 loan-type-select" v-model="dManId">
+                          <!-- <select name="" class="dashboard-input w-100 loan-type-select" v-model="dManId">
                               <option value="">Please Select a user</option>
                               <option v-for="user in users" :key="user.id" :value="user.id">
                                   {{ user.name }}
                               </option>
-                          </select>
+                          </select> -->
+                          <m-select theme="blue" :options="users" object item-text="name" item-value="id" v-model="dManId"></m-select>
                           <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                       </div>
                   </ValidationProvider>

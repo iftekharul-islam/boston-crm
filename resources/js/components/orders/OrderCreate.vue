@@ -68,8 +68,8 @@ export default {
   },
   data() {
     return {
-      step: 1,
-      stepChangeActive: false,
+      step: 2,
+      stepChangeActive: true,
       step1Data: [],
       step2Data: [],
       providedData: [],
@@ -83,6 +83,7 @@ export default {
     }
   },
   created() {
+      // this.changeStep(2);
       this.$root.$on("updateStepData", (res) => {
           if (res.step == 1) {
             this.step1Data = res.data;

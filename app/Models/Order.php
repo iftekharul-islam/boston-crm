@@ -192,11 +192,16 @@ class Order extends Model implements HasMedia
 
     public function revission()
     {
-        return $this->hasMany(OrderWRevision::class,'order_id', 'id');
+        return $this->hasMany(OrderWRevision::class,'order_id', 'id')->orderBy('status', 'asc');
     }
 
     public function comlist()
     {
         return $this->hasOne(OrderWComList::class,'order_id', 'id');
+    }
+
+    public function callLog()
+    {
+        return $this->hasMany(CallLog::class,'order_id', 'id');
     }
 }

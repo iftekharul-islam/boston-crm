@@ -161,11 +161,6 @@ export default {
       let that = this
       axios.post('update-basic-info/'+ this.orderId,this.orderData)
         .then(res => {
-          //   this.$root.$emit('wk_update', res.data.data)
-          //   this.$root.$emit('wk_flow_menu', res.data.data)
-          //   this.$root.$emit('wk_flow_toast', res.data)
-          // this.message = res.data.message
-          // this.errorStatus = res.data.error;
           if (this.error) {
               this.$root.$emit('wk_flow_toast', res.data)
           } else {
@@ -174,10 +169,6 @@ export default {
               this.$root.$emit('wk_flow_menu', res.data.data)
               this.$root.$emit('wk_flow_toast', res.data)
               this.$bvModal.hide('basic-info');
-              // setTimeout(function(){
-              //   that.$bvModal.hide('basic-info');
-              //   that.message = '';
-              // }, 5000);
           }
         }).catch(err => {
           console.log(err)
