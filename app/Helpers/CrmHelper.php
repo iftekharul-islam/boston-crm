@@ -162,6 +162,7 @@ trait CrmHelper {
             'report.attachments',
             'reportRewrite.assignee',
             'reportRewrite.updateBy',
+            'reportRewrite.attachments',
             'analysis.assignee',
             'analysis.attachments',
             'analysis.updatedBy',
