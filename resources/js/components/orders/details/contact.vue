@@ -161,18 +161,6 @@
                   }
               }
           })
-          // if (this.email_address == true && this.contact_number == true) {
-          //     this.submitData();
-          // } else {
-          //     this.$refs.orderForm.validate().then((status) => {
-          //         console.log('hello from orderForm')
-          //         console.log(status)
-          //         return
-          //         if (status) {
-          //             this.submitData();
-          //         }
-          //     });
-          // }
       },
       submitData() {
           this.$refs.orderForm.reset();
