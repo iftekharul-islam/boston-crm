@@ -35,6 +35,8 @@ const mapView = () =>
     import ( /*webpackChunkName: "mapView"*/ '../components/orders/details/mapView')
 const files = () =>
     import ( /*webpackChunkName: "files"*/ '../components/orders/details/files')
+const workflowFiles = () =>
+    import ( /*webpackChunkName: "workflowFiles"*/ '../components/orders/details/workflowFiles')
 const invoice = () =>
     import ( /*webpackChunkName: "invoice"*/ '../components/orders/details/invoice')
 const notes = () =>
@@ -71,6 +73,7 @@ Vue.component('issues', issues);
 Vue.component('history', history);
 Vue.component('map-view', mapView);
 Vue.component('files', files);
+Vue.component('workflow-files', workflowFiles);
 Vue.component('invoice', invoice);
 Vue.component('notes', notes);
 Vue.component('activity-log', activityLog);

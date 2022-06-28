@@ -5,19 +5,28 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Helpers\CrmHelper;
 use Illuminate\Http\Request;
+use App\Repositories\OrderRepository;
 
 class CallController extends BaseController
 {
+    protected OrderRepository $repository;
     use CrmHelper;
-    
+
+    public function __construct(OrderRepository $order_repository)
+    {
+        parent::__construct();
+        $this->repository = $order_repository;
+    }
+
     public function index(Request $get)
     {
         $user = auth()->user();
+        $appraisers = $this->repository->getUserByRoleWise(role: 'appraiser');
         $companyId = $user->getCompanyProfile()->company_id;
         $data = $get->data;
-        $paginate = $get->paginate && $get->paginate > 0 ? $get->paginate : 5;        
+        $paginate = $get->paginate && $get->paginate > 0 ? $get->paginate : 5;
         $order = $this->orderData($data, $companyId, $paginate);
-        return view('call.index', compact('order'));
+        return view('call.index', compact('order','appraisers'));
     }
 
     public function orderData($data, $companyId, $paginate) {
@@ -36,5 +45,6 @@ class CallController extends BaseController
         ->paginate($paginate);
         return $order;
     }
+
 
 }
