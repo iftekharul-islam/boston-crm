@@ -54,7 +54,7 @@
                 <ValidationProvider class="d-block mb-2 dashboard-label" name="Client order no" rules="required"
                                     v-slot="{ errors }">
                     <div :class="{ 'invalid-form' : errors[0] || oldOrderNo }">
-                    <label for="" class="d-block mb-2 dashboard-label">CLient order no <span
+                    <label for="" class="d-block mb-2 dashboard-label">Client order no <span
                         class="text-danger require"></span></label>
                     <input type="text" v-model="orderData.client_order_no" class="dashboard-input w-100" @input="checkclientOrderNo($event)">
                     <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>

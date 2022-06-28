@@ -365,7 +365,7 @@ class OrderController extends BaseController
         $all_lender = $this->repository->getAllClientByType('lender');
 
         $order = $this->orderDetails($id);
-
+//        return $order['inspection_files'];
         $noRewrite = 1;
         if (isset($order->analysis->is_review_send_back) && $order->analysis->is_review_send_back == 1) {
             $noRewrite = 0;

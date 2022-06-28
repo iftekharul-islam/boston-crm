@@ -21,13 +21,15 @@
             <p class="text-light-black mgb-12">Assign to</p>
             <p class="mb-0 text-light-black fw-bold">{{ assignToName }}</p>
         </div>
-        <div class="group">
-            <p class="text-light-black mgb-12">Analysis files upload</p>
+        <div class="group"  v-if="dataFiles.length">
+            <p class="text-light-black mgb-12">Report preparation file upload</p>
             <div class="document">
                 <div class="row">
                     <div class="d-flex align-items-center mb-3" v-for="(file, key) in dataFiles" :key="key">
                         <img src="/img/pdf.svg" alt="boston profile" class="img-fluid">
-                        <span class="text-light-black d-inline-block mgl-12 file-name">{{ file.name }}</span>
+                        <span class="text-light-black d-inline-block mgl-12 file-name">
+                                <a :href="file.original_url" download>{{ file.name }}</a>
+                            </span>
                     </div>
                 </div>
             </div>
@@ -40,7 +42,13 @@
                 <p class="mb-0 text-light-black fw-bold" v-if="this.preNote.length">{{ this.preNote }}</p>
                 <p class="mb-0 text-light-black fw-bold" v-else>Note not updated yet</p>
             </div>
-            <div class="mgb-32">
+            <div class="mgb-32" v-if="assignToName.length">
+                <div class="group">
+                    <p class="text-light-black mgb-12">Assign to</p>
+                    <p class="mb-0 text-light-black fw-bold">{{ assignToName }}</p>
+                </div>
+            </div>
+            <div class="mgb-32" v-else>
                 <ValidationProvider class="group" name="Assign to" rules="required" v-slot="{ errors }">
                     <div :class="{ 'invalid-form' : errors[0] }">
                         <label for="" class="d-block mb-2 dashboard-label">Assign to </label>
@@ -137,7 +145,7 @@
                 if (analysis) {
                     this.assignTo = analysis.assigned_to
                     this.assignToName = analysis.assignee.name
-                    this.dataFiles = analysis.attachments
+                    this.dataFiles = !_.isEmpty(this.orderData.analysis_files) ? this.orderData.analysis_files : [];
                     if (analysis.is_review_send_back) {
                         this.noteCheck = 1
                         this.note = analysis.rewrite_note
