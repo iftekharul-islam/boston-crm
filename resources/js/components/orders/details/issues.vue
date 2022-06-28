@@ -2,88 +2,66 @@
   <div class="order-details-box bg-white">
     <div class="box-header">
       <p class="fw-bold text-light-black fs-20 mb-0">Issues/ Queries/ Tickets</p>
-      <a @click="isIssueModal = true" class="d-inline-flex edit add-call align-items-center fw-bold cursor-pointer">Add issue</a>
+      <a @click.prevent="isIssueModal = true" class="d-inline-flex edit add-call align-items-center fw-bold cursor-pointer">Add issue</a>
     </div>
     <div class="box-body">
       <div class="queries-row" >
-<!--        <div class="queries-box position-relative pending">-->
-<!--          <span class="badges pending-badges">Pending</span>-->
-<!--          <p class="text-gray text-end mgb-12">Today 12:10am</p>-->
-<!--          <p class="text-light-black">He made payment but didnt get confirmation yet</p>-->
-<!--          <div class="d-flex justify-content-between mgb-12">-->
-<!--            <a href="#" class="text-gray mb-0 underline">Assigned to : <span class="text-light-black text-600">Technical team</span></a>-->
-<!--            <a href="#" class="share-box">-->
-<!--              <span class="icon-eye"><span class="path1"></span><span class="path2"></span></span>-->
-<!--            </a>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--        <div class="queries-box position-relative pending" >-->
-<!--          <span class="badges pending-badges">Pending</span>-->
-<!--          <p class="text-gray text-end mgb-12">Today 12:10am</p>-->
-<!--          <p class="text-light-black">He made payment but didnt get confirmation yet</p>-->
-<!--          <div class="d-flex justify-content-between mgb-12">-->
-<!--            <a href="#" class="text-gray mb-0">Assigned to : <span class="text-light-black text-600">Technical team</span></a>-->
-<!--            <a href="#" class="share-box">-->
-<!--              <span class="icon-eye"><span class="path1"></span><span class="path2"></span></span>-->
-<!--            </a>-->
-<!--          </div>-->
-<!--        </div>-->
-        <div class="queries-box position-relative solved">
-          <span class="badges solved-badges">Pending</span>
-          <p class="text-gray text-end mgb-12">Today 12:10am</p>
-          <p class="text-light-black">He made payment but didnt get confirmation yet</p>
-          <div class="d-flex justify-content-between mgb-12">
-            <a href="#" class="text-gray mb-0">Assigned to : <span class="text-light-black text-600">Technical team</span></a>
-            <a href="#" class="share-box">
-              <span class="icon-eye"><span class="path1"></span><span class="path2"></span></span>
-            </a>
-          </div>
-          <div class="solution">
-            <p class="mb-1 fs-14 ">Solution:</p>
-            <p class="mb-0 fs-14">
-                Amar sonar bangla ami tomai valobashi.
-              Chirodin tomar akash tomar batash amar prane
-              bajai bashi sonar bangla ami tomai valobashi.
-            </p>
-          </div>
+        <div v-for="(ticket, index) in tickets" class="queries-box position-relative" :class="{ 'solved':  ticket.status == 1 , 'pending': ticket.status == 0 }" :key="index">
+              <span class="badges solved-badges" v-if="ticket.status == 1">Solved</span>
+              <span class="badges pending-badges" v-else>Pending</span>
+              <p class="text-gray text-end mgb-12">{{ ticket.created_at | momentTime }}</p>
+              <p class="text-light-black">{{ ticket.subject }}</p>
+              <div class="d-flex justify-content-between mgb-12">
+                  <p class="text-gray mb-0" v-if="ticket.assignee">Assigned to : <span class="text-light-black text-600">{{ ticket.assignee.name }}</span></p>
+                  <a href="#" class="share-box" @click.prevent="showUpdateModal(ticket)" v-if="!ticket.solution">
+                      <span class="icon-eye"><span class="path1"></span><span class="path2"></span></span>
+                  </a>
+              </div>
+              <div class="solution" v-if="ticket.solution">
+                  <p class="mb-1 fs-14 ">Solution:</p>
+                  <p class="mb-0 fs-14">{{ ticket.solution }}</p>
+              </div>
         </div>
       </div>
     </div>
      <!-- modal -->
-      <add-issue :showIssueModal="isIssueModal" :orderId="this.id"></add-issue>
-<!--     <b-modal id="issue-info" class="brrower-modal" size="lg" title="Add Issue">-->
-<!--        <div class="modal-body brrower-modal-body">-->
-<!--          <div class="row">-->
-<!--            <div class="col-12">-->
-<!--              <div class="group">-->
-<!--                <label for="" class="d-block mb-2 dashboard-label">Subject name</label>-->
-<!--                <input type="text"  class="dashboard-input w-100">-->
-<!--              </div>-->
-<!--               <div class="group">-->
-<!--                    <label for="client-type" class="d-block mb-2 dashboard-label">Client type <span-->
-<!--                                class="text-danger require"></span></label>-->
-<!--                    <div class="position-relative">-->
-<!--                        <select name="client_type" id="client-type" class="dashboard-input w-100">-->
-<!--                            <option value="">Select a type</option>-->
-<!--                            <option value="amc" selected>Amc</option>-->
-<!--                            <option value="lender">Lender</option>-->
-<!--                        </select>-->
-<!--                        <span class="icon-arrow-down bottom-arrow-icon"></span>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                <div class="group">-->
-<!--                  <label class="d-block mb-2 dashboard-label address-label">Queries or Issues</label>-->
-<!--                  <textarea name="address" class="dashboard-textarea w-100" cols="30"-->
-<!--                            rows="2"></textarea>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      <div slot="modal-footer mgt-44">-->
-<!--        <button class="button button-transparent">Close</button>-->
-<!--        <button class="button button-primary">Save</button>-->
-<!--      </div>-->
-<!--    </b-modal>-->
+    <add-issue :showIssueModal="isIssueModal" :orderId="this.id"></add-issue>
+    <ValidationObserver ref="addIssueSolutionForm">
+          <!-- modal -->
+          <b-modal id="add-issue-solution-modal" class="brrower-modal" size="md" title="Add Issue" no-close-on-backdrop>
+              <div class="modal-body brrower-modal-body">
+                  <div class="row">
+                      <div class="col-12">
+                          <ValidationProvider class="d-block group" name="Subject name" rules="required" v-slot="{ errors }">
+                              <div class="group" :class="{ 'invalid-form' : errors[0] }">
+                                  <label for="" class="d-block mb-2 dashboard-label">Subject name</label>
+                                  <input type="text" v-model="ticket.subject" class="dashboard-input w-100">
+                                  <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                              </div>
+                          </ValidationProvider>
+                          <ValidationProvider class="d-block group" name="Queries or Issues" rules="required" v-slot="{ errors }">
+                              <div class="group" :class="{ 'invalid-form' : errors[0] }">
+                                  <label for="" class="d-block mb-2 dashboard-label">Queries or Issues</label>
+                                  <input v-model="ticket.issue" class="dashboard-input w-100" style="min-height: 100px">
+                                  <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                              </div>
+                          </ValidationProvider>
+                          <ValidationProvider class="d-block group" name="Solution" rules="required" v-slot="{ errors }">
+                              <div class="group" :class="{ 'invalid-form' : errors[0] }">
+                                  <label for="" class="d-block mb-2 dashboard-label">Solution</label>
+                                  <input v-model="ticket.solution" class="dashboard-input w-100" style="min-height: 100px">
+                                  <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                              </div>
+                          </ValidationProvider>
+                      </div>
+                  </div>
+              </div>
+              <div slot="modal-footer" class="mgt-44">
+                  <button class="button button-transparent" @click="$bvModal.hide('add-issue-solution-modal')">Close</button>
+                  <button class="button button-primary" @click="updateIssue">Save</button>
+              </div>
+          </b-modal>
+      </ValidationObserver>
   </div>
 </template>
 <script>
@@ -97,6 +75,13 @@ export default {
         isIssueModal: false,
         issues: [],
         id: null,
+        tickets: [],
+        ticket: {
+            id: '',
+            subject: '',
+            issue: '',
+            solution: ''
+        }
     }),
     created() {
         let order = this.order;
@@ -112,11 +97,44 @@ export default {
         });
     },
     methods: {
+        showUpdateModal(object) {
+            console.log(object)
+            this.ticket.id = object.id
+            this.ticket.subject = object.subject
+            this.ticket.issue = object.issue
+            this.ticket.solution = ''
+            this.$bvModal.show('add-issue-solution-modal')
+        },
+        updateIssue() {
+            this.$refs.addIssueSolutionForm.validate().then((status) => {
+                if (status) {
+                    let data = {
+                        subject: this.ticket.subject,
+                        issue: this.ticket.issue,
+                        solution: this.ticket.solution
+                    }
+                    axios.post('update-issue/' + this.ticket.id, data)
+                        .then(res => {
+                            if (this.error) {
+                                this.$root.$emit('wk_flow_toast', res.data)
+                            } else {
+                                this.$root.$emit('issue_modal_update', res.data.data)
+                                this.$root.$emit('wk_update', res.data.data)
+                                this.$root.$emit('wk_flow_menu', res.data.data)
+                                this.$root.$emit('wk_flow_toast', res.data)
+                                this.$bvModal.hide('add-issue-solution-modal')
+                            }
+                        }).catch(err => {
+                        console.log(err)
+                    })
+                }
+            })
+        },
         fetchData(order) {
             this.orderData = order
             console.log(order)
             this.id = this.orderData.id
-            this.logs = !_.isEmpty(this.orderData.call_log) ? this.orderData.call_log : []
+            this.tickets = !_.isEmpty(this.orderData.tickets) ? this.orderData.tickets : []
         },
 
     }
