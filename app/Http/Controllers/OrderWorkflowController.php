@@ -120,18 +120,20 @@ class OrderWorkflowController extends BaseController
             return false;
         }
         $image_types = ['jpeg', 'jpg', 'png'];
-        $ziped_file = '';
+        $zip_file = 'inspection-files.zip';
+        $zip = new \ZipArchive();
+        $zip->open($zip_file, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
         foreach ($data['files'] as $key => $file) {
             if (in_array($file->getClientOriginalExtension(), $image_types)) {
-                $ziped_file = Zip::create("inspection-files.zip")
-                    ->addRaw($file,++$key.$file->getClientOriginalExtension())
-                    ->saveTo(public_path() .'/client-files');
+                $zip->addFile($file->getPathName());
             } else {
                 $inspection->find($inspection_id)->addMedia($file)
                     ->toMediaCollection('inspection');
             }
         }
-        $inspection->find($inspection_id)->addMedia(public_path() .'/client-files/inspection-files.zip')->toMediaCollection('inspection');
+        $zip->close();
+
+        $inspection->find($inspection_id)->addMedia($zip_file)->toMediaCollection('inspection');
         $inspection = OrderWInspection::with('attachments')->where('id', $inspection_id)->first();
         $historyTitle = "Order Inspection File Has Been Saved";
 
