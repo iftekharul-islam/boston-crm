@@ -70,11 +70,11 @@
               <p class="text-light-black mgb-12">Trainee name</p>
               <p class="mb-0 text-light-black fw-bold">{{ traineeName }}</p>
           </div>
-<!--          <div class="group">-->
-<!--              <p class="text-light-black mgb-12">Quality assureance</p>-->
-<!--              <p class="mb-0 text-light-black fw-bold" v-if="qaName.length">{{ qaName }}</p>-->
-<!--              <p class="mb-0 text-light-black fw-bold" v-else>Not assigned yet</p>-->
-<!--          </div>-->
+          <div class="group">
+              <p class="text-light-black mgb-12">Quality assureance</p>
+              <p class="mb-0 text-light-black fw-bold" v-if="qaName.length">{{ qaName }}</p>
+              <p class="mb-0 text-light-black fw-bold" v-else>Not assigned yet</p>
+          </div>
           <div class="group">
               <p class="text-light-black mgb-12">Delivered by</p>
               <p class="mb-0 text-light-black fw-bold">{{ dManName }}</p>
