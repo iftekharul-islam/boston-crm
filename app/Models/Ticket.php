@@ -15,7 +15,7 @@ class Ticket extends Model
         return $this->hasOne(User::class,'id', 'assigned_to');
     }
 
-    public function solution()
+    public function solver()
     {
         return $this->hasOne(User::class,'id', 'solution_by');
     }

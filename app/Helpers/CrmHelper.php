@@ -178,7 +178,7 @@ trait CrmHelper {
             'comlist',
             'callLog.caller',
             'tickets.assignee',
-            'tickets.solution',
+            'tickets.solver',
             'tickets.creator',
             'tickets.updater',
         )->where('id', $id)->first();
