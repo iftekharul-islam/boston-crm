@@ -22,14 +22,14 @@
         <p class="mb-0 left-side">Phone</p>
         <span>:</span>
         <p class="right-side list-items mb-0">
-          <span v-for="item, ik in borrower_contact_s" :key="ik"> {{ item }} </span>
+          <span class="d-inline-block mb-2" v-for="item, ik in borrower_contact_s" :key="ik"> {{ item }} </span>
         </p>
       </div>
       <div class="list__group">
         <p class="mb-0 left-side">Email</p>
         <span>:</span>
         <p class="right-side list-items mb-0">
-          <span v-for="item, ik in borrower_email_s" :key="ik"> {{ item }} </span>
+          <span class="d-inline-block mb-2" v-for="item, ik in borrower_email_s" :key="ik"> {{ item }} </span>
         </p>
       </div>
     </div>
@@ -60,14 +60,7 @@
                 <ValidationProvider  name="Contact No" :rules="{ 'required' : add.contact == null && borrower_contact == false, min: 10, max: 12 }" v-slot="{ errors }">
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
                     <label for="" class="d-block mb-2 dashboard-label">Contact no <span class="text-danger require"></span></label>
-                    <input v-model="add.contact" type="text" class="dashboard-input w-100" @input="contactNumberChecking($event, 1)">
-                    <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
-                    <div class=" mgb-10 mgt-12">
-                      <button class="add-more " @click="addContact">
-                        <span class="icon-plus"></span> Add
-                      </button>
-                    </div>
-                    <div class="new-array-items">
+                    <div class="new-array-items mgb-12">
                       <div class="items" v-for="item, ki in borrower_contact_s" :key="ki">
                         <div class="item-content"> {{ item }} </div>
                         <div class="item-remove">
@@ -77,6 +70,14 @@
                         </div>
                       </div>
                     </div>
+                    <input v-model="add.contact" type="text" class="dashboard-input w-100" @input="contactNumberChecking($event, 1)">
+                    <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                    <div class=" mgb-10 mgt-12">
+                      <button class="add-more " @click="addContact">
+                        <span class="icon-plus"></span> Add
+                      </button>
+                    </div>
+                    
                   </div>
                 </ValidationProvider>
               </ValidationObserver>
@@ -86,6 +87,16 @@
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
                     <label for="" class="d-block mb-2 dashboard-label">Email address <span
                         class="text-danger require"></span></label>
+                      <div class="new-array-items mgb-12">
+                        <div class="items" v-for="item, ki in borrower_email_s" :key="ki">
+                          <div class="item-content"> {{ item }} </div>
+                          <div class="item-remove">
+                            <button class="button button-transparent p-1" @click="removeItem(ki, 'email')">
+                            <span class="icon-trash fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></span>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
                     <input v-model="add.email" type="text" class="dashboard-input w-100">
                     <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                     <div class="mgb-10 mgt-10">
@@ -93,16 +104,7 @@
                         <span class="icon-plus"></span> Add
                       </button>
                     </div>
-                    <div class="new-array-items">
-                      <div class="items" v-for="item, ki in borrower_email_s" :key="ki">
-                        <div class="item-content"> {{ item }} </div>
-                        <div class="item-remove">
-                          <button class="button button-transparent p-1" @click="removeItem(ki, 'email')">
-                           <span class="icon-trash fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></span>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
+                    
                   </div>
                 </ValidationProvider>
               </ValidationObserver>

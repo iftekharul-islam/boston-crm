@@ -28,37 +28,37 @@
               <div class="col-md-12">
                 
                 <ValidationObserver class="" ref="orderForm">
-                    <div class="d-flex justify-content-between provided-service align-items-center" v-for="item, ik in servicesData" :key="ik">
-                      <div class="group mgb-10">
+                    <div class="d-flex provided-service align-items-center" v-for="item, ik in servicesData" :key="ik">
+                      <div class="group mgr-32">
                         <div class="pr-2">
-                          <label for="" class="d-block dashboard-label">Appraiser Type <span class="require"></span></label>
+                          <label for="" class="d-block dashboard-label mb-2">Appraiser Type <span class="require"></span></label>
                           <m-select v-model="item.typeId" :options="appraisalTypes" item-value="id" item-text="form_type" object></m-select>
                         </div>
                       </div>
-                      <div class="group mgb-10">
-                        <label for="" class="d-block dashboard-label">Appraisal Fee <span class="require"></span></label>
+                      <div class="group">
+                        <label for="" class="d-block dashboard-label mb-2">Appraisal Fee <span class="require"></span></label>
                         <input type="text" v-model="item.fee" class="dashboard-input w-100">
                       </div>
-                      <div class="right-btn">
-                        <button class="button button-primry p-1" @click="remoteProviderType(item, ik)">
+                      <div class="right-btn ms-auto">
+                        <button class="button button-transparent p-0" @click="remoteProviderType(item, ik)">
                           <span class="icon-trash fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></span>
                         </button>
                       </div>
                     </div>
-                    <div class="d-flex mgb-32 justify-content-between provided-service" v-if="servicesData.length < appraisalTypes.length">
-                      <div class="group">
+                    <div class="d-flex mb-0 provided-service" v-if="servicesData.length < appraisalTypes.length">
+                      <div class="group mb-0 mgr-32">
                         <div class="pr-2">
                           <label for="" class="d-block mb-2 dashboard-label">Appraiser Type <span class="require"></span></label>
                           <m-select v-model="add.serviceType" @change="addNewMod" :options="appraisalTypes" item-value="id" item-text="form_type" object></m-select>
                         </div>
                       </div>
-                      <div class="group">
+                      <div class="group mb-0">
                         <label for="" class="d-block mb-2 dashboard-label">Appraisal Fee <span class="require"></span></label>
                         <input type="text" @blur="addNewMod" v-model="add.serviceFee" class="dashboard-input w-100">
                       </div>
                     </div>
-                    <div class="d-flex mgb-32" v-if="servicesData.length < appraisalTypes.length">
-                      <button class="button button-transparent p-0" @click="addNewMod"><span class="icon-plus"></span> Add more</button>
+                    <div class="d-flex mgb-32 mgt-12" v-if="servicesData.length < appraisalTypes.length">
+                      <button class="button button-transparent p-0 text-400" @click="addNewMod"><span class="icon-plus"></span> Add more</button>
                     </div>
                 </ValidationObserver>
               </div>
@@ -190,13 +190,14 @@
     margin-top: 20px;
 }
 .provided-service .group {
-  flex: 0 40%;
+  /* flex: 0 40%; */
 }
 .provided-service .group:nth-child(1) {
-  flex: 0 60%;
+  flex-basis: 196px;
   padding-right: 10px;
 }
 .provided-service .group:nth-child(2) {
   padding-right: 10px;
+  flex-basis: 168px;
 }
 </style>
