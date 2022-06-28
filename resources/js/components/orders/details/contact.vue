@@ -17,14 +17,14 @@
         <p class="mb-0 left-side">Phone Numbers</p>
         <span>:</span>
         <p class="right-side list-items mb-0">
-          <span v-for="item, ik in contact_number_s" :key="ik"> {{ item }} </span>
+          <span class="d-inline-block mb-2" v-for="item, ik in contact_number_s" :key="ik"> {{ item }} </span>
         </p>
       </div>
       <div class="list__group">
         <p class="mb-0 left-side">Email Address</p>
         <span>:</span>
         <p class="right-side list-items mb-0">
-          <span v-for="item, ik in email_address_s" :key="ik"> {{ item }} </span>
+          <span class="d-inline-block mb-2" v-for="item, ik in email_address_s" :key="ik"> {{ item }} </span>
         </p>
       </div>
     </div>
@@ -47,14 +47,7 @@
                 <ValidationProvider name="Contact Number" :rules="{'required' : add.contact == null && contact_number == false, min: 10, max: 12}" v-slot="{ errors }">
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
                     <label for="" class="d-block mb-2 dashboard-label">Phone <span class="text-danger require"></span></label>
-                    <input v-model="add.contact" @input="contactNumberChecking($event, 1)" type="text" class="dashboard-input w-100">
-                    <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
-                    <div class="mgt-12">
-                      <button class="add-more" @click="addContact">
-                        <span class="icon-plus"></span> Add
-                      </button>
-                    </div>
-                    <div class="new-array-items">
+                    <div class="new-array-items mgb-12">
                       <div class="items" v-for="item, ki in contact_number_s" :key="ki">
                         <div class="item-content"> {{ item }} </div>
                         <div class="item-remove">
@@ -63,6 +56,13 @@
                           </button>
                         </div>
                       </div>
+                    </div>
+                    <input v-model="add.contact" @input="contactNumberChecking($event, 1)" type="text" class="dashboard-input w-100">
+                    <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                    <div class="mgt-12">
+                      <button class="add-more" @click="addContact">
+                        <span class="icon-plus"></span> Add
+                      </button>
                     </div>
                   </div>
                 </ValidationProvider>
@@ -73,14 +73,7 @@
                 <div class="group" :class="{ 'invalid-form' : errors[0] }">
                   <label for="" class="d-block mb-2 dashboard-label">Email <span
                       class="text-danger require"></span></label>
-                  <input v-model="add.email" type="text" class="dashboard-input w-100">
-                  <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
-                  <div class="mgt-12">
-                    <button class="add-more" @click="addEmail">
-                      <span class="icon-plus"></span> Add
-                    </button>
-                  </div>
-                  <div class="new-array-items">
+                  <div class="new-array-items mgb-12">
                     <div class="items" v-for="item, ki in email_address_s" :key="ki">
                       <div class="item-content"> {{ item }} </div>
                       <div class="item-remove">
@@ -89,6 +82,13 @@
                         </button>
                       </div>
                     </div>
+                  </div>
+                  <input v-model="add.email" type="text" class="dashboard-input w-100">
+                  <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                  <div class="mgt-12">
+                    <button class="add-more" @click="addEmail">
+                      <span class="icon-plus"></span> Add
+                    </button>
                   </div>
                 </div>
               </ValidationProvider>

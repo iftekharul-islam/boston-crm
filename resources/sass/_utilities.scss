@@ -1722,7 +1722,7 @@ html {
   // font weight
   .text-normal,
   .text-400 {
-    font-weight: 400;
+    font-weight: 400 !important;
   }
   .text-medium,
   .text-500 {

@@ -33,7 +33,7 @@
             <div class="modal-body">
                 <ValidationObserver ref="clientsForm">
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <ValidationProvider class="group mb-4" name="AMC Name" rules="required" v-slot="{ errors }">
                                 <div class="position-relative" :class="{ 'invalid-form' : errors[0] }">
                                     <label for="" class="d-block mb-2 dashboard-label">AMC Name <span
@@ -44,11 +44,10 @@
                                 </div>
                             </ValidationProvider>
                             <a v-if="amc_file != ''" :href="amc_file" target="_blank"
-                                class="underline primary-text text-600" download>AMC
+                                class="underline primary-text text-600 d-inline-block mt-3 mb-3" download>AMC
                                 requirements</a>
-                            <a v-else :href="'#'" @click.prevent class="secondary-text text-gray">AMC requirements</a>
-                            <br>
-                            <div class="position-relative file-upload mt-4">
+                            <a v-else :href="'#'" @click.prevent class="underline primary-text text-600 d-inline-block mt-3 mb-3">AMC requirements</a>
+                            <div class="position-relative file-upload d-block">
                                 <input type="file" @change="changeFileAmc">
                                 <label for="">Upload <span class="icon-upload ms-3 fs-20"><span
                                             class="path1"></span><span class="path2"></span><span
@@ -56,9 +55,8 @@
                                 <span class="primary-text">{{ amcFileName }}</span>
                             </div>
                         </div>
-                        <div class="divider"></div>
-                        <div class="col-md-12">
-                            <ValidationProvider class="group mb-4" name="Lender Name" rules="required"
+                        <div class="col-md-6">
+                            <ValidationProvider class="group d-block" name="Lender Name" rules="required"
                                 v-slot="{ errors }">
                                 <div class="position-relative" :class="{ 'invalid-form' : errors[0] }">
                                     <label for="" class="d-block mb-2 dashboard-label">Lender Name <span
@@ -68,21 +66,20 @@
                                     <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                                 </div>
                             </ValidationProvider>
-                            <div class="group">
+                            <span class="group d-block">
                                 <label for="" class="d-block mb-2 dashboard-label">Lender address</label>
                                 <input class="dashboard-input w-100" type="text" v-model="lender_address" />
                                 <a v-if="lender_file" :href="lender_file" target="_blank"
-                                    class="underline primary-text text-600" download>Lender requirements</a>
-                                <a v-else :href="'#'" @click.prevent class="text-gray">Lender requirements</a>
-                                <br>
-                                <div class="position-relative file-upload mt-4">
+                                    class="underline primary-text text-600 d-inline-block mt-3 mb-3" download>Lender requirements</a>
+                                <a v-else :href="'#'" @click.prevent class="underline primary-text text-600 d-inline-block mt-3 mb-3">Lender requirements</a>
+                                <div class="position-relative file-upload d-block">
                                     <input type="file" @change="changeFileLender">
                                     <label for="">Upload <span class="icon-upload ms-3 fs-20"><span
                                                 class="path1"></span><span class="path2"></span><span
                                                 class="path3"></span></span></label>
                                     <span class="primary-text">{{ lenderFileName }}</span>
                                 </div>
-                            </div>
+                            </span>
                         </div>
                     </div>
                 </ValidationObserver>
