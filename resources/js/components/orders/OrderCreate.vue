@@ -68,8 +68,8 @@ export default {
   },
   data() {
     return {
-      step: 2,
-      stepChangeActive: true,
+      step: 1,
+      stepChangeActive: false,
       step1Data: [],
       step2Data: [],
       providedData: [],
