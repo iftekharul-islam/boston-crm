@@ -85,7 +85,6 @@
                     this.note = this.orderData.inspection.note
                     this.name = this.orderData.inspection.user.name
                     this.dataFiles = this.orderData.inspection_files
-                    console.log(this.dataFiles)
                     this.editable = false
                 } else {
                     this.isEmpty = true

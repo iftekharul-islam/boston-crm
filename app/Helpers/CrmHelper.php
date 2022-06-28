@@ -156,9 +156,10 @@ trait CrmHelper {
             'tickets.creator',
             'tickets.updater',
         )->where('id', $id)->first();
-        $order['inspection_files'] = OrderWInspection::where('order_id', $id)->first()->getMedia('inspection')->toArray();
-        $order['preparation_files'] = OrderWReport::where('order_id', $id)->first()->getMedia('preparation')->toArray();
-        $order['analysis_files'] = OrderWReportAnalysis::where('order_id', $id)->first()->getMedia('analysis')->toArray();
+
+        $order['inspection_files'] = isset($order['inspection']) && count($order['inspection']['attachments'])  ? OrderWInspection::where('order_id', $id)->first()->getMedia('inspection')->toArray() : [];
+        $order['preparation_files'] = isset($order['report']) && count($order['report']['attachments']) ? OrderWReport::where('order_id', $id)->first()->getMedia('preparation')->toArray() : [];
+        $order['analysis_files'] = isset($order['analysis']) && count($order['analysis']['attachments']) ? OrderWReportAnalysis::where('order_id', $id)->first()->getMedia('analysis')->toArray() : [];
 
         return $this->checkActiveStep($order);
     }
