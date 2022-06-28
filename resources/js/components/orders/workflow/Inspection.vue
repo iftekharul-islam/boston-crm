@@ -14,17 +14,21 @@
                 <p class="text-light-black mgb-12">Instruction or Note for Inspection</p>
                 <p class="mb-0 text-light-black fw-bold">{{ note }}</p>
             </div>
-            <div class="group">
+            <div class="group"  v-if="dataFiles.length">
                 <p class="text-light-black mgb-12">Inspection file upload</p>
                 <div class="document">
-                    <div class="row" v-if="dataFiles.length">
-                        <div class="d-flex align-items-center mb-3" v-for="file, ki in dataFiles" :key="ki">
+                    <div class="row">
+                        <div class="d-flex align-items-center mb-3" v-for="(file, key) in dataFiles" :key="key">
                             <img src="/img/pdf.svg" alt="boston profile" class="img-fluid">
-                            <span class="text-light-black d-inline-block mgl-12 file-name">{{ file.name }}</span>
+                            <span class="text-light-black d-inline-block mgl-12 file-name">
+                                <a :href="file.original_url" download>{{ file.name }}</a>
+                            </span>
                         </div>
                     </div>
                 </div>
-                <!-- upload -->
+            </div>
+            <!-- upload -->
+            <div class="group">
                 <div class="position-relative file-upload mgt-20" v-if="editable">
                     <p class="text-light-black mgb-12">Files</p>
                     <div class="position-relative file-upload">
@@ -80,7 +84,7 @@
                     this.id = this.orderData.inspection.id
                     this.note = this.orderData.inspection.note
                     this.name = this.orderData.inspection.user.name
-                    this.dataFiles = this.orderData.inspection.attachments
+                    this.dataFiles = this.orderData.inspection_files
                     this.editable = false
                 } else {
                     this.isEmpty = true

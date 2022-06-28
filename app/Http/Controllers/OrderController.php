@@ -76,7 +76,7 @@ class OrderController extends BaseController
 
     public function orderSummary($user = null, $companyId = null)
     {
-        if ($user == null){
+        if ($user == null) {
             $user = Auth::user();
             $companyId = $user->getCompanyProfile()->company_id;
         }
@@ -173,7 +173,7 @@ class OrderController extends BaseController
             'name' => 'Revised',
             'ids' => [],
         ];
-        foreach ($orders as $order){
+        foreach ($orders as $order) {
             $workStatus = json_decode($order->workflow_status, true);
 
             if ($order->status == 15) {
@@ -190,7 +190,7 @@ class OrderController extends BaseController
                 $declined['total'] += 1;
                 $declined['ids'][] = $order->id;
             }
-            if ($order->rush){
+            if ($order->rush) {
                 $rush['total'] += 1;
                 $rush['ids'][] = $order->id;
             }
@@ -238,7 +238,6 @@ class OrderController extends BaseController
                 $overDue['total'] += 1;
                 $overDue['ids'][] = $order->id;
             }
-
         }
 
         return [
@@ -271,26 +270,27 @@ class OrderController extends BaseController
      * @return JSON
      */
 
-    public function searchOrderData(Request $get, $user = null, $companyId = null){
-        if ($user == null){
+    public function searchOrderData(Request $get, $user = null, $companyId = null)
+    {
+        if ($user == null) {
             $user = Auth::user();
             $companyId = $user->getCompanyProfile()->company_id;
         }
         $data = $get->data;
         $paginate = $get->paginate && $get->paginate > 0 ? $get->paginate : 10;
-        $order = Order::where(function($qry) use ($data) {
+        $order = Order::where(function ($qry) use ($data) {
             return $qry->where('system_order_no', "LIKE", "%$data%")
-                       ->orWhere("client_order_no", "LIKE", "%$data%")
-                       ->orWhere("received_date", "LIKE", "%$data%")
-                       ->orWhere("amc_id", "LIKE", "%$data%")
-                       ->orWhere("lender_id", "LIKE", "%$data%")
-                       ->orWhere("company_id", "LIKE", "%$data%")
-                       ->orWhere("due_date", "LIKE", "%$data%")
-                       ->orWhere("created_at", "LIKE", "%$data%");
+                ->orWhere("client_order_no", "LIKE", "%$data%")
+                ->orWhere("received_date", "LIKE", "%$data%")
+                ->orWhere("amc_id", "LIKE", "%$data%")
+                ->orWhere("lender_id", "LIKE", "%$data%")
+                ->orWhere("company_id", "LIKE", "%$data%")
+                ->orWhere("due_date", "LIKE", "%$data%")
+                ->orWhere("created_at", "LIKE", "%$data%");
         })->with($this->order_list_relation())
-        ->where('company_id', $companyId)
-        ->orderBy('id', 'desc')
-        ->paginate($paginate);
+            ->where('company_id', $companyId)
+            ->orderBy('id', 'desc')
+            ->paginate($paginate);
         return $order;
     }
 
@@ -298,12 +298,13 @@ class OrderController extends BaseController
      * @param Request $get
      * @return mixed
      */
-    public function filterOrderData(Request $get){
+    public function filterOrderData(Request $get)
+    {
         $ids = $get->item['ids'] ?? [];
         $paginate = $get->paginate && $get->paginate > 0 ? $get->paginate : 10;
         $order = Order::whereIn('id', $ids)->with($this->order_list_relation())
-        ->orderBy('id', 'desc')
-        ->paginate($paginate);
+            ->orderBy('id', 'desc')
+            ->paginate($paginate);
 
         return $order;
     }
@@ -328,7 +329,7 @@ class OrderController extends BaseController
         $userID = auth()->user()->id;
         $property_types = PropertyType::all();
 
-        $data = compact('system_order_no', 'userID', 'company', 'appraisal_users', 'appraisal_types', 'loan_types', 'amc_clients', 'lender_clients','property_types');
+        $data = compact('system_order_no', 'userID', 'company', 'appraisal_users', 'appraisal_types', 'loan_types', 'amc_clients', 'lender_clients', 'property_types');
 
         if ($get->array && $get->array == 'true') {
             return $data;
@@ -364,19 +365,18 @@ class OrderController extends BaseController
         $all_lender = $this->repository->getAllClientByType('lender');
 
         $order = $this->orderDetails($id);
-
         $noRewrite = 1;
         if (isset($order->analysis->is_review_send_back) && $order->analysis->is_review_send_back == 1) {
             $noRewrite = 0;
-        } else if( !isset($order->analysis->is_review_send_back)) {
+        } else if (!isset($order->analysis->is_review_send_back)) {
             $noRewrite = 0;
-        } else if(isset($order->analysis->rewrite_note) && $order->analysis->rewrite_note != null) {
+        } else if (isset($order->analysis->rewrite_note) && $order->analysis->rewrite_note != null) {
             $noRewrite = 0;
         }
 
         $order->amc_file = $this->repository->getClientFile($order->amc_id);
         $order->lender_file = $this->repository->getClientFile($order->lender_id);
-        $order->user_role = User::find($order->created_by)->getUserRole($order->created_by,$order->company_id);
+        $order->user_role = User::find($order->created_by)->getUserRole($order->created_by, $order->company_id);
         $order_files = $this->repository->getOrderFiles($id);
         $order_file_types = $this->repository->getOrderFileTypes($id);
         $order_due_date = $this->repository->getOrderDueDate($id);
@@ -385,7 +385,7 @@ class OrderController extends BaseController
         $all_users = $this->repository->getUserExpectRole(role: 'admin');
         $property_types = PropertyType::all();
 
-        return view('order.show', compact('all_users', 'noRewrite', 'order_file_types', 'order_files', 'order', 'diff_in_days', 'diff_in_hours','appraisers','appraisal_types','loan_types','all_amc','all_lender','property_types'));
+        return view('order.show', compact('all_users', 'noRewrite', 'order_file_types', 'order_files', 'order', 'diff_in_days', 'diff_in_hours', 'appraisers', 'appraisal_types', 'loan_types', 'all_amc', 'all_lender', 'property_types'));
     }
 
     /**
@@ -406,18 +406,18 @@ class OrderController extends BaseController
         $amc_clients = $client_users[0];
         $lender_clients = $client_users[1];
         $order = Order::with(
-                'amc',
-                'lender',
-                'user',
-                'appraisalDetail',
-                'providerService',
-                'propertyInfo',
-                'borrowerInfo',
-                'contactInfo'
-            )->where('id', $id)->first();
+            'amc',
+            'lender',
+            'user',
+            'appraisalDetail',
+            'providerService',
+            'propertyInfo',
+            'borrowerInfo',
+            'contactInfo'
+        )->where('id', $id)->first();
         $order->file = $this->repository->getOrderFile($id);
         $property_types = PropertyType::all();
-        return view('order.edit',compact('order', 'appraisal_users', 'amc_clients', 'lender_clients', 'appraisal_types', 'loan_types', 'client_users', 'company', 'userID','property_types'));
+        return view('order.edit', compact('order', 'appraisal_users', 'amc_clients', 'lender_clients', 'appraisal_types', 'loan_types', 'client_users', 'company', 'userID', 'property_types'));
     }
 
     /**
@@ -487,7 +487,7 @@ class OrderController extends BaseController
      * @param $order_id
      * @return JsonResponse
      */
-    public function updatePropertyInfo(Request $request,$order_id): JsonResponse
+    public function updatePropertyInfo(Request $request, $order_id): JsonResponse
     {
         $info = $this->repository->updatePropertyInfo($order_id, $request->all());
 
@@ -507,7 +507,7 @@ class OrderController extends BaseController
      * @param $order_id
      * @return JsonResponse
      */
-    public function updateAppraisalInfo(Request $request, $order_id): JsonResponse
+    public function updateAppraisalInfo(Request $request, $order_id)
     {
         $this->repository->updateAppraisalInfo($order_id, $request->all());
         $data = [
@@ -517,18 +517,34 @@ class OrderController extends BaseController
         ];
 
         $this->repository->addActivity($data);
-        return response()->json(["message" => "Appraisal info updated successfully"]);
-    }
-
-    public function updateClientInfo(Request $request,$order_id)
-    {
-        $this->repository->updateClientDetails($order_id,$request->all());
         $orderData = $this->orderDetails($order_id);
         return [
+            "message" => "Appraisal info updated successfully",
+            "data" => $orderData
+        ];
+    }
+
+    public function updateClientInfo(Request $request, $order_id)
+    {
+        $this->repository->updateClientDetails($order_id, $request->all());
+
+        $orderData = $this->orderDetails($order_id);
+        $order= Order::find($order_id);
+        $data = [
+            "activity_text" => "Client info has been updated",
+            "activity_by" => Auth::id(),
+            "order_id" => $order_id
+        ];
+        $amc_file = $this->repository->getClientFile($order->amc_id);
+        $lender_file = $this->repository->getClientFile($order->lender_id);
+        $this->repository->addActivity($data);
+        return [
             'error' => false,
-            'message' => 'Basic info updated successfully !',
+            'message' => 'Client info updated successfully !',
             'status' => 'success',
-            'data' => $orderData
+            'data' => $orderData,
+            'amc_file' => $amc_file,
+            'lender_file' => $lender_file
         ];
     }
 
@@ -539,7 +555,7 @@ class OrderController extends BaseController
     public function publicOrder($order_id): View|Factory|Application
     {
         $order = Order::find(base64_decode($order_id));
-        if(!$order){
+        if (!$order) {
             abort(404);
         }
         $order_types = $this->repository->getOrderFileTypes(base64_decode($order_id));
@@ -551,14 +567,29 @@ class OrderController extends BaseController
      * @param $order_id
      * @return JsonResponse|\Illuminate\Http\RedirectResponse
      */
-    public function uploadOrderFiles(Request $request, $order_id): JsonResponse|\Illuminate\Http\RedirectResponse
+    public function uploadOrderFiles(Request $request, $order_id): array | \Illuminate\Http\RedirectResponse
     {
-        if($request->has('public')){
+        if ($request->has('public')) {
             $order_id = base64_decode($order_id);
+        }
+        if ($request->file_type == '') {
+            if ($request->ajax()) {
+                return ["message" => "File type is required"];
+            }
+        } else {
+            return redirect()
+                ->to('public-order/' . base64_encode($order_id))
+                ->with(['error' => 'Order file type is required']);
         }
         $this->repository->saveOrderFiles($request->all(), $order_id);
         if ($request->ajax()) {
-            return response()->json(["message" => "Order file uploaded successfully"]);
+            $orderData = $this->orderDetails($order_id);
+            $orderFiles = $this->repository->getOrderFiles($order_id);
+            return [
+                "message" => "Order file uploaded successfully",
+                "data" => $orderData,
+                "orderFiles" => $orderFiles
+            ];
         }
         return redirect()
             ->to('public-order/' . base64_encode($order_id))
@@ -582,9 +613,9 @@ class OrderController extends BaseController
     {
         $string_format = "BAS-000001";
         $check_last_string = Order::latest()->first();
-        if($check_last_string){
+        if ($check_last_string) {
             $system_order_no = ++$check_last_string->system_order_no;
-        }else{
+        } else {
             $system_order_no = $string_format;
         }
         return $system_order_no;
@@ -592,10 +623,10 @@ class OrderController extends BaseController
 
     public function saveOrderData()
     {
-
     }
 
-    public function orderUpdate($type, Request $get) {
+    public function orderUpdate($type, Request $get)
+    {
         $errorChecking = $this->getOrderError($get, $type);
         $error = $errorChecking['error'];
         $errorMessage = $errorChecking['message'];
@@ -677,35 +708,35 @@ class OrderController extends BaseController
         ]);
     }
 
-    public function searchOrderByFiltering(Request $get) {
+    public function searchOrderByFiltering(Request $get)
+    {
         $id = $get->item['id'];
         $item = $get->item;
         if ($get->key == 'appraisal_users') {
             $orderId = AppraisalDetail::where('appraiser_id', $id)->latest()->get()->pluck("order_id");
             return $this->orderInformation($orderId);
         } else if ($get->key == 'client_users') {
-            return Order::where(function($qry) use ($item, $id) {
-                if($item['client_type'] == 'both') {
+            return Order::where(function ($qry) use ($item, $id) {
+                if ($item['client_type'] == 'both') {
                     return $qry->where('amc_id', $id)->orWhere('lender_id', $id);
-                } else if($item['client_type'] === 'amc'){
+                } else if ($item['client_type'] === 'amc') {
                     return $qry->where('amc_id', $id);
                 } else {
                     return $qry->where('lender_id', $id);
                 }
             })->with($this->order_list_relation())->orderBy('id', 'desc')->paginate(100);
-        } else if($get->key == "loan_types") {
+        } else if ($get->key == "loan_types") {
             $orderId = AppraisalDetail::where('loan_type', $id)->latest()->get()->pluck("order_id");
             return $this->orderInformation($orderId);
-        } else if($get->key == "reportType") {
-
-        } else if($get->key = "property_types") {
+        } else if ($get->key == "reportType") {
+        } else if ($get->key = "property_types") {
             $orderId = ProvidedService::whereJsonContains('appraiser_type_fee', ['typeId' => $id])->latest()->get()->pluck("order_id");
             return $this->orderInformation($orderId);
         }
     }
 
-    protected function orderInformation($id) {
+    protected function orderInformation($id)
+    {
         return Order::whereIn('id', $id)->with($this->order_list_relation())->orderBy('id', 'desc')->paginate(100);
     }
-
 }

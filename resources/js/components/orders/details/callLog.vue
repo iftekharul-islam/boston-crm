@@ -32,7 +32,7 @@
         </div>
       </div>
     </div>
-          <add-call-log :showModal="isModal" :orderId="this.id" @click.native.stop></add-call-log>
+          <add-call-log :showModal="isModal" :orderId="this.id"></add-call-log>
   </div>
 </template>
 <script>
@@ -42,10 +42,10 @@ export default {
         order: [],
     },
     data: () => ({
+        orderData: {},
         isModal: false,
         logs: [],
         id: null,
-        message: null
     }),
     created() {
         let order = this.order;

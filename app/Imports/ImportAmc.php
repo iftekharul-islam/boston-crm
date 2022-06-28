@@ -19,16 +19,6 @@ class ImportAmc implements ToModel,WithChunkReading,WithBatchInserts,WithHeading
     {
         $client = new Client();
         $client->name = $row['amc'];
-        // if(trim($row["email"]) != ""){
-        //     $client->email = json_encode(trim($row["email"]));
-        // }else{
-        //     $client->email = '';
-        // }
-        // if(trim($row["phone"]) != ""){
-        //     $client->phone = json_encode(trim($row["phone"]));
-        // }else{
-        //     $client->phone = '';
-        // }
         $client->client_type = 'amc';
         $client->deducts_technology_fee = $row["deducts_technology_fee"] == '' || strtolower($row["deducts_technology_fee"] == "No") ? 0 : 1;
         $client->fee_for_1004uad = $row['1004uad'] == '' || (int) ($row['1004uad'] == 0) ? 0 : (int) $row['1004uad'];
@@ -37,6 +27,13 @@ class ImportAmc implements ToModel,WithChunkReading,WithBatchInserts,WithHeading
         $client->can_inspect = $row['trainee_can_inspect'] == '' || strtolower($row['trainee_can_inspect'] == 'no') ? 0 : 1;
         $client->created_by = auth()->user()->id;
         $client->company_id = auth()->user()->companies()->first()->id;
+        array_shift($row);
+        if($row["email"] != "" || $row["email"] != null){
+            $client->email = [$row["email"]];
+        }
+        if($row["phone"] != ""){
+            $client->phone = [$row["phone"]];
+        }
         $client->save();
     }
 

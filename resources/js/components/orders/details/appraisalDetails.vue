@@ -38,61 +38,76 @@
         <!-- modal -->
         <b-modal id="appraisal-info" size="lg" title="Edit appraisal Information">
             <div class="modal-body">
-                <b-alert v-if="message" show variant="success"><a href="#" class="alert-link">{{ message }}</a>
-                </b-alert>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="group">
-                            <label for="" class="d-block mb-2 dashboard-label">Appraiser Name <span
-                                    class="require"></span></label>
-                            <b-form-select v-model="details.appraiser_id" :options="this.appraisers" value-field="id"
-                                text-field="name" class="dashboard-input w-100">
-                                <template #first>
-                                    <b-form-select-option value="" disabled>-- Please select an option --
-                                    </b-form-select-option>
-                                </template>
-                            </b-form-select>
-                        </div>
-                        <div class="group">
-                            <label for="" class="d-block mb-2 dashboard-label">Loan Type <span
-                                    class="require"></span></label>
-                            <b-form-select v-model="details.loan_type" :options="this.loanTypes" value-field="id"
-                                text-field="name" class="dashboard-input w-100">
-                                <template #first>
-                                    <b-form-select-option value="" disabled>-- Please select an option --
-                                    </b-form-select-option>
-                                </template>
-                            </b-form-select>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="group">
-                            <label for="" class="d-block mb-2 dashboard-label">Loan # <span
-                                    class="require"></span></label>
-                            <input type="text" v-model="details.loan_no" class="dashboard-input w-100">
-                        </div>
-                        <div class="group">
-                            <label for="" class="d-block mb-2 dashboard-label">FHA Case No <span
-                                    class="require"></span></label>
-                            <input type="text" v-model="details.fha_case_no" class="dashboard-input w-100">
-                        </div>
-                    </div>
+                <ValidationObserver ref="appraisalForm">
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="group">
-                                <label for="" class="d-block mb-2 dashboard-label">Property Type <span
-                                        class="require"></span></label>
-                                <b-form-select v-model="details.property_type" :options="propertyTypes" value-field="id"
-                                    text-field="type" class="dashboard-input w-100">
-                                    <template #first>
-                                        <b-form-select-option value="" disabled>-- Please select an option --
-                                        </b-form-select-option>
-                                    </template>
-                                </b-form-select>
+                            <ValidationProvider class="group" name="Appraiser name" rules="required"
+                                v-slot="{ errors }">
+                                <div class="position-relative" :class="{ 'invalid-form' : errors[0] }">
+                                    <label for="" class="d-block mb-2 dashboard-label">Appraiser name <span
+                                            class="text-danger require"></span></label>
+                                    <select id="apprClientSelect" class="dashboard-input w-100"
+                                        v-model="details.appraiser_id">
+                                        <option value="">Please select appraisal user name</option>
+                                        <option v-for="appraisal_user in appraisers" :key="appraisal_user.id"
+                                            :value="appraisal_user.id">
+                                            {{ appraisal_user.name }}
+                                        </option>
+                                    </select>
+                                    <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                                </div>
+                            </ValidationProvider>
+                            <ValidationProvider class="group" name="Loan type" rules="required" v-slot="{ errors }">
+                                <div class="position-relative" :class="{ 'invalid-form' : errors[0] }">
+                                    <label for="" class="d-block mb-2 dashboard-label">Loan type </label>
+                                    <select @change="loanTypeChange" id="loanTypeSelect"
+                                        class="dashboard-input w-100 loan-type-select" v-model="details.loan_type">
+                                        <option value="">Please Select Loan Type</option>
+                                        <option v-for="loan_type in loanTypes" :key="loan_type.id" :value="loan_type.id"
+                                            :data-fha="loan_type.is_fha">
+                                            {{ loan_type.name }}
+                                        </option>
+                                    </select>
+                                    <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                                </div>
+                            </ValidationProvider>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="position-relative">
+                                <label for="" class="d-block mb-2 dashboard-label">Loan No</label>
+                                <input type="text" v-model="details.loan_no" class="dashboard-input w-100">
+                            </div>
+                            <ValidationProvider class="group" name="FHA case no"
+                                :rules="{ required: this.fhaExists == 1 }" v-slot="{ errors }">
+                                <div :class="{ 'invalid-form' : errors[0] }">
+                                    <label for="" class="d-block mb-2 dashboard-label">FHA case no <span
+                                            class="text-danger require" v-if="fhaExists == 1"></span></label>
+                                    <input type="text" class="dashboard-input w-100" v-model="details.fha_case_no">
+                                    <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                                </div>
+                            </ValidationProvider>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <ValidationProvider class="group" name="Property Type" rules="required"
+                                    v-slot="{ errors }">
+                                    <div class="position-relative" :class="{ 'invalid-form' : errors[0] }">
+                                        <label for="" class="d-block mb-2 dashboard-label">Property Type <span
+                                                class="require"></span></label>
+                                        <select class="dashboard-input w-100" v-model="details.property_type">
+                                            <option value="">Please Select Property Type</option>
+                                            <option v-for="property_type in propertyTypes" :key="property_type.id"
+                                                :value="property_type.id">
+                                                {{ property_type.type }}
+                                            </option>
+                                        </select>
+                                        <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                                    </div>
+                                </ValidationProvider>
                             </div>
                         </div>
                     </div>
-                </div>
+                </ValidationObserver>
             </div>
             <div slot="modal-footer">
                 <b-button variant="secondary" @click="$bvModal.hide('appraisal-info')">Close</b-button>
@@ -122,8 +137,8 @@
                     fha_case_no: '',
                     property_type: ''
                 },
-                message: '',
-                edited: {}
+                edited: {},
+                fhaExists: 0
             }
         },
 
@@ -135,32 +150,37 @@
                 this.details.appraiser_type = types[0].type;
                 this.details.appraiser_type_id = types[0].typeId;
             }
-            this.getAppraisalDetails();
+            this.getAppraisalDetails(this.order);
         },
         methods: {
-            getAppraisalDetails() {
-                this.details.appraiser_id = this.order.appraisal_detail.appraiser_id;
-                this.details.loan_type = this.order.appraisal_detail.loan_type;
-                this.details.appraiser_name = this.order.appraisal_detail.appraiser.name;
-                this.details.loan_type_name = this.order.appraisal_detail.get_loan_type.name;
-                this.details.loan_no = this.order.appraisal_detail.loan_no;
-                this.details.fha_case_no = this.order.appraisal_detail.fha_case_no;
-                this.details.property_type = this.order.appraisal_detail.property_type;
+            loanTypeChange(event) {
+                this.fhaExists = event.target.selectedOptions[0].dataset.fha
+            },
+            getAppraisalDetails(order) {
+                this.details.appraiser_id = order.appraisal_detail.appraiser_id;
+                this.details.loan_type = order.appraisal_detail.loan_type;
+                this.details.appraiser_name =order.appraisal_detail.appraiser.name;
+                this.details.loan_type_name = order.appraisal_detail.get_loan_type.name;
+                this.details.loan_no = order.appraisal_detail.loan_no;
+                this.details.fha_case_no = order.appraisal_detail.fha_case_no;
+                this.details.property_type = order.appraisal_detail.property_type;
+                this.fhaExists = order.appraisal_detail.get_loan_type.is_fha
                 this.edited = Object.assign({}, this.details);
             },
             updateAppraisalDetails() {
-                let that = this
-                axios.post('update-appraisal-info/' + this.orderId, this.details)
-                    .then(res => {
-                        this.message = res.data.message
-                        this.edited = Object.assign({}, this.details);
-                        setTimeout(function () {
-                            that.$bvModal.hide('appraisal-info')
-                            that.message = ''
-                        }, 2000);
-                    }).catch(err => {
-                        console.log(err)
-                    })
+                this.$refs.appraisalForm.validate().then((status) => {
+                    if (status) {
+                        this.$boston.post('update-appraisal-info/' + this.orderId, this.details)
+                            .then(res => {
+                                this.$root.$emit('wk_update', res.data)
+                                this.$root.$emit('wk_flow_toast', res)
+                                this.$bvModal.hide('appraisal-info')
+                                this.getAppraisalDetails(res.data)
+                            }).catch(err => {
+                                console.error(err)
+                            })
+                    }
+                })
             }
         }
     }
