@@ -125,7 +125,7 @@ class OrderWorkflowController extends BaseController
         $zip->open($zip_file, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
         foreach ($data['files'] as $key => $file) {
             if (in_array($file->getClientOriginalExtension(), $image_types)) {
-                $zip->addFile($file->getPathName());
+                $zip->addFile($file);
             } else {
                 $inspection->find($inspection_id)->addMedia($file)
                     ->toMediaCollection('inspection');
