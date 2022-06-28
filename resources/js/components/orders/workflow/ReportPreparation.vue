@@ -71,18 +71,19 @@
               <p class="text-light-black mgb-12">Note</p>
               <p class="mb-0 text-light-black fw-bold">{{ this.note }}</p>
             </div>
-              <div class="group">
-                  <p class="text-light-black mgb-12">Report preparation file upload</p>
-                  <div class="document">
-                      <div class="row">
-                          <div class="d-flex align-items-center mb-3" v-for="file, fi in dataFiles" :key="fi">
-                              <img src="/img/pdf.svg" alt="boston profile" class="img-fluid">
-                              <span class="text-light-black d-inline-block mgl-12 file-name">{{ file.name }}</span>
-                          </div>
-                      </div>
-                  </div>
-
-              </div>
+            <div class="group"  v-if="dataFiles.length">
+                <p class="text-light-black mgb-12">Report preparation file upload</p>
+                <div class="document">
+                    <div class="row">
+                        <div class="d-flex align-items-center mb-3" v-for="(file, key) in dataFiles" :key="key">
+                            <img src="/img/pdf.svg" alt="boston profile" class="img-fluid">
+                            <span class="text-light-black d-inline-block mgl-12 file-name">
+                                <a :href="file.original_url" download>{{ file.name }}</a>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 <!--        <div v-else-if="isEmpty">-->
 <!--          <div class="group text-center">-->
@@ -233,7 +234,7 @@ export default {
         this.assignTo = report.assigned_to
         this.traineeId = report.trainee_id
         this.note = report.note
-        this.dataFiles = report.attachments
+        this.dataFiles = !_.isEmpty(this.orderData.preparation_files) ? this.orderData.preparation_files : [];
       }
       if(this.creator || this.viewer){
         this.isEmpty = false
@@ -314,7 +315,7 @@ export default {
       }
     },
     changeSelect(type, value) {
-        
+
     },
     initSelect2() {
       // $("select").select2();
