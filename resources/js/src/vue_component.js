@@ -49,6 +49,8 @@ const orderPagination = () =>
     import ( /*webpackChunkName: "orderPagination"*/ './Pagination')
 const addCallLog = () =>
     import ( /*webpackChunkName: "orderPagination"*/ '../components/orders/AddCallLog')
+const callList = () =>
+    import ( /*webpackChunkName: "callList"*/ '../components/calls/list')
 
 Vue.component('clients-list', ClientList);
 Vue.component('order-create', orderCreate);
@@ -74,3 +76,4 @@ Vue.component('order-list', orderList);
 Vue.component('order-edit-vue', orderEdit);
 Vue.component('paginate', orderPagination);
 Vue.component('add-call-log', addCallLog);
+Vue.component('call-list', callList);

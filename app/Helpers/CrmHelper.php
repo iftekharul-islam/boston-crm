@@ -39,7 +39,7 @@ trait CrmHelper {
 
     protected function getOrderError($get, $type) {
         $error = false;
-        $errorMessage = "";
+        $errorMessage = [];
 
         if ($type == "borrower") {
             $array_filter2 = [
@@ -107,6 +107,32 @@ trait CrmHelper {
         $wkHistory->type = $type;
         $wkHistory->created_at = Carbon::now();
         $wkHistory->save();
+    }
+
+    protected function orderCallDetails($id) {
+        $order = Order::with(
+            'amc',
+            'lender',
+            'user',
+            'appraisalDetail',
+            'appraisalDetail.appraiser',
+            'appraisalDetail.getLoanType',
+            'providerService',
+            'propertyInfo',
+            'borrowerInfo',
+            'contactInfo',
+            'activityLog.user',
+            'inspection.user',
+            'inspection.attachments',
+            'inspection.createBy',
+            'analysis.assignee',
+            'analysis.attachments',
+            'analysis.updatedBy',
+            'analysis.updateBy',
+            'callLog.caller'
+        )->where('id', $id)->first();
+
+        return $order;
     }
 
     protected function orderDetails($id) {
