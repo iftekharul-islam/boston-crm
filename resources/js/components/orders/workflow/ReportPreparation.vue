@@ -14,37 +14,39 @@
       </div>
       <div v-else>
         <ValidationObserver ref="adminForm">
-          <div class="mgb-32">
-            <ValidationProvider class="group" name="Report Creator" rules="required" v-slot="{ errors }">
-              <div :class="{ 'invalid-form' : errors[0] }">
-                <label for="" class="d-block mb-2 dashboard-label">Report Creator </label>
-                <select name="" class="dashboard-input w-100 loan-type-select creatorId" v-model="creatorId">
-                  <option value="">Please Select a user</option>
-                  <option v-for="user in users" :key="user.id" :value="user.id">
-                      {{ user.name }}
-                  </option>
-                </select>
-                <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
-              </div>
-            </ValidationProvider>
-          </div>
-          <div class="mgb-32">
-            <ValidationProvider class="group" name="Report Viewer" rules="required" v-slot="{ errors }">
-              <div :class="{ 'invalid-form' : errors[0] }">
-                <label for="" class="d-block mb-2 dashboard-label">Report Viewer </label>
-                <select name="" class="dashboard-input w-100 loan-type-select viewerId" v-model="viewerId">
-                  <option value="">Please Select a user</option>
-                  <option v-for="user in users" :key="user.id" :value="user.id">
-                      {{ user.name }}
-                  </option>
-                </select>
-                <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
-              </div>
-            </ValidationProvider>
-          </div>
-          <div class="text-end mgt-32">
-            <button class="button button-primary px-4 h-40 d-inline-flex align-items-center" @click="saveAdminData">Save</button>
-          </div>
+            <div class="mgb-32">
+                <ValidationProvider class="group" name="Report Creator" rules="required" v-slot="{ errors }">
+                    <div :class="{ 'invalid-form' : errors[0] }">
+                        <label for="" class="d-block mb-2 dashboard-label">Report Creator </label>
+                        <!-- <select name="" class="dashboard-input w-100 loan-type-select creatorId" @change="changeSelect('creatorId', $event.target.value)" v-model="creatorId">
+                            <option value="">Please Select a user</option>
+                            <option v-for="user in users" :key="user.id" :value="user.id">
+                                {{ user.name }}
+                            </option>
+                        </select> -->
+                        <m-select :options="users" object item-text="name" item-value="id" v-model="creatorId"></m-select>
+                        <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                    </div>
+                </ValidationProvider>
+            </div>
+            <div class="mgb-32">
+                <ValidationProvider class="group" name="Report Viewer" rules="required" v-slot="{ errors }">
+                    <div :class="{ 'invalid-form' : errors[0] }">
+                        <label for="" class="d-block mb-2 dashboard-label">Report Viewer </label>
+                        <!-- <select name="" class="dashboard-input w-100 loan-type-select viewerId" @change="changeSelect('viewerId', $event.target.value)" v-model="viewerId">
+                            <option value="">Please Select a user</option>
+                            <option v-for="user in users" :key="user.id" :value="user.id">
+                                {{ user.name }}
+                            </option>
+                        </select> -->
+                        <m-select :options="users" object item-text="name" item-value="id" v-model="viewerId"></m-select>
+                        <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                    </div>
+                </ValidationProvider>
+            </div>
+            <div class="text-end mgt-32">
+                <button class="button button-primary px-4 h-40 d-inline-flex align-items-center" @click="saveAdminData">Save</button>
+            </div>
         </ValidationObserver>
       </div>
     </div>
@@ -60,7 +62,7 @@
               <p class="mb-0 text-light-black fw-bold">{{ this.viewer }}</p>
             </div>
             <div class="group">
-                <p class="text-light-black mgb-12">Assigne to</p>
+                <p class="text-light-black mgb-12">Assignee to</p>
                 <p class="mb-0 text-light-black fw-bold">{{ this.assignToName }}</p>
             </div>
             <div class="group">
@@ -85,50 +87,19 @@
                 </div>
             </div>
         </div>
-<!--        <div v-else-if="isEmpty">-->
-<!--          <div class="group text-center">-->
-<!--              <p class="text-light-black mgb-12">Admin not updated yet</p>-->
-<!--            </div>-->
-<!--        </div>-->
         <div v-else>
-<!--            <div class="group">-->
-<!--              <p class="text-light-black mgb-12">Report creator</p>-->
-<!--              <p class="mb-0 text-light-black fw-bold">{{ this.creator }}</p>-->
-<!--            </div>-->
-<!--            <div class="group">-->
-<!--              <p class="text-light-black mgb-12">Report reviewer</p>-->
-<!--              <p class="mb-0 text-light-black fw-bold">{{ this.viewer }}</p>-->
-<!--            </div>-->
             <ValidationObserver ref="assigneeForm">
                 <div class="mgb-32">
-                    <ValidationProvider class="group" name="Report Creator" rules="required" v-slot="{ errors }">
-                        <div :class="{ 'invalid-form' : errors[0] }">
-                            <label for="" class="d-block mb-2 dashboard-label">Report Creator </label>
-                            <!-- <select name="" class="dashboard-input w-100 loan-type-select creatorId" @change="changeSelect('creatorId', $event.target.value)" v-model="creatorId">
-                                <option value="">Please Select a user</option>
-                                <option v-for="user in users" :key="user.id" :value="user.id">
-                                    {{ user.name }}
-                                </option>
-                            </select> -->
-                            <m-select :options="users" object item-text="name" item-value="id" v-model="creatorId"></m-select>
-                            <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
-                        </div>
-                    </ValidationProvider>
+                    <div class="group">
+                        <p class="text-light-black mgb-12">Report creator</p>
+                        <p class="mb-0 text-light-black fw-bold">{{ this.creator }}</p>
+                    </div>
                 </div>
                 <div class="mgb-32">
-                    <ValidationProvider class="group" name="Report Viewer" rules="required" v-slot="{ errors }">
-                        <div :class="{ 'invalid-form' : errors[0] }">
-                            <label for="" class="d-block mb-2 dashboard-label">Report Viewer </label>
-                            <!-- <select name="" class="dashboard-input w-100 loan-type-select viewerId" @change="changeSelect('viewerId', $event.target.value)" v-model="viewerId">
-                                <option value="">Please Select a user</option>
-                                <option v-for="user in users" :key="user.id" :value="user.id">
-                                    {{ user.name }}
-                                </option>
-                            </select> -->
-                            <m-select :options="users" object item-text="name" item-value="id" v-model="viewerId"></m-select>
-                            <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
-                        </div>
-                    </ValidationProvider>
+                    <div class="group">
+                        <p class="text-light-black mgb-12">Report reviewer</p>
+                        <p class="mb-0 text-light-black fw-bold">{{ this.viewer }}</p>
+                    </div>
                 </div>
                 <div class="mgb-32">
                     <ValidationProvider class="group" name="Assign to" rules="required" v-slot="{ errors }">
@@ -198,7 +169,6 @@ export default {
   data: () => ({
     isUploading: false,
     orderData: [],
-    isEmpty: false,
     adminDataExist: true,
     dataExist: true,
     creator: '',
@@ -231,16 +201,16 @@ export default {
         this.assignToName = !_.isEmpty(report.assignee) ? report.assignee.name : '',
         this.creatorId = report.creator_id
         this.viewerId = report.reviewed_by
-        this.assignTo = report.assigned_to
+        this.assignTo = report.assigned_to ?? report.creator_id
         this.traineeId = report.trainee_id
         this.note = report.note
         this.dataFiles = !_.isEmpty(this.orderData.preparation_files) ? this.orderData.preparation_files : [];
       }
       if(this.creator || this.viewer){
-        this.isEmpty = false
+        this.isAdmin = false
         this.adminDataExist = true;
       } else {
-        this.isEmpty = true
+        this.isAdmin = true
         this.adminDataExist = false;
       }
       if(this.trainee || this.note){

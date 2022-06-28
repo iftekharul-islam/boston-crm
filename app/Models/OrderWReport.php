@@ -30,7 +30,7 @@ class OrderWReport extends Model implements HasMedia
 
     public function attachments()
     {
-        return $this->media()->where('collection_name', '=', 'preparation');
+        return $this->media()->where('collection_name', '=', 'preparation') ?? [];
     }
 
     public function createBy()
