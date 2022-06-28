@@ -147,7 +147,6 @@ export default {
                     this.$boston.post('submission-create/'+ this.orderData.id, data, { headers: {
                             'Content-Type': 'multipart/form-data'
                         }}).then(res => {
-                        console.log(res.data)
                         this.$root.$emit('wk_update', this.orderData);
                         this.$root.$emit('wk_flow_menu', this.orderData);
                         this.$root.$emit('wk_flow_toast', res);
