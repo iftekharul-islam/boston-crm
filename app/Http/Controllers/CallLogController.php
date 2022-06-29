@@ -29,7 +29,7 @@ class CallLogController extends Controller
 
         $log = new CallLog();
         $log->order_id = $order->id;
-        $log->caller_id = $user->id;
+        $log->caller_id = $request->caller_id ?? $user->id;
         $log->message = $request->message;
         $log->save();
 

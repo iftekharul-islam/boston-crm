@@ -14,7 +14,7 @@
                 <appraisal-details :order="order" :appraisers="appraisers" :loan-types="loan_types" :order-id="order_id"></appraisal-details>
                 <provided-services :order="order" :appraisal-types="appraisal_types" :order-id="order_id"></provided-services>
                 <client-info :order="order" :all-amc="all_amc" :all-lender="all_lender" :order-id="order_id"></client-info>
-                <call-log :order="order"></call-log>
+                <call-log :order="order" :users="all_users"></call-log>
                 <map-view :order="order"></map-view>
             </div>
         </div>

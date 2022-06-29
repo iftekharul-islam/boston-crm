@@ -47,7 +47,7 @@
                 {{-- Client --}}
                 <client-info :order="{{ $order }}" :all-amc="{{ $all_amc }}" :all-lender="{{ $all_lender }}" :order-id="'{{ $order_id }}'"></client-info>
                 {{-- Call log --}}
-                <call-log :order="{{ $order }}"></call-log>
+                <call-log :order="{{ $order }}" :users="{{ json_encode($all_users) }}"></call-log>
                 {{-- Map --}}
                 <map-view :order="{{ $order }}"></map-view>
             </div>
