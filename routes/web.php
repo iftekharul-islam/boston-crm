@@ -112,6 +112,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     //call log
     Route::get('call-log/{order_id}', [CallLogController::class, 'index'])->middleware('role_permission:view.order')->name('call.log');
     Route::post('call-log/{order_id}', [CallLogController::class, 'store'])->middleware('role_permission:view.order')->name('call.log.store');
+    Route::post('call-log-update/{order_id}', [CallLogController::class, 'update'])->middleware('role_permission:view.order')->name('call.log.store');
 
     //Add issue
     Route::get('issues/{order_id}', [TicketController::class, 'index'])->middleware('role_permission:view.order')->name('call.log');

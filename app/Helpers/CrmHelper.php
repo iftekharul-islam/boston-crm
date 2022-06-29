@@ -237,7 +237,17 @@ trait CrmHelper {
     }
 
     protected function order_list_relation() {
-        return ['user', 'amc', 'appraisalDetail', 'appraisalDetail.appraiser', 'appraisalDetail.getLoanType', 'lender', 'propertyInfo', 'inspection.user'];
+        return [
+            'user',
+            'amc',
+            'appraisalDetail',
+            'appraisalDetail.appraiser',
+            'appraisalDetail.getLoanType',
+            'lender',
+            'propertyInfo',
+            'inspection.user',
+            'callLog.caller'
+        ];
     }
 
 }

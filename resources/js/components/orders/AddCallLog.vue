@@ -13,7 +13,7 @@
                             </div>
                         </ValidationProvider>
                     </div>
-                    <div class="col-12">
+                    <div class="col-12 mt-2">
                         <ValidationProvider class="d-block group" name="Message" rules="required" v-slot="{ errors }">
                             <div class="group" :class="{ 'invalid-form' : errors[0] }">
                                 <label for="" class="d-block mb-2 dashboard-label">Message</label>
@@ -21,6 +21,12 @@
                                 <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                             </div>
                         </ValidationProvider>
+                    </div>
+                    <div class="col-12">
+                        <div class="checkbox-group review-check mgt-20">
+                            <input type="checkbox" class="checkbox-input check-data" v-model="isCompleted">
+                            <label for="" class="checkbox-label text-capitalize">Completed </label>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -40,7 +46,8 @@ export default {
     data: () => ({
         id: '',
         message: '',
-        assignTo: ''
+        assignTo: '',
+        isCompleted: null
     }),
     watch: {
         showModal(newValue, oldValue) {
@@ -65,12 +72,16 @@ export default {
                     let data = {
                         message: this.message,
                         caller_id: this.assignTo,
+                        status: this.isCompleted
                     }
                     axios.post('call-log/' + this.id, data)
                         .then(res => {
-                            if (this.error) {
+                            if (res.error) {
                                 this.$root.$emit('wk_flow_toast', res.data)
                             } else {
+                                this.message = ''
+                                this.assignTo = ''
+                                this.isCompleted = null
                                 this.$root.$emit('call_log_update', res.data.data)
                                 this.$root.$emit('wk_update', res.data.data)
                                 this.$root.$emit('wk_flow_menu', res.data.data)
