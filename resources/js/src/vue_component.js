@@ -55,6 +55,8 @@ const callList = () =>
     import ( /*webpackChunkName: "callList"*/ '../components/calls/list')
 const addIssue = () =>
     import ( /*webpackChunkName: "orderPagination"*/ '../components/orders/AddIssue')
+const mModal = () =>
+    import ( /*webpackChunkName: "m-modal"*/ './modal')
 
 Vue.component('clients-list', ClientList);
 Vue.component('order-create', orderCreate);
@@ -83,3 +85,4 @@ Vue.component('paginate', orderPagination);
 Vue.component('add-call-log', addCallLog);
 Vue.component('call-list', callList);
 Vue.component('add-issue', addIssue);
+Vue.component('m-modal', mModal);
