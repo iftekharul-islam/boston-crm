@@ -4,17 +4,18 @@
             <div class="bg-white pd-32">
                 <div class="calls__menu d-flex flex-wrap">
                     <div class="left chart-box-header-btn d-flex flex-wrap me-3">
-                        <button class="calls-btn h-40 d-flex align-items-center mb-2 active">Appraiser <span class="ms-2"> (88)</span></button>
-                        <button class="calls-btn h-40 d-flex align-items-center mb-2">Appraiser <span class="ms-2"> (88)</span></button>
-                        <button class="calls-btn h-40 d-flex align-items-center mb-2">Appraiser <span class="ms-2"> (88)</span></button>
-                        <button class="calls-btn h-40 d-flex align-items-center mb-2">Appraiser <span class="ms-2"> (88)</span></button>
-                        <button class="calls-btn h-40 d-flex align-items-center mb-2">Appraiser <span class="ms-2"> (88)</span></button>
+                        <button class="calls-btn h-40 d-flex align-items-center mb-2 active">All <span class="ms-2"> (88)</span></button>
+                        <button class="calls-btn h-40 d-flex align-items-center mb-2">To be Schedule <span class="ms-2"> (88)</span></button>
+                        <button class="calls-btn h-40 d-flex align-items-center mb-2">Schedule <span class="ms-2"> (88)</span></button>
+                        <button class="calls-btn h-40 d-flex align-items-center mb-2">Todays Call <span class="ms-2"> (88)</span></button>
+                        <button class="calls-btn h-40 d-flex align-items-center mb-2">Completed <span class="ms-2"> (88)</span></button>
+                        <button @click="$bvModal.show('dateRange')" class="calls-btn h-40 d-flex align-items-center mb-2">Date Rage</button>
                     </div>
                     <div class="right d-flex">
                         <a @click="goToMap()" href="javascript:;" class="primary-bg h-40 d-flex align-items-center mb-2 px-2 br-4 text-white me-3">Map selected orders <span class="ms-2">({{ selectedItems.length }})</span></a>
                         <div class=" d-flex calls-search">
-                            <input type="text" class="mb-3 px-3 bdr-1 br-4 gray-border calls-search-input h-40" placeholder="Search...">
-                            <button class="bg-gray inline-flex-center mb-2 calls-search-btn">
+                            <input type="text" v-model="pages.searchModel" @input="searchData($event)" class="mb-3 px-3 bdr-1 br-4 gray-border calls-search-input h-40" placeholder="Search...">
+                            <button class="bg-gray inline-flex-center mb-2 calls-search-btn d-none">
                                 <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M7.33333 13.6667C10.8311 13.6667 13.6667 10.8311 13.6667 7.33333C13.6667 3.83553 10.8311 1 7.33333 1C3.83553 1 1 3.83553 1 7.33333C1 10.8311 3.83553 13.6667 7.33333 13.6667Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                                 <path d="M17 17L13 13" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -23,6 +24,11 @@
                         </div>
                     </div>
                 </div>
+                <!-- <transition name="fade" appear v-if="visibleColumnDropDown">
+                    <div class="column-list">
+                        <div class="col-item" @click="addToTable(item)" :class="{ 'active' : checkColumnActive(item) }" v-for="item, ci in order.disableHeader" :key="ci">{{ item.title }}</div>
+                    </div>
+                </transition> -->
                 <div class="call-list">
                     <div class="call-list-header">
                         <span class="call-list-item ">SL</span>
@@ -44,194 +50,200 @@
                             </svg>
                         </span>
                     </div>
-                    <div class="call-item" v-for="item, callIndex in orderData" :key="callIndex">
-                        <div class="call-list-body">
-                            <span class="call-list-item">
-                                <input :id="`list-item-${item.id}`" type="checkbox" v-model="item.selected" @change="checkSelectedList($event, item)">
-                                <label :for="`list-item-${item.id}`">
-                                    <svg width="12" height="10" viewBox="0 0 12 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M3.85561 9.43102C3.52966 9.43102 3.20372 9.31094 2.94639 9.05361L0.373124 6.48034C-0.124375 5.98284 -0.124375 5.1594 0.373124 4.6619C0.870622 4.1644 1.69407 4.1644 2.19157 4.6619L3.85561 6.32595L9.80843 0.373124C10.3059 -0.124375 11.1294 -0.124375 11.6269 0.373124C12.1244 0.870622 12.1244 1.69407 11.6269 2.19156L4.76483 9.05361C4.52466 9.31094 4.18156 9.43102 3.85561 9.43102Z" fill="white"/>
-                                    </svg>
-                                </label>
-                            </span>
-                            <span class="call-list-item">{{ item.client_order_no }}</span>
-                            <span class="call-list-item"><p class="mb-0 fw-bold text-ellips">{{ item.amc ? item.amc.name : '-' }}</p></span>
-                            <span class="call-list-item"><p class="mb-0 text-ellips">{{ item.property_info.search_address }}</p></span>
-                            <span class="call-list-item">{{ item.inspection ? item.inspection.user.name : '-' }}</span>
-                            <span class="call-list-item">
-                                <template v-if="item.appraisal_detail">
-                                    {{ item.appraisal_detail.appraiser ? item.appraisal_detail.appraiser.name : '-' }}
-                                </template>
-                                <template v-else>
-                                    -
-                                </template>
-                            </span>
-                            <span class="call-list-item">12.03.2022</span>
-                            <span class="call-list-item">
-                                {{ item.inspection ? item.inspection.inspection_date_time : '-' }}
-                            </span>
-                            <span class="call-list-item"><p class="mb-0 scheduled">{{ item.order_status }}</p></span>
-                            <span class="call-list-item">
-                                <a href="#" class="icon-list" data-bs-placement="bottom" title="Details"><span class="icon-eye text-blue-eye fs-20"><span class="path1"></span><span class="path2"></span></span></a>
-                                <a href="#" ata-bs-toggle="tooltip" data-bs-placement="bottom" title="Quick view" class="icon-list quick-view-icon" data-bs-toggle="modal" data-bs-target="#exampleModal"><span class="icon-note text-purple fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></span></a>
-                                <a href="#" class="icon-list" data-bs-placement="bottom" title="Call log"><span class="icon-messages2 primary-text fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span></span></a>
-                                <a href="#" class="icon-list" data-bs-placement="bottom" title="Schedule"><span class="icon-calendar text-brown fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span class="path7"></span><span class="path8"></span></span></a>
-                                <a href="#" class="icon-list"  data-bs-placement="bottom" title="Email & SMS"> <span class="icon-messages text-yellow-msg  fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span></a>
-                                <a href="#" class="icon-list"><span class="icon-call text-light-red fs-20"><span class="path1"></span><span class="path2"></span></span></a>
-                                <button class="button button-transparent p-0" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"><span class="icon-arrow-bottom"></span></button>
-                            </span>
-                        </div>
-                        <div class="call-collapse collapse" id="collapseExample">
-                            <div class="item pending">
-                                <span class="call-badge">Pending</span>
-                                <p class="text-gray text-end fs-12">Today 12:10am</p>
-                                <p class="fs-14 mgt-12 mgb-12">He made payment but didnt get confirmation yet</p>
-                                <div class="d-flex justify-content-between">
-                                    <p class="mb-0 fs-14"><span class="text-gray">Assigned to :</span> <b>Technical team</b></p>
-                                    <a href="#">
-                                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M13.491 1.66667H6.50768C3.47435 1.66667 1.66602 3.475 1.66602 6.50834V13.4833C1.66602 16.525 3.47435 18.3333 6.50768 18.3333H13.4827C16.516 18.3333 18.3243 16.525 18.3243 13.4917V6.50834C18.3327 3.475 16.5243 1.66667 13.491 1.66667Z" fill="white"/>
-                                            <path d="M13.9569 5.83333H9.9319C9.59023 5.83333 9.3069 6.11666 9.3069 6.45833C9.3069 6.8 9.59023 7.08333 9.9319 7.08333H12.4486L6.01523 13.5167C5.77357 13.7583 5.77357 14.1583 6.01523 14.4C6.14023 14.525 6.29857 14.5833 6.4569 14.5833C6.61523 14.5833 6.77357 14.525 6.89857 14.4L13.3319 7.96666V10.4833C13.3319 10.825 13.6152 11.1083 13.9569 11.1083C14.2986 11.1083 14.5819 10.825 14.5819 10.4833V6.45833C14.5819 6.11666 14.2986 5.83333 13.9569 5.83333Z" fill="#F97373"/>
+                    <template v-if="orderData.length">
+                        <div class="call-item" v-for="item, callIndex in orderData" :key="callIndex">
+                            <div class="call-list-body">
+                                <span class="call-list-item">
+                                    <input :id="`list-item-${item.id}`" type="checkbox" v-model="item.selected" @change="checkSelectedList($event, item)">
+                                    <label :for="`list-item-${item.id}`">
+                                        <svg width="12" height="10" viewBox="0 0 12 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M3.85561 9.43102C3.52966 9.43102 3.20372 9.31094 2.94639 9.05361L0.373124 6.48034C-0.124375 5.98284 -0.124375 5.1594 0.373124 4.6619C0.870622 4.1644 1.69407 4.1644 2.19157 4.6619L3.85561 6.32595L9.80843 0.373124C10.3059 -0.124375 11.1294 -0.124375 11.6269 0.373124C12.1244 0.870622 12.1244 1.69407 11.6269 2.19156L4.76483 9.05361C4.52466 9.31094 4.18156 9.43102 3.85561 9.43102Z" fill="white"/>
                                         </svg>
-                                    </a>
-                                </div>
+                                    </label>
+                                </span>
+                                <span class="call-list-item">{{ item.client_order_no }}</span>
+                                <span class="call-list-item"><p class="mb-0 fw-bold text-ellips">{{ item.amc ? item.amc.name : '-' }}</p></span>
+                                <span class="call-list-item"><p class="mb-0 text-ellips">{{ item.property_info.search_address }}</p></span>
+                                <span class="call-list-item">{{ item.inspection ? item.inspection.user.name : '-' }}</span>
+                                <span class="call-list-item">
+                                    <template v-if="item.appraisal_detail">
+                                        {{ item.appraisal_detail.appraiser ? item.appraisal_detail.appraiser.name : '-' }}
+                                    </template>
+                                    <template v-else>
+                                        -
+                                    </template>
+                                </span>
+                                <span class="call-list-item">12.03.2022</span>
+                                <span class="call-list-item">
+                                    {{ item.inspection ? item.inspection.inspection_date_time : '-' }}
+                                </span>
+                                <span class="call-list-item"><p class="mb-0 scheduled">{{ item.order_status }}</p></span>
+                                <span class="call-list-item">
+                                    <a href="#" class="icon-list" data-bs-placement="bottom" title="Details"><span class="icon-eye text-blue-eye fs-20"><span class="path1"></span><span class="path2"></span></span></a>
+                                    <a href="#" ata-bs-toggle="tooltip" data-bs-placement="bottom" title="Quick view" class="icon-list quick-view-icon" data-bs-toggle="modal" data-bs-target="#exampleModal"><span class="icon-note text-purple fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></span></a>
+                                    <a href="#" class="icon-list" data-bs-placement="bottom" title="Call log"><span class="icon-messages2 primary-text fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span></span></a>
+                                    <a href="#" class="icon-list" data-bs-placement="bottom" title="Schedule"><span class="icon-calendar text-brown fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span class="path7"></span><span class="path8"></span></span></a>
+                                    <a href="#" class="icon-list"  data-bs-placement="bottom" title="Email & SMS"> <span class="icon-messages text-yellow-msg  fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span></a>
+                                    <a href="#" class="icon-list"><span class="icon-call text-light-red fs-20"><span class="path1"></span><span class="path2"></span></span></a>
+                                    <button class="button button-transparent p-0" data-bs-toggle="collapse" :data-bs-target="`#collapseExample-${item.id}`" aria-expanded="false" :aria-controls="`#collapseExample-${item.id}`"><span class="icon-arrow-bottom"></span></button>
+                                </span>
                             </div>
-                            <div class="item pending">
-                                <span class="call-badge">Pending</span>
-                                <p class="text-gray text-end fs-12">Today 12:10am</p>
-                                <p class="fs-14 mgt-12 mgb-12">He made payment but didnt get confirmation yet</p>
-                                <div class="d-flex justify-content-between">
-                                    <p class="mb-0 fs-14"><span class="text-gray">Assigned to :</span> <b>Technical team</b></p>
-                                    <a href="#">
-                                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M13.491 1.66667H6.50768C3.47435 1.66667 1.66602 3.475 1.66602 6.50834V13.4833C1.66602 16.525 3.47435 18.3333 6.50768 18.3333H13.4827C16.516 18.3333 18.3243 16.525 18.3243 13.4917V6.50834C18.3327 3.475 16.5243 1.66667 13.491 1.66667Z" fill="white"/>
-                                            <path d="M13.9569 5.83333H9.9319C9.59023 5.83333 9.3069 6.11666 9.3069 6.45833C9.3069 6.8 9.59023 7.08333 9.9319 7.08333H12.4486L6.01523 13.5167C5.77357 13.7583 5.77357 14.1583 6.01523 14.4C6.14023 14.525 6.29857 14.5833 6.4569 14.5833C6.61523 14.5833 6.77357 14.525 6.89857 14.4L13.3319 7.96666V10.4833C13.3319 10.825 13.6152 11.1083 13.9569 11.1083C14.2986 11.1083 14.5819 10.825 14.5819 10.4833V6.45833C14.5819 6.11666 14.2986 5.83333 13.9569 5.83333Z" fill="#F97373"/>
-                                        </svg>
-                                    </a>
+                            <div class="call-collapse collapse" :id="`collapseExample-${item.id}`">
+                                <div class="item pending">
+                                    <span class="call-badge">Pending</span>
+                                    <p class="text-gray text-end fs-12">Today 12:10am</p>
+                                    <p class="fs-14 mgt-12 mgb-12">He made payment but didnt get confirmation yet</p>
+                                    <div class="d-flex justify-content-between">
+                                        <p class="mb-0 fs-14"><span class="text-gray">Assigned to :</span> <b>Technical team</b></p>
+                                    </div>
                                 </div>
+                                <a href="javascript:;" class="item more-item">
+                                    <p class="text-center mb-1 text-white">10</p>
+                                    <p class="text-center text-white mb-0">More</p>
+                                </a>
                             </div>
-                            <div class="item solved">
-                                <span class="call-badge">Solved</span>
-                                <p class="text-gray text-end fs-12">Today 12:10am</p>
-                                <p class="fs-14 mgt-12 mgb-12">He made payment but didnt get confirmation yet</p>
-                                <div class="d-flex justify-content-between">
-                                    <p class="mb-0 fs-14"><span class="text-gray">Assigned to :</span> <b>Technical team</b></p>
-                                    <a href="#">
-                                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M13.491 1.66667H6.50768C3.47435 1.66667 1.66602 3.475 1.66602 6.50834V13.4833C1.66602 16.525 3.47435 18.3333 6.50768 18.3333H13.4827C16.516 18.3333 18.3243 16.525 18.3243 13.4917V6.50834C18.3327 3.475 16.5243 1.66667 13.491 1.66667Z" fill="white"/>
-                                            <path d="M13.9569 5.83333H9.9319C9.59023 5.83333 9.3069 6.11666 9.3069 6.45833C9.3069 6.8 9.59023 7.08333 9.9319 7.08333H12.4486L6.01523 13.5167C5.77357 13.7583 5.77357 14.1583 6.01523 14.4C6.14023 14.525 6.29857 14.5833 6.4569 14.5833C6.61523 14.5833 6.77357 14.525 6.89857 14.4L13.3319 7.96666V10.4833C13.3319 10.825 13.6152 11.1083 13.9569 11.1083C14.2986 11.1083 14.5819 10.825 14.5819 10.4833V6.45833C14.5819 6.11666 14.2986 5.83333 13.9569 5.83333Z" fill="#F97373"/>
-                                        </svg>
-                                    </a>
-                                </div>
-                            </div>
-                            <a href="#" class="item more-item">
-                            <p class="text-center mb-1 text-white">10</p>
-                            <p class="text-center text-white mb-0">More</p>
-                            </a>
-                        </div>
-                        <div class="modal fade quick-view-modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog h-100">
-                            <div class="modal-content h-100 p-0">
-                                <div class="bg-gray pdl-32 pdr-22 d-flex align-items-center justify-content-between h-60 min-h-60 header-modal">
-                                <h5 class="fs-20 fw-bold text-white mb-0" id="exampleModalLabel">Quickview</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body h-100 overflow-auto">
-                                <p class="mb-3 fw-bold">Client info</p>
-                                <div class="modal-item">
-                                    <p class="mb-0">AMC name</p>
-                                    <span>:</span>
-                                    <p class="mb-0 text-600">EStreet Appraisal Management
-                                        Company, LLC</p>
-                                </div>
-                                <a href="#" class="primary-text underline text-600 mgb-24 d-inline-block">AMC requirements</a>
-                                <div class="modal-item">
-                                    <p class="mb-0">AMC name</p>
-                                    <span>:</span>
-                                    <p class="mb-0 text-600">EStreet Appraisal Management
-                                        Company, LLC</p>
-                                </div>
-                                <div class="modal-item">
-                                    <p class="mb-0">AMC name</p>
-                                    <span>:</span>
-                                    <p class="mb-0 text-600">EStreet Appraisal Management
-                                        Company, LLC</p>
-                                </div>
-                                <a href="#" class="primary-text underline text-600 d-inline-block">Lender requirements</a>
-                                <div class="mgt-32">
-                                    <p class="mb-3 text-600">Property info</p>
+                            <div class="modal fade quick-view-modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog h-100">
+                                <div class="modal-content h-100 p-0">
+                                    <div class="bg-gray pdl-32 pdr-22 d-flex align-items-center justify-content-between h-60 min-h-60 header-modal">
+                                    <h5 class="fs-20 fw-bold text-white mb-0" id="exampleModalLabel">Quickview</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body h-100 overflow-auto">
+                                    <p class="mb-3 fw-bold">Client info</p>
                                     <div class="modal-item">
-                                        <p class="mb-0">Property address</p>
+                                        <p class="mb-0">AMC name</p>
+                                        <span>:</span>
+                                        <p class="mb-0 text-600">EStreet Appraisal Management
+                                            Company, LLC</p>
+                                    </div>
+                                    <a href="#" class="primary-text underline text-600 mgb-24 d-inline-block">AMC requirements</a>
+                                    <div class="modal-item">
+                                        <p class="mb-0">AMC name</p>
                                         <span>:</span>
                                         <p class="mb-0 text-600">EStreet Appraisal Management
                                             Company, LLC</p>
                                     </div>
                                     <div class="modal-item">
-                                        <p class="mb-0">Property address</p>
+                                        <p class="mb-0">AMC name</p>
                                         <span>:</span>
-                                        <p class="mb-0 text-700 fs-20 primary-text">EStreet Appraisal Management
+                                        <p class="mb-0 text-600">EStreet Appraisal Management
                                             Company, LLC</p>
                                     </div>
-                                    <div class="modal-item">
-                                        <p class="mb-0">Due date</p>
-                                        <span>:</span>
-                                        <p class="mb-0 text-600">33-33-33</p>
-                                    </div>
-                                    <div class="modal-item">
-                                        <p class="mb-0">Order no</p>
-                                        <span>:</span>
-                                        <p class="mb-0 text-600">4654765765</p>
-                                    </div>
-                                    <div class="modal-item">
-                                        <p class="mb-0">Order receive date</p>
-                                        <span>:</span>
-                                        <p class="mb-0 text-600">40-89-32</p>
-                                    </div>
+                                    <a href="#" class="primary-text underline text-600 d-inline-block">Lender requirements</a>
                                     <div class="mgt-32">
-                                        <p class="mb-3 text-600 ">Contact info</p>
+                                        <p class="mb-3 text-600">Property info</p>
                                         <div class="modal-item">
-                                            <p class="mb-0">Contact name</p>
+                                            <p class="mb-0">Property address</p>
                                             <span>:</span>
-                                            <p class="mb-0 text-600">Abid ali ahmede</p>
+                                            <p class="mb-0 text-600">EStreet Appraisal Management
+                                                Company, LLC</p>
                                         </div>
                                         <div class="modal-item">
-                                            <p class="mb-0">Phone</p>
+                                            <p class="mb-0">Property address</p>
                                             <span>:</span>
-                                            <p class="mb-0 text-600">35465765565</p>
+                                            <p class="mb-0 text-700 fs-20 primary-text">EStreet Appraisal Management
+                                                Company, LLC</p>
                                         </div>
                                         <div class="modal-item">
-                                            <p class="mb-0">Email</p>
+                                            <p class="mb-0">Due date</p>
                                             <span>:</span>
-                                            <p class="mb-0 text-600">exmplll@mail.com</p>
+                                            <p class="mb-0 text-600">33-33-33</p>
+                                        </div>
+                                        <div class="modal-item">
+                                            <p class="mb-0">Order no</p>
+                                            <span>:</span>
+                                            <p class="mb-0 text-600">4654765765</p>
+                                        </div>
+                                        <div class="modal-item">
+                                            <p class="mb-0">Order receive date</p>
+                                            <span>:</span>
+                                            <p class="mb-0 text-600">40-89-32</p>
+                                        </div>
+                                        <div class="mgt-32">
+                                            <p class="mb-3 text-600 ">Contact info</p>
+                                            <div class="modal-item">
+                                                <p class="mb-0">Contact name</p>
+                                                <span>:</span>
+                                                <p class="mb-0 text-600">Abid ali ahmede</p>
+                                            </div>
+                                            <div class="modal-item">
+                                                <p class="mb-0">Phone</p>
+                                                <span>:</span>
+                                                <p class="mb-0 text-600">35465765565</p>
+                                            </div>
+                                            <div class="modal-item">
+                                                <p class="mb-0">Email</p>
+                                                <span>:</span>
+                                                <p class="mb-0 text-600">exmplll@mail.com</p>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="mt-3">
-                                    <p class="text-700 mb-3">Notes</p>
-                                    <p class="note-text mb-3 text-700">Lorem ipsum, or lipsum as it is sometimes known, is dummy text used
-                                        in laying out print, graphic or web designs. The passage is attributed
-                                        to an unknown</p>
-                                    <p class="note-text text-700">Lorem ipsum, or lipsum as it is sometimes known, is dummy text used
+                                    <div class="mt-3">
+                                        <p class="text-700 mb-3">Notes</p>
+                                        <p class="note-text mb-3 text-700">Lorem ipsum, or lipsum as it is sometimes known, is dummy text used
                                             in laying out print, graphic or web designs. The passage is attributed
                                             to an unknown</p>
+                                        <p class="note-text text-700">Lorem ipsum, or lipsum as it is sometimes known, is dummy text used
+                                                in laying out print, graphic or web designs. The passage is attributed
+                                                to an unknown</p>
+                                    </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-primary">Save changes</button>
+                                    </div>
                                 </div>
                                 </div>
-                                <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary">Save changes</button>
-                                </div>
-                            </div>
                             </div>
                         </div>
-                    </div>
+                    </template>
+                    <template v-else>
+                        <div class="text-center my-3">
+                            <strong class="text-danger">No orders has been found.</strong>
+                        </div>
+                    </template>
                 </div>
+                <paginate align="center" :total-page="pages.pageData.last_page" @loadPage="loadPage($event)"></paginate>
             </div>
         </div>
-        <Map v-if="openMap" :latLng="latLng"/>
+        <b-modal id="dateRange" size="md" title="Search by date range">
+            <div class="modal-body">
+                <div class="alert alert-danger text-center" v-if="dateRange.error">
+                    {{ dateRange.message }}
+                </div>
+                <div class="date-range-items">
+                    <label for="">From Date</label>
+                    <v-date-picker mode="date" v-model="dateRange.start">
+                        <template class="position-relative" v-slot="{ inputValue, inputEvents }">
+                            <input class="dashboard-input w-100" :value="inputValue" v-on="inputEvents" @change="dateRange.error = false" />
+                        </template>
+                    </v-date-picker>
+                    <br><br>
+                    <label for="">To Date</label>
+                    <v-date-picker mode="date" v-model="dateRange.end">
+                        <template class="position-relative" v-slot="{ inputValue, inputEvents }">
+                            <input class="dashboard-input w-100" :value="inputValue" v-on="inputEvents" @change="dateRange.error = false" />
+                        </template>
+                    </v-date-picker>
+                </div>
+            </div>
+            <div slot="modal-footer">
+                <b-button variant="secondary" @click="$bvModal.hide('dateRange')">Close</b-button>
+                <b-button variant="primary" @click="searchDateRange">Save</b-button>
+            </div>
+        </b-modal>
+        <Map v-if="openMap" :latLng="latLng" @closeMap="closeCurrentMap($event)"/>
    </div>
 </template>
 
 <script>
+
+import Calendar from 'v-calendar/lib/components/calendar.umd'
+import DatePicker from 'v-calendar/lib/components/date-picker.umd'
+Vue.component('VCalendar', Calendar)
+Vue.component('VDatePicker', DatePicker)
+
 import Map from "./map.vue"
 export default {
     name: "call-lists",
@@ -240,20 +252,31 @@ export default {
         Map,
     },
     data: () => ({
+        pages: {
+            pageData: [],
+            acitvePage: 1,
+            searchModel: null,
+            paginate: 10
+        },
         openMap: false,
         orderData: [],
-        pageData: [],
         selectedItems: [],
         latLng: [],
+        dateRange: {
+            start: null,
+            end: null,
+            search: false,
+            error: false,
+            message: null
+        }
     }),
     created() {
         this.initOrder(this.order);
     },
     methods: {
         initOrder(order) {
-            this.pageData = order;
+            this.pages.pageData = order;
             this.orderData = order.data;
-            console.log(this.pageData);
         },
         checkSelectedList(event, item) {
             let value = item.selected;
@@ -286,6 +309,35 @@ export default {
             });
             this.latLng = getLatLng;
             this.openMap = true;
+        },
+        closeCurrentMap(event) {
+            this.openMap = false;
+        },
+        searchData: _.debounce( function (event) {
+            this.loadPage(this.pages.acitvePage, event.target.value);
+        }, 300),
+        
+        loadPage(acitvePage = null){
+            this.pages.acitvePage = acitvePage;
+            this.$boston.post('search/call/order?page='+this.pages.acitvePage, { data: this.pages.searchModel, paginate: this.pages.paginate, dateRange: this.dateRange }).then( (res) => {
+                this.selectedItems = [];
+                this.dateRange.search = false;
+                this.pages.pageData = res;
+                this.orderData = res.data;
+            }).catch( (err) => {
+                console.log(err);
+            });
+        },
+        searchDateRange() {
+            this.dateRange.error = false;
+            if (this.dateRange.start > this.dateRange.end || this.dateRange.start == null || this.dateRange.end == null) {
+                this.dateRange.error = true;
+                this.dateRange.message = "Please input valid dates";
+                return;
+            }
+            this.dateRange.search = true;
+            this.loadPage(this.acitvePage);
+            this.$bvModal.hide('dateRange');
         }
     },
     watch: {
@@ -296,6 +348,6 @@ export default {
 
 <style scoped>
 .cursor-hover {
-    cursor: hover;
+    cursor: pointer;
 }
 </style>
