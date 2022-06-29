@@ -491,13 +491,13 @@
                     this.callLog.error = true
                     return
                 }
-                this.callLog.error = false
                 let data = {
                     message: this.callLog.message,
                     status: this.callLog.status
                 }
                 axios.post('call-log-update/' + this.callLog.orderId, data)
                     .then(res => {
+                        this.callLog.error = false
                         if (res.data.error) {
                             console.log(res.data.message)
                         } else {

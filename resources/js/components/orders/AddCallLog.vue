@@ -76,7 +76,7 @@ export default {
                     }
                     axios.post('call-log/' + this.id, data)
                         .then(res => {
-                            if (res.error) {
+                            if (res.data.error) {
                                 this.$root.$emit('wk_flow_toast', res.data)
                             } else {
                                 this.message = ''
