@@ -31,6 +31,7 @@ class CallLogController extends Controller
         $log->order_id = $order->id;
         $log->caller_id = $request->caller_id ?? $user->id;
         $log->message = $request->message;
+        $log->status = $request->status;
         $log->save();
 
         $orderData = $this->orderDetails($id);
@@ -39,6 +40,34 @@ class CallLogController extends Controller
             'message' => 'Call log created successfully',
             'status' => 'success',
             'data' => $orderData
+        ];
+    }
+
+    public function update(Request $request, $id)
+    {
+        $order = Order::find($id);
+        $user = auth()->user();
+
+        if (!$order) {
+            return response()->json([
+                'error' => true,
+                'message' => 'Order Information Not Found'
+            ]);
+        }
+
+        $log = new CallLog();
+        $log->order_id = $order->id;
+        $log->caller_id = $user->id;
+        $log->message = $request->message;
+        $log->status = $request->status;
+        $log->save();
+
+        $logData = CallLog::with('caller')->where('order_id', $id)->get();
+        return [
+            'error' => false,
+            'message' => 'Call log updated successfully',
+            'status' => 'success',
+            'data' => $logData
         ];
     }
 }

@@ -117,7 +117,8 @@
                                     data-bs-target="#exampleModal"><span class="icon-note text-purple fs-20"><span
                                             class="path1"></span><span class="path2"></span><span
                                             class="path3"></span><span class="path4"></span></span></a>
-                                <a href="#" class="icon-list" data-bs-placement="bottom" title="Call log"><span
+                                <a @click.prevent="getCallSummary(item.call_log, item.id)" href="#" class="icon-list" data-bs-placement="bottom" title="Call log" data-bs-toggle="modal"
+                                   data-bs-target="#callLogModal"><span
                                         class="icon-messages2 primary-text fs-20"><span class="path1"></span><span
                                             class="path2"></span><span class="path3"></span><span
                                             class="path4"></span><span class="path5"></span></span></a>
@@ -361,6 +362,40 @@
         <Map v-if="openMap" :latLng="latLng" />
         <call-schedule :orderId="orderId" :appraisers="appraisers"></call-schedule>
         <call-re-schedule :scheduleData="scheduleData" :appraisers="appraisers"></call-re-schedule>
+        <div class="modal fade schedule-modal call-log-modal" id="callLogModal" tabindex="-1" aria-labelledby="callLogModalLabel" aria-hidden="true">
+            <div class="modal-dialog h-100">
+                <div class="modal-content ">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <div class="modal-body h-100 overflow-auto">
+                        <p class="mgb-22 fs-20 text-600">Call summary</p>
+                        <div class="call-summary-item" v-for="(log, logIndex) in callLog.items" :key="logIndex">
+                            <div class="top d-flex align-items-center">
+                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRpUDTIJ3qyxor41TSNxjJf3jlqk1f6E7gOmA&usqp=CAU" alt=" profile photo boston" class="img-fluid">
+                                <div class="ms-3">
+                                    <p class="fw-bold mb-1">{{ log.caller.name }}</p>
+                                    <p class="text-gray fs-12 mb-0">{{ log.created_at | momentTime}}</p>
+                                </div>
+                            </div>
+                            <p class="message">{{ log.message }}</p>
+                        </div>
+                        <div class="update-log" v-if="callLog.notCompleted">
+                                <div class="group" :class="{ 'invalid-form' : callLog.error == true }">
+                                    <label for="" class="d-block mb-2 dashboard-label">Message</label>
+                                    <textarea @keyup="callLog.error = false" v-model="callLog.message" class="dashboard-input w-100" style="min-height: 100px"></textarea>
+                                    <span v-if="callLog.error" class="error-message">The Message field is required</span>
+                                </div>
+                            <div class="checkbox-group mt-2">
+                                <input type="checkbox" class="checkbox-input" v-model="callLog.status">
+                                <label for="" class="checkbox-label">Call completed</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" v-if="callLog.notCompleted">
+                        <button type="button" class="button button-primary px-5" @click="addCallLog()">Post</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -378,6 +413,14 @@
             Table
         },
         data: () => ({
+            callLog: {
+                error: false,
+                notCompleted: true,
+                items: [],
+                message: '',
+                status: '',
+                orderId: '',
+            },
             pages: {
                 pageData: [],
                 acitvePage: 1,
@@ -442,6 +485,45 @@
             }.bind(this));
         },
         methods: {
+            addCallLog() {
+                this.callLog.error = false
+                if(this.callLog.message == ''){
+                    this.callLog.error = true
+                    return
+                }
+                let data = {
+                    message: this.callLog.message,
+                    status: this.callLog.status
+                }
+                axios.post('call-log-update/' + this.callLog.orderId, data)
+                    .then(res => {
+                        this.callLog.error = false
+                        if (res.data.error) {
+                            console.log(res.data.message)
+                        } else {
+                            this.callLog.message = ''
+                            this.callLog.isCompleted = null
+                            console.log(res.data.message)
+                            this.getCallSummary(res.data.data, this.callLog.orderId)
+
+                        }
+                    }).catch(err => {
+                    console.log(err)
+                })
+            },
+            getCallSummary(value, id) {
+                this.callLog.notCompleted = true
+                this.callLog.items = []
+                this.callLog.orderId = id
+                if(value.length){
+                    this.callLog.items = value
+                    this.callLog.items.forEach((log, index) => {
+                        if(log.status){
+                            this.callLog.notCompleted = false
+                        }
+                    })
+                }
+            },
             initOrder(order) {
                 this.pages.pageData = order;
                 this.orderData = order.data;
