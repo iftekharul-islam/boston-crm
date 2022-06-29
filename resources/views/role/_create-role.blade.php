@@ -1,7 +1,7 @@
 <form id="createRole" class="mb-4">
     <div class="role-add mgt-32 new-role">
         <div class="role-box">
-            <h2>{{ __('messages.role_view.create_role') }}</h2>
+            <h2 class="mgb-32 fw-bold fs-20">{{ __('messages.role_view.create_role') }}</h2>
             <div class="d-flex align-items-start justify-content-between">
                 <div class="max-w-424 mgb-32">
                     <div class="mgb-20">
