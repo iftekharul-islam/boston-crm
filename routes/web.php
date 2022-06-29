@@ -214,4 +214,6 @@ Route::post('revissin/solutions/delete', [OrderWorkflowController::class, 'revis
 Route::post('check/client/order/no', [OrderWorkflowController::class, 'checkClientOrderNo']);
 
 
+//call routes
+
 //Route::get( "{slug}", [ WebApiController::class, 'home' ] )->where( 'slug', ".*" );

@@ -121,7 +121,7 @@ class OrderWorkflowController extends BaseController
         }
         $image_types = ['jpeg', 'jpg', 'png'];
         $zip = new \ZipArchive();
-        $fileName = 'inspection-files.zip';
+        $fileName = 'inspection('.date('d M Y H:i A').').zip';
         foreach ($data['files'] as $key => $file) {
             if (in_array($file->getClientOriginalExtension(), $image_types)) {
                 if ($zip->open(public_path($fileName), \ZipArchive::CREATE)== TRUE)

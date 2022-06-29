@@ -118,7 +118,7 @@
                                         class="icon-messages2 primary-text fs-20"><span class="path1"></span><span
                                             class="path2"></span><span class="path3"></span><span
                                             class="path4"></span><span class="path5"></span></span></a>
-                                <a href="#" class="icon-list" data-bs-placement="bottom" title="Schedule"><span
+                                <a @click="getScheduleData(callIndex)" href="#" class="icon-list" data-bs-placement="bottom" title="Schedule"><span
                                         class="icon-calendar text-brown fs-20"><span class="path1"></span><span
                                             class="path2"></span><span class="path3"></span><span
                                             class="path4"></span><span class="path5"></span><span
@@ -308,6 +308,8 @@
             </div>
         </div>
         <Map v-if="openMap" :latLng="latLng" />
+        <call-schedule :orderId="orderId" :appraisers="appraisers"></call-schedule>
+        <call-re-schedule :scheduleData="scheduleData" :appraisers="appraisers"></call-re-schedule>
     </div>
 </template>
 
@@ -315,7 +317,7 @@
     import Map from "./map.vue"
     export default {
         name: "call-lists",
-        props: ['order','appraisers'],
+        props: ['order', 'appraisers'],
         components: {
             Map
         },
@@ -326,17 +328,30 @@
             selectedItems: [],
             latLng: [],
             isScheduled: 0,
+            scheduleData: [],
+            orderId: 0
         }),
         created() {
             this.initOrder(this.order);
         },
+        watch: {
+            orderId(newValue) {
+                this.orderId = newValue;
+            }
+        },
         methods: {
+            getScheduleData(index) {
+                this.orderId = this.orderData[index].id
+                this.isScheduled = (JSON.parse(this.orderData[index].workflow_status)).scheduling
+                this.isScheduled == 0 ? this.$bvModal.show('schedule') : this.$bvModal.show('re-schedule')
+                this.scheduleData = this.orderData[index].inspection
+            },
             initOrder(order) {
                 this.pageData = order;
                 this.orderData = order.data;
                 //this.isScheduled = (JSON.parse(this.orderData.workflow_status)).scheduling
-                console.log(this.pageData);
-                console.log(this.orderData)
+                //console.log(this.pageData);
+                //console.log(this.orderData)
             },
             checkSelectedList(event, item) {
                 let value = item.selected;
