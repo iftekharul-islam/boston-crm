@@ -58,6 +58,85 @@
                                 <template v-else>
                                     -
                                 </template>
+<<<<<<< HEAD
+                            </span>
+                            <span class="call-list-item">12.03.2022</span>
+                            <span class="call-list-item">
+                                {{ item.inspection ? item.inspection.inspection_date_time : '-' }}
+                            </span>
+                            <span class="call-list-item">
+                                <p class="mb-0 scheduled">{{ item.order_status }}</p>
+                            </span>
+                            <span class="call-list-item">
+                                <a href="#" class="icon-list" data-bs-placement="bottom" title="Details"><span
+                                        class="icon-eye text-blue-eye fs-20"><span class="path1"></span><span
+                                            class="path2"></span></span></a>
+                                <a href="#" ata-bs-toggle="tooltip" data-bs-placement="bottom" title="Quick view"
+                                    class="icon-list quick-view-icon" data-bs-toggle="modal"
+                                    data-bs-target="#exampleModal"><span class="icon-note text-purple fs-20"><span
+                                            class="path1"></span><span class="path2"></span><span
+                                            class="path3"></span><span class="path4"></span></span></a>
+                                <a href="#" class="icon-list" data-bs-placement="bottom" title="Call log"><span
+                                        class="icon-messages2 primary-text fs-20"><span class="path1"></span><span
+                                            class="path2"></span><span class="path3"></span><span
+                                            class="path4"></span><span class="path5"></span></span></a>
+                                <a @click="getScheduleData(callIndex)" href="#" class="icon-list" data-bs-placement="bottom" title="Schedule"><span
+                                        class="icon-calendar text-brown fs-20"><span class="path1"></span><span
+                                            class="path2"></span><span class="path3"></span><span
+                                            class="path4"></span><span class="path5"></span><span
+                                            class="path6"></span><span class="path7"></span><span
+                                            class="path8"></span></span></a>
+
+                                <a href="#" class="icon-list" data-bs-placement="bottom" title="Email & SMS"> <span
+                                        class="icon-messages text-yellow-msg  fs-20"><span class="path1"></span><span
+                                            class="path2"></span><span class="path3"></span></span></a>
+                                <a href="#" class="icon-list"><span class="icon-call text-light-red fs-20"><span
+                                            class="path1"></span><span class="path2"></span></span></a>
+                                <button class="button button-transparent p-0" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseExample" aria-expanded="false"
+                                    aria-controls="collapseExample"><span class="icon-arrow-bottom"></span></button>
+                            </span>
+                        </div>
+                        <div class="call-collapse collapse" id="collapseExample">
+                            <div class="item pending">
+                                <span class="call-badge">Pending</span>
+                                <p class="text-gray text-end fs-12">Today 12:10am</p>
+                                <p class="fs-14 mgt-12 mgb-12">He made payment but didnt get confirmation yet</p>
+                                <div class="d-flex justify-content-between">
+                                    <p class="mb-0 fs-14"><span class="text-gray">Assigned to :</span> <b>Technical
+                                            team</b></p>
+                                    <a href="#">
+                                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M13.491 1.66667H6.50768C3.47435 1.66667 1.66602 3.475 1.66602 6.50834V13.4833C1.66602 16.525 3.47435 18.3333 6.50768 18.3333H13.4827C16.516 18.3333 18.3243 16.525 18.3243 13.4917V6.50834C18.3327 3.475 16.5243 1.66667 13.491 1.66667Z"
+                                                fill="white" />
+                                            <path
+                                                d="M13.9569 5.83333H9.9319C9.59023 5.83333 9.3069 6.11666 9.3069 6.45833C9.3069 6.8 9.59023 7.08333 9.9319 7.08333H12.4486L6.01523 13.5167C5.77357 13.7583 5.77357 14.1583 6.01523 14.4C6.14023 14.525 6.29857 14.5833 6.4569 14.5833C6.61523 14.5833 6.77357 14.525 6.89857 14.4L13.3319 7.96666V10.4833C13.3319 10.825 13.6152 11.1083 13.9569 11.1083C14.2986 11.1083 14.5819 10.825 14.5819 10.4833V6.45833C14.5819 6.11666 14.2986 5.83333 13.9569 5.83333Z"
+                                                fill="#F97373" />
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="item pending">
+                                <span class="call-badge">Pending</span>
+                                <p class="text-gray text-end fs-12">Today 12:10am</p>
+                                <p class="fs-14 mgt-12 mgb-12">He made payment but didnt get confirmation yet</p>
+                                <div class="d-flex justify-content-between">
+                                    <p class="mb-0 fs-14"><span class="text-gray">Assigned to :</span> <b>Technical
+                                            team</b></p>
+                                    <a href="#">
+                                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M13.491 1.66667H6.50768C3.47435 1.66667 1.66602 3.475 1.66602 6.50834V13.4833C1.66602 16.525 3.47435 18.3333 6.50768 18.3333H13.4827C16.516 18.3333 18.3243 16.525 18.3243 13.4917V6.50834C18.3327 3.475 16.5243 1.66667 13.491 1.66667Z"
+                                                fill="white" />
+                                            <path
+                                                d="M13.9569 5.83333H9.9319C9.59023 5.83333 9.3069 6.11666 9.3069 6.45833C9.3069 6.8 9.59023 7.08333 9.9319 7.08333H12.4486L6.01523 13.5167C5.77357 13.7583 5.77357 14.1583 6.01523 14.4C6.14023 14.525 6.29857 14.5833 6.4569 14.5833C6.61523 14.5833 6.77357 14.525 6.89857 14.4L13.3319 7.96666V10.4833C13.3319 10.825 13.6152 11.1083 13.9569 11.1083C14.2986 11.1083 14.5819 10.825 14.5819 10.4833V6.45833C14.5819 6.11666 14.2986 5.83333 13.9569 5.83333Z"
+                                                fill="#F97373" />
+                                        </svg>
+                                    </a>
+=======
                             </template>
                             <template v-slot:property_address="{item}">
                                 {{ item.property_info.search_address }}
@@ -77,6 +156,7 @@
                             <template v-slot:head_action="{item}">
                                 <div class="text-right">
                                     <img src="/icons/column.svg" :tag="item.item" class="cursor-pointer open-head-column">
+>>>>>>> c6f0dfe2f2c8eae39009574e1f57e40718fa9001
                                 </div>
                             </template>
                             <template v-slot:popup>
@@ -104,6 +184,66 @@
                 <!-- <paginate align="center" :total-page="pages.pageData.last_page" @loadPage="loadPage($event)"></paginate> -->
             </div>
         </div>
+<<<<<<< HEAD
+        <Map v-if="openMap" :latLng="latLng" />
+        <call-schedule :orderId="orderId" :appraisers="appraisers"></call-schedule>
+        <call-re-schedule :scheduleData="scheduleData" :appraisers="appraisers"></call-re-schedule>
+    </div>
+</template>
+
+<script>
+    import Map from "./map.vue"
+    export default {
+        name: "call-lists",
+        props: ['order', 'appraisers'],
+        components: {
+            Map
+        },
+        data: () => ({
+            openMap: false,
+            orderData: [],
+            pageData: [],
+            selectedItems: [],
+            latLng: [],
+            isScheduled: 0,
+            scheduleData: [],
+            orderId: 0
+        }),
+        created() {
+            this.initOrder(this.order);
+        },
+        watch: {
+            orderId(newValue) {
+                this.orderId = newValue;
+            }
+        },
+        methods: {
+            getScheduleData(index) {
+                this.orderId = this.orderData[index].id
+                this.isScheduled = (JSON.parse(this.orderData[index].workflow_status)).scheduling
+                this.isScheduled == 0 ? this.$bvModal.show('schedule') : this.$bvModal.show('re-schedule')
+                this.scheduleData = this.orderData[index].inspection
+            },
+            initOrder(order) {
+                this.pageData = order;
+                this.orderData = order.data;
+                //this.isScheduled = (JSON.parse(this.orderData.workflow_status)).scheduling
+                //console.log(this.pageData);
+                //console.log(this.orderData)
+            },
+            checkSelectedList(event, item) {
+                let value = item.selected;
+                let findIndex = this.selectedItems.findIndex(ele => ele.id == item.id);
+                if (findIndex !== -1) {
+                    if (value == false) {
+                        this.selectedItems.splice(findIndex, 1);
+                    }
+                } else {
+                    if (value == true) {
+                        this.selectedItems.push(item);
+                    }
+=======
+
         <b-modal id="dateRange" size="md" title="Search by date range">
             <div class="modal-body">
                 <div class="alert alert-danger text-center" v-if="dateRange.error">
@@ -242,6 +382,7 @@ export default {
                         title: item[0],
                         key:  item[1]
                     });
+>>>>>>> c6f0dfe2f2c8eae39009574e1f57e40718fa9001
                 }
             });
         },
@@ -283,7 +424,7 @@ export default {
         searchData: _.debounce( function (event) {
             this.loadPage(this.pages.acitvePage, event.target.value);
         }, 300),
-
+        
         loadPage(acitvePage = null){
             this.pages.acitvePage = acitvePage;
             this.$boston.post('search/call/order?page='+this.pages.acitvePage, { data: this.pages.searchModel, paginate: this.pages.paginate, dateRange: this.dateRange }).then( (res) => {
@@ -336,7 +477,7 @@ export default {
                    slicePoint = 0;
                 } else if (val.key == 'action') {
                     slicePoint = this.table.header.length;
-                }
+                } 
                 this.table.header.splice( slicePoint, 0,
                     val.title + '@' + val.key + '@left@left'
                 );

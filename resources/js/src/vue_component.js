@@ -59,6 +59,8 @@ const callReSchedule = () =>
     import ( /*webpackChunkName: "callReSchedule"*/ '../components/calls/callReSchedule')
 const addIssue = () =>
     import ( /*webpackChunkName: "addIssue"*/ '../components/orders/AddIssue')
+const mModal = () =>
+    import ( /*webpackChunkName: "m-modal"*/ './modal')
 
 Vue.component('clients-list', ClientList);
 Vue.component('order-create', orderCreate);
@@ -89,3 +91,5 @@ Vue.component('add-call-log', addCallLog);
 Vue.component('call-list', callList);
 Vue.component('call-schedule', callSchedule);
 Vue.component('call-re-schedule', callReSchedule);
+Vue.component('add-issue', addIssue);
+Vue.component('m-modal', mModal);
