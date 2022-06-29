@@ -162,6 +162,7 @@ trait CrmHelper {
             'report.attachments',
             'reportRewrite.assignee',
             'reportRewrite.updateBy',
+            'reportRewrite.attachments',
             'analysis.assignee',
             'analysis.attachments',
             'analysis.updatedBy',
@@ -178,7 +179,7 @@ trait CrmHelper {
             'comlist',
             'callLog.caller',
             'tickets.assignee',
-            'tickets.solution',
+            'tickets.solver',
             'tickets.creator',
             'tickets.updater',
         )->where('id', $id)->first();
@@ -237,6 +238,10 @@ trait CrmHelper {
 
     protected function order_list_relation() {
         return ['user', 'amc', 'appraisalDetail', 'appraisalDetail.appraiser', 'appraisalDetail.getLoanType', 'lender', 'propertyInfo', 'inspection.user'];
+    }
+
+    protected function order_list_relation_call() {
+        return ['user', 'amc', 'appraisalDetail', 'appraisalDetail.appraiser', 'appraisalDetail.getLoanType', 'lender', 'propertyInfo', 'inspection.user', 'pendingTickets'];
     }
 
 }

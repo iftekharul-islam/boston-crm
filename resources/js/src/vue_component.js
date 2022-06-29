@@ -35,6 +35,8 @@ const mapView = () =>
     import ( /*webpackChunkName: "mapView"*/ '../components/orders/details/mapView')
 const files = () =>
     import ( /*webpackChunkName: "files"*/ '../components/orders/details/files')
+const workflowFiles = () =>
+    import ( /*webpackChunkName: "workflowFiles"*/ '../components/orders/details/workflowFiles')
 const invoice = () =>
     import ( /*webpackChunkName: "invoice"*/ '../components/orders/details/invoice')
 const notes = () =>
@@ -53,6 +55,8 @@ const callList = () =>
     import ( /*webpackChunkName: "callList"*/ '../components/calls/list')
 const addIssue = () =>
     import ( /*webpackChunkName: "orderPagination"*/ '../components/orders/AddIssue')
+const mModal = () =>
+    import ( /*webpackChunkName: "m-modal"*/ './modal')
 
 Vue.component('clients-list', ClientList);
 Vue.component('order-create', orderCreate);
@@ -71,6 +75,7 @@ Vue.component('issues', issues);
 Vue.component('history', history);
 Vue.component('map-view', mapView);
 Vue.component('files', files);
+Vue.component('workflow-files', workflowFiles);
 Vue.component('invoice', invoice);
 Vue.component('notes', notes);
 Vue.component('activity-log', activityLog);
@@ -80,3 +85,4 @@ Vue.component('paginate', orderPagination);
 Vue.component('add-call-log', addCallLog);
 Vue.component('call-list', callList);
 Vue.component('add-issue', addIssue);
+Vue.component('m-modal', mModal);

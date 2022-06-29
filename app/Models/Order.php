@@ -219,4 +219,9 @@ class Order extends Model implements HasMedia
     {
         return $this->hasMany(Ticket::class,'order_id', 'id');
     }
+
+    public function pendingTickets() {
+        return $this->hasMany(Ticket::class,'order_id', 'id')->where('status', 0);
+    }
+
 }

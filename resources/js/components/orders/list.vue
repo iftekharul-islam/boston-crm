@@ -47,7 +47,6 @@
                                 </svg>
                             </button>
                         </div>
-
                         <button class="button button-primary h-40 d-inline-flex align-items-center py-2">View daily report</button>
                     </div>
                 </div>
@@ -80,6 +79,9 @@
                     <template v-slot:property_address="{item}">
                         {{ item.property_info.search_address }}
                     </template>
+                    <template v-slot:order_status="{item}">
+                        <p class="mb-0 scheduled-point">{{ item.order_status }}</p>
+                    </template>
                     <template v-slot:action="{item}">
                         <a title="Edit order information" :href="`orders/${item.id}/edit`" class="btn btn-success btn-sm d-none" :data-key="item.id">
                             <span onclick="roleUpdateOpen(2);" class="icon-edit cursor-pointer"><span class="path1"></span><span class="path2"></span></span>
@@ -91,7 +93,7 @@
                         </a>
                     </template>
                     <template v-slot:head_action="{item}">
-                        <img src="/icons/column.svg" :tag="item.item" class="cursor-pointer">
+                        <img src="/icons/column.svg" :tag="item.item" class="cursor-pointer open-head-column">
                     </template>
                     <template v-slot:popup>
                         <transition name="fade" appear v-if="visibleColumnDropDown">
@@ -148,7 +150,7 @@ export default {
                 'Due date@due_date@left@left',
                 'Status@order_status@left@left',
                 'Map It@map_it@center@center',
-                'Action@action@center@left'
+                'Action@action@right@left'
             ],
             filterItems: [
                 {
@@ -193,6 +195,16 @@ export default {
     },
     destroyed() {
         localStorage.removeItem('orderSearchType');
+    },
+    mounted() {
+        $(document).on("click", function(e) {
+            let target = $(".open-head-column");
+            let eventTarget = $(e.target);
+            let secondTarget = $(".column-list");
+            if (!eventTarget.is(target) && target.has(eventTarget).length == 0 && !eventTarget.is(secondTarget) && secondTarget.has(eventTarget).length == 0) {
+                this.visibleColumnDropDown = false;
+            }
+        }.bind(this));
     },
     methods: {
         updateOrderList(item) {
@@ -244,6 +256,9 @@ export default {
             return findActive;
         },
         addToTable(val) {
+            if (val.key == 'action') {
+                return false;
+            }
             let getHeader = (this.order.header);
             let getIndex = getHeader.find( (ele) => {
                 let key = ele.split("@");
@@ -252,7 +267,19 @@ export default {
                 }
             });
             if (!getIndex) {
-                this.order.header.splice( 8, 0,
+                let slicePoint = 8;
+                if (val.key == 'system_order_no') {
+                   slicePoint = 0;
+                } else if (val.key == 'client_order_no') {
+                   slicePoint = 1;
+                } else if (val.key == 'amc_id') {
+                   slicePoint = 2;
+                } else if (val.key == 'property_address') {
+                   slicePoint = 3;
+                } else if (val.key == 'action') {
+                    slicePoint = this.order.header.length;
+                } 
+                this.order.header.splice( slicePoint, 0,
                     val.title + '@' + val.key + '@left@left'
                 );
             } else  {
@@ -321,6 +348,7 @@ export default {
 select.form-control {
     height: 38px;
 }
+
 .column-list {
     position: absolute;
     background: #fff;

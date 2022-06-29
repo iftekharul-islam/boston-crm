@@ -17,14 +17,14 @@ class CreateTicketsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('order_id');
             $table->string('subject');
-            $table->unsignedBigInteger('assigned_to');
+            $table->unsignedBigInteger('assigned_to')->nullable();
             $table->string('issue')->nullable();
             $table->string('solution')->nullable();
             $table->unsignedBigInteger('solution_by')->nullable();
             $table->dateTime('solution_at')->nullable();
-            $table->integer('status');
+            $table->integer('status')->default(0);
             $table->unsignedBigInteger('created_by');
-            $table->unsignedBigInteger('updated_by');
+            $table->unsignedBigInteger('updated_by')->nullable();
             $table->timestamps();
         });
     }

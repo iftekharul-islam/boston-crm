@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\OrderWSubmission;
+use Zip;
 use Carbon\Carbon;
 use App\Models\Order;
 use App\Models\OrderWQa;
@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Models\OrderWRevision;
 use App\Models\OrderWRewrite;
+use App\Models\OrderWSubmission;
 use App\Models\OrderWInspection;
 use Spatie\GoogleCalendar\Event;
 use Illuminate\Http\JsonResponse;
@@ -118,11 +119,24 @@ class OrderWorkflowController extends BaseController
         if (!$inspection) {
             return false;
         }
-        foreach ($data['files'] as $file) {
-            $inspection->find($inspection_id)->addMedia($file)
-                ->withCustomProperties(['type' => $data['file_type']])
-                ->toMediaCollection('inspection');
+        $image_types = ['jpeg', 'jpg', 'png'];
+        $zip = new \ZipArchive();
+        $fileName = 'inspection-files.zip';
+        foreach ($data['files'] as $key => $file) {
+            if (in_array($file->getClientOriginalExtension(), $image_types)) {
+                if ($zip->open(public_path($fileName), \ZipArchive::CREATE)== TRUE)
+                {
+                    $relativeName = ++$key.'.'.$file->getClientOriginalExtension();
+                    $zip->addFile($file->getPathName(), $relativeName);
+                }
+            } else {
+                $inspection->find($inspection_id)->addMedia($file)
+                    ->toMediaCollection('inspection');
+            }
         }
+        $zip->close();
+
+        $inspection->find($inspection_id)->addMedia($fileName)->toMediaCollection('inspection');
         $inspection = OrderWInspection::with('attachments')->where('id', $inspection_id)->first();
         $historyTitle = "Order Inspection File Has Been Saved";
 
@@ -191,7 +205,7 @@ class OrderWorkflowController extends BaseController
 
         $report = OrderWReport::where('order_id', $id)->first();
 
-        if($report) {
+        if ($report) {
             $report->reviewed_by = $request->reviewed_by;
             $report->creator_id = $request->creator_id;
             $report->assigned_to = $request->assigned_to;
@@ -238,7 +252,6 @@ class OrderWorkflowController extends BaseController
             'status' => 'success',
             'data' => $orderData
         ];
-
     }
 
     public function savePreparationFiles($data, $id)
@@ -287,8 +300,7 @@ class OrderWorkflowController extends BaseController
                 $this->saveAnalysisFiles($request->all(), $analysis->id);
             }
 
-            $historyTitle = "Report analysis updated by ".$user->name.' on Report analysis and reviewed section.';
-
+            $historyTitle = "Report analysis updated by " . $user->name . ' on Report analysis and reviewed section.';
         } else {
             $newAnalysis = new OrderWReportAnalysis();
             $newAnalysis->order_id = $id;
@@ -310,7 +322,7 @@ class OrderWorkflowController extends BaseController
                 $this->saveAnalysisFiles($request->all(), $newAnalysis->id);
             }
 
-            $historyTitle = "Report analysis created by ".$user->name;
+            $historyTitle = "Report analysis created by " . $user->name;
         }
 
         $workStatus = json_decode($order->workflow_status, true);
@@ -326,6 +338,19 @@ class OrderWorkflowController extends BaseController
             'message' => $historyTitle,
             'data' => $orderData
         ];
+    }
+
+    public function saveRewriteFiles($data, $id)
+    {
+        $rewrite = OrderWRewrite::find($id);
+        if (!$rewrite) {
+            return false;
+        }
+        foreach ($data['files'] as $file) {
+            $rewrite->find($id)->addMedia($file)
+                ->toMediaCollection('report-rewrite');
+        }
+        return true;
     }
 
     public function saveAnalysisFiles($data, $id)
@@ -469,6 +494,9 @@ class OrderWorkflowController extends BaseController
 
         $reWrite->note = $get->note;
         $reWrite->save();
+        if (isset($get['files']) && count($get['files'])) {
+            $this->saveRewriteFiles($get->all(), $reWrite->id);
+        }
 
         $workStatus = json_decode($order->workflow_status, true);
         $workStatus['reWritingReport'] = 1;
@@ -559,7 +587,7 @@ class OrderWorkflowController extends BaseController
         $reWrite->revision_details = $get->revission;
         $reWrite->solution_details = "-";
         $reWrite->save();
-        $historyTitle = "Revision has been updated by ".$user->name;
+        $historyTitle = "Revision has been updated by " . $user->name;
 
         $workStatus = json_decode($order->workflow_status, true);
         $workStatus['revision'] = 1;
@@ -606,7 +634,7 @@ class OrderWorkflowController extends BaseController
         $reWrite->solution_details = $get->revission['solution_details_edited'];
         $reWrite->save();
 
-        $historyTitle = "Solution added for revision. Solution added by ".$user->name;
+        $historyTitle = "Solution added for revision. Solution added by " . $user->name;
 
         $workStatus = json_decode($order->workflow_status, true);
         $workStatus['revision'] = 1;
@@ -654,7 +682,7 @@ class OrderWorkflowController extends BaseController
         $reWrite->solution_details = $get->solution_details;
         $reWrite->save();
 
-        $historyTitle = "Revision marked as delivered by ".$user->name;
+        $historyTitle = "Revision marked as delivered by " . $user->name;
 
 
         $workStatus = json_decode($order->workflow_status, true);
@@ -696,7 +724,7 @@ class OrderWorkflowController extends BaseController
         }
         $reWrite->delete();
 
-        $historyTitle = "Revision has been deleted by ".$user->name;
+        $historyTitle = "Revision has been deleted by " . $user->name;
 
         $this->addHistory($order, $user, $historyTitle, 'revision');
         $orderData = $this->orderDetails($get->order_id);
@@ -768,8 +796,9 @@ class OrderWorkflowController extends BaseController
         ];
     }
 
-    public function saveCom(Request $request,$id){
-        $this->repository->saveCom($request->all(),$id);
+    public function saveCom(Request $request, $id)
+    {
+        $this->repository->saveCom($request->all(), $id);
         $orderData = $this->orderDetails($id);
 
         $order = Order::find($id);
@@ -792,7 +821,8 @@ class OrderWorkflowController extends BaseController
         ];
     }
 
-    public function checkClientOrderNo(Request $get) {
+    public function checkClientOrderNo(Request $get)
+    {
         $old = Order::where('client_order_no', $get->client_no)->first();
         if ($old) {
             return response()->json(true);
@@ -800,5 +830,4 @@ class OrderWorkflowController extends BaseController
             return response()->json(false);
         }
     }
-
 }

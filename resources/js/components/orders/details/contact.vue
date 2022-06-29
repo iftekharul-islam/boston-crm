@@ -17,14 +17,14 @@
         <p class="mb-0 left-side">Phone Numbers</p>
         <span>:</span>
         <p class="right-side list-items mb-0">
-          <span v-for="item, ik in contact_number_s" :key="ik"> {{ item }} </span>
+          <span class="d-inline-block mb-2" v-for="item, ik in contact_number_s" :key="ik"> {{ item }} </span>
         </p>
       </div>
       <div class="list__group">
         <p class="mb-0 left-side">Email Address</p>
         <span>:</span>
         <p class="right-side list-items mb-0">
-          <span v-for="item, ik in email_address_s" :key="ik"> {{ item }} </span>
+          <span class="d-inline-block mb-2" v-for="item, ik in email_address_s" :key="ik"> {{ item }} </span>
         </p>
       </div>
     </div>
@@ -34,11 +34,11 @@
       <div class="modal-body brrower-modal-body">
         <div class="row">
           <div class="col-12">
-            <ValidationProvider class="d-block group" name="Contact Info" rules="required" v-slot="{ errors }">
+            <ValidationProvider class="d-block group" name="Contact name" rules="required" v-slot="{ errors }">
               <div class="group" :class="{ 'invalid-form' : errors[0] }">
                 <label for="" class="d-block mb-2 dashboard-label">Contact name <span
                     class="text-danger require"></span></label>
-                <input v-model="contact_info" class="dashboard-input w-100" id="" >
+                <input v-model="edit_contact_name" class="dashboard-input w-100" id="" >
                 <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
               </div>
             </ValidationProvider>
@@ -47,14 +47,7 @@
                 <ValidationProvider name="Contact Number" :rules="{'required' : add.contact == null && contact_number == false, min: 10, max: 12}" v-slot="{ errors }">
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
                     <label for="" class="d-block mb-2 dashboard-label">Phone <span class="text-danger require"></span></label>
-                    <input v-model="add.contact" @input="contactNumberChecking($event, 1)" type="text" class="dashboard-input w-100">
-                    <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
-                    <div class="mgt-12">
-                      <button class="add-more" @click="addContact">
-                        <span class="icon-plus"></span> Add
-                      </button>
-                    </div>
-                    <div class="new-array-items">
+                    <div class="new-array-items mgb-12">
                       <div class="items" v-for="item, ki in contact_number_s" :key="ki">
                         <div class="item-content"> {{ item }} </div>
                         <div class="item-remove">
@@ -64,23 +57,23 @@
                         </div>
                       </div>
                     </div>
+                    <input v-model="add.contact" @input="contactNumberChecking($event, 1)" type="text" class="dashboard-input w-100">
+                    <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                    <div class="mgt-12">
+                      <button class="add-more" @click="addContact">
+                        <span class="icon-plus"></span> Add
+                      </button>
+                    </div>
                   </div>
                 </ValidationProvider>
             </ValidationObserver>
 
             <ValidationObserver class="d-block group" ref="addEmailForm">
-                <ValidationProvider name="Contact Email Address" :rules="{'required' : email_address == false || (email_address == true && add.email == null)}" v-slot="{ errors }">
+                <ValidationProvider name="Contact Email Address" :rules="{'required' : email_address == false && add.email == null }" v-slot="{ errors }">
                 <div class="group" :class="{ 'invalid-form' : errors[0] }">
                   <label for="" class="d-block mb-2 dashboard-label">Email <span
                       class="text-danger require"></span></label>
-                  <input v-model="add.email" type="text" class="dashboard-input w-100">
-                  <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
-                  <div class="mgt-12">
-                    <button class="add-more" @click="addEmail">
-                      <span class="icon-plus"></span> Add
-                    </button>
-                  </div>
-                  <div class="new-array-items">
+                  <div class="new-array-items mgb-12">
                     <div class="items" v-for="item, ki in email_address_s" :key="ki">
                       <div class="item-content"> {{ item }} </div>
                       <div class="item-remove">
@@ -90,6 +83,13 @@
                       </div>
                     </div>
                   </div>
+                  <input v-model="add.email" type="text" class="dashboard-input w-100">
+                  <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                  <div class="mgt-12">
+                    <button class="add-more" @click="addEmail">
+                      <span class="icon-plus"></span> Add
+                    </button>
+                  </div>
                 </div>
               </ValidationProvider>
             </ValidationObserver>
@@ -97,7 +97,7 @@
         </div>
       </div>
       <div slot="modal-footer" class="mgt-44">
-        <button class="button button-transparent" @click="$bvModal.hide('contact-info')">Close</button>
+        <button class="button button-transparent" @click="hideModal()">Close</button>
         <button class="button button-primary" @click="updateContactInfo">Save</button>
       </div>
     </b-modal>
@@ -117,6 +117,7 @@
 
         contactSame: false,
         contact_info: null,
+        edit_contact_name: null,
         contact_number: false,
         email_address: false,
         contact_number_s: [],
@@ -134,6 +135,10 @@
       this.getBorrowerInfo()
     },
     methods:{
+        hideModal(){
+            this.$bvModal.hide('contact-info')
+            this.edit_contact_name = this.contact_info
+        },
       getBorrowerInfo(){
 
         let contactInfo = JSON.parse(this.order.contact_info.contact_email);
@@ -142,33 +147,33 @@
 
         this.contactSame = this.order.contact_info.is_borrower;
         this.contact_info = this.order.contact_info.contact;
+        this.edit_contact_name = this.order.contact_info.contact;
         this.contact_number = contactInfoPhone.length ? true : false;
         this.email_address = contactInfoEmail.length ? true : false;
         this.contact_number_s = contactInfoPhone;
         this.email_address_s = contactInfoEmail;
       },
       updateContactInfo(){
-          if (this.email_address == true && this.contact_number == true) {
-              this.submitData();
-          } else {
-              this.$refs.orderForm.validate().then((status) => {
-                  if (status) {
+          this.$refs.orderForm.validate().then((status) => {
+              if (status) {
+                  if (this.email_address == true && this.contact_number == true) {
                       this.submitData();
                   }
-              });
-          }
+              }
+          })
       },
       submitData() {
           this.$refs.orderForm.reset();
           this.$boston.post('order/update/contactInfo', {
-            contact_info: this.contact_info,
+            contact_info: this.edit_contact_name,
             contact_number: this.contact_number,
             email_address: this.email_address,
             contact_number_s: this.contact_number_s,
             email_address_s: this.email_address_s,
             order: this.order
           }).then(res => {
-              this.submittedMessage = res.messages;
+              this.contact_info = this.edit_contact_name
+              this.submittedMessage = "Contact updated successfully";
               this.$bvModal.hide('contact-info');
               this.hideSubmittedMessage();
           });

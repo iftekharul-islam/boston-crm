@@ -18,7 +18,7 @@ class OrderWRewrite extends Model implements HasMedia
 
     public function attachments()
     {
-        return $this->media()->where('collection_name', '=', 'report_rewrite');
+        return $this->media()->where('collection_name', '=', 'report-rewrite');
     }
 
     public function updateBy() {

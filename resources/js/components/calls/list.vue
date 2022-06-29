@@ -12,7 +12,9 @@
                         <button @click="$bvModal.show('dateRange')" class="calls-btn h-40 d-flex align-items-center mb-2">Date Rage</button>
                     </div>
                     <div class="right d-flex">
-                        <a @click="goToMap()" href="javascript:;" class="primary-bg h-40 d-flex align-items-center mb-2 px-2 br-4 text-white me-3">Map selected orders <span class="ms-2">({{ selectedItems.length }})</span></a>
+                        <a @click="goToMap()" href="javascript:;"
+                            class="primary-bg h-40 d-flex align-items-center mb-2 px-2 br-4 text-white me-3">Map
+                            selected orders <span class="ms-2">({{ selectedItems.length }})</span></a>
                         <div class=" d-flex calls-search">
                             <input type="text" v-model="pages.searchModel" @input="searchData($event)" class="mb-3 px-3 bdr-1 br-4 gray-border calls-search-input h-40" placeholder="Search...">
                             <button class="bg-gray inline-flex-center mb-2 calls-search-btn d-none">
@@ -24,35 +26,10 @@
                         </div>
                     </div>
                 </div>
-                <!-- <transition name="fade" appear v-if="visibleColumnDropDown">
-                    <div class="column-list">
-                        <div class="col-item" @click="addToTable(item)" :class="{ 'active' : checkColumnActive(item) }" v-for="item, ci in order.disableHeader" :key="ci">{{ item.title }}</div>
-                    </div>
-                </transition> -->
                 <div class="call-list">
-                    <div class="call-list-header">
-                        <span class="call-list-item ">SL</span>
-                        <span class="call-list-item ">Order no</span>
-                        <span class="call-list-item ">Client name</span>
-                        <span class="call-list-item ">Property address</span>
-                        <span class="call-list-item ">Inspector</span>
-                        <span class="call-list-item ">Appraiser</span>
-                        <span class="call-list-item ">Last call</span>
-                        <span class="call-list-item ">Insp. date & time</span>
-                        <span class="call-list-item ">Status</span>
-                        <span class="call-list-item cursor-hover">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path opacity="0.25" d="M17.028 0H6.972C2.604 0 0 2.604 0 6.972V17.028C0 21.396 2.604 24 6.972 24H17.028C21.396 24 24 21.396 24 17.028V6.972C24 2.604 21.396 0 17.028 0Z" fill="#2F415E"/>
-                                <path d="M19.5727 8.244C19.5727 8.736 19.1767 9.144 18.6727 9.144H12.3727C11.8807 9.144 11.4727 8.736 11.4727 8.244C11.4727 7.752 11.8807 7.344 12.3727 7.344H18.6727C19.1767 7.344 19.5727 7.752 19.5727 8.244Z" fill="#2F415E"/>
-                                <path d="M9.56388 7.08L6.86387 9.78C6.68387 9.96 6.45588 10.044 6.22788 10.044C5.99988 10.044 5.75988 9.96 5.59188 9.78L4.69188 8.88C4.33187 8.532 4.33187 7.956 4.69188 7.608C5.03988 7.26 5.60388 7.26 5.96388 7.608L6.22788 7.872L8.29188 5.808C8.63987 5.46 9.20388 5.46 9.56388 5.808C9.91188 6.156 9.91188 6.732 9.56388 7.08Z" fill="#2F415E"/>
-                                <path d="M19.5727 16.644C19.5727 17.136 19.1767 17.544 18.6727 17.544H12.3727C11.8807 17.544 11.4727 17.136 11.4727 16.644C11.4727 16.152 11.8807 15.744 12.3727 15.744H18.6727C19.1767 15.744 19.5727 16.152 19.5727 16.644Z" fill="#2F415E"/>
-                                <path d="M9.56388 15.48L6.86387 18.18C6.68387 18.36 6.45588 18.444 6.22788 18.444C5.99988 18.444 5.75988 18.36 5.59188 18.18L4.69188 17.28C4.33187 16.932 4.33187 16.356 4.69188 16.008C5.03988 15.66 5.60388 15.66 5.96388 16.008L6.22788 16.272L8.29188 14.208C8.63987 13.86 9.20388 13.86 9.56388 14.208C9.91188 14.556 9.91188 15.132 9.56388 15.48Z" fill="#2F415E"/>
-                            </svg>
-                        </span>
-                    </div>
                     <template v-if="orderData.length">
-                        <div class="call-item" v-for="item, callIndex in orderData" :key="callIndex">
-                            <div class="call-list-body">
+                        <Table :items="orderData" :sl-start="pages.pageData.from" :header="table.header" @headClick="headerClick($event)">
+                            <template v-slot:sl="{item}">
                                 <span class="call-list-item">
                                     <input :id="`list-item-${item.id}`" type="checkbox" v-model="item.selected" @change="checkSelectedList($event, item)">
                                     <label :for="`list-item-${item.id}`">
@@ -61,142 +38,62 @@
                                         </svg>
                                     </label>
                                 </span>
-                                <span class="call-list-item">{{ item.client_order_no }}</span>
-                                <span class="call-list-item"><p class="mb-0 fw-bold text-ellips">{{ item.amc ? item.amc.name : '-' }}</p></span>
-                                <span class="call-list-item"><p class="mb-0 text-ellips">{{ item.property_info.search_address }}</p></span>
-                                <span class="call-list-item">{{ item.inspection ? item.inspection.user.name : '-' }}</span>
-                                <span class="call-list-item">
-                                    <template v-if="item.appraisal_detail">
-                                        {{ item.appraisal_detail.appraiser ? item.appraisal_detail.appraiser.name : '-' }}
-                                    </template>
-                                    <template v-else>
-                                        -
-                                    </template>
-                                </span>
-                                <span class="call-list-item">12.03.2022</span>
-                                <span class="call-list-item">
-                                    {{ item.inspection ? item.inspection.inspection_date_time : '-' }}
-                                </span>
-                                <span class="call-list-item"><p class="mb-0 scheduled">{{ item.order_status }}</p></span>
-                                <span class="call-list-item">
-                                    <a href="#" class="icon-list" data-bs-placement="bottom" title="Details"><span class="icon-eye text-blue-eye fs-20"><span class="path1"></span><span class="path2"></span></span></a>
-                                    <a href="#" ata-bs-toggle="tooltip" data-bs-placement="bottom" title="Quick view" class="icon-list quick-view-icon" data-bs-toggle="modal" data-bs-target="#exampleModal"><span class="icon-note text-purple fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></span></a>
-                                    <a href="#" class="icon-list" data-bs-placement="bottom" title="Call log"><span class="icon-messages2 primary-text fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span></span></a>
-                                    <a href="#" class="icon-list" data-bs-placement="bottom" title="Schedule"><span class="icon-calendar text-brown fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span class="path7"></span><span class="path8"></span></span></a>
-                                    <a href="#" class="icon-list"  data-bs-placement="bottom" title="Email & SMS"> <span class="icon-messages text-yellow-msg  fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span></a>
-                                    <a href="#" class="icon-list"><span class="icon-call text-light-red fs-20"><span class="path1"></span><span class="path2"></span></span></a>
-                                    <button class="button button-transparent p-0" data-bs-toggle="collapse" :data-bs-target="`#collapseExample-${item.id}`" aria-expanded="false" :aria-controls="`#collapseExample-${item.id}`"><span class="icon-arrow-bottom"></span></button>
-                                </span>
-                            </div>
-                            <div class="call-collapse collapse" :id="`collapseExample-${item.id}`">
-                                <div class="item pending">
-                                    <span class="call-badge">Pending</span>
-                                    <p class="text-gray text-end fs-12">Today 12:10am</p>
-                                    <p class="fs-14 mgt-12 mgb-12">He made payment but didnt get confirmation yet</p>
-                                    <div class="d-flex justify-content-between">
-                                        <p class="mb-0 fs-14"><span class="text-gray">Assigned to :</span> <b>Technical team</b></p>
-                                    </div>
+                            </template>
+                            <template v-slot:order_no="{item}">
+                                {{ item.client_order_no }}
+                            </template>
+                             <template v-slot:client_name="{item}">
+                                {{ item.amc ? item.amc.name : '-' }}
+                            </template>
+                            <template v-slot:inspector="{item}">
+                                {{ item.inspection ? item.inspection.user.name : '-' }}
+                            </template>
+                            <template v-slot:inspection_date_time="{item}">
+                                {{ item.inspection ? item.inspection.inspection_date_time : '-' }}
+                            </template>
+                            <template v-slot:appraiser="{item}">
+                                <template v-if="item.appraisal_detail">
+                                    {{ item.appraisal_detail.appraiser ? item.appraisal_detail.appraiser.name : '-' }}
+                                </template>
+                                <template v-else>
+                                    -
+                                </template>
+                            </template>
+                            <template v-slot:property_address="{item}">
+                                {{ item.property_info.search_address }}
+                            </template>
+                            <template v-slot:status="{item}">
+                                <p class="mb-0 scheduled-point">{{ item.order_status }}</p>
+                            </template>
+                            <template v-slot:action="{item}">
+                                <a href="javascript:;" class="icon-list" data-bs-placement="bottom" title="Quick view" @click="openQuickViewFeature(item)"><span class="icon-eye text-blue-eye fs-20"><span class="path1"></span><span class="path2"></span></span></a>
+                                <a href="javascript:;" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Quick view" class="icon-list quick-view-icon"><span class="icon-note text-purple fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></span></a>
+                                <a href="javascript:;" class="icon-list" data-bs-placement="bottom" title="Call log"><span class="icon-messages2 primary-text fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span></span></a>
+                                <a href="javascript:;" class="icon-list" data-bs-placement="bottom" title="Schedule"><span class="icon-calendar text-brown fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span class="path7"></span><span class="path8"></span></span></a>
+                                <a href="javascript:;" class="icon-list"  data-bs-placement="bottom" title="Email & SMS"> <span class="icon-messages text-yellow-msg  fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span></a>
+                                <a href="javascript:;" class="icon-list"><span class="icon-call text-light-red fs-20"><span class="path1"></span><span class="path2"></span></span></a>
+                                <button class="button button-transparent p-0" @click="openIssues(item)"><span class="icon-arrow-bottom"></span></button>
+                            </template>
+                            <template v-slot:head_action="{item}">
+                                <div class="text-right">
+                                    <img src="/icons/column.svg" :tag="item.item" class="cursor-pointer open-head-column">
                                 </div>
-                                <a href="javascript:;" class="item more-item">
-                                    <p class="text-center mb-1 text-white">10</p>
-                                    <p class="text-center text-white mb-0">More</p>
-                                </a>
-                            </div>
-                            <div class="modal fade quick-view-modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog h-100">
-                                <div class="modal-content h-100 p-0">
-                                    <div class="bg-gray pdl-32 pdr-22 d-flex align-items-center justify-content-between h-60 min-h-60 header-modal">
-                                    <h5 class="fs-20 fw-bold text-white mb-0" id="exampleModalLabel">Quickview</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </template>
+                            <template v-slot:popup>
+                                <transition name="fade" appear v-if="visibleColumnDropDown">
+                                    <div class="column-list">
+                                        <div class="col-item" @click="addToTable(item)" :class="{ 'active' : checkColumnActive(item) }" v-for="item, ci in table.disableHeader" :key="ci">{{ item.title }}</div>
                                     </div>
-                                    <div class="modal-body h-100 overflow-auto">
-                                    <p class="mb-3 fw-bold">Client info</p>
-                                    <div class="modal-item">
-                                        <p class="mb-0">AMC name</p>
-                                        <span>:</span>
-                                        <p class="mb-0 text-600">EStreet Appraisal Management
-                                            Company, LLC</p>
-                                    </div>
-                                    <a href="#" class="primary-text underline text-600 mgb-24 d-inline-block">AMC requirements</a>
-                                    <div class="modal-item">
-                                        <p class="mb-0">AMC name</p>
-                                        <span>:</span>
-                                        <p class="mb-0 text-600">EStreet Appraisal Management
-                                            Company, LLC</p>
-                                    </div>
-                                    <div class="modal-item">
-                                        <p class="mb-0">AMC name</p>
-                                        <span>:</span>
-                                        <p class="mb-0 text-600">EStreet Appraisal Management
-                                            Company, LLC</p>
-                                    </div>
-                                    <a href="#" class="primary-text underline text-600 d-inline-block">Lender requirements</a>
-                                    <div class="mgt-32">
-                                        <p class="mb-3 text-600">Property info</p>
-                                        <div class="modal-item">
-                                            <p class="mb-0">Property address</p>
-                                            <span>:</span>
-                                            <p class="mb-0 text-600">EStreet Appraisal Management
-                                                Company, LLC</p>
-                                        </div>
-                                        <div class="modal-item">
-                                            <p class="mb-0">Property address</p>
-                                            <span>:</span>
-                                            <p class="mb-0 text-700 fs-20 primary-text">EStreet Appraisal Management
-                                                Company, LLC</p>
-                                        </div>
-                                        <div class="modal-item">
-                                            <p class="mb-0">Due date</p>
-                                            <span>:</span>
-                                            <p class="mb-0 text-600">33-33-33</p>
-                                        </div>
-                                        <div class="modal-item">
-                                            <p class="mb-0">Order no</p>
-                                            <span>:</span>
-                                            <p class="mb-0 text-600">4654765765</p>
-                                        </div>
-                                        <div class="modal-item">
-                                            <p class="mb-0">Order receive date</p>
-                                            <span>:</span>
-                                            <p class="mb-0 text-600">40-89-32</p>
-                                        </div>
-                                        <div class="mgt-32">
-                                            <p class="mb-3 text-600 ">Contact info</p>
-                                            <div class="modal-item">
-                                                <p class="mb-0">Contact name</p>
-                                                <span>:</span>
-                                                <p class="mb-0 text-600">Abid ali ahmede</p>
-                                            </div>
-                                            <div class="modal-item">
-                                                <p class="mb-0">Phone</p>
-                                                <span>:</span>
-                                                <p class="mb-0 text-600">35465765565</p>
-                                            </div>
-                                            <div class="modal-item">
-                                                <p class="mb-0">Email</p>
-                                                <span>:</span>
-                                                <p class="mb-0 text-600">exmplll@mail.com</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="mt-3">
-                                        <p class="text-700 mb-3">Notes</p>
-                                        <p class="note-text mb-3 text-700">Lorem ipsum, or lipsum as it is sometimes known, is dummy text used
-                                            in laying out print, graphic or web designs. The passage is attributed
-                                            to an unknown</p>
-                                        <p class="note-text text-700">Lorem ipsum, or lipsum as it is sometimes known, is dummy text used
-                                                in laying out print, graphic or web designs. The passage is attributed
-                                                to an unknown</p>
-                                    </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-primary">Save changes</button>
-                                    </div>
-                                </div>
-                                </div>
-                            </div>
+                                </transition>
+                            </template>
+                        </Table>
+                        <div class="text-center d-flex justify-content-center">
+                            <select @change="loadPage(pages.activePage)" name="paginate" class="form-control per-page" v-model="pages.paginate">
+                                <option value="">Per page</option>
+                                <option :value="item" :key="ik" v-for="item, ik in pages.perPages">{{ item }} Per page</option>
+                            </select>
                         </div>
+                        <paginate align="center" :total-page="pages.pageData.last_page" @loadPage="loadPage($event)"></paginate>
                     </template>
                     <template v-else>
                         <div class="text-center my-3">
@@ -204,9 +101,10 @@
                         </div>
                     </template>
                 </div>
-                <paginate align="center" :total-page="pages.pageData.last_page" @loadPage="loadPage($event)"></paginate>
+                <!-- <paginate align="center" :total-page="pages.pageData.last_page" @loadPage="loadPage($event)"></paginate> -->
             </div>
         </div>
+
         <b-modal id="dateRange" size="md" title="Search by date range">
             <div class="modal-body">
                 <div class="alert alert-danger text-center" v-if="dateRange.error">
@@ -234,6 +132,26 @@
             </div>
         </b-modal>
         <Map v-if="openMap" :latLng="latLng" @closeMap="closeCurrentMap($event)"/>
+        <m-modal v-model="openIssue" title="Pending Issues/Tickets Lists">
+            <div class="issue-list">
+                <div class="call-list-modal" v-if="activeIssue.length">
+                    <div class="item pending" v-for="item, lindex in activeIssue" :key="'pending-issue-'+lindex">
+                        <span class="call-badge">Pending</span>
+                        <p class="text-gray text-end fs-12">{{ item.created_at | dateTime }}</p>
+                        <p class="fs-14 mgt-12 mgb-12">{{ item.issue }}</p>
+                        <div class="d-flex justify-content-between" v-if="item.assigned_to">
+                            <p class="mb-0 fs-14"><span class="text-gray">Assigned to :</span> <b>Technical team</b></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center my-3" v-else>
+                    <div class="alert alert-danger">
+                        There are no issues/tickets found.
+                    </div>
+                </div>
+            </div>
+        </m-modal>
+        <Quickview v-if="openQuickView" :order="quickOrder" @closeQuickView="closeQuickViewModal($event)"/>
    </div>
 </template>
 
@@ -244,20 +162,27 @@ import DatePicker from 'v-calendar/lib/components/date-picker.umd'
 Vue.component('VCalendar', Calendar)
 Vue.component('VDatePicker', DatePicker)
 
+import Table from "../../src/Table.vue"
 import Map from "./map.vue"
+import Quickview from "./QuickView.vue";
+
 export default {
     name: "call-lists",
     props: ['order'],
     components: {
         Map,
+        Quickview,
+        Table
     },
     data: () => ({
         pages: {
             pageData: [],
             acitvePage: 1,
             searchModel: null,
-            paginate: 10
+            paginate: 10,
+            perPages: [10,15,20,25,30,40,50,60,100]
         },
+        visibleColumnDropDown: false,
         openMap: false,
         orderData: [],
         selectedItems: [],
@@ -268,15 +193,58 @@ export default {
             search: false,
             error: false,
             message: null
-        }
+        },
+        table : {
+            disableHeader: [],
+            header : [
+                "SL@sl@left@left",
+                "Order no@order_no@left@left",
+                "Client name@client_name@left@left",
+                "Property address@property_address@left@left",
+                "Inspector@inspector@left@left",
+                "Appraiser@appraiser@left@left",
+                "Last call@last_call@left@left",
+                "Insp. date & time@inspection_date_time@left@left",
+                "Status@status@left@left",
+                "Action@action@right@right"
+            ]
+        },
+        activeIssue: [],
+        openIssue: false,
+        openQuickView: false,
+        quickOrder: [],
     }),
     created() {
         this.initOrder(this.order);
+    },
+    mounted() {
+        $(document).on("click", function(e) {
+            let target = $(".open-head-column");
+            let eventTarget = $(e.target);
+            let secondTarget = $(".column-list");
+            if (!eventTarget.is(target) && target.has(eventTarget).length == 0 && !eventTarget.is(secondTarget) && secondTarget.has(eventTarget).length == 0) {
+                this.visibleColumnDropDown = false;
+            }
+        }.bind(this));
     },
     methods: {
         initOrder(order) {
             this.pages.pageData = order;
             this.orderData = order.data;
+            console.log(this.orderData);
+            this.initTable();
+        },
+        initTable() {
+            this.table.header.map( (ele) => {
+                let item = ele.split("@");
+                let checkDisable = this.table.disableHeader.find((ele) => ele.key == item[1]);
+                if (!checkDisable) {
+                    this.table.disableHeader.push({
+                        title: item[0],
+                        key:  item[1]
+                    });
+                }
+            });
         },
         checkSelectedList(event, item) {
             let value = item.selected;
@@ -337,17 +305,128 @@ export default {
             }
             this.dateRange.search = true;
             this.loadPage(this.acitvePage);
-            this.$bvModal.hide('dateRange');
+            this.$bvModal.hide('dateRange')
+        },
+        checkColumnActive(val) {
+            let getHeader = (this.table.header);
+            let findActive = false;
+            for (let index in getHeader){
+                let ele = getHeader[index];
+                let key = ele.split("@");
+                if (key[1] && val.key == key[1]) {
+                    findActive = val.key == key[1] ? true : false;
+                    break;
+                }
+            }
+            return findActive;
+        },
+        addToTable(val) {
+            if (val.key == 'action') {
+                return false;
+            }
+            let getHeader = (this.table.header);
+            let getIndex = getHeader.find( (ele) => {
+                let key = ele.split("@");
+                if(val.key == key[1]) {
+                    return true;
+                }
+            });
+            if (!getIndex) {
+                let slicePoint = 9;
+                if (val.key == 'sl') {
+                   slicePoint = 0;
+                } else if (val.key == 'action') {
+                    slicePoint = this.table.header.length;
+                } 
+                this.table.header.splice( slicePoint, 0,
+                    val.title + '@' + val.key + '@left@left'
+                );
+            } else  {
+                let getIndexNo = this.table.header.findIndex(ele => {
+                    return ele == getIndex;
+                });
+                this.table.header.splice(getIndexNo, 1);
+            }
+            this.checkColumnActive(val)
+        },
+        headerClick(event) {
+            if (event.item == "action") {
+                this.visibleColumnDropDown = !this.visibleColumnDropDown;
+            }
+        },
+        openIssues(item) {
+            this.activeIssue = item.pending_tickets;
+            this.openIssue = true;
+        },
+        openQuickViewFeature(item) {
+            this.quickOrder = item;
+            this.openQuickView = true;
+        },
+        closeQuickViewModal(val) {
+            this.openQuickView = false;
+            console.log(val);
         }
-    },
-    watch: {
-        
     }
 }
 </script>
 
 <style scoped>
+
 .cursor-hover {
     cursor: pointer;
 }
+
+
+.column-list {
+    position: absolute;
+    background: #fff;
+    min-width: 220px;
+    height: auto;
+    right: 0;
+    top: 40px;
+    border: 1px solid rgba(25, 183, 162, 0.5);
+    box-shadow: 0px 4px 12px 4px rgba(0, 0, 0, 0.08);
+    border-radius: 8px;
+    overflow: hidden;
+    bottom: auto;
+    padding: 20px;
+    z-index: 999;
+}
+.column-list .col-item {
+    padding: 0px 0px 0px 40px;
+    cursor: pointer;
+    position: relative;
+    margin-bottom: 12px;
+}
+
+.column-list .col-item::after {
+    content: "";
+    position: absolute;
+    height: 24px;
+    width: 24px;
+    background: transparent;
+    border: 1px solid #19B7A2;
+    left: 5px;
+    top: 50%;
+    border-radius: 4px;
+    transform: translate(0, -50%);
+}
+.column-list .col-item.active::after {
+    background: #19b7a2;
+}
+.column-list .col-item.active::before {
+    content: '';
+    display: inline-block;
+    transform: rotate(45deg);
+    height: 15px;
+    width: 8px;
+    border-bottom: 3px solid #ffffff;
+    border-right: 3px solid #ffffff;
+    position: absolute;
+    left: 13px;
+    z-index: 9;
+    top: 4px;
+}
+
+
 </style>
