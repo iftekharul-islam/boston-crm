@@ -32,8 +32,8 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-6">
-                        <ValidationObserver ref="fileForm">
-                            <ValidationProvider class="group d-block" name="File type" rules="required"
+                        <ValidationObserver class="group d-block" ref="fileForm">
+                            <ValidationProvider  name="File type" rules="required"
                                 v-slot="{ errors }">
                                 <div :class="{ 'invalid-form' : errors[0] }">
                                     <label for="" class="d-block mb-2 dashboard-label">Select file type <span
@@ -49,11 +49,14 @@
                                 <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                             </ValidationProvider>
                         </ValidationObserver>
-                        <div class="group">
+                        <span class="group d-block">
                             <label for="" class="d-block mb-2 dashboard-label">Select file <span
                                     class="require"></span></label>
-                            <input type="file" multiple v-on:change="addFiles">
-                        </div>
+                            <div class="position-relative file-upload">
+                                <input type="file" multiple v-on:change="addFiles">
+                                <label for="" class="py-2">Upload <span class="icon-upload ms-3 fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span></label>
+                            </div>
+                        </span>
                     </div>
                 </div>
             </div>

@@ -114,7 +114,7 @@
         </div>
         <div slot="modal-footer" class="mgt-44">
           <button class="button button-transparent" @click="$bvModal.hide('borrower-info')">Close</button>
-          <button class="button button-primary" @click="updateBorrowerInfo">Save</button>
+          <button class="button button-primary" @click="updateBorrowerInfo">Update</button>
         </div>
     </b-modal>
     </ValidationObserver>

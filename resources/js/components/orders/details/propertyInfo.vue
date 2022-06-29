@@ -135,7 +135,7 @@
       </div>
       <div slot="modal-footer">
         <b-button variant="secondary" @click="closeModal">Close</b-button>
-        <b-button variant="primary" @click="updatePropertyInfo">Save</b-button>
+        <b-button variant="primary" @click="updatePropertyInfo">Update</b-button>
       </div>
     </b-modal>
   </div>
