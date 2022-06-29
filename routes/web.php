@@ -176,8 +176,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     //Marketing
     Route::get('marketing',
         [MarketingController::class, 'index'])->middleware('role_permission:view.marketing')->name('marketing.index');
-    Route::get('call', [CallController::class, 'index'])->middleware('role_permission:view.call')->name('call.index');
-    Route::post('search/call/order', [CallController::class, 'searchCallOrder'])->middleware('role_permission:view.call')->name('call.search');
+    Route::get('call',
+        [CallController::class, 'index'])->middleware('role_permission:view.call')->name('call.index');
 });
 Auth::routes();
 
@@ -213,5 +213,7 @@ Route::post('revissin/solutions/marked', [OrderWorkflowController::class, 'revis
 Route::post('revissin/solutions/delete', [OrderWorkflowController::class, 'revissinSolutionDelete']);
 Route::post('check/client/order/no', [OrderWorkflowController::class, 'checkClientOrderNo']);
 
+
+//call routes
 
 //Route::get( "{slug}", [ WebApiController::class, 'home' ] )->where( 'slug', ".*" );

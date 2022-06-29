@@ -87,7 +87,7 @@
             </div>
             <div slot="modal-footer">
                 <b-button variant="secondary" @click="$bvModal.hide('inspection')">Close</b-button>
-                <b-button variant="primary" @click="updateInspection">Update</b-button>
+                <b-button variant="primary" @click="updateInspection">Save</b-button>
             </div>
         </b-modal>
     </div>

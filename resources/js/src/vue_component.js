@@ -50,11 +50,15 @@ const orderEdit = () =>
 const orderPagination = () =>
     import ( /*webpackChunkName: "orderPagination"*/ './Pagination')
 const addCallLog = () =>
-    import ( /*webpackChunkName: "orderPagination"*/ '../components/orders/AddCallLog')
+    import ( /*webpackChunkName: "AddCallLog"*/ '../components/orders/AddCallLog')
 const callList = () =>
     import ( /*webpackChunkName: "callList"*/ '../components/calls/list')
+const callSchedule = () =>
+    import ( /*webpackChunkName: "callSchedule"*/ '../components/calls/callSchedule')
+const callReSchedule = () =>
+    import ( /*webpackChunkName: "callReSchedule"*/ '../components/calls/callReSchedule')
 const addIssue = () =>
-    import ( /*webpackChunkName: "orderPagination"*/ '../components/orders/AddIssue')
+    import ( /*webpackChunkName: "addIssue"*/ '../components/orders/AddIssue')
 const mModal = () =>
     import ( /*webpackChunkName: "m-modal"*/ './modal')
 
@@ -82,7 +86,9 @@ Vue.component('activity-log', activityLog);
 Vue.component('order-list', orderList);
 Vue.component('order-edit-vue', orderEdit);
 Vue.component('paginate', orderPagination);
+Vue.component('add-issue', addIssue);
 Vue.component('add-call-log', addCallLog);
 Vue.component('call-list', callList);
-Vue.component('add-issue', addIssue);
+Vue.component('call-schedule', callSchedule);
+Vue.component('call-re-schedule', callReSchedule);
 Vue.component('m-modal', mModal);

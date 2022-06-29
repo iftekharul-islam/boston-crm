@@ -98,7 +98,7 @@
       </div>
       <div slot="modal-footer" class="mgt-44">
         <button class="button button-transparent" @click="hideModal()">Close</button>
-        <button class="button button-primary" @click="updateContactInfo">Update</button>
+        <button class="button button-primary" @click="updateContactInfo">Save</button>
       </div>
     </b-modal>
     </ValidationObserver>

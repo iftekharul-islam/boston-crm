@@ -44,8 +44,8 @@ class OrderWorkflowController extends BaseController
         $order = Order::find($request->order_id);
         $user = auth()->user();
         if ($request->schedule_id > 0) {
-            $message = 'Schedule updated successfully';
-            $historyTitle = 'Schedule updated By ' . auth()->user()->name;
+            $message = 'Re Scheduled successfully';
+            $historyTitle = 'Re Scheduled By ' . auth()->user()->name;
         } else {
             $message = 'Schedule createded successfully';
             $historyTitle = 'Schedule created By ' . auth()->user()->name;
@@ -121,7 +121,8 @@ class OrderWorkflowController extends BaseController
         }
         $image_types = ['jpeg', 'jpg', 'png'];
         $zip = new \ZipArchive();
-        $fileName = 'inspection-files.zip';
+        $date= date('d-H-i');
+        $fileName = 'inspection-files('.$date.').zip';
         foreach ($data['files'] as $key => $file) {
             if (in_array($file->getClientOriginalExtension(), $image_types)) {
                 if ($zip->open(public_path($fileName), \ZipArchive::CREATE)== TRUE)
