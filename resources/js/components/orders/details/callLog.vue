@@ -32,15 +32,13 @@
         </div>
       </div>
     </div>
-          <add-call-log :showModal="isModal" :orderId="this.id"></add-call-log>
+          <add-call-log :showModal="isModal" :orderId="this.id" :users="this.users"></add-call-log>
   </div>
 </template>
 <script>
 export default {
     name: 'callLog',
-    props: {
-        order: [],
-    },
+    props: [ 'order', 'users' ],
     data: () => ({
         orderData: {},
         isModal: false,
@@ -48,6 +46,8 @@ export default {
         id: null,
     }),
     created() {
+        console.log('this.users')
+        console.log(this.users)
         let order = this.order;
         this.fetchData(order);
         this.$root.$on('update_modal', () => {
