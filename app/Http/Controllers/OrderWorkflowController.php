@@ -44,8 +44,8 @@ class OrderWorkflowController extends BaseController
         $order = Order::find($request->order_id);
         $user = auth()->user();
         if ($request->schedule_id > 0) {
-            $message = 'Schedule updated successfully';
-            $historyTitle = 'Schedule updated By ' . auth()->user()->name;
+            $message = 'Re Scheduled successfully';
+            $historyTitle = 'Re Scheduled By ' . auth()->user()->name;
         } else {
             $message = 'Schedule createded successfully';
             $historyTitle = 'Schedule created By ' . auth()->user()->name;

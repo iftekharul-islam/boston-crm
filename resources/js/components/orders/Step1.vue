@@ -9,7 +9,7 @@
                         <div class="d-flex justify-content-between w-100 box-flex">
                             <div class="left max-w-424 w-100 me-3">
 
-                                <ValidationProvider class="group d-block" name="Order no" rules="required" v-slot="{ errors }">
+                                <ValidationProvider class="group" name="Order no" rules="required" v-slot="{ errors }">
                                     <div :class="{ 'invalid-form' : errors[0] || oldOrderNo }">
                                         <label for="" class="d-block mb-2 dashboard-label">Client order no <span
                                                 class="text-danger require"></span></label>
@@ -19,13 +19,13 @@
                                     </div>
                                 </ValidationProvider>
 
-                                <span class="group d-block">
+                                <div class="group mb-3">
                                     <label for="" class="d-block mb-2 dashboard-label">Loan no</label>
                                     <input type="text" class="dashboard-input w-100" v-model="step1.loanNo">
-                                </span>
+                                </div>
 
 
-                                <ValidationProvider class="group d-block" name="Received date" rules="required"
+                                <ValidationProvider class="group" name="Received date" rules="required"
                                     v-slot="{ errors }">
                                     <div :class="{ 'invalid-form' : (errors[0] || dateIssue.status) }">
                                         <label for="" class="d-block mb-2 dashboard-label">Received date <span
@@ -46,7 +46,7 @@
                                     </div>
                                 </ValidationProvider>
 
-                                <ValidationProvider class="group d-block" name="Due date" rules="required" v-slot="{ errors }">
+                                <ValidationProvider class="group" name="Due date" rules="required" v-slot="{ errors }">
                                     <div :class="{ 'invalid-form' : errors[0] }">
                                         <label for="" class="d-block mb-2 dashboard-label">Due date <span
                                                 class="text-danger require"></span></label>
@@ -71,7 +71,7 @@
                                         readonly>
                                 </span>
 
-                                <ValidationProvider class="group d-block" name="Loan type" rules="required" v-slot="{ errors }">
+                                <ValidationProvider class="group" name="Loan type" rules="required" v-slot="{ errors }">
                                     <div class="position-relative" :class="{ 'invalid-form' : errors[0] }">
                                         <label for="" class="d-block mb-2 dashboard-label">Loan type </label>
                                         <select name="" id="loanTypeSelect"
@@ -86,7 +86,7 @@
                                     </div>
                                 </ValidationProvider>
 
-                                <ValidationProvider class="group d-block" name="FHA case no" :rules="{ required: this.fhaExists == 1 }"
+                                <ValidationProvider class="group" name="FHA case no" :rules="{ required: this.fhaExists == 1 }"
                                     v-slot="{ errors }">
                                     <div :class="{ 'invalid-form' : errors[0] }">
                                         <label for="" class="d-block mb-2 dashboard-label">FHA case no <span
@@ -96,7 +96,7 @@
                                     </div>
                                 </ValidationProvider>
 
-                                <ValidationProvider class="group d-block" name="Appraiser name" rules="required"
+                                <ValidationProvider class="group" name="Appraiser name" rules="required"
                                     v-slot="{ errors }">
                                     <div class="position-relative" :class="{ 'invalid-form' : errors[0] }">
                                         <label for="" class="d-block mb-2 dashboard-label">Appraiser name <span
@@ -112,7 +112,7 @@
                                         <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                                     </div>
                                 </ValidationProvider>
-                                <ValidationProvider class="group d-block" name="Property type" rules="required"
+                                <ValidationProvider class="group" name="Property type" rules="required"
                                     v-slot="{ errors }">
                                     <div class="position-relative" :class="{ 'invalid-form' : errors[0] }">
                                         <label for="" class="d-block mb-2 dashboard-label">Property Type <span
@@ -273,14 +273,14 @@
                         <div class="d-flex justify-content-between w-100 box-flex">
                             <div class="left max-w-424 w-100 mb-3">
 
-                                <span class="group d-block">
+                                <div class="group mb-3">
                                     <label for="" class="d-block mb-2 dashboard-label">Search address <span
                                             class="text-danger require"></span></label>
                                     <input type="text" v-model="searchIngAddress" ref="searchMapLocation"
                                         class="dashboard-input w-100">
-                                </span>
+                                </div>
 
-                                <ValidationProvider class="group d-block" name="Address name" rules="required"
+                                <ValidationProvider class="group" name="Address name" rules="required"
                                     v-slot="{ errors }">
                                     <div class="group" :class="{ 'invalid-form' : errors[0] }">
                                         <label for="" class="d-block mb-2 dashboard-label">Address Name <span
@@ -290,7 +290,7 @@
                                     </div>
                                 </ValidationProvider>
 
-                                <ValidationProvider class="group d-block" name="State name" rules="required"
+                                <ValidationProvider class="group" name="State name" rules="required"
                                     v-slot="{ errors }">
                                     <div class="group" :class="{ 'invalid-form' : errors[0] }">
                                         <label for="" class="d-block mb-2 dashboard-label">State name <span
@@ -303,7 +303,7 @@
 
 
 
-                                <ValidationProvider class="group d-block" name="City name" rules="required" v-slot="{ errors }">
+                                <ValidationProvider class="group" name="City name" rules="required" v-slot="{ errors }">
                                     <div class="group" :class="{ 'invalid-form' : errors[0] }">
                                         <label label for="" class="d-block mb-2 dashboard-label">Area/City name <span
                                                 class="text-danger require"></span></label>
@@ -312,7 +312,7 @@
                                     </div>
                                 </ValidationProvider>
 
-                                <ValidationProvider class="group d-block" name="Unit No"
+                                <ValidationProvider class="group" name="Unit No"
                                     :rules="{'required' : condoType == true}" v-slot="{ errors }">
                                     <div class="group" :class="{ 'invalid-form' : errors[0] }">
                                         <label for="" class="d-block mb-2 dashboard-label">Unit No <span

@@ -60,7 +60,7 @@ return [
 		'role_management' => 'Role management',
 		'role_create'     => 'Role Create',
 		'permission'      => 'permission',
-		'create_role'     => 'Create role',
-		'update_role'     => 'Update design',
+		'create_role'     => 'Create Role',
+		'update_role'     => 'Update Role',
 	],
 ];

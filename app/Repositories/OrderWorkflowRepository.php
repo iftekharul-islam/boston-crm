@@ -31,8 +31,11 @@ class OrderWorkflowRepository extends BaseRepository
             $order_workflow_schedule = OrderWInspection::find($data['schedule_id']);
             $order_workflow_schedule->updated_by = Auth::user()->id;
 
-            $order->status = 2;
-            $order->save();
+            if(isset($data['reschedule_note'])) {
+                $order_workflow_schedule->reschedule_note = $data['reschedule_note'];
+                $order->status = 2;
+                $order->save();
+            }
         } else {
             $order_workflow_schedule = new OrderWInspection();
             $order_workflow_schedule->created_by = Auth::user()->id;

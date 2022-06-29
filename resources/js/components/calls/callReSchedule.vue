@@ -7,21 +7,10 @@
                         <ValidationProvider class="group d-block" name="Appraiser name" rules="required"
                             v-slot="{ errors }">
                             <div :class="{ 'invalid-form' : errors[0] }">
-                                <label for="" class="d-block mb-2 dashboard-label">Appraiser name Reschedule<span
+                                <label for="" class="d-block mb-2 dashboard-label">Appraiser name<span
                                         class="text-danger require"></span></label>
-                                <!-- <div class="position-relative">
-                                        <select id="apprClientSelect" class="dashboard-input w-100"
-                                            v-model="scheduleData.appraiser_id">
-                                            <option value="">Please select appraiser</option>
-                                            <option v-for="appraisar in appraisers" :key="appraisar.id"
-                                                :value="appraisar.id">
-                                                {{ appraisar.name }}
-                                            </option>
-                                        </select>
-                                        <span class="icon-arrow-down bottom-arrow-icon"></span>
-                                    </div> -->
                                 <m-select :options="appraisers" object item-value="id" item-text="name"
-                                    v-model="scheduleData.appraiser_id"></m-select>
+                                    v-model="schedule.appraiser_id"></m-select>
                                 <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                             </div>
                         </ValidationProvider>
@@ -30,7 +19,7 @@
                             <div class="group" :class="{ 'invalid-form' : errors[0] }">
                                 <label for="" class="d-block mb-2 dashboard-label">Inspection date & time<span
                                         class="text-danger require"></span></label>
-                                <v-date-picker mode="datetime" v-model="scheduleData.inspection_date_time"
+                                <v-date-picker mode="datetime" v-model="schedule.inspection_date_time"
                                     :available-dates='{ start: new Date(), end: null }'>
                                     <template class="position-relative" v-slot="{ inputValue, inputEvents }">
                                         <input class="dashboard-input w-100" :value="inputValue" v-on="inputEvents" />
@@ -43,18 +32,8 @@
                             <div :class="{ 'invalid-form' : errors[0] }">
                                 <label for="" class="d-block mb-2 dashboard-label">Duration <span
                                         class="text-danger require"></span></label>
-                                <!-- <div class="position-relative">
-                                        <select class="dashboard-input w-100" v-model="scheduleData.duration">
-                                            <option value="">Please select duration</option>
-                                            <option v-for="duration in durations" :key="duration.duration"
-                                                :value="duration.duration">
-                                                {{ duration.duration }}
-                                            </option>
-                                        </select>
-                                        <span class="icon-arrow-down bottom-arrow-icon"></span>
-                                    </div> -->
                                 <m-select :options="durations" object item-text="duration" item-value="duration"
-                                    v-model="scheduleData.duration"></m-select>
+                                    v-model="schedule.duration"></m-select>
                                 <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                             </div>
                         </ValidationProvider>
@@ -63,7 +42,18 @@
                             <div class="group" :class="{ 'invalid-form' : errors[0] }">
                                 <label for="" class="d-block mb-2 dashboard-label">Notes <span
                                         class="text-danger require"></span></label>
-                                <b-form-textarea class="dashboard-textarea" v-model="scheduleData.note"
+                                <b-form-textarea class="dashboard-textarea" v-model="schedule.note"
+                                    placeholder="Enter notes..." rows="2" cols="5">
+                                </b-form-textarea>
+                                <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                            </div>
+                        </ValidationProvider>
+                        <ValidationProvider class="d-block dashboard-label group" name="Cause of reschedule" rules="required"
+                            v-slot="{ errors }">
+                            <div class="group" :class="{ 'invalid-form' : errors[0] }">
+                                <label for="" class="d-block mb-2 dashboard-label">Cause of Reschedule <span
+                                        class="text-danger require"></span></label>
+                                <b-form-textarea class="dashboard-textarea" v-model="schedule.reschedule_note"
                                     placeholder="Enter notes..." rows="2" cols="5">
                                 </b-form-textarea>
                                 <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
@@ -74,15 +64,15 @@
             </div>
         </div>
         <div slot="modal-footer">
+            <b-button v-if="isInspected == 0" variant="danger" @click="deleteSchedule">Delete Icon</b-button>
             <b-button variant="secondary" @click="$bvModal.hide('re-schedule')">Close</b-button>
-            <b-button variant="primary" @click="saveSchedule">Save</b-button>
+            <b-button variant="primary" @click="reSchedule">Save</b-button>
         </div>
     </b-modal>
 </template>
 <script>
-import Calendar from 'v-calendar/lib/components/calendar.umd'
+    import Calendar from 'v-calendar/lib/components/calendar.umd'
     import DatePicker from 'v-calendar/lib/components/date-picker.umd'
-
 
     Vue.component('VCalendar', Calendar)
     Vue.component('VDatePicker', DatePicker)
@@ -90,21 +80,18 @@ import Calendar from 'v-calendar/lib/components/calendar.umd'
         name: 'Schedule',
         props: {
             appraisers: [],
+            scheduleData: []
         },
         data: () => ({
-            scheduleData: {
+            schedule: {
                 schedule_id: 0,
                 order_id: '',
                 appraiser_id: '',
-                inspector_name: '',
                 inspection_date_time: '',
-                inspection_date_time_formatted:'',
                 duration: '',
                 note: '',
-                created_by:'',
-                created_at:''
+                reschedule_note: '',
             },
-            alreadyScheduled: 0,
             durations: [
                 { 'duration': '15 minutes' },
                 { 'duration': '20 minutes' },
@@ -117,18 +104,43 @@ import Calendar from 'v-calendar/lib/components/calendar.umd'
                 { 'duration': '55 minutes' },
                 { 'duration': '60 minutes' },
             ],
+            isInspected: 0,
             edited: {}
         }),
-        created() {
-            this.getScheduleData()
+        watch: {
+            scheduleData(newValue){
+                this.scheduleData = newValue.inspection
+                this.isInspected = (JSON.parse(newValue.workflow_status)).inspection
+                this.getScheduleData(this.scheduleData)
+            },
         },
         methods: {
-            getScheduleData(order) {
-
+            getScheduleData(scheduleData) {
+                this.schedule.order_id = scheduleData.order_id
+                this.schedule.schedule_id = scheduleData.id
+                this.schedule.appraiser_id = scheduleData.inspector_id
+                this.schedule.inspection_date_time = scheduleData.inspection_date_time
+                this.schedule.duration = scheduleData.duration
+                this.schedule.note = scheduleData.note
+                this.schedule.reschedule_note = scheduleData.reschedule_note
             },
-            saveSchedule() {
-
+            reSchedule() {
+                this.$refs.scheduleForm.validate().then((status) => {
+                    if (status) {
+                        this.$boston.post('update-order-schedule', this.schedule)
+                            .then(res => {
+                                this.orderData = res.data;
+                                //this.$root.$emit('wk_update', res.data)
+                                //this.$root.$emit('wk_flow_menu', res.data)
+                                //this.$root.$emit('wk_flow_toast', res)
+                                this.$bvModal.hide('re-schedule')
+                            })
+                    }
+                })
             },
+            deleteSchedule(){
+
+            }
         }
     }
 </script>

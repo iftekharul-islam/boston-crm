@@ -1,5 +1,5 @@
 <div class="role-box role-edit-{{ $role->id }} d-none">
-    <h2 class="mgb-32 fw-bold fs-20">{{ __('messages.role_view.update_role') }}</h2>
+    <h2>{{ __('messages.role_view.update_role') }}</h2>
     <div class="d-flex align-items-start justify-content-between">
         <div class="max-w-424 mgb-32">
             <div class="mgb-20">

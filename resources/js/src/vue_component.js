@@ -91,5 +91,4 @@ Vue.component('add-call-log', addCallLog);
 Vue.component('call-list', callList);
 Vue.component('call-schedule', callSchedule);
 Vue.component('call-re-schedule', callReSchedule);
-Vue.component('add-issue', addIssue);
 Vue.component('m-modal', mModal);

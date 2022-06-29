@@ -24,7 +24,7 @@ class Order extends Model implements HasMedia
 
     protected $table = 'orders';
 
-    protected $appends = ['order_file_types', 'order_status', 'selected', 'orderOptions'];
+    protected $appends = ['order_file_types', 'order_status', 'selected'];
 
     protected $casts = [
       'due_date' => 'date:d M Y',
@@ -86,12 +86,6 @@ class Order extends Model implements HasMedia
 
     public function getOrderStatusAttribute(){
         return self::OrderStatus[$this->status];
-    }
-
-    public function getOrderOptionsAttribute(){
-        return [
-            "openTicket" => false
-        ];
     }
 
     public function getSelectedAttribute(){
@@ -219,9 +213,4 @@ class Order extends Model implements HasMedia
     {
         return $this->hasMany(Ticket::class,'order_id', 'id');
     }
-
-    public function pendingTickets() {
-        return $this->hasMany(Ticket::class,'order_id', 'id')->where('status', 0);
-    }
-
 }
