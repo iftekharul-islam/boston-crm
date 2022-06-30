@@ -34,7 +34,7 @@ Route::get('/locale/{locale}', LocalizationController::class)->name('locale.chan
 Route::group(['middleware' => ['auth:sanctum']], function () {
     //Dashboard
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('user-dashboard', [DashboardController::class, 'userIndex'])->name('dashboard');
+    Route::get('user-dashboard', [DashboardController::class, 'userIndex'])->name('user.dashboard');
     //User Controller
     Route::get('users',
         [UserController::class, 'index'])->middleware('role_permission:view.user')->name('users.index');
