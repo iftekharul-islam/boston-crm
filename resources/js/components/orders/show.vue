@@ -57,7 +57,6 @@ export default {
     ],
     created(){
         this.$root.$on('toast_msg', (res) => {
-            console.log('hello from show vue')
             this.$toast.open({
                 message: res.message,
                 type: res.error == true ? 'error' : 'success',
