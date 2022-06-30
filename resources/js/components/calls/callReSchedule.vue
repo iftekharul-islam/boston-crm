@@ -65,7 +65,7 @@
             </div>
         </div>
         <div slot="modal-footer">
-            <b-button v-if="isInspected == 0" variant="danger" @click="deleteSchedule">Delete Icon</b-button>
+            <b-button v-if="orderStatus == 2" variant="danger" @click="showDeleteSchedule">Delete Icon</b-button>
             <b-button variant="secondary" @click="$bvModal.hide('re-schedule')">Close</b-button>
             <b-button variant="primary" @click="reSchedule">Reschedule</b-button>
         </div>
@@ -91,9 +91,8 @@
             </div>
         </div>
         <div slot="modal-footer">
-            <b-button v-if="isInspected == 0" variant="danger" @click="deleteSchedule">Delete Icon</b-button>
-            <b-button variant="secondary" @click="$bvModal.hide('re-schedule')">Close</b-button>
-            <b-button variant="primary" @click="reSchedule">Reschedule</b-button>
+            <b-button variant="secondary" @click="$bvModal.hide('delete-schedule')">Close</b-button>
+            <b-button variant="primary" @click="deleteSchedule">Delete</b-button>
         </div>
     </b-modal>
     </div>
@@ -107,8 +106,7 @@
     export default {
         name: 'call-re-schedule',
         props: {
-            appraisers: [],
-            scheduleData: []
+            appraisers: []
         },
         data: () => ({
             schedule: {
@@ -119,6 +117,7 @@
                 duration: '',
                 note: '',
                 reschedule_note: '',
+                delete_note: ''
             },
             durations: [
                 { 'duration': '15 minutes' },
@@ -132,19 +131,19 @@
                 { 'duration': '55 minutes' },
                 { 'duration': '60 minutes' },
             ],
-            isInspected: 0,
-            edited: {}
+            orderStatus: 0,
         }),
-        watch: {
-            scheduleData(newValue){
-                this.scheduleData = newValue.inspection
-                this.isInspected = (JSON.parse(newValue.workflow_status)).inspection
-                this.getScheduleData(this.scheduleData)
-            },
-        },
         methods: {
+            setOrderId(orderId){
+                this.schedule.order_id = orderId
+            },
+            setScheduleData(scheduleData){
+                this.getScheduleData(scheduleData)
+            },
+            setOrderStatus(status){
+                this.orderStatus = status
+            },
             getScheduleData(scheduleData) {
-                this.schedule.order_id = scheduleData.order_id
                 this.schedule.schedule_id = scheduleData.id
                 this.schedule.appraiser_id = scheduleData.inspector_id
                 this.schedule.inspection_date_time = scheduleData.inspection_date_time
@@ -155,7 +154,7 @@
             reSchedule() {
                 this.$refs.scheduleForm.validate().then((status) => {
                     if (status) {
-                        this.$boston.post('update-order-schedule', this.schedule)
+                        this.$boston.post('update-order-schedule', this.schedule.schedule_id)
                             .then(res => {
                                 this.orderData = res.data;
                                 //this.$root.$emit('wk_update', res.data)
@@ -166,8 +165,23 @@
                     }
                 })
             },
+            showDeleteSchedule(){
+                this.$bvModal.show('delete-schedule')
+            },
             deleteSchedule(){
-
+                this.$refs.deleteScheduleForm.validate().then((status) => {
+                    if (status) {
+                        this.$boston.post('delete-schedule/'+this.schedule.schedule_id,this.schedule.delete_note)
+                            .then(res => {
+                                this.orderData = res.data;
+                                //this.$root.$emit('wk_update', res.data)
+                                //this.$root.$emit('wk_flow_menu', res.data)
+                                //this.$root.$emit('wk_flow_toast', res)
+                                this.$bvModal.hide('delete-schedule')
+                                this.$bvModal.hide('re-schedule')
+                            })
+                    }
+                })
             }
         }
     }

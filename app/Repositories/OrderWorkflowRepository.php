@@ -55,6 +55,13 @@ class OrderWorkflowRepository extends BaseRepository
         return $order_workflow_schedule ? true : false;
     }
 
+
+    public function deleteSchedule($schedule_id){
+        $order_workflow_schedule = OrderWInspection::find($schedule_id);
+        $order_workflow_schedule->delete();
+        return $order_workflow_schedule ? true : false;
+    }
+
     /**
      * @param $data
      * @return bool

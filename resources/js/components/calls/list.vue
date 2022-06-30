@@ -360,8 +360,8 @@
         </m-modal>
         <Quickview v-if="openQuickView" :order="quickOrder" @closeQuickView="closeQuickViewModal($event)" />
         <Map v-if="openMap" :latLng="latLng" />
-        <call-schedule :orderId="orderId" :appraisers="appraisers"></call-schedule>
-        <call-re-schedule :scheduleData="scheduleData" :appraisers="appraisers"></call-re-schedule>
+        <call-schedule ref="callScheduleComponent" :appraisers="appraisers"></call-schedule>
+        <call-re-schedule ref="callReScheduleComponent" :appraisers="appraisers"></call-re-schedule>
         <div class="modal fade schedule-modal call-log-modal" id="callLogModal" tabindex="-1" aria-labelledby="callLogModalLabel" aria-hidden="true">
             <div class="modal-dialog h-100">
                 <div class="modal-content ">
@@ -459,20 +459,9 @@
             openIssue: false,
             openQuickView: false,
             quickOrder: [],
-            isScheduled: 0,
-            scheduleData: [],
-            orderId: 0
         }),
         created() {
             this.initOrder(this.order);
-        },
-        watch: {
-            orderId(newValue) {
-                this.orderId = newValue;
-            },
-            scheduleData(newValue) {
-                this.scheduleData = newValue;
-            }
         },
         mounted() {
             $(document).on("click", function (e) {
@@ -662,10 +651,11 @@
                 console.log(val);
             },
             getScheduleData(index) {
-                this.orderId = this.orderData[index].id
-                this.scheduleData = this.orderData[index]
-                this.isScheduled = (JSON.parse(this.orderData[index].workflow_status)).scheduling
-                this.isScheduled == 0 ? this.$bvModal.show('schedule') : this.$bvModal.show('re-schedule')
+                this.$refs.callScheduleComponent.setOrderId(this.orderData[index].id)
+                this.$refs.callReScheduleComponent.setOrderId(this.orderData[index].id)
+                this.$refs.callReScheduleComponent.setScheduleData(this.orderData[index].inspection)
+                this.$refs.callReScheduleComponent.setOrderStatus(this.orderData[index].status)
+                this.orderData[index].status == 0 ? this.$bvModal.show('schedule') : this.$bvModal.show('re-schedule')
             },
         },
     }
