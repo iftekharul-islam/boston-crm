@@ -162,6 +162,13 @@ export default {
               type: res.error == true ? 'error' : 'success',
           });
       });
+      this.$root.$on('toast_msg', (res) => {
+          console.log('hello from work flow vue')
+          this.$toast.open({
+              message: res.message,
+              type: res.error == true ? 'error' : 'success',
+          });
+      });
   },
   mounted(){
 

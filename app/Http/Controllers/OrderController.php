@@ -631,12 +631,12 @@ class OrderController extends BaseController
         $error = $errorChecking['error'];
         $errorMessage = $errorChecking['message'];
         if ($error == true) {
-            return response()->json(['error' => $error, 'messages' => $errorMessage]);
+            return response()->json(['error' => $error, 'message' => $errorMessage]);
         }
 
         $order = Order::where('id', $get->order['id'])->first();
         if (!$order) {
-            return response()->json(['error' => true, 'messages' => "Order Information Not Found"]);
+            return response()->json(['error' => true, 'message' => "Order Information Not Found"]);
         }
 
         $returnMessage = null;

@@ -5,9 +5,6 @@
       <a v-b-modal.borrower-info class="d-inline-flex edit align-items-center fw-bold cursor-pointer">Edit <span class="icon-edit ms-3"><span class="path1"></span><span class="path2"></span></span></a>
     </div>
     <div class="box-body">
-      <div class="alert-message alert alert-success" v-if="submittedMessage">
-        {{ submittedMessage }}
-      </div>
       <div class="list__group">
         <p class="mb-0 left-side">Borrower name</p>
         <span>:</span>
@@ -77,7 +74,7 @@
                         <span class="icon-plus"></span> Add
                       </button>
                     </div>
-                    
+
                   </div>
                 </ValidationProvider>
               </ValidationObserver>
@@ -104,7 +101,7 @@
                         <span class="icon-plus"></span> Add
                       </button>
                     </div>
-                    
+
                   </div>
                 </ValidationProvider>
               </ValidationObserver>
@@ -128,8 +125,6 @@
     },
     data(){
       return {
-        submittedMessage: null,
-
         borrower_name: null,
         co_borrower_name: null,
         borrower_contact: false,
@@ -178,9 +173,8 @@
                     borrower_email_s: this.borrower_email_s,
                     order: this.order
                   }).then(res => {
-                      this.submittedMessage = res.messages;
+                      this.$root.$emit('toast_msg', res)
                       this.$bvModal.hide('borrower-info');
-                      this.hideSubmittedMessage();
                   });
               }
           });
@@ -224,11 +218,6 @@
             }
         }
       },
-      hideSubmittedMessage() {
-          setTimeout(() => {
-            this.submittedMessage = null;
-          },5000);
-      }
     }
   }
 </script>

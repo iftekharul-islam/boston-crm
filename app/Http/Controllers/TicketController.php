@@ -33,7 +33,7 @@ class TicketController extends Controller
         $newTicket = new Ticket();
         $newTicket->order_id = $id;
         $newTicket->subject = $request->subject;
-        $newTicket->issue = $request->subject;
+        $newTicket->issue = $request->issue;
         $newTicket->created_by = $user->id;
         $newTicket->save();
 

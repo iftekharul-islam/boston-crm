@@ -5,9 +5,6 @@
       <a v-b-modal.contact-info class="d-inline-flex edit align-items-center fw-bold cursor-pointer">Edit <span class="icon-edit ms-3"><span class="path1"></span><span class="path2"></span></span></a>
     </div>
     <div class="box-body">
-      <div class="alert-message alert alert-success" v-if="submittedMessage">
-        {{ submittedMessage }}
-      </div>
       <div class="list__group">
         <p class="mb-0 left-side">Contact name</p>
         <span>:</span>
@@ -112,9 +109,6 @@
     },
     data(){
       return{
-
-        submittedMessage: null,
-
         contactSame: false,
         contact_info: null,
         edit_contact_name: null,
@@ -173,9 +167,8 @@
             order: this.order
           }).then(res => {
               this.contact_info = this.edit_contact_name
-              this.submittedMessage = "Contact updated successfully";
+              this.$root.$emit('toast_msg', res)
               this.$bvModal.hide('contact-info');
-              this.hideSubmittedMessage();
           });
       },
       addEmail() {
@@ -227,11 +220,6 @@
             }
         }
       },
-      hideSubmittedMessage() {
-          setTimeout(() => {
-            this.submittedMessage = null;
-          },5000);
-      }
     }
   }
 </script>
