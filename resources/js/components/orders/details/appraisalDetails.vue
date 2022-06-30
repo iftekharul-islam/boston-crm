@@ -36,12 +36,12 @@
             </div>
         </div>
         <!-- modal -->
-        <b-modal id="appraisal-info" size="lg" title="Edit appraisal Information">
+        <b-modal id="appraisal-info" size="lg" title="Edit appraisal information">
             <div class="modal-body">
                 <ValidationObserver ref="appraisalForm">
                     <div class="row">
                         <div class="col-md-6">
-                            <ValidationProvider class="group" name="Appraiser name" rules="required"
+                            <ValidationProvider class="group d-block" name="Appraiser name" rules="required"
                                 v-slot="{ errors }">
                                 <div class="position-relative" :class="{ 'invalid-form' : errors[0] }">
                                     <label for="" class="d-block mb-2 dashboard-label">Appraiser name <span
@@ -57,7 +57,7 @@
                                     <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                                 </div>
                             </ValidationProvider>
-                            <ValidationProvider class="group" name="Loan type" rules="required" v-slot="{ errors }">
+                            <ValidationProvider class="group d-block" name="Loan type" rules="required" v-slot="{ errors }">
                                 <div class="position-relative" :class="{ 'invalid-form' : errors[0] }">
                                     <label for="" class="d-block mb-2 dashboard-label">Loan type </label>
                                     <select @change="loanTypeChange" id="loanTypeSelect"
@@ -71,13 +71,28 @@
                                     <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                                 </div>
                             </ValidationProvider>
+                            <ValidationProvider class="group d-block" name="Property Type" rules="required"
+                                v-slot="{ errors }">
+                                <div class="position-relative" :class="{ 'invalid-form' : errors[0] }">
+                                    <label for="" class="d-block mb-2 dashboard-label">Property type <span
+                                            class="require"></span></label>
+                                    <select class="dashboard-input w-100" v-model="details.property_type">
+                                        <option value="">Please Select Property Type</option>
+                                        <option v-for="property_type in propertyTypes" :key="property_type.id"
+                                            :value="property_type.id">
+                                            {{ property_type.type }}
+                                        </option>
+                                    </select>
+                                    <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                                </div>
+                            </ValidationProvider>
                         </div>
                         <div class="col-md-6">
-                            <div class="position-relative">
-                                <label for="" class="d-block mb-2 dashboard-label">Loan No</label>
+                            <span class="position-relative group d-block">
+                                <label for="" class="d-block mb-2 dashboard-label">Loan no</label>
                                 <input type="text" v-model="details.loan_no" class="dashboard-input w-100">
-                            </div>
-                            <ValidationProvider class="group" name="FHA case no"
+                            </span>
+                            <ValidationProvider class="group d-block" name="FHA case no"
                                 :rules="{ required: this.fhaExists == 1 }" v-slot="{ errors }">
                                 <div :class="{ 'invalid-form' : errors[0] }">
                                     <label for="" class="d-block mb-2 dashboard-label">FHA case no <span
@@ -86,25 +101,6 @@
                                     <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                                 </div>
                             </ValidationProvider>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <ValidationProvider class="group" name="Property Type" rules="required"
-                                    v-slot="{ errors }">
-                                    <div class="position-relative" :class="{ 'invalid-form' : errors[0] }">
-                                        <label for="" class="d-block mb-2 dashboard-label">Property Type <span
-                                                class="require"></span></label>
-                                        <select class="dashboard-input w-100" v-model="details.property_type">
-                                            <option value="">Please Select Property Type</option>
-                                            <option v-for="property_type in propertyTypes" :key="property_type.id"
-                                                :value="property_type.id">
-                                                {{ property_type.type }}
-                                            </option>
-                                        </select>
-                                        <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
-                                    </div>
-                                </ValidationProvider>
-                            </div>
                         </div>
                     </div>
                 </ValidationObserver>

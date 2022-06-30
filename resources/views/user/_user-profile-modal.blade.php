@@ -5,9 +5,10 @@
                     <span class="icon-close-circle fs-24"><span class="path1"></span><span class="path2"></span></span>
                 </button>
                 <div class="user-prev-body">
+                    <h4 class="fs-20 fw-bold text-light-black mgb-20">User details</h4>
                     <div class="row">
                         <div class="col-md-6">
-                            <h4 class="fs-20 fw-bold text-light-black mgb-20">User details</h4>
+                            
                             <div class="user-prev-img">
                                 <img src="{{ $user->getMedia('profiles')[0] ?? false ? asset($user->getMedia('profiles')[0]->getUrl()) : asset('img/user.png') }}" alt="{{ $user->name }}" class="img-fluid">
                             </div>

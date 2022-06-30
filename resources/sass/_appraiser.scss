@@ -21,6 +21,9 @@
                 &::before {
                     display: block;
                 }
+                &::after {
+                    background: $primary;
+                }
             }
         }
     }
@@ -43,8 +46,8 @@
             transform: rotate(45deg);
             height: 16px;
             width: 9px;
-            border-bottom: 2px solid #78b13f;
-            border-right: 2px solid #78b13f;
+            border-bottom: 2px solid $white;
+            border-right: 2px solid $white;
             position: absolute;
             top: 2px;
             left: 7px;

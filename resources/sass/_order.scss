@@ -501,6 +501,7 @@
         overflow: hidden;
         text-overflow: ellipsis;
         margin-left: 8px;
+        max-width: 300px;
     }
 }
 
@@ -1399,8 +1400,8 @@ select {
         .search-btn {
             border: none;
             outline: none;
-            width: 40px;
-            height: 40px;
+            width: 32px;
+            height: 32px;
             border-radius: 0px 4px 4px 0px;
             background: $gray;
             @include flex-center;
