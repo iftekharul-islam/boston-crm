@@ -30,10 +30,7 @@
         </div>
         <div class="row chart">
             <div class="chart-box col-lg-12">
-                @php
-                    $owner = $is_owner ? 'true' : 'false'
-                @endphp
-                <ticket-list :permissions="{{ json_encode($user_permissions) }}" :is-owner="{{ $owner }}" :role="'{{ $user_role }}'" :show-route="'{{ route('clients.show', [""]) }}'" :create-route="'{{ route('clients.create') }}'" :delete-route="'{{ route('clients.destroy', [""]) }}'"></ticket-list>
+                <ticket-list></ticket-list>
             </div>
         </div>
 

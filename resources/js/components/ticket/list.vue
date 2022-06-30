@@ -58,17 +58,6 @@
 import Pagination from 'vue-pagination-2'
 Vue.component('pagination', Pagination)
 export default {
-  props: {
-    showRoute: String,
-    createRoute: String,
-    deleteRoute: String,
-    permissions: Array,
-    role: String,
-    isOwner: {
-      default: false,
-      type: Boolean
-    }
-  },
   data() {
     return {
       tickets: {},
@@ -96,14 +85,10 @@ export default {
       currentType: 'all',
       page: 1,
       searchText: '',
-      canCreate: false,
-      canUpdate: false,
-      canDelete: false,
-      canView: false,
     }
   },
   created() {
-    this.getType('All')
+    this.getType('all')
   },
   methods: {
       isAssigned(obj) {
