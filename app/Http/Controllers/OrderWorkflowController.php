@@ -39,7 +39,7 @@ class OrderWorkflowController extends BaseController
     {
         $this->repository->updateOrderScheduleData($request->all());
         //code for set event on google calender
-        //$this->service->setOrderSchedule($request->order_id);
+        $this->service->setOrderSchedule($request->order_id);
 
         $order = Order::find($request->order_id);
         $user = auth()->user();

@@ -64,7 +64,7 @@
     Vue.component('VCalendar', Calendar)
     Vue.component('VDatePicker', DatePicker)
     export default {
-        name: 'Schedule',
+        name: 'call-schedule',
         props: {
             appraisers: [],
             orderId: 0

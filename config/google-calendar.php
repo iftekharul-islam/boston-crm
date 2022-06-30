@@ -13,7 +13,8 @@ return [
             /*
              * Path to the json file containing the credentials.
              */
-            'credentials_json' => storage_path('app/google-calendar/sodium-crane-770-3242eaa97823.json'),
+            //'credentials_json' => storage_path('app/google-calendar/sodium-crane-770-3242eaa97823.json'),
+            'credentials_json' => storage_path('app/google-calendar/bostonnewcrm-70e899416915.json'),
         ],
 
         /*

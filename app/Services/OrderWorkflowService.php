@@ -33,7 +33,7 @@ class OrderWorkflowService
         $event->endDateTime = Carbon::parse($schedule->inspection_date_time)->addMinute((int) $schedule->duration);
         $event->location = $property_info->search_address;
         $event->colorId = $inspector->color_id ?? 1;
-        $event->addAttendee(['email' => $inspector->email]);
+        //$event->addAttendee(['email' => $inspector->email]);
         $newEvent = $event->save();
         if(!$schedule->event_id){
             $schedule->event_id = $newEvent->id;
