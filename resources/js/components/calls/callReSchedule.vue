@@ -1,5 +1,6 @@
 <template>
-    <b-modal id="re-schedule" size="md" title="Schedule">
+    <div>
+    <b-modal id="re-schedule" size="md" title="Re Schedule">
         <div class="modal-body">
             <div class="row">
                 <div class="col-md-12">
@@ -66,9 +67,36 @@
         <div slot="modal-footer">
             <b-button v-if="isInspected == 0" variant="danger" @click="deleteSchedule">Delete Icon</b-button>
             <b-button variant="secondary" @click="$bvModal.hide('re-schedule')">Close</b-button>
-            <b-button variant="primary" @click="reSchedule">Save</b-button>
+            <b-button variant="primary" @click="reSchedule">Reschedule</b-button>
         </div>
     </b-modal>
+    <b-modal id="delete-schedule" size="md" title="Delete Schedule">
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <ValidationObserver ref="deleteScheduleForm">
+                        <ValidationProvider class="d-block dashboard-label group" name="Cause of deletion" rules="required"
+                            v-slot="{ errors }">
+                            <div class="group" :class="{ 'invalid-form' : errors[0] }">
+                                <label for="" class="d-block mb-2 dashboard-label">Cause of Deletion <span
+                                        class="text-danger require"></span></label>
+                                <b-form-textarea class="dashboard-textarea" v-model="schedule.delete_note"
+                                    placeholder="Enter notes..." rows="2" cols="5">
+                                </b-form-textarea>
+                                <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                            </div>
+                        </ValidationProvider>
+                    </ValidationObserver>
+                </div>
+            </div>
+        </div>
+        <div slot="modal-footer">
+            <b-button v-if="isInspected == 0" variant="danger" @click="deleteSchedule">Delete Icon</b-button>
+            <b-button variant="secondary" @click="$bvModal.hide('re-schedule')">Close</b-button>
+            <b-button variant="primary" @click="reSchedule">Reschedule</b-button>
+        </div>
+    </b-modal>
+    </div>
 </template>
 <script>
     import Calendar from 'v-calendar/lib/components/calendar.umd'
@@ -77,7 +105,7 @@
     Vue.component('VCalendar', Calendar)
     Vue.component('VDatePicker', DatePicker)
     export default {
-        name: 'Schedule',
+        name: 'call-re-schedule',
         props: {
             appraisers: [],
             scheduleData: []
