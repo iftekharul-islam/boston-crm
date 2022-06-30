@@ -8,7 +8,7 @@
 
         <div class="chat-item" v-for="noteItem, ni in notes" :key="noteItem.key + ni">
           <div class="chat-name d-flex align-items-center">
-            <img v-if="noteItem.user.thumb" :src="noteItem.user.thumb" alt="boston chat image" class="img-fluid"/>
+            <img v-if="noteItem.user && noteItem.user.thumb" :src="noteItem.user.thumb" alt="boston chat image" class="img-fluid"/>
             <img v-else src="/img/user.png" alt="boston chat image" class="img-fluid"/>
             <div class="ms-3">
               <p class="text-600 mb-0">{{ noteItem.user ? noteItem.user.name : '-' }}</p>

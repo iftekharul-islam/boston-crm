@@ -209,6 +209,7 @@ class OrderRepository extends BaseRepository
         return AppraisalDetail::query()->where('order_id', $order_id)->update([
             "appraiser_id" => $data['appraiser_id'],
             "loan_type" => $data['loan_type'],
+            "property_type" => $data['property_type'],
             "fha_case_no" => $data['fha_case_no'],
             "loan_no" => $data['loan_no'],
         ]);

@@ -11,7 +11,7 @@
             </svg>
           </span>
         </div>
-        <div class="revission-body">
+        <div class="revission-body" ref="revissionBody">
           <!-- add button -->
           <div class="revission-add text-end mb-3">
             <button v-if="!addRevission" @click="revissionAdd(true)" class="button button-primary py-2 h-40 flex-center d-inline-flex">Add revision</button>
@@ -69,7 +69,7 @@
                     <div class="button-box ms-auto">
                       <button @click="deleteRevission(item, ir)" class="action-btn mgr-12"> <span class="icon-trash"><span class="path1"></span><span
                             class="path2"></span><span class="path3"></span><span class="path4"></span></span></button>
-                      <button @click="editNotes(item, ir)" class="action-btn"><span class="icon-edit"><span
+                      <button @click="editNotes(item, ir, $event)" class="action-btn"><span class="icon-edit"><span
                             class="path1"></span><span class="path2"></span></span></button>
                     </div>
                   </div>
@@ -200,7 +200,7 @@
 
             <!-- Edit notes -->
             <transition name="fade" v-if="editNotesModal" appear>
-              <div class="edit-revission">
+              <div class="edit-revission" ref="editNotesModals">
                   <ValidationObserver ref="editRevision">
                       <p class="fs-20 fw-bold">Edit revision</p>
                       <ValidationProvider name="Date & time" rules="required" v-slot="{ errors }">
@@ -354,7 +354,7 @@ export default {
     editRevission() {
       // this.revissionEdit = !this.revissionEdit
     }, 
-    editNotes(item, index) {
+    editNotes(item, index, event) {
         this.form.id = item.id;
         this.form.date = item.revision_date;
         this.form.revission = item.revision_details;

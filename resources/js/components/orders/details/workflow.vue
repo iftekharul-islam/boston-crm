@@ -31,7 +31,7 @@
               </span>
               <p class="mb-0">Initial Review</p>
             </div>
-            <div class="item" :class="{'complete' : status.reportAnalysisReview === 1, 'current' : currentStep('report-analysis-review'), 'activeStep' : isActive == 'report-analysis-review'}" @click="changeTab('report-analysis-review')">
+            <div class="item" :class="{'complete' : checkReportAnalysysCompletation(status.reportAnalysisReview), 'current' : currentStep('report-analysis-review'), 'activeStep' : isActive == 'report-analysis-review'}" @click="changeTab('report-analysis-review')">
               <span class="ball">
                   <img src="/img/current-white.png" alt="current step boston">
               </span>
@@ -155,8 +155,10 @@ export default {
       });
 
       this.$root.$on('wk_flow_toast', (res) => {
-          this.$store.commit('app/storeOrder', res.data);
-          this.orderData = res.data;
+          if (res.error == false) {
+              this.$store.commit('app/storeOrder', res.data);
+              this.orderData = res.data;
+          }
           this.$toast.open({
               message: res.message,
               type: res.error == true ? 'error' : 'success',
@@ -193,22 +195,33 @@ export default {
           this.norewriteReport = noRewrite;
         }
         this.currentStep(this.orderData.currentStep);
+        this.checkReportAnalysysCompletation(this.status.reportAnalysisReview);
     },
     updateRole() {
-      if (this.role.length) {
-        this.myRole = this.role
-      }
+        if (this.role.length) {
+          this.myRole = this.role
+        }
     },
     changeTab(type, value = 0) {
-      if (value === 1) {
-          return false;
-      }
-      this.isActive = type;
-      this.addParam('wkf', type);
+        if (value === 1) {
+            return false;
+        }
+        this.isActive = type;
+        this.addParam('wkf', type);
 
-      if (type == "revision") {
-        this.$root.$emit('open_revision', true);
-      }
+        if (type == "revision") {
+          this.$root.$emit('open_revision', true);
+        }
+    },
+    checkReportAnalysysCompletation(status) {
+        if (status === 1) {
+             if (this.order.analysis){
+                if (this.order.analysis.is_check_upload && this.order.analysis.is_check_upload == 1 && this.status.reWritingReport === 1) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
   }
 }

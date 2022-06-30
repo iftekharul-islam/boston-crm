@@ -14,14 +14,15 @@
                         <p class="mb-0 text-light-black fw-bold" v-html="current.note"></p>
                     </div>
 
-                    <div class="mgb-32">
-                        <ValidationProvider class="group" name="Assign to" rules="required" v-slot="{ errors }">
-                            <div :class="{ 'invalid-form' : errors[0] }">
-                                <label for="" class="mb-2 text-light-black d-inline-block">Assign to</label>
-                                <m-select theme="blue" :options="usersInfo" object item-text="name" item-value="id"
-                                    v-model="assigned_to"></m-select>
-                            </div>
-                        </ValidationProvider>
+                    <div class="assign_rewrite" :class="{ 'invalid-form' : chooseAssign.type }">
+                        <div class="rewrite_step_1">
+                            <label for="" class="mb-2 text-light-black d-inline-block">Assign to</label>
+                            <m-select theme="blue" :options="usersInfo" object item-text="name" item-value="id" @change="chooseAssignChange($event)" v-model="assigned_to"></m-select>
+                            <span class="error-message" v-if="chooseAssign.type">{{ chooseAssign.message }}</span>
+                        </div>
+                        <div class="rewrite_step_2">
+                            <button class="button button-primary px-4 h-40 d-inline-flex align-items-center" @click="saveAssigneeOnly">Assign</button>
+                        </div>
                     </div>
 
                     <div class="group">
@@ -34,36 +35,37 @@
                             </div>
                         </div>
                     </div>
-
-                    <div class="mgb-20">
-                        <ValidationProvider class="group" name="Choose Notes" rules="required" v-slot="{ errors }">
-                            <div :class="{ 'invalid-form' : errors[0] }">
-                                <label for="" class="mb-2 text-light-black d-inline-block">Add note</label>
-                                <div class="preparation-input w-100 position-relative">
-                                    <textarea v-model="note" cols="30" rows="3"
-                                        class="w-100 dashboard-textarea"></textarea>
+                    <template v-if="orderData.report_rewrite != null">
+                        <div class="mgb-20">
+                            <ValidationProvider class="group" name="Choose Notes" rules="required" v-slot="{ errors }">
+                                <div :class="{ 'invalid-form' : errors[0] }">
+                                    <label for="" class="mb-2 text-light-black d-inline-block">Add note</label>
+                                    <div class="preparation-input w-100 position-relative">
+                                        <textarea v-model="note" cols="30" rows="3"
+                                            class="w-100 dashboard-textarea"></textarea>
+                                    </div>
                                 </div>
-                            </div>
-                        </ValidationProvider>
-                    </div>
-                    <div>
-                        <p class="text-light-black mgb-12">Files</p>
-                        <div class="position-relative file-upload">
-                            <input type="file" multiple v-on:change="addFiles">
-                            <label for="" class="py-2">Upload <span class="icon-upload ms-3 fs-20"><span
-                                        class="path1"></span><span class="path2"></span><span
-                                        class="path3"></span></span></label>
+                            </ValidationProvider>
                         </div>
-                        <p class="text-light-black mgb-12" v-if="fileData.files.length">{{ fileData.files.length }}
-                            Files</p>
-                    </div>
-                    <div class="text-end mgt-32">
-                        <button v-if="current.note"
-                            class="button button-danger px-4 h-40 d-inline-flex align-items-center"
-                            @click="editable = true">Close</button>
-                        <button class="button button-primary px-4 h-40 d-inline-flex align-items-center"
-                            @click="saveAssigneeData">Done</button>
-                    </div>
+                        <div>
+                            <p class="text-light-black mgb-12">Files</p>
+                            <div class="position-relative file-upload">
+                                <input type="file" multiple v-on:change="addFiles">
+                                <label for="" class="py-2">Upload <span class="icon-upload ms-3 fs-20"><span
+                                            class="path1"></span><span class="path2"></span><span
+                                            class="path3"></span></span></label>
+                            </div>
+                            <p class="text-light-black mgb-12" v-if="fileData.files.length">{{ fileData.files.length }}
+                                Files</p>
+                        </div>
+                        <div class="text-end mgt-32">
+                            <button v-if="current.note"
+                                class="button button-danger px-4 h-40 d-inline-flex align-items-center"
+                                @click="editable = true">Close</button>
+                            <button class="button button-primary px-4 h-40 d-inline-flex align-items-center"
+                                @click="saveAssigneeData">Done</button>
+                        </div>
+                    </template>
                 </div>
             </ValidationObserver>
         </div>
@@ -92,7 +94,9 @@
                             <div class="d-flex align-items-center mb-3 document" v-for="file, fileIndex in dataFiles"
                                 :key="fileIndex">
                                 <img src="/img/pdf.svg" alt="boston profile" class="img-fluid">
-                                <span class="text-light-black d-inline-block mgl-12 file-name">{{ file.name }}</span>
+                                <span class="text-light-black d-inline-block mgl-12 file-name">
+                                    <a :href="file.original_url" download>{{ file.name }}</a>
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -102,7 +106,9 @@
                             <div class="d-flex align-items-center mb-3 document" v-for="file, fileIndex in reportFiles"
                                 :key="fileIndex">
                                 <img src="/img/pdf.svg" alt="boston profile" class="img-fluid">
-                                <span class="text-light-black d-inline-block mgl-12 file-name">{{ file.name }}</span>
+                                <span class="text-light-black d-inline-block mgl-12 file-name">
+                                    <a :href="file.original_url" download>{{ file.name }}</a>
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -116,6 +122,10 @@
         name: 'RewritingReport',
         props: ['order'],
         data: () => ({
+            chooseAssign: {
+                message: null,
+                type: false,
+            },
             orderData: [],
             prev: [],
             current: [],
@@ -126,7 +136,7 @@
             fileData: {
                 files: [],
             },
-            retportFiles: []
+            retportFiles: [],
         }),
         inject: ['usersInfo'],
         created() {
@@ -151,7 +161,7 @@
                 this.current = order.report_rewrite ?? [];
 
                 this.dataFiles = this.prev.attachments;
-                if (this.current.note) {
+                if (this.current) {
                     this.assigned_to = this.current.assigned_to;
                     this.note = this.current.note;
                     this.editable = true;
@@ -174,12 +184,14 @@
                                 'Content-Type': 'multipart/form-data'
                             }
                         }).then(res => {
-                            this.fileData.files = []
-                            this.orderData = res.data;
-                            this.editable = true;
-                            this.initData(this.orderData);
-                            this.$root.$emit('wk_update', this.orderData);
-                            this.$root.$emit('wk_flow_menu', this.orderData);
+                            if (res.error == false) {
+                                this.fileData.files = []
+                                this.orderData = res.data;
+                                this.editable = true;
+                                this.initData(this.orderData);
+                                this.$root.$emit('wk_update', this.orderData);
+                                this.$root.$emit('wk_flow_menu', this.orderData);
+                            }
                             this.$root.$emit('wk_flow_toast', res);
                         }).catch(err => {
                             console.log('err', err)
@@ -187,6 +199,35 @@
                     }
                 })
             },
+            chooseAssignChange(value) {
+                if (value) {
+                    this.chooseAssign.type = false;
+                }
+            },
+            saveAssigneeOnly() {
+                this.chooseAssign.type = false;
+                if (this.assigned_to == null || this.assigned_to == "") {
+                    this.chooseAssign = {
+                        message: "Please choose an assignee",
+                        type: true
+                    }
+                    return false;
+                }
+                this.$boston.post('rewrite-report/update/assignee', {
+                        assigned_to: this.assigned_to,
+                        orderId: this.orderData.id
+                    }).then(res => {
+                        if (res.error == false) {
+                            this.orderData = res.data;
+                            this.initData(this.orderData);
+                            this.$root.$emit('wk_update', this.orderData);
+                            this.$root.$emit('wk_flow_menu', this.orderData);
+                        }
+                        this.$root.$emit('wk_flow_toast', res);
+                    }).catch(err => {
+                        console.log('err', err)
+                    });
+                },
         }
     }
 </script>
@@ -199,5 +240,22 @@
 
     .invalid-form label {
         color: rgb(238, 80, 80) !important;
+    }
+    .assign_rewrite {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 30px;
+    }
+    .rewrite_step_1 {
+        flex: 80%;
+    }
+    .rewrite_step_2 {
+        flex: 20%;
+        text-align: right;
+        margin-top: 30px;
+    }
+    .invalid-form .rewrite_step_2 {
+        margin-top: 10px;
     }
 </style>

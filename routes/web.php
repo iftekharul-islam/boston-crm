@@ -210,6 +210,8 @@ Route::post('/assignee-report-preparation-create/{id}', [OrderWorkflowController
 Route::post('/report-analysis-create/{id}', [OrderWorkflowController::class, 'storeReportAnalysis'])->name('report.analysis.create');
 Route::post('/submission-create/{id}', [OrderWorkflowController::class, 'storeSubmission'])->name('submission.create');
 Route::post('rewrite-report/update/', [OrderWorkflowController::class, 'rewriteReport']);
+Route::post('rewrite-report/update/assignee', [OrderWorkflowController::class, 'rewriteReportAssignee']);
+
 Route::post('revissin/add', [OrderWorkflowController::class, 'revissinAdd']);
 Route::post('revissin/edit', [OrderWorkflowController::class, 'revissinEdit']);
 Route::post('revissin/solutions/add', [OrderWorkflowController::class, 'revissinSolutionAdd']);

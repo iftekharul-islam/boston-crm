@@ -4,17 +4,18 @@ namespace App\Http\Controllers;
 
 use Zip;
 use Carbon\Carbon;
+use App\Models\User;
 use App\Models\Order;
 use App\Models\OrderWQa;
 use App\Models\OrderWcom;
 use App\Helpers\CrmHelper;
 use App\Models\OrderWReport;
 use Illuminate\Http\Request;
+use App\Models\OrderWRewrite;
 use Illuminate\Http\Response;
 use App\Models\OrderWRevision;
-use App\Models\OrderWRewrite;
-use App\Models\OrderWSubmission;
 use App\Models\OrderWInspection;
+use App\Models\OrderWSubmission;
 use Spatie\GoogleCalendar\Event;
 use Illuminate\Http\JsonResponse;
 use App\Models\OrderWReportAnalysis;
@@ -514,15 +515,11 @@ class OrderWorkflowController extends BaseController
             $reWrite->order_id = $order->id;
             $reWrite->created_at = Carbon::now();
             $reWrite->created_by = $user->id;
-            $reWrite->assigned_to = $get->assigned_to;
             $reWrite->save();
-            $historyTitle = "New assignee assiged by " . $user->name . ' on the Re-writing the report section.';
         } else {
             $reWrite->updated_by = $user->id;
             $reWrite->updated_at = Carbon::now();
-            $historyTitle = "Re-writing the report section updated by " . $user->name;
         }
-
         $reWrite->note = $get->note;
         $reWrite->save();
         if (isset($get['files']) && count($get['files'])) {
@@ -536,8 +533,49 @@ class OrderWorkflowController extends BaseController
         $order->workflow_status = json_encode($workStatus);
         $order->save();
 
+        $historyTitle = "Re-writing the report updated by " . $user->name . ' change note "'.$get->note.'"';
         $this->addHistory($order, $user, $historyTitle, 'rewriting-report');
         $orderData = $this->orderDetails($get->order_id);
+
+        return [
+            'error' => false,
+            'message' => $historyTitle,
+            'status' => 'success',
+            'data' => $orderData
+        ];
+    }
+
+
+    public function rewriteReportAssignee(Request $get)
+    {
+        $order = Order::find($get->orderId);
+        $user = auth()->user();
+
+        if (!$order) {
+            return response()->json([
+                'error' => true,
+                'message' => 'Order Information Not Found'
+            ]);
+        }
+
+        $reWrite = OrderWRewrite::where('order_id', $order->id)->first();
+        $assignee = User::find($get->assigned_to);
+        if (!$reWrite) {
+            $reWrite = new OrderWRewrite();
+            $reWrite->order_id = $order->id;
+            $reWrite->created_at = Carbon::now();
+            $reWrite->created_by = $user->id;
+            $reWrite->assigned_to = $get->assigned_to;
+            $reWrite->save();
+        } else {
+            $reWrite->updated_by = $user->id;
+            $reWrite->updated_at = Carbon::now();
+            $reWrite->save();
+        }
+
+        $historyTitle = "{$assignee->name} has assiged by " . $user->name . ' on the Re-writing the report Assign.';
+        $this->addHistory($order, $user, $historyTitle, 'rewriting-report');
+        $orderData = $this->orderDetails($get->orderId);
 
         return [
             'error' => false,
@@ -854,11 +892,14 @@ class OrderWorkflowController extends BaseController
 
     public function checkClientOrderNo(Request $get)
     {
-        $old = Order::where('client_order_no', $get->client_no)->first();
+        $old = Order::where('client_order_no', $get->client_no)->with('propertyInfo', 'providerService')->first();
         if ($old) {
-            return response()->json(true);
+            $address = $old->propertyInfo->full_addr;
+            $provider = json_decode($old->providerService->appraiser_type_fee, true)[0];
+            $fullMessage = "<div class='mt-2'>The order no. already exists. The address is <strong style='color:#ff4406'>$address</strong> and Appraisal type is <strong style='color:#ff4406'>{$provider['type']}</strong></div>";
+            return response()->json([ 'find' => true, 'message' => $fullMessage ]);
         } else {
-            return response()->json(false);
+            return response()->json(['find' => false]);
         }
     }
 }
