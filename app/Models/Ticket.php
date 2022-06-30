@@ -29,4 +29,15 @@ class Ticket extends Model
     {
         return $this->hasOne(User::class,'id', 'updated_by');
     }
+
+    public function order()
+    {
+        return $this->hasOne(Order::class,'id', 'order_id');
+    }
+
+    public function assignedUser()
+    {
+        return $this->hasOne(User::class,'id', 'assigned_to');
+    }
+
 }

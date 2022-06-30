@@ -34,6 +34,7 @@ Route::get('/locale/{locale}', LocalizationController::class)->name('locale.chan
 Route::group(['middleware' => ['auth:sanctum']], function () {
     //Dashboard
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('user-dashboard', [DashboardController::class, 'userIndex'])->name('user.dashboard');
     //User Controller
     Route::get('users',
         [UserController::class, 'index'])->middleware('role_permission:view.user')->name('users.index');
@@ -112,11 +113,13 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     //call log
     Route::get('call-log/{order_id}', [CallLogController::class, 'index'])->middleware('role_permission:view.order')->name('call.log');
     Route::post('call-log/{order_id}', [CallLogController::class, 'store'])->middleware('role_permission:view.order')->name('call.log.store');
+    Route::post('call-log-update/{order_id}', [CallLogController::class, 'update'])->middleware('role_permission:view.order')->name('call.log.store');
 
-    //Add issue
+    //tickets
     Route::get('issues/{order_id}', [TicketController::class, 'index'])->middleware('role_permission:view.order')->name('call.log');
     Route::post('issue/{order_id}', [TicketController::class, 'store'])->middleware('role_permission:view.order')->name('call.log.store');
     Route::post('update-issue/{id}', [TicketController::class, 'update'])->middleware('role_permission:view.order')->name('call.log.store');
+    Route::get('get-tickets/{type}', [TicketController::class, 'getTicketByType']);
 
 //    Route::get('/get-basic-info/{id}',[OrderController::class,'getBasicInfo'])->middleware('role_permission:view.order');
 //    Route::get('/get-appraisal-info/{id}',[OrderController::class,'getAppraisalInfo'])->middleware('role_permission:view.order');
@@ -135,6 +138,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     //order workflow
     Route::post('/update-order-schedule', [OrderWorkflowController::class, 'updateOrderSchedule']);
+    Route::post('/delete-schedule/{id}', [OrderWorkflowController::class, 'deleteSchedule']);
     Route::get('/check-event', [OrderWorkflowController::class, 'checkEvent']);
     Route::post('/save-initial-review',[OrderWorkflowController::class,'saveInitialReview']);
     Route::post('/save-quality-assurance',[OrderWorkflowController::class,'saveQualityAssurance']);
@@ -176,8 +180,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     //Marketing
     Route::get('marketing',
         [MarketingController::class, 'index'])->middleware('role_permission:view.marketing')->name('marketing.index');
-    Route::get('call', [CallController::class, 'index'])->middleware('role_permission:view.call')->name('call.index');
-    Route::post('search/call/order', [CallController::class, 'searchCallOrder'])->middleware('role_permission:view.call')->name('call.search');
+    Route::get('call',
+        [CallController::class, 'index'])->middleware('role_permission:view.call')->name('call.index');
 });
 Auth::routes();
 
@@ -215,5 +219,7 @@ Route::post('revissin/solutions/marked', [OrderWorkflowController::class, 'revis
 Route::post('revissin/solutions/delete', [OrderWorkflowController::class, 'revissinSolutionDelete']);
 Route::post('check/client/order/no', [OrderWorkflowController::class, 'checkClientOrderNo']);
 
+
+//call routes
 
 //Route::get( "{slug}", [ WebApiController::class, 'home' ] )->where( 'slug', ".*" );

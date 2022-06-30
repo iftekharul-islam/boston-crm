@@ -2,7 +2,8 @@
   <div class="order-details-box bg-white">
     <div class="box-header">
       <p class="fw-bold text-light-black fs-20 mb-0">Call log</p>
-        <a @click="isModal = true" class="d-inline-flex edit add-call align-items-center fw-bold">Add call log</a>
+        <a class="d-inline-flex edit add-call align-items-center fw-bold" v-if="isCompleted">Completed</a>
+        <a @click="isModal = true" class="d-inline-flex edit add-call align-items-center fw-bold" v-else>Add call log</a>
     </div>
     <div class="box-body">
       <div class="col-log">
@@ -32,20 +33,19 @@
         </div>
       </div>
     </div>
-          <add-call-log :showModal="isModal" :orderId="this.id"></add-call-log>
+    <add-call-log :showModal="isModal" :orderId="this.id" :users="this.users"></add-call-log>
   </div>
 </template>
 <script>
 export default {
     name: 'callLog',
-    props: {
-        order: [],
-    },
+    props: [ 'order', 'users' ],
     data: () => ({
         orderData: {},
         isModal: false,
         logs: [],
         id: null,
+        isCompleted: false
     }),
     created() {
         let order = this.order;
@@ -63,6 +63,13 @@ export default {
             this.orderData = order
             this.id = this.orderData.id
             this.logs = !_.isEmpty(this.orderData.call_log) ? this.orderData.call_log : []
+            if(this.logs.length){
+                this.logs.forEach((log, index) => {
+                    if(log.status){
+                        this.isCompleted = true
+                    }
+                })
+            }
         },
 
     }

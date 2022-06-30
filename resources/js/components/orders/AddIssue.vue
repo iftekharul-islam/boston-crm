@@ -42,7 +42,6 @@ export default {
     }),
     watch: {
         showIssueModal(newValue, oldValue) {
-            console.log(newValue)
             if (newValue === true) {
                 this.$bvModal.show('add-issue-modal')
             } else {

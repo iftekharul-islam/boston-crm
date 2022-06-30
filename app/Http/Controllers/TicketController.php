@@ -33,7 +33,7 @@ class TicketController extends Controller
         $newTicket = new Ticket();
         $newTicket->order_id = $id;
         $newTicket->subject = $request->subject;
-        $newTicket->issue = $request->subject;
+        $newTicket->issue = $request->issue;
         $newTicket->created_by = $user->id;
         $newTicket->save();
 
@@ -81,5 +81,59 @@ class TicketController extends Controller
             'message' => $historyTitle,
             'data' => $orderData
         ];
+    }
+
+    public function getTicketByType($type)
+    {
+        $page_number = request()->query('page');
+        $search_key = request()->query('searchKey') ?? '';
+
+        $tickets = $this->getTickets($type, $page_number, $search_key);
+
+        return response()->json([
+            'data' => $tickets,
+        ]);
+    }
+
+    public function getTickets(string $type, int $page_number,string $search_key): array
+    {
+        return $this->getTicketData(strtolower($type), $page_number,$search_key);
+    }
+
+    public function getTicketData(string $type, int $page_number, string $search_key): array
+    {
+        $data = [];
+        $data['all'] = Ticket::count();
+        $data['open'] = Ticket::where('status', '!=', 1)->count();
+        $data['my'] =Ticket::where('assigned_to', auth()->user()->id)->count();
+
+        if ($search_key == '') {
+            if ($type == 'open') {
+                $data['tickets'] = Ticket::with('order.lender', 'assignedUser')->where('status', '!=', 1)->paginate(10, ['*'], 'page', $page_number);
+            } elseif ($type == 'my') {
+                $data['tickets'] = Ticket::with('order.lender', 'assignedUser')->where('assigned_to', auth()->user()->id)->paginate(10, ['*'], 'page', $page_number);
+            } else {
+                $data['tickets'] = Ticket::with('order.lender', 'assignedUser')->paginate(10, ['*'], 'page', $page_number);
+                $data['pageNumber'] = $page_number;
+            }
+        } else {
+            if ($type == 'open') {
+                $data['tickets'] = Ticket::with('order.lender', 'assignedUser')
+                    ->Where('subject', 'like', '%' . $search_key . '%')
+                    ->where('status', '!=', 1)
+                    ->paginate(10, ['*'], 'page', $page_number);
+            } elseif ($type == 'my') {
+                $data['tickets'] = Ticket::with('order.lender', 'assignedUser')
+                    ->Where('subject', 'like', '%' . $search_key . '%')
+                    ->where('assigned_to', auth()->user()->id)
+                    ->paginate(10, ['*'], 'page', $page_number);
+            }  else {
+                $data['tickets'] = Ticket::with('order.lender', 'assignedUser')
+                    ->Where('subject', 'like', '%' . $search_key . '%')
+                    ->paginate(10, ['*'], 'page', $page_number);
+                $data['pageNumber'] = $page_number;
+            }
+        }
+        return $data;
     }
 }

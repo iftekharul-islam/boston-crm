@@ -26,7 +26,7 @@
         {{--             </div>--}}
         {{--             <span class="icon-arrow-down ms-auto"></span>--}}
         {{--        </a>--}}
-               <a href="{{ url('/call') }}" class="list-item d-flex align-items-center  text-white {{ (request()->is('calls')) ? 'active' : '' }}">
+               <a href="{{ url('/call') }}" class="list-item d-flex align-items-center  text-white {{ (request()->is('call')) ? 'active' : '' }}">
                    <div class="d-inline-flex align-items-center">
                        <span class="icon-call me-3 fs-3"><span class="path1"></span><span class="path2"></span></span>
                        <span class="items-text"> {{ __('messages.dashboard_view.calls') }} </span>
@@ -44,8 +44,6 @@
             </a>
         @endif
         @if(in_array('view.user', $user_permissions ?? []) || $is_owner || $user_role == 'admin')
-         <!-- submenu -->
-         <div class=" sidebar-dropdown">
             <a href="{{ route('users.index') }}"
                class="list-item d-flex align-items-center  text-white {{ (request()->is('users*')) ? 'active' : '' }}">
                 <div class="d-inline-flex align-items-center">
@@ -54,14 +52,6 @@
                 </div>
                 <span class="icon-arrow-down ms-auto"></span>
             </a>
-                 <!-- dropdown menu -->
-                 <ul class="submenu">
-                     <li class="submenu-item"><a href="#" class="submenu-link text-light">Some where</a></li>
-                     <li class="submenu-item"><a href="#" class="submenu-link text-light">Any where</a></li>
-                     <li class="submenu-item"><a href="#" class="submenu-link text-light">Some where</a></li>
-                     <li class="submenu-item"><a href="#" class="submenu-link text-light">Some where</a></li>
-                 </ul>
-            </div>
         @endif
         @if(in_array('view.role', $user_permissions ?? []) || $is_owner || $user_role == 'admin')
             <a href="{{ route('roles.index') }}"
@@ -75,8 +65,11 @@
             </a>
         @endif
         @if(in_array('view.order', $user_permissions ?? []) || $is_owner || $user_role == 'admin')
+        <!-- submenu -->
+        <div class="sidebar-dropdown">
             <a href="{{ route('orders.index') }}"
-               class="list-item d-flex align-items-center  text-white {{ (request()->is('orders*')) ? 'active' : '' }}">
+{{--               class="list-item d-flex align-items-center  text-white {{ (request()->is(['orders*', 'loan-types', 'appraisal-types'])) ? 'active' : '' }}">--}}
+               class="list-item d-flex align-items-center  text-white {{ (request()->is(['orders*'])) ? 'active' : '' }}">
                 <div class="d-inline-flex align-items-center">
                 <span class="icon-order me-3 fs-3"><span class="path1"></span><span class="path2"></span><span
                             class="path3"></span></span>
@@ -84,6 +77,20 @@
                 </div>
                 <span class="icon-arrow-down ms-auto"></span>
             </a>
+            <!-- dropdown menu -->
+            <ul class="submenu active">
+                @if(in_array('view.loantype', $user_permissions ?? []) || $is_owner || $user_role == 'admin')
+                    <li class="submenu-item {{ (request()->is('loan-types')) ? 'active' : '' }}">
+                        <a href="{{ route('loan-types.index') }}" class="submenu-link text-light">Loan Types</a>
+                    </li>
+                @endif
+                @if(in_array('view.appraisaltype', $user_permissions ?? []) || $is_owner || $user_role == 'admin')
+                    <li class="submenu-item {{ (request()->is('appraisal-types')) ? 'active' : '' }}">
+                        <a href="{{ route('appraisal-types.index') }}" class="submenu-link text-light">Appraisal Types</a>
+                    </li>
+                @endif
+            </ul>
+        </div>
         @endif
         {{--         <a href="{{ url('/marketing') }}" class="list-item d-flex align-items-center  text-white">--}}
         {{--            <div class="d-inline-flex align-items-center">--}}
@@ -108,7 +115,7 @@
             <span class="icon-arrow-down ms-auto"></span>
         </a>
         @if(in_array('view.appraisaltype', $user_permissions ?? []) || $is_owner || $user_role == 'admin')
-            <a href="{{ route('appraisal-types.index') }}" class="list-item d-flex align-items-center  text-white">
+            <a href="{{ route('appraisal-types.index') }}" class="list-item d-flex align-items-center  text-white  {{ (request()->is('appraisal-types')) ? 'active' : '' }}">
                 <div class="d-inline-flex align-items-center">
                 <span class="icon-profile-circle me-3 fs-3"><span class="path1"></span><span class="path2"></span><span
                             class="path3"></span></span>
@@ -118,7 +125,7 @@
             </a>
         @endif
         @if(in_array('view.loantype', $user_permissions ?? []) || $is_owner || $user_role == 'admin')
-            <a href="{{ route('loan-types.index') }}" class="list-item d-flex align-items-center  text-white">
+            <a href="{{ route('loan-types.index') }}" class="list-item d-flex align-items-center text-white  {{ (request()->is('loan-types')) ? 'active' : '' }}">
                 <div class="d-inline-flex align-items-center">
                 <span class="icon-profile-circle me-3 fs-3"><span class="path1"></span><span class="path2"></span><span
                             class="path3"></span></span>
