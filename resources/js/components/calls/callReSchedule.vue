@@ -1,100 +1,102 @@
 <template>
     <div>
-    <b-modal id="re-schedule" size="md" title="Re Schedule">
-        <div class="modal-body">
-            <div class="row">
-                <div class="col-md-12">
-                    <ValidationObserver ref="scheduleForm">
-                        <ValidationProvider class="group d-block" name="Appraiser name" rules="required"
-                            v-slot="{ errors }">
-                            <div :class="{ 'invalid-form' : errors[0] }">
-                                <label for="" class="d-block mb-2 dashboard-label">Appraiser name<span
-                                        class="text-danger require"></span></label>
-                                <m-select :options="appraisers" object item-value="id" item-text="name"
-                                    v-model="schedule.appraiser_id"></m-select>
-                                <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
-                            </div>
-                        </ValidationProvider>
-                        <ValidationProvider class="d-block dashboard-label group" name="Inspection date & time"
-                            rules="required" v-slot="{ errors }">
-                            <div class="group" :class="{ 'invalid-form' : errors[0] }">
-                                <label for="" class="d-block mb-2 dashboard-label">Inspection date & time<span
-                                        class="text-danger require"></span></label>
-                                <v-date-picker mode="datetime" v-model="schedule.inspection_date_time"
-                                    :available-dates='{ start: new Date(), end: null }'>
-                                    <template class="position-relative" v-slot="{ inputValue, inputEvents }">
-                                        <input class="dashboard-input w-100" :value="inputValue" v-on="inputEvents" />
-                                    </template>
-                                </v-date-picker>
-                                <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
-                            </div>
-                        </ValidationProvider>
-                        <ValidationProvider class="group d-block" name="Duration" rules="required" v-slot="{ errors }">
-                            <div :class="{ 'invalid-form' : errors[0] }">
-                                <label for="" class="d-block mb-2 dashboard-label">Duration <span
-                                        class="text-danger require"></span></label>
-                                <m-select :options="durations" object item-text="duration" item-value="duration"
-                                    v-model="schedule.duration"></m-select>
-                                <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
-                            </div>
-                        </ValidationProvider>
-                        <ValidationProvider class="d-block dashboard-label group" name="Notes" rules="required"
-                            v-slot="{ errors }">
-                            <div class="group" :class="{ 'invalid-form' : errors[0] }">
-                                <label for="" class="d-block mb-2 dashboard-label">Notes <span
-                                        class="text-danger require"></span></label>
-                                <b-form-textarea class="dashboard-textarea" v-model="schedule.note"
-                                    placeholder="Enter notes..." rows="2" cols="5">
-                                </b-form-textarea>
-                                <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
-                            </div>
-                        </ValidationProvider>
-                        <ValidationProvider class="d-block dashboard-label group" name="Cause of reschedule" rules="required"
-                            v-slot="{ errors }">
-                            <div class="group" :class="{ 'invalid-form' : errors[0] }">
-                                <label for="" class="d-block mb-2 dashboard-label">Cause of Reschedule <span
-                                        class="text-danger require"></span></label>
-                                <b-form-textarea class="dashboard-textarea" v-model="schedule.reschedule_note"
-                                    placeholder="Enter notes..." rows="2" cols="5">
-                                </b-form-textarea>
-                                <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
-                            </div>
-                        </ValidationProvider>
-                    </ValidationObserver>
+        <b-modal id="re-schedule" size="md" title="Re Schedule">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <ValidationObserver ref="scheduleForm">
+                            <ValidationProvider class="group d-block" name="Appraiser name" rules="required"
+                                v-slot="{ errors }">
+                                <div :class="{ 'invalid-form' : errors[0] }">
+                                    <label for="" class="d-block mb-2 dashboard-label">Appraiser name<span
+                                            class="text-danger require"></span></label>
+                                    <m-select :options="appraisers" object item-value="id" item-text="name"
+                                        v-model="schedule.appraiser_id"></m-select>
+                                    <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                                </div>
+                            </ValidationProvider>
+                            <ValidationProvider class="d-block dashboard-label group" name="Inspection date & time"
+                                rules="required" v-slot="{ errors }">
+                                <div class="group" :class="{ 'invalid-form' : errors[0] }">
+                                    <label for="" class="d-block mb-2 dashboard-label">Inspection date & time<span
+                                            class="text-danger require"></span></label>
+                                    <v-date-picker mode="datetime" v-model="schedule.inspection_date_time"
+                                        :available-dates='{ start: new Date(), end: null }'>
+                                        <template class="position-relative" v-slot="{ inputValue, inputEvents }">
+                                            <input class="dashboard-input w-100" :value="inputValue"
+                                                v-on="inputEvents" />
+                                        </template>
+                                    </v-date-picker>
+                                    <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                                </div>
+                            </ValidationProvider>
+                            <ValidationProvider class="group d-block" name="Duration" rules="required"
+                                v-slot="{ errors }">
+                                <div :class="{ 'invalid-form' : errors[0] }">
+                                    <label for="" class="d-block mb-2 dashboard-label">Duration <span
+                                            class="text-danger require"></span></label>
+                                    <m-select :options="durations" object item-text="duration" item-value="duration"
+                                        v-model="schedule.duration"></m-select>
+                                    <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                                </div>
+                            </ValidationProvider>
+                            <ValidationProvider class="d-block dashboard-label group" name="Notes" rules="required"
+                                v-slot="{ errors }">
+                                <div class="group" :class="{ 'invalid-form' : errors[0] }">
+                                    <label for="" class="d-block mb-2 dashboard-label">Notes <span
+                                            class="text-danger require"></span></label>
+                                    <b-form-textarea class="dashboard-textarea" v-model="schedule.note"
+                                        placeholder="Enter notes..." rows="2" cols="5">
+                                    </b-form-textarea>
+                                    <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                                </div>
+                            </ValidationProvider>
+                            <ValidationProvider class="d-block dashboard-label group" name="Cause of reschedule"
+                                rules="required" v-slot="{ errors }">
+                                <div class="group" :class="{ 'invalid-form' : errors[0] }">
+                                    <label for="" class="d-block mb-2 dashboard-label">Cause of Reschedule <span
+                                            class="text-danger require"></span></label>
+                                    <b-form-textarea class="dashboard-textarea" v-model="schedule.reschedule_note"
+                                        placeholder="Enter notes..." rows="2" cols="5">
+                                    </b-form-textarea>
+                                    <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                                </div>
+                            </ValidationProvider>
+                        </ValidationObserver>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div slot="modal-footer">
-            <b-button v-if="orderStatus == 2" variant="danger" @click="showDeleteSchedule">Delete Icon</b-button>
-            <b-button variant="secondary" @click="$bvModal.hide('re-schedule')">Close</b-button>
-            <b-button variant="primary" @click="reSchedule">Reschedule</b-button>
-        </div>
-    </b-modal>
-    <b-modal id="delete-schedule" size="md" title="Delete Schedule">
-        <div class="modal-body">
-            <div class="row">
-                <div class="col-md-12">
-                    <ValidationObserver ref="deleteScheduleForm">
-                        <ValidationProvider class="d-block dashboard-label group" name="Cause of deletion" rules="required"
-                            v-slot="{ errors }">
-                            <div class="group" :class="{ 'invalid-form' : errors[0] }">
-                                <label for="" class="d-block mb-2 dashboard-label">Cause of Deletion <span
-                                        class="text-danger require"></span></label>
-                                <b-form-textarea class="dashboard-textarea" v-model="schedule.delete_note"
-                                    placeholder="Enter notes..." rows="2" cols="5">
-                                </b-form-textarea>
-                                <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
-                            </div>
-                        </ValidationProvider>
-                    </ValidationObserver>
+            <div slot="modal-footer">
+                <b-button v-if="orderStatus == 2" variant="danger" @click="showDeleteSchedule">Delete Icon</b-button>
+                <b-button variant="secondary" @click="$bvModal.hide('re-schedule')">Close</b-button>
+                <b-button variant="primary" @click="reSchedule">Reschedule</b-button>
+            </div>
+        </b-modal>
+        <b-modal id="delete-schedule" size="md" title="Delete Schedule">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <ValidationObserver ref="deleteScheduleForm">
+                            <ValidationProvider class="d-block dashboard-label group" name="Cause of deletion"
+                                rules="required" v-slot="{ errors }">
+                                <div class="group" :class="{ 'invalid-form' : errors[0] }">
+                                    <label for="" class="d-block mb-2 dashboard-label">Cause of Deletion <span
+                                            class="text-danger require"></span></label>
+                                    <b-form-textarea class="dashboard-textarea" v-model="schedule.delete_note"
+                                        placeholder="Enter notes..." rows="2" cols="5">
+                                    </b-form-textarea>
+                                    <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                                </div>
+                            </ValidationProvider>
+                        </ValidationObserver>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div slot="modal-footer">
-            <b-button variant="secondary" @click="$bvModal.hide('delete-schedule')">Close</b-button>
-            <b-button variant="primary" @click="deleteSchedule">Delete</b-button>
-        </div>
-    </b-modal>
+            <div slot="modal-footer">
+                <b-button variant="secondary" @click="$bvModal.hide('delete-schedule')">Close</b-button>
+                <b-button variant="primary" @click="deleteSchedule">Delete</b-button>
+            </div>
+        </b-modal>
     </div>
 </template>
 <script>
@@ -134,13 +136,13 @@
             orderStatus: 0,
         }),
         methods: {
-            setOrderId(orderId){
+            setOrderId(orderId) {
                 this.schedule.order_id = orderId
             },
-            setScheduleData(scheduleData){
+            setScheduleData(scheduleData) {
                 this.getScheduleData(scheduleData)
             },
-            setOrderStatus(status){
+            setOrderStatus(status) {
                 this.orderStatus = status
             },
             getScheduleData(scheduleData) {
@@ -165,13 +167,13 @@
                     }
                 })
             },
-            showDeleteSchedule(){
+            showDeleteSchedule() {
                 this.$bvModal.show('delete-schedule')
             },
-            deleteSchedule(){
+            deleteSchedule() {
                 this.$refs.deleteScheduleForm.validate().then((status) => {
                     if (status) {
-                        this.$boston.post('delete-schedule/'+this.schedule.schedule_id,this.schedule.delete_note)
+                        this.$boston.post('delete-schedule/' + this.schedule.schedule_id, this.schedule.delete_note)
                             .then(res => {
                                 this.orderData = res.data;
                                 //this.$root.$emit('wk_update', res.data)
