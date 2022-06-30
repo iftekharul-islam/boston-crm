@@ -54,7 +54,15 @@ export default {
         'all_users',
         'order_files',
         'order_file_types',
-    ]
+    ],
+    created(){
+        this.$root.$on('toast_msg', (res) => {
+            this.$toast.open({
+                message: res.message,
+                type: res.error == true ? 'error' : 'success',
+            });
+        });
+    }
 }
 
 </script>

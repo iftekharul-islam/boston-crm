@@ -502,7 +502,7 @@
                             console.log(res.data.message)
                         } else {
                             this.callLog.message = ''
-                            this.callLog.isCompleted = null
+                            this.callLog.status = ''
                             console.log(res.data.message)
                             this.getCallSummary(res.data.data, this.callLog.orderId)
 

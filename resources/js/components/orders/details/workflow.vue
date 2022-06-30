@@ -162,6 +162,12 @@ export default {
               type: res.error == true ? 'error' : 'success',
           });
       });
+      this.$root.$on('toast_msg', (res) => {
+          this.$toast.open({
+              message: res.message,
+              type: res.error == true ? 'error' : 'success',
+          });
+      });
   },
   mounted(){
 
