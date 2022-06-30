@@ -2,7 +2,8 @@ import Vue from "vue";
 
 const ClientList = () =>
     import ( /*webpackChunkName: "client_list"*/ '../components/clients/list');
-
+const TicketList = () =>
+    import ( /*webpackChunkName: "client_list"*/ '../components/ticket/list');
 const orderCreate = () =>
     import ( /*webpackChunkName: "orderCreate"*/ '../components/orders/OrderCreate')
 const basicInfo = () =>
@@ -63,6 +64,7 @@ const mModal = () =>
     import ( /*webpackChunkName: "m-modal"*/ './modal')
 
 Vue.component('clients-list', ClientList);
+Vue.component('ticket-list', TicketList);
 Vue.component('order-create', orderCreate);
 Vue.component('basic-info', basicInfo);
 Vue.component('property-info', propertyInfo);
