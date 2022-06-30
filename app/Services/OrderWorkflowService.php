@@ -40,4 +40,10 @@ class OrderWorkflowService
             $schedule->save();
         }
     }
+
+    public function deleteOrderSchedule($schedule_id){
+        $schedule = OrderWInspection::find($schedule_id);
+        $event = Event::find($schedule->event_id);
+        $event ?? $event->delete();
+    }
 }

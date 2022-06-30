@@ -19,6 +19,7 @@ use Spatie\GoogleCalendar\Event;
 use Illuminate\Http\JsonResponse;
 use App\Models\OrderWReportAnalysis;
 use App\Services\OrderWorkflowService;
+use App\Repositories\OrderRepository;
 use App\Repositories\OrderWorkflowRepository;
 
 
@@ -26,13 +27,15 @@ class OrderWorkflowController extends BaseController
 {
     protected OrderWorkflowService $service;
     protected OrderWorkflowRepository $repository;
+    protected OrderRepository $orderRepository;
     use CrmHelper;
 
-    public function __construct(OrderWorkflowService $order_w_service, OrderWorkflowRepository $order_w_repository)
+    public function __construct(OrderWorkflowService $order_w_service, OrderWorkflowRepository $order_w_repository, OrderRepository $order_repository)
     {
         parent::__construct();
         $this->service = $order_w_service;
         $this->repository = $order_w_repository;
+        $this->orderRepository = $order_repository;
     }
 
     public function updateOrderSchedule(Request $request)
@@ -57,6 +60,34 @@ class OrderWorkflowController extends BaseController
         return [
             'error' => false,
             'message' => $message,
+            'data' => $orderData
+        ];
+    }
+
+    public function deleteSchedule(Request $request, $id)
+    {
+        dd($request->all());
+        $order_w_schedule = OrderWInspection::find($id);
+        $orderData = $this->orderDetails($order_w_schedule->order_id);
+        $order = Order::find($order_w_schedule->order_id);
+        $order->forceFill([
+            'workflow_status->scheduling' => 0,
+            'status' => 0
+        ])->save();
+
+        $data = [
+            "activity_text" => "Schedule Deleted By " . auth()->user()->name . "REASON: " . $request->delete_note,
+            "activity_by" => auth()->user()->id,
+            "order_id" => $order_w_schedule->order_id
+        ];
+
+        $this->orderRepository->addActivity($data);
+
+        $this->service->deleteOrderSchedule($id);
+        $this->repository->deleteSchedule($id);
+        return [
+            'error' => false,
+            'message' => "Schedule deleted successfully",
             'data' => $orderData
         ];
     }
@@ -121,13 +152,12 @@ class OrderWorkflowController extends BaseController
         }
         $image_types = ['jpeg', 'jpg', 'png'];
         $zip = new \ZipArchive();
-        $date= date('d-H-i');
-        $fileName = 'inspection-files('.$date.').zip';
+        $date = date('d-H-i');
+        $fileName = 'inspection-files(' . $date . ').zip';
         foreach ($data['files'] as $key => $file) {
             if (in_array($file->getClientOriginalExtension(), $image_types)) {
-                if ($zip->open(public_path($fileName), \ZipArchive::CREATE)== TRUE)
-                {
-                    $relativeName = ++$key.'.'.$file->getClientOriginalExtension();
+                if ($zip->open(public_path($fileName), \ZipArchive::CREATE) == TRUE) {
+                    $relativeName = ++$key . '.' . $file->getClientOriginalExtension();
                     $zip->addFile($file->getPathName(), $relativeName);
                 }
             } else {
