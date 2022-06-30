@@ -203,18 +203,19 @@ export const getPostcodeByLatLng = async(lat, lng) => {
     return res;
 }
 
-function formatedPhone(val) {
-    let array = ['/', '#', '@', '!', '~', ',', '"', "'", '?', '(', ')', '[', ']', '{', '}'];
-    for (let i in array) {
-        let item = array[i];
-        val.replace(item, '');
-    }
-    return val;
+function filterPhoneNumber(val) {
+    let check1 = val.replace("(", "");
+    let check2 = check1.replace(")", "");
+    let check3 = check2.replace("-", "");
+    let check4 = check3.replace(" ", "");
+    let check5 = check4.replace("+", "");
+    return check5;
 }
 
 export function formatPhoneNo(phone) {
     if (!phone) return null;
-    let phones = phone.replace(/(\d{3})\-?(\d{3})\-?(\d{4}).*/, '$1-$2-$3');
+    let getPhone = filterPhoneNumber(phone);
+    let phones = getPhone.replace(/(\d{3})\-?(\d{3})\-?(\d{4}).*/, '$1-$2-$3');
     return phones;
 }
 

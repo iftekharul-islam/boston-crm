@@ -28,7 +28,7 @@
                 <ValidationProvider class="group" name="Contact No" :rules="{ 'required' : add.contact == null && step2.borrower_contact == false, min: 10, max: 12 }" v-slot="{ errors }">
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
                     <label for="" class="d-block mb-2 dashboard-label">Contact no <span class="text-danger require"></span></label>
-                    <input v-model="add.contact" @input="contactNumberChecking($event, 1)" @blur="addContact" type="text" class="dashboard-input w-100">
+                    <input v-model="add.contact" @input="contactNumberChecking($event, 1)" @blur="addContact" @change="addContact" type="text" class="dashboard-input w-100">
                     <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                     <span v-if="invalidPhone1 == false" class="text-danger error-message">Invalid Phone Number</span>
                     <!-- new item -->
@@ -264,7 +264,7 @@ export default {
             if (status) {
                 let newEmail = this.add.email2;
                 let findOld = this.step2.email_address_s.find((ele) =>  ele == newEmail);
-                if (!findOld && newEmail != null) {
+                if (!findOld && newEmail != null && newEmail != "") {
                   this.step2.email_address_s.push(newEmail);
                   this.add.email2 = null;
                   this.step2.email_address = true;
@@ -277,15 +277,17 @@ export default {
         this.$refs.addContact2form.validate().then((status) => {
             if (status) {
                 let newContact = this.add.contact2;
-                if ( newContact.length < 10 || newContact.length > 12 ) {
-                    return false;
+                if (newContact != null && newContact != "") {
+                    if ( newContact.length < 10 || newContact.length > 12 ) {
+                        return false;
+                    }
                 }
                 let findOld = this.step2.contact_number_s.find((ele) =>  ele == newContact);
-                if (!findOld && newContact != null) {
-                  this.step2.contact_number_s.push(newContact);
-                  this.add.contact2 = null;
-                  this.step2.contact_number = true;
-                  this.$refs.addContact2form.reset();
+                if (!findOld && newContact != null && newContact != "") {
+                    this.step2.contact_number_s.push(newContact);
+                    this.add.contact2 = null;
+                    this.step2.contact_number = true;
+                    this.$refs.addContact2form.reset();
                 }
             }
         });
@@ -295,7 +297,7 @@ export default {
             if (status) {
                 let newEmail = this.add.email;
                 let findOld = this.step2.borrower_email_s.find((ele) =>  ele == newEmail);
-                if (!findOld && newEmail != null) {
+                if (!findOld && newEmail != null && newEmail != "") {
                   this.step2.borrower_email_s.push(newEmail);
                   this.add.email = null;
                   this.step2.borrower_email = true;
@@ -307,11 +309,13 @@ export default {
         this.$refs.addContactForm.validate().then((status) => {
             if (status) {
                 let newContact = this.add.contact;
-                if ( newContact.length < 10 || newContact.length > 12 ) {
-                    return false;
+                if (newContact != null && newContact != "") {
+                    if ( newContact.length < 10 || newContact.length > 12 ) {
+                        return false;
+                    }
                 }
                 let findOld = this.step2.borrower_contact_s.find((ele) =>  ele == newContact);
-                if (!findOld && newContact != null) {
+                if (!findOld && newContact != null && newContact != "") {
                   this.step2.borrower_contact_s.push(newContact);
                   this.add.contact = null;
                   this.step2.borrower_contact = true;
@@ -411,12 +415,10 @@ export default {
     contactNumberChecking(e, type){
         let phoneNo = e.target.value;
         let formatedNumber = this.$boston.formatPhoneNo(phoneNo);
-        
         if (type == 1) {
             this.invalidPhone1 = true;
             this.add.contact = formatedNumber;
         } 
-
         if(type == 2) {
             this.invalidPhone2 = true;
             this.add.contact2 = formatedNumber;

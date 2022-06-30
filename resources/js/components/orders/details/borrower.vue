@@ -48,13 +48,10 @@
               </div>
               </ValidationProvider>
 
-              <ValidationProvider class="group d-block" name="Co-borrower Name" rules="required" v-slot="{ errors }">
-                <div class="group" :class="{ 'invalid-form' : errors[0] }">
+              <div class="group mb-3">
                   <label for="" class="d-block mb-2 dashboard-label">Co-borrower name <span class="require"></span></label>
                   <input type="text" v-model="co_borrower_name" class="dashboard-input w-100">
-                    <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
-                </div>
-              </ValidationProvider>
+              </div>
 
               <ValidationObserver class="group d-block" ref="addContactForm">
                 <ValidationProvider  name="Contact No" :rules="{ 'required' : add.contact == null && borrower_contact == false, min: 10, max: 12 }" v-slot="{ errors }">
@@ -70,7 +67,7 @@
                         </div>
                       </div>
                     </div>
-                    <input v-model="add.contact" type="text" class="dashboard-input w-100" @input="contactNumberChecking($event, 1)">
+                    <input v-model="add.contact" @blur="addContact" @change="addContact" type="text" class="dashboard-input w-100" @input="contactNumberChecking($event, 1)">
                     <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                     <div class=" mgb-10 mgt-12">
                       <button class="add-more " @click="addContact">
@@ -97,7 +94,7 @@
                           </div>
                         </div>
                       </div>
-                    <input v-model="add.email" type="text" class="dashboard-input w-100">
+                    <input v-model="add.email" @change="addEmail" @blur="addEmail" type="text" class="dashboard-input w-100">
                     <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                     <div class="mgb-10 mgt-10">
                       <button class="add-more" @click="addEmail">
@@ -178,9 +175,16 @@
                     borrower_email_s: this.borrower_email_s,
                     order: this.order
                   }).then(res => {
+                     this.$toast.open({
+                        message: res.message,
+                        type: res.error == true ? 'error' : 'success',
+                    });
+                    if (res.error == false) {
                       this.submittedMessage = res.messages;
                       this.$bvModal.hide('borrower-info');
                       this.hideSubmittedMessage();
+                    }
+
                   });
               }
           });
@@ -190,7 +194,7 @@
               if (status) {
                   let newEmail = this.add.email;
                   let findOld = this.borrower_email_s.find((ele) =>  ele == newEmail);
-                  if (!findOld && newEmail != null) {
+                  if (!findOld && newEmail != null && newEmail != "") {
                     this.borrower_email_s.push(newEmail);
                     this.add.email = null;
                     this.borrower_email = true;
@@ -203,7 +207,7 @@
               if (status) {
                   let newContact = this.add.contact;
                   let findOld = this.borrower_contact_s.find((ele) =>  ele == newContact);
-                  if (!findOld && newContact != null) {
+                  if (!findOld && newContact != null && newContact != "") {
                     this.borrower_contact_s.push(newContact);
                     this.add.contact = null;
                     this.borrower_contact = true;

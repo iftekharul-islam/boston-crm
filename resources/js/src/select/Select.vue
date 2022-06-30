@@ -83,16 +83,11 @@ export default {
     },
     mounted() {
         document.addEventListener('click', (e) => {
-            let target = e.target;
-            let el = this.$refs["vue-select"];
-            
-            if (!(el == target || el.contains(target))) {
+            let target = $(e.target);
+            let el = $(this.$refs["vue-select"]);
+            if (!target.is(el) && el.has(target).length == 0) {
                 this.closeBox(true);
             }
-
-            // if (!container.contains(target)) {
-            //     this.closeBox(true);
-            // }
         });
     },
     methods : {
