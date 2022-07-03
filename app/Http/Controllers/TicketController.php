@@ -76,7 +76,7 @@ class TicketController extends Controller
         }
 
         $ticket->subject = $request->subject;
-        $ticket->issue = $request->subject;
+        $ticket->issue = $request->issue;
         if($request->solution){
             $ticket->assigned_to = $user->id;
             $ticket->solution = $request->solution;
