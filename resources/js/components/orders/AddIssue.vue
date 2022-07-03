@@ -26,7 +26,7 @@
             </div>
             <div slot="modal-footer" class="mgt-44">
                 <button class="button button-transparent" @click="hideModel">Close</button>
-                <button class="button button-primary" @click="addIssue">Save</button>
+                <button class="button button-primary" @click="addIssue">Post</button>
             </div>
         </b-modal>
     </ValidationObserver>
@@ -77,7 +77,8 @@ export default {
                                 this.$root.$emit('wk_flow_menu', res.data.data)
                                 this.$root.$emit('wk_flow_toast', res.data)
                                 this.$bvModal.hide('add-issue-modal')
-                                this.message = ''
+                                this.subject = ''
+                                this.issue = ''
                             }
                         }).catch(err => {
                         console.log(err)

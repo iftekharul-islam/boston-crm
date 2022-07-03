@@ -215,7 +215,7 @@
                         <div class="update-log" v-if="callLog.notCompleted">
                                 <div class="group" :class="{ 'invalid-form' : callLog.error == true }">
                                     <label for="" class="d-block mb-2 dashboard-label">Message</label>
-                                    <textarea @keyup="callLog.error = false" v-model="callLog.message" class="dashboard-input w-100" style="min-height: 100px"></textarea>
+                                    <textarea @keyup="dataExist()" v-model.trim="callLog.message" class="dashboard-input w-100" style="min-height: 100px"></textarea>
                                     <span v-if="callLog.error" class="error-message">The Message field is required</span>
                                 </div>
                             <div class="checkbox-group mt-2">
@@ -316,6 +316,13 @@
             }.bind(this));
         },
         methods: {
+            dataExist() {
+                if(this.callLog.message !== ""){
+                    this.callLog.error = false
+                } else {
+                    this.callLog.error = true
+                }
+            },
             addCallLog() {
                 this.callLog.error = false
                 if(this.callLog.message == ''){
@@ -342,7 +349,6 @@
                 })
             },
             getCallSummary(value, id) {
-                console.log(value)
                 this.callLog.notCompleted = true
                 this.callLog.items = []
                 this.callLog.orderId = id
@@ -492,7 +498,6 @@
             },
             closeQuickViewModal(val) {
                 this.openQuickView = false;
-                console.log(val);
             },
             getScheduleData(index) {
                 this.$refs.callScheduleComponent.setOrderId(this.orderData[index].id)

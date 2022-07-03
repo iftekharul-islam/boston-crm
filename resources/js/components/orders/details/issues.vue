@@ -4,7 +4,7 @@
       <p class="fw-bold text-light-black fs-20 mb-0">Issues/ Queries/ Tickets</p>
       <a @click.prevent="isIssueModal = true" class="d-inline-flex edit add-call align-items-center fw-bold cursor-pointer">Add issue</a>
     </div>
-    <div class="box-body">
+        <div class="box-body" v-if="tickets.length">
       <div class="queries-row" >
         <div v-for="(ticket, index) in tickets" class="queries-box position-relative" :class="{ 'solved':  ticket.status == 1 , 'pending': ticket.status == 0 }" :key="index">
               <span class="badges solved-badges" v-if="ticket.status == 1">Solved</span>
@@ -24,6 +24,9 @@
         </div>
       </div>
     </div>
+      <div class="text-center mt-3 mb-3" v-else>
+          No call added yet !
+      </div>
      <!-- modal -->
     <add-issue :showIssueModal="isIssueModal" :orderId="this.id"></add-issue>
     <ValidationObserver ref="addIssueSolutionForm">
@@ -62,7 +65,7 @@
               </div>
               <div slot="modal-footer" class="mgt-44">
                   <button class="button button-transparent" @click="$bvModal.hide('add-issue-solution-modal')">Close</button>
-                  <button class="button button-primary" @click="updateIssue">Save</button>
+                  <button class="button button-primary" @click="updateIssue">Post</button>
               </div>
           </b-modal>
       </ValidationObserver>
@@ -100,6 +103,7 @@ export default {
     },
     methods: {
         showUpdateModal(object) {
+            console.log(object)
             this.ticket.id = object.id
             this.ticket.subject = object.subject
             this.ticket.issue = object.issue
@@ -124,6 +128,9 @@ export default {
                                 this.$root.$emit('wk_flow_menu', res.data.data)
                                 this.$root.$emit('wk_flow_toast', res.data)
                                 this.$bvModal.hide('add-issue-solution-modal')
+                                this.ticket.subject = ''
+                                this.ticket.issue = ''
+                                this.ticket.solution = ''
                             }
                         }).catch(err => {
                         console.log(err)
