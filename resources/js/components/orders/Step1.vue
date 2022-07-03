@@ -172,7 +172,6 @@
                                                 <div class="position-relative borderless-select">
                                                     <select id="providerTypeFee" class="dashboard-input w-100"
                                                         v-model="providerTypes.default.type">
-                                                        <option value="">Choose Provided Service</option>
                                                         <option :value="item.id"
                                                             :data-full="item.is_full_appraisal" :key="ki"
                                                             v-for="item, ki in appraisalTypes">{{ item.form_type

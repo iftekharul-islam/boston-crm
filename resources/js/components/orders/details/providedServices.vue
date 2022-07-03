@@ -6,7 +6,7 @@
     </div>
     <div class="box-body">
       <div class="list_groups" v-for="item, ik in servicesData" :key="ik">
-        <p class="mb-0 left-side">Appraiser Type: <strong class="primary-text">{{ item.type }}</strong></p>
+        <p class="mb-0 left-side">Appraiser type: <strong class="primary-text">{{ item.type }}</strong></p>
         <p class="right-side mb-0">Fee: <strong class="primary-text">${{ item.fee }}</strong></p>
       </div>
       <hr>
@@ -31,12 +31,12 @@
                     <div class="d-flex provided-service align-items-center" v-for="item, ik in servicesData" :key="ik">
                       <div class="group mgr-32">
                         <div class="pr-2">
-                          <label for="" class="d-block dashboard-label mb-2">Appraiser Type <span class="require"></span></label>
+                          <label for="" class="d-block dashboard-label mb-2">Appraiser type <span class="require"></span></label>
                           <m-select v-model="item.typeId" :options="appraisalTypes" item-value="id" item-text="form_type" object></m-select>
                         </div>
                       </div>
                       <div class="group">
-                        <label for="" class="d-block dashboard-label mb-2">Appraisal Fee <span class="require"></span></label>
+                        <label for="" class="d-block dashboard-label mb-2">Appraisal fee <span class="require"></span></label>
                         <input type="text" v-model="item.fee" class="dashboard-input w-100">
                       </div>
                       <div class="right-btn ms-auto">
@@ -53,7 +53,7 @@
                         </div>
                       </div>
                       <div class="group mb-0">
-                        <label for="" class="d-block mb-2 dashboard-label">Appraisal Fee <span class="require"></span></label>
+                        <label for="" class="d-block mb-2 dashboard-label">Appraisal fee <span class="require"></span></label>
                         <input type="text" @blur="addNewMod" v-model="add.serviceFee" class="dashboard-input w-100">
                       </div>
                     </div>

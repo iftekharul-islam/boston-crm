@@ -35,6 +35,8 @@
         }
     }
     &__menu-list {
+        position: sticky;
+        top: 10px;
         .list-item {
             padding: 12px 18px 12px 40px;
             transition: all .3s ease-in;
