@@ -13,7 +13,7 @@
               <p class="text-light-black">{{ ticket.subject }}</p>
               <div class="d-flex justify-content-between mgb-12">
                   <p class="text-gray mb-0" v-if="ticket.assignee">Assigned to : <span class="text-light-black text-600">{{ ticket.assignee.name }}</span></p>
-                  <a href="#" class="share-box" @click.prevent="showUpdateModal(ticket)" v-if="!ticket.solution">
+                  <a href="#" class="share-box" @click.prevent="showUpdateModal(ticket)">
                       <span class="icon-eye"><span class="path1"></span><span class="path2"></span></span>
                   </a>
               </div>
@@ -42,14 +42,18 @@
                           <ValidationProvider class="d-block group" name="Queries or Issues" rules="required" v-slot="{ errors }">
                               <div class="group" :class="{ 'invalid-form' : errors[0] }">
                                   <label for="" class="d-block mb-2 dashboard-label">Queries or Issues</label>
-                                  <input v-model="ticket.issue" class="dashboard-input w-100" style="min-height: 100px">
+                                  <b-form-textarea v-model="ticket.issue" placeholder="Enter issue..." rows="2"
+                                                   cols="5">
+                                  </b-form-textarea>
                                   <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                               </div>
                           </ValidationProvider>
                           <ValidationProvider class="d-block group" name="Solution" rules="required" v-slot="{ errors }">
                               <div class="group" :class="{ 'invalid-form' : errors[0] }">
                                   <label for="" class="d-block mb-2 dashboard-label">Solution</label>
-                                  <input v-model="ticket.solution" class="dashboard-input w-100" style="min-height: 100px">
+                                  <b-form-textarea v-model="ticket.solution" placeholder="Enter Solution..." rows="2"
+                                                   cols="5">
+                                  </b-form-textarea>
                                   <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                               </div>
                           </ValidationProvider>
@@ -87,22 +91,19 @@ export default {
         let order = this.order;
         this.fetchData(order);
         this.$root.$on('update_add_issue_modal', () => {
-            console.log('hello from modal false')
             this.isIssueModal = false
         })
         this.$root.$on('issue_modal_update', (res) => {
             this.isIssueModal = false
-            console.log('hello from modal update')
             this.fetchData(res);
         });
     },
     methods: {
         showUpdateModal(object) {
-            console.log(object)
             this.ticket.id = object.id
             this.ticket.subject = object.subject
             this.ticket.issue = object.issue
-            this.ticket.solution = ''
+            this.ticket.solution = object.solution
             this.$bvModal.show('add-issue-solution-modal')
         },
         updateIssue() {
@@ -132,7 +133,6 @@ export default {
         },
         fetchData(order) {
             this.orderData = order
-            console.log(order)
             this.id = this.orderData.id
             this.tickets = !_.isEmpty(this.orderData.tickets) ? this.orderData.tickets : []
         },

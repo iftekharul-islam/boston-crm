@@ -17,7 +17,9 @@
                         <ValidationProvider class="d-block group" name="Message" rules="required" v-slot="{ errors }">
                             <div class="group" :class="{ 'invalid-form' : errors[0] }">
                                 <label for="" class="d-block mb-2 dashboard-label">Message</label>
-                                <textarea v-model="message" class="dashboard-input w-100" style="min-height: 100px"></textarea>
+                                <b-form-textarea v-model="message" placeholder="Enter Message..." rows="2"
+                                                 cols="5">
+                                </b-form-textarea>
                                 <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                             </div>
                         </ValidationProvider>
@@ -79,15 +81,14 @@ export default {
                             if (res.data.error) {
                                 this.$root.$emit('wk_flow_toast', res.data)
                             } else {
-                                this.message = ''
-                                this.assignTo = ''
-                                this.isCompleted = null
                                 this.$root.$emit('call_log_update', res.data.data)
                                 this.$root.$emit('wk_update', res.data.data)
                                 this.$root.$emit('wk_flow_menu', res.data.data)
                                 this.$root.$emit('wk_flow_toast', res.data)
                                 this.$bvModal.hide('add-call-log')
                                 this.message = ''
+                                this.assignTo = ''
+                                this.isCompleted = null
                             }
                         }).catch(err => {
                         console.log(err)

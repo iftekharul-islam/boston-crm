@@ -374,7 +374,12 @@
                         <p class="mgb-22 fs-20 text-600">Call summary</p>
                         <div class="call-summary-item" v-for="(log, logIndex) in callLog.items" :key="logIndex">
                             <div class="top d-flex align-items-center">
-                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRpUDTIJ3qyxor41TSNxjJf3jlqk1f6E7gOmA&usqp=CAU" alt=" profile photo boston" class="img-fluid">
+                                <div v-if="log.caller.media.length">
+                                    <img :src="log.caller.media[0].original_url" alt=" profile photo boston" class="img-fluid">
+                                </div>
+                                <div v-else>
+                                    <img src="/img/user.png" alt=" profile photo boston" class="img-fluid">
+                                </div>
                                 <div class="ms-3">
                                     <p class="fw-bold mb-1">{{ log.caller.name }}</p>
                                     <p class="text-gray fs-12 mb-0">{{ log.created_at | momentTime}}</p>
@@ -496,7 +501,6 @@
                         } else {
                             this.callLog.message = ''
                             this.callLog.status = ''
-                            console.log(res.data.message)
                             this.getCallSummary(res.data.data, this.callLog.orderId)
 
                         }
@@ -505,6 +509,7 @@
                 })
             },
             getCallSummary(value, id) {
+                console.log(value)
                 this.callLog.notCompleted = true
                 this.callLog.items = []
                 this.callLog.orderId = id

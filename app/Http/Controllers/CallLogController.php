@@ -5,11 +5,20 @@ namespace App\Http\Controllers;
 use App\Helpers\CrmHelper;
 use App\Models\CallLog;
 use App\Models\Order;
+use App\Repositories\OrderRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CallLogController extends Controller
 {
     use CrmHelper;
+    protected OrderRepository $repository;
+
+    public function __construct(OrderRepository $order_repository)
+    {
+        $this->repository = $order_repository;
+    }
+
     public function index($id)
     {
         return CallLog::where('order_id', $id)->orderBy('created_at', 'desc')->get();
@@ -33,6 +42,19 @@ class CallLogController extends Controller
         $log->message = $request->message;
         $log->status = $request->status;
         $log->save();
+
+        $msg = 'Call log created successfully';
+        if($log->status){
+            $msg = 'Call log completed successfully';
+        }
+
+        $data = [
+            "activity_text" => $msg,
+            "activity_by" => Auth::id(),
+            "order_id" => $order->id
+        ];
+
+        $this->repository->addActivity($data);
 
         $orderData = $this->orderDetails($id);
         return [
@@ -61,6 +83,19 @@ class CallLogController extends Controller
         $log->message = $request->message;
         $log->status = $request->status;
         $log->save();
+
+        $msg = 'Call log updated successfully';
+        if($log->status){
+            $msg = 'Call log completed successfully';
+        }
+
+        $data = [
+            "activity_text" => $msg,
+            "activity_by" => Auth::id(),
+            "order_id" => $order->id
+        ];
+
+        $this->repository->addActivity($data);
 
         $logData = CallLog::with('caller')->where('order_id', $id)->get();
         return [
