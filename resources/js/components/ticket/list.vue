@@ -109,10 +109,7 @@ export default {
     getTickets(page = 1) {
       axios.get(window.origin + '/get-tickets/' + this.currentType + '?page=' + page + '&searchKey=' + (this.searchText).trim())
           .then(res => {
-              console.log(res)
             this.tickets = res.data.data.tickets
-              console.log('this.tickets')
-              console.log(this.tickets)
             this.types[0].count = res.data.data.all
             this.types[1].count = res.data.data.open
             this.types[2].count = res.data.data.my
