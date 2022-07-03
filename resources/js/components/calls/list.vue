@@ -102,7 +102,7 @@
                             <a :href="`/orders/${item.id}`" class="icon-list" data-bs-placement="bottom"
                                 title="Details"><span class="icon-eye text-blue-eye fs-20"><span
                                         class="path1"></span><span class="path2"></span></span></a>
-                            <a href="javascript:;" @click.prevent="getQuickView(callIndex)" title="Quick view"
+                            <a href="javascript:;" @click.prevent="getQuickView(item)" title="Quick view"
                                 class="icon-list quick-view-icon"><span class="icon-note text-purple fs-20"><span
                                         class="path1"></span><span class="path2"></span><span class="path3"></span><span
                                         class="path4"></span></span></a>
@@ -111,13 +111,13 @@
                                 data-bs-target="#callLogModal"><span class="icon-messages2 primary-text fs-20"><span
                                         class="path1"></span><span class="path2"></span><span class="path3"></span><span
                                         class="path4"></span><span class="path5"></span></span></a>
-                            <a @click="getScheduleData(callIndex)" href="javascript:;" class="icon-list"
+                            <a @click="getScheduleData(item)" href="javascript:;" class="icon-list"
                                 data-bs-placement="bottom" title="Schedule"><span
                                     class="icon-calendar text-brown fs-20"><span class="path1"></span><span
                                         class="path2"></span><span class="path3"></span><span class="path4"></span><span
                                         class="path5"></span><span class="path6"></span><span class="path7"></span><span
                                         class="path8"></span></span></a>
-                            <a href="javascript:;" @click="getSendMessage(callIndex)" class="icon-list"
+                            <a href="javascript:;" @click="getSendMessage(item)" class="icon-list"
                                 data-bs-placement="bottom" title="Email & SMS"> <span
                                     class="icon-messages text-yellow-msg  fs-20"><span class="path1"></span><span
                                         class="path2"></span><span class="path3"></span></span></a>
@@ -505,19 +505,20 @@
                 this.activeIssue = item.pending_tickets;
                 this.openIssue = true;
             },
-            getQuickView(index) {
+            getQuickView(item) {
                 this.$bvModal.show('quick-view')
-                this.$refs.quickViewComponent.setQuickViewData(this.orderData[index])
+                this.$refs.quickViewComponent.setQuickViewData(item)
             },
-            getScheduleData(index) {
-                this.$refs.callScheduleComponent.setOrderId(this.orderData[index].id)
-                this.$refs.callReScheduleComponent.setOrderId(this.orderData[index].id)
-                this.$refs.callReScheduleComponent.setScheduleData(this.orderData[index].inspection)
-                this.$refs.callReScheduleComponent.setOrderStatus(this.orderData[index].status)
-                this.orderData[index].status == 0 ? this.$bvModal.show('schedule') : this.$bvModal.show('re-schedule')
+            getScheduleData(item) {
+                this.$refs.callScheduleComponent.setOrderId(item.id)
+                this.$refs.callReScheduleComponent.setOrderId(item.id)
+                this.$refs.callReScheduleComponent.setScheduleData(item.inspection)
+                this.$refs.callReScheduleComponent.setOrderStatus(item.status)
+                item.status == 0 ? this.$bvModal.show('schedule') : this.$bvModal.show('re-schedule')
             },
-            getSendMessage(index) {
+            getSendMessage(item) {
                 this.$bvModal.show('send-message')
+                this.$refs.sendMessageComponent.setContactData(item.contact_info)
             },
             filterByTab(item) {
                 this.pages.filterType = item;

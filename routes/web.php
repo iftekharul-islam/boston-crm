@@ -221,5 +221,6 @@ Route::post('check/client/order/no', [OrderWorkflowController::class, 'checkClie
 
 
 //call routes
+Route::post('send-message',[CallController::class, 'sendMessage']);
 
 //Route::get( "{slug}", [ WebApiController::class, 'home' ] )->where( 'slug', ".*" );
