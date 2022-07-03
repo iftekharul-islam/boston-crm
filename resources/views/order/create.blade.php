@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section("css")
+
+@endsection
+
 @section('content')
     <order-create
             :order-list="'{{ route('orders.index') }}'"

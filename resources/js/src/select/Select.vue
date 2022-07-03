@@ -1,8 +1,9 @@
 <template>
-    <div class="vue-select" ref="vue-select" :theme="themeData" :key="setKey">
-        <div class="vue-select-label" :class="{'active' : activeClick}" @click="openOptions">
+    <div class="vue-select" ref="vue-select" :set-id="setKey" :key="setKey" :theme="themeData" @mouseleave="closeOptions" @mouseenter="openOptions(false)">
+        <div class="vue-select-label-text" v-html="label" v-if="label"></div>
+        <div class="vue-select-label" :class="{'active' : activeClick}" @click="openOptions" :style="`${noBorder != undefined ? 'border: unset!important' : ''}`">
             <div class="select-label">
-                <template v-if="multiple && multipleSelect.length">
+                <template v-if="multiple && multipleSelect != null && multipleSelect.length">
                     <div class="multiple-option-item">
                         <span v-for="mItem, is in multipleSelect" :key="is" @click="removeSelectedItem(mItem, is)">
                             <template v-if="returnObject">
@@ -17,18 +18,22 @@
                 <template v-else>{{ currentValue }}</template>
             </div>
             <div class="select-icon">
-                <img :src="require('./asset/down-chevron.png').default" class="img-fluid">
+                <!-- <img :src="require('./asset/down-chevron.png')" class="img-fluid"> -->
+                <span>&#x276E;</span>
             </div>
         </div>
         <transition name="fade-x" appear v-if="activeClick">
             <div class="vue-select-search">
                 <input ref="filterData" type="text" placeholder="filter..." v-model="interSearch"  @input="updateSearch($event.target.value)" class="inter-search">
+                <small v-if="items.length">* Total <strong>({{ items.length }})</strong> items in the list </small>
+                <small v-else>* There are <strong>no</strong> item in the list </small>
                 <div class="vue-select-options">
                     <template v-if="returnObject == true">
                         <div class="vue-option" :class="{ 'active' : checkActiveLink(item) }" @click="chooseItem(item)" v-for="item, ik in items" :key="ik">
                             <div class="option-item-box">
                                 <div class="options-checkbox">
-                                    <img :src="require('./asset/checkbox.png').default" class="img-fluid">
+                                    <!-- <img :src="require('./asset/checkbox.png')" class="img-fluid"> -->
+                                    <span>&#x2713;</span>
                                 </div>
                                 <slot :name="item[itemValue]" :item="item">
                                     <span v-html="item[itemText]"></span>
@@ -40,7 +45,8 @@
                         <div class="vue-option" :class="{ 'active' : checkActiveLink(item) }" @click="chooseItem(item)" v-for="item, ik in items" :key="ik">
                             <div class="option-item-box">
                                 <div class="options-checkbox">
-                                    <img :src="require('./asset/checkbox.png').default" class="img-fluid">
+                                    <!-- <img :src="require('./asset/checkbox.png')" class="img-fluid"> -->
+                                    <span>&#x2713;</span>
                                 </div>
                                 <slot :name="item" :item="{item}">
                                     <span v-html="item"></span>
@@ -57,36 +63,52 @@
 <script>
 
 export default {
-    props: ['options', 'object', 'item-text', 'theme', 'return-array', 'item-value', 'multi-select', 'auto-hide'],
+    props: ['options', 'object', 'item-text', 'theme', 'no-border', 'label', 'hover', 'return-array', 'item-value', 'multi-select', 'auto-hide'],
     data: () => ({
         items: [],
         returnObject: false,
         currentValue: "Choose an item",
         multipleSelect: [],
         activeClick: false,
-        themeData: "dark",
+        themeData: "blue",
         setKey: null,
         multiple: false,
         interSearch: null,
         backupItem: [],
+        tabIndex: 0,
+        imageStr: {
+            checked: null,
+            arrow: null
+        }
     }),
     model: {
         prop: 'modelData',
         event: 'change'
     },  
     created() {
+        if (this.multiple !== undefined) {
+            this.currentValue = "Choose options";
+        }
         this.setKey = Math.floor(Math.random(10000) * 1000);
         this.interSearch = "";
         this.items = this.options;
+        this.imageStr.checked = "./asset/checkbox.png";
+        this.imageStr.arrow = "./asset/down-chevron.png";
         this.initCurrentData(this.$props, this.$attrs);
         this.setTheme();
     },
     mounted() {
         document.addEventListener('click', (e) => {
-            let target = $(e.target);
-            let el = $(this.$refs["vue-select"]);
-            if (!target.is(el) && el.has(target).length == 0) {
+            let target = e.target;
+            let targetClosest = target.closest(".vue-select");
+            if (targetClosest == undefined) {
                 this.closeBox(true);
+            } else {
+                let clickSetId = targetClosest.getAttribute('set-id');
+                let getRefs = this.$refs['vue-select'].getAttribute('set-id');
+                if (clickSetId != getRefs) {
+                    this.closeBox(true);
+                }
             }
         });
     },
@@ -127,7 +149,9 @@ export default {
             let modelData = this.$attrs.modelData;
             if (this.returnObject) {
                 if (this.multiple) {
-                    this.multipleSelect = modelData;
+                    if (typeof modelData == 'array' || typeof modelData == 'object') {
+                        this.multipleSelect = modelData;
+                    }
                 } else {
                     if (typeof modelData == 'object') {
                         this.currentValue = modelData[this.itemText];
@@ -152,13 +176,25 @@ export default {
         emitValue(event, value) {
             this.$emit(event, value);
         },
-        openOptions() {
+        closeOptions() {
+            if (this.$props.hover != undefined) {
+                this.close();
+            }
+        },
+        openOptions(type = true) {
+            if (type == false && this.$props.hover == undefined) {
+                return false;
+            }
             this.initList();
             if (this.activeClick == false) {
                 this.activeClick = true;
                 this.$nextTick(() => this.$refs.filterData.focus())
             } else {
-                this.closeBox();
+                if (type == false && this.$props.hover != undefined) {
+                    return false;
+                } else {
+                    this.closeBox();
+                }
             }
         },
         updateSearch(value) {
@@ -208,16 +244,23 @@ export default {
         },
         addMultiple(item) {
             let checkOld = null;
-            if (this.returnObject) {
-                checkOld = this.multipleSelect.findIndex((ele) => ele[this.itemValue] == item[this.itemValue]);
+
+            if (this.multipleSelect != null) {
+                if (this.returnObject) {
+                    checkOld = this.multipleSelect.findIndex((ele) => ele[this.itemValue] == item[this.itemValue]);
+                } else {
+                    checkOld = this.multipleSelect.findIndex((ele) => ele == item);
+                }
+                if (checkOld != -1) {
+                    this.multipleSelect.splice(checkOld, 1);
+                } else {
+                    this.multipleSelect.push(item);
+                }
             } else {
-                checkOld = this.multipleSelect.findIndex((ele) => ele == item);
-            }
-            if (checkOld != -1) {
-                this.multipleSelect.splice(checkOld, 1);
-            } else {
+                this.multipleSelect = [];
                 this.multipleSelect.push(item);
             }
+            
             let returnMultiple = [];
             if (this.$props.returnArray !== undefined) {
                 this.multipleSelect.map(ele => {
@@ -229,7 +272,7 @@ export default {
                 });
                 this.emitValue('change', returnMultiple.length ? returnMultiple : null);
             } else {
-                this.emitValue('change', this.multipleSelect.length ? this.multipleSelect : null);
+                this.emitValue('change', (this.multipleSelect && this.multipleSelect.length) ? this.multipleSelect : null);
             }
         },
         initList() {
@@ -337,6 +380,9 @@ export default {
     scrollbar-width: thin;
     scrollbar-color: #4f5f6f;
 }
+.vue-select-label:active {
+    background: #ebebeb;
+}
 .vue-select-label::-webkit-scrollbar {
     height: 5px;
 }
@@ -359,7 +405,7 @@ export default {
     position: absolute;
     width: 100%;
     background: #fff;
-    box-shadow: 0 3px 8px 0px rgb(0 0 0 / 10%);
+    box-shadow: 0 5px 15px 0px rgb(0 0 0 / 15%);
     padding: 10px;
     border-bottom-right-radius: 0.25rem;
     border-bottom-left-radius: 0.25rem;
@@ -367,7 +413,7 @@ export default {
     overflow: auto;
     scrollbar-width: thin;
     scrollbar-color: #6f7f8f;
-    z-index: 10;
+    z-index: 99999;
 }
 .vue-select-search::-webkit-scrollbar {
     width: 5px;
@@ -383,9 +429,6 @@ export default {
     outline: 0;
     display: inline-block;
     border: unset;
-}
-.vue-select-options{
-    margin-top: 10px;
 }
 .vue-select-options .vue-option{
     cursor: pointer;
@@ -434,6 +477,10 @@ export default {
 .multiple-option-item span:active {
     background: #f96f5d;
     color: #fff;
+}
+
+.vue-select-options .vue-option.active .options-checkbox span {
+    color: #ddd;
 }
 
 .vue-select[theme="dark"] .vue-select-options .vue-option.active .options-checkbox {
@@ -493,6 +540,19 @@ export default {
 .vue-select.required .vue-select-label {
     border-color: #ff7c7c;
 }
-
-
+.vue-select .vue-select-label-text {
+    font-size: 14px;
+    display: inline-block;
+    margin-bottom: 5px;
+}
+.vue-select-search small {
+    display: inline-block;
+    font-size: 12px;
+    margin-top: 10px;
+    letter-spacing: 0.7px;
+}
+.vue-select .select-icon span {
+    transform: rotate(-90deg);
+    display: inline-block;
+}
 </style>

@@ -74,14 +74,15 @@
                                 <ValidationProvider class="group" name="Loan type" rules="required" v-slot="{ errors }">
                                     <div class="position-relative" :class="{ 'invalid-form' : errors[0] }">
                                         <label for="" class="d-block mb-2 dashboard-label">Loan type </label>
-                                        <select name="" id="loanTypeSelect"
+                                        <!-- <select name="" id="loanTypeSelect"
                                             class="dashboard-input w-100 loan-type-select" v-model="step1.loanType">
                                             <option value="">Please Select Loan Type</option>
                                             <option v-for="loan_type in loanTypes" :key="loan_type.id"
                                                 :value="loan_type.id" :data-fha="loan_type.is_fha">
                                                 {{ loan_type.name }}
                                             </option>
-                                        </select>
+                                        </select> -->
+                                        <m-select no-border v-model="step1.loanType" object item-text="name" item-value="id" hover :options="loanTypes"></m-select>
                                         <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                                     </div>
                                 </ValidationProvider>
@@ -101,14 +102,15 @@
                                     <div class="position-relative" :class="{ 'invalid-form' : errors[0] }">
                                         <label for="" class="d-block mb-2 dashboard-label">Appraiser name <span
                                                 class="text-danger require"></span></label>
-                                        <select id="apprClientSelect" class="dashboard-input w-100"
+                                        <!-- <select id="apprClientSelect" class="dashboard-input w-100"
                                             v-model="step1.appraiserName">
                                             <option value="">Please select appraisal user name</option>
                                             <option v-for="appraisal_user in appraisalUsers" :key="appraisal_user.id"
                                                 :value="appraisal_user.id">
                                                 {{ appraisal_user.name }}
                                             </option>
-                                        </select>
+                                        </select> -->
+                                        <m-select no-border v-model="step1.appraiserName" object item-text="name" item-value="id" hover :options="appraisalUsers"></m-select>
                                         <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                                     </div>
                                 </ValidationProvider>
@@ -117,14 +119,15 @@
                                     <div class="position-relative" :class="{ 'invalid-form' : errors[0] }">
                                         <label for="" class="d-block mb-2 dashboard-label">Property Type <span
                                                 class="text-danger require"></span></label>
-                                        <select id="propertyTypeSelect" class="dashboard-input w-100"
+                                        <!-- <select id="propertyTypeSelect" class="dashboard-input w-100"
                                             v-model="step1.propertyType">
                                             <option value="">Please select property type</option>
                                             <option v-for="propertyType in propertyTypes" :key="propertyType.id"
                                                 :value="propertyType.id">
                                                 {{ propertyType.type }}
                                             </option>
-                                        </select>
+                                        </select> -->
+                                        <m-select no-border v-model="step1.propertyType" object item-text="type" item-value="id" hover :options="propertyTypes"></m-select>
                                         <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                                     </div>
                                 </ValidationProvider>
@@ -165,13 +168,13 @@
                                 <!-- input box and new add -->
                                 <div class="col-12">
                                     <div class="row">
-                                        <div class="col-6">
+                                        <div class="col-7">
                                             <div class="group" :class="{ 'invalid-form': providerTypes.error.type == true }">
                                                 <label for="" class="d-block mb-2 dashboard-label">Appraiser
                                                     type </label>
                                                 <div class="position-relative borderless-select">
-                                                    <select id="providerTypeFee" class="dashboard-input w-100"
-                                                        v-model="providerTypes.default.type">
+                                                    <select id="providerTypeFee" class="dashboard-input w-100" v-model="providerTypes.default.type">
+                                                        <option value="">Choose Type</option>
                                                         <option :value="item.id"
                                                             :data-full="item.is_full_appraisal" :key="ki"
                                                             v-for="item, ki in appraisalTypes">{{ item.form_type
@@ -181,7 +184,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-6">
+                                        <div class="col-5">
                                             <div class="group" :class="{ 'invalid-form': providerTypes.error.fee == true }">
                                                 <label for="" class="d-block mb-2 dashboard-label">Fee </label>
                                                 <input @input="checkProviderValidation($event, 2)" type="number"
@@ -478,7 +481,7 @@
                 condoType: false,
                 providerTypes: {
                     default: {
-                        type: null,
+                        type: "",
                         fee: null,
                     },
                     error: {
@@ -534,7 +537,7 @@
                 $("#loanTypeSelect").on("select2:select", function (e) {
                     let value = e.target.value;
                     this.step1.loanType = value;
-                    this.fhaExists = e.target.selectedOptions[0].dataset.fha
+                    this.fhaExists = e.target.selectedOptions[0].dataset.fha;
                 }.bind(this));
 
                 $(document).on("change", "#amcClientSelect", function (e) {
@@ -622,7 +625,7 @@
                 let newFee = this.providerTypes.default.fee;
                 this.providerTypes.error.type = false;
                 this.providerTypes.error.fee = false;
-                if (newType == null) {
+                if (newType == null || newType == "") {
                     this.providerTypes.error.type = true;
                 } 
                 if (newFee == null) {
