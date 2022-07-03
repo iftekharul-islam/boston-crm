@@ -416,6 +416,8 @@
                 this.$boston.post('search/call/order?page=' + this.pages.acitvePage, { 'filterType' : this.pages.filterType, data: this.pages.searchModel, paginate: this.pages.paginate, dateRange: this.dateRange }).then((res) => {
                     this.selectedItems = [];
                     this.dateRange.search = false;
+                    this.dateRange.start = null;
+                    this.dateRange.end = null;
                     this.pages.pageData = res;
                     this.orderData = res.data;
                 }).catch((err) => {
