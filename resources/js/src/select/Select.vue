@@ -1,5 +1,5 @@
 <template>
-    <div class="vue-select" ref="vue-select" :set-id="setKey" :key="setKey" :theme="themeData" @mouseleave="closeOptions" @mouseenter="openOptions(false)">
+    <div class="vue-select" ref="vue-select" :set-id="setKey" :key="setKey" :theme="themeData" @mouseleave="closeOptions" @mouseenter="openOptions(false)" :style="`${minWidth ? 'min-width:'+ minWidth + 'px' : ''}`">
         <div class="vue-select-label-text" v-html="label" v-if="label"></div>
         <div class="vue-select-label" :class="{'active' : activeClick}" @click="openOptions" :style="`${noBorder != undefined ? 'border: unset!important' : ''}`">
             <div class="select-label">
@@ -63,7 +63,7 @@
 <script>
 
 export default {
-    props: ['options', 'object', 'item-text', 'theme', 'no-border', 'label', 'hover', 'return-array', 'item-value', 'multi-select', 'auto-hide'],
+    props: ['options', 'object', 'min-width', 'item-text', 'theme', 'no-border', 'label', 'hover', 'return-array', 'item-value', 'multi-select', 'auto-hide'],
     data: () => ({
         items: [],
         returnObject: false,
@@ -554,5 +554,8 @@ export default {
 .vue-select .select-icon span {
     transform: rotate(-90deg);
     display: inline-block;
+}
+.vue-select {
+    text-align: left;
 }
 </style>
