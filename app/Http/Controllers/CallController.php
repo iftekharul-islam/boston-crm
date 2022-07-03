@@ -41,7 +41,7 @@ class CallController extends BaseController
         } else if($filterType == "today_call") {
 
         }
-        
+
         $order = Order::where(function($qry) use ($data, $dateRange, $filterType) {
             return $qry->where('system_order_no', "LIKE", "%$data%")
                        ->orWhere("client_order_no", "LIKE", "%$data%")

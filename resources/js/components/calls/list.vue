@@ -4,15 +4,23 @@
             <div class="bg-white pd-32">
                 <div class="calls__menu d-flex flex-wrap">
                     <div class="left chart-box-header-btn d-flex flex-wrap me-3">
-                        <button @click="filterByTab('all')" :class="{'active' : pages.filterType == 'all' || pages.filterType == null}" class="calls-btn h-40 d-flex align-items-center mb-2">All <span class="ms-2">
+                        <button @click="filterByTab('all')"
+                            :class="{'active' : pages.filterType == 'all' || pages.filterType == null}"
+                            class="calls-btn h-40 d-flex align-items-center mb-2">All <span class="ms-2">
                                 ({{ filterValue.all }})</span></button>
-                        <button @click="filterByTab('to_schedule')" :class="{'active' : pages.filterType == 'to_schedule'}" class="calls-btn h-40 d-flex align-items-center mb-2">To be Schedule <span class="ms-2">
+                        <button @click="filterByTab('to_schedule')"
+                            :class="{'active' : pages.filterType == 'to_schedule'}"
+                            class="calls-btn h-40 d-flex align-items-center mb-2">To be Schedule <span class="ms-2">
                                 ({{ filterValue.to_schedule }})</span></button>
-                        <button @click="filterByTab('schedule')" :class="{'active' : pages.filterType == 'schedule'}" class="calls-btn h-40 d-flex align-items-center mb-2">Schedule <span class="ms-2">
+                        <button @click="filterByTab('schedule')" :class="{'active' : pages.filterType == 'schedule'}"
+                            class="calls-btn h-40 d-flex align-items-center mb-2">Schedule <span class="ms-2">
                                 ({{ filterValue.schedule }})</span></button>
-                        <button @click="filterByTab('today_call')" :class="{'active' : pages.filterType == 'today_call'}" class="calls-btn h-40 d-flex align-items-center mb-2">Todays Call <span class="ms-2">
+                        <button @click="filterByTab('today_call')"
+                            :class="{'active' : pages.filterType == 'today_call'}"
+                            class="calls-btn h-40 d-flex align-items-center mb-2">Todays Call <span class="ms-2">
                                 ({{ filterValue.today_call }})</span></button>
-                        <button @click="filterByTab('completed')" :class="{'active' : pages.filterType == 'completed'}" class="calls-btn h-40 d-flex align-items-center mb-2">Completed <span class="ms-2">
+                        <button @click="filterByTab('completed')" :class="{'active' : pages.filterType == 'completed'}"
+                            class="calls-btn h-40 d-flex align-items-center mb-2">Completed <span class="ms-2">
                                 ({{ filterValue.completed }})</span></button>
                         <button @click="$bvModal.show('dateRange')"
                             class="calls-btn h-40 d-flex align-items-center mb-2">Date Rage</button>
@@ -39,9 +47,11 @@
                         </div>
                     </div>
                 </div>
-                <Table :items="orderData" :sl-start="pages.pageData.from" :header="table.header" @headClick="headerClick($event)">
+                <Table :items="orderData" :sl-start="pages.pageData.from" :header="table.header"
+                    @headClick="headerClick($event)">
                     <template v-slot:status="{item}">
-                        <p class="mb-0 status-scheduled td-text-overflow" :title="item.order_status">{{ item.order_status }}</p>
+                        <p class="mb-0 status-scheduled td-text-overflow" :title="item.order_status">{{
+                            item.order_status }}</p>
                     </template>
                     <template v-slot:sl="{item}">
                         <div class="call-list">
@@ -63,7 +73,7 @@
                         {{ item.amc ? item.amc.name : '-' }}
                     </template>
                     <template v-slot:last_call="{item}">
-                    {{ item.last_call ? item.last_call : '-' }}
+                        {{ item.last_call ? item.last_call : '-' }}
                     </template>
                     <template v-slot:inspector="{item}">
                         {{ item.inspection ? item.inspection.user.name : '-' }}
@@ -89,30 +99,32 @@
                     </template>
                     <template v-slot:action="{item}">
                         <span class="call-list-item">
-                            <a :href="`/orders/${item.id}`" class="icon-list" data-bs-placement="bottom" title="Details"><span
-                                    class="icon-eye text-blue-eye fs-20"><span class="path1"></span><span
-                                        class="path2"></span></span></a>
-                            <a href="javascript:;" ata-bs-toggle="tooltip" data-bs-placement="bottom" title="Quick view"
-                                class="icon-list quick-view-icon" @click="openQuickView=true"><span class="icon-note text-purple fs-20"><span
-                                        class="path1"></span><span class="path2"></span><span
-                                        class="path3"></span><span class="path4"></span></span></a>
-                            <a @click.prevent="getCallSummary(item.call_log, item.id)" href="javascript:;" class="icon-list" data-bs-placement="bottom" title="Call log" data-bs-toggle="modal"
-                                data-bs-target="#callLogModal"><span
-                                    class="icon-messages2 primary-text fs-20"><span class="path1"></span><span
-                                        class="path2"></span><span class="path3"></span><span
+                            <a :href="`/orders/${item.id}`" class="icon-list" data-bs-placement="bottom"
+                                title="Details"><span class="icon-eye text-blue-eye fs-20"><span
+                                        class="path1"></span><span class="path2"></span></span></a>
+                            <a href="javascript:;" @click.prevent="getQuickView(callIndex)" title="Quick view"
+                                class="icon-list quick-view-icon"><span class="icon-note text-purple fs-20"><span
+                                        class="path1"></span><span class="path2"></span><span class="path3"></span><span
+                                        class="path4"></span></span></a>
+                            <a @click.prevent="getCallSummary(item.call_log, item.id)" href="javascript:;"
+                                class="icon-list" data-bs-placement="bottom" title="Call log" data-bs-toggle="modal"
+                                data-bs-target="#callLogModal"><span class="icon-messages2 primary-text fs-20"><span
+                                        class="path1"></span><span class="path2"></span><span class="path3"></span><span
                                         class="path4"></span><span class="path5"></span></span></a>
-                            <a @click="getScheduleData(callIndex)" href="javascript:;" class="icon-list" data-bs-placement="bottom" title="Schedule"><span
+                            <a @click="getScheduleData(callIndex)" href="javascript:;" class="icon-list"
+                                data-bs-placement="bottom" title="Schedule"><span
                                     class="icon-calendar text-brown fs-20"><span class="path1"></span><span
-                                        class="path2"></span><span class="path3"></span><span
-                                        class="path4"></span><span class="path5"></span><span
-                                        class="path6"></span><span class="path7"></span><span
+                                        class="path2"></span><span class="path3"></span><span class="path4"></span><span
+                                        class="path5"></span><span class="path6"></span><span class="path7"></span><span
                                         class="path8"></span></span></a>
-                            <a href="javascript:;" @click="getSendMessage(callIndex)" class="icon-list" data-bs-placement="bottom" title="Email & SMS"> <span
+                            <a href="javascript:;" @click="getSendMessage(callIndex)" class="icon-list"
+                                data-bs-placement="bottom" title="Email & SMS"> <span
                                     class="icon-messages text-yellow-msg  fs-20"><span class="path1"></span><span
                                         class="path2"></span><span class="path3"></span></span></a>
                             <a href="javascript:;" class="icon-list"><span class="icon-call text-light-red fs-20"><span
                                         class="path1"></span><span class="path2"></span></span></a>
-                            <button @click="openIssues(item)" class="button button-transparent p-0"><span class="icon-arrow-bottom"></span></button>
+                            <button @click="openIssues(item)" class="button button-transparent p-0"><span
+                                    class="icon-arrow-bottom"></span></button>
                         </span>
                     </template>
                     <template v-slot:head_action="{item}">
@@ -121,13 +133,16 @@
                     <template v-slot:popup>
                         <transition name="fade" appear v-if="visibleColumnDropDown">
                             <div class="column-list">
-                                <div class="col-item" @click="addToTable(item)" :class="{ 'active' : checkColumnActive(item) }" v-for="item, ci in table.disableHeader" :key="ci">{{ item.title }}</div>
+                                <div class="col-item" @click="addToTable(item)"
+                                    :class="{ 'active' : checkColumnActive(item) }"
+                                    v-for="item, ci in table.disableHeader" :key="ci">{{ item.title }}</div>
                             </div>
                         </transition>
                     </template>
                 </Table>
                 <div class="text-center d-flex justify-content-center">
-                    <select @change="loadPage(pages.activePage)" name="paginate" class="form-control per-page" v-model="pages.paginate">
+                    <select @change="loadPage(pages.activePage)" name="paginate" class="form-control per-page"
+                        v-model="pages.paginate">
                         <option value="">Per page</option>
                         <option :value="item" :key="ik" v-for="item, ik in pages.perPages">{{ item }} Per page</option>
                     </select>
@@ -184,14 +199,14 @@
             </div>
         </m-modal>
 
-
-        <Quickview v-if="openQuickView" :order="quickOrder" @closeQuickView="closeQuickViewModal($event)" />
+        <quick-view ref="quickViewComponent"></quick-view>
         <call-schedule ref="callScheduleComponent" :appraisers="appraisers"></call-schedule>
         <call-re-schedule ref="callReScheduleComponent" :appraisers="appraisers"></call-re-schedule>
         <send-message ref="sendMessageComponent"></send-message>
         <Map v-if="openMap" :latLng="latLng" @closeMap="closeCurrentMap($event)" />
 
-        <div class="modal fade schedule-modal call-log-modal" id="callLogModal" tabindex="-1" aria-labelledby="callLogModalLabel" aria-hidden="true">
+        <div class="modal fade schedule-modal call-log-modal" id="callLogModal" tabindex="-1"
+            aria-labelledby="callLogModalLabel" aria-hidden="true">
             <div class="modal-dialog h-100">
                 <div class="modal-content ">
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -200,7 +215,8 @@
                         <div class="call-summary-item" v-for="(log, logIndex) in callLog.items" :key="logIndex">
                             <div class="top d-flex align-items-center">
                                 <div v-if="log.caller.media.length">
-                                    <img :src="log.caller.media[0].original_url" alt=" profile photo boston" class="img-fluid">
+                                    <img :src="log.caller.media[0].original_url" alt=" profile photo boston"
+                                        class="img-fluid">
                                 </div>
                                 <div v-else>
                                     <img src="/img/user.png" alt=" profile photo boston" class="img-fluid">
@@ -213,11 +229,12 @@
                             <p class="message">{{ log.message }}</p>
                         </div>
                         <div class="update-log" v-if="callLog.notCompleted">
-                                <div class="group" :class="{ 'invalid-form' : callLog.error == true }">
-                                    <label for="" class="d-block mb-2 dashboard-label">Message</label>
-                                    <textarea @keyup="dataExist()" v-model.trim="callLog.message" class="dashboard-input w-100" style="min-height: 100px"></textarea>
-                                    <span v-if="callLog.error" class="error-message">The Message field is required</span>
-                                </div>
+                            <div class="group" :class="{ 'invalid-form' : callLog.error == true }">
+                                <label for="" class="d-block mb-2 dashboard-label">Message</label>
+                                <textarea @keyup="dataExist()" v-model.trim="callLog.message"
+                                    class="dashboard-input w-100" style="min-height: 100px"></textarea>
+                                <span v-if="callLog.error" class="error-message">The Message field is required</span>
+                            </div>
                             <div class="checkbox-group mt-2">
                                 <input type="checkbox" class="checkbox-input" v-model="callLog.status">
                                 <label for="" class="checkbox-label">Call completed</label>
@@ -236,7 +253,6 @@
 <script>
     import Table from "../../src/Table.vue"
     import Map from "./map.vue"
-    import Quickview from "./QuickView.vue";
 
     import Calendar from 'v-calendar/lib/components/calendar.umd'
     import DatePicker from 'v-calendar/lib/components/date-picker.umd'
@@ -246,10 +262,9 @@
 
     export default {
         name: "call-lists",
-        props: ['order','appraisers', 'filter-value'],
+        props: ['order', 'appraisers', 'filter-value'],
         components: {
             Map,
-            Quickview,
             Table
         },
         data: () => ({
@@ -299,8 +314,6 @@
             },
             activeIssue: [],
             openIssue: false,
-            openQuickView: false,
-            quickOrder: [],
         }),
         created() {
             this.initOrder(this.order);
@@ -317,7 +330,7 @@
         },
         methods: {
             dataExist() {
-                if(this.callLog.message !== ""){
+                if (this.callLog.message !== "") {
                     this.callLog.error = false
                 } else {
                     this.callLog.error = true
@@ -325,7 +338,7 @@
             },
             addCallLog() {
                 this.callLog.error = false
-                if(this.callLog.message == ''){
+                if (this.callLog.message == '') {
                     this.callLog.error = true
                     return
                 }
@@ -345,17 +358,17 @@
 
                         }
                     }).catch(err => {
-                    console.log(err)
-                })
+                        console.log(err)
+                    })
             },
             getCallSummary(value, id) {
                 this.callLog.notCompleted = true
                 this.callLog.items = []
                 this.callLog.orderId = id
-                if(value.length){
+                if (value.length) {
                     this.callLog.items = value
                     this.callLog.items.forEach((log, index) => {
-                        if(log.status){
+                        if (log.status) {
                             this.callLog.notCompleted = false
                         }
                     })
@@ -419,7 +432,7 @@
 
             loadPage(acitvePage = null) {
                 this.pages.acitvePage = acitvePage;
-                this.$boston.post('search/call/order?page=' + this.pages.acitvePage, { 'filterType' : this.pages.filterType, data: this.pages.searchModel, paginate: this.pages.paginate, dateRange: this.dateRange }).then((res) => {
+                this.$boston.post('search/call/order?page=' + this.pages.acitvePage, { 'filterType': this.pages.filterType, data: this.pages.searchModel, paginate: this.pages.paginate, dateRange: this.dateRange }).then((res) => {
                     this.selectedItems = [];
                     this.dateRange.search = false;
                     this.dateRange.start = null;
@@ -492,12 +505,9 @@
                 this.activeIssue = item.pending_tickets;
                 this.openIssue = true;
             },
-            openQuickViewFeature(item) {
-                this.quickOrder = item;
-                this.openQuickView = true;
-            },
-            closeQuickViewModal(val) {
-                this.openQuickView = false;
+            getQuickView(index) {
+                this.$bvModal.show('quick-view')
+                this.$refs.quickViewComponent.setQuickViewData(this.orderData[index])
             },
             getScheduleData(index) {
                 this.$refs.callScheduleComponent.setOrderId(this.orderData[index].id)
@@ -506,7 +516,7 @@
                 this.$refs.callReScheduleComponent.setOrderStatus(this.orderData[index].status)
                 this.orderData[index].status == 0 ? this.$bvModal.show('schedule') : this.$bvModal.show('re-schedule')
             },
-            getSendMessage(index){
+            getSendMessage(index) {
                 this.$bvModal.show('send-message')
             },
             filterByTab(item) {
@@ -521,6 +531,7 @@
     .cursor-hover {
         cursor: pointer;
     }
+
     .column-list {
         position: absolute;
         background: #fff;
@@ -575,6 +586,7 @@
         top: 4px;
         cursor: hover;
     }
+
     .td-text-overflow {
         max-width: 150px;
         white-space: nowrap;
