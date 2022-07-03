@@ -67,7 +67,6 @@
         name: 'call-schedule',
         props: {
             appraisers: [],
-            orderId: 0
         },
         data: () => ({
             schedule: {
@@ -93,12 +92,10 @@
             ],
             orderData: [],
         }),
-        watch: {
-            orderId(newValue) {
-                this.schedule.order_id = newValue
-            }
-        },
         methods: {
+            setOrderId(orderId){
+                this.schedule.order_id = orderId
+            },
             saveSchedule() {
                 this.$refs.scheduleForm.validate().then((status) => {
                     if (status) {

@@ -29,7 +29,7 @@
             <div class="list__group">
                 <p class="mb-0 left-side">Property Type</p>
                 <span>:</span>
-                <div v-for="propertyType,index in propertyTypes" :key="propertyType.index">
+                <div v-for="propertyType, index in propertyTypes" :key="index + ' appr_details '">
                     <p v-if="propertyType.id == edited.property_type" class="right-side mb-0 word-break">
                         {{ propertyType.type }}</p>
                 </div>
@@ -46,28 +46,14 @@
                                 <div class="position-relative" :class="{ 'invalid-form' : errors[0] }">
                                     <label for="" class="d-block mb-2 dashboard-label">Appraiser name <span
                                             class="text-danger require"></span></label>
-                                    <select id="apprClientSelect" class="dashboard-input w-100"
-                                        v-model="details.appraiser_id">
-                                        <option value="">Please select appraisal user name</option>
-                                        <option v-for="appraisal_user in appraisers" :key="appraisal_user.id"
-                                            :value="appraisal_user.id">
-                                            {{ appraisal_user.name }}
-                                        </option>
-                                    </select>
+                                    <m-select v-model="details.appraiser_id" :options="appraisers" item-text="name" item-value="id" object theme="blue"></m-select>
                                     <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                                 </div>
                             </ValidationProvider>
                             <ValidationProvider class="group d-block" name="Loan type" rules="required" v-slot="{ errors }">
                                 <div class="position-relative" :class="{ 'invalid-form' : errors[0] }">
                                     <label for="" class="d-block mb-2 dashboard-label">Loan type </label>
-                                    <select @change="loanTypeChange" id="loanTypeSelect"
-                                        class="dashboard-input w-100 loan-type-select" v-model="details.loan_type">
-                                        <option value="">Please Select Loan Type</option>
-                                        <option v-for="loan_type in loanTypes" :key="loan_type.id" :value="loan_type.id"
-                                            :data-fha="loan_type.is_fha">
-                                            {{ loan_type.name }}
-                                        </option>
-                                    </select>
+                                    <m-select @change="loanTypeChange" v-model="details.loan_type" :options="loanTypes" item-text="name" item-value="id" object theme="blue"></m-select>
                                     <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                                 </div>
                             </ValidationProvider>
@@ -101,6 +87,19 @@
                                     <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                                 </div>
                             </ValidationProvider>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <ValidationProvider class="group" name="Property Type" rules="required"
+                                    v-slot="{ errors }">
+                                    <div :class="{ 'invalid-form' : errors[0] }">
+                                        <label for="" class="d-block mb-2 dashboard-label">Property Type <span
+                                                class="require"></span></label>
+                                        <m-select v-model="details.property_type" :options="propertyTypes" item-text="type" item-value="id" object theme="blue"></m-select>
+                                        <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                                    </div>
+                                </ValidationProvider>
+                            </div>
                         </div>
                     </div>
                 </ValidationObserver>

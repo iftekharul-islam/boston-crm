@@ -109,29 +109,29 @@
                                 <p class="mb-0 scheduled">{{ item.order_status }}</p>
                             </span>
                             <span class="call-list-item">
-                                <a href="#" class="icon-list" data-bs-placement="bottom" title="Details"><span
+                                <a href="javascript:;" class="icon-list" data-bs-placement="bottom" title="Details"><span
                                         class="icon-eye text-blue-eye fs-20"><span class="path1"></span><span
                                             class="path2"></span></span></a>
-                                <a href="#" ata-bs-toggle="tooltip" data-bs-placement="bottom" title="Quick view"
+                                <a href="javascript:;" ata-bs-toggle="tooltip" data-bs-placement="bottom" title="Quick view"
                                     class="icon-list quick-view-icon" data-bs-toggle="modal"
                                     data-bs-target="#exampleModal"><span class="icon-note text-purple fs-20"><span
                                             class="path1"></span><span class="path2"></span><span
                                             class="path3"></span><span class="path4"></span></span></a>
-                                <a @click.prevent="getCallSummary(item.call_log, item.id)" href="#" class="icon-list" data-bs-placement="bottom" title="Call log" data-bs-toggle="modal"
+                                <a @click.prevent="getCallSummary(item.call_log, item.id)" href="javascript:;" class="icon-list" data-bs-placement="bottom" title="Call log" data-bs-toggle="modal"
                                    data-bs-target="#callLogModal"><span
                                         class="icon-messages2 primary-text fs-20"><span class="path1"></span><span
                                             class="path2"></span><span class="path3"></span><span
                                             class="path4"></span><span class="path5"></span></span></a>
-                                <a @click="getScheduleData(callIndex)" href="#" class="icon-list" data-bs-placement="bottom" title="Schedule"><span
+                                <a @click="getScheduleData(callIndex)" href="javascript:;" class="icon-list" data-bs-placement="bottom" title="Schedule"><span
                                         class="icon-calendar text-brown fs-20"><span class="path1"></span><span
                                             class="path2"></span><span class="path3"></span><span
                                             class="path4"></span><span class="path5"></span><span
                                             class="path6"></span><span class="path7"></span><span
                                             class="path8"></span></span></a>
-                                <a href="#" class="icon-list" data-bs-placement="bottom" title="Email & SMS"> <span
+                                <a href="javascript:;" @click="getSendMessage(callIndex)" class="icon-list" data-bs-placement="bottom" title="Email & SMS"> <span
                                         class="icon-messages text-yellow-msg  fs-20"><span class="path1"></span><span
                                             class="path2"></span><span class="path3"></span></span></a>
-                                <a href="#" class="icon-list"><span class="icon-call text-light-red fs-20"><span
+                                <a href="javascript:;" class="icon-list"><span class="icon-call text-light-red fs-20"><span
                                             class="path1"></span><span class="path2"></span></span></a>
                                 <button class="button button-transparent p-0" data-bs-toggle="collapse"
                                     data-bs-target="#collapseExample" aria-expanded="false"
@@ -146,7 +146,7 @@
                                 <div class="d-flex justify-content-between">
                                     <p class="mb-0 fs-14"><span class="text-gray">Assigned to :</span> <b>Technical
                                             team</b></p>
-                                    <a href="#">
+                                    <a href="javascript:;">
                                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
                                             <path
@@ -166,7 +166,7 @@
                                 <div class="d-flex justify-content-between">
                                     <p class="mb-0 fs-14"><span class="text-gray">Assigned to :</span> <b>Technical
                                             team</b></p>
-                                    <a href="#">
+                                    <a href="javascript:;">
                                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
                                             <path
@@ -186,7 +186,7 @@
                                 <div class="d-flex justify-content-between">
                                     <p class="mb-0 fs-14"><span class="text-gray">Assigned to :</span> <b>Technical
                                             team</b></p>
-                                    <a href="#">
+                                    <a href="javascript:;">
                                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
                                             <path
@@ -199,7 +199,7 @@
                                     </a>
                                 </div>
                             </div>
-                            <a href="#" class="item more-item">
+                            <a href="javascript:;" class="item more-item">
                                 <p class="text-center mb-1 text-white">10</p>
                                 <p class="text-center text-white mb-0">More</p>
                             </a>
@@ -222,7 +222,7 @@
                                             <p class="mb-0 text-600">EStreet Appraisal Management
                                                 Company, LLC</p>
                                         </div>
-                                        <a href="#" class="primary-text underline text-600 mgb-24 d-inline-block">AMC
+                                        <a href="javascript:;" class="primary-text underline text-600 mgb-24 d-inline-block">AMC
                                             requirements</a>
                                         <div class="modal-item">
                                             <p class="mb-0">AMC name</p>
@@ -236,7 +236,7 @@
                                             <p class="mb-0 text-600">EStreet Appraisal Management
                                                 Company, LLC</p>
                                         </div>
-                                        <a href="#" class="primary-text underline text-600 d-inline-block">Lender
+                                        <a href="javascript:;" class="primary-text underline text-600 d-inline-block">Lender
                                             requirements</a>
                                         <div class="mgt-32">
                                             <p class="mb-3 text-600">Property info</p>
@@ -358,10 +358,14 @@
                 </div>
             </div>
         </m-modal>
+
+
         <Quickview v-if="openQuickView" :order="quickOrder" @closeQuickView="closeQuickViewModal($event)" />
         <Map v-if="openMap" :latLng="latLng" />
-        <call-schedule :orderId="orderId" :appraisers="appraisers"></call-schedule>
-        <call-re-schedule :scheduleData="scheduleData" :appraisers="appraisers"></call-re-schedule>
+        <call-schedule ref="callScheduleComponent" :appraisers="appraisers"></call-schedule>
+        <call-re-schedule ref="callReScheduleComponent" :appraisers="appraisers"></call-re-schedule>
+        <send-message ref="sendMessageComponent"></send-message>
+
         <div class="modal fade schedule-modal call-log-modal" id="callLogModal" tabindex="-1" aria-labelledby="callLogModalLabel" aria-hidden="true">
             <div class="modal-dialog h-100">
                 <div class="modal-content ">
@@ -459,20 +463,9 @@
             openIssue: false,
             openQuickView: false,
             quickOrder: [],
-            isScheduled: 0,
-            scheduleData: [],
-            orderId: 0
         }),
         created() {
             this.initOrder(this.order);
-        },
-        watch: {
-            orderId(newValue) {
-                this.orderId = newValue;
-            },
-            scheduleData(newValue) {
-                this.scheduleData = newValue;
-            }
         },
         mounted() {
             $(document).on("click", function (e) {
@@ -662,11 +655,15 @@
                 console.log(val);
             },
             getScheduleData(index) {
-                this.orderId = this.orderData[index].id
-                this.scheduleData = this.orderData[index]
-                this.isScheduled = (JSON.parse(this.orderData[index].workflow_status)).scheduling
-                this.isScheduled == 0 ? this.$bvModal.show('schedule') : this.$bvModal.show('re-schedule')
+                this.$refs.callScheduleComponent.setOrderId(this.orderData[index].id)
+                this.$refs.callReScheduleComponent.setOrderId(this.orderData[index].id)
+                this.$refs.callReScheduleComponent.setScheduleData(this.orderData[index].inspection)
+                this.$refs.callReScheduleComponent.setOrderStatus(this.orderData[index].status)
+                this.orderData[index].status == 0 ? this.$bvModal.show('schedule') : this.$bvModal.show('re-schedule')
             },
+            getSendMessage(index){
+                this.$bvModal.show('send-message')
+            }
         },
     }
 </script>

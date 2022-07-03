@@ -83,7 +83,7 @@ export default {
     }
   },
   created() {
-      // this.changeStep(2);
+      // this.changeStepTest();
       this.$root.$on("updateStepData", (res) => {
           if (res.step == 1) {
             this.step1Data = res.data;
@@ -123,6 +123,10 @@ export default {
       });
   },
   methods: {
+    changeStepTest() {
+      this.step = 2;
+      this.stepChangeActive = true;
+    },  
     stepChangeActiveStatus(value) {
       this.stepChangeActive = value.status;
       this.step1Data = value.data;

@@ -167,6 +167,8 @@
               totalfee += parseFloat(ele.fee);
           });
           this.servicesFee = totalfee;
+          this.add.serviceType = null;
+          this.add.serviceFee = null;
       },
     }
   }

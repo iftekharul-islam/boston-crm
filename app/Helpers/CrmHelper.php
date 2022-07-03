@@ -82,13 +82,13 @@ trait CrmHelper {
                 array_push($errorMessage, "Choose email address");
             }
         } elseif ($type == "providerService") {
-            if ($get->note ==  null ) {
-                $error = true;
-                array_push($errorMessage, "Enter provider service fee");
-            }
+            // if ($get->note ==  null ) {
+            //     $error = true;
+            //     array_push($errorMessage, "Enter provider service note");
+            // }
             if (count($get->data) == 0) {
                 $error = true;
-                array_push($errorMessage, "Please add some fee");
+                array_push($errorMessage, "Please add services and fee");
             }
         }
 
@@ -219,7 +219,7 @@ trait CrmHelper {
                 $currentStep = "initial-review";
             } else if($wkFlow[$item] == 1 && $item == "initial-review") {
                 $currentStep = "report-analysis-review";
-            } else if($wkFlow[$item] == 1 && $item == "report-analysis-review" && $order->analysis->is_review_send_back == 1) {
+            } else if($wkFlow[$item] == 1 && $item == "report-analysis-review") {
                 $currentStep = "rewriting-report";
             } else if($wkFlow[$item] == 1 && $item == "rewriting-report") {
                 $currentStep = "quality-assurance";

@@ -4,21 +4,23 @@ namespace App\Http\Controllers;
 
 use Zip;
 use Carbon\Carbon;
+use App\Models\User;
 use App\Models\Order;
 use App\Models\OrderWQa;
 use App\Models\OrderWcom;
 use App\Helpers\CrmHelper;
 use App\Models\OrderWReport;
 use Illuminate\Http\Request;
+use App\Models\OrderWRewrite;
 use Illuminate\Http\Response;
 use App\Models\OrderWRevision;
-use App\Models\OrderWRewrite;
-use App\Models\OrderWSubmission;
 use App\Models\OrderWInspection;
+use App\Models\OrderWSubmission;
 use Spatie\GoogleCalendar\Event;
 use Illuminate\Http\JsonResponse;
 use App\Models\OrderWReportAnalysis;
 use App\Services\OrderWorkflowService;
+use App\Repositories\OrderRepository;
 use App\Repositories\OrderWorkflowRepository;
 
 
@@ -26,13 +28,15 @@ class OrderWorkflowController extends BaseController
 {
     protected OrderWorkflowService $service;
     protected OrderWorkflowRepository $repository;
+    protected OrderRepository $orderRepository;
     use CrmHelper;
 
-    public function __construct(OrderWorkflowService $order_w_service, OrderWorkflowRepository $order_w_repository)
+    public function __construct(OrderWorkflowService $order_w_service, OrderWorkflowRepository $order_w_repository, OrderRepository $order_repository)
     {
         parent::__construct();
         $this->service = $order_w_service;
         $this->repository = $order_w_repository;
+        $this->orderRepository = $order_repository;
     }
 
     public function updateOrderSchedule(Request $request)
@@ -57,6 +61,34 @@ class OrderWorkflowController extends BaseController
         return [
             'error' => false,
             'message' => $message,
+            'data' => $orderData
+        ];
+    }
+
+    public function deleteSchedule(Request $request, $id)
+    {
+        dd($request->all());
+        $order_w_schedule = OrderWInspection::find($id);
+        $orderData = $this->orderDetails($order_w_schedule->order_id);
+        $order = Order::find($order_w_schedule->order_id);
+        $order->forceFill([
+            'workflow_status->scheduling' => 0,
+            'status' => 0
+        ])->save();
+
+        $data = [
+            "activity_text" => "Schedule Deleted By " . auth()->user()->name . "REASON: " . $request->delete_note,
+            "activity_by" => auth()->user()->id,
+            "order_id" => $order_w_schedule->order_id
+        ];
+
+        $this->orderRepository->addActivity($data);
+
+        $this->service->deleteOrderSchedule($id);
+        $this->repository->deleteSchedule($id);
+        return [
+            'error' => false,
+            'message' => "Schedule deleted successfully",
             'data' => $orderData
         ];
     }
@@ -121,13 +153,12 @@ class OrderWorkflowController extends BaseController
         }
         $image_types = ['jpeg', 'jpg', 'png'];
         $zip = new \ZipArchive();
-        $date= date('d-H-i');
-        $fileName = 'inspection-files('.$date.').zip';
+        $date = date('d-H-i');
+        $fileName = 'inspection-files(' . $date . ').zip';
         foreach ($data['files'] as $key => $file) {
             if (in_array($file->getClientOriginalExtension(), $image_types)) {
-                if ($zip->open(public_path($fileName), \ZipArchive::CREATE)== TRUE)
-                {
-                    $relativeName = ++$key.'.'.$file->getClientOriginalExtension();
+                if ($zip->open(public_path($fileName), \ZipArchive::CREATE) == TRUE) {
+                    $relativeName = ++$key . '.' . $file->getClientOriginalExtension();
                     $zip->addFile($file->getPathName(), $relativeName);
                 }
             } else {
@@ -484,15 +515,11 @@ class OrderWorkflowController extends BaseController
             $reWrite->order_id = $order->id;
             $reWrite->created_at = Carbon::now();
             $reWrite->created_by = $user->id;
-            $reWrite->assigned_to = $get->assigned_to;
             $reWrite->save();
-            $historyTitle = "New assignee assiged by " . $user->name . ' on the Re-writing the report section.';
         } else {
             $reWrite->updated_by = $user->id;
             $reWrite->updated_at = Carbon::now();
-            $historyTitle = "Re-writing the report section updated by " . $user->name;
         }
-
         $reWrite->note = $get->note;
         $reWrite->save();
         if (isset($get['files']) && count($get['files'])) {
@@ -506,8 +533,49 @@ class OrderWorkflowController extends BaseController
         $order->workflow_status = json_encode($workStatus);
         $order->save();
 
+        $historyTitle = "Re-writing the report updated by " . $user->name . ' change note "'.$get->note.'"';
         $this->addHistory($order, $user, $historyTitle, 'rewriting-report');
         $orderData = $this->orderDetails($get->order_id);
+
+        return [
+            'error' => false,
+            'message' => $historyTitle,
+            'status' => 'success',
+            'data' => $orderData
+        ];
+    }
+
+
+    public function rewriteReportAssignee(Request $get)
+    {
+        $order = Order::find($get->orderId);
+        $user = auth()->user();
+
+        if (!$order) {
+            return response()->json([
+                'error' => true,
+                'message' => 'Order Information Not Found'
+            ]);
+        }
+
+        $reWrite = OrderWRewrite::where('order_id', $order->id)->first();
+        $assignee = User::find($get->assigned_to);
+        if (!$reWrite) {
+            $reWrite = new OrderWRewrite();
+            $reWrite->order_id = $order->id;
+            $reWrite->created_at = Carbon::now();
+            $reWrite->created_by = $user->id;
+            $reWrite->assigned_to = $get->assigned_to;
+            $reWrite->save();
+        } else {
+            $reWrite->updated_by = $user->id;
+            $reWrite->updated_at = Carbon::now();
+            $reWrite->save();
+        }
+
+        $historyTitle = "{$assignee->name} has assiged by " . $user->name . ' on the Re-writing the report Assign.';
+        $this->addHistory($order, $user, $historyTitle, 'rewriting-report');
+        $orderData = $this->orderDetails($get->orderId);
 
         return [
             'error' => false,
@@ -824,11 +892,14 @@ class OrderWorkflowController extends BaseController
 
     public function checkClientOrderNo(Request $get)
     {
-        $old = Order::where('client_order_no', $get->client_no)->first();
+        $old = Order::where('client_order_no', $get->client_no)->with('propertyInfo', 'providerService')->first();
         if ($old) {
-            return response()->json(true);
+            $address = $old->propertyInfo->full_addr;
+            $provider = json_decode($old->providerService->appraiser_type_fee, true)[0];
+            $fullMessage = "<div class='mt-2'>The order no. already exists. The address is <strong style='color:#ff4406'>$address</strong> and Appraisal type is <strong style='color:#ff4406'>{$provider['type']}</strong></div>";
+            return response()->json([ 'find' => true, 'message' => $fullMessage ]);
         } else {
-            return response()->json(false);
+            return response()->json(['find' => false]);
         }
     }
 }

@@ -20,13 +20,17 @@
                             <th>Client Order No</th>
                             <th>Property Address</th>
                             <th>AMC Name</th>
+                            <th>Appraisal Type</th>
                             <th>Status</th>
                         </thead>
                         <tbody>
                             <tr v-for="item, ik in data" :key="`st-road-${ik}`">
                                 <td>{{ item.client_order_no }}</td>
-                                <td>{{ item.property_info.street_name }}</td>
+                                <td>{{ item.property_info.full_addr }}</td>
                                 <td>{{ item.amc.name }}</td>
+                                <td>
+                                    {{ showProvidedServiceType(item) }}
+                                </td>
                                 <td>
                                     <div class="dot"></div>
                                     {{ item.order_status }}
@@ -46,7 +50,16 @@
 
 export default {
     name: 'street-address',
-    props: ['data']
+    props: ['data'],
+    methods: {
+        showProvidedServiceType(items) {
+            let item = JSON.parse(items.provider_service.appraiser_type_fee);
+            let firstItem = item[0];
+            if (firstItem) {
+                return firstItem.type;
+            }
+        }
+    }
 }
 
 </script>
@@ -61,14 +74,17 @@ div#streetAddress-modal {
     background: rgba(0,0,0,0.25);
     display: flex;
     align-items: center;
+    backdrop-filter: blur(5px);
     justify-content: center;
 }
 .st-box {
     background: #fff;
-    max-width: 912px;
-    width: 100%;
+    max-width: 90%;
+    min-width: 80%;
     border-radius: 0.25rem;
     padding: 32px;
+    max-height: 80vh;
+    overflow: auto;
 }
 .st-box .st-title {
     position: relative;
@@ -98,8 +114,6 @@ div#streetAddress-modal {
 .st-box .tables tbody tr:last-of-type td {
     border-bottom: 0;
 }
-
-
 
 .st-box .dot{
     height: 10px;

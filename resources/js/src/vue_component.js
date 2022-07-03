@@ -2,7 +2,8 @@ import Vue from "vue";
 
 const ClientList = () =>
     import ( /*webpackChunkName: "client_list"*/ '../components/clients/list');
-
+const TicketList = () =>
+    import ( /*webpackChunkName: "client_list"*/ '../components/ticket/list');
 const orderCreate = () =>
     import ( /*webpackChunkName: "orderCreate"*/ '../components/orders/OrderCreate')
 const basicInfo = () =>
@@ -61,8 +62,11 @@ const addIssue = () =>
     import ( /*webpackChunkName: "addIssue"*/ '../components/orders/AddIssue')
 const mModal = () =>
     import ( /*webpackChunkName: "m-modal"*/ './modal')
+const sendMessage = () =>
+    import ( /*webpackChunkName: "sendmessage"*/ '../components/calls/sendMessage')
 
 Vue.component('clients-list', ClientList);
+Vue.component('ticket-list', TicketList);
 Vue.component('order-create', orderCreate);
 Vue.component('basic-info', basicInfo);
 Vue.component('property-info', propertyInfo);
@@ -92,3 +96,5 @@ Vue.component('call-list', callList);
 Vue.component('call-schedule', callSchedule);
 Vue.component('call-re-schedule', callReSchedule);
 Vue.component('m-modal', mModal);
+Vue.component('send-message', sendMessage);
+
