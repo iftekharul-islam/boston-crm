@@ -75,4 +75,8 @@ class Client extends Model implements HasMedia, Auditable
     {
         return $this->belongsTo(User::class,'created_by');
     }
+
+    public function attachments(){
+        return $this->media()->where('collection_name', '=', 'clients');
+    }
 }

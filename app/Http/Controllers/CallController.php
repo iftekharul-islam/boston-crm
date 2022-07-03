@@ -26,6 +26,7 @@ class CallController extends BaseController
         $data = $get->data;
         $paginate = $get->paginate && $get->paginate > 0 ? $get->paginate : 5;
         $order = $this->orderData($data, $companyId, $paginate);
+        
         return view('call.index', compact('order','appraisers'));
     }
 

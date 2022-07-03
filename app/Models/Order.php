@@ -116,7 +116,7 @@ class Order extends Model implements HasMedia
         return $this->belongsTo(Client::class,'amc_id','id');
     }
 
-    public function lender(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function lender()
     {
         return $this->belongsTo(Client::class,'lender_id','id');
     }
