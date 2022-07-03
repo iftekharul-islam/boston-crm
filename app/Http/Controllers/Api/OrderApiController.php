@@ -23,7 +23,8 @@ class OrderApiController extends Controller
 {
     use CrmHelper;
 
-    public function store(Request $get) {
+    public function store(Request $get)
+    {
 
         $step = $get->step1;
         $step2 = $get->step2;
@@ -32,12 +33,12 @@ class OrderApiController extends Controller
         $errorChecking = $this->getErrorMessage($get);
         $error = $errorChecking['error'];
         $errorMessage = $errorChecking['message'];
-        
+
         if ($error == true) {
             return response()->json(['error' => $error, 'messages' => $errorMessage]);
         }
 
-        $orderProccess = DB::transaction( function() use ($step, $step2, $company, $get) {
+        $orderProccess = DB::transaction(function () use ($step, $step2, $company, $get) {
             $amcClient = $step['amcClient'];
             $appraiserName = $step['appraiserName'];
 
@@ -252,11 +253,9 @@ class OrderApiController extends Controller
             //file upload
             if (isset($step2["file"])) {
                 $file = $step2["file"];
-                if (str_contains($file, 'data:image/')) {
-                    $order->addMediaFromBase64($file)
-                        ->withCustomProperties(['type' => 'Order'])
-                        ->toMediaCollection('orders');
-                }
+                $order->addMediaFromBase64($file)
+                    ->withCustomProperties(['type' => 'Order'])
+                    ->toMediaCollection('orders');
             }
 
             if ($orderId == null) {
@@ -281,7 +280,8 @@ class OrderApiController extends Controller
         return $orderProccess;
     }
 
-    protected function getErrorMessage($get) {
+    protected function getErrorMessage($get)
+    {
         $step = $get->step1;
         $step2 = $get->step2;
         $company = $get->company;
@@ -325,17 +325,17 @@ class OrderApiController extends Controller
         ];
 
         foreach ($array_filter as $item) {
-            if($item == 'fhaCaseNo'){
+            if ($item == 'fhaCaseNo') {
                 $loanType = LoanType::where('id', $step['loanType'])->first();
-                if($loanType && $loanType->is_fha){
+                if ($loanType && $loanType->is_fha) {
                     if ($step[$item] == null) {
                         $error = true;
-                        array_push($errorMessage['step1'], $this->recTitle($item)." is missing");
+                        array_push($errorMessage['step1'], $this->recTitle($item) . " is missing");
                     }
                 }
             } elseif ($step[$item] == null) {
                 $error = true;
-                array_push($errorMessage['step1'], $this->recTitle($item)." is missing");
+                array_push($errorMessage['step1'], $this->recTitle($item) . " is missing");
             }
         }
 
@@ -347,16 +347,16 @@ class OrderApiController extends Controller
         foreach ($array_filter2 as $item) {
             if ($step2[$item] == null) {
                 $error = true;
-                array_push($errorMessage['step2'], $this->recTitle($item)." is missing");
+                array_push($errorMessage['step2'], $this->recTitle($item) . " is missing");
             }
         }
         if ($step2['borrower_contact'] == false) {
             $error = true;
-            array_push($errorMessage['step2'], $this->recTitle('borrower_contact')." is missing");
+            array_push($errorMessage['step2'], $this->recTitle('borrower_contact') . " is missing");
         }
         if ($step2['borrower_email'] == false) {
             $error = true;
-            array_push($errorMessage['step2'], $this->recTitle('borrower_email')." is missing");
+            array_push($errorMessage['step2'], $this->recTitle('borrower_email') . " is missing");
         }
 
         if ($step2['contactSame'] == 0) {
@@ -368,7 +368,7 @@ class OrderApiController extends Controller
             foreach ($array_filter3 as $item) {
                 if ($step2[$item] == null) {
                     $error = true;
-                    array_push($errorMessage['step2'], $this->recTitle($item)." is missing");
+                    array_push($errorMessage['step2'], $this->recTitle($item) . " is missing");
                 }
             }
         }
@@ -379,11 +379,13 @@ class OrderApiController extends Controller
         ];
     }
 
-    protected function recTitle($item) {
+    protected function recTitle($item)
+    {
         return ucwords(str_replace("_", " ", $item));
     }
 
-    public function getSameData(Request $get){
+    public function getSameData(Request $get)
+    {
         $propertyInfo = PropertyInfo::where('street_name', "LIKE", "%$get->street%")->get()->pluck('order_id');
         $order = Order::whereIn('id', $propertyInfo)->orderBy('id', 'desc')->with(
             'amc',
@@ -400,5 +402,4 @@ class OrderApiController extends Controller
             'orders' => $order
         ]);
     }
-
 }

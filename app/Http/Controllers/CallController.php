@@ -7,17 +7,20 @@ use App\Models\Order;
 use App\Helpers\CrmHelper;
 use App\Models\CallLog;
 use Illuminate\Http\Request;
+use App\Services\CallService;
 use App\Repositories\OrderRepository;
 
 class CallController extends BaseController
 {
     protected OrderRepository $repository;
+    protected CallService $callService;
     use CrmHelper;
 
-    public function __construct(OrderRepository $order_repository)
+    public function __construct(OrderRepository $order_repository,CallService $callService)
     {
         parent::__construct();
         $this->repository = $order_repository;
+        $this->service = $callService;
     }
 
     public function index(Request $get)
@@ -105,5 +108,10 @@ class CallController extends BaseController
         ];
     }
 
+
+    public function sendMessage(Request $request)
+    {
+        $this->service->sendMessage($request->all());
+    }
 
 }
