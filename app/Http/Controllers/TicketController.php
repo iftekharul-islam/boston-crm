@@ -6,12 +6,20 @@ use App\Helpers\CrmHelper;
 use App\Models\CallLog;
 use App\Models\Order;
 use App\Models\Ticket;
+use App\Repositories\OrderRepository;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TicketController extends Controller
 {
     use CrmHelper;
+    protected OrderRepository $repository;
+
+    public function __construct(OrderRepository $order_repository)
+    {
+        $this->repository = $order_repository;
+    }
 
     public function index($id)
     {
@@ -39,6 +47,13 @@ class TicketController extends Controller
 
         $historyTitle = "Issue/Query created successfully";
 
+        $data = [
+            "activity_text" => "Issue/Query created successfully",
+            "activity_by" => Auth::id(),
+            "order_id" => $order->id
+        ];
+
+        $this->repository->addActivity($data);
 
         $orderData = $this->orderDetails($id);
         return [
@@ -72,7 +87,15 @@ class TicketController extends Controller
         $ticket->updated_by = $user->id;
         $ticket->save();
 
-        $historyTitle = "Issue updated successfully";
+        $historyTitle = "Issue solution added successfully";
+
+        $data = [
+            "activity_text" => "Issue solution added successfully",
+            "activity_by" => Auth::id(),
+            "order_id" => $ticket->order_id
+        ];
+
+        $this->repository->addActivity($data);
 
 
         $orderData = $this->orderDetails($ticket->order_id);

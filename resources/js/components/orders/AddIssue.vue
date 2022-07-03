@@ -15,7 +15,9 @@
                         <ValidationProvider class="d-block group" name="Queries or Issues" rules="required" v-slot="{ errors }">
                             <div class="group" :class="{ 'invalid-form' : errors[0] }">
                                 <label for="" class="d-block mb-2 dashboard-label">Queries or Issues</label>
-                                <input v-model="issue" class="dashboard-input w-100" style="min-height: 100px">
+                                <b-form-textarea v-model="issue" placeholder="Enter issue..." rows="2"
+                                                 cols="5">
+                                </b-form-textarea>
                                 <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                             </div>
                         </ValidationProvider>
