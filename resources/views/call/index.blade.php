@@ -1,5 +1,5 @@
 @extends('layouts.app')
 
 @section('content')
-   <call-list :order="{{ json_encode($order) }}" :appraisers="{{ $appraisers }}"></call-list>
+   <call-list :filter-value="{{ json_encode($filterValue) }}" :order="{{ json_encode($order) }}" :appraisers="{{ $appraisers }}"></call-list>
  @endsection

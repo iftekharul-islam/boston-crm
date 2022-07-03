@@ -1,5 +1,5 @@
 <template>
-    <transition name="fade" appear>
+    <transition name="slide-y" appear>
         <div class="modals quick-view-modal">
             <div class="modal-dialog h-100">
                 <div class="modal-content h-100 p-0">

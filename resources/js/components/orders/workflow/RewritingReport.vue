@@ -83,7 +83,7 @@
                         <p class="primary-text mb-2">(Rewrite & send back)</p>
                         <p class="mb-0 text-light-black fw-bold" v-html="current.note"></p>
                     </div>
-                    <div class="group">
+                    <div class="group" v-if="current.assignee">
                         <p class="text-light-black mgb-12">Assign to</p>
                         <p class="mb-0 text-light-black fw-bold">{{ current.assignee.name }}</p>
                     </div>

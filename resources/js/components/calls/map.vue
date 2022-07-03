@@ -1,36 +1,22 @@
 <template>
-  <div class="order-details-box bg-white">
-    <div class="box-header">
-      <p class="fw-bold text-light-black fs-20 mb-0">Map</p>
-    </div>
-    <div class="box-body">
-     <div class="map" ref="map" v-if="!mapNotFound">
-        <!-- <MapMarker :lat="center.lat" :lng="center.lng"></MapMarker>
-        <MapMarker v-for="item, li in latLon" :key="li+'map-lat-lon'" :lat="item.lat" :lng="item.lng"></MapMarker>
-        <MapInfo v-for="item, lix in latLon" :key="lix+'map-details-data'" :lat="center.lat" :lng="center.lng" class="map-info-bg">
-            <span style="text-align: center; color: #2473e8">Boston Order's Property Info:</span> <br><br>
-            S.O.N: <strong style="color: #000">#{{ item.details.orderNo }}</strong> <br>
-            {{ item.details.property.search_address }}
-        </MapInfo> -->
+   <transition name="fade">
+     <div class="map-box">
+        <div class="cancel" @click="closeMap()">
+          <img src="/img/cancel.png" class="img-fluid">
+        </div>
+        <div class="map" ref="map" v-if="!mapNotFound"></div>
+        <div class="text-center" v-else>
+          Map Information Not Found
+        </div>
       </div>
-      <div class="text-center" v-else>
-        Map Information Not Found
-      </div>
-    </div>
-  </div>
+   </transition>
 </template>
 
 
 <script>
-import MapMarker from "../../src/MapMarker.vue";
-import MapInfo from "../../src/MapInfo.vue";
-
 export default {
     name: "Mapview",
     props: ['latLng'],
-    components: {
-      MapInfo, MapMarker
-    },
     data: () => ({
         center: {
           lat: null,
@@ -44,7 +30,7 @@ export default {
         message: null,
     }),
     created(){
-        this.markerIcon = this.$boston.host('img/marker.png');
+        this.markerIcon = this.$boston.host('img/pin.png');
         this.latLng.map( (ele, index) => {
             if (index == 0) {
                 this.center.lat = ele.lat;
@@ -60,36 +46,61 @@ export default {
     },
     methods: {
       geolocate() {
-        this.mapNotFound = window.google.maps === undefined ? true : false;
-        this.map = new window.google.maps.Map(this.$refs['map'], {
-            center:  this.center,
-            zoom: 14,
-            gestureHandling: 'greedy'
-        });
-        new window.google.maps.Marker({
-            position: this.center,
-            map: this.map,
-            icon: this.markerIcon
-        });
-        
-        // let mapItem = {
-        //     position: {
-        //         lat: ele.lat,
-        //         lng: ele.lng,
-        //     },
-        //     map: this.map,
-        //     icon: this.markerIcon
-        // };
-        // new window.google.maps.Marker(mapItem);
-    },
+          this.mapNotFound = window.google.maps === undefined ? true : false;
+          this.map = new window.google.maps.Map(this.$refs['map'], {
+              center:  this.center,
+              icon: this.markerIcon,
+              zoom: 10,
+              mapTypeId: window.google.maps.MapTypeId.ROADMAP,
+              gestureHandling: 'greedy'
+          });
+          this.buildMapWithMultipleLocations(this.map)
+      },
 
-    getMap(callback) {
-        let vm = this;
-        function checkForMap() {
-          if (vm.map) callback(vm.map)
-          else setTimeout(checkForMap, 200)
-        }
-        checkForMap();
+      buildMapWithMultipleLocations(getMap) {
+        let lcoationtions = this.latLng;
+        const infowindow = new google.maps.InfoWindow();
+        const geocoder = new google.maps.Geocoder();
+        const map = getMap;
+        let latAverage = 0;
+        let lngAverage = 0;
+        lcoationtions.forEach(function(locationItem, index) {
+          geocoder.geocode({'address': locationItem.details.property.formatedAddress}, function(results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+              const latitude = results[0].geometry.location.lat();
+              const longitude = results[0].geometry.location.lng();
+              
+              latAverage = latitude;
+              lngAverage = longitude;
+
+              map.setCenter(new google.maps.LatLng(latAverage, lngAverage));
+              this.setLocation(map, infowindow, longitude, latitude, locationItem);
+            }
+          }.bind(this));
+        }.bind(this));
+      },
+
+      closeMap() {
+        this.$emit('closeMap', true);
+      },
+
+      setLocation(map, infowindow, longitude, latitude, locationItem) {
+        const marker = new google.maps.Marker({
+          position: new google.maps.LatLng(latitude, longitude),
+          map: map,
+          icon: this.markerIcon,
+        });
+
+        google.maps.event.addListener(
+          marker,
+          'click',
+          (function (marker) {
+            return function () {
+              infowindow.setContent(locationItem.details.property.full_addr);
+              infowindow.open(map, marker)
+            };
+          })(marker)
+        );
       }
     }
 }
@@ -99,11 +110,34 @@ export default {
 <style>
 
 .map {
-  height: 400px;
-}
-.map-info-bg{
-  color: #00c851;
-  font-weight: bold;
+    height: 85vh;
+    width: 85%;
+    left: 50%;
+    transform: translate(-50%, 5%);
+    box-shadow: 0 8px 16px rgb(0 0 0 / 35%);
+    border-radius: 0.25rem;
 }
 
+.map-box {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    z-index: 99999;
+    top: 0;
+    left: 0;
+    backdrop-filter: blur(8px);
+    background: rgba(0,0,0,0.5);
+}
+
+.cancel img {
+    height: 45px;
+    filter: invert(1);
+    cursor: pointer;
+}
+.cancel {
+    position: absolute;
+    right: 11%;
+    top: 5%;
+    z-index: 999999;
+}
 </style>
