@@ -26,12 +26,12 @@
         <div class="text-center mt-3 mb-3" v-else>
             Not yet scheduled !
         </div>
-        <b-modal id="inspection" size="md" title="Edit Basic Information">
+        <b-modal id="inspection" size="md" title="Edit inspection">
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-12">
                         <ValidationObserver ref="inspectionForm">
-                            <ValidationProvider class="group" name="Appraiser name" rules="required"
+                            <ValidationProvider class="group d-block" name="Appraiser name" rules="required"
                                 v-slot="{ errors }">
                                 <div :class="{ 'invalid-form' : errors[0] }">
                                     <label for="" class="d-block mb-2 dashboard-label">Appraiser name <span
@@ -40,7 +40,7 @@
                                     <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                                 </div>
                             </ValidationProvider>
-                            <ValidationProvider class="d-block mb-2 dashboard-label" name="Inspection date & time"
+                            <ValidationProvider class="d-block group dashboard-label" name="Inspection date & time"
                                 rules="required" v-slot="{ errors }">
                                 <div class="group" :class="{ 'invalid-form' : errors[0] }">
                                     <label for="" class="d-block mb-2 dashboard-label">Inspection date & time<span
@@ -55,7 +55,7 @@
                                     <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                                 </div>
                             </ValidationProvider>
-                            <ValidationProvider class="group" name="Duration" rules="required" v-slot="{ errors }">
+                            <ValidationProvider class="group d-block" name="Duration" rules="required" v-slot="{ errors }">
                                 <div :class="{ 'invalid-form' : errors[0] }">
                                     <label for="" class="d-block mb-2 dashboard-label">Duration <span
                                             class="text-danger require"></span></label>
@@ -70,7 +70,7 @@
                                     <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                                 </div>
                             </ValidationProvider>
-                            <ValidationProvider class="d-block mb-2 dashboard-label" name="Notes" rules="required"
+                            <ValidationProvider class="d-block group dashboard-label" name="Notes" rules="required"
                                 v-slot="{ errors }">
                                 <div class="group" :class="{ 'invalid-form' : errors[0] }">
                                     <label for="" class="d-block mb-2 dashboard-label">Notes <span

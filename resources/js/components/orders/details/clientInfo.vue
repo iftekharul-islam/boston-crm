@@ -36,7 +36,7 @@
                         <div class="col-md-6">
                             <ValidationProvider class="group mb-4" name="AMC Name" rules="required" v-slot="{ errors }">
                                 <div class="position-relative" :class="{ 'invalid-form' : errors[0] }">
-                                    <label for="" class="d-block mb-2 dashboard-label">AMC Name <span
+                                    <label for="" class="d-block mb-2 dashboard-label">AMC name <span
                                             class="require"></span></label>
                                     <m-select v-model="amc_id" @change="changeClientType('amc', $event)"
                                         :options="allAmc" object item-value="id" item-text="name"></m-select>
@@ -59,7 +59,7 @@
                             <ValidationProvider class="group d-block" name="Lender Name" rules="required"
                                 v-slot="{ errors }">
                                 <div class="position-relative" :class="{ 'invalid-form' : errors[0] }">
-                                    <label for="" class="d-block mb-2 dashboard-label">Lender Name <span
+                                    <label for="" class="d-block mb-2 dashboard-label">Lender name <span
                                             class="require"></span></label>
                                     <m-select v-model="lender_id" @change="changeClientType('lender', $event)"
                                         :options="allLender" object item-value="id" item-text="name"></m-select>

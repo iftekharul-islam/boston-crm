@@ -48,7 +48,7 @@
                             </button>
                         </div>
 
-                        <button class="button button-primary h-40 d-inline-flex align-items-center py-2">View daily report</button>
+                        <button class="button button-primary h-32 d-inline-flex align-items-center py-2">View daily report</button>
                     </div>
                 </div>
                 <Table :items="orderData" :sl-start="pages.pageData.from" :header="order.header" @headClick="headerClick($event)">

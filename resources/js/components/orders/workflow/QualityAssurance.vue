@@ -18,9 +18,9 @@
                     <div class="file-img">
                         <img src="/img/pdf.png" alt="boston pdf image">
                     </div>
-                    <div class="mgl-12">
-                        <p class="text-light-black mb-0">{{ attachment.name }}</p>
-                        <p class="text-gray mb-0 fs-12">Uploaded: {{ analysis.updated_by.name + ', ' +
+                    <div class="mgl-12 document">
+                        <p class="text-light-black mb-0 file-name">{{ attachment.name }}</p>
+                        <p class="text-gray mb-0 fs-12 ">Uploaded: {{ analysis.updated_by.name + ', ' +
                             analysis.updated_at }}</p>
                     </div>
                 </div>
@@ -78,8 +78,8 @@
                     <div class="file-img">
                         <img src="/img/pdf.png" alt="boston pdf image">
                     </div>
-                    <div class="mgl-12">
-                        <p class="text-light-black mb-0">{{ attachment.name }}</p>
+                    <div class="mgl-12 document">
+                        <p class="text-light-black mb-0 file-name">{{ attachment.name }}</p>
                         <p class="text-gray mb-0 fs-12">Uploaded: {{ analysis.updated_by.name + ', ' +
                             analysis.updated_at }}</p>
                     </div>
@@ -213,8 +213,8 @@
                     <div class="file-img">
                         <img src="/img/pdf.png" alt="boston pdf image">
                     </div>
-                    <div class="mgl-12">
-                        <p class="text-light-black mb-0">{{ attachment.name }}</p>
+                    <div class="mgl-12 document">
+                        <p class="text-light-black mb-0 file-name">{{ attachment.name }}</p>
                         <p class="text-gray mb-0 fs-12">Uploaded: {{ orderData.analysis.updated_by.name + ', ' +
                             orderData.analysis.updated_at }}</p>
                     </div>
@@ -239,16 +239,15 @@
                     <div class="file-img">
                         <img src="/img/pdf.png" alt="boston pdf image">
                     </div>
-                    <div class="mgl-12">
-                        <p class="text-light-black mb-0">{{ attachment.name }}</p>
+                    <div class="mgl-12 document">
+                        <p class="text-light-black mb-0 file-name">{{ attachment.name }}</p>
                         <p class="text-gray mb-0 fs-12">Uploaded: {{ analysis.updated_by.name + ', ' +
                             analysis.updated_at }}</p>
                     </div>
                 </div>
             </div>
             <button v-if="showSeeCom" type="button"
-                class="button button-primary px-4 h-40 d-inline-flex align-items-center" @click="mapOpen = true">See
-                Com</button>
+                class="button button-primary px-4 h-40 d-inline-flex align-items-center mt-4" @click="mapOpen = true">See com</button>
             <!-- load see com -->
             <div v-if="mapOpen" class="map-direction vue-modal">
                 <div class="content">
