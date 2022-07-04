@@ -432,7 +432,7 @@
         data() {
             return {
                 oldOrderNo: {
-                    find: false, 
+                    find: false,
                     message: null
                 },
                 fhaExists: 0,
@@ -628,11 +628,11 @@
                 this.providerTypes.error.fee = false;
                 if (newType == null || newType == "") {
                     this.providerTypes.error.type = true;
-                } 
+                }
                 if (newFee == null) {
                     this.providerTypes.error.fee = true;
-                } 
-                
+                }
+
                 if (newType && newFee) {
                     this.setNewFee(newType, newFee);
                 }
@@ -662,7 +662,7 @@
                         fee: newFee
                     });
                 }
-                
+
                 this.providerTypes.default.type = null;
                 this.providerTypes.default.fee = null;
                 this.providerTypes.error.type = false;
@@ -708,7 +708,7 @@
                 this.isFullAppraisal == 1 ? this.step1.technologyFee = uad : this.step1.technologyFee = d
                 if (processingFee != '' && processingFee > 0) {
                     let technologyFee = parseFloat(parseFloat(this.step1.technologyFee) + parseFloat(this.providerTypes.totalAmount * (processingFee / 100)))
-                    this.step1.technologyFee = technologyFee
+                    this.step1.technologyFee = parseFloat(technologyFee).toFixed(2)
                 }
             },
             remoteProviderType(item, index) {
