@@ -65,7 +65,7 @@ const mModal = () =>
 const sendMessage = () =>
     import ( /*webpackChunkName: "sendMessage"*/ '../components/calls/sendMessage')
 const quickView = () =>
-    import ( /*webpackChunkName: "quickView"*/ '../components/calls/quickView')
+    import ( /*webpackChunkName: "quickView"*/ '../components/calls/QuickView')
 
 Vue.component('clients-list', ClientList);
 Vue.component('ticket-list', TicketList);

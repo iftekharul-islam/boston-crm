@@ -177,14 +177,15 @@
                                 'Content-Type': 'multipart/form-data'
                             }
                         }).then(res => {
+                            console.log(res);
                             this.isUploading = false
                             this.fileData.file_type = ''
                             this.fileData.files = []
                             this.isDataExists = true
                             if (res.error == false) {
                                 this.orderData = res.data
-                                this.$root.$emit('wk_update', this.orderData);
                                 this.$root.$emit('wk_flow_menu', this.orderData);
+                                this.$root.$emit('wk_update', this.orderData);
                                 this.updateData(this.orderData);
                             }
                             this.$root.$emit('wk_flow_toast', res)

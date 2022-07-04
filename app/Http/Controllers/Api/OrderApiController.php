@@ -163,6 +163,7 @@ class OrderApiController extends Controller
             $zipcode = $step['zipcode'];
             $city = $step['city'];
             $country = $step['country'];
+            $county = $step['county'];
             $latitude = $step['lat'];
             $longitude = $step['lng'];
 
@@ -187,6 +188,7 @@ class OrderApiController extends Controller
             $propertyInfo->state_name = $state;
             $propertyInfo->zip = $zipcode;
             $propertyInfo->country = $country;
+            $propertyInfo->county = $county;
             $propertyInfo->unit_no = $unitNo;
             $propertyInfo->latitude = $latitude;
             $propertyInfo->longitude = $longitude;
@@ -254,7 +256,7 @@ class OrderApiController extends Controller
             if (isset($step2["file"])) {
                 $file = $step2["file"];
                 $order->addMediaFromBase64($file)
-                    ->withCustomProperties(['type' => 'Order'])
+                    ->withCustomProperties(['type' => 'Order','user'=> auth()->user->name])
                     ->toMediaCollection('orders');
             }
 
@@ -320,6 +322,7 @@ class OrderApiController extends Controller
             "street",
             "zipcode",
             "country",
+            'county',
             "lat",
             "lng",
         ];

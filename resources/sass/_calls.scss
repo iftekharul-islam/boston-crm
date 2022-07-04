@@ -298,7 +298,7 @@
                 .modal-body {
                     padding: 0;
                 }
-                
+
             }
         }
     }
@@ -314,7 +314,7 @@
                 width: 145px;
                 min-width: 145px;
             }
-    
+
         }
         span {
             margin: 0 8px;
@@ -383,7 +383,7 @@
         &.solved {
             background: $solved-bg;
             .call-badge {
-              
+
                 background: $sky-blue;
             }
         }
@@ -420,4 +420,10 @@
 
 .phone-number input:focus {
     outline: unset;
+}
+
+.phone-number.flat input {
+    background: unset;
+    font-weight: normal;
+    border: unset;
 }

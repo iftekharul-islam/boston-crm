@@ -194,7 +194,7 @@ class OrderRepository extends BaseRepository
             "city_name" => $data['city_name'],
             "state_name" => $data['state_name'],
             "zip" => $data['zip'],
-            "country" => $data['country'],
+            "county" => $data['county'],
             "unit_no" => $data['unit_no'],
         ]);
     }
@@ -251,7 +251,7 @@ class OrderRepository extends BaseRepository
 
     public function getOrderFiles($order_id)
     {
-        return $this->model->find($order_id)->getMedia('orders')->groupBy('custom_properties')->toArray();
+        return $this->model->find($order_id)->getMedia('orders')->groupBy('custom_properties.type')->toArray();
     }
 
     /**
@@ -297,7 +297,7 @@ class OrderRepository extends BaseRepository
     {
         foreach ($data['files'] as $file){
             $this->model->find($order_id)->addMedia($file)
-                ->withCustomProperties(['type' => $data['file_type']])
+                ->withCustomProperties(['type' => $data['file_type'],'user'=>auth()->user()->name])
                 ->toMediaCollection('orders');
         }
         return true;
