@@ -256,38 +256,73 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
-.quick-view-modal {
-    padding: 20px;
+#quick-view {
+    padding: 20px !important;
+    .modal-header {
+        height: 60px;
+        padding: 4px 10px 4px 32px;
+        background: $gray;
+        .modal-title {
+            margin-bottom: 0;
+            color: $white;
+        }
+    }
     .modal-dialog {
         margin: 0 0 0 auto;
+        height: 100%;
         max-width: 680px;
+        .btn-close {
+            position: absolute;
+            top: 17px;
+            right: 24px;
+            z-index: 99;
+            background: none;
+            &::after {
+                content: url('data:image/svg+xml; utf8,<svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 17L17 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M17 17L1 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>');
+            }
+        }
         .modal-content {
             border: none;
             border-radius: 8px;
+            padding: 0;
+            height: 100%;
             .header-modal {
                 border-radius: 8px 8px 0px 0px;
             }
             .modal-body {
                 padding: 24px 32px;
-                .modal-item {
-                    display: flex;
-                    margin-bottom: 16px;
-                    p {
-                        &:first-of-type {
-                            width: 145px;
-                            min-width: 145px;
-                        }
-
-                    }
-                    span {
-                        margin: 0 8px;
-                        display: inline-block;
-                    }
+                height: 100%;
+                overflow: auto;
+                overflow-x: hidden;
+                position: initial !important;
+                .modal-body {
+                    padding: 0;
                 }
+                
             }
         }
     }
+    .modal-footer {
+        margin: 0;
+        display: none;
+    }
+    .modal-item {
+        display: flex;
+        margin-bottom: 16px;
+        p {
+            &:first-of-type {
+                width: 145px;
+                min-width: 145px;
+            }
+    
+        }
+        span {
+            margin: 0 8px;
+            display: inline-block;
+        }
+    }
 }
+
 .schedule-modal {
     padding: 20px;
     .modal-dialog {
