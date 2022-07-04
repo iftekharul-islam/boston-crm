@@ -529,7 +529,7 @@ class OrderController extends BaseController
         $this->repository->updateClientDetails($order_id, $request->all());
 
         $orderData = $this->orderDetails($order_id);
-        $order= Order::find($order_id);
+        $order = Order::find($order_id);
         $data = [
             "activity_text" => "Client info has been updated",
             "activity_by" => Auth::id(),
@@ -575,11 +575,11 @@ class OrderController extends BaseController
         if ($request->file_type == '') {
             if ($request->ajax()) {
                 return ["message" => "File type is required"];
+            } else {
+                return redirect()
+                    ->to('public-order/' . base64_encode($order_id))
+                    ->with(['error' => 'Order file type is required']);
             }
-        } else {
-            return redirect()
-                ->to('public-order/' . base64_encode($order_id))
-                ->with(['error' => 'Order file type is required']);
         }
         $this->repository->saveOrderFiles($request->all(), $order_id);
         if ($request->ajax()) {

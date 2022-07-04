@@ -65,7 +65,7 @@
           </ValidationObserver>
       </div>
       <div v-else>
-          <a class="edit-btn"><span class="icon-edit" @click="isEditable = true"><span class="path1"></span><span class="path2"></span></span></a>
+          <a class="edit-btn"  @click="isEditable = true"><span class="icon-edit"><span class="path1"></span><span class="path2"></span></span></a>
           <div class="group">
               <p class="text-light-black mgb-12">Trainee name</p>
               <p class="mb-0 text-light-black fw-bold">{{ traineeName }}</p>
@@ -149,9 +149,9 @@ export default {
                         }}).then(res => {
                             if (res.error == false) {
                                 this.orderData = res.data;
+                                this.updateData(this.orderData);
                                 this.$root.$emit('wk_update', this.orderData);
                                 this.$root.$emit('wk_flow_menu', this.orderData);
-                                this.updateData(res.data);
                             }
                             this.$root.$emit('wk_flow_toast', res);
                     }).catch(err => {

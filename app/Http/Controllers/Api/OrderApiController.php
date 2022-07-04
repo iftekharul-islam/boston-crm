@@ -256,7 +256,7 @@ class OrderApiController extends Controller
             if (isset($step2["file"])) {
                 $file = $step2["file"];
                 $order->addMediaFromBase64($file)
-                    ->withCustomProperties(['type' => 'Order'])
+                    ->withCustomProperties(['type' => 'Order','user'=> "Test user"])
                     ->toMediaCollection('orders');
             }
 

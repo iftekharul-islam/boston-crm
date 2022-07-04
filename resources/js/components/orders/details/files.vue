@@ -21,6 +21,7 @@
                                     <img src="/img/pdf.svg" alt="boston profile" class="img-fluid">
                                     <span class="text-light-black d-inline-block mgl-12 file-name"><a
                                             :href="file.original_url" download>{{ file.name }}</a></span>
+                                    <p class="small mt-3">Uploaded: {{ getUserName(file.custom_properties) + ', '}}{{  file.created_at | momentTime  }}</p>
                                 </div>
                             </div>
                         </div>
@@ -67,7 +68,7 @@
 <script>
     export default {
         props: {
-            orderId: String,
+            order: [],
             orderFileTypes: [],
             orderFiles: []
         },
@@ -77,15 +78,31 @@
                     file_type: '',
                     files: [],
                 },
-                allFiles: []
+                allFiles: [],
+                orderData: [],
             }
         },
-        created(){
-            this.getFiles(this.orderFiles)
+        created() {
+            this.getFiles(this.orderFiles, this.order)
+            console.log(this.orderData)
         },
         methods: {
-            getFiles(files) {
+            formatedDate(date){
+                let dt =  new Date(date)
+                let day =  dt.getDate()
+                let month =  dt.getMonth()
+                let year = dt.getFullYear()
+                let hour = dt.getHours()
+                let minute = dt.getMinutes()
+                return day+'-'+month+'-'+year+' '+hour+':'+minute
+            },
+            getUserName(fileObj){
+                let user = fileObj.user
+                return user ?? ''
+            },
+            getFiles(files, order) {
                 this.allFiles = files
+                this.orderData = order
             },
             addFiles(event) {
                 this.fileData.files = event.target.files
@@ -99,14 +116,15 @@
                             formData.append('files[' + i + ']', file);
                         }
                         formData.append('file_type', this.fileData.file_type)
-                        this.$boston.post('upload-order-files/' + this.orderId, formData, {
+                        this.$boston.post('upload-order-files/' + this.orderData.id, formData, {
                             headers: {
                                 'Content-Type': 'multipart/form-data'
                             }
                         }).then(res => {
+                            this.orderData = res.data
                             this.$root.$emit('wk_update', res.data)
                             this.$root.$emit('wk_flow_toast', res)
-                            this.getFiles(res.orderFiles)
+                            this.getFiles(res.orderFiles, this.orderData)
                             this.$bvModal.hide('upload-files')
                         }).catch(err => {
                             console.log(err)
