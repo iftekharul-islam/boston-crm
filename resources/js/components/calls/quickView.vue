@@ -107,7 +107,7 @@
                 this.lender_name = orderData.lender.name
                 this.lender_address = orderData.lender.address
                 this.lender_file = (orderData.lender.attachments && orderData.lender.attachments[0]) ? orderData.lender.attachments[0].original_url : ''
-                this.property_address = orderData.property_info.search_address
+                this.property_address = orderData.property_info.full_addr
                 this.due_date = orderData.due_date
                 this.client_order_no = orderData.client_order_no
                 this.system_order_no = orderData.system_order_no
