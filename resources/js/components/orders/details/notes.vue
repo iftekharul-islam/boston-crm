@@ -44,7 +44,7 @@
               this.notes = [];
               this.orderData = order;
 
-              if (order.provider_service && order.provider_service.note != "") {
+              if (order.provider_service && order.provider_service.note != "" && order.provider_service.note != null) {
                 this.notes.push({
                     key: 'provided_service',
                     title: "Provided Services",

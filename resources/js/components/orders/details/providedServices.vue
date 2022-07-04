@@ -124,6 +124,7 @@
                 this.$emit('updateSection', {section: 'providedService', data: this.orderData});
                 this.$bvModal.hide('provided-services');
                 this.checkProviderBalance();  
+                this.$root.$emit("wk_update", this.orderData);
             }
         })
         .catch( err =>{

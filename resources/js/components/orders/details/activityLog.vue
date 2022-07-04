@@ -8,11 +8,9 @@
         <div class="fs-14 logItem" :key="ai">
           <div class="logby">
             <span>{{ activityLog.user.name }}</span>
-            <span>{{ activityLog.created_at | momentTime }}</span>
+            <span>{{ activityLog.created_at | dateTime }}</span>
           </div>
-          <div class="logs">
-            {{ activityLog.activity_text }}
-          </div>
+          <div class="logs" v-html="activityLog.activity_text"></div>
         </div>
       </template>
     </div>
@@ -22,7 +20,9 @@
   export default {
     props:{
       orderId: String,
-      order: []
+      order: {
+          activity_log: []
+      }
     },
     data(){
       return{
@@ -30,7 +30,10 @@
       }
     },
     created() {
-      this.getActivityLog()
+      this.getActivityLog();
+      this.$root.$on('wk_update', (order) => {
+        this.activityLogs = order.activity_log;
+      });
     },
     methods: {
       getActivityLog(){

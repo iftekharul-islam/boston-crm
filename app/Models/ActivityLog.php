@@ -11,11 +11,11 @@ class ActivityLog extends Model
     use HasFactory;
 
     protected $casts = [
-      'created_at' => 'date:m-d-Y H:i A'
+      // 'created_at' => 'date:m-d-Y H:i A'
     ];
 
     protected $fillable = [
-      "order_id","activity_text","activity_by"
+      "order_id", "activity_text", "activity_by"
     ];
 
     public function user()

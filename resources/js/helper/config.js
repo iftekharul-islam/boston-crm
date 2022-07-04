@@ -11,6 +11,7 @@ Vue.filter('moment', (date) => {
         return '-';
     }
     let d = new Date(Date.parse(date));
+    d.toLocaleString('en-US', { timeZone: 'America/New_York' })
     let month = months.short[d.getMonth() - 1];
     let year = d.getFullYear();
     let dates = d.getDate();
@@ -22,6 +23,7 @@ Vue.filter('momentTime', (date) => {
         return '-';
     }
     let d = new Date(Date.parse(date));
+    d.toLocaleString('en-US', { timeZone: 'America/New_York' });
     let month = months.short[d.getMonth()];
     let year = d.getFullYear();
     let dates = d.getDate();
@@ -43,6 +45,7 @@ Vue.filter('dateTime', (date) => {
         return '-';
     }
     let d = new Date(Date.parse(date));
+    d.toLocaleString('en-US', { timeZone: 'America/New_York' })
     let month = months.short[d.getMonth()];
     let year = d.getFullYear();
     let dates = d.getDate();
@@ -64,6 +67,7 @@ Vue.filter('onlyDate', (date) => {
         return '-';
     }
     let d = new Date(Date.parse(date));
+    d.toLocaleString('en-US', { timeZone: 'America/New_York' })
     let year = d.getFullYear();
     let dates = d.getDate();
 

@@ -691,7 +691,7 @@ class OrderController extends BaseController
             $providerType->total_fee = collect($fee)->sum('fee');
             $providerType->save();
 
-            $returnMessage = "Order Provided Service Has Been Updated";
+            $returnMessage = "Order Provided Service Has Been Updated<br> <strong>Note</strong>: $note";
         }
 
         $data = [
