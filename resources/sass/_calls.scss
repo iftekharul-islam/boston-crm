@@ -251,7 +251,11 @@
         text-overflow: ellipsis;
     }
 }
-
+.text-ellips {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 .quick-view-modal {
     padding: 20px;
     .modal-dialog {

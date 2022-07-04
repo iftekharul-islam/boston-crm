@@ -66,7 +66,7 @@
         @endif
         @if(in_array('view.order', $user_permissions ?? []) || $is_owner || $user_role == 'admin')
         <!-- submenu -->
-        <div class="sidebar-dropdown">
+        <div class="sidebar-dropdown {{ (request()->is(['loan-types', 'appraisal-types'])) ? 'submenu-active' : '' }}">
             <a href="{{ route('orders.index') }}"
 {{--               class="list-item d-flex align-items-center  text-white {{ (request()->is(['orders*', 'loan-types', 'appraisal-types'])) ? 'active' : '' }}">--}}
                class="list-item d-flex align-items-center  text-white {{ (request()->is(['orders*'])) ? 'active' : '' }}">
@@ -78,7 +78,7 @@
                 <span class="icon-arrow-down ms-auto"></span>
             </a>
             <!-- dropdown menu -->
-            <ul class="submenu active">
+            <ul class="submenu">
                 @if(in_array('view.loantype', $user_permissions ?? []) || $is_owner || $user_role == 'admin')
                     <li class="submenu-item {{ (request()->is('loan-types')) ? 'active' : '' }}">
                         <a href="{{ route('loan-types.index') }}" class="submenu-link text-light">Loan Types</a>
@@ -114,7 +114,7 @@
             </div>
             <span class="icon-arrow-down ms-auto"></span>
         </a>
-        @if(in_array('view.appraisaltype', $user_permissions ?? []) || $is_owner || $user_role == 'admin')
+        {{-- @if(in_array('view.appraisaltype', $user_permissions ?? []) || $is_owner || $user_role == 'admin')
             <a href="{{ route('appraisal-types.index') }}" class="list-item d-flex align-items-center  text-white  {{ (request()->is('appraisal-types')) ? 'active' : '' }}">
                 <div class="d-inline-flex align-items-center">
                 <span class="icon-profile-circle me-3 fs-3"><span class="path1"></span><span class="path2"></span><span
@@ -123,8 +123,8 @@
                 </div>
                 <span class="icon-arrow-down ms-auto"></span>
             </a>
-        @endif
-        @if(in_array('view.loantype', $user_permissions ?? []) || $is_owner || $user_role == 'admin')
+        @endif --}}
+        {{-- @if(in_array('view.loantype', $user_permissions ?? []) || $is_owner || $user_role == 'admin')
             <a href="{{ route('loan-types.index') }}" class="list-item d-flex align-items-center text-white  {{ (request()->is('loan-types')) ? 'active' : '' }}">
                 <div class="d-inline-flex align-items-center">
                 <span class="icon-profile-circle me-3 fs-3"><span class="path1"></span><span class="path2"></span><span
@@ -133,7 +133,7 @@
                 </div>
                 <span class="icon-arrow-down ms-auto"></span>
             </a>
-        @endif
+        @endif --}}
         @if(in_array('view.marketing', $user_permissions ?? []) || $is_owner || $user_role == 'admin')
             <a href="{{ route('marketing.index') }}" class="list-item d-flex align-items-center  text-white">
                 <div class="d-inline-flex align-items-center">
