@@ -232,17 +232,17 @@
                 <p class="text-light-black mgb-12">Changed effective date</p>
                 <p class="mb-0 text-light-black fw-bold">{{ qa.effective_date }}</p>
             </div>
-            <div class="group" v-if="analysis">
-                <p class="text-light-black mgb-12">Files</p>
-                <div class="d-flex align-items-center" v-for="attachment, indexKey in analysis.attachments"
+            <div class="group" v-if="orderData.quality_assurance">
+                <p class="text-light-black mgb-12">Quality assurance files</p>
+                <div class="d-flex align-items-center" v-for="attachment, indexKey in orderData.quality_assurance.attachments"
                     :key="indexKey">
                     <div class="file-img">
                         <img src="/img/pdf.png" alt="boston pdf image">
                     </div>
                     <div class="mgl-12 document">
                         <p class="text-light-black mb-0 file-name">{{ attachment.name }}</p>
-                        <p class="text-gray mb-0 fs-12">Uploaded: {{ analysis.updated_by.name + ', ' +
-                            analysis.updated_at }}</p>
+                        <p class="text-gray mb-0 fs-12">Uploaded: {{ orderData.quality_assurance.updated_by.name + ', ' +
+                            orderData.quality_assurance.updated_at }}</p>
                     </div>
                 </div>
             </div>
@@ -640,7 +640,7 @@
                         this.$root.$emit('wk_flow_menu', this.orderData)
                         this.$root.$emit('wk_flow_toast', res);
                         this.showSeeCom = true
-                        this.initMap()
+                        //this.initMap()
                         setTimeout(() => {
                             self.comList = false
                         }, 1000);
