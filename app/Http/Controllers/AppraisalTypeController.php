@@ -91,7 +91,7 @@ class AppraisalTypeController extends BaseController
         $appraisal_type_data = [
             'form_type' => $request->form_type,
             'modified_form' => $request->modified_form,
-            'condo_type' => $request->condo_type ? 1 : 0,
+            'condo_type' => $request->condo_type,
             'is_full_appraisal' => $request->is_full_appraisal ? 1 : 0,
         ];
         $this->repository->update(attributes: $appraisal_type_data, id: $id);

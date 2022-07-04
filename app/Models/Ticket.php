@@ -9,6 +9,10 @@ class Ticket extends Model
 {
     use HasFactory;
 
+    protected $casts = [
+        'created_at' => 'date:d M Y H:i A'
+    ];
+
 
     public function assignee()
     {

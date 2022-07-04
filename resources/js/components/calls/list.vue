@@ -223,7 +223,7 @@
                                 </div>
                                 <div class="ms-3">
                                     <p class="fw-bold mb-1">{{ log.caller.name }}</p>
-                                    <p class="text-gray fs-12 mb-0">{{ log.created_at | momentTime}}</p>
+                                    <p class="text-gray fs-12 mb-0">{{ log.created_at }}</p>
                                 </div>
                             </div>
                             <p class="message">{{ log.message }}</p>
