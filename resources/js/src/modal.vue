@@ -70,7 +70,7 @@ export default {
     position: absolute;
     min-width: 700px;
     border-radius: 0.25rem;
-    box-shadow: 0 10px 20px rgb(0 0 0 / 15%);
+    box-shadow: 0 5px 20px rgb(0 0 0 / 5%);
     padding: 20px;
 }
 .open-model .model-title {

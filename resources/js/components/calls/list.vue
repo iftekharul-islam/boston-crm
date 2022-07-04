@@ -536,7 +536,7 @@
         padding: 0px 0px 0px 40px;
         cursor: pointer;
         position: relative;
-        margin-bottom: 12px;
+        margin-bottom: 10px;
     }
 
     .column-list .col-item::after {

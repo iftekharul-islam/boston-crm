@@ -381,7 +381,7 @@ export default {
     scrollbar-color: #4f5f6f;
 }
 .vue-select-label:active {
-    background: #ebebeb;
+    // background: #ebebeb;
 }
 .vue-select-label::-webkit-scrollbar {
     height: 5px;
@@ -550,6 +550,7 @@ export default {
     font-size: 12px;
     margin-top: 10px;
     letter-spacing: 0.7px;
+    margin-bottom: 10px;
 }
 .vue-select .select-icon span {
     transform: rotate(-90deg);

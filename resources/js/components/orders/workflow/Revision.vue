@@ -271,6 +271,7 @@ export default {
       date: null,
       revission: null
     },
+    currentTopPosition: 0,
     marked: {
       id: null,
       completed_by: null,
@@ -360,6 +361,9 @@ export default {
         this.form.revission = item.revision_details;
         this.addRevission = false;
         this.editNotesModal = true;
+        this.$nextTick(() => {
+            $(".edit-revission").attr("style", "top:"+this.currentTopPosition + 'px!important');
+        });
     },
     openMarkAsDelivery(item, index, status = false) {
         if (status == false) {
@@ -374,9 +378,10 @@ export default {
         this.marked.solution_details = item.solution_details.replace('-', '');
         this.marked.delivered_by = item.delivered_by;
         this.marked.completed_by = item.completed_by;
-        this.marked.delivery_date = item.delivery_date_format;
-        
-        $(".revission-modal .revission-content").animate({scrollTop: 100}, 500);
+        this.marked.delivery_date = item.delivery_date_format;        
+        this.$nextTick(() => {
+            $(".edit-revission").attr("style", "top:"+this.currentTopPosition + 'px!important');
+        });
     },
     saveAsMarked() {
       this.$refs.markDelivery.validate().then((status) => {
@@ -437,6 +442,17 @@ export default {
     _cancel() {
         this.$refs.popup.close();
     },
+    scrollDiv() {
+        const scrollDemo = $(".revission-content");
+        let output = "";
+        scrollDemo.on("scroll", function(e){
+            output = scrollDemo.scrollTop();
+            this.currentTopPosition = output;
+        }.bind(this));
+    }
+  },
+  mounted() {
+    this.scrollDiv();
   }
 }
 </script>
