@@ -386,3 +386,9 @@
 .phone-number input:focus {
     outline: unset;
 }
+
+.phone-number.flat input {
+    background: unset;
+    font-weight: normal;
+    border: unset;
+}

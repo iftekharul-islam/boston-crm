@@ -254,6 +254,7 @@
 <script>
     import Table from "../../src/Table.vue"
     import Map from "./map.vue"
+    import Quickview from "./quickView.vue";
 
     import Calendar from 'v-calendar/lib/components/calendar.umd'
     import DatePicker from 'v-calendar/lib/components/date-picker.umd'
@@ -266,6 +267,7 @@
         props: ['order', 'appraisers', 'filter-value'],
         components: {
             Map,
+            'quick-view': Quickview,
             Table
         },
         data: () => ({
