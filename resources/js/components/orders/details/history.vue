@@ -45,6 +45,9 @@ export default {
       this.$root.$on('wk_update', (res) => {
           this.history = res.work_hisotry;
       });
+      this.$root.$on('sendHistory', (res) => {
+          this.history = res.work_hisotry;
+      });
     }
 }
 

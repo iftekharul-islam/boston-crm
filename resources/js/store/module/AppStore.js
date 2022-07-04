@@ -14,7 +14,7 @@ const appStore = {
     namespaced: true,
     state: {
         appName: "Boston CRM",
-        orderDetails: getOrderDetails(),
+        orderDetails: [],
     },
     getters: {
         getAppName : (state) => state.appName,
