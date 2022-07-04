@@ -54,7 +54,7 @@
                         </div>
                       </div>
                     </div>
-                    <input v-model="add.contact" @input="contactNumberChecking($event, 1)" type="text" class="dashboard-input w-100">
+                    <input v-model="add.contact" @input="contactNumberChecking($event, 1)" @blur="addContact" type="text" class="dashboard-input w-100">
                     <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                     <div class="mgt-12">
                       <button class="add-more" @click="addContact">
@@ -80,7 +80,7 @@
                       </div>
                     </div>
                   </div>
-                  <input v-model="add.email" type="text" class="dashboard-input w-100">
+                  <input v-model="add.email" type="text" @blur="addEmail" class="dashboard-input w-100">
                   <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                   <div class="mgt-12">
                     <button class="add-more" @click="addEmail">
@@ -176,7 +176,7 @@
               if (status) {
                   let newEmail = this.add.email;
                   let findOld = this.email_address_s.find((ele) =>  ele == newEmail);
-                  if (!findOld && newEmail != null) {
+                  if (!findOld && newEmail != null && newEmail != "") {
                     this.email_address_s.push(newEmail);
                     this.add.email = null;
                     this.email_address = true;
@@ -198,7 +198,7 @@
                       return false;
                   }
                   let findOld = this.contact_number_s.find((ele) =>  ele == newContact);
-                  if (!findOld && newContact != null) {
+                  if (!findOld && newContact != null && newContact != "") {
                       this.contact_number_s.push(newContact);
                       this.add.contact = null;
                       this.contact_number = true;
