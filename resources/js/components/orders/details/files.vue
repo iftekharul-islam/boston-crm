@@ -21,7 +21,7 @@
                                     <img src="/img/pdf.svg" alt="boston profile" class="img-fluid">
                                     <span class="text-light-black d-inline-block mgl-12 file-name"><a
                                             :href="file.original_url" download>{{ file.name }}</a></span>
-                                    <p class="small mt-3">Uploaded: {{ getUserName(file.custom_properties)+ ' ' + formatedDate(file.created_at)  }}</p>
+                                    <p class="small mt-3">Uploaded: {{ getUserName(file.custom_properties) + ', '}}{{  file.created_at | momentTime  }}</p>
                                 </div>
                             </div>
                         </div>
