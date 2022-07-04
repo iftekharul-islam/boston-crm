@@ -142,6 +142,7 @@ export default {
       this.$root.$emit('sendHistory', this.order);
 
       this.initOrder(this.order);
+      this.status = JSON.parse(this.order.workflow_status) ?? [];
       this.updateRole()
 
       this.norewriteReport = this.norewrite;
@@ -152,6 +153,7 @@ export default {
       }
 
       this.$root.$on('wk_flow_menu', (res) => {
+          this.status = JSON.parse(res.workflow_status);
           this.initOrder(res);
       });
 
@@ -183,7 +185,7 @@ export default {
     },
     initOrder(order) {
         this.orderData = order;
-        this.status = JSON.parse(order.workflow_status) ?? [];
+        // this.status = JSON.parse(order.workflow_status) ?? [];
         if (order.analysis){
           let noRewrite = 1;
           if (order.analysis.is_review_send_back && order.analysis.is_review_send_back == 1) {
@@ -197,7 +199,6 @@ export default {
         }
         this.currentStep(this.orderData.currentStep);
         this.checkReportAnalysysCompletation(this.status.reportAnalysisReview);
-        this.$forceUpdate();
     },
     updateRole() {
         if (this.role.length) {
@@ -217,8 +218,8 @@ export default {
     },
     checkReportAnalysysCompletation(status) {
         if (status === 1) {
-             if (this.order.analysis){
-                if (this.order.analysis.is_check_upload && this.order.analysis.is_check_upload == 1 && this.status.reWritingReport === 1) {
+             if (this.orderData.analysis){
+                if (this.orderData.analysis.is_check_upload && this.orderData.analysis.is_check_upload == 1 && this.status.reWritingReport == 1) {
                     return true;
                 }
             }
