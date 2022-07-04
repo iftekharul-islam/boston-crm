@@ -75,6 +75,10 @@
         },
         created() {
             this.getWorkflowFiles(this.order)
+            this.$root.$on('wk_flow_toast', (res) => {
+                this.orderData = res.data;
+                this.getWorkflowFiles(this.orderData);
+            });
         },
         methods: {
             getWorkflowFiles(order) {

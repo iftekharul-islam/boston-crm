@@ -1397,6 +1397,19 @@ select {
     opacity: 0;
 }
 
+
+.slide-y-enter-active,
+.slide-y-leave-active {
+    transition: opacity 0.3s;
+    transform: translateY(0deg);
+}
+.slide-y-enter,
+.slide-y-leave-to {
+    opacity: 0;
+    transform: translateY(-50deg);
+}
+
+
 .order-views {
     .search-box {
         input {

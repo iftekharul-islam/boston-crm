@@ -240,13 +240,36 @@ trait CrmHelper {
         return [
             'user',
             'amc',
+            'amc.attachments',
             'appraisalDetail',
             'appraisalDetail.appraiser',
             'appraisalDetail.getLoanType',
             'lender',
+            'lender.attachments',
             'propertyInfo',
             'inspection.user',
-            'callLog.caller'
+            'callLog.caller',
+            'contactInfo',
+            'providerService'
+        ];
+    }
+
+    protected function order_call_list_relation() {
+        return [
+            'user',
+            'amc',
+            'amc.attachments',
+            'appraisalDetail',
+            'appraisalDetail.appraiser',
+            'appraisalDetail.getLoanType',
+            'lender',
+            'lender.attachments',
+            'propertyInfo',
+            'pendingTickets',
+            'inspection.user',
+            'callLog.caller',
+            'providerService',
+            'contactInfo',
         ];
     }
 

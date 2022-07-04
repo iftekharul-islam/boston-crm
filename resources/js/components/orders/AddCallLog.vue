@@ -34,7 +34,7 @@
             </div>
             <div slot="modal-footer" class="mgt-44">
                 <button class="button button-transparent" @click="hideModel">Close</button>
-                <button class="button button-primary" @click="addLog">Save</button>
+                <button class="button button-primary" @click="addLog">Post</button>
             </div>
         </b-modal>
     </ValidationObserver>

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Ticket;
 use App\Models\ContactInfo;
 use App\Models\BorrowerInfo;
 use App\Models\PropertyInfo;
@@ -10,10 +11,10 @@ use App\Models\OrderWRewrite;
 use App\Models\OrderWRevision;
 use App\Models\AppraisalDetail;
 use App\Models\ProvidedService;
-use Illuminate\Support\Facades\Auth;
 use Spatie\MediaLibrary\HasMedia;
 use App\Models\OrderWInitialReview;
 use App\Models\OrderWReportAnalysis;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -116,7 +117,7 @@ class Order extends Model implements HasMedia
         return $this->belongsTo(Client::class,'amc_id','id');
     }
 
-    public function lender(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function lender()
     {
         return $this->belongsTo(Client::class,'lender_id','id');
     }
@@ -212,5 +213,9 @@ class Order extends Model implements HasMedia
     public function tickets()
     {
         return $this->hasMany(Ticket::class,'order_id', 'id');
+    }
+
+    public function pendingTickets() {
+        return $this->hasMany(Ticket::class,'order_id', 'id')->where('status', 0);
     }
 }
