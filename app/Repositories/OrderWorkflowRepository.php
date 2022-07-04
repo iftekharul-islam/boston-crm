@@ -130,7 +130,12 @@ class OrderWorkflowRepository extends BaseRepository
 
     public function saveCom($data, $id)
     {
-        $com = new OrderWComList();
+        $order_w_com = OrderWComList::where('order_id', $id)->first();
+        if($order_w_com){
+            $com = $order_w_com;
+        }else{
+            $com = new OrderWComList();
+        }
         $com->order_id = $id;
         $com->destination = json_encode($data);
         $com->save();

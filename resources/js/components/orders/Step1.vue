@@ -499,8 +499,7 @@
                     currentPlace: null,
                     markerIcon: "",
                     data: [],
-                },
-                isFullAppraisal: 0
+                }
             }
         },
         created() {
@@ -528,7 +527,6 @@
                     let value = e.target.value;
                     this.providerTypes.default.type = value;
                     this.checkProviderValidation(e, 1);
-                    this.isFullAppraisal = e.target.selectedOptions[0].dataset.full
                 }.bind(this));
                  $("#propertyTypeSelect").on("select2:select", function (e) {
                     let value = e.target.value;
@@ -659,7 +657,8 @@
                     this.providerTypes.extra.push({
                         typeId: appType.id,
                         type: appType.form_type,
-                        fee: newFee
+                        fee: newFee,
+                        full: appType.is_full_appraisal
                     });
                 }
 
@@ -705,7 +704,7 @@
                 let uad = e.target.selectedOptions[0].dataset.uad
                 let d = e.target.selectedOptions[0].dataset.d
                 let processingFee = e.target.selectedOptions[0].dataset.processing
-                this.isFullAppraisal == 1 ? this.step1.technologyFee = uad : this.step1.technologyFee = d
+                this.providerTypes.extra[0].full == 1 ? this.step1.technologyFee = uad : this.step1.technologyFee = d
                 if (processingFee != '' && processingFee > 0) {
                     let technologyFee = parseFloat(parseFloat(this.step1.technologyFee) + parseFloat(this.providerTypes.totalAmount * (processingFee / 100)))
                     this.step1.technologyFee = parseFloat(technologyFee).toFixed(2)
