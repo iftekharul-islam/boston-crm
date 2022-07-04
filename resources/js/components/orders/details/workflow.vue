@@ -139,6 +139,7 @@ export default {
   }),
   created(){
       this.$store.commit('app/storeOrder', this.order);
+      this.$root.$emit('sendHistory', this.order);
 
       this.initOrder(this.order);
       this.updateRole()

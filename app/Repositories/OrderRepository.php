@@ -194,7 +194,7 @@ class OrderRepository extends BaseRepository
             "city_name" => $data['city_name'],
             "state_name" => $data['state_name'],
             "zip" => $data['zip'],
-            "country" => $data['country'],
+            "county" => $data['county'],
             "unit_no" => $data['unit_no'],
         ]);
     }

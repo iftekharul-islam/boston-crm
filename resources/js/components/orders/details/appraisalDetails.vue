@@ -57,21 +57,6 @@
                                     <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                                 </div>
                             </ValidationProvider>
-                            <ValidationProvider class="group d-block" name="Property Type" rules="required"
-                                v-slot="{ errors }">
-                                <div class="position-relative" :class="{ 'invalid-form' : errors[0] }">
-                                    <label for="" class="d-block mb-2 dashboard-label">Property type <span
-                                            class="require"></span></label>
-                                    <select class="dashboard-input w-100" v-model="details.property_type">
-                                        <option value="">Please Select Property Type</option>
-                                        <option v-for="property_type in propertyTypes" :key="property_type.id"
-                                            :value="property_type.id">
-                                            {{ property_type.type }}
-                                        </option>
-                                    </select>
-                                    <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
-                                </div>
-                            </ValidationProvider>
                         </div>
                         <div class="col-md-6">
                             <span class="position-relative group d-block">
@@ -89,7 +74,7 @@
                             </ValidationProvider>
                         </div>
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-6 mt-2">
                                 <ValidationProvider class="group" name="Property Type" rules="required"
                                     v-slot="{ errors }">
                                     <div :class="{ 'invalid-form' : errors[0] }">

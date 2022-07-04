@@ -51,6 +51,11 @@
         <span>:</span>
         <p class="right-side mb-0">{{ edited.unit_no }}</p>
       </div>
+      <div class="list__group">
+        <p class="mb-0 left-side">County</p>
+        <span>:</span>
+        <p class="right-side mb-0">{{ edited.county }}</p>
+      </div>
     </div>
     <b-modal id="property-info" size="lg" title="Edit Basic Information">
       <div class="modal-body">
@@ -104,7 +109,7 @@
               <ValidationProvider rules="required" name="County" v-slot="{ errors }">
                 <div class="group" :class="{ 'invalid-form' : errors[0] }">
                   <label for="" class="d-block mb-2 dashboard-label">County <span class="require"></span></label>
-                  <input type="text" v-model="info.country" class="dashboard-input w-100">
+                  <input type="text" v-model="info.county" class="dashboard-input w-100">
                   <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                 </div>
               </ValidationProvider>
@@ -195,7 +200,7 @@ export default {
         this.info.state_name = this.order.property_info.state_name
         this.info.formatedAddress = this.order.property_info.formatedAddress
         this.info.zip = this.order.property_info.zip
-        this.info.country = this.order.property_info.country
+        this.info.county = this.order.property_info.county
         this.info.unit_no = this.order.property_info.unit_no
         this.info.latitude = this.order.property_info.latitude
         this.info.longitude = this.order.property_info.longitude
