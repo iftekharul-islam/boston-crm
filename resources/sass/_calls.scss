@@ -85,7 +85,7 @@
         }
         &:nth-child(9) {
             width: 90px;
-        } 
+        }
         &:nth-child(10) {
             // width: 250px;
         }
@@ -174,7 +174,7 @@
                 justify-content: flex-end;
             }
         }
-        
+
     }
     .call-item {
         border-bottom: 1px solid $platinum;
@@ -189,7 +189,7 @@
         display: flex;
         align-items: flex-start;
         padding: 20px 0;
-        
+
         .scheduled {
             color: $success;
             &::before {
@@ -233,7 +233,7 @@
             &.solved {
                 background: $solved-bg;
                 .call-badge {
-                  
+
                     background: $sky-blue;
                 }
             }
@@ -251,7 +251,11 @@
         text-overflow: ellipsis;
     }
 }
-
+.text-ellips {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 .quick-view-modal {
     padding: 20px;
     .modal-dialog {
@@ -273,7 +277,7 @@
                             width: 145px;
                             min-width: 145px;
                         }
-                        
+
                     }
                     span {
                         margin: 0 8px;
@@ -305,7 +309,7 @@
 
 .call-summary-item {
     margin-bottom: 22px;
-    max-width: 240px;
+    max-width: 400px;
     img {
         height: 40px;
         width: 40px;

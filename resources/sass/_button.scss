@@ -39,6 +39,9 @@
         background: $white;
         color: $light-black;
         border-color: $gray;
+        &:hover {
+            color: $primary;
+        }
     }
 }
 

@@ -9,7 +9,7 @@
                 @csrf
 
                 <div class="form-group group">
-                    <label for="exampleInputEmail1">Form type</label>
+                    <label for="exampleInputEmail1" class="mb-2">Form type</label>
                     <input type="text" name="form_type"
                         class="dashboard-input w-100 @error('form_type') is-invalid @enderror" id="formType"
                         placeholder="Enter form type" value="{{ old('form_type') }}">
@@ -20,7 +20,7 @@
                     @enderror
                 </div>
                 <div class="form-group group">
-                    <label for="exampleInputEmail1">Modified Form</label>
+                    <label for="exampleInputEmail1" class="mb-2">Modified Form</label>
                     <input type="text" name="modified_form"
                         class="dashboard-input w-100 @error('modified_form') is-invalid @enderror" id="modifiedForm"
                         placeholder="Enter modified form" value="{{ old('modified_form') }}">
@@ -52,10 +52,16 @@
                 </div>
                 <div class="form-group mt-4">
                     <p class="mgb-12">Is full Appraisal</p>
-                    <input type="radio" id="yes" name="is_full_appraisal" value="1">
-                    <label for="yes">Yes</label>
-                    <input type="radio" id="no" name="is_full_appraisal" value="0">
-                    <label for="no">No</label><br>
+                    <div class="d-flex condo-type">
+                        <div class="position-relative mgr-32">
+                            <input type="radio" id="yes" name="is_full_appraisal" value="1" class="condo-type-input">
+                            <label for="yes" class="condo-type-label">Yes</label>
+                        </div>
+                        <div class="position-relative">
+                            <input type="radio" id="no" name="is_full_appraisal" value="0" class="condo-type-input">
+                            <label for="no" class="condo-type-label">No</label>
+                        </div>
+                    </div>
                 </div>
                 <div class="text-end mgt-32">
                     <button type="button" id="submit-button" class="button button-primary h-40 py-2 px-5">Add</button>

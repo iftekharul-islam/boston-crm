@@ -1,123 +1,112 @@
 <template>
-    <transition name="slide-y" appear>
-        <div class="modals quick-view-modal">
-            <div class="modal-dialog h-100">
-                <div class="modal-content h-100 p-0">
-                    <div class="bg-gray pdl-32 pdr-22 d-flex align-items-center justify-content-between h-60 min-h-60 header-modal">
-                    <h5 class="fs-20 fw-bold text-white mb-0" id="exampleModalLabel">Quickview</h5>
-                    <button @click="closeModal" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body h-100 overflow-auto">
+    <b-modal id="quick-view" size="md" title="Quick View">
+        <button @click="$bvModal.hide('quick-view')" type="button" class="btn-close" aria-label="Close"></button>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-12">
                     <p class="mb-3 fw-bold">Client info</p>
                     <div class="modal-item">
-                        <p class="mb-0">AMC name</p>
-                        <span>:</span>
-                        <p class="mb-0 text-600">EStreet Appraisal Management
-                            Company, LLC</p>
+                        <p>AMC name: <span class="mb-0 text-600">{{ amc_name }}</span></p>
                     </div>
-                    <a href="#" class="primary-text underline text-600 mgb-24 d-inline-block">AMC requirements</a>
+                    <a v-if="amc_file != ''" :href="amc_file" target="_blank"
+                        class="underline primary-text text-600 d-inline-block mt-3 mb-3" download>AMC
+                        requirements</a>
+                    <a v-else :href="'#'" @click.prevent
+                        class="text-gray text-600 d-inline-block mt-3 mb-3">AMC requirements</a>
                     <div class="modal-item">
-                        <p class="mb-0">AMC name</p>
-                        <span>:</span>
-                        <p class="mb-0 text-600">EStreet Appraisal Management
-                            Company, LLC</p>
+                        <p>Lender/Bank name: <span class="mb-0 text-600">{{ lender_name }}</span></p>
+                        <p>Lender/Bank address: <span class="mb-0 text-600">{{ lender_address }}</span></p>
                     </div>
-                    <div class="modal-item">
-                        <p class="mb-0">AMC name</p>
-                        <span>:</span>
-                        <p class="mb-0 text-600">EStreet Appraisal Management
-                            Company, LLC</p>
-                    </div>
-                    <a href="#" class="primary-text underline text-600 d-inline-block">Lender requirements</a>
+                    <a v-if="lender_file" :href="lender_file" target="_blank"
+                        class="underline primary-text text-600 d-inline-block mt-3 mb-3" download>Lender
+                        requirements</a>
+                    <a v-else :href="'#'" @click.prevent
+                        class="text-gray text-600 d-inline-block mt-3 mb-3">Lender requirements</a>
                     <div class="mgt-32">
                         <p class="mb-3 text-600">Property info</p>
                         <div class="modal-item">
-                            <p class="mb-0">Property address</p>
-                            <span>:</span>
-                            <p class="mb-0 text-600">EStreet Appraisal Management
-                                Company, LLC</p>
+                            <p>Property address:<span class="mb-0 text-600">{{ property_address }}</span></p>
                         </div>
                         <div class="modal-item">
-                            <p class="mb-0">Property address</p>
-                            <span>:</span>
-                            <p class="mb-0 text-700 fs-20 primary-text">EStreet Appraisal Management Company, LLC</p>
-                        </div>
-                        <a href="#" class="primary-text underline text-600 mgb-24 d-inline-block">AMC
-                            requirements</a>
-                        <div class="modal-item">
-                            <p class="mb-0">Due date</p>
-                            <span>:</span>
-                            <p class="mb-0 text-600">33-33-33</p>
+                            <p>Due date:<span class="mb-0 text-600">{{ due_date }}</span></p>
                         </div>
                         <div class="modal-item">
-                            <p class="mb-0">Order no</p>
-                            <span>:</span>
-                            <p class="mb-0 text-600">4654765765</p>
+                            <p>Client order no: <span class="mb-0 text-600"> {{ client_order_no }}</span></p>
                         </div>
                         <div class="modal-item">
-                            <p class="mb-0">Order receive date</p>
-                            <span>:</span>
-                            <p class="mb-0 text-600">40-89-32</p>
+                            <p class="mb-0">System order no: <span class="mb-0 text-600">{{ system_order_no }}</span>
+                            </p>
+                        </div>
+                        <div class="modal-item">
+                            <p>Order receive date: <span class="mb-0 text-600">{{ received_date }}</span></p>
                         </div>
                         <div class="mgt-32">
-                            <p class="mb-3 text-600 ">Contact info</p>
+                            <p class="mb-3 text-600">Contact info</p>
                             <div class="modal-item">
-                                <p class="mb-0">Contact name</p>
-                                <span>:</span>
-                                <p class="mb-0 text-600">Abid ali ahmede</p>
+                                <p>Contact name: <span class="mb-0 text-600">{{ contact_name }}</span></p>
                             </div>
                             <div class="modal-item">
-                                <p class="mb-0">Phone</p>
-                                <span>:</span>
-                                <p class="mb-0 text-600">35465765565</p>
+                                <p>Phone: <span v-for="phone,index in contact_phone" class="mb-0 text-600">{{ phone }}
+                                    <span v-if="index != Object.keys(contact_phone).length - 1"> , </span>
+                                </span></p>
                             </div>
                             <div class="modal-item">
-                                <p class="mb-0">Email</p>
-                                <span>:</span>
-                                <p class="mb-0 text-600">exmplll@mail.com</p>
+                                <p>Email: <span v-for="email,index in contact_email" class="mb-0 text-600">{{ email }}
+                                    <span v-if="index != Object.keys(contact_email).length - 1"> , </span>
+                                </span></p>
                             </div>
                         </div>
                     </div>
                     <div class="mt-3">
                         <p class="text-700 mb-3">Notes</p>
-                        <p class="note-text mb-3 text-700">Lorem ipsum, or lipsum as it is sometimes known, is dummy text used
-                            in laying out print, graphic or web designs. The passage is attributed
-                            to an unknown</p>
-                        <p class="note-text text-700">Lorem ipsum, or lipsum as it is sometimes known, is dummy text used
-                                in laying out print, graphic or web designs. The passage is attributed
-                                to an unknown</p>
-                    </div>
-                    </div>
-                    <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="closeModal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                        <p class="note-text mb-3 text-700">{{ note }}</p>
                     </div>
                 </div>
             </div>
         </div>
-    </transition>
+        <div slot="modal-footer">
+            <b-button type="button" variant="secondary" @click="$bvModal.hide('quick-view')">Close</b-button>
+        </div>
+    </b-modal>
 </template>
 
 <script>
-export default {
-    name: 'quick-view',
-    methods: {
-        closeModal() {
-            this.$emit('closeQuickView', false);
+    export default {
+        name: 'quick-view',
+        data: () => ({
+            amc_name: '',
+            amc_file: '',
+            lender_name: '',
+            lender_address: '',
+            lender_file: '',
+            property_address: '',
+            due_date: '',
+            client_order_no: '',
+            system_order_no: '',
+            received_date: '',
+            contact_name: '',
+            contact_phone: '',
+            contact_email: '',
+            note: '',
+        }),
+        methods: {
+            setQuickViewData(orderData) {
+                this.amc_name = orderData.amc.name
+                this.amc_file = (orderData.amc.attachments && orderData.amc.attachments[0]) ? orderData.amc.attachments[0].original_url : ''
+                this.lender_name = orderData.lender.name
+                this.lender_address = orderData.lender.address
+                this.lender_file = (orderData.lender.attachments && orderData.lender.attachments[0]) ? orderData.lender.attachments[0].original_url : ''
+                this.property_address = orderData.property_info.full_address
+                this.due_date = orderData.due_date
+                this.client_order_no = orderData.client_order_no
+                this.system_order_no = orderData.system_order_no
+                this.received_date = orderData.received_date
+                this.contact_name = orderData.contact_info.contact
+                this.contact_phone = JSON.parse(orderData.contact_info.contact_email).phone
+                this.contact_email = JSON.parse(orderData.contact_info.contact_email).email
+                this.note = orderData.provider_service.note
+                console.log(this.amc_file)
+            }
         }
     }
-}
 </script>
-
-<style scoped>
-.modals {
-    position: fixed;
-    top: 0;
-    right: 0;
-    height: 100vh;
-    overflow: auto;
-}
-.quick-view-modal .modal-dialog {
-    box-shadow: 0 5px 10px rgb(0 0 0 / 20%);
-}
-</style>

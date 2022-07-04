@@ -151,19 +151,13 @@ class OrderWorkflowController extends BaseController
         if (!$inspection) {
             return false;
         }
-        $image_types = ['jpeg', 'jpg', 'png'];
         $zip = new \ZipArchive();
-        $date = date('d-H-i');
+        $date = date('d-M-Y-H-i-s');
         $fileName = 'inspection-files(' . $date . ').zip';
         foreach ($data['files'] as $key => $file) {
-            if (in_array($file->getClientOriginalExtension(), $image_types)) {
-                if ($zip->open(public_path($fileName), \ZipArchive::CREATE) == TRUE) {
-                    $relativeName = ++$key . '.' . $file->getClientOriginalExtension();
-                    $zip->addFile($file->getPathName(), $relativeName);
-                }
-            } else {
-                $inspection->find($inspection_id)->addMedia($file)
-                    ->toMediaCollection('inspection');
+            if ($zip->open(public_path($fileName), \ZipArchive::CREATE) == TRUE) {
+                $relativeName = ++$key . '.' . $file->getClientOriginalExtension();
+                $zip->addFile($file->getPathName(), $relativeName);
             }
         }
         $zip->close();

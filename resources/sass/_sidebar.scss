@@ -87,8 +87,11 @@
         padding-left: 0px;
         padding-right: 0px;
         padding-top: 0px;
+        margin: 0;
         background: #223045;
-        display: none;
+        height: 0;
+        overflow: hidden;
+        transition: all .3s ease-in;
         .submenu-item {
             color: $white;
             padding: 10px 20px;
@@ -98,12 +101,15 @@
                 display: block;
             }
             &:hover {
-                background: $primary;
+                background: #139181;
             }
 
         }
     }
     &:hover {
+        .submenu {
+            min-height: 100px;
+        }
         .list-item {
             background: $primary;
         }
@@ -111,7 +117,19 @@
             display: block;
         }
     }
-    
+    &.submenu-active {
+        .list-item {
+            background: $primary;
+        }
+        .submenu {
+            height: 100%;
+            .submenu-item {
+                &.active {
+                    background: #139181;
+                }
+            }
+        }
+    }
 }
 
 

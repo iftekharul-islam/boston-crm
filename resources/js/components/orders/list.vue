@@ -101,13 +101,15 @@
                         </transition>
                     </template>
                 </Table>
-                <div class="text-center d-flex justify-content-center">
-                    <select @change="loadPage(pages.activePage)" name="paginate" class="form-control per-page" v-model="pages.paginate">
-                        <option value="">Per page</option>
-                        <option :value="item" :key="ik" v-for="item, ik in pages.perPages">{{ item }} Per page</option>
-                    </select>
+                <div class="d-flex align-items-center justify-content-center">
+                    <div class="text-center d-flex justify-content-center mgr-20">
+                        <select @change="loadPage(pages.activePage)" name="paginate" class="form-control per-page" v-model="pages.paginate">
+                            <option value="">Per page</option>
+                            <option :value="item" :key="ik" v-for="item, ik in pages.perPages">{{ item }} Per page</option>
+                        </select>
+                    </div>
+                    <paginate align="center" :total-page="pages.pageData.last_page" @loadPage="loadPage($event)"></paginate>
                 </div>
-                <paginate align="center" :total-page="pages.pageData.last_page" @loadPage="loadPage($event)"></paginate>
             </div>
         </div>
     </div>

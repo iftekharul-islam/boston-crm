@@ -240,13 +240,17 @@ trait CrmHelper {
         return [
             'user',
             'amc',
+            'amc.attachments',
             'appraisalDetail',
             'appraisalDetail.appraiser',
             'appraisalDetail.getLoanType',
             'lender',
+            'lender.attachments',
             'propertyInfo',
             'inspection.user',
-            'callLog.caller'
+            'callLog.caller',
+            'contactInfo',
+            'providerService'
         ];
     }
 
@@ -254,14 +258,18 @@ trait CrmHelper {
         return [
             'user',
             'amc',
+            'amc.attachments',
             'appraisalDetail',
             'appraisalDetail.appraiser',
             'appraisalDetail.getLoanType',
             'lender',
+            'lender.attachments',
             'propertyInfo',
             'pendingTickets',
             'inspection.user',
-            'callLog.caller'
+            'callLog.caller',
+            'providerService',
+            'contactInfo',
         ];
     }
 

@@ -6,18 +6,22 @@ use Carbon\Carbon;
 use App\Models\Order;
 use App\Helpers\CrmHelper;
 use App\Models\CallLog;
+use App\Models\OrderWInspection;
 use Illuminate\Http\Request;
+use App\Services\CallService;
 use App\Repositories\OrderRepository;
 
 class CallController extends BaseController
 {
     protected OrderRepository $repository;
+    protected CallService $callService;
     use CrmHelper;
 
-    public function __construct(OrderRepository $order_repository)
+    public function __construct(OrderRepository $order_repository,CallService $callService)
     {
         parent::__construct();
         $this->repository = $order_repository;
+        $this->service = $callService;
     }
 
     public function index(Request $get)
@@ -39,9 +43,10 @@ class CallController extends BaseController
         if ($filterType == "completed") {
             $orderId = CallLog::where('status', 1)->get()->pluck('order_id');
         } else if($filterType == "today_call") {
-
+            $today = Carbon::today();
+            $orderId = OrderWInspection::whereDate('inspection_date_time', $today)->get()->pluck('order_id');
         }
-        
+
         $order = Order::where(function($qry) use ($data, $dateRange, $filterType) {
             return $qry->where('system_order_no', "LIKE", "%$data%")
                        ->orWhere("client_order_no", "LIKE", "%$data%")
@@ -70,6 +75,8 @@ class CallController extends BaseController
                 return $qry->where("status", 0);
             } else if($filterType == "schedule") {
                 return $qry->where("status", 1);
+            } else if($filterType == "today_call") {
+                return $qry->where("status", "<", 3);
             }
         })
         ->orderBy('id', 'desc')
@@ -95,7 +102,8 @@ class CallController extends BaseController
         $toBeSchedule = $orders->where('status', 0)->count();
         $schedule = Order::where('status', 1)->count();
         $completed = CallLog::where('status', 1)->count();
-        $today_call = 0;
+        $todaysCallId = OrderWInspection::whereDate('inspection_date_time', Carbon::today())->get()->pluck('order_id');
+        $today_call = Order::whereIn('id', $todaysCallId)->where('status', "<", 3)->count();
         return [
             "all" => $all,
             "to_schedule" => $toBeSchedule,
@@ -105,5 +113,10 @@ class CallController extends BaseController
         ];
     }
 
+
+    public function sendMessage(Request $request)
+    {
+        $this->service->sendMessage($request->all());
+    }
 
 }
