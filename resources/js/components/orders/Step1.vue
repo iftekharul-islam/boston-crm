@@ -372,10 +372,10 @@
 
                                 <ValidationProvider class="group" name="County" rules="required" v-slot="{ errors }">
                                     <div class="group" :class="{ 'invalid-form' : errors[0] }">
-                                        <label for="" class="d-block mb-2 dashboard-label">Country <span
+                                        <label for="" class="d-block mb-2 dashboard-label">County <span
                                                 class="text-danger require"></span>
                                         </label>
-                                        <input type="text" readonly class="dashboard-input w-100" v-model="step1.country">
+                                        <input type="text" class="dashboard-input w-100" v-model="step1.county">
                                         <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                                     </div>
                                 </ValidationProvider>
@@ -448,6 +448,7 @@
                 stepActive: false,
                 proviedServicePass: false,
                 step1: {
+                    county: '',
                     unitNo: '',
                     clientOrderNo: '',
                     systemOrder: '',
@@ -761,6 +762,7 @@
                     formatedAddress: this.order.property_info.formatedAddress,
                     zipcode: this.order.property_info.zip,
                     country: this.order.property_info.country,
+                    county: this.order.property_info.county,
                     lat: this.order.property_info.latitude,
                     lng: this.order.property_info.longitude,
                 };
@@ -853,16 +855,18 @@
                             lon: null,
                             state: null,
                             place_id: null,
+                            county: null,
                         };
                         addressData.place_id = place.place_id;
+
 
                         for (var i = 0; i < place.address_components.length; i++) {
                             if (place.address_components[i].types[0] == 'postal_code') {
                                 addressData.postal_code = place.address_components[i].long_name;
                             }
-                            // if (place.address_components[i].types[0] == 'route') {
-                            //   addressData.street = place.address_components[i].long_name;
-                            // }
+                            if (place.address_components[i].types[0] == "administrative_area_level_2") {
+                                addressData.county = place.address_components[i].long_name;
+                            }
                             if (place.address_components[i].types[0] == 'locality') {
                                 addressData.city = place.address_components[i].long_name;
                             }
@@ -895,8 +899,10 @@
                 this.step1.street = this.mapData.data.street;
                 this.step1.zipcode = this.mapData.data.postal_code;
                 this.step1.country = this.mapData.data.country;
+                this.step1.county = this.mapData.data.county;
                 this.step1.lat = this.mapData.data.lat;
                 this.step1.lng = this.mapData.data.lon;
+                console.log(this.mapData.data);
                 this.changeStreetAddress(this.step1.street);
             },
             getAmcClient(id) {
