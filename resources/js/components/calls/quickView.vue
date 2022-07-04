@@ -6,7 +6,8 @@
                 <div class="col-md-12">
                     <p class="mb-3 fw-bold">Client info</p>
                     <div class="modal-item">
-                        <p>AMC name: <span class="mb-0 text-600">{{ amc_name }}</span></p>
+                        <p class="mb-0 text-400">AMC name: </p>
+                        <span class="mb-0 text-600 d-block">{{ amc_name }}</span>
                     </div>
                     <a v-if="amc_file != ''" :href="amc_file" target="_blank"
                         class="underline primary-text text-600 d-inline-block mt-3 mb-3" download>AMC
@@ -14,8 +15,12 @@
                     <a v-else :href="'#'" @click.prevent
                         class="text-gray text-600 d-inline-block mt-3 mb-3">AMC requirements</a>
                     <div class="modal-item">
-                        <p>Lender/Bank name: <span class="mb-0 text-600">{{ lender_name }}</span></p>
-                        <p>Lender/Bank address: <span class="mb-0 text-600">{{ lender_address }}</span></p>
+                        <p class="mb-0 text-400">Lender/Bank name: </p>
+                        <span class="mb-0 text-600 d-block">{{ lender_name }}</span>
+                    </div>
+                    <div class="modal-item">
+                        <p class="mb-0 text-400">Lender/Bank address: </p>
+                        <span class="mb-0 text-600 d-block">{{ lender_address }}</span>
                     </div>
                     <a v-if="lender_file" :href="lender_file" target="_blank"
                         class="underline primary-text text-600 d-inline-block mt-3 mb-3" download>Lender
@@ -25,35 +30,41 @@
                     <div class="mgt-32">
                         <p class="mb-3 text-600">Property info</p>
                         <div class="modal-item">
-                            <p>Property address: <span class="mb-0 text-600">{{ property_address }}</span></p>
+                            <p class="mb-0 text-400">Property address:</p>
+                            <span class="mb-0 text-600 d-block">{{ property_address }}</span>
                         </div>
                         <div class="modal-item">
-                            <p>Due date:<span class="mb-0 text-600">{{ due_date }}</span></p>
+                            <p class="mb-0 text-400">Due date:</p>
+                            <span class="mb-0 text-600 d-block">{{ due_date }}</span>
                         </div>
                         <div class="modal-item">
-                            <p>Client order no: <span class="mb-0 text-600"> {{ client_order_no }}</span></p>
+                            <p class="mb-0 text-400">Client order no: </p>
+                            <span class="mb-0 text-600 d-block"> {{ client_order_no }}</span>
                         </div>
                         <div class="modal-item">
-                            <p class="mb-0">System order no: <span class="mb-0 text-600">{{ system_order_no }}</span>
+                            <p class="mb-0">System order no:
                             </p>
+                            <span class="mb-0 text-600 d-block">{{ system_order_no }}</span>
                         </div>
                         <div class="modal-item">
-                            <p>Order receive date: <span class="mb-0 text-600">{{ received_date }}</span></p>
+                            <p class="mb-0 text-400">Order receive date: </p>
+                            <span class="mb-0 text-600 d-block">{{ received_date }}</span>
                         </div>
                         <div class="mgt-32">
                             <p class="mb-3 text-600">Contact info</p>
                             <div class="modal-item">
-                                <p>Contact name: <span class="mb-0 text-600">{{ contact_name }}</span></p>
+                                <p class="mb-0 text-400">Contact name: </p>
+                                <span class="mb-0 text-600 d-block">{{ contact_name }}</span>
                             </div>
                             <div class="modal-item">
-                                <p>Phone: <span v-for="phone,index in contact_phone" class="mb-0 text-600">{{ phone }}
-                                    <span v-if="index != Object.keys(contact_phone).length - 1"> , </span>
-                                </span></p>
+                                <p class="mb-0 text-400">Phone: </p>
+                                <span v-for="phone,index in contact_phone" class="mb-0 text-600 d-block">{{ phone }}
+                                    <span v-if="index != Object.keys(contact_phone).length - 1"> , </span> </span>
                             </div>
                             <div class="modal-item">
-                                <p>Email: <span v-for="email,index in contact_email" class="mb-0 text-600">{{ email }}
-                                    <span v-if="index != Object.keys(contact_email).length - 1"> , </span>
-                                </span></p>
+                                <p class="mb-0 text-400">Email: </p>
+                                <span v-for="email,index in contact_email" class="mb-0 text-600 d-block">{{ email }}
+                                    <span v-if="index != Object.keys(contact_email).length - 1"> , </span> </span>
                             </div>
                         </div>
                     </div>
