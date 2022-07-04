@@ -228,17 +228,18 @@
                             </div>
                             <p class="message">{{ log.message }}</p>
                         </div>
-                        <div class="update-log" v-if="callLog.notCompleted">
-                            <div class="group" :class="{ 'invalid-form' : callLog.error == true }">
-                                <label for="" class="d-block mb-2 dashboard-label">Message</label>
-                                <textarea @keyup="dataExist()" v-model.trim="callLog.message"
-                                    class="dashboard-input w-100" style="min-height: 100px"></textarea>
-                                <span v-if="callLog.error" class="error-message">The Message field is required</span>
-                            </div>
-                            <div class="checkbox-group mt-2">
-                                <input type="checkbox" class="checkbox-input" v-model="callLog.status">
-                                <label for="" class="checkbox-label">Call completed</label>
-                            </div>
+                    </div>
+                    <!-- message box -->
+                    <div class="update-log" v-if="callLog.notCompleted">
+                        <div class="group" :class="{ 'invalid-form' : callLog.error == true }">
+                            <label for="" class="d-block mb-2 dashboard-label">Message</label>
+                            <textarea @keyup="dataExist()" v-model.trim="callLog.message"
+                                class="dashboard-input w-100" style="min-height: 100px"></textarea>
+                            <span v-if="callLog.error" class="error-message">The Message field is required</span>
+                        </div>
+                        <div class="checkbox-group mt-2">
+                            <input type="checkbox" class="checkbox-input" v-model="callLog.status">
+                            <label for="" class="checkbox-label">Call completed</label>
                         </div>
                     </div>
                     <div class="modal-footer" v-if="callLog.notCompleted">
