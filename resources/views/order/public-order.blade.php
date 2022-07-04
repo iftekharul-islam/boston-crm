@@ -12,7 +12,7 @@
             <h4 class="text-light-black fs-20 mb-3 text-600">{{ $order->system_order_no }} require some files</h4>
             @if(session()->has('success'))
                 <div class="alert alert-success">
-                    {{ session('success') }}
+                    {{ session()->get('success') }}
                 </div>
             @endif
             <form action="{{ route('order.file.upload', request()->route('id') ) }}" method="POST" enctype="multipart/form-data">
@@ -39,7 +39,7 @@
                             <input class="form-control" type="file" name="files[]" multiple required>
                             <label for="" class="py-2">Upload <span class="icon-upload ms-3 fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span></label>
                         </div>
-                       
+
                     </div>
                     <div class="py-3 bg-platinum d-flex justify-content-end px-3 box-footer">
                         <button class="button button-primary px-5">Submit</button>
