@@ -52,7 +52,7 @@
                                 <label for="">Upload <span class="icon-upload ms-3 fs-20"><span
                                             class="path1"></span><span class="path2"></span><span
                                             class="path3"></span></span></label>
-                                <span class="primary-text">{{ amcFileName }}</span>
+                                <span class="primary-text text-ellips max-w-150 d-block">{{ amcFileName }}</span>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -77,7 +77,7 @@
                                     <label for="">Upload <span class="icon-upload ms-3 fs-20"><span
                                                 class="path1"></span><span class="path2"></span><span
                                                 class="path3"></span></span></label>
-                                    <span class="primary-text">{{ lenderFileName }}</span>
+                                    <span class="primary-text text-ellips max-w-150 d-block">{{ lenderFileName }}</span>
                                 </div>
                             </span>
                         </div>

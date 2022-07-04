@@ -251,7 +251,11 @@
         text-overflow: ellipsis;
     }
 }
-
+.text-ellips {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 .quick-view-modal {
     padding: 20px;
     .modal-dialog {
@@ -362,4 +366,23 @@
         background: $success;
         margin-right: 8px;
     }
+}
+
+.phone-number input {
+    outline: unset;
+    padding: 4px 5px;
+    border-radius: 0.25rem;
+    border: thin solid #ddd;
+    background: #eee;
+    display: inline-block;
+    width: 150px;
+    min-width: 0px;
+    text-align: center;
+    overflow-x: auto;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.phone-number input:focus {
+    outline: unset;
 }

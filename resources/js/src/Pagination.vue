@@ -74,8 +74,6 @@ export default {
 .paginate-box {
     display: flex;
     justify-content: center;
-    width: 100%;
-    padding: 20px 0px;
 }
 
 .paginate-box[align="center"] {

@@ -181,11 +181,13 @@
                             this.fileData.file_type = ''
                             this.fileData.files = []
                             this.isDataExists = true
-                            this.orderData = res.data
-                            this.$root.$emit('wk_update', this.orderData)
-                            this.$root.$emit('wk_flow_menu', this.orderData)
+                            if (res.error == false) {
+                                this.orderData = res.data
+                                this.$root.$emit('wk_update', this.orderData);
+                                this.$root.$emit('wk_flow_menu', this.orderData);
+                                this.updateData(this.orderData);
+                            }
                             this.$root.$emit('wk_flow_toast', res)
-                            this.updateData(this.orderData)
                         }).catch(err => {
                         });
                     } else {

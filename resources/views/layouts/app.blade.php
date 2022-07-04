@@ -114,13 +114,18 @@
             $('.crm-select').select2();
             $('.loan-type-select').select2();
 
-            $(".submenu").hide();
-            $('#sidebar .sidebar-dropdown').hover(function() {
-                $(this).find('.submenu').stop().show(500);
-            }, function() {
-                $(this).find('.submenu').stop().hide(500);
-            });
+            // $(".submenu").hide();
+            // $('#sidebar .sidebar-dropdown').hover(function() {
+            //     $(this).find('.submenu').stop().show(500);
+            // }, function() {
+            //     $(this).find('.submenu').stop().hide(500);
+            // });
+            // $(".submenu-item").click(function() {
+            //     $(".submenu").show();
+            // });
+            
         });
+        
         sidebarToggle = () => {
             let sidebarToggle = document.getElementById("sidebar");
             sidebarToggle.classList.toggle("sidebar-collapse");
