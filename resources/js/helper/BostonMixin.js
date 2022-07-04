@@ -89,6 +89,10 @@ Vue.mixin({
         
             let fullDate = `${year}-${month + 1}-${dates}`;
             return fullDate;
+        },
+        selectText(event) {
+            let target = event.target;
+            target.select();
         }
     }
 });

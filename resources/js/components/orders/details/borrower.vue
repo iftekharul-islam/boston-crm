@@ -18,8 +18,8 @@
       <div class="list__group">
         <p class="mb-0 left-side">Phone</p>
         <span>:</span>
-        <p class="right-side list-items mb-0">
-          <span class="d-inline-block mb-2" v-for="item, ik in borrower_contact_s" :key="ik"> {{ item }} </span>
+         <p class="right-side list-items mb-0 phone-number">
+          <input @click="selectText($event)" readonly class="d-inline-block mb-2" v-for="item, ik in borrower_contact_s" :key="ik" :value="item"/>
         </p>
       </div>
       <div class="list__group">

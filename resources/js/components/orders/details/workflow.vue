@@ -196,6 +196,7 @@ export default {
         }
         this.currentStep(this.orderData.currentStep);
         this.checkReportAnalysysCompletation(this.status.reportAnalysisReview);
+        this.$forceUpdate();
     },
     updateRole() {
         if (this.role.length) {

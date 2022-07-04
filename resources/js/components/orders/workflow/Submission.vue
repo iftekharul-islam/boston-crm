@@ -147,10 +147,13 @@ export default {
                     this.$boston.post('submission-create/'+ this.orderData.id, data, { headers: {
                             'Content-Type': 'multipart/form-data'
                         }}).then(res => {
-                        this.$root.$emit('wk_update', this.orderData);
-                        this.$root.$emit('wk_flow_menu', this.orderData);
-                        this.$root.$emit('wk_flow_toast', res);
-                        this.updateData(res.data);
+                            if (res.error == false) {
+                                this.orderData = res.data;
+                                this.$root.$emit('wk_update', this.orderData);
+                                this.$root.$emit('wk_flow_menu', this.orderData);
+                                this.updateData(res.data);
+                            }
+                            this.$root.$emit('wk_flow_toast', res);
                     }).catch(err => {
 
                     });
