@@ -33,13 +33,13 @@
                     <p class="mgb-12">Condo type</p>
                     <div class="d-flex condo-type">
                         <div class="position-relative mgr-32">
-                            <input type="checkbox" @if($appraisal_type->modified_form == 1 ) checked @endif
-                        name="condo_type" value="1" class="@error('condo_type') is-invalid @enderror condo-type-input" id="condo_type"
-                        value="{{ old('condo_type') }}">
+                            <input type="radio" @if($appraisal_type->condo_type == 1 ) checked @endif
+                                name="condo_type" value="1" class="condo-type-input" id="condo_type">
                             <label for="condo_type" class="condo-type-label"> Yes </label>
                         </div>
                         <div class="position-relative">
-                            <input type="radio" name="condo_type" value="2" id="condo_type2" class="condo-type-input">
+                            <input type="radio" @if($appraisal_type->condo_type == 0 ) checked @endif
+                                   name="condo_type" value="0" id="condo_type2" class="condo-type-input">
                             <label for="condo_type2" class="condo-type-label"> No</label>
                         </div>
                     </div>

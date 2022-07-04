@@ -9,6 +9,10 @@ class CallLog extends Model
 {
     use HasFactory;
 
+    protected $casts = [
+        'created_at' => 'date:d M Y H:i A'
+    ];
+
     public function caller()
     {
         return $this->hasOne(User::class,'id', 'caller_id');
