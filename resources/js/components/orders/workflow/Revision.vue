@@ -59,7 +59,7 @@
                 <div class="revission-card-top">
                   <div class="revission-card-header d-flex">
                     <div class="revission-name me-3">
-                      <p class="mb-0 fs-20 fw-bold">{{ item.users.created_by.name }}</p>
+                      <p class="mb-2 fs-20 fw-bold lh-20">{{ item.users.created_by.name }}</p>
                       <p class="mb-0">{{ item.revision_date | dateTime }}</p>
                     </div>
                     <div class="marked" :class="{'completed' : item.solution_details != '-' }">

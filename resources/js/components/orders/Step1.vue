@@ -143,8 +143,7 @@
                                 <div class="provided-service-data row mgb-20" v-if="providerTypes.extra.length > 0">
                                     <!-- label -->
                                     <div class="col-6">
-                                        <label for="" class="d-block mb-2 dashboard-label"><strong>Appraiser
-                                                type</strong> </label>
+                                        <label for="" class="d-block mb-2 dashboard-label"><strong>Appraiser type</strong> </label>
                                     </div>
                                     <div class="col-6">
                                         <label for="" class="d-block mb-2 dashboard-label"><strong>Fee</strong> </label>
@@ -171,7 +170,7 @@
                                         <div class="col-7">
                                             <div class="group" :class="{ 'invalid-form': providerTypes.error.type == true }">
                                                 <label for="" class="d-block mb-2 dashboard-label">Appraiser
-                                                    type </label>
+                                                    type <span class="require"></span> </label>
                                                 <div class="position-relative borderless-select">
                                                     <select id="providerTypeFee" class="dashboard-input w-100" v-model="providerTypes.default.type">
                                                         <option value="">Choose Type</option>
@@ -186,7 +185,7 @@
                                         </div>
                                         <div class="col-5">
                                             <div class="group" :class="{ 'invalid-form': providerTypes.error.fee == true }">
-                                                <label for="" class="d-block mb-2 dashboard-label">Fee </label>
+                                                <label for="" class="d-block mb-2 dashboard-label">Fee   <span class="require"></span></label>
                                                 <input @input="checkProviderValidation($event, 2)" type="number"
                                                     step="any" class="dashboard-input w-100" v-model="providerTypes.default.fee" @blur="addFee">
                                             </div>

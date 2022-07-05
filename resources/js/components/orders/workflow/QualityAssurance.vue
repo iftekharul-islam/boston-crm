@@ -329,8 +329,8 @@
                                 </li>
                             </draggable>
                         </div>
-                        <div>
-                            <button class="btn btn-primary">Save</button>
+                        <div class="text-end pdr-36">
+                            <button class="button button-primary py-2 px-4">Save</button>
                         </div>
                         <!-- time -->
                         <div class="destination-time-space">

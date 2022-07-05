@@ -99,30 +99,42 @@
                     </template>
                     <template v-slot:action="{item}">
                         <span class="call-list-item">
-                            <a :href="`/orders/${item.id}`" class="icon-list" data-bs-placement="bottom"
-                                title="Details"><span class="icon-eye text-blue-eye fs-20"><span
-                                        class="path1"></span><span class="path2"></span></span></a>
-                            <a href="javascript:;" @click.prevent="getQuickView(item)" title="Quick view"
+                            <a :href="`/orders/${item.id}`" class="icon-list" >
+                            <span class="icon-eye text-blue-eye fs-20"><span
+                                class="path1"></span><span class="path2"></span></span>
+                                <span class="call-tooltip">Details</span>
+                            </a>
+                            <a href="javascript:;" @click.prevent="getQuickView(item)" 
                                 class="icon-list quick-view-icon"><span class="icon-note text-purple fs-20"><span
-                                        class="path1"></span><span class="path2"></span><span class="path3"></span><span
-                                        class="path4"></span></span></a>
+                                class="path1"></span><span class="path2"></span><span class="path3"></span><span
+                                class="path4"></span></span>
+                                <span class="call-tooltip">Quick view</span>
+                            </a>
                             <a @click.prevent="getCallSummary(item.call_log, item.id)" href="javascript:;"
-                                class="icon-list" data-bs-placement="bottom" title="Call log" data-bs-toggle="modal"
+                                class="icon-list" data-bs-toggle="modal"
                                 data-bs-target="#callLogModal"><span class="icon-messages2 primary-text fs-20"><span
-                                        class="path1"></span><span class="path2"></span><span class="path3"></span><span
-                                        class="path4"></span><span class="path5"></span></span></a>
-                            <a @click="getScheduleData(item)" href="javascript:;" class="icon-list"
-                                data-bs-placement="bottom" title="Schedule"><span
+                                class="path1"></span><span class="path2"></span><span class="path3"></span><span
+                                class="path4"></span><span class="path5"></span></span>
+                                <span class="call-tooltip">Call log</span>
+                            </a>
+                            <a @click="getScheduleData(item)" href="javascript:;" class="icon-list">
+                                <span
                                     class="icon-calendar text-brown fs-20"><span class="path1"></span><span
-                                        class="path2"></span><span class="path3"></span><span class="path4"></span><span
-                                        class="path5"></span><span class="path6"></span><span class="path7"></span><span
-                                        class="path8"></span></span></a>
-                            <a href="javascript:;" @click="getSendMessage(item)" class="icon-list"
-                                data-bs-placement="bottom" title="Email & SMS"> <span
+                                    class="path2"></span><span class="path3"></span><span class="path4"></span><span
+                                    class="path5"></span><span class="path6"></span><span class="path7"></span><span
+                                    class="path8"></span></span>
+                                    <span class="call-tooltip">Schedule</span>
+                            </a>
+                            <a href="javascript:;" @click="getSendMessage(item)" class="icon-list"> 
+                                <span
                                     class="icon-messages text-yellow-msg  fs-20"><span class="path1"></span><span
-                                        class="path2"></span><span class="path3"></span></span></a>
+                                    class="path2"></span><span class="path3"></span></span>
+                                    <span class="call-tooltip">Email & SMS</span>
+                            </a>
                             <a href="javascript:;" class="icon-list"><span class="icon-call text-light-red fs-20"><span
-                                        class="path1"></span><span class="path2"></span></span></a>
+                                        class="path1"></span><span class="path2"></span></span>
+                                        <span class="call-tooltip">Calls</span>
+                            </a>
                             <button @click="openIssues(item)" class="button button-transparent p-0"><span
                                     class="icon-arrow-bottom"></span></button>
                         </span>
