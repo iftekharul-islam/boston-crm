@@ -13,9 +13,11 @@
                                     <div :class="{ 'invalid-form' : errors[0] || oldOrderNo.find }">
                                         <label for="" class="d-block mb-2 dashboard-label">Client order no <span
                                                 class="text-danger require"></span></label>
-                                        <input type="text" class="dashboard-input w-100" @input="checkclientOrderNo($event)" v-model="step1.clientOrderNo">
+                                        <input type="text" class="dashboard-input w-100"
+                                            @input="checkclientOrderNo($event)" v-model="step1.clientOrderNo">
                                         <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
-                                        <span v-if="oldOrderNo.find" class="error-message" v-html="oldOrderNo.message"></span>
+                                        <span v-if="oldOrderNo.find" class="error-message"
+                                            v-html="oldOrderNo.message"></span>
                                     </div>
                                 </ValidationProvider>
 
@@ -82,13 +84,14 @@
                                                 {{ loan_type.name }}
                                             </option>
                                         </select> -->
-                                        <m-select @change="loanTypeChange" no-border v-model="step1.loanType" object item-text="name" item-value="id" hover :options="loanTypes"></m-select>
+                                        <m-select @change="loanTypeChange" no-border v-model="step1.loanType" object
+                                            item-text="name" item-value="id" hover :options="loanTypes"></m-select>
                                         <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                                     </div>
                                 </ValidationProvider>
 
-                                <ValidationProvider class="group" name="FHA case no" :rules="{ required: this.fhaExists == 1 }"
-                                    v-slot="{ errors }">
+                                <ValidationProvider class="group" name="FHA case no"
+                                    :rules="{ required: this.fhaExists == 1 }" v-slot="{ errors }">
                                     <div :class="{ 'invalid-form' : errors[0] }">
                                         <label for="" class="d-block mb-2 dashboard-label">FHA case no <span
                                                 class="text-danger require" v-if="fhaExists == 1"></span></label>
@@ -110,7 +113,8 @@
                                                 {{ appraisal_user.name }}
                                             </option>
                                         </select> -->
-                                        <m-select no-border v-model="step1.appraiserName" object item-text="name" item-value="id" hover :options="appraisalUsers"></m-select>
+                                        <m-select no-border v-model="step1.appraiserName" object item-text="name"
+                                            item-value="id" hover :options="appraisalUsers"></m-select>
                                         <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                                     </div>
                                 </ValidationProvider>
@@ -127,7 +131,8 @@
                                                 {{ propertyType.type }}
                                             </option>
                                         </select> -->
-                                        <m-select no-border v-model="step1.propertyType" object item-text="type" item-value="id" hover :options="propertyTypes"></m-select>
+                                        <m-select no-border v-model="step1.propertyType" object item-text="type"
+                                            item-value="id" hover :options="propertyTypes"></m-select>
                                         <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                                     </div>
                                 </ValidationProvider>
@@ -143,7 +148,8 @@
                                 <div class="provided-service-data row mgb-20" v-if="providerTypes.extra.length > 0">
                                     <!-- label -->
                                     <div class="col-6">
-                                        <label for="" class="d-block mb-2 dashboard-label"><strong>Appraiser type</strong> </label>
+                                        <label for="" class="d-block mb-2 dashboard-label"><strong>Appraiser
+                                                type</strong> </label>
                                     </div>
                                     <div class="col-6">
                                         <label for="" class="d-block mb-2 dashboard-label"><strong>Fee</strong> </label>
@@ -168,15 +174,17 @@
                                 <div class="col-12">
                                     <div class="row">
                                         <div class="col-7">
-                                            <div class="group" :class="{ 'invalid-form': providerTypes.error.type == true }">
+                                            <div class="group"
+                                                :class="{ 'invalid-form': providerTypes.error.type == true }">
                                                 <label for="" class="d-block mb-2 dashboard-label">Appraiser
                                                     type <span class="require"></span> </label>
                                                 <div class="position-relative borderless-select">
-                                                    <select id="providerTypeFee" class="dashboard-input w-100" v-model="providerTypes.default.type">
+                                                    <select id="providerTypeFee" class="dashboard-input w-100"
+                                                        v-model="providerTypes.default.type">
                                                         <option value="">Choose Type</option>
-                                                        <option :value="item.id"
-                                                            :data-full="item.is_full_appraisal" :key="ki"
-                                                            v-for="item, ki in appraisalTypes">{{ item.form_type
+                                                        <option :value="item.id" :data-full="item.is_full_appraisal"
+                                                            :key="ki" v-for="item, ki in appraisalTypes">{{
+                                                            item.form_type
                                                             }}</option>
                                                     </select>
                                                     <span class="icon-arrow-down bottom-arrow-icon"></span>
@@ -184,10 +192,13 @@
                                             </div>
                                         </div>
                                         <div class="col-5">
-                                            <div class="group" :class="{ 'invalid-form': providerTypes.error.fee == true }">
-                                                <label for="" class="d-block mb-2 dashboard-label">Fee   <span class="require"></span></label>
+                                            <div class="group"
+                                                :class="{ 'invalid-form': providerTypes.error.fee == true }">
+                                                <label for="" class="d-block mb-2 dashboard-label">Fee <span
+                                                        class="require"></span></label>
                                                 <input @input="checkProviderValidation($event, 2)" type="number"
-                                                    step="any" class="dashboard-input w-100" v-model="providerTypes.default.fee" @blur="addFee">
+                                                    step="any" class="dashboard-input w-100"
+                                                    v-model="providerTypes.default.fee" @blur="addFee">
                                             </div>
                                         </div>
                                     </div>
@@ -426,7 +437,7 @@
             type: null,
             amcClients: [],
             lenderClients: [],
-            propertyTypes:[]
+            propertyTypes: []
         },
         data() {
             return {
@@ -456,7 +467,7 @@
                     receiveDate: '',
                     technologyFee: 0,
                     fhaCaseNo: '',
-                    propertyType:'',
+                    propertyType: '',
                     appraiserName: null,
                     dueDate: '',
                     appraiserType: '',
@@ -498,7 +509,8 @@
                     currentPlace: null,
                     markerIcon: "",
                     data: [],
-                }
+                },
+                processingFee: 0
             }
         },
         created() {
@@ -520,15 +532,15 @@
         methods: {
             loanTypeChange() {
                 let fhaExistData = this.loanTypes.filter((item) => {
-                    if(item.id == this.step1.loanType) {
+                    if (item.id == this.step1.loanType) {
                         return item;
                     }
                 });
-                if(fhaExistData.length > 0){
+                if (fhaExistData.length > 0) {
                     this.fhaExists = fhaExistData[0].is_fha
                 }
             },
-            updateLoanType(event){
+            updateLoanType(event) {
                 this.step1.loanType = null
             },
             select2Features() {
@@ -536,8 +548,9 @@
                     let value = e.target.value;
                     this.providerTypes.default.type = value;
                     this.checkProviderValidation(e, 1);
+                    this.calculateTechnologyFeeOnProviderChange()
                 }.bind(this));
-                 $("#propertyTypeSelect").on("select2:select", function (e) {
+                $("#propertyTypeSelect").on("select2:select", function (e) {
                     let value = e.target.value;
                     this.step1.propertyType = value;
                 }.bind(this));
@@ -690,6 +703,7 @@
 
                 $("#providerTypeFee").val(this.providerTypes.default.type).trigger('change');
                 this.checkProviderBalance();
+                this.calculateTechnologyFeeOnProviderChange()
                 this.$root.$emit("updateProviderData", this.providerTypes);
             },
 
@@ -724,10 +738,27 @@
             calculateTechnologyFee(e) {
                 let uad = e.target.selectedOptions[0].dataset.uad
                 let d = e.target.selectedOptions[0].dataset.d
-                let processingFee = e.target.selectedOptions[0].dataset.processing
-                this.providerTypes.extra[0].full == 1 ? this.step1.technologyFee = uad : this.step1.technologyFee = d
-                if (processingFee != '' && processingFee > 0) {
-                    let technologyFee = parseFloat(parseFloat(this.step1.technologyFee) + parseFloat(this.providerTypes.totalAmount * (processingFee / 100)))
+                this.processingFee = e.target.selectedOptions[0].dataset.processing
+                if (this.providerTypes.extra.length > 0) {
+                    this.providerTypes.extra[0].full == 1 ? this.step1.technologyFee = uad : this.step1.technologyFee = d
+                }
+                if (this.processingFee > 0) {
+                    let technologyFee = parseFloat(parseFloat(this.step1.technologyFee) + parseFloat(this.providerTypes.totalAmount * (this.processingFee / 100)))
+                    this.step1.technologyFee = parseFloat(technologyFee).toFixed(2)
+                }
+            },
+            calculateTechnologyFeeOnProviderChange() {
+                if(this.step1.amcClient != ''){
+                    this.processingFee = $('#amcClientSelect').find(':selected').data('processing')
+                }
+
+                if (this.providerTypes.extra.length > 0 && this.providerTypes.extra[0].full == 1) {
+                    this.step1.technologyFee = $('#amcClientSelect').find(':selected').data('uad')
+                } else {
+                    this.step1.technologyFee = $('#amcClientSelect').find(':selected').data('d')
+                }
+                if (this.processingFee > 0) {
+                    let technologyFee = parseFloat(parseFloat(this.step1.technologyFee) + parseFloat(this.providerTypes.totalAmount * (this.processingFee / 100)))
                     this.step1.technologyFee = parseFloat(technologyFee).toFixed(2)
                 }
             },
@@ -736,6 +767,7 @@
                 if (this.providerTypes.extra.length == 0) {
                     this.providerTypes.totalAmount = 0;
                     this.condoType = false;
+                    this.step1.technologyFee = 0
                 } else {
                     this.checkProviderBalance();
                 }
@@ -969,10 +1001,10 @@
                 }
             },
 
-            checkclientOrderNo: _.debounce( function (event) {
+            checkclientOrderNo: _.debounce(function (event) {
                 let value = event.target.value;
                 this.oldOrderNo.find = false;
-                this.$boston.post('/check/client/order/no', {'client_no' : value}).then((res) => {
+                this.$boston.post('/check/client/order/no', { 'client_no': value }).then((res) => {
                     this.oldOrderNo.find = res.find;
                     this.oldOrderNo.message = res.message;
                 }).catch(err => {
