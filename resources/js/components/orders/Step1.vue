@@ -611,6 +611,18 @@
                         this.stepActive = true;
                         this.stepChangeActive();
                     } else {
+                        if(!this.providerTypes.extra.length){
+                            let newType = this.providerTypes.default.type;
+                            let newFee = this.providerTypes.default.fee;
+                            this.providerTypes.error.type = false;
+                            this.providerTypes.error.fee = false;
+                            if (newType == null || newType == "") {
+                                this.providerTypes.error.type = true;
+                            }
+                            if (newFee == null) {
+                                this.providerTypes.error.fee = true;
+                            }
+                        }
                         $("html, body").animate({ scrollTop: 0 }, 300);
                     }
                 });

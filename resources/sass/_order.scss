@@ -541,6 +541,13 @@
     @include for-min-1600 {
         grid-column-gap: 30px;
     }
+    .issue {
+        padding-top: 8px;
+        max-height: 100px;
+        overflow: auto;
+        overflow-x: hidden;
+        margin-bottom: 8px;
+    }
     .solution {
         border-top: 1px solid $sky-blue;
         padding-top: 8px;
@@ -930,7 +937,7 @@ select {
         @include for-max-1399 {
             max-width: 140px;
         }
-        
+
     }
     img {
         width: 40px;

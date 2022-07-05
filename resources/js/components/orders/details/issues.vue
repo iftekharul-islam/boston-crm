@@ -10,7 +10,9 @@
               <span class="badges solved-badges" v-if="ticket.status == 1">Solved</span>
               <span class="badges pending-badges" v-else>Pending</span>
               <p class="text-gray text-end mgb-12">{{ ticket.created_at | momentTime }}</p>
-              <p class="text-light-black">{{ ticket.subject }}</p>
+              <div class="issue">
+                  <p class="text-light-black">{{ ticket.issue }}</p>
+              </div>
               <div class="d-flex justify-content-between mgb-12">
                   <p class="text-gray mb-0" v-if="ticket.assignee">Assigned to : <span class="text-light-black text-600">{{ ticket.assignee.name }}</span></p>
                   <a href="#" class="share-box" @click.prevent="showUpdateModal(ticket)">
