@@ -25,13 +25,16 @@
                         </div>
                     </div>
 
-                    <div class="group">
+                    <div class="group" v-if="orderData.analysis">
                         <p class="text-light-black mgb-12">Files From Previous Step</p>
                         <div class="row">
-                            <div class="d-flex align-items-center mb-3 document" v-for="file, fileIndex in dataFiles"
+                            <div class="d-flex align-items-center mb-3 document" v-for="file, fileIndex in orderData.analysis.attachments"
                                 :key="fileIndex">
                                 <img src="/img/pdf.svg" alt="boston profile" class="img-fluid">
-                                <span class="text-light-black d-inline-block mgl-12 file-name">{{ file.name }}</span>
+                                <a :href="file.original_url" download>{{ file.name }}</a>
+                                <p class="text-gray mb-0 fs-12">Uploaded: {{ orderData.analysis.updated_by.name
+                                    + ', ' +
+                                    orderData.analysis.updated_at }}</p>
                             </div>
                         </div>
                     </div>
@@ -88,26 +91,32 @@
                         <p class="mb-0 text-light-black fw-bold">{{ current.assignee.name }}</p>
                     </div>
 
-                    <div class="group">
+                    <div class="group" v-if="orderData.analysis">
                         <p class="text-light-black mgb-12">Files From Previous Step</p>
                         <div class="row">
-                            <div class="d-flex align-items-center mb-3 document" v-for="file, fileIndex in dataFiles"
+                            <div class="d-flex align-items-center mb-3 document" v-for="file, fileIndex in orderData.analysis.attachments"
                                 :key="fileIndex">
                                 <img src="/img/pdf.svg" alt="boston profile" class="img-fluid">
                                 <span class="text-light-black d-inline-block mgl-12 file-name">
                                     <a :href="file.original_url" download>{{ file.name }}</a>
+                                    <p class="text-gray mb-0 fs-12">Uploaded: {{ orderData.analysis.updated_by.name
+                                    + ', ' +
+                                    orderData.analysis.updated_at }}</p>
                                 </span>
                             </div>
                         </div>
                     </div>
-                    <div class="group">
+                    <div class="group" v-if="orderData.report_rewrite">
                         <p class="text-light-black mgb-12">Files From Current Step</p>
                         <div class="row">
-                            <div class="d-flex align-items-center mb-3 document" v-for="file, fileIndex in reportFiles"
+                            <div class="d-flex align-items-center mb-3 document" v-for="file, fileIndex in orderData.report_rewrite.attachments"
                                 :key="fileIndex">
                                 <img src="/img/pdf.svg" alt="boston profile" class="img-fluid">
                                 <span class="text-light-black d-inline-block mgl-12 file-name">
                                     <a :href="file.original_url" download>{{ file.name }}</a>
+                                    <p v-if="orderData.report_rewrite.update_by" class="text-gray mb-0 fs-12">Uploaded: {{ orderData.report_rewrite.update_by.name
+                                    + ', ' +
+                                   orderData.report_rewrite.updated_at }}</p>
                                 </span>
                             </div>
                         </div>
@@ -129,14 +138,12 @@
             orderData: [],
             prev: [],
             current: [],
-            dataFiles: [],
             note: null,
             assigned_to: null,
             editable: false,
             fileData: {
                 files: [],
             },
-            retportFiles: [],
         }),
         inject: ['usersInfo'],
         created() {
@@ -160,12 +167,10 @@
                 this.prev = order.analysis ?? [];
                 this.current = order.report_rewrite ?? [];
 
-                this.dataFiles = this.prev.attachments;
                 if (this.current) {
                     this.assigned_to = this.current.assigned_to;
                     this.note = this.current.note;
                     this.editable = true;
-                    this.reportFiles = this.current.attachments
                 }
             },
             saveAssigneeData() {
@@ -194,7 +199,7 @@
                             }
                             this.$root.$emit('wk_flow_toast', res);
                         }).catch(err => {
-                            console.log('err', err)
+                            console.error(err)
                         });
                     }
                 })
@@ -225,7 +230,7 @@
                         }
                         this.$root.$emit('wk_flow_toast', res);
                     }).catch(err => {
-                        console.log('err', err)
+                        console.error(err)
                     });
                 },
         }

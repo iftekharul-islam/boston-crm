@@ -13,7 +13,8 @@ class OrderWInspection extends Model implements HasMedia
     use HasFactory, InteractsWithMedia;
 
     protected $casts = [
-        'created_at' => 'date:d M Y'
+        'created_at' => 'date:d M Y',
+        'updated_at' => 'date:d M Y H:i A'
     ];
     protected $appends = ['inspection_date_time_formatted'];
 

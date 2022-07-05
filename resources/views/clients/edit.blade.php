@@ -204,6 +204,13 @@
 @endsection
 @push('js')
     <script type="text/javascript">
+        $(document).keypress(
+            function (event) {
+                if (event.which == '13') {
+                    event.preventDefault();
+                }
+            }
+        );
         function numbersOnly(e){
             return e.charCode >= 48 && e.charCode <= 57;
         }

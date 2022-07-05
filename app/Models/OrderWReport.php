@@ -11,6 +11,10 @@ class OrderWReport extends Model implements HasMedia
 {
     use HasFactory, InteractsWithMedia;
 
+    protected $casts = [
+        'updated_at' => 'date:d M Y H:i A'
+    ];
+
 
     public function reviewer(){
         return $this->belongsTo(User::class, 'reviewed_by', 'id');
