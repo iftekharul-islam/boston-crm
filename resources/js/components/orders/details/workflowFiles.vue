@@ -14,32 +14,48 @@
                                 <p class="fw-bold text-light-black">Inspection Files</p>
                                 <div class="d-flex align-items-center mb-3" v-for="file in inspectionFiles">
                                     <img src="/img/pdf.svg" alt="boston profile" class="img-fluid">
-                                    <span class="text-light-black d-inline-block mgl-12 file-name"><a
-                                            :href="file.original_url" target="_blank" download>{{ file.name }}</a></span>
+                                    <div class="mgl-12">
+                                         <span class="text-light-black mb-0 file-name d-block"><a
+                                            :href="file.original_url" target="_blank" download class="text-light-black">{{ file.name }}</a></span>
+                                        <p class="text-gray fs-12 mb-0">Uploaded: date time </p>
+                                    </div>
+                                   
                                 </div>
                             </div>
                             <div class="col-sm-6 col-md-4 col-lg-3">
                                 <p class="fw-bold text-light-black">Report Preparation Files</p>
                                 <div class="d-flex align-items-center mb-3" v-for="file in reportFiles">
                                     <img src="/img/pdf.svg" alt="boston profile" class="img-fluid">
-                                    <span class="text-light-black d-inline-block mgl-12 file-name"><a
-                                            :href="file.original_url" target="_blank" download>{{ file.name }}</a></span>
+                                    <div class="mgl-12">
+                                        <span class="text-light-black mb-0 file-name d-block"><a
+                                            :href="file.original_url" target="_blank" download class="text-light-black">{{ file.name }}</a></span>
+                                         <p class="text-gray fs-12 mb-0">Uploaded: date time </p>
+                                    </div>
+                                    
                                 </div>
                             </div>
                             <div class="col-sm-6 col-md-4 col-lg-3">
                                 <p class="fw-bold text-light-black">Report Analysis Files</p>
                                 <div class="d-flex align-items-center mb-3" v-for="file in reportAnalysisFiles">
                                     <img src="/img/pdf.svg" alt="boston profile" class="img-fluid">
-                                    <span class="text-light-black d-inline-block mgl-12 file-name"><a
-                                            :href="file.original_url" target="_blank" download>{{ file.name }}</a></span>
+                                    <div class="mgl-12">
+                                        <span class="text-light-black mb-0 file-name d-block"><a
+                                            :href="file.original_url" target="_blank" download class="text-light-black">{{ file.name }}</a></span>
+                                        <p class="text-gray fs-12 mb-0">Uploaded: date time </p>
+                                    </div>
+                                    
                                 </div>
                             </div>
                             <div class="col-sm-6 col-md-4 col-lg-3">
                                 <p class="fw-bold text-light-black">Quality Assurance Files</p>
                                 <div class="d-flex align-items-center mb-3" v-for="file in qaFiles">
                                     <img src="/img/pdf.svg" alt="boston profile" class="img-fluid">
-                                    <span class="text-light-black d-inline-block mgl-12 file-name"><a
-                                            :href="file.original_url" target="_blank" download>{{ file.name }}</a></span>
+                                    <div class="mgl-12">
+                                        <span class="text-light-black mb-0 file-name d-block"><a
+                                            :href="file.original_url" target="_blank" download class="text-light-black">{{ file.name }}</a></span>
+                                        <p class="text-gray fs-12 mb-0">Uploaded: date time </p>
+                                    </div>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -48,8 +64,12 @@
                                 <p class="fw-bold text-light-black">Report Rewrite Files</p>
                                 <div class="d-flex align-items-center mb-3" v-for="file in reportRewriteFiles">
                                     <img src="/img/pdf.svg" alt="boston profile" class="img-fluid">
-                                    <span class="text-light-black d-inline-block mgl-12 file-name"><a
-                                            :href="file.original_url" target="_blank" download>{{ file.name }}</a></span>
+                                    <div class="mgl-12">
+                                        <span class="text-light-black mb-0 file-name d-block"><a
+                                            :href="file.original_url" target="_blank" download class="text-light-black">{{ file.name }}</a></span>
+                                        <p class="text-gray fs-12 mb-0">Uploaded: date time </p>
+                                    </div>
+                                    
                                 </div>
                             </div>
                         </div>
