@@ -66,8 +66,9 @@
                             <ValidationProvider class="group d-block" name="FHA case no"
                                 :rules="{ required: this.fhaExists == 1 }" v-slot="{ errors }">
                                 <div :class="{ 'invalid-form' : errors[0] }">
-                                    <label for="" class="d-block mb-2 dashboard-label">FHA case no <span
-                                            class="text-danger require" v-if="fhaExists == 1"></span></label>
+                                    <label for="" class="d-block mb-2 dashboard-label">FHA case no
+                                        <span class="text-danger require" v-if="fhaExists == 1"></span>
+                                    </label>
                                     <input type="text" class="dashboard-input w-100" v-model="details.fha_case_no">
                                     <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                                 </div>
@@ -133,8 +134,15 @@
             this.getAppraisalDetails(this.order);
         },
         methods: {
-            loanTypeChange(event) {
-                this.fhaExists = event.target.selectedOptions[0].dataset.fha
+            loanTypeChange() {
+                let fhaExistData = this.loanTypes.filter((item) => {
+                    if(item.id == this.details.loan_type) {
+                        return item;
+                    }
+                });
+                if(fhaExistData.length > 0){
+                    this.fhaExists = fhaExistData[0].is_fha
+                }
             },
             getAppraisalDetails(order) {
                 this.details.appraiser_id = order.appraisal_detail.appraiser_id;
