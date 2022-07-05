@@ -90,6 +90,7 @@
                         this.$boston.post('send-message',this.sendMessageData)
                         .then(res => {
                             this.$bvModal.hide('send-message')
+                            this.$root.$emit('wk_flow_toast', res)
                         })
                         .catch(err => {
                             console.error(err)
