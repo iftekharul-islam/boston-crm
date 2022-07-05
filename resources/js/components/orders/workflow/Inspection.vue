@@ -5,7 +5,7 @@
         </div>
         <div v-else>
             <a class="edit-btn" v-if="!editable" @click="editable = true"><span class="icon-edit"><span
-                class="path1"></span><span class="path2"></span></span></a>
+                        class="path1"></span><span class="path2"></span></span></a>
             <div class="group">
                 <p class="text-light-black mgb-12">Appraiser</p>
                 <p class="mb-0 text-light-black fw-bold">{{ name }}</p>
@@ -14,14 +14,18 @@
                 <p class="text-light-black mgb-12">Instruction or Note for Inspection</p>
                 <p class="mb-0 text-light-black fw-bold">{{ note }}</p>
             </div>
-            <div class="group"  v-if="dataFiles.length">
+            <div class="group" v-if="orderData.inspection">
                 <p class="text-light-black mgb-12">Inspection file upload</p>
                 <div class="document">
                     <div class="row">
-                        <div class="d-flex align-items-center mb-3" v-for="(file, key) in dataFiles" :key="key">
+                        <div class="d-flex align-items-center mb-3"
+                            v-for="(file, key) in orderData.inspection.attachments" :key="key">
                             <img src="/img/pdf.svg" alt="boston profile" class="img-fluid">
                             <span class="text-light-black d-inline-block mgl-12 file-name">
                                 <a :href="file.original_url" download>{{ file.name }}</a>
+                                <p class="text-gray mb-0 fs-12">Uploaded: {{ orderData.inspection.create_by.name
+                                    + ', ' +
+                                    orderData.inspection.updated_at }}</p>
                             </span>
                         </div>
                     </div>
@@ -34,15 +38,16 @@
                     <div class="position-relative file-upload">
                         <input type="file" multiple v-on:change="addFiles">
                         <label for="" class="py-2">Upload <span class="icon-upload ms-3 fs-20"><span
-                            class="path1"></span><span class="path2"></span><span
-                            class="path3"></span></span></label>
+                                    class="path1"></span><span class="path2"></span><span
+                                    class="path3"></span></span></label>
                     </div>
-                    <p class="text-light-black mgb-12" v-if="fileData.files.length">{{ fileData.files.length }} Files</p>
+                    <p class="text-light-black mgb-12" v-if="fileData.files.length">{{ fileData.files.length }} Files
+                    </p>
                 </div>
             </div>
             <div class="text-end mgt-32" v-if="editable">
                 <button class="button button-primary px-4 h-40 d-inline-flex align-items-center" @click="saveInsFiles"
-                        :disabled="isUploading">Save</button>
+                    :disabled="isUploading">Save</button>
             </div>
         </div>
     </div>
@@ -67,12 +72,11 @@
             },
             name: null,
             note: null,
-            dataFiles: [],
         }),
         created() {
             let order = this.order;
             let localOrderData = this.$store.getters['app/orderDetails']
-            if(localOrderData){
+            if (localOrderData) {
                 order = localOrderData;
             }
             this.inspectionData(order);
@@ -84,7 +88,6 @@
                     this.id = this.orderData.inspection.id
                     this.note = this.orderData.inspection.note
                     this.name = this.orderData.inspection.user.name
-                    this.dataFiles = this.orderData.inspection_files
                     this.editable = false
                 } else {
                     this.isEmpty = true

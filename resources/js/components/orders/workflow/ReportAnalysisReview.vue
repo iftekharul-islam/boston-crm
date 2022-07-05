@@ -21,14 +21,17 @@
             <p class="text-light-black mgb-12">Assign to</p>
             <p class="mb-0 text-light-black fw-bold">{{ assignToName }}</p>
         </div>
-        <div class="group"  v-if="dataFiles.length">
-            <p class="text-light-black mgb-12">Report analysis file upload</p>
+        <div class="group"  v-if="orderData.analysis">
+            <p class="text-light-black mgb-12">Report analysis file</p>
             <div class="document">
                 <div class="row">
-                    <div class="d-flex align-items-center mb-3" v-for="(file, key) in dataFiles" :key="key">
+                    <div class="d-flex align-items-center mb-3" v-for="(file, key) in orderData.analysis.attachments" :key="key">
                         <img src="/img/pdf.svg" alt="boston profile" class="img-fluid">
                         <span class="text-light-black d-inline-block mgl-12 file-name">
                             <a :href="file.original_url" download>{{ file.name }}</a>
+                            <p class="text-gray mb-0 fs-12">Uploaded: {{ orderData.analysis.updated_by.name
+                                    + ', ' +
+                                    orderData.analysis.updated_at }}</p>
                         </span>
                     </div>
                 </div>
@@ -120,7 +123,6 @@
                 file_type: '',
                 files: [],
             },
-            dataFiles: [],
             message: '',
         }),
         created() {
@@ -145,7 +147,6 @@
                 if (analysis) {
                     this.assignTo = analysis.assigned_to
                     this.assignToName = analysis.assignee.name
-                    this.dataFiles = !_.isEmpty(this.orderData.analysis_files) ? this.orderData.analysis_files : [];
                     if (analysis.is_review_send_back) {
                         this.noteCheck = 1
                         this.note = analysis.rewrite_note

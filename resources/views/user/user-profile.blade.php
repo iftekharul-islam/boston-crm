@@ -111,6 +111,9 @@
                                                    class="d-block mb-2 dashboard-label">{{ __('messages.profile_view.phone') }}</label>
                                             <input type="text"
                                                    id="phone"
+                                                   maxlength="12"
+                                                   oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"
+                                                   onkeyup="return formatPhoneNo(event);"
                                                    class="dashboard-input w-100 @error('phone') is-invalid @enderror" name="phone"
                                                    value="{{ $profile->phone ?? '' }}">
                                             @error('phone')
@@ -165,6 +168,10 @@
 
 @section('js')
     <script>
+        function formatPhoneNo(e){
+            let phoneNo = e.target.value;
+            e.target.value = phoneNo.replace(/(\d{3})\-?(\d{3})\-?(\d{4}).*/,'$1-$2-$3')
+        }
         const MAX_FILE_SIZE = 3 * 1024 * 1024; // 1MB
         $(document).ready(function () {
             if ($(".success-msg")){

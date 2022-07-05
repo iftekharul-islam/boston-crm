@@ -281,10 +281,10 @@
                                         class="dashboard-input w-100">
                                 </div>
 
-                                <ValidationProvider class="group" name="Address name" rules="required"
+                                <ValidationProvider class="group" name="Full address name" rules="required"
                                     v-slot="{ errors }">
                                     <div class="group" :class="{ 'invalid-form' : errors[0] }">
-                                        <label for="" class="d-block mb-2 dashboard-label">Address Name <span
+                                        <label for="" class="d-block mb-2 dashboard-label">Full address Name <span
                                                 class="text-danger require"></span></label>
                                         <input type="text" class="dashboard-input w-100" v-model="step1.searchAddress">
                                         <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>

@@ -46,7 +46,7 @@
               </ValidationProvider>
 
               <div class="group mb-3">
-                  <label for="" class="d-block mb-2 dashboard-label">Co-borrower name <span class="require"></span></label>
+                  <label for="" class="d-block mb-2 dashboard-label">Co-borrower name</label>
                   <input type="text" v-model="co_borrower_name" class="dashboard-input w-100">
               </div>
 
