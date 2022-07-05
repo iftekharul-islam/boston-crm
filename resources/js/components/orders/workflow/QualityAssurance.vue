@@ -214,7 +214,7 @@
                         <img src="/img/pdf.png" alt="boston pdf image">
                     </div>
                     <div class="mgl-12 document">
-                        <p class="text-light-black mb-0 file-name">{{ attachment.name }}</p>
+                        <a :href="attachment.original_url" target="_blank" download class="text-light-black mb-0 file-name">{{ attachment.name }}</a>
                         <p class="text-gray mb-0 fs-12">Uploaded: {{ orderData.analysis.updated_by.name + ', ' +
                             orderData.analysis.updated_at }}</p>
                     </div>
@@ -240,7 +240,7 @@
                         <img src="/img/pdf.png" alt="boston pdf image">
                     </div>
                     <div class="mgl-12 document">
-                        <p class="text-light-black mb-0 file-name">{{ attachment.name }}</p>
+                        <a :href="attachment.original_url" target="_blank" download class="text-light-black mb-0 file-name">{{ attachment.name }}</a>
                         <p class="text-gray mb-0 fs-12">Uploaded: {{ orderData.quality_assurance.updated_by.name + ', ' +
                             orderData.quality_assurance.updated_at }}</p>
                     </div>

@@ -528,9 +528,11 @@
             },
             getScheduleData(item) {
                 this.$refs.callScheduleComponent.setOrderId(item.id)
-                this.$refs.callReScheduleComponent.setOrderId(item.id)
-                this.$refs.callReScheduleComponent.setScheduleData(item.inspection)
-                this.$refs.callReScheduleComponent.setOrderStatus(item.status)
+                if(item.inspection){
+                    this.$refs.callReScheduleComponent.setOrderId(item.id)
+                    this.$refs.callReScheduleComponent.setScheduleData(item.inspection)
+                    this.$refs.callReScheduleComponent.setOrderStatus(item.status)
+                }
                 item.status == 0 ? this.$bvModal.show('schedule') : this.$bvModal.show('re-schedule')
             },
             getSendMessage(item) {
