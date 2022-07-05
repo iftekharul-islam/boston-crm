@@ -86,7 +86,6 @@
         },
         created() {
             this.getFiles(this.orderFiles, this.order)
-            console.log(this.orderData)
         },
         methods: {
             formatedDate(date){

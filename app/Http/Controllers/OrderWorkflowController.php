@@ -527,7 +527,7 @@ class OrderWorkflowController extends BaseController
         $order->workflow_status = json_encode($workStatus);
         $order->save();
 
-        $historyTitle = "Re-writing the report updated by " . $user->name . ' change note "'.$get->note.'"';
+        $historyTitle = "Re-writing the report updated by " . $user->name ;
         $this->addHistory($order, $user, $historyTitle, 'rewriting-report');
         $orderData = $this->orderDetails($get->order_id);
 
