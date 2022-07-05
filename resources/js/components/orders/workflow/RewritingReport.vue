@@ -243,17 +243,16 @@
     }
     .assign_rewrite {
         display: flex;
-        align-items: center;
+        align-items: flex-end;
         justify-content: space-between;
         margin-bottom: 30px;
     }
     .rewrite_step_1 {
-        flex: 80%;
+        margin-right: 16px;
+        flex-grow: 1;
     }
     .rewrite_step_2 {
-        flex: 20%;
         text-align: right;
-        margin-top: 30px;
     }
     .invalid-form .rewrite_step_2 {
         margin-top: 10px;
