@@ -544,6 +544,9 @@
     .solution {
         border-top: 1px solid $sky-blue;
         padding-top: 8px;
+        max-height: 100px;
+        overflow: auto;
+        overflow-x: hidden;
     }
 }
 
