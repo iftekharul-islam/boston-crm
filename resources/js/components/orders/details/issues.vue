@@ -25,7 +25,7 @@
       </div>
     </div>
       <div class="text-center mt-3 mb-3" v-else>
-          No call added yet !
+          No Issues/ Queries added yet !
       </div>
      <!-- modal -->
     <add-issue :showIssueModal="isIssueModal" :orderId="this.id"></add-issue>

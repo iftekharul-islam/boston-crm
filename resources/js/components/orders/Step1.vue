@@ -82,7 +82,7 @@
                                                 {{ loan_type.name }}
                                             </option>
                                         </select> -->
-                                        <m-select no-border v-model="step1.loanType" object item-text="name" item-value="id" hover :options="loanTypes"></m-select>
+                                        <m-select @change="loanTypeChange" no-border v-model="step1.loanType" object item-text="name" item-value="id" hover :options="loanTypes"></m-select>
                                         <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                                     </div>
                                 </ValidationProvider>
@@ -519,6 +519,16 @@
             this.select2Features();
         },
         methods: {
+            loanTypeChange() {
+                let fhaExistData = this.loanTypes.filter((item) => {
+                    if(item.id == this.step1.loanType) {
+                        return item;
+                    }
+                });
+                if(fhaExistData.length > 0){
+                    this.fhaExists = fhaExistData[0].is_fha
+                }
+            },
             updateLoanType(event){
                 this.step1.loanType = null
             },
