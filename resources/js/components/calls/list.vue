@@ -126,10 +126,8 @@
                                     <span class="call-tooltip">Schedule</span>
                             </a>
                             <a href="javascript:;" @click="getSendMessage(item)" class="icon-list"> 
-                                <span
-                                    class="icon-messages text-yellow-msg  fs-20"><span class="path1"></span><span
-                                    class="path2"></span><span class="path3"></span></span>
-                                    <span class="call-tooltip">Email & SMS</span>
+                                <span class="icon-sms text-skyblue fs-20"><span class="path1"></span><span class="path2"></span></span>
+                                <span class="call-tooltip">Email & SMS</span>
                             </a>
                             <a href="javascript:;" class="icon-list"><span class="icon-call text-light-red fs-20"><span
                                         class="path1"></span><span class="path2"></span></span>
