@@ -12,6 +12,10 @@ class OrderWRewrite extends Model implements HasMedia
 {
     use HasFactory, InteractsWithMedia;
 
+    protected $casts = [
+        'updated_at' => 'date:d M Y H:i A'
+    ];
+
     public function assignee(){
         return $this->belongsTo(User::class,'assigned_to','id');
     }
