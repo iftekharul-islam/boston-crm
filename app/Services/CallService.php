@@ -19,7 +19,7 @@ class CallService
         }
         if ($data['send_sms']  == 1) {
             foreach ($data['phones'] as $phone) {
-                $formatted_number = '+1' . (int) str_replace('-', '', $phone);
+                $formatted_number = "1" . (int) str_replace('-', '', $phone);
                 $this->sendSms($order->system_order_no, $formatted_number, $data['message']);
             }
         }
@@ -52,25 +52,29 @@ class CallService
             ->post($url, [
                 'source' => 'Boston CRM',
                 'clientMessageId' => $message_id,
-                'destination' => $destination,
-                'text' => $message,
+                'destination' => "+8801837487415",
+                'text' => "Hello,
+“LENDER NAME” assigned us an appraisal for the property “SUBJECT FULL ADDRESS”. Please contact us to schedule an appointment at 617-440-7700 or orders@bostonappraisal.com.
+Thank you",
                 "encoding" => "AUTO"
             ]);
 
         $result = $response->json();
+        dd($result);
+        return $result && $result->status['code'] == "QUEUED" ? true : false;
 
-        $umid = $result['umid'];
-        $timestamp = $result['timestamp'];
-        //feedback url for validating success or failure
-        $success_url = 'https://sms.8x8.com/api/v1/subaccounts/BostonAppraisalServices_6qQ93_hq/messages/' . $umid . '/feedback';
+        // $umid = $result['umid'];
+        // $timestamp = time();
+        // //feedback url for validating success or failure
+        // $success_url = 'https://sms.8x8.com/api/v1/subaccounts/BostonAppraisalServices_6qQ93_hq/messages/' . $umid . '/feedback';
 
-        $success_response = Http::withHeaders($headers)
-            ->withToken($token)
-            ->post($success_url, [
-                'outcome' => 'success', // success or failure ,required field
-                'timestamp' => $timestamp
-            ]);
+        // $success_response = Http::withHeaders($headers)
+        //     ->withToken($token)
+        //     ->post($success_url, [
+        //         'outcome' => 'success', // success or failure ,required field
+        //         'timestamp' => $timestamp
+        //     ]);
 
-        dd($success_response->json());
+        // dd($success_response->json());
     }
 }

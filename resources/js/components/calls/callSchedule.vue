@@ -102,9 +102,9 @@
                         this.$boston.post('update-order-schedule', this.schedule)
                             .then(res => {
                                 this.orderData = res.data;
-                                //this.$root.$emit('wk_update', res.data)
-                                //this.$root.$emit('wk_flow_menu', res.data)
-                                //this.$root.$emit('wk_flow_toast', res)
+                                this.$root.$emit('wk_update', res.data)
+                                this.$root.$emit('wk_flow_menu', res.data)
+                                this.$root.$emit('wk_flow_toast', res)
                                 this.$bvModal.hide('schedule')
                             })
                     }
