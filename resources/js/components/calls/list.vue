@@ -615,11 +615,4 @@
         top: 4px;
         cursor: hover;
     }
-
-    .td-text-overflow {
-        max-width: 150px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
 </style>
