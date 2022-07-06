@@ -49,7 +49,7 @@
                     </div>
                     <div class="text-end mgt-32">
                         <button class="button button-primary px-4 h-40 d-inline-flex align-items-center"
-                            @click="saveAdminData">Save</button>
+                            @click="saveAdminData">Assign</button>
                     </div>
                 </ValidationObserver>
             </div>

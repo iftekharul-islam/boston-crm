@@ -21,7 +21,7 @@
             <p class="text-light-black mgb-12">Assign to</p>
             <p class="mb-0 text-light-black fw-bold">{{ assignToName }}</p>
         </div>
-        <div class="group"  v-if="orderData.analysis">
+        <div class="group"  v-if="orderData.analysis.attachments.length">
             <p class="text-light-black mgb-12">Report analysis file</p>
             <div class="document">
                 <div class="row">
@@ -45,60 +45,68 @@
                 <p class="mb-0 text-light-black fw-bold" v-if="this.preNote.length">{{ this.preNote }}</p>
                 <p class="mb-0 text-light-black fw-bold" v-else>Note not updated yet</p>
             </div>
-            <div class="mgb-32" v-if="assignToName.length">
-                <div class="group">
-                    <p class="text-light-black mgb-12">Assign to</p>
-                    <p class="mb-0 text-light-black fw-bold">{{ assignToName }}</p>
-                </div>
-            </div>
-            <div class="mgb-32" v-else>
-                <ValidationProvider class="group" name="Assign to" rules="required" v-slot="{ errors }">
-                    <div :class="{ 'invalid-form' : errors[0] }">
-                        <label for="" class="d-block mb-2 dashboard-label">Assign to </label>
-                        <!-- <select name="" class="dashboard-input w-100 loan-type-select" v-model="assignTo">
-                            <option value="">Please Select a user</option>
-                            <option v-for="user in users" :key="user.id" :value="user.id">
-                                {{ user.name }}
-                            </option>
-                        </select> -->
-                        <m-select theme="blue" :options="users" object item-text="name" item-value="id" v-model="assignTo"></m-select>
-                        <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+            <div v-if="assignToName.length">
+                <div class="mgb-32">
+                    <div class="group">
+                        <p class="text-light-black mgb-12">Assign to</p>
+                        <p class="mb-0 text-light-black fw-bold">{{ assignToName }}</p>
                     </div>
-                </ValidationProvider>
-            </div>
-            <div class="mgb-32">
-                <ValidationProvider class="group" name="Note" rules="required" v-slot="{ errors }">
-                    <div :class="{ 'invalid-form' : errors[0] }">
-                        <label for="" class="mb-2 text-light-black d-inline-block">Add note</label>
-                        <div class="preparation-input w-100 position-relative">
-                            <textarea name="" id="" cols="30" rows="3" class="w-100 dashboard-textarea" v-model="note"></textarea>
+                </div>
+                <div class="mgb-32">
+                    <ValidationProvider class="group" name="Note" rules="required" v-slot="{ errors }">
+                        <div :class="{ 'invalid-form' : errors[0] }">
+                            <label for="" class="mb-2 text-light-black d-inline-block">Add note</label>
+                            <div class="preparation-input w-100 position-relative">
+                                <textarea name="" id="" cols="30" rows="3" class="w-100 dashboard-textarea" v-model="note"></textarea>
+                            </div>
+                            <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                         </div>
-                        <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                    </ValidationProvider>
+                </div>
+                <div class="mgb-32 d-flex align-items-center">
+                    <div class="checkbox-group review-check mgr-20">
+                        <input type="radio" class="checkbox-input check-data" v-model="noteCheck" value="1">
+                        <label for="" class="checkbox-label text-capitalize">Rewrite & send back</label>
                     </div>
-                </ValidationProvider>
-            </div>
-            <div class="mgb-32 d-flex align-items-center">
-                <div class="checkbox-group review-check mgr-20">
-                    <input type="radio" class="checkbox-input check-data" v-model="noteCheck" value="1">
-                    <label for="" class="checkbox-label text-capitalize">Rewrite & send back</label>
+                    <div class="checkbox-group review-check">
+                        <input type="radio" class="checkbox-input check-data" v-model="noteCheck" value="2">
+                        <label for="" class="checkbox-label text-capitalize">Check & upload</label>
+                    </div>
                 </div>
-                <div class="checkbox-group review-check">
-                    <input type="radio" class="checkbox-input check-data" v-model="noteCheck" value="2">
-                    <label for="" class="checkbox-label text-capitalize">Check & upload</label>
+                <!-- upload -->
+                <div>
+                    <p class="text-light-black mgb-12">Files</p>
+                    <div class="position-relative file-upload">
+                        <input type="file" multiple v-on:change="addFiles">
+                        <label for="" class="py-2">Upload <span class="icon-upload ms-3 fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span></label>
+                    </div>
+                    <p class="text-light-black mgb-12" v-if="fileData.files.length">{{ fileData.files.length }} Files</p>
+                </div>
+                <div class="text-end mgt-32">
+                    <button class="button button-primary px-4 h-40 d-inline-flex align-items-center" @click="saveFinalData" :disabled="isUploading">Done</button>
                 </div>
             </div>
-            <!-- upload -->
-            <div>
-                <p class="text-light-black mgb-12">Files</p>
-                <div class="position-relative file-upload">
-                    <input type="file" multiple v-on:change="addFiles">
-                    <label for="" class="py-2">Upload <span class="icon-upload ms-3 fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span></label>
+            <div v-else>
+                <div class="mgb-32">
+                    <ValidationProvider class="group" name="Assign to" rules="required" v-slot="{ errors }">
+                        <div :class="{ 'invalid-form' : errors[0] }">
+                            <label for="" class="d-block mb-2 dashboard-label">Assign to </label>
+                            <!-- <select name="" class="dashboard-input w-100 loan-type-select" v-model="assignTo">
+                                <option value="">Please Select a user</option>
+                                <option v-for="user in users" :key="user.id" :value="user.id">
+                                    {{ user.name }}
+                                </option>
+                            </select> -->
+                            <m-select theme="blue" :options="users" object item-text="name" item-value="id" v-model="assignTo"></m-select>
+                            <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                        </div>
+                    </ValidationProvider>
                 </div>
-                <p class="text-light-black mgb-12" v-if="fileData.files.length">{{ fileData.files.length }} Files</p>
+                <div class="text-end mgt-32">
+                    <button class="button button-primary px-4 h-40 d-inline-flex align-items-center" @click="saveAssigneeData">Assign</button>
+                </div>
             </div>
-            <div class="text-end mgt-32">
-                <button class="button button-primary px-4 h-40 d-inline-flex align-items-center" @click="saveAssigneeData" :disabled="isUploading">Done</button>
-            </div>
+
         </ValidationObserver>
     </div>
   </div>
@@ -139,6 +147,7 @@
             },
             updateData(order) {
                 this.orderData = order
+                this.isDataExists = false
                 let initReview = !_.isEmpty(this.orderData.initial_review) ? this.orderData.initial_review : false;
                 if (initReview) {
                     this.preNote = initReview.note
@@ -156,11 +165,40 @@
                         this.note = analysis.note
                     }
                 }
-                if (this.assignToName || this.note) {
+                if (this.assignToName && this.note) {
                     this.isDataExists = true
                 }
             },
             saveAssigneeData() {
+                this.isUploading = true
+                this.$refs.assigneeForm.validate().then((status) => {
+                    if (status) {
+                        let formData = new FormData();
+                        formData.append('assigned_to', this.assignTo)
+                        this.$boston.post('report-analysis-create/' + this.orderData.id, formData, {
+                            headers: {
+                                'Content-Type': 'multipart/form-data'
+                            }
+                        }).then(res => {
+                            this.isUploading = false
+                            this.fileData.file_type = ''
+                            this.fileData.files = []
+                            this.isDataExists = true
+                            if (res.error == false) {
+                                this.orderData = res.data
+                                this.$root.$emit('wk_flow_menu', this.orderData);
+                                this.$root.$emit('wk_update', this.orderData);
+                                this.updateData(this.orderData);
+                            }
+                            this.$root.$emit('wk_flow_toast', res)
+                        }).catch(err => {
+                        });
+                    } else {
+                        this.isUploading = false
+                    }
+                })
+            },
+            saveFinalData() {
                 this.isUploading = true
                 this.$refs.assigneeForm.validate().then((status) => {
                     if (status) {
@@ -170,7 +208,6 @@
                             formData.append('files[' + i + ']', file);
                         }
                         formData.append('file_type', this.fileData.file_type)
-                        formData.append('assigned_to', this.assignTo)
                         formData.append('note', this.note)
                         formData.append('noteCheck', this.noteCheck)
                         this.$boston.post('report-analysis-create/' + this.orderData.id, formData, {
@@ -178,7 +215,6 @@
                                 'Content-Type': 'multipart/form-data'
                             }
                         }).then(res => {
-                            console.log(res);
                             this.isUploading = false
                             this.fileData.file_type = ''
                             this.fileData.files = []
