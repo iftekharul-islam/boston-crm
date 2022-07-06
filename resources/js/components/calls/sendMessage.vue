@@ -74,13 +74,15 @@
                     subject: '',
                     message: '',
                     send_email: 0,
-                    send_sms: 0
+                    send_sms: 0,
+                    order_id: 0
                 }
 
             }
         },
         methods: {
             setContactData(contactData) {
+                this.sendMessageData.order_id = contactData.order_id
                 this.sendMessageData.emails = (JSON.parse(contactData.contact_email)).email
                 this.sendMessageData.phones = (JSON.parse(contactData.contact_email)).phone
             },

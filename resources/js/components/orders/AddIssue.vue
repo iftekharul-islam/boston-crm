@@ -56,7 +56,6 @@ export default {
     },
     methods: {
         hideModel() {
-            console.log('hello')
             this.$bvModal.hide('add-issue-modal')
             this.$root.$emit('update_add_issue_modal')
         },
