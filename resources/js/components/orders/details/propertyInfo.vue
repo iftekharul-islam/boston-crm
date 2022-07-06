@@ -51,11 +51,11 @@
         <span>:</span>
         <p class="right-side mb-0">{{ edited.unit_no }}</p>
       </div>
-      <!-- <div class="list__group">
+      <div class="list__group">
         <p class="mb-0 left-side">County</p>
         <span>:</span>
         <p class="right-side mb-0">{{ edited.county }}</p>
-      </div> -->
+      </div>
     </div>
     <b-modal id="property-info" size="lg" title="Edit Basic Information">
       <div class="modal-body">

@@ -21,7 +21,7 @@
                 <span>:</span>
                 <p class="right-side mb-0">{{ edited.loan_type_name }}</p>
             </div>
-            <div class="list__group">
+            <div class="list__group" v-if="edited.fha_case_no">
                 <p class="mb-0 left-side">FHA Case</p>
                 <span>:</span>
                 <p class="right-side mb-0 word-break">{{ edited.fha_case_no }}</p>

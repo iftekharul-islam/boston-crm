@@ -170,7 +170,7 @@ export default {
                     key: "reportType"
                 },
                 {
-                    title: "Property Type",
+                    title: "Appraisal Type",
                     key: "property_types"
                 }
             ],
@@ -298,7 +298,7 @@ export default {
             } else {
                 let findData = this.filterTypeValue[dcol.key];
                 let searchData = [];
-                
+
                 if (dcol.key == 'property_types') {
                     searchData = findData.filter((ele) => (ele.form_type).toLowerCase().match(value.toLowerCase()));
                 } else {
