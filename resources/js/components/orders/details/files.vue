@@ -19,9 +19,11 @@
                                 <p class="fw-bold text-light-black">{{ type }}</p>
                                 <div class="d-flex align-items-center mb-3" v-for="file in files">
                                     <img src="/img/pdf.svg" alt="boston profile" class="img-fluid">
-                                    <span class="text-light-black d-inline-block mgl-12 file-name"><a
-                                            :href="file.original_url" download>{{ file.name }}</a></span>
-                                    <p class="small mt-3">Uploaded: {{ getUserName(file.custom_properties) + ', '}}{{  file.created_at | momentTime  }}</p>
+                                    <div class="mgl-12">
+                                        <span class="text-light-black mb-0 file-name d-block"><a
+                                            :href="file.original_url" download class="text-light-black">{{ file.name }}</a></span>
+                                        <p class="text-gray fs-12 mb-0">Uploaded: {{ getUserName(file.custom_properties) + ', '}}{{  file.created_at | momentTime  }}</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
