@@ -15,7 +15,7 @@ class LoanTypeCreateRequest extends FormRequest
 	 #[ArrayShape([ 'name' => "string" ])] public function rules(): array
 	 {
 			return [
-				'name' => 'required|string',
+				'name' => 'required|string|unique:loan_types,name',
 			];
 	 }
 }

@@ -166,7 +166,7 @@ export default {
                     key: "loan_types"
                 },
                 {
-                    title: "Report Type",
+                    title: "Property Type",
                     key: "reportType"
                 },
                 {

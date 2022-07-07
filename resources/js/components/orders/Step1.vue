@@ -176,7 +176,7 @@
                                         <div class="col-7">
                                             <div class="group"
                                                 :class="{ 'invalid-form': providerTypes.error.type == true }">
-                                                <label for="" class="d-block mb-2 dashboard-label">Appraiser
+                                                <label for="" class="d-block mb-2 dashboard-label">Appraisal
                                                     type <span class="require"></span> </label>
                                                 <div class="position-relative borderless-select">
                                                     <select id="providerTypeFee" class="dashboard-input w-100"
