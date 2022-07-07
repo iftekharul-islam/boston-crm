@@ -151,3 +151,11 @@
         padding-top: 200px;
     }
 }
+
+.issue-box {
+    .box-body {
+        max-height: 800px;
+        overflow: auto;
+        overflow-x: hidden;
+    }
+}
