@@ -13,7 +13,7 @@
                             <div class="col-sm-6 col-md-4 col-lg-3" v-if="inspectionFiles">
                                 <p class="fw-bold text-light-black">Inspection Files</p>
                                 <div class="d-flex align-items-center mb-3" v-for="file in inspectionFiles">
-                                    <img src="/img/pdf.svg" alt="boston profile" class="img-fluid">
+                                    <img src="/img/zip.svg" alt="boston files" class="img-fluid">
                                     <div class="mgl-12">
                                         <span class="text-light-black mb-0 file-name d-block"><a
                                                 :href="file.original_url" target="_blank" download
@@ -31,7 +31,9 @@
                             <div class="col-sm-6 col-md-4 col-lg-3" v-if="reportFiles">
                                 <p class="fw-bold text-light-black">Report Preparation Files</p>
                                 <div class="d-flex align-items-center mb-3" v-for="file in reportFiles">
-                                    <img src="/img/pdf.svg" alt="boston profile" class="img-fluid">
+                                    <img v-if="file.mime_type == 'image/jpeg'" src="/img/image.svg" alt="boston files" class="img-fluid">
+                                    <img v-else-if="file.mime_type == 'application/pdf'" src="/img/pdf.svg" alt="boston files" class="img-fluid">
+                                    <img v-else src="/img/common.svg" alt="boston files" class="img-fluid">
                                     <div class="mgl-12">
                                         <span class="text-light-black mb-0 file-name d-block"><a
                                                 :href="file.original_url" target="_blank" download
@@ -50,7 +52,9 @@
                             <div class="col-sm-6 col-md-4 col-lg-3" v-if="reportAnalysisFiles">
                                 <p class="fw-bold text-light-black">Report Analysis Files</p>
                                 <div class="d-flex align-items-center mb-3" v-for="file in reportAnalysisFiles">
-                                    <img src="/img/pdf.svg" alt="boston profile" class="img-fluid">
+                                    <img v-if="file.mime_type == 'image/jpeg'" src="/img/image.svg" alt="boston files" class="img-fluid">
+                                    <img v-else-if="file.mime_type == 'application/pdf'" src="/img/pdf.svg" alt="boston files" class="img-fluid">
+                                    <img v-else src="/img/common.svg" alt="boston files" class="img-fluid">
                                     <div class="mgl-12">
                                         <span class="text-light-black mb-0 file-name d-block"><a
                                                 :href="file.original_url" target="_blank" download
@@ -69,7 +73,9 @@
                             <div class="col-sm-6 col-md-4 col-lg-3" v-if="qaFiles">
                                 <p class="fw-bold text-light-black">Quality Assurance Files</p>
                                 <div class="d-flex align-items-center mb-3" v-for="file in qaFiles">
-                                    <img src="/img/pdf.svg" alt="boston profile" class="img-fluid">
+                                    <img v-if="file.mime_type == 'image/jpeg'" src="/img/image.svg" alt="boston files" class="img-fluid">
+                                    <img v-else-if="file.mime_type == 'application/pdf'" src="/img/pdf.svg" alt="boston files" class="img-fluid">
+                                    <img v-else src="/img/common.svg" alt="boston files" class="img-fluid">
                                     <div class="mgl-12">
                                         <span class="text-light-black mb-0 file-name d-block"><a
                                                 :href="file.original_url" target="_blank" download
@@ -90,7 +96,9 @@
                             <div class="col-sm-6 col-md-4 col-lg-3" v-if="reportRewriteFiles">
                                 <p class="fw-bold text-light-black">Report Rewrite Files</p>
                                 <div class="d-flex align-items-center mb-3" v-for="file in reportRewriteFiles">
-                                    <img src="/img/pdf.svg" alt="boston profile" class="img-fluid">
+                                    <img v-if="file.mime_type == 'image/jpeg'" src="/img/image.svg" alt="boston files" class="img-fluid">
+                                    <img v-else-if="file.mime_type == 'application/pdf'" src="/img/pdf.svg" alt="boston files" class="img-fluid">
+                                    <img v-else src="/img/common.svg" alt="boston files" class="img-fluid">
                                     <div class="mgl-12">
                                         <span class="text-light-black mb-0 file-name d-block"><a
                                                 :href="file.original_url" target="_blank" download

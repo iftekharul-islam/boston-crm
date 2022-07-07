@@ -67,7 +67,6 @@ class OrderWorkflowController extends BaseController
 
     public function deleteSchedule(Request $request, $id)
     {
-        dd($request->all());
         $order_w_schedule = OrderWInspection::find($id);
         $orderData = $this->orderDetails($order_w_schedule->order_id);
         $order = Order::find($order_w_schedule->order_id);
