@@ -1,5 +1,5 @@
 <template>
-  <div class="order-details-box bg-white">
+  <div class="order-details-box issue-box bg-white">
     <div class="box-header">
       <p class="fw-bold text-light-black fs-20 mb-0">Issues/ Queries/ Tickets</p>
       <a @click.prevent="isIssueModal = true" class="d-inline-flex edit add-call align-items-center fw-bold cursor-pointer">Add issue</a>
