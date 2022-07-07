@@ -58,7 +58,11 @@ class Order extends Model implements HasMedia
         13 => "Delivered",
         14 => "Cancelled",
         15 => "Deleted",
-        16 => "Declined"
+        16 => "Declined",
+        17 => "Cancel With Payment",
+        18 => "Cancel Without Payment",
+        19 => "On Hold",
+        20 => "Re-Active"
     ];
 
     protected $fillable = [
