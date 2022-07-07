@@ -30,7 +30,8 @@
                                 <input type="text" class="search-input" @input="checkSearch($event.target.value, dCol)" placeholder="Search...">
                                 <ul class="p-0 m-0 search-results">
                                     <li class="results-item" v-for="filter_item, fi in filterTypeValue[dCol.key]" :key="fi" @click="chooseFilterItem(filter_item, dCol.key)">
-                                        <span v-if="dCol.key == 'property_types'">{{ filter_item.form_type }}</span>
+                                        <span v-if="dCol.key == 'appraisal_types'">{{ filter_item.form_type }}</span>
+                                        <span v-else-if="dCol.key == 'property_types'">{{ filter_item.type }}</span>
                                         <span v-else>{{ filter_item.name }}</span>
                                     </li>
                                 </ul>
@@ -167,11 +168,11 @@ export default {
                 },
                 {
                     title: "Property Type",
-                    key: "reportType"
+                    key: "property_types"
                 },
                 {
                     title: "Appraisal Type",
-                    key: "property_types"
+                    key: "appraisal_types"
                 }
             ],
 

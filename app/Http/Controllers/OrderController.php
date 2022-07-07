@@ -58,13 +58,15 @@ class OrderController extends BaseController
         $companyId = $company->company_id;
 
         $appraisal_users = $this->repository->getUserByRoleWise(role: 'appraiser');
-        $property_types = $this->repository->getAppraisalTypes();
+        $appraisal_types = $this->repository->getAppraisalTypes();
+        $property_types = PropertyType::all();
         $loan_types = $this->repository->getLoanTypes();
         $client_users = $this->repository->getClients();
 
         $filterType = [
             "appraisal_users" => $appraisal_users,
             "property_types" => $property_types,
+            "appraisal_types" => $appraisal_types,
             "loan_types" => $loan_types,
             "client_users" => $client_users,
         ];
