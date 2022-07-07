@@ -18,7 +18,9 @@
                             <div class="col-sm-6 col-md-4 col-lg-3" v-for="(files,type) in allFiles" :key="type">
                                 <p class="fw-bold text-light-black">{{ type }}</p>
                                 <div class="d-flex align-items-center mb-3" v-for="file in files">
-                                    <img src="/img/pdf.svg" alt="boston profile" class="img-fluid">
+                                    <img v-if="file.mime_type == 'image/jpeg'" src="/img/image.svg" alt="boston files" class="img-fluid">
+                                    <img v-else-if="file.mime_type == 'application/pdf'" src="/img/pdf.svg" alt="boston files" class="img-fluid">
+                                    <img v-else src="/img/common.svg" alt="boston files" class="img-fluid">
                                     <div class="mgl-12">
                                         <span class="text-light-black mb-0 file-name d-block"><a
                                             :href="file.original_url" download class="text-light-black">{{ file.name }}</a></span>

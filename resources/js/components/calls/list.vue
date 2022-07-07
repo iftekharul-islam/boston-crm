@@ -338,6 +338,7 @@
                 if (res.error == false) {
                     this.$store.commit('app/storeOrder', res.data);
                     this.orderData = res.data;
+                    this.initOrder(res.data);
                 }
                 this.$toast.open({
                     message: res.message,
@@ -546,7 +547,7 @@
             },
             getSendMessage(item) {
                 this.$bvModal.show('send-message')
-                this.$refs.sendMessageComponent.setContactData(item.contact_info)
+                this.$refs.sendMessageComponent.setContactData(item.contact_info,item.property_info,item.lender)
             },
             filterByTab(item) {
                 this.pages.filterType = item;

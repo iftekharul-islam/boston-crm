@@ -25,7 +25,11 @@
                         <div class="row">
                             <div class="d-flex align-items-center mb-3 document"
                                 v-for="file, fileIndex in orderData.analysis.attachments" :key="fileIndex">
-                                <img src="/img/pdf.svg" alt="boston profile" class="img-fluid">
+                                <img v-if="file.mime_type == 'image/jpeg'" src="/img/image.svg" alt="boston files"
+                                    class="img-fluid">
+                                <img v-else-if="file.mime_type == 'application/pdf'" src="/img/pdf.svg"
+                                    alt="boston files" class="img-fluid">
+                                <img v-else src="/img/common.svg" alt="boston files" class="img-fluid">
                                 <span class="text-light-black d-inline-block mgl-12 file-name">
                                     <a :href="file.original_url" download>{{ file.name }}</a>
                                     <p class="text-gray mb-0 fs-12">Uploaded: {{ orderData.analysis.updated_by.name
@@ -62,7 +66,11 @@
                         <div class="row">
                             <div class="d-flex align-items-center mb-3 document"
                                 v-for="file, fileIndex in orderData.analysis.attachments" :key="fileIndex">
-                                <img src="/img/pdf.svg" alt="boston profile" class="img-fluid">
+                                <img v-if="file.mime_type == 'image/jpeg'" src="/img/image.svg" alt="boston files"
+                                    class="img-fluid">
+                                <img v-else-if="file.mime_type == 'application/pdf'" src="/img/pdf.svg"
+                                    alt="boston files" class="img-fluid">
+                                <img v-else src="/img/common.svg" alt="boston files" class="img-fluid">
                                 <span class="text-light-black d-inline-block mgl-12 file-name">
                                     <a :href="file.original_url" download>{{ file.name }}</a>
                                     <p class="text-gray mb-0 fs-12">Uploaded: {{ orderData.analysis.updated_by.name
@@ -107,8 +115,8 @@
         <template v-if="currentStep == 'step3'">
             <ValidationObserver ref="rewritingReport">
                 <div class="re-writing-report-item step-items">
-                    <a class="edit-btn" @click="editable"><span class="icon-edit"><span
-                                class="path1"></span><span class="path2"></span></span></a>
+                    <a class="edit-btn" @click="editable"><span class="icon-edit"><span class="path1"></span><span
+                                class="path2"></span></span></a>
                     <div class="group">
                         <p class="text-light-black mgb-12">Note from previous stpes</p>
                         <p class="mb-0 text-light-black fw-bold" v-html="prev.rewrite_note"></p>
@@ -127,7 +135,11 @@
                         <div class="row">
                             <div class="d-flex align-items-center mb-3 document"
                                 v-for="file, fileIndex in orderData.analysis.attachments" :key="fileIndex">
-                                <img src="/img/pdf.svg" alt="boston profile" class="img-fluid">
+                                <img v-if="file.mime_type == 'image/jpeg'" src="/img/image.svg" alt="boston files"
+                                    class="img-fluid">
+                                <img v-else-if="file.mime_type == 'application/pdf'" src="/img/pdf.svg"
+                                    alt="boston files" class="img-fluid">
+                                <img v-else src="/img/common.svg" alt="boston files" class="img-fluid">
                                 <a :href="file.original_url" download>{{ file.name }}</a>
                                 <span class="text-light-black d-inline-block mgl-12 file-name">
                                     <p class="text-gray mb-0 fs-12">Uploaded: {{ orderData.analysis.updated_by.name
@@ -142,7 +154,11 @@
                         <div class="row">
                             <div class="d-flex align-items-center mb-3 document"
                                 v-for="file, fileIndex in orderData.report_rewrite.attachments" :key="fileIndex">
-                                <img src="/img/pdf.svg" alt="boston profile" class="img-fluid">
+                                <img v-if="file.mime_type == 'image/jpeg'" src="/img/image.svg" alt="boston files"
+                                    class="img-fluid">
+                                <img v-else-if="file.mime_type == 'application/pdf'" src="/img/pdf.svg"
+                                    alt="boston files" class="img-fluid">
+                                <img v-else src="/img/common.svg" alt="boston files" class="img-fluid">
                                 <span class="text-light-black d-inline-block mgl-12 file-name">
                                     <a :href="file.original_url" download>{{ file.name }}</a>
                                     <p v-if="orderData.report_rewrite.update_by" class="text-gray mb-0 fs-12">Uploaded:
@@ -269,10 +285,10 @@
                     console.error(err)
                 });
             },
-            editable(){
+            editable() {
                 this.currentStep = 'step2'
             },
-            viewable(){
+            viewable() {
                 this.currentStep = 'step3'
             }
         }

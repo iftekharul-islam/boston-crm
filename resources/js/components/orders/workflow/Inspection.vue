@@ -20,7 +20,7 @@
                     <div class="row">
                         <div class="d-flex align-items-center mb-3"
                             v-for="(file, key) in orderData.inspection.attachments" :key="key">
-                            <img src="/img/pdf.svg" alt="boston profile" class="img-fluid">
+                            <img src="/img/zip.svg" alt="boston profile" class="img-fluid">
                             <span class="text-light-black d-inline-block mgl-12 file-name">
                                 <a :href="file.original_url" download>{{ file.name }}</a>
                                 <p class="text-gray mb-0 fs-12">Uploaded: {{ orderData.inspection.create_by.name

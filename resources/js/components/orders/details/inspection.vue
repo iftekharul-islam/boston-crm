@@ -139,20 +139,20 @@
         methods: {
             getInspectionData(order) {
                 this.orderData = order
-                this.isScheduled = (JSON.parse(this.orderData.workflow_status)).scheduling == 1 ? 1 : 0
+                this.isScheduled = (JSON.parse(order.workflow_status)).scheduling == 1 ? 1 : 0
                 if (this.isScheduled == 1) {
-                    this.inspection.order_id = this.orderData.id
-                    this.inspection.schedule_id = this.orderData.inspection.id
-                    this.inspection.appraiserName = this.orderData.inspection.user.name
-                    this.inspection.appraiser_id = this.orderData.inspection.inspector_id
-                    this.inspection.inspection_date_time = this.orderData.inspection.inspection_date_time
-                    this.inspection.note = this.orderData.inspection.note
-                    this.inspection.duration = this.orderData.inspection.duration
+                    this.inspection.order_id = order.id
+                    this.inspection.schedule_id = order.inspection.id
+                    this.inspection.appraiserName = order.inspection.user.name
+                    this.inspection.appraiser_id = order.inspection.inspector_id
+                    this.inspection.inspection_date_time =order.inspection.inspection_date_time
+                    this.inspection.note = order.inspection.note
+                    this.inspection.duration = order.inspection.duration
                 }
             },
             editInspection() {
                 this.$bvModal.show('inspection')
-                this.getInspectionData()
+                this.getInspectionData(this.orderData)
             },
             updateInspection() {
                 this.$refs.inspectionForm.validate().then((status) => {

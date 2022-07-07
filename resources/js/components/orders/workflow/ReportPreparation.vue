@@ -82,13 +82,18 @@
                     <p class="text-light-black mgb-12">Report preparation file</p>
                     <div class="document">
                         <div class="row">
-                            <div class="d-flex align-items-center mb-3" v-for="(file, key) in orderData.report.attachments" :key="key">
-                                <img src="/img/pdf.svg" alt="boston profile" class="img-fluid">
+                            <div class="d-flex align-items-center mb-3"
+                                v-for="(file, key) in orderData.report.attachments" :key="key">
+                                <img v-if="file.mime_type == 'image/jpeg'" src="/img/image.svg" alt="boston files"
+                                    class="img-fluid">
+                                <img v-else-if="file.mime_type == 'application/pdf'" src="/img/pdf.svg"
+                                    alt="boston files" class="img-fluid">
+                                <img v-else src="/img/common.svg" alt="boston files" class="img-fluid">
                                 <span class="text-light-black d-inline-block mgl-12 file-name">
                                     <a :href="file.original_url" download>{{ file.name }}</a>
                                     <p class="text-gray mb-0 fs-12">Uploaded: {{ orderData.report.create_by.name
-                                    + ', ' +
-                                    orderData.report.updated_at }}</p>
+                                        + ', ' +
+                                        orderData.report.updated_at }}</p>
                                 </span>
                             </div>
                         </div>
@@ -207,18 +212,18 @@
                 this.fileData.files = event.target.files
             },
             updateAdmin() {
-                if(this.orderData.report){
+                if (this.orderData.report) {
                     let report = this.orderData.report
-                    if(report.creator){
-                        this.creator =  report.creator.name
+                    if (report.creator) {
+                        this.creator = report.creator.name
                     }
-                    if(report.reviewer){
+                    if (report.reviewer) {
                         this.viewer = report.reviewer.name
                     }
-                    if(report.trainee){
+                    if (report.trainee) {
                         this.trainee = report.trainee.name
                     }
-                    if(report.assignee){
+                    if (report.assignee) {
                         this.assignToName = report.assignee.name
                     }
                     this.creatorId = report.creator_id

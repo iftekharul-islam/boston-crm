@@ -171,12 +171,12 @@
             deleteSchedule() {
                 this.$refs.deleteScheduleForm.validate().then((status) => {
                     if (status) {
-                        this.$boston.post('delete-schedule/' + this.schedule.schedule_id, this.schedule.delete_note)
+                        this.$boston.post('delete-schedule/' + this.schedule.schedule_id, {delete_note : this.schedule.delete_note})
                             .then(res => {
                                 this.orderData = res.data;
-                                //this.$root.$emit('wk_update', res.data)
-                                //this.$root.$emit('wk_flow_menu', res.data)
-                                //this.$root.$emit('wk_flow_toast', res)
+                                this.$root.$emit('wk_update', res.data)
+                                this.$root.$emit('wk_flow_menu', res.data)
+                                this.$root.$emit('wk_flow_toast', res)
                                 this.$bvModal.hide('delete-schedule')
                                 this.$bvModal.hide('re-schedule')
                             })
