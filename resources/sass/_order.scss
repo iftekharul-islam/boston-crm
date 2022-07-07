@@ -1511,3 +1511,20 @@ select {
         }
     }
 }
+
+.pagination-wrapper {
+    nav {
+        padding-bottom: 20px;
+        ul {
+            justify-content: center;
+            .page-item {
+                &.active {
+                    .page-link {
+                        background: $light-black;
+                        color: $white !important;
+                    }
+                }
+            }
+        }
+    }
+}
