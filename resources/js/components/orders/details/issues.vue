@@ -105,7 +105,6 @@ export default {
     },
     methods: {
         showUpdateModal(object) {
-            console.log(object)
             this.ticket.id = object.id
             this.ticket.subject = object.subject
             this.ticket.issue = object.issue
@@ -125,14 +124,11 @@ export default {
                             if (this.error) {
                                 this.$root.$emit('wk_flow_toast', res.data)
                             } else {
+                                this.$bvModal.hide('add-issue-solution-modal')
                                 this.$root.$emit('issue_modal_update', res.data.data)
                                 this.$root.$emit('wk_update', res.data.data)
                                 this.$root.$emit('wk_flow_menu', res.data.data)
                                 this.$root.$emit('wk_flow_toast', res.data)
-                                this.$bvModal.hide('add-issue-solution-modal')
-                                this.ticket.subject = ''
-                                this.ticket.issue = ''
-                                this.ticket.solution = ''
                             }
                         }).catch(err => {
                         console.log(err)
