@@ -31,8 +31,7 @@
                             selected orders <span class="ms-2">({{ selectedItems.length }})</span></a>
                         <div class=" d-flex calls-search">
                             <input type="text" v-model="pages.searchModel" @input="searchData($event)"
-                                class="mb-3 px-3 bdr-1 br-4 gray-border calls-search-input h-40"
-                                placeholder="Search...">
+                                class="mb-3 px-3 bdr-1 br-4 gray-border calls-search-input h-40" :placeholder="searchColumnType">
                             <button class="bg-gray inline-flex-center mb-2 calls-search-btn d-none">
                                 <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
@@ -77,6 +76,9 @@
                     </template>
                     <template v-slot:inspector="{item}">
                         {{ item.inspection ? item.inspection.user.name : '-' }}
+                    </template>
+                    <template v-slot:due_date="{item}">
+                        {{ item.due_date | onlyDate }}
                     </template>
                     <template v-slot:order_no="{item}">
                         {{ item.client_order_no }}
@@ -195,13 +197,15 @@
 
         <m-modal v-model="openIssue" title="Pending Issues/Tickets Lists">
             <div class="issue-list">
-                <div class="call-list-modal" v-if="activeIssue && activeIssue.length">
-                    <div class="item pending" v-for="item, lindex in activeIssue" :key="'pending-issue-'+lindex">
-                        <span class="call-badge">Pending</span>
-                        <p class="text-gray text-end fs-12">{{ item.created_at | dateTime }}</p>
-                        <p class="fs-14 mgt-12 mgb-12">{{ item.issue }}</p>
-                        <div class="d-flex justify-content-between" v-if="item.assigned_to">
-                            <p class="mb-0 fs-14"><span class="text-gray">Assigned to :</span> <b>Technical team</b></p>
+                <div class="row" v-if="activeIssue && activeIssue.length">
+                    <div class="call-list-modal col-md-6" v-for="item, lindex in activeIssue" :key="'pending-issue-'+lindex">
+                        <div class="item pending">
+                            <span class="call-badge">Pending</span>
+                            <p class="text-gray text-end fs-12">{{ item.created_at | dateTime }}</p>
+                            <p class="fs-14 mgt-12 mgb-12">{{ item.issue }}</p>
+                            <div class="d-flex justify-content-between" v-if="item.assigned_to">
+                                <p class="mb-0 fs-14"><span class="text-gray">Assigned to :</span> <b>Technical team</b></p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -307,6 +311,7 @@
             orderData: [],
             selectedItems: [],
             latLng: [],
+            searchColumnType: "Order no, client order no received date, amc id, lender id, company id, due date, created date etc.",
             dateRange: {
                 start: null,
                 end: null,
@@ -322,6 +327,7 @@
                     "Client name@client_name@left@left",
                     "Property address@property_address@left@left",
                     "Inspector@inspector@left@left",
+                    'Due date@due_date@left@left',
                     "Appraiser@appraiser@left@left",
                     "Last call@last_call@left@left",
                     "Insp. date & time@inspection_date_time@left@left",

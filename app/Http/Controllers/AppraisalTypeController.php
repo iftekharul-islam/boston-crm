@@ -55,7 +55,7 @@ class AppraisalTypeController extends BaseController
             'company_id' => auth()->user()->companies()->first()->id,
             'form_type' => $request->form_type,
             'modified_form' => $request->modified_form,
-            'condo_type' => $request->condo_type ? 1 : 0,
+            'condo_type' => $request->condo_type == "1" ? 1 : 0,
             'is_full_appraisal' => $request->is_full_appraisal ? 1 : 0,
         ];
 

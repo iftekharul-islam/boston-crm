@@ -66,7 +66,7 @@
         @endif
         @if(in_array('view.order', $user_permissions ?? []) || $is_owner || $user_role == 'admin')
         <!-- submenu -->
-        <div class="sidebar-dropdown {{ (request()->is(['loan-types', 'appraisal-types'])) ? 'submenu-active' : '' }}">
+        <div class="sidebar-dropdown {{ (request()->is(['loan-types', 'appraisal-types']) || request()->path() == 'loan-types/create' || request()->path() == 'appraisal-types/create') ? 'submenu-active' : '' }}">
             <a href="{{ route('orders.index') }}"
 {{--               class="list-item d-flex align-items-center  text-white {{ (request()->is(['orders*', 'loan-types', 'appraisal-types'])) ? 'active' : '' }}">--}}
                class="list-item d-flex align-items-center  text-white {{ (request()->is(['orders*'])) ? 'active' : '' }}">
@@ -80,12 +80,12 @@
             <!-- dropdown menu -->
             <ul class="submenu">
                 @if(in_array('view.loantype', $user_permissions ?? []) || $is_owner || $user_role == 'admin')
-                    <li class="submenu-item {{ (request()->is('loan-types')) ? 'active' : '' }}">
+                    <li class="submenu-item {{ (request()->is('loan-types') || request()->path() == 'loan-types/create') ? 'active' : '' }}">
                         <a href="{{ route('loan-types.index') }}" class="submenu-link text-light">Loan Types</a>
                     </li>
                 @endif
                 @if(in_array('view.appraisaltype', $user_permissions ?? []) || $is_owner || $user_role == 'admin')
-                    <li class="submenu-item {{ (request()->is('appraisal-types')) ? 'active' : '' }}">
+                    <li class="submenu-item {{ (request()->is('appraisal-types') || request()->path() == 'appraisal-types/create') ? 'active' : '' }}">
                         <a href="{{ route('appraisal-types.index') }}" class="submenu-link text-light">Appraisal Types</a>
                     </li>
                 @endif
