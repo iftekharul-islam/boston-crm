@@ -85,8 +85,12 @@ class LoanTypeController extends BaseController
      *
      * @return RedirectResponse
      */
-    public function update(LoanTypeCreateRequest $request, int $id)
+    public function update(Request $request, int $id)
     {
+        $request->validate([
+            'name' => 'required|string|unique:loan_types,name,'. $id,
+        ]);
+
         $loan_type_data = [
             'name' => $request->name,
             'is_fha' => $request->is_fha

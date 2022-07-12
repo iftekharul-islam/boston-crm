@@ -15,8 +15,8 @@ class AppraisalTypeCreateRequest extends FormRequest
 	 #[ArrayShape([ 'form_type' => "string", 'modified_form' => "string" ])] public function rules(): array
 	 {
 			return [
-				'form_type'     => 'required|string',
-				'modified_form' => 'required|string',
+				'form_type'     => 'required|string|unique:appraisal_types,form_type',
+				'modified_form' => 'required|string|unique:appraisal_types,modified_form',
 			];
 	 }
 }

@@ -9,6 +9,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 
 class AppraisalTypeController extends BaseController
 {
@@ -86,8 +87,13 @@ class AppraisalTypeController extends BaseController
      *
      * @return RedirectResponse
      */
-    public function update(AppraisalTypeCreateRequest $request, int $id): RedirectResponse
+    public function update(Request $request, int $id): RedirectResponse
     {
+        $request->validate([
+            'form_type'     => 'required|string|unique:appraisal_types,form_type,'. $id,
+            'modified_form' => 'required|string|unique:appraisal_types,modified_form,'. $id,
+        ]);
+
         $appraisal_type_data = [
             'form_type' => $request->form_type,
             'modified_form' => $request->modified_form,
