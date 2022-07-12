@@ -3,7 +3,7 @@
         <div class="open-archive d-flex">
             <div class="open-archive-left">
                 <div class="d-flex flex-wrap">
-                    <div class="open-archive-box" v-for="(item, key) in summary" @click="updateOrderList(item)" :key="key">
+                    <div class="open-archive-box" v-for="(item, key) in summaryData" @click="updateOrderList(item)" :key="key">
                         <button class="order-sml-box">
                             <h5 class="mb-2 number">{{ item.total }}</h5>
                             <p class="mb-0 text">{{ item.name }}</p>
@@ -164,7 +164,7 @@
 import Table from "../../src/Table.vue"
 export default {
     props: [
-        'data', 'summaryData', 'filterType'
+        'data', 'summary', 'filterType'
     ],
     components: {
         Table
@@ -175,7 +175,7 @@ export default {
             orderId: '',
             status: '',
         },
-        summary: [],
+        summaryData: [],
         orderData: [],
         filterDataBackup: [],
         filterTypeValue: [],
@@ -241,7 +241,7 @@ export default {
     created() {
         this.initTableDate(this.data);
         this.filterTypeValue = this.filterType;
-        this.summary = this.summaryData
+        this.summaryData = this.summary
         localStorage.setItem('orderSearchType', JSON.stringify(this.filterType));
     },
     destroyed() {
@@ -249,7 +249,6 @@ export default {
     },
     methods: {
         viewAvailable(status) {
-            console.log(status)
             if(jQuery.inArray(status, [15, 17, 18, 19]) !== -1){
                 return false
             }
@@ -267,19 +266,16 @@ export default {
             this.updateStatus.status = ''
         },
         submitAction(orderId, status) {
-            console.log(orderId)
-            console.log(status)
             let data = {
                 'id': orderId,
                 'status': status,
                 'fee_amount': this.updateStatus.feeAmount
             }
             this.$boston.post('update-order-status', data).then( (res) => {
-                console.log(res)
                 let data = res.data
                 this.initTableDate(data.orderData);
                 this.filterTypeValue = data.filterType;
-                this.summary = data.summaryData
+                this.summaryData = data.orderSummary
                 this.$toast.open({
                     message: res.message,
                     type: res.error == true ? 'error' : 'success',
