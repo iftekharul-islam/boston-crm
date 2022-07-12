@@ -27,11 +27,11 @@
 
 .icon-sms .path1:before {
   content: "\e93";
-  opacity: 0.4;
 }
 .icon-sms .path2:before {
   content: "\e94";
   margin-left: -1em;
+  color: #fff;
 }
 .icon-clock .path1:before {
   content: "\e946";

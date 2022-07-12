@@ -67,7 +67,6 @@ class OrderWorkflowController extends BaseController
 
     public function deleteSchedule(Request $request, $id)
     {
-        dd($request->all());
         $order_w_schedule = OrderWInspection::find($id);
         $orderData = $this->orderDetails($order_w_schedule->order_id);
         $order = Order::find($order_w_schedule->order_id);
@@ -318,7 +317,6 @@ class OrderWorkflowController extends BaseController
                 $analysis->is_check_upload = 1;
                 $analysis->note = $request->note;
             }
-            $analysis->assigned_to = $request->assigned_to;
             $analysis->updated_by = $user->id;
             $analysis->save();
 
@@ -330,25 +328,12 @@ class OrderWorkflowController extends BaseController
         } else {
             $newAnalysis = new OrderWReportAnalysis();
             $newAnalysis->order_id = $id;
-            if ($request->noteCheck == '1') {
-                $newAnalysis->is_review_send_back = 1;
-                $newAnalysis->is_check_upload = 0;
-                $newAnalysis->rewrite_note = $request->note;
-            } else {
-                $newAnalysis->is_review_send_back = 0;
-                $newAnalysis->is_check_upload = 1;
-                $newAnalysis->note = $request->note;
-            }
             $newAnalysis->assigned_to = $request->assigned_to;
             $newAnalysis->created_by = $user->id;
             $newAnalysis->updated_by = $user->id;
             $newAnalysis->save();
 
-            if (isset($request['files']) && count($request['files'])) {
-                $this->saveAnalysisFiles($request->all(), $newAnalysis->id);
-            }
-
-            $historyTitle = "Report analysis created by " . $user->name;
+            $historyTitle = "Report analysis assigned by " . $user->name;
         }
 
         $workStatus = json_decode($order->workflow_status, true);
@@ -527,7 +512,7 @@ class OrderWorkflowController extends BaseController
         $order->workflow_status = json_encode($workStatus);
         $order->save();
 
-        $historyTitle = "Re-writing the report updated by " . $user->name . ' change note "'.$get->note.'"';
+        $historyTitle = "Re-writing the report updated by " . $user->name ;
         $this->addHistory($order, $user, $historyTitle, 'rewriting-report');
         $orderData = $this->orderDetails($get->order_id);
 

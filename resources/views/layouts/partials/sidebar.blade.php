@@ -106,7 +106,7 @@
         {{--             </div>--}}
         {{--             <span class="icon-arrow-down ms-auto"></span>--}}
         {{--        </a>--}}
-        <a href="{{ route('profile') }}" class="list-item d-flex align-items-center  text-white">
+        <a href="{{ route('profile') }}" class="list-item d-flex align-items-center  text-white {{ request()->is('profiles') ? 'active' : '' }}">
             <div class="d-inline-flex align-items-center">
                 <span class="icon-profile-circle me-3 fs-3"><span class="path1"></span><span class="path2"></span><span
                             class="path3"></span></span>

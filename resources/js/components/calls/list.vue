@@ -101,30 +101,40 @@
                     </template>
                     <template v-slot:action="{item}">
                         <span class="call-list-item">
-                            <a :href="`/orders/${item.id}`" class="icon-list" data-bs-placement="bottom"
-                                title="Details"><span class="icon-eye text-blue-eye fs-20"><span
-                                        class="path1"></span><span class="path2"></span></span></a>
-                            <a href="javascript:;" @click.prevent="getQuickView(item)" title="Quick view"
+                            <a :href="`/orders/${item.id}`" class="icon-list">
+                                <span class="icon-eye text-blue-eye fs-20"><span class="path1"></span><span
+                                        class="path2"></span></span>
+                                <span class="call-tooltip">Details</span>
+                            </a>
+                            <a href="javascript:;" @click.prevent="getQuickView(item)"
                                 class="icon-list quick-view-icon"><span class="icon-note text-purple fs-20"><span
                                         class="path1"></span><span class="path2"></span><span class="path3"></span><span
-                                        class="path4"></span></span></a>
+                                        class="path4"></span></span>
+                                <span class="call-tooltip">Quick view</span>
+                            </a>
                             <a @click.prevent="getCallSummary(item.call_log, item.id)" href="javascript:;"
-                                class="icon-list" data-bs-placement="bottom" title="Call log" data-bs-toggle="modal"
-                                data-bs-target="#callLogModal"><span class="icon-messages2 primary-text fs-20"><span
-                                        class="path1"></span><span class="path2"></span><span class="path3"></span><span
-                                        class="path4"></span><span class="path5"></span></span></a>
-                            <a @click="getScheduleData(item)" href="javascript:;" class="icon-list"
-                                data-bs-placement="bottom" title="Schedule"><span
-                                    class="icon-calendar text-brown fs-20"><span class="path1"></span><span
+                                class="icon-list" data-bs-toggle="modal" data-bs-target="#callLogModal"><span
+                                    class="icon-messages2 primary-text fs-20"><span class="path1"></span><span
+                                        class="path2"></span><span class="path3"></span><span class="path4"></span><span
+                                        class="path5"></span></span>
+                                <span class="call-tooltip">Call log</span>
+                            </a>
+                            <a @click="getScheduleData(item)" href="javascript:;" class="icon-list">
+                                <span class="icon-calendar text-brown fs-20"><span class="path1"></span><span
                                         class="path2"></span><span class="path3"></span><span class="path4"></span><span
                                         class="path5"></span><span class="path6"></span><span class="path7"></span><span
-                                        class="path8"></span></span></a>
-                            <a href="javascript:;" @click="getSendMessage(item)" class="icon-list"
-                                data-bs-placement="bottom" title="Email & SMS"> <span
-                                    class="icon-messages text-yellow-msg  fs-20"><span class="path1"></span><span
-                                        class="path2"></span><span class="path3"></span></span></a>
+                                        class="path8"></span></span>
+                                <span class="call-tooltip">Schedule</span>
+                            </a>
+                            <a href="javascript:;" @click="getSendMessage(item)" class="icon-list">
+                                <span class="icon-messages text-yellow-msg  fs-20"><span class="path1"></span><span
+                                        class="path2"></span><span class="path3"></span></span>
+                                <span class="call-tooltip">Email & SMS</span>
+                            </a>
                             <a href="javascript:;" class="icon-list"><span class="icon-call text-light-red fs-20"><span
-                                        class="path1"></span><span class="path2"></span></span></a>
+                                        class="path1"></span><span class="path2"></span></span>
+                                <span class="call-tooltip">Calls</span>
+                            </a>
                             <button @click="openIssues(item)" class="button button-transparent p-0"><span
                                     class="icon-arrow-bottom"></span></button>
                         </span>
@@ -142,14 +152,18 @@
                         </transition>
                     </template>
                 </Table>
-                <div class="text-center d-flex justify-content-center">
-                    <select @change="loadPage(pages.activePage)" name="paginate" class="form-control per-page"
-                        v-model="pages.paginate">
-                        <option value="">Per page</option>
-                        <option :value="item" :key="ik" v-for="item, ik in pages.perPages">{{ item }} Per page</option>
-                    </select>
+                <div class="d-flex align-items-center justify-content-center">
+                    <div class="text-center d-flex justify-content-center mgr-20">
+                        <select @change="loadPage(pages.activePage)" name="paginate" class="form-control per-page"
+                            v-model="pages.paginate">
+                            <option value="">Per page</option>
+                            <option :value="item" :key="ik" v-for="item, ik in pages.perPages">{{ item }} Per page
+                            </option>
+                        </select>
+                    </div>
+                    <paginate align="center" :total-page="pages.pageData.last_page" @loadPage="loadPage($event)">
+                    </paginate>
                 </div>
-                <paginate align="center" :total-page="pages.pageData.last_page" @loadPage="loadPage($event)"></paginate>
             </div>
         </div>
         <b-modal id="dateRange" size="md" title="Search by date range">
@@ -237,8 +251,8 @@
                     <div class="update-log" v-if="callLog.notCompleted">
                         <div class="group" :class="{ 'invalid-form' : callLog.error == true }">
                             <label for="" class="d-block mb-2 dashboard-label">Message</label>
-                            <textarea @keyup="dataExist()" v-model.trim="callLog.message"
-                                class="dashboard-input w-100" style="min-height: 100px"></textarea>
+                            <textarea @keyup="dataExist()" v-model.trim="callLog.message" class="dashboard-input w-100"
+                                style="min-height: 100px"></textarea>
                             <span v-if="callLog.error" class="error-message">The Message field is required</span>
                         </div>
                         <div class="checkbox-group mt-2">
@@ -326,6 +340,17 @@
         }),
         created() {
             this.initOrder(this.order);
+            this.$root.$on('wk_flow_toast', (res) => {
+                if (res.error == false) {
+                    this.$store.commit('app/storeOrder', res.data);
+                    this.orderData = res.data;
+                    this.initOrder(res.data);
+                }
+                this.$toast.open({
+                    message: res.message,
+                    type: res.error == true ? 'error' : 'success',
+                });
+            });
         },
         mounted() {
             $(document).on("click", function (e) {
@@ -520,19 +545,20 @@
             },
             getScheduleData(item) {
                 this.$refs.callScheduleComponent.setOrderId(item.id)
-                this.$refs.callReScheduleComponent.setOrderId(item.id)
-                this.$refs.callReScheduleComponent.setScheduleData(item.inspection)
-                this.$refs.callReScheduleComponent.setOrderStatus(item.status)
+                if (item.inspection) {
+                    this.$refs.callReScheduleComponent.setScheduleData(item.inspection)
+                    this.$refs.callReScheduleComponent.setOrderStatus(item.status)
+                }
                 item.status == 0 ? this.$bvModal.show('schedule') : this.$bvModal.show('re-schedule')
             },
             getSendMessage(item) {
                 this.$bvModal.show('send-message')
-                this.$refs.sendMessageComponent.setContactData(item.contact_info)
+                this.$refs.sendMessageComponent.setContactData(item.contact_info,item.property_info,item.lender)
             },
             filterByTab(item) {
                 this.pages.filterType = item;
                 this.loadPage();
-            }
+            },
         },
     }
 </script>
@@ -595,12 +621,5 @@
         z-index: 9;
         top: 4px;
         cursor: hover;
-    }
-
-    .td-text-overflow {
-        max-width: 150px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
     }
 </style>

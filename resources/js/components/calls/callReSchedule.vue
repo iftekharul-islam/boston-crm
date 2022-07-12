@@ -113,7 +113,7 @@
         data: () => ({
             schedule: {
                 schedule_id: 0,
-                order_id: '',
+                order_id: 0,
                 appraiser_id: '',
                 inspection_date_time: '',
                 duration: '',
@@ -136,9 +136,6 @@
             orderStatus: 0,
         }),
         methods: {
-            setOrderId(orderId) {
-                this.schedule.order_id = orderId
-            },
             setScheduleData(scheduleData) {
                 this.getScheduleData(scheduleData)
             },
@@ -146,6 +143,7 @@
                 this.orderStatus = status
             },
             getScheduleData(scheduleData) {
+                this.schedule.order_id = scheduleData.order_id
                 this.schedule.schedule_id = scheduleData.id
                 this.schedule.appraiser_id = scheduleData.inspector_id
                 this.schedule.inspection_date_time = scheduleData.inspection_date_time
@@ -156,12 +154,12 @@
             reSchedule() {
                 this.$refs.scheduleForm.validate().then((status) => {
                     if (status) {
-                        this.$boston.post('update-order-schedule', this.schedule.schedule_id)
+                        this.$boston.post('update-order-schedule', this.schedule)
                             .then(res => {
                                 this.orderData = res.data;
-                                //this.$root.$emit('wk_update', res.data)
-                                //this.$root.$emit('wk_flow_menu', res.data)
-                                //this.$root.$emit('wk_flow_toast', res)
+                                this.$root.$emit('wk_update', res.data)
+                                this.$root.$emit('wk_flow_menu', res.data)
+                                this.$root.$emit('wk_flow_toast', res)
                                 this.$bvModal.hide('re-schedule')
                             })
                     }
@@ -173,12 +171,12 @@
             deleteSchedule() {
                 this.$refs.deleteScheduleForm.validate().then((status) => {
                     if (status) {
-                        this.$boston.post('delete-schedule/' + this.schedule.schedule_id, this.schedule.delete_note)
+                        this.$boston.post('delete-schedule/' + this.schedule.schedule_id, {delete_note : this.schedule.delete_note})
                             .then(res => {
                                 this.orderData = res.data;
-                                //this.$root.$emit('wk_update', res.data)
-                                //this.$root.$emit('wk_flow_menu', res.data)
-                                //this.$root.$emit('wk_flow_toast', res)
+                                this.$root.$emit('wk_update', res.data)
+                                this.$root.$emit('wk_flow_menu', res.data)
+                                this.$root.$emit('wk_flow_toast', res)
                                 this.$bvModal.hide('delete-schedule')
                                 this.$bvModal.hide('re-schedule')
                             })

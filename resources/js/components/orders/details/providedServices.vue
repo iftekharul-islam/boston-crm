@@ -6,7 +6,7 @@
     </div>
     <div class="box-body">
       <div class="list_groups" v-for="item, ik in servicesData" :key="ik">
-        <p class="mb-0 left-side">Appraiser type: <strong class="primary-text">{{ item.type }}</strong></p>
+        <p class="mb-0 left-side">Appraisal type: <strong class="primary-text">{{ item.type }}</strong></p>
         <p class="right-side mb-0">Fee: <strong class="primary-text">${{ item.fee }}</strong></p>
       </div>
       <hr>
@@ -26,12 +26,12 @@
             <b-alert v-if="message" show variant="success"><a href="#" class="alert-link">{{ message }}</a></b-alert>
             <div class="row">
               <div class="col-md-12">
-                
+
                 <ValidationObserver class="" ref="orderForm">
                     <div class="d-flex provided-service align-items-center" v-for="item, ik in servicesData" :key="ik">
                       <div class="group mgr-32">
                         <div class="pr-2">
-                          <label for="" class="d-block dashboard-label mb-2">Appraiser type <span class="require"></span></label>
+                          <label for="" class="d-block dashboard-label mb-2">Appraisal type <span class="require"></span></label>
                           <m-select v-model="item.typeId" :options="appraisalTypes" item-value="id" item-text="form_type" object></m-select>
                         </div>
                       </div>
@@ -48,7 +48,7 @@
                     <div class="d-flex mb-0 provided-service" v-if="servicesData.length < appraisalTypes.length">
                       <div class="group mb-0 mgr-32">
                         <div class="pr-2">
-                          <label for="" class="d-block mb-2 dashboard-label">Appraiser Type <span class="require"></span></label>
+                          <label for="" class="d-block mb-2 dashboard-label">Appraisal Type <span class="require"></span></label>
                           <m-select v-model="add.serviceType" @change="addNewMod" :options="appraisalTypes" item-value="id" item-text="form_type" object></m-select>
                         </div>
                       </div>
@@ -67,7 +67,7 @@
                 <textarea type="text" v-model="note" class="dashboard-input w-100" style="min-height: 100px"></textarea>
               </div>
             </div>
-          </div> 
+          </div>
         <div slot="modal-footer" class="mgt-44">
           <b-button variant="secondary" @click="$bvModal.hide('provided-services')">Close</b-button>
           <b-button variant="primary" @click="updateProvidedServices">Save</b-button>
@@ -110,8 +110,8 @@
       },
       updateProvidedServices() {
         this.$boston.post('order/update/providerService', {
-            fee: this.servicesFee, 
-            data: this.servicesData, 
+            fee: this.servicesFee,
+            data: this.servicesData,
             note: this.note,
             order: this.order
         }).then( res => {
@@ -123,7 +123,7 @@
                 this.orderData = res.order;
                 this.$emit('updateSection', {section: 'providedService', data: this.orderData});
                 this.$bvModal.hide('provided-services');
-                this.checkProviderBalance();  
+                this.checkProviderBalance();
                 this.$root.$emit("wk_update", this.orderData);
             }
         })
@@ -145,7 +145,7 @@
                 this.condoType = true;
               }
               let checkOld = ( this.servicesData ).find((ele) =>  ele.typeId == newType);
-              if (!checkOld) {              
+              if (!checkOld) {
                 this.servicesData.push({
                     typeId: appType.id,
                     type: appType.form_type,

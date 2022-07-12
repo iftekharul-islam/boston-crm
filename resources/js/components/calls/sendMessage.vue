@@ -74,15 +74,21 @@
                     subject: '',
                     message: '',
                     send_email: 0,
-                    send_sms: 0
+                    send_sms: 0,
+                    order_id: 0
                 }
-
             }
         },
         methods: {
-            setContactData(contactData) {
+            setContactData(contactData,property,lender) {
+                this.sendMessageData.order_id = contactData.order_id
                 this.sendMessageData.emails = (JSON.parse(contactData.contact_email)).email
                 this.sendMessageData.phones = (JSON.parse(contactData.contact_email)).phone
+                let lenderName = lender.name
+                let propertyAddress = property.full_addr
+
+                let formattedMessage = "Hello, We have been assigned an appraisal through the "+ lenderName +". We need to schedule an appointment to complete an appraisal inspection of the subject property located at "+propertyAddress+". Please call our offices or email us at your earliest convenience. You can reach us at 617-440-7700 or via email at orders@bostonappraisal.com. Thank you !";
+                this.sendMessageData.message = formattedMessage;
             },
             sendMessage() {
                 this.$refs.sendMessageForm.validate().then((status) => {
@@ -90,6 +96,7 @@
                         this.$boston.post('send-message',this.sendMessageData)
                         .then(res => {
                             this.$bvModal.hide('send-message')
+                            this.$root.$emit('wk_flow_toast', res)
                         })
                         .catch(err => {
                             console.error(err)

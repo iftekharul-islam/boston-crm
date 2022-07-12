@@ -13,13 +13,16 @@
             </div>
             <div class="group" v-if="orderData.analysis">
                 <p class="text-light-black mgb-12">Files</p>
-                <div class="d-flex align-items-center" v-for="attachment, indexKey in analysis.attachments"
-                    :key="indexKey">
+                <div class="d-flex align-items-center" v-for="file, indexKey in analysis.attachments" :key="indexKey">
                     <div class="file-img">
-                        <img src="/img/pdf.png" alt="boston pdf image">
+                        <img v-if="file.mime_type == 'image/jpeg'" src="/img/image.svg" alt="boston files"
+                            class="img-fluid">
+                        <img v-else-if="file.mime_type == 'application/pdf'" src="/img/pdf.svg" alt="boston files"
+                            class="img-fluid">
+                        <img v-else src="/img/common.svg" alt="boston files" class="img-fluid">
                     </div>
                     <div class="mgl-12 document">
-                        <p class="text-light-black mb-0 file-name">{{ attachment.name }}</p>
+                        <a :href="file.original_url" target="_blank" download class="text-light-black mb-0 file-name">{{ file.name }}</a>
                         <p class="text-gray mb-0 fs-12 ">Uploaded: {{ analysis.updated_by.name + ', ' +
                             analysis.updated_at }}</p>
                     </div>
@@ -37,7 +40,8 @@
                                     {{ user.name }}
                                 </option>
                             </select> -->
-                            <m-select theme="blue" :options="users" object item-text="name" item-value="id" v-model="qa.assigned_to"></m-select>
+                            <m-select theme="blue" :options="users" object item-text="name" item-value="id"
+                                v-model="qa.assigned_to"></m-select>
                             <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                         </div>
                     </ValidationProvider>
@@ -73,13 +77,17 @@
             </div>
             <div class="group" v-if="analysis">
                 <p class="text-light-black mgb-12">Files</p>
-                <div class="d-flex align-items-center" v-for="attachment, indexKey in analysis.attachments"
-                    :key="indexKey">
+                <div class="d-flex align-items-center" v-for="file, indexKey in analysis.attachments" :key="indexKey">
                     <div class="file-img">
-                        <img src="/img/pdf.png" alt="boston pdf image">
+                        <img v-if="file.mime_type == 'image/jpeg'" src="/img/image.svg" alt="boston files"
+                            class="img-fluid">
+                        <img v-else-if="file.mime_type == 'application/pdf'" src="/img/pdf.svg" alt="boston files"
+                            class="img-fluid">
+                        <img v-else src="/img/common.svg" alt="boston files" class="img-fluid">
                     </div>
                     <div class="mgl-12 document">
-                        <p class="text-light-black mb-0 file-name">{{ attachment.name }}</p>
+                        <a :href="file.original_url" target="_blank" download class="text-light-black mb-0 file-name">{{
+                            file.name }}</a>
                         <p class="text-gray mb-0 fs-12">Uploaded: {{ analysis.updated_by.name + ', ' +
                             analysis.updated_at }}</p>
                     </div>
@@ -208,13 +216,18 @@
             </div>
             <div class="group" v-if="orderData.analysis">
                 <p class="text-light-black mgb-12">Files</p>
-                <div class="d-flex align-items-center" v-for="attachment, indexKey in orderData.analysis.attachments"
+                <div class="d-flex align-items-center" v-for="file, indexKey in orderData.analysis.attachments"
                     :key="indexKey">
                     <div class="file-img">
-                        <img src="/img/pdf.png" alt="boston pdf image">
+                        <img v-if="file.mime_type == 'image/jpeg'" src="/img/image.svg" alt="boston files"
+                            class="img-fluid">
+                        <img v-else-if="file.mime_type == 'application/pdf'" src="/img/pdf.svg" alt="boston files"
+                            class="img-fluid">
+                        <img v-else src="/img/common.svg" alt="boston files" class="img-fluid">
                     </div>
                     <div class="mgl-12 document">
-                        <p class="text-light-black mb-0 file-name">{{ attachment.name }}</p>
+                        <a :href="file.original_url" target="_blank" download class="text-light-black mb-0 file-name">{{
+                            file.name }}</a>
                         <p class="text-gray mb-0 fs-12">Uploaded: {{ orderData.analysis.updated_by.name + ', ' +
                             orderData.analysis.updated_at }}</p>
                     </div>
@@ -232,22 +245,29 @@
                 <p class="text-light-black mgb-12">Changed effective date</p>
                 <p class="mb-0 text-light-black fw-bold">{{ qa.effective_date }}</p>
             </div>
-            <div class="group" v-if="analysis">
-                <p class="text-light-black mgb-12">Files</p>
-                <div class="d-flex align-items-center" v-for="attachment, indexKey in analysis.attachments"
+            <div class="group" v-if="orderData.quality_assurance">
+                <p class="text-light-black mgb-12">Quality assurance files</p>
+                <div class="d-flex align-items-center" v-for="file, indexKey in orderData.quality_assurance.attachments"
                     :key="indexKey">
                     <div class="file-img">
-                        <img src="/img/pdf.png" alt="boston pdf image">
+                        <img v-if="file.mime_type == 'image/jpeg'" src="/img/image.svg" alt="boston files"
+                            class="img-fluid">
+                        <img v-else-if="file.mime_type == 'application/pdf'" src="/img/pdf.svg" alt="boston files"
+                            class="img-fluid">
+                        <img v-else src="/img/common.svg" alt="boston files" class="img-fluid">
                     </div>
                     <div class="mgl-12 document">
-                        <p class="text-light-black mb-0 file-name">{{ attachment.name }}</p>
-                        <p class="text-gray mb-0 fs-12">Uploaded: {{ analysis.updated_by.name + ', ' +
-                            analysis.updated_at }}</p>
+                        <a :href="file.original_url" target="_blank" download class="text-light-black mb-0 file-name">{{
+                            file.name }}</a>
+                        <p class="text-gray mb-0 fs-12">Uploaded: {{ orderData.quality_assurance.updated_by.name + ', '
+                            +
+                            orderData.quality_assurance.updated_at }}</p>
                     </div>
                 </div>
             </div>
             <button v-if="showSeeCom" type="button"
-                class="button button-primary px-4 h-40 d-inline-flex align-items-center mt-4" @click="mapOpen = true">See com</button>
+                class="button button-primary px-4 h-40 d-inline-flex align-items-center mt-4"
+                @click="mapOpen = true">See com</button>
             <!-- load see com -->
             <div v-if="mapOpen" class="map-direction vue-modal">
                 <div class="content">
@@ -267,7 +287,8 @@
                                                     {{ user.name }}
                                                 </option>
                                             </select> -->
-                                            <m-select theme="blue" :options="users" object item-text="name" item-value="id" v-model="qa.assigned_to"></m-select>
+                                            <m-select theme="blue" :options="users" object item-text="name"
+                                                item-value="id" v-model="qa.assigned_to"></m-select>
                                             <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                                         </div>
                                     </ValidationProvider>
@@ -329,8 +350,8 @@
                                 </li>
                             </draggable>
                         </div>
-                        <div>
-                            <button class="btn btn-primary">Save</button>
+                        <div class="text-end pdr-36">
+                            <button class="button button-primary py-2 px-4">Save</button>
                         </div>
                         <!-- time -->
                         <div class="destination-time-space">
@@ -573,7 +594,7 @@
                 google.maps.event.addListener(autocomplete, 'place_changed', function () {
                     var place = autocomplete.getPlace()
                     if (startingPoint.value.length > 0) {
-                        this.startAddress = {'address': place.formatted_address, 'lat': place.geometry.location.lat(), 'lng': place.geometry.location.lng()}
+                        this.startAddress = { 'address': place.formatted_address, 'lat': place.geometry.location.lat(), 'lng': place.geometry.location.lng() }
                         this.comAddresses.unshift(this.startAddress)
                         this.initMap()
                         this.isStartAddress = true
@@ -640,7 +661,7 @@
                         this.$root.$emit('wk_flow_menu', this.orderData)
                         this.$root.$emit('wk_flow_toast', res);
                         this.showSeeCom = true
-                        this.initMap()
+                        //this.initMap()
                         setTimeout(() => {
                             self.comList = false
                         }, 1000);
@@ -662,10 +683,13 @@
                 this.analysis = this.orderData.analysis;
 
                 if (this.orderData.analysis) {
-                    this.rewrite_note = this.orderData.analysis.rewrite_note;
                     this.analysisnote = this.orderData.analysis.note;
                 }
-                if(this.orderData.comlist){
+                if (this.orderData.report_rewrite) {
+                    this.rewrite_note = this.orderData.report_rewrite.note;
+                }
+
+                if (this.orderData.comlist) {
                     this.comAddresses = JSON.parse(this.orderData.comlist.destination)
                 }
                 this.qa.order_id = order.id

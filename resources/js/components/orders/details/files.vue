@@ -18,10 +18,14 @@
                             <div class="col-sm-6 col-md-4 col-lg-3" v-for="(files,type) in allFiles" :key="type">
                                 <p class="fw-bold text-light-black">{{ type }}</p>
                                 <div class="d-flex align-items-center mb-3" v-for="file in files">
-                                    <img src="/img/pdf.svg" alt="boston profile" class="img-fluid">
-                                    <span class="text-light-black d-inline-block mgl-12 file-name"><a
-                                            :href="file.original_url" download>{{ file.name }}</a></span>
-                                    <p class="small mt-3">Uploaded: {{ getUserName(file.custom_properties) + ', '}}{{  file.created_at | momentTime  }}</p>
+                                    <img v-if="file.mime_type == 'image/jpeg'" src="/img/image.svg" alt="boston files" class="img-fluid">
+                                    <img v-else-if="file.mime_type == 'application/pdf'" src="/img/pdf.svg" alt="boston files" class="img-fluid">
+                                    <img v-else src="/img/common.svg" alt="boston files" class="img-fluid">
+                                    <div class="mgl-12">
+                                        <span class="text-light-black mb-0 file-name d-block"><a
+                                            :href="file.original_url" download class="text-light-black">{{ file.name }}</a></span>
+                                        <p class="text-gray fs-12 mb-0">Uploaded: {{ getUserName(file.custom_properties) + ', '}}{{  file.created_at | momentTime  }}</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -33,7 +37,7 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-6">
-                        <ValidationObserver ref="fileForm">
+                        <ValidationObserver class="group d-block" ref="fileForm">
                             <ValidationProvider class="group d-block" name="File type" rules="required"
                                 v-slot="{ errors }">
                                 <div :class="{ 'invalid-form' : errors[0] }">
@@ -50,11 +54,13 @@
                                 <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                             </ValidationProvider>
                         </ValidationObserver>
-                        <div class="group">
-                            <label for="" class="d-block mb-2 dashboard-label">Select file <span
-                                    class="require"></span></label>
-                            <input type="file" multiple v-on:change="addFiles">
-                        </div>
+                        <span class="group d-block">
+                             <label for="" class="d-block mb-2 dashboard-label">Select file <span class="require"></span></label>
+                            <div class="position-relative file-upload">
+                                <input type="file" multiple v-on:change="addFiles">
+                                <label for="" class="py-2">Upload <span class="icon-upload ms-3 fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span></label>
+                            </div>
+                        </span>
                     </div>
                 </div>
             </div>
@@ -84,7 +90,6 @@
         },
         created() {
             this.getFiles(this.orderFiles, this.order)
-            console.log(this.orderData)
         },
         methods: {
             formatedDate(date){

@@ -1,5 +1,5 @@
 <template>
-  <div class="order-details-box bg-white">
+  <div class="order-details-box issue-box bg-white">
     <div class="box-header">
       <p class="fw-bold text-light-black fs-20 mb-0">Issues/ Queries/ Tickets</p>
       <a @click.prevent="isIssueModal = true" class="d-inline-flex edit add-call align-items-center fw-bold cursor-pointer">Add issue</a>
@@ -10,7 +10,9 @@
               <span class="badges solved-badges" v-if="ticket.status == 1">Solved</span>
               <span class="badges pending-badges" v-else>Pending</span>
               <p class="text-gray text-end mgb-12">{{ ticket.created_at | momentTime }}</p>
-              <p class="text-light-black">{{ ticket.subject }}</p>
+              <div class="issue">
+                  <p class="text-light-black">{{ ticket.issue }}</p>
+              </div>
               <div class="d-flex justify-content-between mgb-12">
                   <p class="text-gray mb-0" v-if="ticket.assignee">Assigned to : <span class="text-light-black text-600">{{ ticket.assignee.name }}</span></p>
                   <a href="#" class="share-box" @click.prevent="showUpdateModal(ticket)">
@@ -25,7 +27,7 @@
       </div>
     </div>
       <div class="text-center mt-3 mb-3" v-else>
-          No call added yet !
+          No Issues/ Queries added yet !
       </div>
      <!-- modal -->
     <add-issue :showIssueModal="isIssueModal" :orderId="this.id"></add-issue>
@@ -103,7 +105,6 @@ export default {
     },
     methods: {
         showUpdateModal(object) {
-            console.log(object)
             this.ticket.id = object.id
             this.ticket.subject = object.subject
             this.ticket.issue = object.issue
@@ -123,14 +124,11 @@ export default {
                             if (this.error) {
                                 this.$root.$emit('wk_flow_toast', res.data)
                             } else {
+                                this.$bvModal.hide('add-issue-solution-modal')
                                 this.$root.$emit('issue_modal_update', res.data.data)
                                 this.$root.$emit('wk_update', res.data.data)
                                 this.$root.$emit('wk_flow_menu', res.data.data)
                                 this.$root.$emit('wk_flow_toast', res.data)
-                                this.$bvModal.hide('add-issue-solution-modal')
-                                this.ticket.subject = ''
-                                this.ticket.issue = ''
-                                this.ticket.solution = ''
                             }
                         }).catch(err => {
                         console.log(err)

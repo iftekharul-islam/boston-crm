@@ -10,7 +10,7 @@
         <span>:</span>
         <p class="right-side mb-0">{{ borrower_name }}</p>
       </div>
-      <div class="list__group">
+      <div class="list__group" v-if="co_borrower_name">
         <p class="mb-0 left-side">Co-borrower name</p>
         <span>:</span>
         <p class="right-side mb-0">{{ co_borrower_name }}</p>
@@ -46,7 +46,7 @@
               </ValidationProvider>
 
               <div class="group mb-3">
-                  <label for="" class="d-block mb-2 dashboard-label">Co-borrower name <span class="require"></span></label>
+                  <label for="" class="d-block mb-2 dashboard-label">Co-borrower name</label>
                   <input type="text" v-model="co_borrower_name" class="dashboard-input w-100">
               </div>
 
@@ -177,7 +177,7 @@
                     if (res.error == false) {
                       this.submittedMessage = res.messages;
                       this.$bvModal.hide('borrower-info');
-                      this.hideSubmittedMessage();
+                      //this.hideSubmittedMessage();
                     }
                   });
               }

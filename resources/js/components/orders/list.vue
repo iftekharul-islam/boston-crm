@@ -30,7 +30,8 @@
                                 <input type="text" class="search-input" @input="checkSearch($event.target.value, dCol)" placeholder="Search...">
                                 <ul class="p-0 m-0 search-results">
                                     <li class="results-item" v-for="filter_item, fi in filterTypeValue[dCol.key]" :key="fi" @click="chooseFilterItem(filter_item, dCol.key)">
-                                        <span v-if="dCol.key == 'property_types'">{{ filter_item.form_type }}</span>
+                                        <span v-if="dCol.key == 'appraisal_types'">{{ filter_item.form_type }}</span>
+                                        <span v-else-if="dCol.key == 'property_types'">{{ filter_item.type }}</span>
                                         <span v-else>{{ filter_item.name }}</span>
                                     </li>
                                 </ul>
@@ -80,7 +81,7 @@
                     <template v-slot:property_address="{item}">
                         {{ item.property_info.search_address }}
                     </template>
-                    <template v-slot:action="{item}">
+                    <template v-slot:view="{item}">
                         <a title="Edit order information" :href="`orders/${item.id}/edit`" class="btn btn-success btn-sm d-none" :data-key="item.id">
                             <span onclick="roleUpdateOpen(2);" class="icon-edit cursor-pointer"><span class="path1"></span><span class="path2"></span></span>
                         </a>
@@ -89,6 +90,20 @@
                                 View
                             </span>
                         </a>
+                    </template>
+                    <template v-slot:action="{item}">
+                        <div>
+                            <b-dropdown variant="link" right toggle-class="text-decoration-none" no-caret class="mt-2">
+                                <template #button-content>
+                                    <span class="icon-arrow-bottom"></span>
+                                </template>
+                                <b-dropdown-item href="#" @click.prevent="addFeeAmount(item.id, 17)">Cancel with payment</b-dropdown-item>
+                                <b-dropdown-item href="#" @click.prevent="submitAction(item.id, 18)">Cancel with out payment </b-dropdown-item>
+                                <b-dropdown-item href="#" @click.prevent="submitAction(item.id, 15)">Delete</b-dropdown-item>
+                                <b-dropdown-item href="#" @click.prevent="submitAction(item.id, 19)">On Hold</b-dropdown-item>
+                                <b-dropdown-item href="#" @click.prevent="submitAction(item.id, 20)">Re-Active</b-dropdown-item>
+                            </b-dropdown>
+                        </div>
                     </template>
                     <template v-slot:head_action="{item}">
                         <img src="/icons/column.svg" :tag="item.item" class="cursor-pointer">
@@ -112,6 +127,29 @@
                 </div>
             </div>
         </div>
+        <!-- modal -->
+        <ValidationObserver ref="addFeeAmountFrom">
+            <!-- modal -->
+            <b-modal id="add-fee-amount-modal" class="brrower-modal" size="md" title="Add Fee Amount" no-close-on-backdrop>
+                <div class="modal-body brrower-modal-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <ValidationProvider class="d-block group" name="Fee amount" rules="required" v-slot="{ errors }">
+                                <div class="group" :class="{ 'invalid-form' : errors[0] }">
+                                    <label for="" class="d-block mb-2 dashboard-label">Fee amount</label>
+                                    <input type="number" v-model="updateStatus.feeAmount" class="dashboard-input w-100">
+                                    <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                                </div>
+                            </ValidationProvider>
+                        </div>
+                    </div>
+                </div>
+                <div slot="modal-footer" class="mgt-44">
+                    <button class="button button-transparent" @click="$bvModal.hide('add-fee-amount-modal')">Close</button>
+                    <button class="button button-primary" @click="submitFeeAmount">Submit</button>
+                </div>
+            </b-modal>
+        </ValidationObserver>
     </div>
 </template>
 
@@ -121,12 +159,18 @@
 import Table from "../../src/Table.vue"
 export default {
     props: [
-        'data', 'summary', 'filterType'
+        'data', 'summaryData', 'filterType'
     ],
     components: {
         Table
     },
     data: () => ({
+        updateStatus: {
+            feeAmount: '',
+            orderId: '',
+            status: '',
+        },
+        summary: [],
         orderData: [],
         filterDataBackup: [],
         filterTypeValue: [],
@@ -150,6 +194,7 @@ export default {
                 'Due date@due_date@left@left',
                 'Status@order_status@left@left',
                 'Map It@map_it@center@center',
+                'view@view@center@left',
                 'Action@action@center@left'
             ],
             filterItems: [
@@ -166,12 +211,12 @@ export default {
                     key: "loan_types"
                 },
                 {
-                    title: "Report Type",
-                    key: "reportType"
-                },
-                {
                     title: "Property Type",
                     key: "property_types"
+                },
+                {
+                    title: "Appraisal Type",
+                    key: "appraisal_types"
                 }
             ],
 
@@ -191,12 +236,49 @@ export default {
     created() {
         this.initTableDate(this.data);
         this.filterTypeValue = this.filterType;
+        this.summary = this.summaryData
         localStorage.setItem('orderSearchType', JSON.stringify(this.filterType));
     },
     destroyed() {
         localStorage.removeItem('orderSearchType');
     },
     methods: {
+
+        addFeeAmount(orderId, status) {
+            console.log(orderId)
+            console.log(status)
+            this.updateStatus.orderId = orderId
+            this.updateStatus.status = status
+            this.$bvModal.show('add-fee-amount-modal')
+        },
+        submitFeeAmount() {
+            this.$bvModal.hide('add-fee-amount-modal')
+            this.submitAction(this.updateStatus.orderId, this.updateStatus.status)
+            this.updateStatus.orderId = ''
+            this.updateStatus.status = ''
+        },
+        submitAction(orderId, status) {
+            console.log(orderId)
+            console.log(status)
+            let data = {
+                'id': orderId,
+                'status': status,
+                'fee_amount': this.updateStatus.feeAmount
+            }
+            this.$boston.post('update-order-status', data).then( (res) => {
+                console.log(res)
+                let data = res.data
+                this.initTableDate(data.orderData);
+                this.filterTypeValue = data.filterType;
+                this.summary = data.summaryData
+                this.$toast.open({
+                    message: res.message,
+                    type: res.error == true ? 'error' : 'success',
+                });
+            }).catch( (err) => {
+                console.log(err);
+            });
+        },
         updateOrderList(item) {
             this.pages.acitvePage = 1
             this.$boston.post('filter-list/order?page='+this.pages.acitvePage, { item: item, paginate: this.pages.paginate }).then( (res) => {
@@ -298,7 +380,7 @@ export default {
             } else {
                 let findData = this.filterTypeValue[dcol.key];
                 let searchData = [];
-                
+
                 if (dcol.key == 'property_types') {
                     searchData = findData.filter((ele) => (ele.form_type).toLowerCase().match(value.toLowerCase()));
                 } else {

@@ -45,6 +45,8 @@ export default {
     watch: {
         showIssueModal(newValue, oldValue) {
             if (newValue === true) {
+                this.subject = ''
+                this.issue = ''
                 this.$bvModal.show('add-issue-modal')
             } else {
                 this.$bvModal.hide('add-issue-modal')
@@ -56,7 +58,6 @@ export default {
     },
     methods: {
         hideModel() {
-            console.log('hello')
             this.$bvModal.hide('add-issue-modal')
             this.$root.$emit('update_add_issue_modal')
         },
@@ -72,13 +73,11 @@ export default {
                             if (this.error) {
                                 this.$root.$emit('wk_flow_toast', res.data)
                             } else {
+                                this.$bvModal.hide('add-issue-modal')
                                 this.$root.$emit('issue_modal_update', res.data.data)
                                 this.$root.$emit('wk_update', res.data.data)
                                 this.$root.$emit('wk_flow_menu', res.data.data)
                                 this.$root.$emit('wk_flow_toast', res.data)
-                                this.$bvModal.hide('add-issue-modal')
-                                this.subject = ''
-                                this.issue = ''
                             }
                         }).catch(err => {
                         console.log(err)

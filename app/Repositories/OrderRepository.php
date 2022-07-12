@@ -295,9 +295,10 @@ class OrderRepository extends BaseRepository
      */
     public function saveOrderFiles($data, $order_id): bool
     {
+        $user = auth()->user()->name ?? "Guest";
         foreach ($data['files'] as $file){
             $this->model->find($order_id)->addMedia($file)
-                ->withCustomProperties(['type' => $data['file_type'],'user'=>auth()->user()->name])
+                ->withCustomProperties(['type' => $data['file_type'],'user'=> $user])
                 ->toMediaCollection('orders');
         }
         return true;

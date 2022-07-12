@@ -11,7 +11,7 @@
         <span>:</span>
         <p class="right-side mb-0 primary-text fw-bold fs-20">{{ edited.formatedAddress }}</p>
       </div>
-      <div class="list__group">
+      <!-- <div class="list__group">
         <p class="mb-0 left-side">Property address</p>
         <span>:</span>
         <p class="right-side mb-0">{{ edited.search_address }}</p>
@@ -45,7 +45,7 @@
         <p class="mb-0 left-side">Zip</p>
         <span>:</span>
         <p class="right-side mb-0">{{ edited.zip }}</p>
-      </div>
+      </div> -->
       <div class="list__group">
         <p class="mb-0 left-side">Unit No</p>
         <span>:</span>
@@ -233,7 +233,7 @@ export default {
                         message: that.message,
                         type: res.data.error == true ? 'error' : 'success',
                     });
-                    
+
                     that.$bvModal.hide('property-info');
                   }).catch(err => {
               })

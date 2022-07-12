@@ -108,7 +108,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('api/get/same/orders/by/street', [OrderApiController::class, 'getSameData']);
 
     //order details
-    Route::get('save-order-data', [OrderController::class, 'saveOrderData']);
+    Route::post('update-order-status', [OrderController::class, 'updateOrderStatus']);
 
     //call log
     Route::get('call-log/{order_id}', [CallLogController::class, 'index'])->middleware('role_permission:view.order')->name('call.log');

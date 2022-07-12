@@ -117,6 +117,9 @@ class CallController extends BaseController
     public function sendMessage(Request $request)
     {
         $this->service->sendMessage($request->all());
+        return [
+            "message" => "Successfully sent"
+        ];
     }
 
 }

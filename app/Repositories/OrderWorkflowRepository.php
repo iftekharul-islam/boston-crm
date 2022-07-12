@@ -47,7 +47,7 @@ class OrderWorkflowRepository extends BaseRepository
         }
         $order_workflow_schedule->order_id = $data["order_id"];
         $order_workflow_schedule->inspector_id = $data["appraiser_id"];
-        $order_workflow_schedule->inspection_date_time = Carbon::parse($data["inspection_date_time"])->format('Y-m-d H:i:s');
+        $order_workflow_schedule->inspection_date_time = Carbon::parse($data["inspection_date_time"])->setTimezone('America/New_York')->format('Y-m-d H:i:s');
         $order_workflow_schedule->duration = $data["duration"];
         $order_workflow_schedule->note = $data["note"];
         $order_workflow_schedule->save();
@@ -130,7 +130,12 @@ class OrderWorkflowRepository extends BaseRepository
 
     public function saveCom($data, $id)
     {
-        $com = new OrderWComList();
+        $order_w_com = OrderWComList::where('order_id', $id)->first();
+        if($order_w_com){
+            $com = $order_w_com;
+        }else{
+            $com = new OrderWComList();
+        }
         $com->order_id = $id;
         $com->destination = json_encode($data);
         $com->save();

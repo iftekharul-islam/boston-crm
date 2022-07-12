@@ -51,20 +51,22 @@ class OrderController extends BaseController
      *
      * @return Application|Factory|View
      */
-    public function index(Request $get) //: View|Factory|Application
+    public function index(Request $get)
     {
         $user = Auth::user();
         $company = $user->getCompanyProfile();
         $companyId = $company->company_id;
 
         $appraisal_users = $this->repository->getUserByRoleWise(role: 'appraiser');
-        $property_types = $this->repository->getAppraisalTypes();
+        $appraisal_types = $this->repository->getAppraisalTypes();
+        $property_types = PropertyType::all();
         $loan_types = $this->repository->getLoanTypes();
         $client_users = $this->repository->getClients();
 
         $filterType = [
             "appraisal_users" => $appraisal_users,
             "property_types" => $property_types,
+            "appraisal_types" => $appraisal_types,
             "loan_types" => $loan_types,
             "client_users" => $client_users,
         ];
@@ -276,8 +278,8 @@ class OrderController extends BaseController
             $user = Auth::user();
             $companyId = $user->getCompanyProfile()->company_id;
         }
-        $data = $get->data;
-        $paginate = $get->paginate && $get->paginate > 0 ? $get->paginate : 10;
+        $data = $get->data ?? '';
+        $paginate = isset($get->paginate) && $get->paginate > 0 ? $get->paginate : 10;
         $order = Order::where(function ($qry) use ($data) {
             return $qry->where('system_order_no', "LIKE", "%$data%")
                 ->orWhere("client_order_no", "LIKE", "%$data%")
@@ -291,6 +293,7 @@ class OrderController extends BaseController
             ->where('company_id', $companyId)
             ->orderBy('id', 'desc')
             ->paginate($paginate);
+
         return $order;
     }
 
@@ -621,8 +624,56 @@ class OrderController extends BaseController
         return $system_order_no;
     }
 
-    public function saveOrderData()
+    public function updateOrderStatus(Request $request)
     {
+        logger('$request->all()');
+        logger($request->all());
+        $order = Order::find($request->id);
+        $user = Auth::user();
+
+        if (!$order) {
+            return response()->json([
+                'error' => true,
+                'message' => 'Order Information Not Found'
+            ]);
+        }
+        $order->status = $request->status;
+        if($request->fee_amount){
+            $order->fee_amount= $request->fee_amount;
+        }
+        $order->save();
+
+        $company = $user->getCompanyProfile();
+        $companyId = $company->company_id;
+
+        $appraisal_users = $this->repository->getUserByRoleWise(role: 'appraiser');
+        $property_types = $this->repository->getAppraisalTypes();
+        $loan_types = $this->repository->getLoanTypes();
+        $client_users = $this->repository->getClients();
+
+        $filterType = [
+            "appraisal_users" => $appraisal_users,
+            "property_types" => $property_types,
+            "loan_types" => $loan_types,
+            "client_users" => $client_users,
+        ];
+
+        $orderData = $this->searchOrderData($request, $user, $companyId);
+        $orderSummary = $this->orderSummary($user, $companyId);
+
+        $orderData = [
+            'filterType' => $filterType,
+            'orderData' => $orderData,
+            'orderSummary' => $orderSummary
+        ];
+
+        return [
+            'error' => false,
+            'message' => 'Order status updated successfully',
+            'status' => 'success',
+            'data' => $orderData
+        ];
+
     }
 
     public function orderUpdate($type, Request $get)

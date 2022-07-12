@@ -1055,6 +1055,9 @@ html {
   .pdr-32 {
     padding-right: 32px;
   }
+  .pdr-36 {
+    padding-right: 36px;
+  }
   
   .pdb-1 {
     padding-bottom: 1px;
@@ -1475,6 +1478,9 @@ html {
   .text-light-red {
     color: $light-red;
   }
+  .text-skyblue {
+    color: $sky-blue;
+  }
  // background
  .bg-light-black {
    background: $light-black;
@@ -1667,6 +1673,9 @@ html {
   @include for-min-992 {
       font-size: 64px;
   }
+}
+.lh-20 {
+  line-height: 20px;
 }
 
 
