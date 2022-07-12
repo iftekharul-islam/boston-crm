@@ -89,6 +89,7 @@ export default {
 .open-model .model-body{
     max-height: 600px;
     overflow: auto;
+    overflow-x: hidden;
     scrollbar-width: thin;
     scrollbar-color: #bbb;
 }
