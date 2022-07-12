@@ -82,14 +82,19 @@
                         {{ item.property_info.search_address }}
                     </template>
                     <template v-slot:view="{item}">
-                        <a title="Edit order information" :href="`orders/${item.id}/edit`" class="btn btn-success btn-sm d-none" :data-key="item.id">
-                            <span onclick="roleUpdateOpen(2);" class="icon-edit cursor-pointer"><span class="path1"></span><span class="path2"></span></span>
-                        </a>
-                        <a title="View order information" :href="`orders/${item.id}`" class="view-btn" :data-key="item.id">
-                            <span onclick="roleUpdateOpen(2);" class="cursor-pointer">
-                                View
-                            </span>
-                        </a>
+                        <template v-if="viewAvailable(item.status)">
+                            <a title="Edit order information" :href="`orders/${item.id}/edit`" class="btn btn-success btn-sm d-none" :data-key="item.id">
+                                <span onclick="roleUpdateOpen(2);" class="icon-edit cursor-pointer"><span class="path1"></span><span class="path2"></span></span>
+                            </a>
+                            <a title="View order information" :href="`orders/${item.id}`" class="view-btn" :data-key="item.id">
+                                <span onclick="roleUpdateOpen(2);" class="cursor-pointer">
+                                    View
+                                </span>
+                            </a>
+                        </template>
+                        <template v-else>
+                            -
+                        </template>
                     </template>
                     <template v-slot:action="{item}">
                         <div>
@@ -97,11 +102,11 @@
                                 <template #button-content>
                                     <span class="icon-arrow-bottom"></span>
                                 </template>
-                                <b-dropdown-item href="#" @click.prevent="addFeeAmount(item.id, 17)">Cancel with payment</b-dropdown-item>
-                                <b-dropdown-item href="#" @click.prevent="submitAction(item.id, 18)">Cancel with out payment </b-dropdown-item>
-                                <b-dropdown-item href="#" @click.prevent="submitAction(item.id, 15)">Delete</b-dropdown-item>
-                                <b-dropdown-item href="#" @click.prevent="submitAction(item.id, 19)">On Hold</b-dropdown-item>
-                                <b-dropdown-item href="#" @click.prevent="submitAction(item.id, 20)">Re-Active</b-dropdown-item>
+                                <b-dropdown-item href="#" @click.prevent="addFeeAmount(item.id, 17)" :disabled="item.status == 17">Cancel with payment</b-dropdown-item>
+                                <b-dropdown-item href="#" @click.prevent="submitAction(item.id, 18)" :disabled="item.status == 18">Cancel with out payment </b-dropdown-item>
+                                <b-dropdown-item href="#" @click.prevent="submitAction(item.id, 15)" :disabled="item.status == 15">Delete</b-dropdown-item>
+                                <b-dropdown-item href="#" @click.prevent="submitAction(item.id, 19)" :disabled="item.status == 19">On Hold</b-dropdown-item>
+                                <b-dropdown-item href="#" @click.prevent="submitAction(item.id, 20)" :disabled="item.status == 20">Re-Active</b-dropdown-item>
                             </b-dropdown>
                         </div>
                     </template>
@@ -243,10 +248,14 @@ export default {
         localStorage.removeItem('orderSearchType');
     },
     methods: {
-
-        addFeeAmount(orderId, status) {
-            console.log(orderId)
+        viewAvailable(status) {
             console.log(status)
+            if(jQuery.inArray(status, [15, 17, 18, 19]) !== -1){
+                return false
+            }
+            return true
+        },
+        addFeeAmount(orderId, status) {
             this.updateStatus.orderId = orderId
             this.updateStatus.status = status
             this.$bvModal.show('add-fee-amount-modal')
