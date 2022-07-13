@@ -183,7 +183,7 @@ class OrderController extends BaseController
                 $deleted['ids'][] = $order->id;
                 continue;
             }
-            if ($order->status == 14) {
+            if (in_array($order->status, [14, 17, 18])) {
                 $cancelled['total'] += 1;
                 $cancelled['ids'][] = $order->id;
                 continue;
