@@ -282,13 +282,13 @@ class OrderController extends BaseController
         $paginate = isset($get->paginate) && $get->paginate > 0 ? $get->paginate : 10;
         $order = Order::where(function ($qry) use ($data) {
             return $qry->where('system_order_no', "LIKE", "%$data%")
-                ->orWhere("client_order_no", "LIKE", "%$data%")
-                ->orWhere("received_date", "LIKE", "%$data%")
-                ->orWhere("amc_id", "LIKE", "%$data%")
-                ->orWhere("lender_id", "LIKE", "%$data%")
-                ->orWhere("company_id", "LIKE", "%$data%")
-                ->orWhere("due_date", "LIKE", "%$data%")
-                ->orWhere("created_at", "LIKE", "%$data%");
+                ->orWhere("client_order_no", "LIKE", "%$data%");
+                // ->orWhere("received_date", "LIKE", "%$data%")
+                // ->orWhere("amc_id", "LIKE", "%$data%")
+                // ->orWhere("lender_id", "LIKE", "%$data%")
+                // ->orWhere("company_id", "LIKE", "%$data%")
+                // ->orWhere("due_date", "LIKE", "%$data%")
+                // ->orWhere("created_at", "LIKE", "%$data%");
         })->with($this->order_list_relation())
             ->where('company_id', $companyId)
             ->orderBy('id', 'desc')

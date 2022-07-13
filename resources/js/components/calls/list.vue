@@ -311,7 +311,7 @@
             orderData: [],
             selectedItems: [],
             latLng: [],
-            searchColumnType: "Order no, client order no received date, amc id, lender id, company id, due date, created date etc.",
+            searchColumnType: "Search by orderno, client order no etc.",
             dateRange: {
                 start: null,
                 end: null,
