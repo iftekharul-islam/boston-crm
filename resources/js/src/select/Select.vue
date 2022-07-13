@@ -409,6 +409,7 @@ export default {
     padding: 10px;
     border-bottom-right-radius: 0.25rem;
     border-bottom-left-radius: 0.25rem;
+    transition: all 200ms linear;
     max-height: 350px;
     overflow: auto;
     scrollbar-width: thin;

@@ -77,7 +77,7 @@
               </ValidationObserver>
 
                <ValidationObserver class="group d-block" ref="addEmailForm">
-                <ValidationProvider  name="Email Address" :rules="{ 'required' : add.email == null && borrower_email == false }" v-slot="{ errors }">
+                <ValidationProvider  name="Email Address" :rules="{ 'required' : (add.email == null || add.email == '' ) && borrower_email == false }" v-slot="{ errors }">
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
                     <label for="" class="d-block mb-2 dashboard-label">Email address <span
                         class="text-danger require"></span></label>

@@ -539,6 +539,7 @@ class OrderWorkflowController extends BaseController
 
         $reWrite = OrderWRewrite::where('order_id', $order->id)->first();
         $assignee = User::find($get->assigned_to);
+        $error = false;
         if (!$reWrite) {
             $reWrite = new OrderWRewrite();
             $reWrite->order_id = $order->id;
@@ -546,18 +547,15 @@ class OrderWorkflowController extends BaseController
             $reWrite->created_by = $user->id;
             $reWrite->assigned_to = $get->assigned_to;
             $reWrite->save();
+            $historyTitle = "{$assignee->name} has assiged by " . $user->name . ' on the Re-writing the report Assign.';
+            $this->addHistory($order, $user, $historyTitle, 'rewriting-report');
         } else {
-            $reWrite->updated_by = $user->id;
-            $reWrite->updated_at = Carbon::now();
-            $reWrite->save();
+            $error = true;
+            $historyTitle = "Already assigned previously can't reassign now.";
         }
-
-        $historyTitle = "{$assignee->name} has assiged by " . $user->name . ' on the Re-writing the report Assign.';
-        $this->addHistory($order, $user, $historyTitle, 'rewriting-report');
         $orderData = $this->orderDetails($get->orderId);
-
         return [
-            'error' => false,
+            'error' => $error,
             'message' => $historyTitle,
             'status' => 'success',
             'data' => $orderData

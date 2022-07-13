@@ -751,7 +751,6 @@
                 if(this.step1.amcClient != ''){
                     this.processingFee = $('#amcClientSelect').find(':selected').data('processing')
                 }
-
                 if (this.providerTypes.extra.length > 0 && this.providerTypes.extra[0].full == 1) {
                     this.step1.technologyFee = $('#amcClientSelect').find(':selected').data('uad')
                 } else {
@@ -825,15 +824,33 @@
                     let ele = setFee[i];
                     this.setNewFee(ele.typeId, ele.fee);
                 }
-
                 this.searchIngAddress = this.order.property_info.formatedAddress;
-
                 let receivedDateFormated = new Date(receivedDate);
                 let dueDateFormated = new Date(dueDate);
                 if (receivedDateFormated > dueDateFormated) {
                     this.dateIssue.status = true;
                 }
-
+                
+                
+                // recalculate technology fee when edit second time
+                let getStepAmc = this.step1.amcClient;
+                let amcClients = this.amcClients.find(ele => ele.id == getStepAmc);
+                let dataUad = amcClients.fee_for_1004uad;
+                let dataD = amcClients.fee_for_1004d;
+                let dataProcessing = amcClients.processing_fee;
+                
+                if(this.step1.amcClient != ''){
+                    this.processingFee = dataProcessing;
+                }
+                if (this.providerTypes.extra.length > 0 && this.providerTypes.extra[0].full == 1) {
+                    this.step1.technologyFee = dataUad;
+                } else {
+                    this.step1.technologyFee = dataD;
+                }
+                if (this.processingFee > 0) {
+                    let technologyFee = parseFloat(parseFloat(this.step1.technologyFee) + parseFloat(this.providerTypes.totalAmount * (this.processingFee / 100)))
+                    this.step1.technologyFee = parseFloat(technologyFee).toFixed(2)
+                }
             },
 
             geolocate() {

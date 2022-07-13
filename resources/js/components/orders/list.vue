@@ -27,7 +27,7 @@
                             </button>
                             <!-- dropdown -->
                             <div class="dropdown-menu py-0 search-dropdown" :aria-labelledby="`dropdownMenuLink_${dCol.key}`">
-                                <input type="text" class="search-input" @input="checkSearch($event.target.value, dCol)" placeholder="Search...">
+                                <input type="text" class="search-input" @input="checkSearch($event.target.value, dCol)" placeholder="Search by order no or client order no...">
                                 <ul class="p-0 m-0 search-results">
                                     <li class="results-item" v-for="filter_item, fi in filterTypeValue[dCol.key]" :key="fi" @click="chooseFilterItem(filter_item, dCol.key)">
                                         <span v-if="dCol.key == 'appraisal_types'">{{ filter_item.form_type }}</span>
@@ -499,5 +499,8 @@ select.form-control {
 .search-results li:hover {
     transition: all 0.2s linear;
     color: #19b7a2;
+}
+.report.bg-white {
+    margin-top: 35px;
 }
 </style>

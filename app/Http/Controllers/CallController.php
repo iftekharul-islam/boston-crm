@@ -47,15 +47,15 @@ class CallController extends BaseController
             $orderId = OrderWInspection::whereDate('inspection_date_time', $today)->get()->pluck('order_id');
         }
 
-        $order = Order::where(function($qry) use ($data, $dateRange, $filterType) {
+        $order = Order::where(function($qry) use ($data) {
             return $qry->where('system_order_no', "LIKE", "%$data%")
-                       ->orWhere("client_order_no", "LIKE", "%$data%")
-                       ->orWhere("received_date", "LIKE", "%$data%")
-                       ->orWhere("amc_id", "LIKE", "%$data%")
-                       ->orWhere("lender_id", "LIKE", "%$data%")
-                       ->orWhere("company_id", "LIKE", "%$data%")
-                       ->orWhere("due_date", "LIKE", "%$data%")
-                       ->orWhere("created_at", "LIKE", "%$data%");
+                       ->orWhere("client_order_no", "LIKE", "%$data%");
+                    //    ->orWhere("received_date", "LIKE", "%$data%")
+                    //    ->orWhere("amc_id", "LIKE", "%$data%")
+                    //    ->orWhere("lender_id", "LIKE", "%$data%")
+                    //    ->orWhere("company_id", "LIKE", "%$data%")
+                    //    ->orWhere("due_date", "LIKE", "%$data%")
+                    //    ->orWhere("created_at", "LIKE", "%$data%");
         })->with($this->order_call_list_relation())
         ->where('company_id', $companyId)
         ->when($orderId, function($qry) use ($orderId){
