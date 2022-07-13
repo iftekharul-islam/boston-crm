@@ -94,7 +94,10 @@ class UserController extends BaseController
 					 code: $code )->sendMailToUser( code: $code );
 			} );
 
-			return response()->json( [ 'success' => true ] );
+			return response()->json([
+                'success' => true,
+                'email' => $request->get( 'email' )
+            ]);
 	 }
 
 	 /**
