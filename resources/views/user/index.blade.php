@@ -284,7 +284,10 @@
                 email: email
             },
             success: function (response) {
-                location.reload();
+                $('#userInviteModal').modal('hide');
+                swal('Invitation has been sent to '+ response.email , '' , "success").then(function () {
+                    location.reload();
+                })
             },
             error: function (response) {
                 let errors = response.responseJSON.errors;
