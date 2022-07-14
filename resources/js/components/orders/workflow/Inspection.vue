@@ -14,7 +14,7 @@
                 <p class="text-light-black mgb-12">Instruction or Note for Inspection</p>
                 <p class="mb-0 text-light-black fw-bold">{{ note }}</p>
             </div>
-            <div class="group" v-if="orderData.inspection">
+            <div class="group" v-if="orderData.inspection.attachments.length">
                 <p class="text-light-black mgb-12">Inspection file upload</p>
                 <div class="document">
                     <div class="row">
@@ -32,22 +32,24 @@
                 </div>
             </div>
             <!-- upload -->
-            <div class="group">
-                <div class="position-relative file-upload mgt-20" v-if="editable">
-                    <p class="text-light-black mgb-12">Files</p>
-                    <div class="position-relative file-upload">
-                        <input type="file" multiple v-on:change="addFiles">
-                        <label for="" class="py-2">Upload <span class="icon-upload ms-3 fs-20"><span
-                                    class="path1"></span><span class="path2"></span><span
-                                    class="path3"></span></span></label>
+            <div  v-if="editable">
+                <div class="group">
+                    <div class="position-relative file-upload mgt-20">
+                        <p class="text-light-black mgb-12">Files</p>
+                        <div class="position-relative file-upload">
+                            <input type="file" multiple v-on:change="addFiles">
+                            <label for="" class="py-2">Upload <span class="icon-upload ms-3 fs-20"><span
+                                class="path1"></span><span class="path2"></span><span
+                                class="path3"></span></span></label>
+                        </div>
+                        <p class="text-light-black mgb-12" v-if="fileData.files.length">{{ fileData.files.length }} Files
+                        </p>
                     </div>
-                    <p class="text-light-black mgb-12" v-if="fileData.files.length">{{ fileData.files.length }} Files
-                    </p>
                 </div>
-            </div>
-            <div class="text-end mgt-32" v-if="editable">
-                <button class="button button-primary px-4 h-40 d-inline-flex align-items-center" @click="saveInsFiles"
-                    :disabled="isUploading">Save</button>
+                <div class="text-end mgt-32">
+                    <button class="button button-primary px-4 h-40 d-inline-flex align-items-center" @click="saveInsFiles"
+                            :disabled="isUploading">Save</button>
+                </div>
             </div>
         </div>
     </div>
@@ -85,10 +87,13 @@
             inspectionData(order) {
                 this.orderData = order;
                 if (this.orderData.inspection !== null) {
+                    this.editable = true
                     this.id = this.orderData.inspection.id
                     this.note = this.orderData.inspection.note
                     this.name = this.orderData.inspection.user.name
-                    this.editable = false
+                    if(this.orderData.inspection.attachments.length){
+                        this.editable = false
+                    }
                 } else {
                     this.isEmpty = true
                 }
