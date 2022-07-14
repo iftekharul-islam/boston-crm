@@ -219,6 +219,15 @@ export function formatPhoneNo(phone) {
     return phones;
 }
 
+export function ValidateEmail(inputText) {
+    var mailformat = /^w+([.-]?w+)*@w+([.-]?w+)*(.w{2,3})+$/;
+    if(inputText.value.match(mailformat)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 export {
     apiPost,
     apiGet,
