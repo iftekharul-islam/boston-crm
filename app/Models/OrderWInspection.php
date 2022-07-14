@@ -24,7 +24,7 @@ class OrderWInspection extends Model implements HasMedia
     ];
 
     public function getInspectionDateTimeFormattedAttribute() {
-        return Carbon::parse($this->attributes['inspection_date_time'])->format('d M Y H:i A');
+        return Carbon::parse($this->attributes['inspection_date_time'])->format('d M Y h:i A');
     }
 
     public function user(){
