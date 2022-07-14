@@ -139,13 +139,13 @@
 
 @section('js')
     <script>
-        const MAX_FILE_SIZE = 1024 * 1024; // 1MB
+        const MAX_FILE_SIZE = 3 * 1024 * 1024; // 3MB
 
         $("#inputGroupFile01").change(function (event) {
             $('.image-error').text("");
             let fileSize = this.files[0].size;
             if (fileSize > MAX_FILE_SIZE) {
-                $('.image-error').text("File must not exceed 1 MB!");
+                $('.image-error').text("File must not exceed 3 MB!");
                 return;
             }
             readURL(this);
