@@ -21,20 +21,23 @@
             <div id="order-views" class="order-views">
                 <div class="report-top d-flex justify-content-between mgb-32 flex-wrap">
                     <div class="left chart-box-header-btn d-flex flex-wrap justify-content-between">
-                        <div class="item-btn-drop" v-for="dCol, di in order.filterItems" :key="di">
-                            <button class="chart-btn h-32 d-flex align-items-center justify-content-between mb-2" :key="di" :id="`dropdownMenuLink_${dCol.key}`" data-bs-toggle="dropdown" aria-expanded="false">
-                                {{ dCol.title }} ({{ showNumber(filterTypeValue[dCol.key]) }})
-                            </button>
-                            <!-- dropdown -->
-                            <div class="dropdown-menu py-0 search-dropdown" :aria-labelledby="`dropdownMenuLink_${dCol.key}`">
-                                <input type="text" class="search-input" @input="checkSearch($event.target.value, dCol)" placeholder="Search by order no or client order no...">
-                                <ul class="p-0 m-0 search-results">
-                                    <li class="results-item" v-for="filter_item, fi in filterTypeValue[dCol.key]" :key="fi" @click="chooseFilterItem(filter_item, dCol.key)">
-                                        <span v-if="dCol.key == 'appraisal_types'">{{ filter_item.form_type }}</span>
-                                        <span v-else-if="dCol.key == 'property_types'">{{ filter_item.type }}</span>
-                                        <span v-else>{{ filter_item.name }}</span>
-                                    </li>
-                                </ul>
+                        <div class="drop-box">
+                            <div class="drop-box-item" v-for="dCol, di in order.filterItems" :key="di" @mouseenter="dropBoxEvent(dCol, $event, true)" @mouseleave="dropBoxEvent(dCol, $event, false)">
+                                <div class="box-head-title">
+                                    {{ dCol.title }} <strong>({{ showNumber(filterTypeValue[dCol.key]) }})</strong>
+                                </div>
+                                <div class="box-body">
+                                    <div class="box-search">
+                                        <input type="text" @input="checkSearch($event.target.value, dCol)" placeholder="Search...">
+                                    </div>
+                                    <div class="box-lists">
+                                        <div class="drop-box-list" :class="{'active' : filter_item.status == true }" v-for="filter_item, fi in filterTypeValue[dCol.key]" :key="fi" @click="chooseFilterItem(filter_item, dCol.key)">
+                                            <span v-if="dCol.key == 'appraisal_types'">{{ filter_item.form_type }}</span>
+                                            <span v-else-if="dCol.key == 'property_types'">{{ filter_item.type }}</span>
+                                            <span v-else>{{ filter_item.name }}</span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -48,7 +51,6 @@
                                 </svg>
                             </button>
                         </div>
-
                         <button class="button button-primary h-32 d-inline-flex align-items-center py-2">View daily report</button>
                     </div>
                 </div>
@@ -79,7 +81,9 @@
                         </template>
                     </template>
                     <template v-slot:property_address="{item}">
-                        {{ item.property_info.search_address }}
+                        <div class="td-text-overflow" :title="item.property_info.full_addr">
+                            {{ item.property_info.full_addr }}
+                        </div>
                     </template>
                     <template v-slot:view="{item}">
                         <template v-if="viewAvailable(item.status)">
@@ -181,6 +185,7 @@ export default {
         filterTypeValue: [],
         visibleColumnDropDown: false,
         filterTypeBack: [],
+        selectedFilterItems: [],
         pages: {
             acitvePage: 1,
             pageData: [],
@@ -318,6 +323,9 @@ export default {
                     });
                 }
             });
+            this.order.filterItems.map(ele => {
+                this.selectedFilterItems[ele.key] = [];
+            });
         },
         checkColumnActive(val) {
             let getHeader = (this.order.header);
@@ -333,15 +341,26 @@ export default {
             return findActive;
         },
         addToTable(val) {
+            if (val.key == 'action') {
+                return false;
+            }
             let getHeader = (this.order.header);
-            let getIndex = getHeader.find( (ele) => {
+            let getIndex = getHeader.find((ele) => {
                 let key = ele.split("@");
-                if(val.key == key[1]) {
+                if (val.key == key[1]) {
                     return true;
                 }
             });
             if (!getIndex) {
-                this.order.header.splice( 8, 0,
+                let slicePoint = this.order.header.length - 3;
+                if (val.key == 'system_order_no') {
+                    slicePoint = 0;
+                } else if (val.key == 'client_order_no') {
+                    slicePoint = 1;
+                } else if (val.key == 'action') {
+                    slicePoint = this.order.header.length;
+                }
+                this.order.header.splice(slicePoint, 0,
                     val.title + '@' + val.key + '@left@left'
                 );
             } else  {
@@ -386,20 +405,97 @@ export default {
                 let findData = this.filterTypeValue[dcol.key];
                 let searchData = [];
 
-                if (dcol.key == 'property_types') {
+                if (dcol.key == 'appraisal_types') {
                     searchData = findData.filter((ele) => (ele.form_type).toLowerCase().match(value.toLowerCase()));
+                } else if (dcol.key == 'property_types'){
+                    searchData = findData.filter((ele) => (ele.type).toLowerCase().match(value.toLowerCase()));
                 } else {
                     searchData = findData.filter((ele) => (ele.name).toLowerCase().match(value.toLowerCase()));
                 }
                 this.filterTypeValue[dcol.key] = searchData;
             }
         },
+        findIndexFirstKey(firstKey, key, item) {
+            let oldCheck = firstKey.findIndex(ele => {      
+                if (key == 'appraisal_types') {
+                    return (ele.form_type).toLowerCase().match(item.form_type.toLowerCase());
+                } else if (key == 'property_types'){
+                    return (ele.type).toLowerCase().match(item.type.toLowerCase());
+                } else {
+                    return (ele.name).toLowerCase().match(item.name.toLowerCase());
+                }
+            });
+            return oldCheck;
+        },
         chooseFilterItem(item, key) {
-            this.$boston.post('search/order/by/filter', { item, key }).then( (res) => {
+            let firstKey = this.selectedFilterItems[key];
+            let oldCheck = this.findIndexFirstKey(firstKey, key, item);
+            if (oldCheck != -1) {
+                firstKey.splice(oldCheck, 1);
+            } else {
+                firstKey.push(item);
+            }
+            this.selectedFilterItems[key] = firstKey;
+            let filterValueByKey = [];
+            this.filterTypeValue[key].find(ele => {
+                let findOldId = null;
+                if (key == 'appraisal_types') {
+                    findOldId = firstKey.find(eles => ele.form_type == eles.form_type);
+                } else if (key == 'property_types'){
+                    findOldId = firstKey.find(eles => ele.type == eles.type);
+                } else {
+                    findOldId = firstKey.find(eles => ele.name == eles.name);
+                }
+                if (findOldId) {
+                    ele['status'] = true;
+                } else {
+                    ele['status'] = false;
+                }
+                filterValueByKey.push(ele);
+            });
+            this.filterTypeValue[key] = filterValueByKey;
+
+            this.$boston.post('search/order/by/filter', { item: firstKey, key }).then( (res) => {
                 this.initTableDate(res);
             }).catch( (err) => {
                 console.log(err);
             });
+        }, 
+        refilterSelectedItem(firstKey, key) {
+            let filterValueByKey = [];
+            this.filterTypeValue[key].find(ele => {
+                let findOldId = null;
+                if (key == 'appraisal_types') {
+                    findOldId = firstKey.find(eles => ele.form_type == eles.form_type);
+                } else if (key == 'property_types'){
+                    findOldId = firstKey.find(eles => ele.type == eles.type);
+                } else {
+                    findOldId = firstKey.find(eles => ele.name == eles.name);
+                }
+                if (findOldId) {
+                    ele['status'] = true;
+                } else {
+                    ele['status'] = false;
+                }
+                filterValueByKey.push(ele);
+            });
+            this.filterTypeValue[key] = filterValueByKey;
+        },
+        dropBoxEvent(item, event, status) {
+            let target = event.target;
+            if (status == true) {
+                $(target).find('.box-body').css({
+                    "visibility" : "visible",
+                    "opacity" : 1,
+                    "transition" : "all 150ms linear"
+                });
+            } else {
+                $(target).find('.box-body').css({
+                    "visibility" : "hidden",
+                    "opacity" : 0,
+                    "transition" : "all 150ms linear"
+                });
+            }
         }
     }
 }
@@ -502,5 +598,88 @@ select.form-control {
 }
 .report.bg-white {
     margin-top: 35px;
+}
+
+/* box-item-design */
+.drop-box{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+.drop-box .drop-box-item{
+    position: relative;
+    margin-right: 10px;
+}
+.drop-box .box-head-title {
+    background: #efefef;
+    border-radius: 0.2rem;
+    border: thin solid #ddd;
+    padding: 3px 10px;
+    cursor: pointer;
+}
+.drop-box .box-body {
+    border: thin solid #19b7a2;
+    box-shadow: 0 7px 12px rgb(0 0 0 / 20%);
+    overflow: hidden;
+    border-radius: 0.25rem;
+    padding: 10px 0;
+    position: absolute;
+    z-index: 99999;
+    background: #fff;
+    margin-top: 3px;
+    visibility: hidden;
+    opacity: 0;
+    transition: all 300ms linear;
+}
+.drop-box input[type="text"] {
+    border: unset;
+    background: #eee;
+    padding: 5px 10px;
+    border-radius: 0.25rem;
+    margin: 0 10px 10px;
+}
+.drop-box .box-lists {
+    max-height: 300px;
+    overflow-y: auto;
+    padding: 0 10px;
+    border-width: thin;
+    border-color: #bbb;
+}
+.drop-box .box-lists::-webkit-scrollbar {
+    width: 5px;
+}
+.drop-box .box-lists::-webkit-scrollbar-thumb {
+    background: #bbb;
+}
+.drop-box .drop-box-list {
+    padding: 5px;
+    cursor: pointer;
+    transition: all 200ms linear;
+    position: relative;
+    padding-left: 30px;
+}
+.drop-box .drop-box-list:hover {
+    transition: all 200ms linear;
+    color: #19b7a2;
+}
+.drop-box .drop-box-list:after {
+    content: "";
+    position: absolute;
+    transition: all 200ms linear;
+    left: 0px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: thin solid #bbb;
+    height: 20px;
+    width: 20px;
+    border-radius: 0.25rem;
+}
+.drop-box .drop-box-list:hover:after {
+    border-color: #19b7a2;
+}
+.drop-box .drop-box-list.active:after {
+    background: #19b7a2;
+    border-color: #19b7a2;
 }
 </style>

@@ -22,7 +22,7 @@
                         <button @click="filterByTab('completed')" :class="{'active' : pages.filterType == 'completed'}"
                             class="calls-btn h-40 d-flex align-items-center mb-2">Completed <span class="ms-2">
                                 ({{ filterValue.completed }})</span></button>
-                        <button @click="$bvModal.show('dateRange')"
+                        <button @click="$bvModal.show('dateRange'); filterByTab('daterange')" :class="{'active' : pages.filterType == 'daterange'}"
                             class="calls-btn h-40 d-flex align-items-center mb-2">Date Rage</button>
                     </div>
                     <div class="right d-flex">
@@ -468,9 +468,11 @@
                 this.pages.acitvePage = acitvePage;
                 this.$boston.post('search/call/order?page=' + this.pages.acitvePage, { 'filterType': this.pages.filterType, data: this.pages.searchModel, paginate: this.pages.paginate, dateRange: this.dateRange }).then((res) => {
                     this.selectedItems = [];
-                    this.dateRange.search = false;
-                    this.dateRange.start = null;
-                    this.dateRange.end = null;
+                    if (this.pages.filterType != 'daterange') {
+                        this.dateRange.search = false;
+                        this.dateRange.start = null;
+                        this.dateRange.end = null;
+                    }
                     this.pages.pageData = res;
                     this.orderData = res.data;
                 }).catch((err) => {
@@ -557,7 +559,12 @@
             },
             filterByTab(item) {
                 this.pages.filterType = item;
-                this.loadPage();
+                if (item != 'daterange') {
+                    this.dateRange.search = false;
+                    this.dateRange.start = null;
+                    this.dateRange.end = null;
+                    this.loadPage();
+                }
             },
         },
     }

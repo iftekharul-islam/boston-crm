@@ -761,27 +761,27 @@ class OrderController extends BaseController
 
     public function searchOrderByFiltering(Request $get)
     {
-        $id = $get->item['id'];
+        $id = collect($get->item)->pluck('id')->toArray();
         $item = $get->item;
         if ($get->key == 'appraisal_users') {
-            $orderId = AppraisalDetail::where('appraiser_id', $id)->latest()->get()->pluck("order_id");
+            $orderId = AppraisalDetail::whereIn('appraiser_id', $id)->latest()->get()->pluck("order_id");
             return $this->orderInformation($orderId);
         } else if ($get->key == 'client_users') {
             return Order::where(function ($qry) use ($item, $id) {
-                if ($item['client_type'] == 'both') {
-                    return $qry->where('amc_id', $id)->orWhere('lender_id', $id);
-                } else if ($item['client_type'] === 'amc') {
-                    return $qry->where('amc_id', $id);
-                } else {
-                    return $qry->where('lender_id', $id);
-                }
+                return $qry->whereIn('amc_id', $id)->orWhereIn('lender_id', $id);
+                // if ($item['client_type'] == 'both') {
+                // } else if ($item['client_type'] === 'amc') {
+                //     return $qry->whereIn('amc_id', $id);
+                // } else {
+                //     return $qry->whereIn('lender_id', $id);
+                // }
             })->with($this->order_list_relation())->orderBy('id', 'desc')->paginate(100);
         } else if ($get->key == "loan_types") {
-            $orderId = AppraisalDetail::where('loan_type', $id)->latest()->get()->pluck("order_id");
+            $orderId = AppraisalDetail::whereIn('loan_type', $id)->latest()->get()->pluck("order_id");
             return $this->orderInformation($orderId);
         } else if ($get->key == "reportType") {
         } else if ($get->key = "property_types") {
-            $orderId = ProvidedService::whereJsonContains('appraiser_type_fee', ['typeId' => $id])->latest()->get()->pluck("order_id");
+            $orderId = AppraisalDetail::whereIn('property_type', $id)->latest()->get()->pluck("order_id");
             return $this->orderInformation($orderId);
         }
     }

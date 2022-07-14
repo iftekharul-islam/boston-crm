@@ -54,7 +54,7 @@
             </div>
             <div class="right max-w-424 w-100">
               <ValidationObserver ref="addEmailForm">
-                <ValidationProvider class="group" name="Email Address" :rules="{ 'required' : add.email == null && step2.borrower_email == false }" rules="email" v-slot="{ errors }">
+                <ValidationProvider class="group" name="Email Address" :rules="{ 'required' : add.email == null && step2.borrower_email == false, 'email' : true }" v-slot="{ errors }">
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
                     <label for="" class="d-block mb-2 dashboard-label">Email address <span
                         class="text-danger require"></span></label>
@@ -135,7 +135,7 @@
             </div>
             <div class="right max-w-424 w-100">
               <ValidationObserver ref="addEmail2form">
-                  <ValidationProvider class="group" name="Contact Email Address" :rules="{'required' : step2.contactSame == false && (step2.email_address == false && add.email2 == null)}" rules="email" v-slot="{ errors }">
+                  <ValidationProvider class="group" name="Contact Email Address" :rules="{'required' : step2.contactSame == false && (step2.email_address == false && add.email2 == null), 'email' : true}" v-slot="{ errors }">
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
                     <label for="" class="d-block mb-2 dashboard-label">Email address <span
                         class="text-danger require"></span></label>
