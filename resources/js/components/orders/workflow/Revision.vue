@@ -16,7 +16,7 @@
           <div class="revission-add text-end mb-3">
             <button v-if="!addRevission" @click="revissionAdd(true)" class="button button-primary py-2 h-40 flex-center d-inline-flex">Add revision</button>
           </div>
-          
+
           <ValidationObserver ref="addRevission">
             <!-- add revission form -->
             <transition v-if="addRevission" name="fade" appear>
@@ -26,7 +26,7 @@
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
                     <label>Date & time</label>
                       <!-- <input type="datetime" v-model="form.date" class="dashboard-input w-100 gray-border"> -->
-                      <v-date-picker mode="datetime" v-model="form.date">
+                      <v-date-picker mode="datetime" v-model="form.date" timezone="utc">
                         <template class="position-relative" v-slot="{ inputValue, inputEvents }">
                             <input class="dashboard-input w-100" :value="inputValue"
                                 v-on="inputEvents" />
@@ -53,7 +53,7 @@
 
           <!-- revission card -->
           <div class="revission-card bg-white position-relative">
-            
+
             <template v-if="revisionData.length > 0">
               <div :class="`revission-item solution-btn-position-${item.id}`" v-for="item, ir in revisionData" :key="ir">
                 <div class="revission-card-top">
@@ -206,7 +206,7 @@
                       <ValidationProvider name="Date & time" rules="required" v-slot="{ errors }">
                         <div class="group" :class="{ 'invalid-form' : errors[0] }">
                           <label>Date & time</label>
-                          <v-date-picker mode="datetime" v-model="form.date">
+                          <v-date-picker mode="datetime" v-model="form.date" timezone="utc">
                             <template class="position-relative" v-slot="{ inputValue, inputEvents }">
                                 <input class="dashboard-input w-100" :value="inputValue"
                                     v-on="inputEvents" />
@@ -226,8 +226,8 @@
                       <div class="text-end">
                         <button @click="editNotesModal = false" class="button button-transparent px-5 h-40 flex-center">Close</button>
                         <button @click="revissionEditSubmit" class="button button-primary px-5 h-40 flex-center d-inline-flex">Update Revision</button>
-                      </div> 
-                  </ValidationObserver> 
+                      </div>
+                  </ValidationObserver>
               </div>
             </transition>
 
@@ -338,8 +338,8 @@ export default {
         }).then( (res) => {
             if (res.status == 'success') {
                 this.revisionData = res.data.revission;
-                this.revisionData[index].open_solution = false;  
-                this.$root.$emit('wk_flow_menu', res.data);              
+                this.revisionData[index].open_solution = false;
+                this.$root.$emit('wk_flow_menu', res.data);
                 this.$root.$emit('wk_update', res.data);
                 this.$root.$emit('wk_flow_toast', res);
             }
@@ -354,7 +354,7 @@ export default {
     },
     editRevission() {
       // this.revissionEdit = !this.revissionEdit
-    }, 
+    },
     editNotes(item, index, event) {
         this.form.id = item.id;
         this.form.date = item.revision_date;
@@ -378,7 +378,7 @@ export default {
         this.marked.solution_details = item.solution_details.replace('-', '');
         this.marked.delivered_by = item.delivered_by;
         this.marked.completed_by = item.completed_by;
-        this.marked.delivery_date = item.delivery_date_format;        
+        this.marked.delivery_date = item.delivery_date_format;
         this.$nextTick(() => {
             $(".edit-revission").attr("style", "top:"+this.currentTopPosition + 'px!important');
         });
@@ -434,7 +434,7 @@ export default {
             this.$root.$emit('wk_update', res.data);
             this.$root.$emit('wk_flow_toast', res);
         }).catch(err => {
-          
+
         });
         this.$refs.popup.close();
     },

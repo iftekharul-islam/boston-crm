@@ -68,7 +68,7 @@
                                     <label for="" class="d-block mb-2 dashboard-label">Inspection date & time<span
                                             class="text-danger require"></span></label>
                                     <v-date-picker mode="datetime" v-model="scheduleData.inspection_date_time"
-                                        :available-dates='{ start: new Date(), end: null }'>
+                                        :available-dates='{ start: new Date(), end: null }' timezone="utc">
                                         <template class="position-relative" v-slot="{ inputValue, inputEvents }">
                                             <input class="dashboard-input w-100" :value="inputValue"
                                                 v-on="inputEvents" />
@@ -196,6 +196,9 @@
             saveSchedule() {
                 this.$refs.scheduleForm.validate().then((status) => {
                     if (status) {
+                        console.log('scheduleData')
+                        console.log(this.scheduleData)
+                        // return
                         this.$boston.post('update-order-schedule', this.scheduleData)
                             .then(res => {
                                 this.message = res.message;
