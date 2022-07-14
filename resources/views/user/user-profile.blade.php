@@ -172,7 +172,7 @@
             let phoneNo = e.target.value;
             e.target.value = phoneNo.replace(/(\d{3})\-?(\d{3})\-?(\d{4}).*/,'$1-$2-$3')
         }
-        const MAX_FILE_SIZE = 3 * 1024 * 1024; // 1MB
+        const MAX_FILE_SIZE = 3 * 1024 * 1024; // 3MB
         $(document).ready(function () {
             if ($(".success-msg")){
                 setTimeout(function(){
