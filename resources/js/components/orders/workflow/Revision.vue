@@ -303,7 +303,8 @@ export default {
         this.revissionKey = Math.floor(Math.random(10000) * 1000);
     },
     revission() {
-      this.revissionModal = !this.revissionModal
+        this.revissionModal = !this.revissionModal
+        document.documentElement.style.overflow = 'auto'
     },
     revissionAdd(status) {
         this.form.id = null;
