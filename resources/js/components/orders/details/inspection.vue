@@ -10,17 +10,17 @@
             <div class="list__group">
                 <p class="mb-0 left-side">Appraiser</p>
                 <span>:</span>
-                <p class="right-side mb-0">{{ inspection.appraiserName }}</p>
+                <p class="right-side mb-0">{{ edited.appraiserName }}</p>
             </div>
             <div class="list__group">
                 <p class="mb-0 left-side">Inspection date</p>
                 <span>:</span>
-                <p class="right-side mb-0">{{ inspection.inspection_date_time }}</p>
+                <p class="right-side mb-0">{{ edited.inspection_date_time_formatted }}</p>
             </div>
             <div class="list__group">
                 <p class="mb-0 left-side">Notes</p>
                 <span>:</span>
-                <p class="right-side mb-0 line-1">{{ inspection.note }}</p>
+                <p class="right-side mb-0 line-1">{{ edited.note }}</p>
             </div>
         </div>
         <div class="text-center mt-3 mb-3" v-else>
@@ -113,7 +113,8 @@
                 appraiser_id: '',
                 inspection_date_time: '',
                 duration: '',
-                note: ''
+                note: '',
+                inspection_date_time_formatted: ''
             },
             durations: [
                 { 'duration': '15 minutes' },
@@ -127,7 +128,8 @@
                 { 'duration': '55 minutes' },
                 { 'duration': '60 minutes' },
             ],
-            storeData: []
+            storeData: [],
+            edited: {}
         }),
         created() {
             this.getInspectionData(this.order);
@@ -145,9 +147,11 @@
                     this.inspection.schedule_id = order.inspection.id
                     this.inspection.appraiserName = order.inspection.user.name
                     this.inspection.appraiser_id = order.inspection.inspector_id
-                    this.inspection.inspection_date_time =order.inspection.inspection_date_time
+                    this.inspection.inspection_date_time = order.inspection.inspection_date_time
                     this.inspection.note = order.inspection.note
                     this.inspection.duration = order.inspection.duration
+                    this.inspection.inspection_date_time_formatted = order.inspection.inspection_date_time_formatted
+                    this.edited = Object.assign({}, this.inspection)
                 }
             },
             editInspection() {
@@ -157,7 +161,15 @@
             updateInspection() {
                 this.$refs.inspectionForm.validate().then((status) => {
                     if (status) {
-                        this.$boston.post('update-order-schedule', this.inspection)
+                        let formData = new FormData();
+                        formData.append('order_id',this.inspection.order_id)
+                        formData.append('schedule_id',this.inspection.schedule_id)
+                        formData.append('appraiser_id',this.inspection.appraiser_id)
+                        formData.append('inspection_date_time',this.inspection.inspection_date_time)
+                        formData.append('duration',this.inspection.duration)
+                        formData.append('note',this.inspection.note)
+
+                        this.$boston.post('update-order-schedule', formData)
                             .then(res => {
                                 this.orderData = res.data;
                                 this.$root.$emit('wk_update', this.orderData);

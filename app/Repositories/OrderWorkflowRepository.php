@@ -31,7 +31,7 @@ class OrderWorkflowRepository extends BaseRepository
             $order_workflow_schedule = OrderWInspection::find($data['schedule_id']);
             $order_workflow_schedule->updated_by = Auth::user()->id;
 
-            if(isset($data['reschedule_note'])) {
+            if (isset($data['reschedule_note'])) {
                 $order_workflow_schedule->reschedule_note = $data['reschedule_note'];
                 $order->status = 2;
                 $order->save();
@@ -59,7 +59,8 @@ class OrderWorkflowRepository extends BaseRepository
     }
 
 
-    public function deleteSchedule($schedule_id){
+    public function deleteSchedule($schedule_id)
+    {
         $order_workflow_schedule = OrderWInspection::find($schedule_id);
         $order_workflow_schedule->delete();
         return $order_workflow_schedule ? true : false;
@@ -134,9 +135,9 @@ class OrderWorkflowRepository extends BaseRepository
     public function saveCom($data, $id)
     {
         $order_w_com = OrderWComList::where('order_id', $id)->first();
-        if($order_w_com){
+        if ($order_w_com) {
             $com = $order_w_com;
-        }else{
+        } else {
             $com = new OrderWComList();
         }
         $com->order_id = $id;
@@ -145,5 +146,4 @@ class OrderWorkflowRepository extends BaseRepository
 
         return $com;
     }
-
 }
