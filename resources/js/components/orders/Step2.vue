@@ -255,9 +255,9 @@ export default {
         let reader = new FileReader();
         reader.readAsDataURL(fileData);
         reader.onload = function () {
-            that.step2.file = reader.result
+           that.step2.file = reader.result
         };
-      this.step2.fileName = fileData.name
+        this.step2.fileName = event.target.files[0].name
     },
     addEmail2() {
         this.$refs.addEmail2form.validate().then((status) => {

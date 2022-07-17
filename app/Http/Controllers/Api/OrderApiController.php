@@ -253,10 +253,16 @@ class OrderApiController extends Controller
             $contactInfo->save();
 
             //file upload
+
             if (isset($step2["file"])) {
                 $file = $step2["file"];
+                $img = explode(',', $step2["file"]);
+                $ini = substr($img[0], 11);
+                $type = explode(';', $ini);
                 $order->addMediaFromBase64($file)
-                    ->withCustomProperties(['type' => 'Order','user'=> $user->name])
+                    ->usingName("order-file")
+                    ->usingFilename("order-file".'.'.$type[0])
+                    ->withCustomProperties(['type' => 'Order', 'user' => $user->name])
                     ->toMediaCollection('orders');
             }
 
