@@ -93,7 +93,7 @@
             orderData: [],
         }),
         methods: {
-            setOrderId(orderId){
+            setOrderId(orderId) {
                 this.schedule.order_id = orderId
             },
             saveSchedule() {
