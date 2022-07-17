@@ -198,7 +198,7 @@ export default {
         this.info.street_name = this.order.property_info.street_name
         this.info.city_name = this.order.property_info.city_name
         this.info.state_name = this.order.property_info.state_name
-        this.info.formatedAddress = this.order.property_info.formatedAddress
+        this.info.formatedAddress = this.order.property_info.full_addr
         this.info.zip = this.order.property_info.zip
         this.info.county = this.order.property_info.county
         this.info.unit_no = this.order.property_info.unit_no
