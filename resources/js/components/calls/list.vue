@@ -124,7 +124,8 @@
                                         class="path2"></span><span class="path3"></span><span class="path4"></span><span
                                         class="path5"></span><span class="path6"></span><span class="path7"></span><span
                                         class="path8"></span></span>
-                                <span class="call-tooltip">Schedule</span>
+                                <span class="call-tooltip" v-if="item.status == 0">Schedule</span>
+                                <span class="call-tooltip" v-else>Re-schedule</span>
                             </a>
                             <a href="javascript:;" @click="getSendMessage(item)" class="icon-list">
                                 <span class="icon-messages text-yellow-msg  fs-20"><span class="path1"></span><span
@@ -343,7 +344,7 @@
             this.$root.$on('wk_flow_toast', (res) => {
                 if (res.error == false) {
                     this.$store.commit('app/storeOrder', res.data)
-                    this.initOrder(this.order)
+                    this.loadPage(this.activePage)
                 }
                 this.$toast.open({
                     message: res.message,
