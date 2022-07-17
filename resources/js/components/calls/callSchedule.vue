@@ -99,11 +99,17 @@
             saveSchedule() {
                 this.$refs.scheduleForm.validate().then((status) => {
                     if (status) {
-                        this.$boston.post('update-order-schedule', this.schedule)
+                        let formData = new FormData();
+                        formData.append('schedule_id',this.schedule.schedule_id)
+                        formData.append('order_id',this.schedule.order_id)
+                        formData.append('appraiser_id',this.schedule.appraiser_id)
+                        formData.append('inspection_date_time',this.schedule.inspection_date_time)
+                        formData.append('duration',this.schedule.duration)
+                        formData.append('note',this.schedule.note)
+
+                        this.$boston.post('update-order-schedule', formData)
                             .then(res => {
                                 this.orderData = res.data;
-                                this.$root.$emit('wk_update', res.data)
-                                this.$root.$emit('wk_flow_menu', res.data)
                                 this.$root.$emit('wk_flow_toast', res)
                                 this.$bvModal.hide('schedule')
                             })
