@@ -67,7 +67,9 @@
                 </div>
             </div>
             <div slot="modal-footer">
-                <b-button v-if="orderStatus == 2" class="button button-transparent p-0" @click="showDeleteSchedule"><span class="icon-trash"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></span></b-button>
+                <b-button v-if="orderStatus == 2" class="button button-transparent p-0" @click="showDeleteSchedule">
+                    <span class="icon-trash"><span class="path1"></span><span class="path2"></span><span
+                            class="path3"></span><span class="path4"></span></span></b-button>
                 <b-button variant="secondary" @click="$bvModal.hide('re-schedule')">Close</b-button>
                 <b-button variant="primary" @click="reSchedule">Reschedule</b-button>
             </div>
@@ -154,7 +156,15 @@
             reSchedule() {
                 this.$refs.scheduleForm.validate().then((status) => {
                     if (status) {
-                        this.$boston.post('update-order-schedule', this.schedule)
+                        let formData = new FormData();
+                        formData.append('order_id',this.schedule.order_id)
+                        formData.append('schedule_id',this.schedule.schedule_id)
+                        formData.append('inspection_date_time',this.schedule.inspection_date_time)
+                        formData.append('appraiser_id',this.schedule.appraiser_id)
+                        formData.append('duration',this.schedule.duration)
+                        formData.append('note',this.schedule.note)
+                        formData.append('reschedule_note',this.schedule.reschedule_note)
+                        this.$boston.post('update-order-schedule', formData)
                             .then(res => {
                                 this.orderData = res.data;
                                 this.$root.$emit('wk_update', res.data)
@@ -171,7 +181,7 @@
             deleteSchedule() {
                 this.$refs.deleteScheduleForm.validate().then((status) => {
                     if (status) {
-                        this.$boston.post('delete-schedule/' + this.schedule.schedule_id, {delete_note : this.schedule.delete_note})
+                        this.$boston.post('delete-schedule/' + this.schedule.schedule_id, { delete_note: this.schedule.delete_note })
                             .then(res => {
                                 this.orderData = res.data;
                                 this.$root.$emit('wk_update', res.data)

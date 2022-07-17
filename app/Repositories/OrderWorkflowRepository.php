@@ -47,8 +47,10 @@ class OrderWorkflowRepository extends BaseRepository
         }
         $order_workflow_schedule->order_id = $data["order_id"];
         $order_workflow_schedule->inspector_id = $data["appraiser_id"];
-//        $order_workflow_schedule->inspection_date_time = Carbon::parse($data["inspection_date_time"])->setTimezone('America/New_York')->format('Y-m-d H:i:s');
-        $order_workflow_schedule->inspection_date_time = Carbon::parse($data["inspection_date_time"])->format('Y-m-d H:i:s');
+        //$order_workflow_schedule->inspection_date_time = new \DateTime($data['inspection_date_time']);
+        //formated from js date object
+        $formated_date_time = \DateTime::createFromFormat('D M d Y H:i:s e+', $data['inspection_date_time']);
+        $order_workflow_schedule->inspection_date_time = Carbon::parse($formated_date_time)->format('Y-m-d H:i:s');
         $order_workflow_schedule->duration = $data["duration"];
         $order_workflow_schedule->note = $data["note"];
         $order_workflow_schedule->save();
