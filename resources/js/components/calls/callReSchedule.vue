@@ -67,7 +67,7 @@
                 </div>
             </div>
             <div slot="modal-footer">
-                <b-button v-if="orderStatus == 2" variant="danger" @click="showDeleteSchedule">Delete Icon</b-button>
+                <b-button v-if="orderStatus == 2" class="button button-transparent p-0" @click="showDeleteSchedule"><span class="icon-trash"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></span></b-button>
                 <b-button variant="secondary" @click="$bvModal.hide('re-schedule')">Close</b-button>
                 <b-button variant="primary" @click="reSchedule">Reschedule</b-button>
             </div>
