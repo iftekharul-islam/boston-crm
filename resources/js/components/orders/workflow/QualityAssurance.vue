@@ -267,7 +267,7 @@
             </div>
             <button v-if="showSeeCom" type="button"
                 class="button button-primary px-4 h-40 d-inline-flex align-items-center mt-4"
-                @click="mapOpen = true">See com</button>
+                @click="openSeeCom">See com</button>
             <!-- load see com -->
             <div v-if="mapOpen" class="map-direction vue-modal">
                 <div class="content">
@@ -297,7 +297,7 @@
                             <!-- starting point -->
                             <div class="group">
                                 <label for="" class="d-block mb-2 dashboard-label">Starting point</label>
-                                <input @keyup="getStartPoint" id="starting-point" type="text"
+                                <input @keyup="getStartPoint" ref="startingPoint" v-model="startingPointValue" id="starting-point" type="text"
                                     class="dashboard-input w-100 gray-border">
                             </div>
                         </div>
@@ -351,7 +351,7 @@
                             </draggable>
                         </div>
                         <div class="text-end pdr-36">
-                            <button class="button button-primary py-2 px-4">Save</button>
+                            <button class="button button-primary py-2 px-4" @click="saveMapOrganize">Save</button>
                         </div>
                         <!-- time -->
                         <div class="destination-time-space">
@@ -438,6 +438,7 @@
                 note: '',
                 files: [],
             },
+            startingPointValue: null,
             analysis: {},
             rewrite_note: null,
             analysisnote: null,
@@ -478,7 +479,12 @@
         },
         methods: {
             handleChange() {
-                this.initMap()
+                // nothing to do here
+            },
+            saveMapOrganize() {
+                this.$nextTick(() => {
+                    this.initMap();
+                })
             },
             getComponentData() {
                 return {
@@ -487,46 +493,58 @@
                     },
                 }
             },
+            openSeeCom() {
+                this.mapOpen = true;
+                this.$nextTick(() => {
+                    this.initMap();
+                })
+            },
             initMap() {
-                var directionsService = new google.maps.DirectionsService();
-                var directionsRenderer = new google.maps.DirectionsRenderer({
-                    draggable: true,
-                    map
-                });
-                var chicago = new google.maps.LatLng(41.850033, -87.6500523);
-                var mapOptions = {
-                    zoom: 14,
-                    center: chicago
-                }
+
                 var endAddress = ''
                 var startAddress = ''
-                this.wayPoints = []
-                for (var i = 0; i < this.comAddresses.length; i++) {
-                    if (i != 0 && i != this.comAddresses.length - 1)
+
+                var directionsService = new google.maps.DirectionsService();
+                var directionsRenderer = new google.maps.DirectionsRenderer({ 'draggable': true });
+
+                let getStartingLatLng = this.comAddresses[0];
+                startAddress = getStartingLatLng['address']
+                var firstLatLng = new google.maps.LatLng(getStartingLatLng.lat, getStartingLatLng.lng);
+                var mapOptions = {
+                    zoom: 14,
+                    center: firstLatLng,
+                    gestureHandling: 'greedy'
+                }
+                
+                this.wayPoints = [];
+                for (var i = 1; i < this.comAddresses.length; i++) {
+                    if (i != this.comAddresses.length - 1)
                         this.wayPoints.push({
                             'location': this.comAddresses[i]['address'], 'stopover': true
                         })
-                    if (i == 0) {
-                        startAddress = this.comAddresses[i]['address']
-                    }
+
                     if (i == this.comAddresses.length - 1) {
                         endAddress = this.comAddresses[i]['address']
                     }
                 }
-
                 var start = startAddress;
                 var end = endAddress;
+                this.startingPointValue = start;
+
                 var request = {
                     origin: start,
-                    destination: endAddress,
+                    destination: end,
                     waypoints: this.wayPoints,
-                    travelMode: 'DRIVING'
+                    travelMode: "DRIVING"
                 };
-                var map = new google.maps.Map(document.getElementById('map'), mapOptions);
+                const map = new google.maps.Map(document.getElementById('map'), mapOptions);
                 directionsRenderer.setMap(map);
+                var bounds = '';
                 directionsService.route(request, function (result, status) {
                     if (status == 'OK') {
                         directionsRenderer.setDirections(result)
+                        bounds = result.routes[0].bounds;
+                        map.fitBounds(bounds);
                         var totalTime = 0;
                         var totalDistance = 0;
                         this.summary = result.routes[0].summary
@@ -581,7 +599,8 @@
                     east: center.lng + 0.1,
                     west: center.lng - 0.1,
                 };
-                const startingPoint = document.getElementById("starting-point")
+                // const startingPoint = document.getElementById("starting-point")
+                const startingPoint = this.$refs.startingPoint;
                 const options = {
                     bounds: defaultBounds,
                     componentRestrictions: { country: "us" },
@@ -593,7 +612,7 @@
                 let self = this;
                 google.maps.event.addListener(autocomplete, 'place_changed', function () {
                     var place = autocomplete.getPlace()
-                    if (startingPoint.value.length > 0) {
+                    if (this.startingPointValue.length > 0) {
                         this.startAddress = { 'address': place.formatted_address, 'lat': place.geometry.location.lat(), 'lng': place.geometry.location.lng() }
                         this.comAddresses.unshift(this.startAddress)
                         this.initMap()
