@@ -342,9 +342,8 @@
             this.initOrder(this.order);
             this.$root.$on('wk_flow_toast', (res) => {
                 if (res.error == false) {
-                    this.$store.commit('app/storeOrder', res.data);
-                    this.orderData = res.data;
-                    this.initOrder(res.data);
+                    this.$store.commit('app/storeOrder', res.data)
+                    this.initOrder(this.order)
                 }
                 this.$toast.open({
                     message: res.message,
@@ -546,6 +545,7 @@
                 this.$refs.quickViewComponent.setQuickViewData(item)
             },
             getScheduleData(item) {
+                console.log(item)
                 this.$refs.callScheduleComponent.setOrderId(item.id)
                 if (item.inspection) {
                     this.$refs.callReScheduleComponent.setScheduleData(item.inspection)

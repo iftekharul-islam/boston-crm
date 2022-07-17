@@ -637,6 +637,7 @@
                 if (this.placeName.length > 0) {
                     this.addresses.push({ 'address': this.placeName, 'lat': this.placeLat, 'lng': this.placeLng })
                     document.getElementById("com-input").value = ''
+                    this.placeName = ''
                 }
                 return false
             },

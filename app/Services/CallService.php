@@ -60,8 +60,7 @@ Thank you",
             ]);
 
         $result = $response->json();
-        dd($result);
-        return $result && $result->status['code'] == "QUEUED" ? true : false;
+        return $result && $result["status"]["code"] == "QUEUED" ? true : false;
 
         // $umid = $result['umid'];
         // $timestamp = time();
