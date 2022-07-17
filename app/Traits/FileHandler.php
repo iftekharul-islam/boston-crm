@@ -10,7 +10,7 @@ trait FileHandler
 {
 	 protected string $storagePrefix = 'public';
 	 protected bool $isOriginalName = false;
-	 
+
 	 /**
 		* Will store file in the storage folder.
 		* In the storage folder by default it will create a folder called profile.
@@ -25,10 +25,10 @@ trait FileHandler
 	 {
 			$name = $this->generateUploadingFileName( $file );
 			$file->storeAs( "{$this->storagePrefix}/{$folder}", $name );
-			
+
 			return $folder . '/' . $name;
 	 }
-	 
+
 	 /**
 		* @param UploadedFile $file
 		* @param object       $model
@@ -43,10 +43,13 @@ trait FileHandler
 		 string $folder = 'download',
 		 string $storage_location = 'public'
 	 ): void {
-			Media::query()->where( 'model_id', $model->id )->first()?->delete();
+			$existImage = Media::query()->where( 'model_id', $model->id )->first() ?? false;
+            if($existImage){
+                $existImage->delete();
+            }
 			$model->addMedia( $file )->toMediaCollection( $folder, $storage_location );
 	 }
-	 
+
 	 /**
 		* Uploaded file name will generate.
 		*
@@ -61,10 +64,10 @@ trait FileHandler
 				 $name = Str::of( $file->getClientOriginalName() )->replaceMatches( "/[.].*/", '' )->snake()->limit( 30, '' );
 				 $name = $name . "-" . uniqid();
 			}
-			
+
 			return $name . "." . $file->getClientOriginalExtension();
 	 }
-	 
+
 	 /**
 		* Will generate uniq name
 		*

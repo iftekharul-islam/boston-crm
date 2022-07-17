@@ -149,6 +149,11 @@
                                                        for="inputGroupFile01"></label>
                                             </div>
                                             <p class="image-error text-danger"></p>
+                                            @error('image')
+                                            <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
                                         </div>
                                     </div>
                                 </div>
