@@ -36,6 +36,14 @@ class CallLogController extends Controller
             ]);
         }
 
+        $logCompleted = CallLog::where('order_id', $id)->where('status', 1)->count();
+        if($logCompleted){
+            return response()->json([
+                'error' => true,
+                'message' => 'Call log already completed'
+            ]);
+        }
+
         $log = new CallLog();
         $log->order_id = $order->id;
         $log->caller_id = $request->caller_id ?? $user->id;
@@ -74,6 +82,14 @@ class CallLogController extends Controller
             return response()->json([
                 'error' => true,
                 'message' => 'Order Information Not Found'
+            ]);
+        }
+
+        $logCompleted = CallLog::where('order_id', $id)->where('status', 1)->count();
+        if($logCompleted){
+            return response()->json([
+                'error' => true,
+                'message' => 'Call log already completed'
             ]);
         }
 

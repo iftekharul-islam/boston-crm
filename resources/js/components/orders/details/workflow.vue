@@ -213,7 +213,8 @@ export default {
         this.addParam('wkf', type);
 
         if (type == "revision") {
-          this.$root.$emit('open_revision', true);
+            this.$root.$emit('open_revision', true);
+            document.documentElement.style.overflow = 'hidden'
         }
     },
     checkReportAnalysysCompletation(status) {

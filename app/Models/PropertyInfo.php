@@ -17,7 +17,7 @@ class PropertyInfo extends Model
     protected $appends = ['full_addr'];
 
     protected function getFullAddrAttribute() {
-      return $this->street_name.", ". $this->unitNo().$this->city_name.", ".$this->zip;
+      return $this->search_address.", ". $this->unitNo().$this->city_name.", ".$this->zip;
     }
 
     protected function unitNo() {
