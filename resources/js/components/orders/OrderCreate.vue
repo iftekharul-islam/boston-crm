@@ -126,7 +126,7 @@ export default {
     changeStepTest() {
       this.step = 2;
       this.stepChangeActive = true;
-    },  
+    },
     stepChangeActiveStatus(value) {
       this.stepChangeActive = value.status;
       this.step1Data = value.data;
