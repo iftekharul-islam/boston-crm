@@ -95,10 +95,6 @@
         methods: {
             setOrderId(orderId) {
                 this.schedule.order_id = orderId
-                this.schedule.appraiser_id = ''
-                this.scheduel.inspection_date_time = ''
-                this.scheduel.duration = ''
-                this.scheduel.note =  ''
             },
             saveSchedule() {
                 this.$refs.scheduleForm.validate().then((status) => {
@@ -115,6 +111,7 @@
                             .then(res => {
                                 this.orderData = res.data;
                                 this.$root.$emit('wk_flow_toast', res)
+                                this.schedule = {}
                                 this.$bvModal.hide('schedule')
                             })
                     }
