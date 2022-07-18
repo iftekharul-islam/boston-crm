@@ -48,9 +48,11 @@ class OrderWorkflowRepository extends BaseRepository
         $order_workflow_schedule->order_id = $data["order_id"];
         $order_workflow_schedule->inspector_id = $data["appraiser_id"];
         //$order_workflow_schedule->inspection_date_time = new \DateTime($data['inspection_date_time']);
+
         //formated from js date object
         $formated_date_time = \DateTime::createFromFormat('D M d Y H:i:s e+', $data['inspection_date_time']);
         $order_workflow_schedule->inspection_date_time = Carbon::parse($formated_date_time)->format('Y-m-d H:i:s');
+
         $order_workflow_schedule->duration = $data["duration"];
         $order_workflow_schedule->note = $data["note"];
         $order_workflow_schedule->save();
@@ -140,10 +142,24 @@ class OrderWorkflowRepository extends BaseRepository
         } else {
             $com = new OrderWComList();
         }
+        if(isset($data['assigned_to'])){
+            $com->assigned_to = $data['assigned_to'];
+        }
         $com->order_id = $id;
         $com->destination = json_encode($data);
+        $com->created_by = auth()->user()->id;
         $com->save();
 
         return $com;
+    }
+
+    public function saveComRoute($data,$com_id,$assigned_to){
+        $order_w_com = OrderWComList::find($com_id);
+        $order_w_com->destination = json_encode($data);
+        $order_w_com->assigned_to = $assigned_to;
+        $order_w_com->updated_by = auth()->user()->id;
+        $order_w_com->save();
+
+        return $order_w_com;
     }
 }

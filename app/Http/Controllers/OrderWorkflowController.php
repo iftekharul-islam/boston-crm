@@ -857,6 +857,21 @@ class OrderWorkflowController extends BaseController
         ];
     }
 
+    public function saveComRoute(Request $request,$order_id,$com_id,$assigned_to)
+    {
+        $this->repository->saveComRoute($request->all(),$com_id,$assigned_to);
+        $orderData = $this->orderDetails($order_id);
+
+        $order = Order::find($order_id);
+        $user = auth()->user();
+        $historyTitle = "Com list route mapped by " . auth()->user()->name;
+        $this->addHistory($order, $user, $historyTitle, 'quality-assurance');
+        return [
+            "message" => "Com list route mapped successfully",
+            "data" => $orderData
+        ];
+    }
+
     public function addCom(Request $request)
     {
         $this->repository->addCom($request->all());

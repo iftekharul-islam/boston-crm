@@ -22,7 +22,8 @@
                         <img v-else src="/img/common.svg" alt="boston files" class="img-fluid">
                     </div>
                     <div class="mgl-12 document">
-                        <a :href="file.original_url" target="_blank" download class="text-light-black mb-0 file-name">{{ file.name }}</a>
+                        <a :href="file.original_url" target="_blank" download class="text-light-black mb-0 file-name">{{
+                            file.name }}</a>
                         <p class="text-gray mb-0 fs-12 ">Uploaded: {{ analysis.updated_by.name + ', ' +
                             analysis.updated_at }}</p>
                     </div>
@@ -266,8 +267,8 @@
                 </div>
             </div>
             <button v-if="showSeeCom" type="button"
-                class="button button-primary px-4 h-40 d-inline-flex align-items-center mt-4"
-                @click="openSeeCom">See com</button>
+                class="button button-primary px-4 h-40 d-inline-flex align-items-center mt-4" @click="openSeeCom">See
+                com</button>
             <!-- load see com -->
             <div v-if="mapOpen" class="map-direction vue-modal">
                 <div class="content">
@@ -297,8 +298,8 @@
                             <!-- starting point -->
                             <div class="group">
                                 <label for="" class="d-block mb-2 dashboard-label">Starting point</label>
-                                <input @keyup="getStartPoint" ref="startingPoint" v-model="startingPointValue" id="starting-point" type="text"
-                                    class="dashboard-input w-100 gray-border">
+                                <input @keyup="getStartPoint" ref="startingPoint" v-model="startingPointValue"
+                                    id="starting-point" type="text" class="dashboard-input w-100 gray-border">
                             </div>
                         </div>
                         <!-- destination -->
@@ -351,7 +352,8 @@
                             </draggable>
                         </div>
                         <div class="text-end pdr-36">
-                            <button class="button button-primary py-2 px-4" @click="saveMapOrganize">Save</button>
+                            <button type="button" class="button button-primary py-2 px-4" @click.prevent="saveMapData">Save</button>
+                            <button class="button button-primary py-2 px-4" @click="saveMapOrganize">Map It</button>
                         </div>
                         <!-- time -->
                         <div class="destination-time-space">
@@ -454,6 +456,7 @@
             comList: false,
             showSeeCom: false,
             comAddresses: [],
+            comId: 0,
             wayPoints: [],
             canAddCom: false,
             summary: 'No Route Found',
@@ -486,6 +489,28 @@
                     this.initMap();
                 })
             },
+            saveMapData() {
+                if (!this.qa.assigned_to) {
+                    this.$toast.open({
+                        message: "Please assign someone",
+                        type: 'error',
+                    });
+                }else{
+                    this.$boston.post('save-com-route/'+ this.orderData.id + '/' + this.comId + '/' + this.qa.assigned_to, this.comAddresses)
+                    .then(res => {
+                        this.orderData = res.data
+                        this.comAddresses = JSON.parse(this.orderData.comlist.destination)
+                        this.$root.$emit('wk_update', this.orderData)
+                        this.$root.$emit('wk_flow_menu', this.orderData)
+                        this.$root.$emit('wk_flow_toast', res);
+                        this.getReportAnalysisData(res.data);
+                        this.mapOpen = false
+                    })
+                    .catch(err => {
+                        console.error(err)
+                    })
+                }
+            },
             getComponentData() {
                 return {
                     on: {
@@ -515,7 +540,7 @@
                     center: firstLatLng,
                     gestureHandling: 'greedy'
                 }
-                
+
                 this.wayPoints = [];
                 for (var i = 1; i < this.comAddresses.length; i++) {
                     if (i != this.comAddresses.length - 1)
@@ -687,7 +712,7 @@
                         }, 1000);
                     })
                     .catch(err => {
-                        console.log(err)
+                        console.error(err)
                     })
             },
             getReportAnalysisData(order, localstore) {
@@ -710,13 +735,12 @@
                 }
 
                 if (this.orderData.comlist) {
+                    this.showSeeCom = true
                     this.comAddresses = JSON.parse(this.orderData.comlist.destination)
+                    this.comId = this.orderData.comlist.id
                 }
                 this.qa.order_id = order.id
                 this.qa.effective_date = this.orderData.due_date
-                if (this.orderData.comlist) {
-                    this.showSeeCom = true
-                }
 
                 if (this.orderData.quality_assurance) {
                     if (this.alreadyQualityAssurance == 1 && this.orderData.quality_assurance.note) {
@@ -750,7 +774,7 @@
                                 this.getReportAnalysisData(res.data);
                                 this.currentStep = 'step2'
                             }).catch(err => {
-                                console.log(err)
+                                console.error(err)
                             })
                     }
                 })
@@ -784,7 +808,7 @@
                             this.getReportAnalysisData(res.data);
                             this.currentStep = 'step3'
                         }).catch(err => {
-                            console.log(err)
+                            console.error(err)
                         })
                     }
                 })
@@ -797,4 +821,5 @@
         height: 100%;
         width: 100%;
     }
+
 </style>
