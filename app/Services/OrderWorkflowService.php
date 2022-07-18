@@ -35,6 +35,7 @@ class OrderWorkflowService
         $event->colorId = $inspector->color_id ?? 1;
         //$event->addAttendee(['email' => $inspector->email]);
         $newEvent = $event->save();
+
         if(!$schedule->event_id){
             $schedule->event_id = $newEvent->id;
             $schedule->save();
@@ -44,6 +45,9 @@ class OrderWorkflowService
     public function deleteOrderSchedule($schedule_id){
         $schedule = OrderWInspection::find($schedule_id);
         $event = Event::find($schedule->event_id);
-        $event ?? $event->delete();
+        if($event){
+            $event->delete();
+        }
+        return true;
     }
 }
