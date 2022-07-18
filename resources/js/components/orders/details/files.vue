@@ -74,7 +74,7 @@
             </div>
             <div slot="modal-footer">
                 <b-button variant="secondary" @click="$bvModal.hide('upload-files')">Close</b-button>
-                <b-button variant="primary" @click.once="saveOrderFiles">Save</b-button>
+                <b-button :disabled="disabled" variant="primary" @click="saveOrderFiles">Save</b-button>
             </div>
         </b-modal>
     </div>
@@ -94,7 +94,8 @@
                 },
                 allFiles: [],
                 orderData: [],
-                filesLength: 0
+                filesLength: 0,
+                disabled: false,
             }
         },
         created() {
@@ -123,6 +124,7 @@
                 this.filesLength = event.target.files.length
             },
             saveOrderFiles() {
+                this.disabled = true
                 this.$refs.fileForm.validate().then((status) => {
                     if (status) {
                         if (this.fileData.files.length == 0) {
@@ -149,7 +151,9 @@
                                 this.getFiles(res.orderFiles, this.orderData)
                                 this.fileData.files = []
                                 this.fileData.file_type = ''
+                                this.filesLength = 0
                                 this.$bvModal.hide('upload-files')
+                                this.disabled = false
                             }).catch(err => {
                                 console.log(err)
                             })
