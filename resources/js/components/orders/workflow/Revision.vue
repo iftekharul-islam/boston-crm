@@ -26,7 +26,7 @@
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
                     <label>Date & time</label>
                       <!-- <input type="datetime" v-model="form.date" class="dashboard-input w-100 gray-border"> -->
-                      <v-date-picker mode="datetime" v-model="form.date" timezone="utc">
+                      <v-date-picker mode="datetime" v-model="form.date">
                         <template class="position-relative" v-slot="{ inputValue, inputEvents }">
                             <input class="dashboard-input w-100" :value="inputValue"
                                 v-on="inputEvents" />
@@ -206,7 +206,7 @@
                       <ValidationProvider name="Date & time" rules="required" v-slot="{ errors }">
                         <div class="group" :class="{ 'invalid-form' : errors[0] }">
                           <label>Date & time</label>
-                          <v-date-picker mode="datetime" v-model="form.date" timezone="utc">
+                          <v-date-picker mode="datetime" v-model="form.date">
                             <template class="position-relative" v-slot="{ inputValue, inputEvents }">
                                 <input class="dashboard-input w-100" :value="inputValue"
                                     v-on="inputEvents" />
@@ -317,10 +317,13 @@ export default {
     revissionSubmit() {
         this.$refs.addRevission.validate().then((status) => {
             if (status) {
-              this.$boston.post('revissin/add', {
-                'order_id' : this.orderData.id,
-                ...this.form
-              }).then( (res) => {
+                let formData = new FormData();
+                formData.append('order_id',this.orderData.id)
+                formData.append('id',this.form.id)
+                formData.append('date',this.form.date)
+                formData.append('revission',this.form.revission)
+
+              this.$boston.post('revissin/add', formData).then( (res) => {
                 this.revisionData = res.data.revission;
                 this.addRevission = false;
                 this.$root.$emit('wk_flow_menu', res.data);
@@ -406,10 +409,13 @@ export default {
     revissionEditSubmit() {
         this.$refs.editRevision.validate().then((status) => {
             if (status) {
-              this.$boston.post('revissin/edit', {
-                'order_id' : this.orderData.id,
-                ...this.form
-              }).then( (res) => {
+                let formData = new FormData();
+                formData.append('order_id',this.orderData.id)
+                formData.append('id',this.form.id)
+                formData.append('date',this.form.date)
+                formData.append('revission',this.form.revission)
+
+              this.$boston.post('revissin/edit', formData).then( (res) => {
                   this.revisionData = res.data.revission;
                   this.editNotesModal = false;
                   this.$root.$emit('wk_flow_menu', res.data);
