@@ -67,13 +67,14 @@
                                             class="path1"></span><span class="path2"></span><span
                                             class="path3"></span></span></label>
                             </div>
+                            <span class="text-danger" v-if="filesLength > 0">{{ filesLength + " files selected."}}</span>
                         </span>
                     </div>
                 </div>
             </div>
             <div slot="modal-footer">
                 <b-button variant="secondary" @click="$bvModal.hide('upload-files')">Close</b-button>
-                <b-button variant="primary" @click="saveOrderFiles">Save</b-button>
+                <b-button variant="primary" @click.once="saveOrderFiles">Save</b-button>
             </div>
         </b-modal>
     </div>
@@ -93,6 +94,7 @@
                 },
                 allFiles: [],
                 orderData: [],
+                filesLength: 0
             }
         },
         created() {
@@ -118,6 +120,7 @@
             },
             addFiles(event) {
                 this.fileData.files = event.target.files
+                this.filesLength = event.target.files.length
             },
             saveOrderFiles() {
                 this.$refs.fileForm.validate().then((status) => {
@@ -145,6 +148,7 @@
                                 this.$root.$emit('wk_flow_toast', res)
                                 this.getFiles(res.orderFiles, this.orderData)
                                 this.fileData.files = []
+                                this.fileData.file_type = ''
                                 this.$bvModal.hide('upload-files')
                             }).catch(err => {
                                 console.log(err)
