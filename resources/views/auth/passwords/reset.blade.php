@@ -8,7 +8,7 @@
                 <div class="card-header">{{ __('Reset Password') }}</div>
 
                 <div class="card-body">
-                   
+
                 </div>
             </div>
         </div>
@@ -32,6 +32,7 @@
                     @csrf
 
                     <input type="hidden" name="token" value="{{ $token }}">
+                    <input type="hidden" name="email" value="{{ $email ?? old('email') }}">
 
                     {{-- <div class="group">
                         <label for="email" class="d-block text-light-black mb-2">{{ __('Email Address') }}</label>

@@ -59,7 +59,7 @@
                                 id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                                 <div class="d-flex align-items-center">
                                     <div class="profile__img me-2">
-                                        <img src="{{ auth()->user()->getMedia('profiles')[0] ?? false? asset(auth()->user()->getMedia('profiles')[0]->getUrl()): asset('img/dummy-profile.png') }}"
+                                        <img src="{{ auth()->user()->getMedia('profiles')[0] ?? false? asset(auth()->user()->getMedia('profiles')[0]->getUrl()): asset('img/user.png') }}"
                                             alt="{{ auth()->user()->name }}">
                                     </div>
                                     <div class="profile__name">
@@ -105,7 +105,7 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js" defer></script>
     <script src="{{ asset('assets/js/jquery.validate.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/additional-methods.min.js"></script>
-    
+
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.18/dist/js/bootstrap-select.min.js"></script>
 
@@ -123,9 +123,9 @@
             // $(".submenu-item").click(function() {
             //     $(".submenu").show();
             // });
-            
+
         });
-        
+
         sidebarToggle = () => {
             let sidebarToggle = document.getElementById("sidebar");
             sidebarToggle.classList.toggle("sidebar-collapse");
