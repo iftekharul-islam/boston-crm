@@ -128,8 +128,7 @@
                                 <span class="call-tooltip" v-else>Re-schedule</span>
                             </a>
                             <a href="javascript:;" @click="getSendMessage(item)" class="icon-list">
-                                <span class="icon-messages text-yellow-msg  fs-20"><span class="path1"></span><span
-                                        class="path2"></span><span class="path3"></span></span>
+                                <img src="/img/sms.svg" alt="Email and sms" class="img-fluid">
                                 <span class="call-tooltip">Email & SMS</span>
                             </a>
                             <a href="javascript:;" class="icon-list"><span class="icon-call text-light-red fs-20"><span
@@ -546,7 +545,6 @@
                 this.$refs.quickViewComponent.setQuickViewData(item)
             },
             getScheduleData(item) {
-                console.log(item)
                 this.$refs.callScheduleComponent.setOrderId(item.id)
                 if (item.inspection) {
                     this.$refs.callReScheduleComponent.setScheduleData(item.inspection)

@@ -256,12 +256,10 @@ class OrderApiController extends Controller
 
             if (isset($step2["file"])) {
                 $file = $step2["file"];
-                $img = explode(',', $step2["file"]);
-                $ini = substr($img[0], 11);
-                $type = explode(';', $ini);
+                $extension = explode('/', mime_content_type($file))[1];
                 $order->addMediaFromBase64($file)
                     ->usingName("order-file")
-                    ->usingFilename("order-file".'.'.$type[0])
+                    ->usingFilename("order-file" . '.' . $extension)
                     ->withCustomProperties(['type' => 'Order', 'user' => $user->name])
                     ->toMediaCollection('orders');
             }
