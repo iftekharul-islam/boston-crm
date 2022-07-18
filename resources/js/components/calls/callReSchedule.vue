@@ -175,6 +175,7 @@
             },
             showDeleteSchedule() {
                 this.$bvModal.show('delete-schedule')
+                this.schedule.delete_note = ''
             },
             deleteSchedule() {
                 this.$refs.deleteScheduleForm.validate().then((status) => {
