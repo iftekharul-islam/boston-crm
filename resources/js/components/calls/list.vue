@@ -131,9 +131,9 @@
                                         class="path2"></span><span class="path3"></span></span>
                                 <span class="call-tooltip">Email & SMS</span>
                             </a>
-                            <a href="javascript:;" class="icon-list"><span class="icon-call text-light-red fs-20"><span
+                            <a @click="callNumberInit(item)" href="javascript:;" class="icon-list"><span class="icon-call text-light-red fs-20"><span
                                         class="path1"></span><span class="path2"></span></span>
-                                <span class="call-tooltip">Calls</span>
+                                <span class="call-tooltip">Call</span>
                             </a>
                             <button @click="openIssues(item)" class="button button-transparent p-0"><span
                                     class="icon-arrow-bottom"></span></button>
@@ -217,6 +217,36 @@
             </div>
         </m-modal>
 
+        <m-modal v-model="openCallNumber" title="Call to client">
+            <div class="box-body">
+                <div class="list__group">
+                    <p class="mb-0 left-side">Borrower name</p>
+                    <span>:</span>
+                    <p class="right-side mb-0">{{ contact_number_e }}</p>
+                </div>
+                <div class="list__group">
+                    <p class="mb-0 left-side">Borrower Phone Numbers</p>
+                    <span>:</span>
+                    <p class="right-side list-items mb-0 phone-number">
+                    <input @click="selectText($event)" readonly class="d-inline-block mb-2" v-for="item, ik in contact_number_s" :key="ik" :value="item"/>
+                    </p>
+                </div>
+                <hr>
+                <div class="list__group">
+                    <p class="mb-0 left-side">Contact</p>
+                    <span>:</span>
+                    <p class="right-side mb-0">{{ contact_ex_number_e }}</p>
+                </div>
+                <div class="list__group">
+                    <p class="mb-0 left-side">Contact Phone Numbers</p>
+                    <span>:</span>
+                    <p class="right-side list-items mb-0 phone-number">
+                    <input @click="selectText($event)" readonly class="d-inline-block mb-2" v-for="item, ik in contact_ex_number_s" :key="ik" :value="item"/>
+                    </p>
+                </div>
+            </div>
+        </m-modal>
+
         <quick-view ref="quickViewComponent"></quick-view>
         <call-schedule ref="callScheduleComponent" :appraisers="appraisers"></call-schedule>
         <call-re-schedule ref="callReScheduleComponent" :appraisers="appraisers"></call-re-schedule>
@@ -286,10 +316,16 @@
         components: {
             Map,
             'quick-view': Quickview,
-            Table
+            Table,
         },
         data: () => ({
             filterValues: [],
+            openCallNumber: false,
+            contact_number_s: [],
+            contact_number_e: null,
+            contact_ex_number_s: [],
+            contact_ex_number_e: null,
+            contact_is_borrower: 0,
             callLog: {
                 error: false,
                 notCompleted: true,
@@ -407,6 +443,18 @@
                         }
                     })
                 }
+            },
+            callNumberInit(item) {
+                let contactInfo = JSON.parse(item.borrower_info.contact_email);
+                this.contact_number_s = contactInfo['phone'];
+                this.contact_number_e = item.borrower_info.borrower_name;
+
+                let contactInfoEx = JSON.parse(item.contact_info.contact_email);
+                this.contact_ex_number_s = contactInfoEx['phone'];
+                this.contact_ex_number_e = item.contact_info.contact;
+                this.contact_is_borrower = item.contact_info.is_borrower;
+
+                this.openCallNumber = true;
             },
             initOrder(order) {
                 this.pages.pageData = order;

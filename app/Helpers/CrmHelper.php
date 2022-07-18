@@ -270,6 +270,7 @@ trait CrmHelper {
             'callLog.caller',
             'providerService',
             'contactInfo',
+            'borrowerInfo'
         ];
     }
 
