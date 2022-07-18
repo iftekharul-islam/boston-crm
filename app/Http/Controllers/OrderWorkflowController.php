@@ -574,7 +574,8 @@ class OrderWorkflowController extends BaseController
             ]);
         }
 
-        $deliveredDate = Carbon::parse($get->date);
+        $formated_date_time = \DateTime::createFromFormat('D M d Y H:i:s e+', $get->date);
+        $deliveredDate = Carbon::parse($formated_date_time)->format('Y-m-d H:i:s');
 
         $reWrite = new OrderWRevision();
         $reWrite->order_id = $order->id;
@@ -617,7 +618,8 @@ class OrderWorkflowController extends BaseController
             ]);
         }
 
-        $deliveredDate = Carbon::parse($get->date);
+        $formated_date_time = \DateTime::createFromFormat('D M d Y H:i:s e+', $get->date);
+        $deliveredDate = Carbon::parse($formated_date_time)->format('Y-m-d H:i:s');
 
         $reWrite = OrderWRevision::where('order_id', $get->order_id)->where('id', $get->id)->first();
         if (!$order) {
