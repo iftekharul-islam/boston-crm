@@ -59,7 +59,7 @@
                                 id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                                 <div class="d-flex align-items-center">
                                     <div class="profile__img me-2">
-                                        <img src="{{ auth()->user()->getMedia('profiles')[0] ?? false? asset(auth()->user()->getMedia('profiles')[0]->getUrl()): asset('img/user.png') }}"
+                                        <img src="{{ auth()->user()->getMedia('profiles')[0] ?? false? asset(auth()->user()->getMedia('profiles')[0]->getUrl()): asset('img/dummy-profile.png') }}"
                                             alt="{{ auth()->user()->name }}">
                                     </div>
                                     <div class="profile__name">
