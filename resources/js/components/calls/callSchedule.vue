@@ -114,6 +114,9 @@
                                 this.schedule = {}
                                 this.$bvModal.hide('schedule')
                             })
+                            .catch(err => {
+                                console.error(err)
+                            })
                     }
                 })
             },
