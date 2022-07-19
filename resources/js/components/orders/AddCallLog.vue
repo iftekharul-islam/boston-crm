@@ -81,14 +81,12 @@ export default {
                     }
                     axios.post('call-log/' + this.id, data)
                         .then(res => {
-                            if (res.data.error) {
-                                this.$root.$emit('wk_flow_toast', res.data)
-                            } else {
-                                this.$bvModal.hide('add-call-log')
+                            this.$root.$emit('wk_flow_toast', res.data)
+                            this.$bvModal.hide('add-call-log')
+                            if(res.data.data){
                                 this.$root.$emit('call_log_update', res.data.data)
                                 this.$root.$emit('wk_update', res.data.data)
                                 this.$root.$emit('wk_flow_menu', res.data.data)
-                                this.$root.$emit('wk_flow_toast', res.data)
                             }
                         }).catch(err => {
                         console.log(err)

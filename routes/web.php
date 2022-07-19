@@ -30,6 +30,9 @@ use App\Http\Controllers\CallLogController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('daily-report-template', function(){
+    return view('emails.report');
+});
 Route::get('/locale/{locale}', LocalizationController::class)->name('locale.change');
 Route::group(['middleware' => ['auth:sanctum']], function () {
     //Dashboard

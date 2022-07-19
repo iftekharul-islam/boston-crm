@@ -32,15 +32,18 @@ class CallLogController extends Controller
         if (!$order) {
             return response()->json([
                 'error' => true,
-                'message' => 'Order Information Not Found'
+                'message' => 'Order Information Not Found',
+                'data' => ''
             ]);
         }
 
         $logCompleted = CallLog::where('order_id', $id)->where('status', 1)->count();
+        $orderData = $this->orderDetails($id);
         if($logCompleted){
             return response()->json([
                 'error' => true,
-                'message' => 'Call log already completed'
+                'message' => 'Call log already completed',
+                'data' => $orderData
             ]);
         }
 
@@ -81,15 +84,18 @@ class CallLogController extends Controller
         if (!$order) {
             return response()->json([
                 'error' => true,
-                'message' => 'Order Information Not Found'
+                'message' => 'Order Information Not Found',
+                'data' => ''
             ]);
         }
 
         $logCompleted = CallLog::where('order_id', $id)->where('status', 1)->count();
+        $logData = CallLog::with('caller')->where('order_id', $id)->get();
         if($logCompleted){
             return response()->json([
                 'error' => true,
-                'message' => 'Call log already completed'
+                'message' => 'Call log already completed',
+                'data' => $logData
             ]);
         }
 
