@@ -66,6 +66,10 @@ const sendMessage = () =>
     import ( /*webpackChunkName: "sendMessage"*/ '../components/calls/sendMessage')
 const quickView = () =>
     import ( /*webpackChunkName: "quickView"*/ '../components/calls/quickView')
+const marketingList = () =>
+    import ( /*webpackChunkName: "marketingList"*/ '../components/marketing/list')
+const addClient = () =>
+    import ( /*webpackChunkName: "addClient"*/ '../components/marketing/addClient')
 
 Vue.component('clients-list', ClientList);
 Vue.component('ticket-list', TicketList);
@@ -100,3 +104,5 @@ Vue.component('call-re-schedule', callReSchedule);
 Vue.component('m-modal', mModal);
 Vue.component('send-message', sendMessage);
 Vue.component('quick-view', quickView);
+Vue.component('marketing-list', marketingList);
+Vue.component('add-client', addClient);
