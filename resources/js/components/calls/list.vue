@@ -312,7 +312,7 @@
             orderData: [],
             selectedItems: [],
             latLng: [],
-            searchColumnType: "Search by orderno, client order no etc.",
+            searchColumnType: "Search by order no, client order no etc.",
             dateRange: {
                 start: null,
                 end: null,
@@ -383,17 +383,21 @@
                 axios.post('call-log-update/' + this.callLog.orderId, data)
                     .then(res => {
                         this.callLog.error = false
-                        if (res.data.error) {
-                            console.log(res.data.message)
-                        } else {
-                            this.callLog.message = ''
-                            this.callLog.status = ''
+                        this.callLog.message = ''
+                        this.callLog.status = ''
+                        this.toastMessage(res.data.message, res.data.error)
+                        if(res.data.data){
                             this.getCallSummary(res.data.data, this.callLog.orderId)
-
                         }
                     }).catch(err => {
                         console.log(err)
                     })
+            },
+            toastMessage(msg, status){
+                this.$toast.open({
+                    message: msg,
+                    type: status == true ? 'error' : 'success',
+                });
             },
             getCallSummary(value, id) {
                 this.callLog.notCompleted = true
