@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\MarketingClient;
+use App\Models\MarketingStatus;
 use App\Repositories\MarketingRepository;
 
 class MarketingController extends BaseController
@@ -19,7 +20,8 @@ class MarketingController extends BaseController
     public function index()
     {
         $clients = MarketingClient::all();
-        return view('marketing.index',compact('clients'));
+        $statuses = MarketingStatus::withCount('client')->get();
+        return view('marketing.index',compact('clients','statuses'));
     }
 
     public function saveMarketingClient(Request $request)
@@ -29,6 +31,17 @@ class MarketingController extends BaseController
         return [
             "data" => $clients,
             "message" => "Marketing client saved successfully"
+        ];
+    }
+
+    public function saveStatus(Request $request)
+    {
+        $this->repository->saveStatus($request->all());
+        $statuses = MarketingStatus::withCount('client')->get();
+
+        return [
+            "data" => $statuses,
+            "message" => "New status added successfully"
         ];
     }
 }

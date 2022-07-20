@@ -70,6 +70,10 @@ const marketingList = () =>
     import ( /*webpackChunkName: "marketingList"*/ '../components/marketing/list')
 const addClient = () =>
     import ( /*webpackChunkName: "addClient"*/ '../components/marketing/addClient')
+const addStatus = () =>
+    import ( /*webpackChunkName: "addStatus"*/ '../components/marketing/addStatus')
+const clientData = () =>
+    import ( /*webpackChunkName: "clientData"*/ '../components/marketing/clientData')
 
 Vue.component('clients-list', ClientList);
 Vue.component('ticket-list', TicketList);
@@ -106,3 +110,5 @@ Vue.component('send-message', sendMessage);
 Vue.component('quick-view', quickView);
 Vue.component('marketing-list', marketingList);
 Vue.component('add-client', addClient);
+Vue.component('add-status', addStatus);
+Vue.component('client-data', clientData);

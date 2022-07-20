@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\MarketingClient;
+use App\Models\MarketingStatus;
 
 class MarketingRepository
 {
@@ -17,5 +18,15 @@ class MarketingRepository
         $client->save();
 
         return $client;
+    }
+
+    public function saveStatus($data)
+    {
+        $status = new MarketingStatus();
+        $status->status = $data['status'];
+        $status->created_by = auth()->user()->id;
+        $status->save();
+
+        return $status;
     }
 }
