@@ -1,4 +1,4 @@
 @extends('layouts.app')
 @section('content')
-    <marketing-list :clients="{{ $clients }}"></marketing-list>
+    <marketing-list :clients="{{ $clients }}" :statuses="{{ $statuses }}"></marketing-list>
 @endsection

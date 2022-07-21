@@ -270,6 +270,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         [MarketingController::class, 'index']
     )->middleware('role_permission:view.marketing')->name('marketing.index');
     Route::post('save-marketing-client',[MarketingController::class,'saveMarketingClient']);
+    Route::post('save-status',[MarketingController::class,'saveStatus']);
+    Route::post('change-client-status',[MarketingController::class,'changeClientStatus']);
+
+
     //call routes
     Route::get('call', [CallController::class, 'index'])->middleware('role_permission:view.call')->name('call.index');
     Route::post('search/call/order', [CallController::class, 'searchCallOrder'])->middleware('role_permission:view.call')->name('call.search');

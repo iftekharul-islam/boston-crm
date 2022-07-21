@@ -383,8 +383,8 @@ class OrderController extends BaseController
         $order_files = $this->repository->getOrderFiles($id);
         $order_file_types = $this->repository->getOrderFileTypes($id);
         $order_due_date = $this->repository->getOrderDueDate($id);
-        $diff_in_days = Carbon::parse($order_due_date->due_date)->diffInDays();
-        $diff_in_hours = Carbon::parse($order_due_date->due_date)->diffInHours();
+        $diff_in_days = Carbon::now()->diffInDays($order_due_date->due_date,false);
+        $diff_in_hours = Carbon::now()->diffInHours($order_due_date->due_date,false);
         $all_users = $this->repository->getUserExpectRole(role: 'admin');
         $property_types = PropertyType::all();
 
