@@ -50,9 +50,6 @@
             currentStatus: "Current Status",
             copied: false
         }),
-        created() {
-            // console.log(this.order);
-        },
         methods: {
             changeOrderStatus(val) {
                 this.savingStatus = true;

@@ -29,4 +29,13 @@ class MarketingRepository
 
         return $status;
     }
+
+    public function changeClientStatus($data)
+    {
+        $client = MarketingClient::find($data['id']);
+        $client->status_id = $data['status_id'];
+        $client->save();
+
+        return $client;
+    }
 }

@@ -95,7 +95,7 @@
                     if (status) {
                         this.$boston.post('save-marketing-client', this.client)
                             .then(res => {
-                                this.$root.$emit('client_res', res.data)
+                                this.$root.$emit('client_res', res)
                                 this.$root.$emit('toast_msg', res)
                                 this.$bvModal.hide('add-client')
                                 this.client = {}

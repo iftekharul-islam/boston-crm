@@ -28,8 +28,10 @@ class MarketingController extends BaseController
     {
         $this->repository->saveMarketingClient($request->all());
         $clients = MarketingClient::all();
+        $statuses = MarketingStatus::withCount('client')->get();
         return [
             "data" => $clients,
+            "statuses" => $statuses,
             "message" => "Marketing client saved successfully"
         ];
     }
@@ -42,6 +44,17 @@ class MarketingController extends BaseController
         return [
             "data" => $statuses,
             "message" => "New status added successfully"
+        ];
+    }
+
+    public function changeClientStatus(Request $request){
+        $this->repository->changeClientStatus($request->all());
+        $clients = MarketingClient::all();
+        $statuses = MarketingStatus::withCount('client')->get();
+        return [
+            "data" => $clients,
+            "statuses" => $statuses,
+            "message" => "Client status changed successfully"
         ];
     }
 }
