@@ -38,7 +38,7 @@ class BaseController extends Controller
 				 }
 				 View::share( [
 					 'user_role'   => $this->user_role ?? '',
-					 'is_owner'    => $this->isOwner ?? false,
+					 'is_owner'    => $this->isOwner ,
 					 'user_permissions' => $this->userPermissions,
 				 ] );
 

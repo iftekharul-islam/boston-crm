@@ -33,7 +33,7 @@
 
 <body>
     <div class="dashboard-main d-flex" id="app">
-        @if (auth()->check())
+        @if (auth()->check() && isset($is_owner) && isset($user_role))
             @include('layouts.partials.sidebar')
         @endif
         <div class="dashboard-main__right flex-grow-1 bg-platinum">
