@@ -171,6 +171,7 @@ export default {
               this.$root.$emit('wk_update', res.data.data)
               this.$root.$emit('wk_flow_menu', res.data.data)
               this.$root.$emit('wk_flow_toast', res.data)
+              this.$root.$emit('update_order_time', res.data)
               this.$bvModal.hide('basic-info');
           }
         }).catch(err => {

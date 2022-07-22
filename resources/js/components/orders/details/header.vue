@@ -2,9 +2,9 @@
     <div class="order-details-header d-flex mgb-20">
         <div class="left d-flex align-items-center">
             <h4 class="fs-24 fw-bold text-light-black mb-0 mgr-20">Order details</h4>
-            <span class="due" v-if="diff_in_days >= 0 && diff_in_hours > 0">Due in {{ diff_in_days + ' days' }}
-                {{diff_in_days == 0 ?
-                ', ' +diff_in_hours + ' hours' : ''}}</span>
+            <span class="due" v-if="diffInDay >= 0 && diffInHour > 0">Due in {{ diffInDay + ' days' }}
+                {{diffInDay == 0 ?
+                ', ' +diffInHour + ' hours' : ''}}</span>
             <span class="due" v-else>Already Overdue</span>
         </div>
         <div class="right d-flex align-items-center ms-auto">
@@ -46,11 +46,23 @@
         props: ['order', 'diff_in_days', 'diff_in_hours', 'shareUrl'],
         name: 'Order-header',
         data: () => ({
+            diffInDay: '',
+            diffInHour: '',
             savingStatus: false,
             currentStatus: "Current Status",
             copied: false
         }),
+        created() {
+            this.updateNewTime(this.diff_in_days, this.diff_in_hours)
+            this.$root.$on('update_order_time',  (res) => {
+                this.updateNewTime(res.data.diff_in_days, res.data.diff_in_hours)
+            });
+        },
         methods: {
+            updateNewTime(inDay, inHour){
+                this.diffInDay = inDay
+                this.diffInHour = inHour
+            },
             changeOrderStatus(val) {
                 this.savingStatus = true;
             },
