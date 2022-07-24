@@ -8,7 +8,7 @@
         </div>
         <div class="d-flex marketing-menu-list">
             <div class="menu">
-                <a v-for="status,index in allStatuses" href="#" class="text-light-black active">{{ status.status }}
+                <a v-for="status,index in allStatuses" href="javascript:;" @click="changeActiveStatus(status.id)" class="text-light-black" :class="status.id == activeStatus ? 'active' : ''">{{ status.status }}
                     <span class="text-gray mgl-12">{{ status.client_count }}</span></a>
             </div>
             <div class="ms-auto">
@@ -18,9 +18,9 @@
 
         <div class="marketing-box">
             <div class="left">
-                <a href="javascript:;" @click.prevent="changeActiveClient(index)" class="menu-box"
-                    :class="index == activeClient ? 'active' : ''" v-if="allClients.length > 0"
-                    v-for="client,index in allClients">
+                <a href="javascript:;" @click.prevent="makeActiveClient(client.id)" class="menu-box"
+                    :class="client.id == activeClient ? 'active' : ''" v-if="currentClients.length > 0"
+                    v-for="client,index in currentClients">
                     <span class="round"></span>
                     <div class="ms-3">
                         <p class="mb-1">{{ client.name }}</p>
@@ -31,12 +31,12 @@
                     </div>
                     <div v-if="index == activeClient" class="icon ms-auto"><span class="icon-arrow-down1"></span></div>
                 </a>
-                <a href="javascript:;" v-if="allClients.length == 0" class="menu-box">
+                <a href="javascript:;" v-if="currentClients.length == 0" class="menu-box">
                     <p class="text-danger text-center display-6">No clients found !</p>
                 </a>
             </div>
             <div class="right">
-                <div class="marketing-box__content h-100 bg-white" v-if="allClients.length > 0">
+                <div class="marketing-box__content h-100 bg-white" v-if="currentClients.length > 0">
                     <div class="content-left me-3">
                         <p class="fs-20 text-light-black fw-bold mgb-24">{{ currentClient.name }}</p>
                         <div class="d-flex flwx-wrap corporation">
@@ -127,7 +127,7 @@
             </div>
         </div>
         <add-client></add-client>
-        <add-status></add-status>
+        <add-status :statuses="allStatuses"></add-status>
     </div>
 </template>
 <script>
@@ -141,6 +141,8 @@
             allStatuses: [],
             status: '',
             activeClient: 0,
+            activeStatus: 0,
+            filterClients: [],
             currentClient: {
                 id: '',
                 name: '',
@@ -151,8 +153,10 @@
             },
         }),
         created() {
-            this.initClient(this.clients)
+            this.allClients = this.clients
             this.initStatus(this.statuses)
+            this.filterAllClients(1,'status',this.allClients)
+            this.changeActiveStatus(1)
             this.$root.$on('toast_msg', (res) => {
                 this.$toast.open({
                     message: res.message,
@@ -160,25 +164,23 @@
                 })
             })
             this.$root.$on('client_res', (res) => {
-                this.allClients = res
-                this.initClient(res.data)
+                this.allClients = res.data
                 this.initStatus(res.statuses)
                 this.activeClient = res.data.length - 1
-                this.changeActiveClient(this.activeClient)
+                this.filterAllClients(1,'status',this.allClients)
             })
             this.$root.$on('status_res', (res) => {
                 this.allStatuses = res
                 this.initStatus(res)
-                this.changeActiveClient(this.activeClient)
             })
-            if (this.clients && this.clients.length > 0) {
-                this.activeClient = 0
-            }
-            this.changeActiveClient(this.activeClient)
+            //if (this.clients && this.clients.length > 0) {
+            //    this.activeClient =
+            //}
+            //this.makeActiveClient(this.allClients[0].id)
         },
         methods: {
             initClient(client) {
-                this.allClients = client
+                this.currentClients = client
             },
             initStatus(status) {
                 this.allStatuses = status
@@ -189,17 +191,21 @@
             addStatus() {
                 this.$bvModal.show('add-status')
             },
-            changeActiveClient(index) {
-                this.activeClient = index
-                let client = this.allClients[index]
+            makeActiveClient(clientId) {
+                this.activeClient = clientId
+                let client = this.allClients.filter(client => client.id == clientId)
                 if (client) {
-                    this.currentClient.id = client.id
-                    this.currentClient.name = client.name
-                    this.currentClient.address = client.address
-                    this.currentClient.email = client.email
-                    this.currentClient.phone = client.phone
-                    this.currentClient.status = client.status_id
+                    this.currentClient.id = client[0].id
+                    this.currentClient.name = client[0].name
+                    this.currentClient.address = client[0].address
+                    this.currentClient.email = client[0].email
+                    this.currentClient.phone = client[0].phone
+                    this.currentClient.status = client[0].status_id
                 }
+            },
+            changeActiveStatus(statusId){
+                this.activeStatus = statusId
+                this.filterAllClients(statusId,'status',this.allClients)
             },
             changeClientStatus() {
                 let formData = new FormData()
@@ -207,14 +213,36 @@
                 formData.append('status_id', this.currentClient.status)
                 this.$boston.post('change-client-status', formData)
                     .then(res => {
-                        this.initClient(res.data)
-                        console.log(res.statuses)
+                        this.allClients = res.data
                         this.initStatus(res.statuses)
                         this.$root.$emit('toast_msg', res)
+                        this.changeActiveStatus(this.currentClient.status)
                     })
                     .catch(err => {
                         console.error(err)
                     })
+            },
+            //filterStatusClients(statusId){
+            //    let filterClients = []
+            //    filterClients = this.allClients.filter(client => client.status_id == statusId)
+            //    if(filterClients.length > 0){
+            //        this.makeActiveClient(filterClients[0].id)
+            //    }
+            //    return this.initClient(filterClients)
+            //},
+            filterAllClients(id,type,allClients){
+                if(type == 'client'){
+                    this.filterClients = allClients.filter(client => client.id == id)
+                }else{
+                    this.filterClients = allClients.filter(client => client.status_id == id)
+                }
+                console.log(allClients)
+                if(this.filterClients.length > 0){
+                    this.makeActiveClient(this.filterClients[0].id)
+                    this.initClient(this.filterClients)
+                }else{
+                    this.initClient([])
+                }
             }
         }
     }
