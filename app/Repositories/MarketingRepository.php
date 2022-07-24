@@ -30,6 +30,16 @@ class MarketingRepository
         return $status;
     }
 
+    public function updateStatus($data)
+    {
+        $status = MarketingStatus::find($data['id']);
+        $status->status = $data['status'];
+        $status->updated_by = auth()->user()->id;
+        $status->save();
+
+        return $status;
+    }
+
     public function changeClientStatus($data)
     {
         $client = MarketingClient::find($data['id']);

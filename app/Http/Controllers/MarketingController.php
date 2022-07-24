@@ -47,6 +47,16 @@ class MarketingController extends BaseController
         ];
     }
 
+    public function updateStatus(Request $request){
+        $this->repository->updateStatus($request->all());
+        $statuses = MarketingStatus::withCount('client')->get();
+
+        return [
+            "data" => $statuses,
+            "message" => "Status updated successfully"
+        ];
+    }
+
     public function changeClientStatus(Request $request){
         $this->repository->changeClientStatus($request->all());
         $clients = MarketingClient::all();
