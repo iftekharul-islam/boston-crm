@@ -32,7 +32,7 @@
                     <div v-if="index == activeClient" class="icon ms-auto"><span class="icon-arrow-down1"></span></div>
                 </a>
                 <a href="javascript:;" v-if="currentClients.length == 0" class="menu-box">
-                    <p class="text-danger text-center display-6">No clients found !</p>
+                    <p class="text-gray">No clients found !</p>
                 </a>
             </div>
             <div class="right">
@@ -121,9 +121,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="marketing-box__content h-100 bg-white" v-else>
-                    <p class="text-danger text-center display-6">No client information available</p>
-                </div>
+                <a href="javascript:;" v-if="currentClients.length == 0" class="menu-box">
+                    <p class="text-gray">No client information available !</p>
+                </a>
             </div>
         </div>
         <add-client :categories="categories"></add-client>
