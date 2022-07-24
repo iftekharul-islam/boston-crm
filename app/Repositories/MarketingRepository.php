@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\MarketingClient;
 use App\Models\MarketingStatus;
+use App\Models\MarketingClientCategory;
 
 class MarketingRepository
 {
@@ -12,12 +13,22 @@ class MarketingRepository
         $client = new MarketingClient();
         $client->name = $data['name'];
         $client->address = $data['address'];
+        $client->category_id = $data['category_id'];
         $client->email = $data['email'];
         $client->phone = $data['phone'];
         $client->created_by = auth()->user()->id;
         $client->save();
 
         return $client;
+    }
+
+    public function saveMarketingClientCategory($data)
+    {
+        $category = new MarketingClientCategory();
+        $category->name = $data['name'];
+        $category->save();
+        
+        return $category;
     }
 
     public function saveStatus($data)

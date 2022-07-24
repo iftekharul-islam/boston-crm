@@ -126,7 +126,7 @@
                 </div>
             </div>
         </div>
-        <add-client></add-client>
+        <add-client :categories="categories"></add-client>
         <add-status :statuses="allStatuses"></add-status>
     </div>
 </template>
@@ -134,7 +134,8 @@
     export default {
         props: {
             clients: [],
-            statuses: []
+            statuses: [],
+            categories: []
         },
         data: () => ({
             allClients: [],
@@ -173,10 +174,6 @@
                 this.allStatuses = res
                 this.initStatus(res)
             })
-            //if (this.clients && this.clients.length > 0) {
-            //    this.activeClient =
-            //}
-            //this.makeActiveClient(this.allClients[0].id)
         },
         methods: {
             initClient(client) {
@@ -222,21 +219,12 @@
                         console.error(err)
                     })
             },
-            //filterStatusClients(statusId){
-            //    let filterClients = []
-            //    filterClients = this.allClients.filter(client => client.status_id == statusId)
-            //    if(filterClients.length > 0){
-            //        this.makeActiveClient(filterClients[0].id)
-            //    }
-            //    return this.initClient(filterClients)
-            //},
             filterAllClients(id,type,allClients){
                 if(type == 'client'){
                     this.filterClients = allClients.filter(client => client.id == id)
                 }else{
                     this.filterClients = allClients.filter(client => client.status_id == id)
                 }
-                console.log(allClients)
                 if(this.filterClients.length > 0){
                     this.makeActiveClient(this.filterClients[0].id)
                     this.initClient(this.filterClients)
