@@ -245,7 +245,7 @@
     });
     $('#add-phone').on('click', function (e) {
         e.preventDefault();
-        $('#phone-append').append('<div class="append-div" id="phone-' + phoneCount + '"><input type="text" name="phone[]" maxlength="12" onkeyup="return formatPhoneNo(event)" class="phone dashboard-input"><button type="button" id="' + phoneCount + '" class="button button-transparent p-0 contact-del-btn phone-button"><span class="icon-trash"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></span></button></div>');
+        $('#phone-append').append('<div class="append-div" id="phone-' + phoneCount + '"><input type="text" name="phone[]" maxlength="14" onkeyup="return formatPhoneNo(event)" class="phone dashboard-input"><button type="button" id="' + phoneCount + '" class="button button-transparent p-0 contact-del-btn phone-button"><span class="icon-trash"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></span></button></div>');
         phoneCount++;
     });
     $(document).on('click', '.phone-button', function () {

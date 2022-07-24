@@ -114,7 +114,7 @@
                         <div class="group status-group">
                             <label for="role" class="d-block text-light-black mb-2">Status</label>
                             <div class="position-relative">
-                                <m-select :options="statuses" object item-text="status" item-value="id"
+                                <m-select :options="allStatuses" object item-text="status" item-value="id"
                                     v-model="currentClient.status" @change="changeClientStatus">
                                 </m-select>
                             </div>
