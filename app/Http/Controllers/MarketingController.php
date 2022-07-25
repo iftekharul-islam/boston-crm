@@ -2,20 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\MarketingClient;
 use App\Models\MarketingStatus;
+use App\Services\CompanyService;
 use App\Models\MarketingClientCategory;
 use App\Repositories\MarketingRepository;
 
 class MarketingController extends BaseController
 {
     protected MarketingRepository $repository;
+    protected CompanyService $service;
 
-    public function __construct(MarketingRepository $marketing_repository)
+    public function __construct(MarketingRepository $marketing_repository, CompanyService $company_service,)
     {
         parent::__construct();
         $this->repository = $marketing_repository;
+        $this->service = $company_service;
     }
 
     public function index()
@@ -23,8 +27,34 @@ class MarketingController extends BaseController
         $clients = MarketingClient::with('comments.user')->orderBy('created_at', 'desc')->get();
         $statuses = MarketingStatus::withCount('client')->get();
         $categories = MarketingClientCategory::all();
-        return view('marketing.index',compact('clients','statuses','categories'));
+        $company_users = $this->service->getAuthUserCompany();
+        $users = $company_users->users()->get();
+        return view('marketing.index',compact('clients','statuses','categories','users'));
     }
+
+    public function filterUsers(Request $request)
+    {
+        if($request->has('search_key') && $request->search_key != ''){
+            $users = User::where('name','like','%' . $request->search_key . '%')->get();
+        }else{
+            $company_users = $this->service->getAuthUserCompany();
+            $users = $company_users->users()->get();
+        }
+        return [
+            "data" => $users,
+        ];
+    }
+
+    public function saveAssignedUsers(Request $request){
+        $client = MarketingClient::find($request->id);
+        $client->assigned_to = json_encode($request->users);
+        $client->save();
+        $clients = MarketingClient::all();
+        return [
+            'data' => $clients
+        ];
+    }
+
 
     public function saveMarketingClient(Request $request)
     {

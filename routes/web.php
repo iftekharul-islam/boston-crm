@@ -271,6 +271,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     )->middleware('role_permission:view.marketing')->name('marketing.index');
     Route::post('save-marketing-client',[MarketingController::class,'saveMarketingClient']);
     Route::post('save-marketing-client-category',[MarketingController::class,'saveMarketingClientCategory']);
+    Route::post('filter-users',[MarketingController::class,'filterUsers']);
+    Route::post('save-assigned-users',[MarketingController::class,'saveAssignedUsers']);
     Route::post('save-status',[MarketingController::class,'saveStatus']);
     Route::post('update-status',[MarketingController::class,'updateStatus']);
     Route::post('change-client-status',[MarketingController::class,'changeClientStatus']);
