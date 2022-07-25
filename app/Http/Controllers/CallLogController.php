@@ -37,15 +37,15 @@ class CallLogController extends Controller
             ]);
         }
 
-        $logCompleted = CallLog::where('order_id', $id)->where('status', 1)->count();
-        $orderData = $this->orderDetails($id);
-        if($logCompleted){
-            return response()->json([
-                'error' => true,
-                'message' => 'Call log already completed',
-                'data' => $orderData
-            ]);
-        }
+//        $logCompleted = CallLog::where('order_id', $id)->where('status', 1)->count();
+//        $orderData = $this->orderDetails($id);
+//        if($logCompleted){
+//            return response()->json([
+//                'error' => true,
+//                'message' => 'Call log already completed',
+//                'data' => $orderData
+//            ]);
+//        }
 
         $log = new CallLog();
         $log->order_id = $order->id;
@@ -55,8 +55,10 @@ class CallLogController extends Controller
         $log->save();
 
         $msg = 'Call log created successfully';
+        $historyTitle = 'Call log created with text : '. $log->message;
         if($log->status){
             $msg = 'Call log completed successfully';
+            $historyTitle = 'Call log completed with text : '. $log->message;
         }
 
         $data = [
@@ -66,6 +68,7 @@ class CallLogController extends Controller
         ];
 
         $this->repository->addActivity($data);
+        $this->addHistory($order, $user, $historyTitle, 'quality-assurance');
 
         $orderData = $this->orderDetails($id);
         return [
@@ -89,15 +92,15 @@ class CallLogController extends Controller
             ]);
         }
 
-        $logCompleted = CallLog::where('order_id', $id)->where('status', 1)->count();
-        $logData = CallLog::with('caller')->where('order_id', $id)->get();
-        if($logCompleted){
-            return response()->json([
-                'error' => true,
-                'message' => 'Call log already completed',
-                'data' => $logData
-            ]);
-        }
+//        $logCompleted = CallLog::where('order_id', $id)->where('status', 1)->count();
+//        $logData = CallLog::with('caller')->where('order_id', $id)->get();
+//        if($logCompleted){
+//            return response()->json([
+//                'error' => true,
+//                'message' => 'Call log already completed',
+//                'data' => $logData
+//            ]);
+//        }
 
         $log = new CallLog();
         $log->order_id = $order->id;
@@ -107,8 +110,10 @@ class CallLogController extends Controller
         $log->save();
 
         $msg = 'Call log updated successfully';
+        $historyTitle = 'Call log updated with text : '. $log->message;
         if($log->status){
             $msg = 'Call log completed successfully';
+            $historyTitle = 'Call log completed with text : '. $log->message;
         }
 
         $data = [
@@ -118,6 +123,7 @@ class CallLogController extends Controller
         ];
 
         $this->repository->addActivity($data);
+        $this->addHistory($order, $user, $historyTitle, 'quality-assurance');
 
         $logData = CallLog::with('caller')->where('order_id', $id)->get();
         return [
