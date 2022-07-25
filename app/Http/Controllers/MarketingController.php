@@ -19,7 +19,7 @@ class MarketingController extends BaseController
 
     public function index()
     {
-        $clients = MarketingClient::all();
+        $clients = MarketingClient::with('comments.user')->orderBy('created_at', 'desc')->get();
         $statuses = MarketingStatus::withCount('client')->get();
         return view('marketing.index',compact('clients','statuses'));
     }

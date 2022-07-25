@@ -12,4 +12,9 @@ class MarketingClient extends Model
     protected $fillable = [
         'name','address','email','phone'
     ];
+
+    public function comments()
+    {
+        return $this->hasMany(MarketingClientComment::class,'client_id','id');
+    }
 }
