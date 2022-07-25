@@ -112,7 +112,7 @@
                                         class="path4"></span></span>
                                 <span class="call-tooltip">Quick view</span>
                             </a>
-                            <a @click.prevent="getCallSummary(item.call_log, item.id)" href="javascript:;"
+                            <a @click.prevent="getCallSummary(item.call_log, item.id, item.client_order_no, item.property_info.full_addr)" href="javascript:;"
                                 class="icon-list" data-bs-toggle="modal" data-bs-target="#callLogModal"><span
                                     class="icon-messages2 primary-text fs-20"><span class="path1"></span><span
                                         class="path2"></span><span class="path3"></span><span class="path4"></span><span
@@ -259,7 +259,9 @@
                 <div class="modal-content ">
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     <div class="modal-body h-100 overflow-auto">
-                        <p class="mgb-22 fs-20 text-600">Call summary</p>
+                        <h3>Call summary <span class="fs-15 badges solved-badges" v-if="!callLog.notCompleted">Completed</span></h3>
+                        <p class="text-gray fs-12 mb-0">{{ callLog.order_no }}</p>
+                        <p class="mb-3 text-gray fs-12 mb-0">{{ callLog.address }}</p>
                         <div class="call-summary-item" v-for="(log, logIndex) in callLog.items" :key="logIndex">
                             <div class="top d-flex align-items-center">
                                 <div v-if="log.caller.media.length">
@@ -278,19 +280,19 @@
                         </div>
                     </div>
                     <!-- message box -->
-                    <div class="update-log" v-if="callLog.notCompleted">
+                    <div class="update-log">
                         <div class="group" :class="{ 'invalid-form' : callLog.error == true }">
                             <label for="" class="d-block mb-2 dashboard-label">Message</label>
                             <textarea @keyup="dataExist()" v-model.trim="callLog.message" class="dashboard-input w-100"
                                 style="min-height: 100px"></textarea>
                             <span v-if="callLog.error" class="error-message">The Message field is required</span>
                         </div>
-                        <div class="checkbox-group mt-2">
+                        <div class="checkbox-group mt-2"  v-if="callLog.notCompleted">
                             <input type="checkbox" class="checkbox-input" v-model="callLog.status">
                             <label for="" class="checkbox-label">Call completed</label>
                         </div>
                     </div>
-                    <div class="modal-footer" v-if="callLog.notCompleted">
+                    <div class="modal-footer">
                         <button type="button" class="button button-primary px-5" @click="addCallLog()">Post</button>
                     </div>
                 </div>
@@ -333,6 +335,8 @@
                 message: '',
                 status: '',
                 orderId: '',
+                order_no: '',
+                address: '',
             },
             pages: {
                 pageData: [],
@@ -434,10 +438,12 @@
                     type: status == true ? 'error' : 'success',
                 });
             },
-            getCallSummary(value, id) {
+            getCallSummary(value, id, order_no, address) {
                 this.callLog.notCompleted = true
                 this.callLog.items = []
                 this.callLog.orderId = id
+                this.callLog.order_no = order_no
+                this.callLog.address = address
                 if (value.length) {
                     this.callLog.items = value
                     this.callLog.items.forEach((log, index) => {

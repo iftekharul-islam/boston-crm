@@ -24,9 +24,9 @@
                             </div>
                         </ValidationProvider>
                     </div>
-                    <div class="col-12">
+                    <div class="col-12" v-if="!notCompleted">
                         <div class="checkbox-group review-check mgt-20">
-                            <input type="checkbox" class="checkbox-input check-data" v-model="isCompleted">
+                            <input type="checkbox" class="checkbox-input check-data" v-model="complete">
                             <label for="" class="checkbox-label text-capitalize">Completed </label>
                         </div>
                     </div>
@@ -43,20 +43,22 @@
 <script>
 export default {
     props: [
-        'orderId', 'showModal', 'users'
+        'orderId', 'showModal', 'users', 'isCompleted'
     ],
     data: () => ({
         id: '',
         message: '',
         assignTo: '',
-        isCompleted: null
+        notCompleted: true,
+        complete: null
     }),
     watch: {
         showModal(newValue, oldValue) {
             if (newValue === true) {
                 this.message = ''
                 this.assignTo = ''
-                this.isCompleted = null
+                this.complete = null
+                this.notCompleted = this.isCompleted
                 this.$bvModal.show('add-call-log')
             } else {
                 this.$bvModal.hide('add-call-log')
@@ -65,6 +67,8 @@ export default {
     },
     created() {
         this.id = this.orderId;
+        this.notCompleted = this.isCompleted
+        console.log('this.notCompleted', this.notCompleted)
     },
     methods: {
         hideModel() {
@@ -77,7 +81,7 @@ export default {
                     let data = {
                         message: this.message,
                         caller_id: this.assignTo,
-                        status: this.isCompleted
+                        status: this.complete
                     }
                     axios.post('call-log/' + this.id, data)
                         .then(res => {
