@@ -6,7 +6,7 @@
                     <div class="left chart-box-header-btn d-flex flex-wrap me-3">
                         <button @click="filterByTab('all')"
                             :class="{'active' : pages.filterType == 'all' || pages.filterType == null}"
-                            class="calls-btn h-40 d-flex align-items-center mb-2">All <span class="ms-2">
+                            class="calls-btn h-40 d-flex align-items-center mb-2 d-none">All <span class="ms-2">
                                 ({{ filterValue.all }})</span></button>
                         <button @click="filterByTab('to_schedule')"
                             :class="{'active' : pages.filterType == 'to_schedule'}"
@@ -228,7 +228,7 @@
                     <p class="mb-0 left-side">Borrower Phone Numbers</p>
                     <span>:</span>
                     <p class="right-side list-items mb-0 phone-number">
-                    <input @click="selectText($event)" readonly class="d-inline-block mb-2" v-for="item, ik in contact_number_s" :key="ik" :value="item"/>
+                    <input @click="selectText(item)" readonly class="d-inline-block mb-2" v-for="item, ik in contact_number_s" :key="ik" :value="item"/>
                     </p>
                 </div>
                 <hr>
@@ -241,7 +241,7 @@
                     <p class="mb-0 left-side">Contact Phone Numbers</p>
                     <span>:</span>
                     <p class="right-side list-items mb-0 phone-number">
-                    <input @click="selectText($event)" readonly class="d-inline-block mb-2" v-for="item, ik in contact_ex_number_s" :key="ik" :value="item"/>
+                    <input @click="selectText(item)" readonly class="d-inline-block mb-2" v-for="item, ik in contact_ex_number_s" :key="ik" :value="item"/>
                     </p>
                 </div>
             </div>

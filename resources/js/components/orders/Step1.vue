@@ -327,7 +327,7 @@
                                 <ValidationProvider class="group" name="Unit No"
                                     :rules="{'required' : condoType == true}" v-slot="{ errors }">
                                     <div class="group" :class="{ 'invalid-form' : errors[0] }">
-                                        <label for="" class="d-block mb-2 dashboard-label">Unit No <span
+                                        <label for="" class="d-block mb-2 dashboard-label">Unit No <span v-if="condoType"
                                                 class="text-danger require"></span>
                                         </label>
                                         <input type="text" class="dashboard-input w-100" v-model="step1.unitNo">
@@ -335,6 +335,8 @@
                                     </div>
                                 </ValidationProvider>
                             </div>
+
+                            
 
                             <div class="right max-w-424 w-100">
                                 <ValidationProvider class="group" name="Street name" rules="required"

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Helpers\CrmHelper;
 use App\Models\User;
 use App\Models\CompanyUser;
 use Illuminate\Http\Request;
@@ -25,7 +26,7 @@ class LoginController extends Controller
 	 | to conveniently provide its functionality to your applications.
 	 |
 	 */
-	 use AuthenticatesUsers;
+	 use AuthenticatesUsers, CrmHelper;
 	 
 	 /**
 		* Where to redirect users after login.
@@ -79,6 +80,8 @@ class LoginController extends Controller
 				 if ( $request->hasSession() ) {
 						$request->session()->put( 'auth.password_confirmed_at', time() );
 				 }
+
+				 $this->addActivity($user, "Logged in as ".$request->get( 'email' )." and Ip Address is ".request()->ip());
 				 
 				 return $this->sendLoginResponse( $request );
 			}

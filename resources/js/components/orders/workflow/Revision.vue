@@ -1,7 +1,7 @@
 <template>
-  <transition name="fade" appear v-if="revissionModal" :duration="200">
+  <transition name="fade-x" appear v-if="revissionModal" :duration="500">
     <div class="revission-modal">
-      <div class="revission-content position-relative">
+      <div ref="revissionContent" class="revission-content position-relative anim">
         <div class="header bg-gray d-flex align-items-center justify-content-between">
           <p class="mb-0 fs-20 fw-bold text-white">Revision</p>
           <span class="cursor-pointer" @click="revission()">
@@ -250,17 +250,23 @@
 export default {
   name: 'Revision',
   props: ['order'],
+  model: {
+    prop: 'modelData',
+    event: 'change'
+  },
   inject: ['usersInfo'],
   data: () => ({
     dialogue: {
       title: "Delete Revission!",
       message: "Are you want to delete this revission?",
     },
+    modalOpenNext: false,
     editNotesModal: false,
     revissionModal: true,
     addRevission: false,
     addSolution: false,
     revissionEdit: false,
+    openModalKey: 'open-model',
     orderData: [],
     solutions: [],
     revissionKey: 'rev-key',
@@ -281,9 +287,11 @@ export default {
     }
   }),
   created(){
-      this.$root.$on('open_revision', status => {
-          this.revissionModal = status;
-      });
+      this.revissionModal = this.$attrs.modelData;
+
+      // this.$root.$on('open_revision', status => {
+      //     this.revissionModal = status;
+      // });
 
       let order = this.order;
       let localOrderData = this.$store.getters['app/orderDetails']
@@ -304,7 +312,8 @@ export default {
     },
     revission() {
         this.revissionModal = !this.revissionModal
-        document.documentElement.style.overflow = 'auto'
+        document.documentElement.style.overflow = 'auto';
+        this.$emit('change', this.revissionModal);
     },
     revissionAdd(status) {
         this.form.id = null;
@@ -450,10 +459,34 @@ export default {
             output = scrollDemo.scrollTop();
             this.currentTopPosition = output;
         }.bind(this));
+    },
+    animControll(status) {
+      this.$nextTick(() => {
+        let ele = $(".revission-content");
+        if (status == false) {
+            $(ele).addClass('anim');
+        } else {
+            setTimeout(() => {
+                $(ele).removeClass('anim');
+            },200);
+        }
+      });
     }
   },
   mounted() {
-    this.scrollDiv();
+    this.$nextTick(() => {
+      this.scrollDiv();
+    });
+    this.animControll(this.revissionModal);
+  },
+  watch: {
+    $attrs: {
+      handler(val) {
+          this.revissionModal = val.modelData;
+          this.animControll(this.revissionModal);
+      }, 
+      deep: true
+    }
   }
 }
 </script>
@@ -487,5 +520,11 @@ export default {
 input.dashboard-input.w-100 {
     border: thin solid #888;
     margin-top: 5px;
+}
+
+/* we will explain what these classes do next! */
+.anim {
+      margin-right: -100%;
+      transition: all 300ms ease-in-out;
 }
 </style>

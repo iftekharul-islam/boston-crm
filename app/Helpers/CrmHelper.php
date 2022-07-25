@@ -1,12 +1,13 @@
 <?php
 
 namespace App\Helpers;
-use App\Models\OrderWInspection;
-use App\Models\OrderWReport;
-use App\Models\OrderWReportAnalysis;
 use Carbon\Carbon;
 use App\Models\Order;
+use App\Models\OrderWReport;
+use App\Models\UserActivity;
 use App\Models\OrderWHistory;
+use App\Models\OrderWInspection;
+use App\Models\OrderWReportAnalysis;
 
 trait CrmHelper {
 
@@ -110,6 +111,10 @@ trait CrmHelper {
         $wkHistory->type = $type;
         $wkHistory->created_at = Carbon::now();
         $wkHistory->save();
+        
+        if ($type != "order-create") {
+            $this->addActivity( $user, $title );
+        }
     }
 
     protected function orderCallDetails($id) {
@@ -272,6 +277,16 @@ trait CrmHelper {
             'contactInfo',
             'borrowerInfo'
         ];
+    }
+
+    protected function addActivity($user, $activity, $old = null, $new = null) {
+        $newActivity = new UserActivity;
+        $newActivity->user_id = $user->id;
+        $newActivity->activity = $activity;
+        $newActivity->old = $old;
+        $newActivity->new = $new;
+        $newActivity->created_at = Carbon::now()->toDateTimeString();
+        $newActivity->save();
     }
 
 }
