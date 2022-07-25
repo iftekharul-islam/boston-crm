@@ -56,35 +56,39 @@
                         <div class="comment">
                             <div class="comment__header">
                                 <p class="mb-0 fw-bold">Comments</p>
-                                <span class="comment-count text-gray">12</span>
+                                <span class="comment-count text-gray">{{ currentClient.comments.length }}</span>
                             </div>
-                            <div class="comment-item">
+                            <div class="comment-item" v-for="(comment, index) in currentClient.comments" :key="index">
                                 <div class="d-flex align-items-center">
-                                    <img src="https://deadline.com/wp-content/uploads/2020/07/shutterstock_671527774-e1594584322476.jpg"
-                                        alt="boston image" class="comment-img">
-                                    <div class="d-flex fw-bold mgl-12">Hussain M. Nasir <span
-                                            class="ms-3 text-gray text-400">13 Jan
-                                            2021 02:09</span></div>
+                                    <div v-if="comment.user.media.length">
+                                        <img :src="comment.user.media[0].original_url" alt=" profile photo boston"
+                                             class="img-fluid">
+                                    </div>
+                                    <div v-else>
+                                        <img src="/img/user.png" alt="boston image" class="comment-img">
+                                    </div>
+                                    <div class="d-flex fw-bold mgl-12">
+                                        {{  comment.user.name }}
+                                        <span class="ms-3 text-gray text-400">
+                                            {{  comment.created_at }}
+                                        </span>
+                                    </div>
                                 </div>
-                                <p class="comment-text mb-0">Scott Hurley
-                                    VP/Director of Mortgage Lending
-                                    (401) 248-7379 (Direct)
-                                    (401) 248-7310 (HQ)
-                                    shurley@admiralsbank.com
-
-                                    Called and left a message for scott.</p>
+                                <p class="comment-text mb-0">
+                                    {{ comment.description }}
+                                </p>
                             </div>
-                            <div class="comment-item">
-                                <div class="d-flex align-items-center">
-                                    <img src="https://deadline.com/wp-content/uploads/2020/07/shutterstock_671527774-e1594584322476.jpg"
-                                        alt="boston image" class="comment-img">
-                                    <div class="d-flex fw-bold mgl-12">Hussain M. Nasir <span
-                                            class="ms-3 text-gray text-400">13 Jan
-                                            2021 02:09</span></div>
-                                </div>
-                                <p class="comment-text mb-0">Scott Hurley
-                                    VP/Director of Mortgage Lending.</p>
-                            </div>
+<!--                            <div class="comment-item">-->
+<!--                                <div class="d-flex align-items-center">-->
+<!--                                    <img src="https://deadline.com/wp-content/uploads/2020/07/shutterstock_671527774-e1594584322476.jpg"-->
+<!--                                        alt="boston image" class="comment-img">-->
+<!--                                    <div class="d-flex fw-bold mgl-12">Hussain M. Nasir <span-->
+<!--                                            class="ms-3 text-gray text-400">13 Jan-->
+<!--                                            2021 02:09</span></div>-->
+<!--                                </div>-->
+<!--                                <p class="comment-text mb-0">Scott Hurley-->
+<!--                                    VP/Director of Mortgage Lending.</p>-->
+<!--                            </div>-->
 
                             <div class="comment-box">
                                 <div class="comment-box-header mb-3">
@@ -151,10 +155,12 @@
                 email: '',
                 phone: '',
                 status: '',
+                comments: '',
             },
         }),
         created() {
             this.allClients = this.clients
+            console.log('all Clients', this.allClients)
             this.initStatus(this.statuses)
             this.filterAllClients(1,'status',this.allClients)
             this.changeActiveStatus(1)
@@ -198,6 +204,7 @@
                     this.currentClient.email = client[0].email
                     this.currentClient.phone = client[0].phone
                     this.currentClient.status = client[0].status_id
+                    this.currentClient.comments = client[0].comments
                 }
             },
             changeActiveStatus(statusId){
