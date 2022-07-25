@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\TaskBasedReport;
 use Carbon\Carbon;
 use App\Models\Order;
 use App\Helpers\CrmHelper;
