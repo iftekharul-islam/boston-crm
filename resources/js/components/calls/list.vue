@@ -259,7 +259,7 @@
                 <div class="modal-content ">
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     <div class="modal-body h-100 overflow-auto">
-                        <h3>Call summary</h3>
+                        <h3>Call summary <span class="fs-15 badges solved-badges" v-if="!callLog.notCompleted">Completed</span></h3>
                         <p class="text-gray fs-12 mb-0">{{ callLog.order_no }}</p>
                         <p class="mb-3 text-gray fs-12 mb-0">{{ callLog.address }}</p>
                         <div class="call-summary-item" v-for="(log, logIndex) in callLog.items" :key="logIndex">
