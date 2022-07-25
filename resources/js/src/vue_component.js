@@ -72,6 +72,8 @@ const addClient = () =>
     import ( /*webpackChunkName: "addClient"*/ '../components/marketing/addClient')
 const addStatus = () =>
     import ( /*webpackChunkName: "addStatus"*/ '../components/marketing/addStatus')
+const assignTo = () =>
+    import ( /*webpackChunkName: "assignTo"*/ '../components/marketing/assignTo')
 
 Vue.component('clients-list', ClientList);
 Vue.component('ticket-list', TicketList);
@@ -109,3 +111,4 @@ Vue.component('quick-view', quickView);
 Vue.component('marketing-list', marketingList);
 Vue.component('add-client', addClient);
 Vue.component('add-status', addStatus);
+Vue.component('assign-to', assignTo);

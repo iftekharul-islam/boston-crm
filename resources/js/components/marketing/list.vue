@@ -40,16 +40,16 @@
                     <div class="content-left me-3">
                         <p class="fs-20 text-light-black fw-bold mgb-24">{{ currentClient.name }}</p>
                         <div class="d-flex flwx-wrap corporation">
-                            <a href="" class="corporation-btn">Schedule <div class="mgl-12"><span
+                            <a href="javascript:;" class="corporation-btn">Schedule <div class="mgl-12"><span
                                         class="icon-clock"><span class="path1"></span><span class="path2"></span></span>
                                 </div></a>
-                            <a href="" class="corporation-btn">Assign to <div class="mgl-12"><span
+                            <a href="javascript:;" class="corporation-btn" @click.prevent="openAssignedTo">Assign to <div class="mgl-12"><span
                                         class="icon-user"><span class="path1"></span><span class="path2"></span></span>
                                 </div></a>
-                            <a href="" class="corporation-btn">Email now <div class="mgl-12"><span
+                            <a href="javascript:;" class="corporation-btn">Email now <div class="mgl-12"><span
                                         class="icon-sms"><span class="path1"></span><span class="path2"></span></span>
                                 </div></a>
-                            <a href="" class="corporation-btn">Call <div class="mgl-12"><span class="icon-call"><span
+                            <a href="javascript:;" class="corporation-btn">Call <div class="mgl-12"><span class="icon-call"><span
                                             class="path1"></span><span class="path2"></span></span></div></a>
                         </div>
 
@@ -126,6 +126,7 @@
                 </a>
             </div>
         </div>
+        <assign-to :users="users" :client="currentClient"></assign-to>
         <add-client :categories="categories"></add-client>
         <add-status :statuses="allStatuses"></add-status>
     </div>
@@ -133,6 +134,7 @@
 <script>
     export default {
         props: {
+            users: [],
             clients: [],
             statuses: [],
             categories: []
@@ -170,6 +172,9 @@
                 this.activeClient = res.data.length - 1
                 this.filterAllClients(1,'status',this.allClients)
             })
+            this.$root.$on('update_client', (res) => {
+                this.allClients = res.data
+            })
             this.$root.$on('status_res', (res) => {
                 this.allStatuses = res
                 this.initStatus(res)
@@ -188,6 +193,9 @@
             addStatus() {
                 this.$bvModal.show('add-status')
             },
+            openAssignedTo(){
+                this.$bvModal.show('assign-to')
+            },
             makeActiveClient(clientId) {
                 this.activeClient = clientId
                 let client = this.allClients.filter(client => client.id == clientId)
@@ -197,6 +205,7 @@
                     this.currentClient.address = client[0].address
                     this.currentClient.email = client[0].email
                     this.currentClient.phone = client[0].phone
+                    this.currentClient.assigned_to = client[0].assigned_to
                     this.currentClient.status = client[0].status_id
                 }
             },
