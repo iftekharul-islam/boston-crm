@@ -43,7 +43,7 @@ class OrderWorkflowController extends BaseController
     {
         $this->repository->updateOrderScheduleData($request->all());
         //code for set event on google calender
-       $this->service->setOrderSchedule($request->order_id);
+        $this->service->setOrderSchedule($request->order_id);
 
         $order = Order::find($request->order_id);
         $user = auth()->user();
@@ -512,7 +512,7 @@ class OrderWorkflowController extends BaseController
         $order->workflow_status = json_encode($workStatus);
         $order->save();
 
-        $historyTitle = "Re-writing the report updated by " . $user->name ;
+        $historyTitle = "Re-writing the report updated by " . $user->name;
         $this->addHistory($order, $user, $historyTitle, 'rewriting-report');
         $orderData = $this->orderDetails($get->order_id);
 
@@ -859,9 +859,9 @@ class OrderWorkflowController extends BaseController
         ];
     }
 
-    public function saveComRoute(Request $request,$order_id,$com_id,$assigned_to)
+    public function saveComRoute(Request $request, $order_id, $com_id, $assigned_to)
     {
-        $this->repository->saveComRoute($request->all(),$com_id,$assigned_to);
+        $this->repository->saveComRoute($request->all(), $com_id, $assigned_to);
         $orderData = $this->orderDetails($order_id);
 
         $order = Order::find($order_id);
@@ -891,7 +891,7 @@ class OrderWorkflowController extends BaseController
             $address = $old->propertyInfo->full_addr;
             $provider = json_decode($old->providerService->appraiser_type_fee, true)[0];
             $fullMessage = "<div class='mt-2'>The order no. already exists. The address is <strong style='color:#ff4406'>$address</strong> and Appraisal type is <strong style='color:#ff4406'>{$provider['type']}</strong></div>";
-            return response()->json([ 'find' => true, 'message' => $fullMessage ]);
+            return response()->json(['find' => true, 'message' => $fullMessage]);
         } else {
             return response()->json(['find' => false]);
         }

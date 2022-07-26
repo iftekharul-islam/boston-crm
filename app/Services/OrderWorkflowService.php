@@ -40,6 +40,7 @@ class OrderWorkflowService
             $schedule->event_id = $newEvent->id;
             $schedule->save();
         }
+        return $newEvent->id ? true : false;
     }
 
     public function deleteOrderSchedule($schedule_id){
