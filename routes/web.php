@@ -281,6 +281,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     //call routes
     Route::get('call', [CallController::class, 'index'])->middleware('role_permission:view.call')->name('call.index');
     Route::post('search/call/order', [CallController::class, 'searchCallOrder'])->middleware('role_permission:view.call')->name('call.search');
+    Route::post('send-message', [CallController::class, 'sendMessage']);
 });
 Auth::routes();
 
@@ -317,9 +318,5 @@ Route::post('revissin/solutions/add', [OrderWorkflowController::class, 'revissin
 Route::post('revissin/solutions/marked', [OrderWorkflowController::class, 'revissinSolutionMarked']);
 Route::post('revissin/solutions/delete', [OrderWorkflowController::class, 'revissinSolutionDelete']);
 Route::post('check/client/order/no', [OrderWorkflowController::class, 'checkClientOrderNo']);
-
-
-//call routes
-Route::post('send-message', [CallController::class, 'sendMessage']);
 
 //Route::get( "{slug}", [ WebApiController::class, 'home' ] )->where( 'slug', ".*" );

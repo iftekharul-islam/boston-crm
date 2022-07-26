@@ -49,7 +49,6 @@
             client: {
                 handler(val) {
                     this.checkedUsers = JSON.parse(val.assigned_to) ?? []
-                    console.log(this.checkedUsers)
                 },
                 deep: true
             }
