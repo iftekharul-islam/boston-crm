@@ -25,6 +25,7 @@
         "vue-template-compiler": "^2.6.12"
     },
     "dependencies": {
+        "@johmun/vue-tags-input": "^2.1.0",
         "autoprefixer": "10.4.5",
         "bootstrap-select": "^1.13.18",
         "bootstrap-vue": "^2.22.0",
