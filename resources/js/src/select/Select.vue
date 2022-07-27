@@ -22,7 +22,7 @@
                 <span>&#x276E;</span>
             </div>
         </div>
-        <transition name="fade-x" appear v-if="activeClick">
+        <transition name="fade-xt" appear v-if="activeClick">
             <div class="vue-select-search">
                 <input ref="filterData" type="text" placeholder="filter..." v-model="interSearch"  @input="updateSearch($event.target.value)" class="inter-search">
                 <small v-if="items.length">* Total <strong>({{ items.length }})</strong> items in the list </small>
@@ -104,8 +104,8 @@ export default {
             if (targetClosest == undefined) {
                 this.closeBox(true);
             } else {
-                let clickSetId = targetClosest.getAttribute('set-id');
-                let getRefs = this.$refs['vue-select'].getAttribute('set-id');
+                let clickSetId = $(targetClosest).attr('set-id');
+                let getRefs = $(this.$refs['vue-select']).attr('set-id');
                 if (clickSetId != getRefs) {
                     this.closeBox(true);
                 }
@@ -440,11 +440,13 @@ export default {
 .vue-select-options .vue-option:hover, .vue-select-options .vue-option.active {
     background: #80e9a724;
 }
-.fade-x-enter-active, .fade-x-leave-active {
-  transition: opacity 200ms;
+.fade-xt-enter-active, .fade-xt-leave-active {
+    transition: 200ms;
+    opacity: 1;
 }
-.fade-x-enter, .fade-x-leave-to {
-  opacity: 0;
+.fade-xt-enter, .fade-xt-leave-to {
+    transition: 200ms;
+    opacity: 0;
 }
 .option-item-box {
     display: flex;

@@ -15,9 +15,7 @@
       </div>
       <div class="text-left">
         <strong>Note</strong>
-        <div>
-          {{ note }}
-        </div>
+        <div v-html="note"></div>
       </div>
     </div>
     <!-- modal -->
@@ -64,7 +62,7 @@
               </div>
               <div class="group">
                 <label for="" class="d-block mb-2 dashboard-label">Note</label>
-                <textarea type="text" v-model="note" class="dashboard-input w-100" style="min-height: 100px"></textarea>
+                <text-editor v-model="note" placeholder="Enter notes here...."></text-editor>
               </div>
             </div>
           </div>

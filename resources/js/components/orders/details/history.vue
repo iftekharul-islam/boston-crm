@@ -10,12 +10,15 @@
         <template v-for="item, ai in history">
           <div class="fs-14 logItem" :key="ai">
             <div class="logby">
-              <span>{{ item.user.name }}</span>
+              <span>
+                {{ item.user.name }}
+              </span>
               <span>{{ item.created_at | momentTime }}</span>
             </div>
-            <div class="logs">
-              {{ item.history }}
+            <div class="logby-type">
+              Section: <strong>{{ strTitle(item.type) }}</strong>
             </div>
+            <div class="logs" v-html="item.history"></div>
           </div>
         </template>
       </div>
@@ -48,6 +51,12 @@ export default {
       this.$root.$on('sendHistory', (res) => {
           this.history = res.work_hisotry;
       });
+    },
+    methods: {
+      strTitle(val) {
+          let title = val.replaceAll('-', " ");
+          return title.toUpperCase();
+      }
     }
 }
 

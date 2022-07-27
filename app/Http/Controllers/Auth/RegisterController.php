@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Actions\Fortify\PasswordValidationRules;
 use App\Events\UserCreatedEvent;
 use App\Events\UserMailVerificationEvent;
+use App\Helpers\CrmHelper;
 use App\Http\Controllers\Controller;
 use App\Notifications\NewUserCreateNotification;
 use App\Providers\RouteServiceProvider;
@@ -18,7 +19,7 @@ use Illuminate\Support\Facades\Validator;
 use Laravel\Fortify\Rules\Password;
 
 class RegisterController extends Controller {
-    use PasswordValidationRules;
+    use PasswordValidationRules, CrmHelper;
 
     /*
     |--------------------------------------------------------------------------
@@ -86,7 +87,7 @@ class RegisterController extends Controller {
                 event( new UserMailVerificationEvent( $user ) );
                 Notification::route( 'mail', $data['email'] )->notify( new NewUserCreateNotification($data['name']) );
                 $user->companies()->where( 'active_company', 1 )->first();
-
+                $this->addActivity($user, "Your account's registration has been successful along with others information.");
                 return $user;
             }
 

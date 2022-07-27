@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Helpers\CrmHelper;
 use App\Helpers\Helper;
 use App\Http\Requests\AuthLoginRequest;
 use App\Repositories\UserRepository;
@@ -15,8 +16,11 @@ use League\Fractal\Serializer\ArraySerializer;
 use Spatie\Permission\Models\Role;
 
 class LoginController extends BaseController {
+
     private UserTransformer $transformer;
     private UserRepository $repository;
+
+    use CrmHelper;
 
     public function __construct( UserTransformer $user_transformer, UserRepository $user_repository ) {
         parent::__construct();
@@ -50,6 +54,8 @@ class LoginController extends BaseController {
         $this->transformer->setPermissions( $role->permissions()->pluck( 'name' ) );
         $this->transformer->setActiveCompany( $user_company );
         $user_data = fractal()->item( $user, $this->transformer )->serializeWith( new ArraySerializer )->toArray();
+        
+        $this->addActivity($user, "Logged in as ".$request->get( 'email' )." and Ip Address is ".request()->ip());
 
         return response( Helper::responseMessage( true, 201, trans( 'lang.success_login' ), $user_data ), 201 );
     }
@@ -63,7 +69,7 @@ class LoginController extends BaseController {
      */
     public function logout( Request $request ): Response|Application|ResponseFactory {
         $request->user()->currentAccessToken()->delete();
-
+        $this->addActivity( $request->user(), "Logged Out From Server");
         return response( Helper::responseMessage( true, 200, trans( 'lang.success_logout' ) ) );
     }
 }

@@ -9,7 +9,7 @@
       <div class="list__group">
         <p class="mb-0 left-side">Property Details </p>
         <span>:</span>
-        <p class="right-side mb-0 primary-text fw-bold fs-20">{{ edited.formatedAddress }}</p>
+        <p class="right-side mb-0 primary-text fw-bold fs-20">{{ edited.full_addr }}</p>
       </div>
       <!-- <div class="list__group">
         <p class="mb-0 left-side">Property address</p>
@@ -196,6 +196,7 @@ export default {
     getPropertyInfo(){
         this.info.search_address = this.order.property_info.search_address
         this.info.street_name = this.order.property_info.street_name
+        this.info.full_addr = this.order.property_info.full_addr
         this.info.city_name = this.order.property_info.city_name
         this.info.state_name = this.order.property_info.state_name
         this.info.formatedAddress = this.order.property_info.full_addr

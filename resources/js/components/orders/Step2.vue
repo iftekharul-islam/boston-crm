@@ -100,12 +100,11 @@
                 <div class="group" :class="{ 'invalid-form' : errors[0] }">
                   <label for="" class="d-block mb-2 dashboard-label">Contact <span
                       class="text-danger require"></span></label>
-                  <textarea :disabled="step2.contactSame == true" v-model="step2.contact_info" name="" class="dashboard-textarea w-100" id="" cols="30" rows="3"></textarea>
-                  <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                  <text-editor :disabled="step2.contactSame == true" :invalid-message="errors[0]" :invalid="step2.contactSame == false && (step2.contact_info == null || step2.contact_info == '')" v-model="step2.contact_info" placeholder="Enter contact details..."></text-editor>
                 </div>
               </ValidationProvider>
             </div>
-            <div class="middle max-w-424 w-100 me-3">
+            <div class="middle max-w-424 w-100 me-3" v-pd:t="40">
               <ValidationObserver ref="addContact2form">
                   <ValidationProvider class="group" name="Contact Number" :rules="{'required' : step2.contactSame == false && (step2.contact_number == false && add.contact2 == null), min: 10, max: 12 }" v-slot="{ errors }">
                     <div class="group" :class="{ 'invalid-form' : errors[0] }">
@@ -133,7 +132,7 @@
                   </ValidationProvider>
               </ValidationObserver>
             </div>
-            <div class="right max-w-424 w-100">
+            <div class="right max-w-424 w-100" v-pd:t="40">
               <ValidationObserver ref="addEmail2form">
                   <ValidationProvider class="group" name="Contact Email Address" :rules="{'required' : step2.contactSame == false && (step2.email_address == false && add.email2 == null), 'email' : true}" v-slot="{ errors }">
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
