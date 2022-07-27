@@ -271,7 +271,157 @@
                 class="button button-primary px-4 h-40 d-inline-flex align-items-center mt-4" @click="openSeeCom">See
                 com</button>
             <!-- load see com -->
-            <div v-if="mapOpen"></div>
+            <div v-if="mapOpen" class="map-direction vue-modal">
+                <div class="content">
+                    <div class="left bg-white">
+                        <div class="starting-point">
+                            <!-- assign -->
+                            <ValidationObserver ref="seeComForm">
+                                <div class="mgb-32">
+                                    <ValidationProvider class="group" name="Assigned to" rules="required"
+                                        v-slot="{ errors }">
+                                        <div :class="{ 'invalid-form' : errors[0] }">
+                                            <label for="" class="d-block mb-2 dashboard-label">Assigned to<span
+                                                    class="text-danger require"></span></label>
+                                            <!-- <select class="dashboard-input w-100" v-model="qa.assigned_to">
+                                                <option value="">Please select to assign</option>
+                                                <option v-for="user in users" :key="user.id" :value="user.id">
+                                                    {{ user.name }}
+                                                </option>
+                                            </select> -->
+                                            <m-select theme="blue" :options="users" object item-text="name"
+                                                item-value="id" v-model="qa.assigned_to"></m-select>
+                                            <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                                        </div>
+                                    </ValidationProvider>
+                                </div>
+                            </ValidationObserver>
+                            <!-- starting point -->
+                            <div class="group">
+                                <label for="" class="d-block mb-2 dashboard-label">Starting point</label>
+                                <input @keyup="getStartPoint" ref="startingPoint" v-model="startingPointValue"
+                                    id="starting-point" type="text" class="dashboard-input w-100 gray-border">
+                            </div>
+                        </div>
+                        <!-- destination -->
+                        <div class="destination mgt-32">
+                            <p class="text-600 mgb-12">Destination</p>
+                            <draggable v-model="comAddresses" @start="drag=true" @end="drag=false"
+                                :component-data="getComponentData()">
+                                <!-- <li v-if="isStartAddress" class="destination-list-item" v-for="item,index in comAddresses.splice(1)" :key="index">
+                                    <span class="drag-dot">
+                                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <circle cx="2" cy="2" r="2" fill="#7E829B" />
+                                            <circle cx="2" cy="10" r="2" fill="#7E829B" />
+                                            <circle cx="10" cy="2" r="2" fill="#7E829B" />
+                                            <circle cx="10" cy="10" r="2" fill="#7E829B" />
+                                        </svg>
+                                    </span>
+                                    <input type="text" :value="item.address" class="dashboard-input w-100 gray-border"
+                                        readonly>
+                                    <button @click="removeDestination(index)"
+                                        class="button button-transparent p-0 del-icon">
+                                        <span class="icon-trash fs-20"><span class="path1"></span><span
+                                                class="path2"></span><span class="path3"></span><span
+                                                class="path4"></span></span>
+                                    </button>
+                                </li> -->
+                                <li class="destination-list-item" v-for="item,index in comAddresses" :key="index">
+                                    <span class="drag-dot">
+                                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <circle cx="2" cy="2" r="2" fill="#7E829B" />
+                                            <circle cx="2" cy="10" r="2" fill="#7E829B" />
+                                            <circle cx="10" cy="2" r="2" fill="#7E829B" />
+                                            <circle cx="10" cy="10" r="2" fill="#7E829B" />
+                                        </svg>
+                                    </span>
+                                    <input type="text" :value="item.address" class="dashboard-input w-100 gray-border"
+                                        readonly>
+                                    <button @click="removeDestination(index)"
+                                        class="button button-transparent p-0 del-icon">
+                                        <span class="icon-trash fs-20"><span class="path1"></span><span
+                                                class="path2"></span><span class="path3"></span><span
+                                                class="path4"></span></span>
+                                    </button>
+                                </li>
+                                <li class="destination-list-item">
+                                    <input @keyup="getDestination" placeholder="Enter any destination" type="text"
+                                        id="destination" class="dashboard-input w-100 gray-border">
+                                </li>
+                            </draggable>
+                        </div>
+                        <div class="text-end pdr-36">
+                            <button type="button" class="button button-primary py-2 px-4"
+                                @click.prevent="saveMapData">Save</button>
+                            <button class="button button-primary py-2 px-4" @click="saveMapOrganize">Map It</button>
+                        </div>
+                        <!-- time -->
+                        <div class="destination-time-space">
+                            <div class="destination-time d-flex">
+                                <div class="left d-flex me-2">
+                                    <div class="logo mgr-12">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M15.51 2.83008H8.49C6 2.83008 5.45 4.07008 5.13 5.59008L4 11.0001H20L18.87 5.59008C18.55 4.07008 18 2.83008 15.51 2.83008Z"
+                                                stroke="white" stroke-width="1.5" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                            <path
+                                                d="M21.9907 19.82C22.1007 20.99 21.1607 22 19.9607 22H18.0807C17.0007 22 16.8507 21.54 16.6607 20.97L16.4607 20.37C16.1807 19.55 16.0007 19 14.5607 19H9.44071C8.00071 19 7.79071 19.62 7.54071 20.37L7.34071 20.97C7.15071 21.54 7.00071 22 5.92071 22H4.04071C2.84071 22 1.90071 20.99 2.01071 19.82L2.57071 13.73C2.71071 12.23 3.00071 11 5.62071 11H18.3807C21.0007 11 21.2907 12.23 21.4307 13.73L21.9907 19.82Z"
+                                                stroke="white" stroke-width="1.5" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                            <path d="M4 8H3" stroke="white" stroke-width="1.5" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                            <path d="M21 8H20" stroke="white" stroke-width="1.5" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                            <g opacity="0.4">
+                                                <path d="M12 3V5" stroke="white" stroke-width="1.5"
+                                                    stroke-linecap="round" stroke-linejoin="round" />
+                                                <path d="M10.5 5H13.5" stroke="white" stroke-width="1.5"
+                                                    stroke-linecap="round" stroke-linejoin="round" />
+                                            </g>
+                                            <path opacity="0.4" d="M6 15H9" stroke="white" stroke-width="1.5"
+                                                stroke-linecap="round" stroke-linejoin="round" />
+                                            <path opacity="0.4" d="M15 15H18" stroke="white" stroke-width="1.5"
+                                                stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                    </div>
+                                    <div class="">
+                                        <p class="fw-bold mb-0">{{ summary }}</p>
+                                    </div>
+
+                                </div>
+                                <div class="right ms-auto">
+                                    <div class="">
+                                        <p class="fw-bold mb-0">{{ totalTime + ' Min' }}</p>
+                                        <p class="text-gray fs-14 mb-0">{{ totalDistance + ' Mi' }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="right full-map position-relative">
+                        <button @click="mapOpen = false" class="button button-transparent x-btn p-0">
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M1 13L13 1" stroke="#2F415E" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                                <path d="M13 13L1 1" stroke="#2F415E" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
+                        </button>
+                        <div id="map">
+                            <iframe
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d116834.15093170418!2d90.34928581382016!3d23.78062065335469!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755b8b087026b81%3A0x8fa563bbdd5904c2!2sDhaka!5e0!3m2!1sen!2sbd!4v1655630336126!5m2!1sen!2sbd"
+                                width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+                                referrerpolicy="no-referrer-when-downgrade">
+                            </iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -355,6 +505,8 @@
                         type: 'error',
                     });
                 } else {
+                    //console.log(this.comAddresses)
+                    //return false
                     this.$boston.post('save-com-route/' + this.orderData.id + '/' + this.comId + '/' + this.qa.assigned_to, this.comAddresses)
                         .then(res => {
                             this.orderData = res.data
@@ -379,25 +531,25 @@
             },
             openSeeCom() {
                 this.mapOpen = true;
-                let startAddress = this.comAddresses[0].address
-                let endAddress = ''
-                let wayPoints = '';
-                let travelMode = "driving";
-                for (var i = 1; i < this.comAddresses.length; i++) {
-                    if (i != this.comAddresses.length - 1)
-                        wayPoints += this.comAddresses[i]['address'] + "|"
+                //let startAddress = this.comAddresses[0].address
+                //let endAddress = ''
+                //let wayPoints = '';
+                //let travelMode = "driving";
+                //for (var i = 1; i < this.comAddresses.length; i++) {
+                //    if (i != this.comAddresses.length - 1)
+                //        wayPoints += this.comAddresses[i]['address'] + "|"
 
-                    if (i == this.comAddresses.length - 1) {
-                        endAddress = this.comAddresses[i]['address']
-                    }
-                }
-                let url = 'https://www.google.com/maps/dir/?api=1&travelmode=' + travelMode + '&origin=' + startAddress + '&destination=' + endAddress + '&waypoints=' + wayPoints;
+                //    if (i == this.comAddresses.length - 1) {
+                //        endAddress = this.comAddresses[i]['address']
+                //    }
+                //}
+                //let url = 'https://www.google.com/maps/dir/?api=1&travelmode=' + travelMode + '&origin=' + startAddress + '&destination=' + endAddress + '&waypoints=' + wayPoints;
 
-                window.open(url, '_blank');
+                //window.open(url, '_blank');
 
-                //this.$nextTick(() => {
-                //    this.initMap();
-                //})
+                this.$nextTick(() => {
+                    this.initMap();
+                })
             },
             initMap() {
 
