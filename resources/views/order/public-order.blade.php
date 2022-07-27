@@ -39,7 +39,7 @@
                     <input class="form-control" type="file" name="files[]" multiple>
                 </div>
                 <div class="py-3 bg-platinum d-flex justify-content-end px-3 box-footer">
-                    <button class="button button-primary px-5">Submit</button>
+                    <button type="submit" class="submit button button-primary px-5">Submit</button>
                 </div>
             </div>
         </form>
@@ -70,12 +70,9 @@
                 }
             },
             submitHandler: function (form) {
-                if (form.valid()) {
-                    form.submit();
-                } else {
-                    $(this).data('validator').resetForm();
-                    return false;
-                }
+                console.log(form)
+                $('.submit').attr('disabled','disabled')
+                form.submit()
             }
         });
     });
