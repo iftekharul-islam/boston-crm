@@ -154,6 +154,7 @@ class OrderWorkflowRepository extends BaseRepository
     }
 
     public function saveComRoute($data,$com_id,$assigned_to){
+        dd($data);
         $order_w_com = OrderWComList::find($com_id);
         $order_w_com->destination = json_encode($data);
         $order_w_com->assigned_to = $assigned_to;
