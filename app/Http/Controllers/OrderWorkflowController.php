@@ -31,6 +31,8 @@ class OrderWorkflowController extends BaseController
     protected OrderRepository $orderRepository;
     use CrmHelper;
 
+    protected $workFlowStatus = 0;
+
     public function __construct(OrderWorkflowService $order_w_service, OrderWorkflowRepository $order_w_repository, OrderRepository $order_repository)
     {
         parent::__construct();
@@ -311,6 +313,8 @@ class OrderWorkflowController extends BaseController
         }
 
         $analysis = OrderWReportAnalysis::where('order_id', $id)->first();
+        $this->workFlowStatus = 9;
+
         if ($analysis) {
             $noteCheckOrNot = "Checked as check and upload";
             if ($request->noteCheck == '1') {
@@ -318,10 +322,12 @@ class OrderWorkflowController extends BaseController
                 $analysis->is_check_upload = 0;
                 $analysis->rewrite_note = $request->note;
                 $noteCheckOrNot = "Checked as rewrite and send back";
+                $this->workFlowStatus = 7;
             } else {
                 $analysis->is_review_send_back = 0;
                 $analysis->is_check_upload = 1;
                 $analysis->note = $request->note;
+                $this->workFlowStatus = 6;
             }
             $analysis->updated_by = $user->id;
             $analysis->save();
@@ -344,7 +350,7 @@ class OrderWorkflowController extends BaseController
 
         $workStatus = json_decode($order->workflow_status, true);
         $workStatus['reportAnalysisReview'] = 1;
-        $order->status = 9;
+        $order->status = $this->workFlowStatus;
         $order->workflow_status = json_encode($workStatus);
         $order->save();
 
@@ -522,7 +528,7 @@ class OrderWorkflowController extends BaseController
         $workStatus = json_decode($order->workflow_status, true);
         $workStatus['reWritingReport'] = 1;
 
-        $order->status = 8;
+        $order->status = 9;
         $order->workflow_status = json_encode($workStatus);
         $order->save();
 
@@ -563,9 +569,16 @@ class OrderWorkflowController extends BaseController
             $historyTitle = "<strong>{$assignee->name}</strong> has assiged by " . $user->name . ' on the Re-writing the report Assign.';
             $this->addHistory($order, $user, $historyTitle, 'rewriting-report');
         } else {
-            $error = true;
+            // $error = true;
             $historyTitle = "Trying to reassign on Re-writing the report. Already assigned, can't reassign now.";
         }
+
+        $analysis = OrderWReportAnalysis::where('order_id', $order->id)->first();
+        if ($analysis && $analysis->is_review_send_back == 1) {
+            $order->status = 8;
+            $order->save();
+        }
+
         $orderData = $this->orderDetails($get->orderId);
         return [
             'error' => $error,
@@ -689,14 +702,11 @@ class OrderWorkflowController extends BaseController
         $reWrite->updated_at = Carbon::now();
         $reWrite->updated_by = $user->id;
         $reWrite->completed_by = $user->id;
-        $reWrite->delivered_by = $user->id;
-        $reWrite->status = 1;
-        $reWrite->delivery_date = Carbon::now();
         $reWrite->solution_details = $get->revission['solution_details_edited'];
         $reWrite->save();
 
         $deliveryDate = date('d-m-Y', strtotime($reWrite->delivery_date));
-        $historyTitle = $user->name." add a solution.<br>Revission: <strong class='text-info'>{$reWrite->revision_details}</strong> <br>Solution: <strong class='text-success'>{$get->revission['solution_details_edited']}</strong><br>Delivery Date: <strong class='text-primary'>{$deliveryDate}</strong>";
+        $historyTitle = $user->name." add a solution.<br>Revission: <strong class='text-info'>{$reWrite->revision_details}</strong> <br>Solution: <strong class='text-success'>{$get->revission['solution_details_edited']}</strong>";
 
         $workStatus = json_decode($order->workflow_status, true);
         $workStatus['revision'] = 1;
@@ -745,7 +755,9 @@ class OrderWorkflowController extends BaseController
         $reWrite->save();
 
         $deliveryDate = date('d-m-Y', strtotime($reWrite->delivery_date));
-        $historyTitle = $user->name." marked as delivery for revission.<br>Revission: <strong class='text-info'>{$reWrite->revision_details}</strong> <br>Solution: <strong class='text-success'>{$reWrite->solution_details}</strong><br>Delivery Date: <strong class='text-primary'>{$deliveryDate}</strong>";
+        $completedUser = User::find($get->completed_by);
+        $deliveredUser = User::find($get->delivered_by);
+        $historyTitle = $user->name." marked as delivery for revission.<br>Revission: <strong class='text-info'>{$reWrite->revision_details}</strong> <br>Solution: <strong class='text-success'>{$reWrite->solution_details}</strong><br>Completed By: <strong class='text-info'>{$completedUser->name}</strong><br>Delivered By: <strong class='text-primary'>{$deliveredUser->name}</strong><br>Delivery Date: <strong class='text-primary'>{$deliveryDate}</strong>";
 
 
         $workStatus = json_decode($order->workflow_status, true);

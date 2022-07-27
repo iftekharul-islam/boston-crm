@@ -215,8 +215,7 @@
                         <div class="mt-auto">
                             <div class="group">
                                 <label for="" class="d-block mb-2 dashboard-label">Note</label>
-                                <textarea name="" id="" rows="7" class="dashboard-textarea w-100"
-                                    v-model="step1.note"></textarea>
+                                <text-editor v-model="step1.note" placeholder="Enter note here..."></text-editor>
                             </div>
                             <h3 class="text-light-black fw-bold mgt-40">Total fee : <span> $ {{
                                     providerTypes.totalAmount }} </span></h3>
@@ -826,7 +825,7 @@
                     let ele = setFee[i];
                     this.setNewFee(ele.typeId, ele.fee);
                 }
-                this.searchIngAddress = this.order.property_info.formatedAddress;
+                // this.searchIngAddress = this.order.property_info.formatedAddress;
                 let receivedDateFormated = new Date(receivedDate);
                 let dueDateFormated = new Date(dueDate);
                 if (receivedDateFormated > dueDateFormated) {

@@ -192,7 +192,7 @@ class Order extends Model implements HasMedia
     }
     public function workHisotry()
     {
-        return $this->hasMany(OrderWHistory::class,'order_id', 'id');
+        return $this->hasMany(OrderWHistory::class,'order_id', 'id')->orderBy('id', 'desc');
     }
     public function submission()
     {

@@ -251,7 +251,7 @@
         <call-schedule ref="callScheduleComponent" :appraisers="appraisers"></call-schedule>
         <call-re-schedule ref="callReScheduleComponent" :appraisers="appraisers"></call-re-schedule>
         <send-message ref="sendMessageComponent"></send-message>
-        <Map v-if="openMap" :latLng="latLng" @closeMap="closeCurrentMap($event)" />
+        <!-- <Map v-if="openMap" :latLng="latLng" @closeMap="closeCurrentMap($event)" /> -->
 
         <div class="modal fade schedule-modal call-log-modal" id="callLogModal" tabindex="-1"
             aria-labelledby="callLogModalLabel" aria-hidden="true">
@@ -301,7 +301,7 @@
 
 <script>
     import Table from "../../src/Table.vue"
-    import Map from "./map.vue"
+    // import Map from "./map.vue"
     import Quickview from "./quickView.vue";
 
     import Calendar from 'v-calendar/lib/components/calendar.umd'
@@ -314,7 +314,7 @@
         name: "call-lists",
         props: ['order', 'appraisers', 'filter-value'],
         components: {
-            Map,
+            // Map,
             'quick-view': Quickview,
             Table,
         },
@@ -338,7 +338,7 @@
                 pageData: [],
                 acitvePage: 1,
                 searchModel: null,
-                filterType: null,
+                filterType: "to_schedule",
                 paginate: 10,
                 perPages: [10, 15, 20, 25, 30, 40, 50, 60, 100]
             },
@@ -488,6 +488,7 @@
             },
             goToMap() {
                 let getLatLng = [];
+                let addrUrl = "";
                 if (this.selectedItems.length <= 0) {
                     return false;
                 }
@@ -501,9 +502,12 @@
                         }
                     }
                     getLatLng.push(latLng);
+                    addrUrl += ele.property_info.formatedAddress + "/";
                 });
                 this.latLng = getLatLng;
-                this.openMap = true;
+                let url = "https://www.google.co.in/maps/dir/"+addrUrl+"?hl=en";
+                // this.openMap = true;
+                window.open(url);
             },
             closeCurrentMap(event) {
                 this.openMap = false;

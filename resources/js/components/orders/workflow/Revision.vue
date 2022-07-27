@@ -62,7 +62,7 @@
                       <p class="mb-2 fs-20 fw-bold lh-20">{{ item.users.created_by.name }}</p>
                       <p class="mb-0">{{ item.revision_date | dateTime }}</p>
                     </div>
-                    <div class="marked" :class="{'completed' : item.solution_details != '-' }">
+                    <div class="marked" :class="{'completed' : item.status == 1 }">
                       <a href="javascript:;" class="open open-btn fs-14">Open</a>
                       <a href="" @click.prevent="openMarkAsDelivery(item, ir)" class="mark-delivery fs-14">Mark as delivered</a>
                     </div>
@@ -377,7 +377,7 @@ export default {
     },
     openMarkAsDelivery(item, index, status = false) {
         if (status == false) {
-            if (item.solution_details !== "-") {
+            if (item.solution_details == 1) {
                 return false;
             }
         }

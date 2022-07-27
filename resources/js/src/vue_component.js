@@ -66,6 +66,8 @@ const sendMessage = () =>
     import ( /*webpackChunkName: "sendMessage"*/ '../components/calls/sendMessage')
 const quickView = () =>
     import ( /*webpackChunkName: "quickView"*/ '../components/calls/quickView')
+const editor = () =>
+    import ( /*webpackChunkName: "text-editor"*/ '../src/editor/TextEditor');
 
 Vue.component('clients-list', ClientList);
 Vue.component('ticket-list', TicketList);
@@ -100,3 +102,53 @@ Vue.component('call-re-schedule', callReSchedule);
 Vue.component('m-modal', mModal);
 Vue.component('send-message', sendMessage);
 Vue.component('quick-view', quickView);
+Vue.component('text-editor', editor);
+
+
+Vue.directive('pd', {
+    bind: function (el, binding, vnode) {
+        if (binding.arg) {
+            if (binding.arg == "t") {
+                el.style.paddingTop = binding.value + 'px';  
+            } else if (binding.arg == "b") {
+                el.style.paddingBottom = binding.value + 'px';  
+            } else if (binding.arg == "l") {
+                el.style.paddingLeft = binding.value + 'px';  
+            } else if (binding.arg == "r") {
+                el.style.paddingRight = binding.value + 'px';
+            } else if (binding.arg == "x") {
+                el.style.paddingLeft = binding.value + 'px';
+                el.style.paddingRight = binding.value + 'px';
+            } else if (binding.arg == "y") {
+                el.style.paddingTop = binding.value + 'px';
+                el.style.paddingBottom = binding.value + 'px';
+            }
+        } else {
+              el.style.padding = binding.value + 'px';
+        }
+    }
+})
+
+Vue.directive('mg', {
+    bind: function (el, binding, vnode) {
+        if (binding.arg) {
+            if (binding.arg == "t") {
+                el.style.marginTop = binding.value + 'px';  
+            } else if (binding.arg == "b") {
+                el.style.marginBottom = binding.value + 'px';  
+            } else if (binding.arg == "l") {
+                el.style.marginLeft = binding.value + 'px';  
+            } else if (binding.arg == "r") {
+                el.style.marginRight = binding.value + 'px';
+            } else if (binding.arg == "x") {
+                el.style.marginLeft = binding.value + 'px';
+                el.style.marginRight = binding.value + 'px';
+            } else if (binding.arg == "y") {
+                el.style.marginTop = binding.value + 'px';
+                el.style.marginBottom = binding.value + 'px';
+            }
+        } else {
+              el.style.margin = binding.value + 'px';
+        }
+    }
+})
