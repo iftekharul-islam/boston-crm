@@ -45,7 +45,7 @@ class OrderWorkflowController extends BaseController
     {
         $this->repository->updateOrderScheduleData($request->all());
         //code for set event on google calender
-//        $this->service->setOrderSchedule($request->order_id);
+        $this->service->setOrderSchedule($request->order_id);
 
         // inspection_date_time_formatted
 
@@ -600,7 +600,8 @@ class OrderWorkflowController extends BaseController
             ]);
         }
 
-        $deliveredDate = Carbon::parse($get->date);
+        $formated_date_time = \DateTime::createFromFormat('D M d Y H:i:s e+', $get->date);
+        $deliveredDate = Carbon::parse($formated_date_time)->format('Y-m-d H:i:s');
 
         $reWrite = new OrderWRevision();
         $reWrite->order_id = $order->id;
@@ -643,7 +644,8 @@ class OrderWorkflowController extends BaseController
             ]);
         }
 
-        $deliveredDate = Carbon::parse($get->date);
+        $formated_date_time = \DateTime::createFromFormat('D M d Y H:i:s e+', $get->date);
+        $deliveredDate = Carbon::parse($formated_date_time)->format('Y-m-d H:i:s');
 
         $reWrite = OrderWRevision::where('order_id', $get->order_id)->where('id', $get->id)->first();
         if (!$order) {
@@ -885,6 +887,21 @@ class OrderWorkflowController extends BaseController
         ];
     }
 
+    public function saveComRoute(Request $request, $order_id, $com_id, $assigned_to)
+    {
+        $this->repository->saveComRoute($request->all(), $com_id, $assigned_to);
+        $orderData = $this->orderDetails($order_id);
+
+        $order = Order::find($order_id);
+        $user = auth()->user();
+        $historyTitle = "Com list route mapped by " . auth()->user()->name;
+        $this->addHistory($order, $user, $historyTitle, 'quality-assurance');
+        return [
+            "message" => "Com list route mapped successfully",
+            "data" => $orderData
+        ];
+    }
+
     public function addCom(Request $request)
     {
         $this->repository->addCom($request->all());
@@ -902,7 +919,7 @@ class OrderWorkflowController extends BaseController
             $address = $old->propertyInfo->full_addr;
             $provider = json_decode($old->providerService->appraiser_type_fee, true)[0];
             $fullMessage = "<div class='mt-2'>The order no. already exists. The address is <strong style='color:#ff4406'>$address</strong> and Appraisal type is <strong style='color:#ff4406'>{$provider['type']}</strong></div>";
-            return response()->json([ 'find' => true, 'message' => $fullMessage ]);
+            return response()->json(['find' => true, 'message' => $fullMessage]);
         } else {
             return response()->json(['find' => false]);
         }

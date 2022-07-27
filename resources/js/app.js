@@ -47,5 +47,5 @@ axios.defaults.baseURL = window.origin
 
 const app = new Vue({
     el: '#app',
-    store: storage
+    store: storage,
 });

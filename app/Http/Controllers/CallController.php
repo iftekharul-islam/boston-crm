@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\TaskBasedReport;
 use Carbon\Carbon;
 use App\Models\Order;
 use App\Helpers\CrmHelper;
@@ -118,7 +119,7 @@ class CallController extends BaseController
     {
         $this->service->sendMessage($request->all());
         return [
-            "message" => "Successfully sent"
+            "message" => "Message sent successfully !"
         ];
     }
 

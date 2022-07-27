@@ -14,7 +14,7 @@ class BaseController extends Controller
 	 protected string $user_role;
 	 protected bool $isOwner = false;
 	 protected array $userPermissions = [];
-	 
+
 	 public function __construct()
 	 {
 			$this->middleware( function ($request, $next) {
@@ -41,10 +41,10 @@ class BaseController extends Controller
 				 }
 				 View::share( [
 					 'user_role'   => $this->user_role ?? '',
-					 'is_owner'    => $this->isOwner,
+					 'is_owner'    => $this->isOwner ,
 					 'user_permissions' => $this->userPermissions,
 				 ] );
-				 
+
 				 return $next( $request );
 			} );
 	 }

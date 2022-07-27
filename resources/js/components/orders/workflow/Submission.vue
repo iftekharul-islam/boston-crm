@@ -86,7 +86,7 @@
           <div class="group">
               <div class="checkbox-group submission-check mgt-20">
                   <input type="checkbox" class="checkbox-input check-data" v-model="isAssineed" disabled>
-                  <label for="" class="checkbox-label text-capitalize">Trainee assigned</label>
+                  <label for="" class="checkbox-label text-capitalize">Trainee signed</label>
               </div>
           </div>
       </div>
@@ -123,6 +123,9 @@ export default {
                 this.qaName = !_.isEmpty(qAssureance.assignee) ? qAssureance.assignee.name : '';
             }
             let submission = !_.isEmpty(this.orderData.submission) ? this.orderData.submission : false;
+            if(this.orderData.report){
+                this.traineeId = this.orderData.report.trainee_id
+            }
             if(submission){
                 this.traineeId = submission.trainee_id;
                 this.dManId = submission.delivery_man_id;

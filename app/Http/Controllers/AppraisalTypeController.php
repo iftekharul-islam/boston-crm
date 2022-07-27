@@ -91,7 +91,7 @@ class AppraisalTypeController extends BaseController
     {
         $request->validate([
             'form_type'     => 'required|string|unique:appraisal_types,form_type,'. $id,
-            'modified_form' => 'required|string|unique:appraisal_types,modified_form,'. $id,
+            'modified_form' => 'required|string',
         ]);
 
         $appraisal_type_data = [

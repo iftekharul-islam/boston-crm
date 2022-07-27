@@ -68,7 +68,7 @@
                                     <label for="" class="d-block mb-2 dashboard-label">Inspection date & time<span
                                             class="text-danger require"></span></label>
                                     <v-date-picker mode="datetime" v-model="scheduleData.inspection_date_time"
-                                        :available-dates='{ start: new Date(), end: null }' timezone="utc">
+                                        :available-dates='{ start: new Date(), end: null }'>
                                         <template class="position-relative" v-slot="{ inputValue, inputEvents }">
                                             <input class="dashboard-input w-100" :value="inputValue"
                                                 v-on="inputEvents" />
@@ -161,11 +161,12 @@
         }),
         created() {
             let order = this.order;
-            let localOrderData = this.$store.getters['app/orderDetails']
-            if(localOrderData){
-                order = localOrderData;
-            }
+            //let localOrderData = this.$store.getters['app/orderDetails']
+            //if(localOrderData){
+            //    order = localOrderData;
+            //}
             this.getScheduleData(order)
+            //console.log(order)
         },
         methods: {
             getScheduleData(order) {
@@ -196,10 +197,15 @@
             saveSchedule() {
                 this.$refs.scheduleForm.validate().then((status) => {
                     if (status) {
-                        console.log('scheduleData')
-                        console.log(this.scheduleData)
-                        // return
-                        this.$boston.post('update-order-schedule', this.scheduleData)
+                        let formData = new FormData();
+                        formData.append('order_id',this.scheduleData.order_id)
+                        formData.append('schedule_id',this.scheduleData.schedule_id)
+                        formData.append('appraiser_id',this.scheduleData.appraiser_id)
+                        formData.append('inspection_date_time',this.scheduleData.inspection_date_time)
+                        formData.append('duration',this.scheduleData.duration)
+                        formData.append('note',this.scheduleData.note)
+
+                        this.$boston.post('update-order-schedule', formData)
                             .then(res => {
                                 this.message = res.message;
                                 this.orderData = res.data;
@@ -216,6 +222,7 @@
             editSchedule() {
                 this.$bvModal.show('schedule')
                 this.getScheduleData(this.order)
+                console.log(this.order)
             },
         }
     }

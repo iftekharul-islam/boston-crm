@@ -3,26 +3,55 @@
 namespace App\Services;
 
 use App\Models\Order;
+use App\Models\CallLog;
+use App\Models\PropertyInfo;
+use Illuminate\Mail\SentMessage;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Mail\SentMessage;
+use Illuminate\Support\Facades\Auth;
+use App\Repositories\OrderRepository;
 
 class CallService
 {
+    protected $repository;
+
+    public function __construct(OrderRepository $repository)
+    {
+        $this->repository = $repository;
+    }
+
     public function sendMessage($data)
     {
-        $order = Order::find($data['order_id']);
-        if ($data['send_email'] == 1) {
+        $value_of = $data["data"];
+        $order = Order::find($value_of['order_id']);
+        if ($value_of['send_email'] == 1) {
             foreach ($data['emails'] as $email) {
-                $this->sendEmail($email, $data['message'], $data['subject']);
+                $this->sendEmail($email['text'], $value_of['message'], $value_of['subject']);
             }
         }
-        if ($data['send_sms']  == 1) {
+        if ($value_of['send_sms']  == 1) {
             foreach ($data['phones'] as $phone) {
-                $formatted_number = "1" . (int) str_replace('-', '', $phone);
-                $this->sendSms($order->system_order_no, $formatted_number, $data['message']);
+                $formatted_number = "1" . (int) str_replace('-', '', $phone['text']);
+                $this->sendSms($order->system_order_no, $formatted_number, $value_of['message']);
             }
         }
+        $log = new CallLog();
+        $log->order_id = $order->id;
+        $log->caller_id = Auth::id();
+        $log->message = $value_of['message'];
+        $log->save();
+
+        $property_address = PropertyInfo::where('order_id', $order->id)->first();
+
+        $msg = "A message has been sent to client. Property Address : " . $property_address->formatedAddress;
+
+        $data = [
+            "activity_text" => $msg,
+            "activity_by" => Auth::id(),
+            "order_id" => $order->id
+        ];
+
+        $this->repository->addActivity($data);
     }
 
     public function sendEmail($email, $description, $subject)
@@ -52,16 +81,13 @@ class CallService
             ->post($url, [
                 'source' => 'Boston CRM',
                 'clientMessageId' => $message_id,
-                'destination' => "+8801837487415",
-                'text' => "Hello,
-“LENDER NAME” assigned us an appraisal for the property “SUBJECT FULL ADDRESS”. Please contact us to schedule an appointment at 617-440-7700 or orders@bostonappraisal.com.
-Thank you",
+                'destination' => $destination,
+                'text' => $message,
                 "encoding" => "AUTO"
             ]);
 
         $result = $response->json();
-        dd($result);
-        return $result && $result->status['code'] == "QUEUED" ? true : false;
+        return $result && $result["status"]["code"] == "QUEUED" ? true : false;
 
         // $umid = $result['umid'];
         // $timestamp = time();

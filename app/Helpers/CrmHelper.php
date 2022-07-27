@@ -192,6 +192,8 @@ trait CrmHelper {
         $order['inspection_files'] = isset($order['inspection']) && count($order['inspection']['attachments'])  ? OrderWInspection::where('order_id', $id)->first()->getMedia('inspection')->toArray() : [];
         $order['preparation_files'] = isset($order['report']) && count($order['report']['attachments']) ? OrderWReport::where('order_id', $id)->first()->getMedia('preparation')->toArray() : [];
         $order['analysis_files'] = isset($order['analysis']) && count($order['analysis']['attachments']) ? OrderWReportAnalysis::where('order_id', $id)->first()->getMedia('analysis')->toArray() : [];
+        $order['diff_in_days'] = Carbon::now()->diffInDays($order->due_date,false);
+        $order['diff_in_hours'] = Carbon::now()->diffInHours($order->due_date,false);
 
         return $this->checkActiveStep($order);
     }

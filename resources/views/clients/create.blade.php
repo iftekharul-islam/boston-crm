@@ -57,8 +57,9 @@
                                 <div class="group">
                                     <label for="phone" class="d-block mb-2 dashboard-label">Phone no <span
                                             class="text-danger require"></span></label>
-                                    <input type="text" maxlength="12" onkeyup="return formatPhoneNo(event)"
-                                        name="phone[]" id="phone" class="dashboard-input w-100 mb-3" required>
+                                    <input type="text" maxlength="14"
+                                        onkeyup="return formatPhoneNo(event)" name="phone[]" id="phone"
+                                        class="dashboard-input w-100 mb-3" required>
                                     <div id="phone-append" class="contact-append"></div>
                                     <div class="text-end">
                                         <button id="add-phone" class="button button-transparent p-0 text-gray">+ Add
@@ -216,8 +217,18 @@
         return e.charCode >= 48 && e.charCode <= 57;
     }
 
+    function filterPhoneNumber(val) {
+        let check1 = val.replace("(", "");
+        let check2 = check1.replace(")", "");
+        let check3 = check2.replace("-", "");
+        let check4 = check3.replace(" ", "");
+        let check5 = check4.replace("+", "");
+        return check5;
+    }
+
     function formatPhoneNo(e) {
         let phoneNo = e.target.value;
+        phoneNo = filterPhoneNumber(phoneNo);
         e.target.value = phoneNo.replace(/(\d{3})\-?(\d{3})\-?(\d{4}).*/, '$1-$2-$3')
     }
 
@@ -234,7 +245,7 @@
     });
     $('#add-phone').on('click', function (e) {
         e.preventDefault();
-        $('#phone-append').append('<div class="append-div" id="phone-' + phoneCount + '"><input type="text" name="phone[]" maxlength="12" onkeyup="return formatPhoneNo(event)" class="phone dashboard-input"><button type="button" id="' + phoneCount + '" class="button button-transparent p-0 contact-del-btn phone-button"><span class="icon-trash"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></span></button></div>');
+        $('#phone-append').append('<div class="append-div" id="phone-' + phoneCount + '"><input type="text" name="phone[]" maxlength="14" onkeyup="return formatPhoneNo(event)" class="phone dashboard-input"><button type="button" id="' + phoneCount + '" class="button button-transparent p-0 contact-del-btn phone-button"><span class="icon-trash"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></span></button></div>');
         phoneCount++;
     });
     $(document).on('click', '.phone-button', function () {
@@ -423,7 +434,6 @@
                 }
             },
             submitHandler: function (form) {
-                console.log(form)
                 if (form.valid()) {
                     form.submit();
                 } else {

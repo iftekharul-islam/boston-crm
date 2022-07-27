@@ -16,7 +16,7 @@ class AppraisalTypeCreateRequest extends FormRequest
 	 {
 			return [
 				'form_type'     => 'required|string|unique:appraisal_types,form_type',
-				'modified_form' => 'required|string|unique:appraisal_types,modified_form',
+				'modified_form' => 'required|string',
 			];
 	 }
 }

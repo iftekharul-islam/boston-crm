@@ -22,28 +22,34 @@ class OrderWorkflowService
         $inspector = User::where('id', $schedule->inspector_id)->select('name', 'email', 'color_id')->first();
         if ($schedule->event_id) {
             $event = Event::find($schedule->event_id);
-            $eventNote = $schedule->reschedule_note;
         } else {
             $event = new Event;
-            $eventNote = $schedule->note;
         }
-        $event->name = $property_info->search_address . ' ' . $inspector->name  . ' (' . $contact_info->contact . ',' . $phone_numbers . ') ' . $eventNote;
-        $event->description = $eventNote;
+        $event->name = $property_info->search_address . ' ' . $inspector->name  . ' (' . $contact_info->contact . ',' . $phone_numbers . ') ' . $schedule->note;
+        $event->description = $schedule->note;
         $event->startDateTime = Carbon::parse($schedule->inspection_date_time);
         $event->endDateTime = Carbon::parse($schedule->inspection_date_time)->addMinute((int) $schedule->duration);
         $event->location = $property_info->search_address;
         $event->colorId = $inspector->color_id ?? 1;
-        //$event->addAttendee(['email' => $inspector->email]);
+        // Error trace : Service accounts cannot invite attendees without Domain-Wide Delegation of Authority
+        // if($inspector->email){
+        //     $event->addAttendee(['email' => $inspector->email]);
+        // }
         $newEvent = $event->save();
+
         if(!$schedule->event_id){
             $schedule->event_id = $newEvent->id;
             $schedule->save();
         }
+        return $newEvent->id ? true : false;
     }
 
     public function deleteOrderSchedule($schedule_id){
         $schedule = OrderWInspection::find($schedule_id);
         $event = Event::find($schedule->event_id);
-        $event ?? $event->delete();
+        if($event){
+            $event->delete();
+        }
+        return true;
     }
 }

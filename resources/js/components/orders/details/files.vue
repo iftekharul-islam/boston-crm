@@ -18,13 +18,17 @@
                             <div class="col-sm-6 col-md-4 col-lg-3" v-for="(files,type) in allFiles" :key="type">
                                 <p class="fw-bold text-light-black">{{ type }}</p>
                                 <div class="d-flex align-items-center mb-3" v-for="file in files">
-                                    <img v-if="file.mime_type == 'image/jpeg'" src="/img/image.svg" alt="boston files" class="img-fluid">
-                                    <img v-else-if="file.mime_type == 'application/pdf'" src="/img/pdf.svg" alt="boston files" class="img-fluid">
+                                    <img v-if="file.mime_type == 'image/jpeg'" src="/img/image.svg" alt="boston files"
+                                        class="img-fluid">
+                                    <img v-else-if="file.mime_type == 'application/pdf'" src="/img/pdf.svg"
+                                        alt="boston files" class="img-fluid">
                                     <img v-else src="/img/common.svg" alt="boston files" class="img-fluid">
                                     <div class="mgl-12">
                                         <span class="text-light-black mb-0 file-name d-block"><a
-                                            :href="file.original_url" download class="text-light-black">{{ file.name }}</a></span>
-                                        <p class="text-gray fs-12 mb-0">Uploaded: {{ getUserName(file.custom_properties) + ', '}}{{  file.created_at | momentTime  }}</p>
+                                                :href="file.original_url" download class="text-light-black">{{ file.name
+                                                }}</a></span>
+                                        <p class="text-gray fs-12 mb-0">Uploaded: {{ getUserName(file.custom_properties)
+                                            + ', '}}{{ file.created_at | momentTime }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -55,18 +59,22 @@
                             </ValidationProvider>
                         </ValidationObserver>
                         <span class="group d-block">
-                             <label for="" class="d-block mb-2 dashboard-label">Select file <span class="require"></span></label>
+                            <label for="" class="d-block mb-2 dashboard-label">Select file <span
+                                    class="require"></span></label>
                             <div class="position-relative file-upload">
                                 <input type="file" multiple v-on:change="addFiles">
-                                <label for="" class="py-2">Upload <span class="icon-upload ms-3 fs-20"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span></label>
+                                <label for="" class="py-2">Upload <span class="icon-upload ms-3 fs-20"><span
+                                            class="path1"></span><span class="path2"></span><span
+                                            class="path3"></span></span></label>
                             </div>
+                            <span class="text-danger" v-if="filesLength > 0">{{ filesLength + " files selected."}}</span>
                         </span>
                     </div>
                 </div>
             </div>
             <div slot="modal-footer">
                 <b-button variant="secondary" @click="$bvModal.hide('upload-files')">Close</b-button>
-                <b-button variant="primary" @click="saveOrderFiles">Save</b-button>
+                <b-button :disabled="disabled" variant="primary" @click="saveOrderFiles">Save</b-button>
             </div>
         </b-modal>
     </div>
@@ -86,22 +94,24 @@
                 },
                 allFiles: [],
                 orderData: [],
+                filesLength: 0,
+                disabled: false,
             }
         },
         created() {
             this.getFiles(this.orderFiles, this.order)
         },
         methods: {
-            formatedDate(date){
-                let dt =  new Date(date)
-                let day =  dt.getDate()
-                let month =  dt.getMonth()
+            formatedDate(date) {
+                let dt = new Date(date)
+                let day = dt.getDate()
+                let month = dt.getMonth()
                 let year = dt.getFullYear()
                 let hour = dt.getHours()
                 let minute = dt.getMinutes()
-                return day+'-'+month+'-'+year+' '+hour+':'+minute
+                return day + '-' + month + '-' + year + ' ' + hour + ':' + minute
             },
-            getUserName(fileObj){
+            getUserName(fileObj) {
                 let user = fileObj.user
                 return user ?? ''
             },
@@ -111,29 +121,43 @@
             },
             addFiles(event) {
                 this.fileData.files = event.target.files
+                this.filesLength = event.target.files.length
             },
             saveOrderFiles() {
+                this.disabled = true
                 this.$refs.fileForm.validate().then((status) => {
                     if (status) {
-                        let formData = new FormData();
-                        for (let i = 0; i < this.fileData.files.length; i++) {
-                            let file = this.fileData.files[i];
-                            formData.append('files[' + i + ']', file);
-                        }
-                        formData.append('file_type', this.fileData.file_type)
-                        this.$boston.post('upload-order-files/' + this.orderData.id, formData, {
-                            headers: {
-                                'Content-Type': 'multipart/form-data'
+                        if (this.fileData.files.length == 0) {
+                            this.$toast.open({
+                                message: "Please select one or more files to upload",
+                                type: 'error'
+                            });
+                            return false;
+                        } else {
+                            let formData = new FormData();
+                            for (let i = 0; i < this.fileData.files.length; i++) {
+                                let file = this.fileData.files[i];
+                                formData.append('files[' + i + ']', file);
                             }
-                        }).then(res => {
-                            this.orderData = res.data
-                            this.$root.$emit('wk_update', res.data)
-                            this.$root.$emit('wk_flow_toast', res)
-                            this.getFiles(res.orderFiles, this.orderData)
-                            this.$bvModal.hide('upload-files')
-                        }).catch(err => {
-                            console.log(err)
-                        })
+                            formData.append('file_type', this.fileData.file_type)
+                            this.$boston.post('upload-order-files/' + this.orderData.id, formData, {
+                                headers: {
+                                    'Content-Type': 'multipart/form-data'
+                                }
+                            }).then(res => {
+                                this.orderData = res.data
+                                this.$root.$emit('wk_update', res.data)
+                                this.$root.$emit('wk_flow_toast', res)
+                                this.getFiles(res.orderFiles, this.orderData)
+                                this.fileData.files = []
+                                this.fileData.file_type = ''
+                                this.filesLength = 0
+                                this.$bvModal.hide('upload-files')
+                                this.disabled = false
+                            }).catch(err => {
+                                console.log(err)
+                            })
+                        }
                     }
                 })
             }
