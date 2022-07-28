@@ -496,27 +496,52 @@
                 }
             },
             goToMap() {
-                let getLatLng = [];
-                let addrUrl = "";
+                //let getLatLng = [];
+                //let addrUrl = "";
+                //if (this.selectedItems.length <= 0) {
+                //    return false;
+                //}
+                //this.selectedItems.map((ele) => {
+                //    let latLng = {
+                //        lat: parseFloat(ele.property_info.latitude),
+                //       lng: parseFloat(ele.property_info.longitude),
+                //        details: {
+                 //           orderNo: ele.client_order_no,
+                //            property: ele.property_info
+                //        }
+                //    }
+                //    getLatLng.push(latLng);
+                //    addrUrl += ele.property_info.formatedAddress + "/";
+                //});
+                //this.latLng = getLatLng;
+                //let url = "https://www.google.co.in/maps/dir/"+addrUrl+"?hl=en";
+                // this.openMap = true;
+                //window.open(url);
+                let propertyAddresses = []
                 if (this.selectedItems.length <= 0) {
                     return false;
                 }
+
                 this.selectedItems.map((ele) => {
-                    let latLng = {
-                        lat: parseFloat(ele.property_info.latitude),
-                        lng: parseFloat(ele.property_info.longitude),
-                        details: {
-                            orderNo: ele.client_order_no,
-                            property: ele.property_info
-                        }
+                    propertyAddresses.push({address: ele.property_info.search_address});
+                })
+
+                console.log(propertyAddresses)
+                let startAddress = propertyAddresses[0].address
+                let endAddress = ''
+                let wayPoints = '';
+                let travelMode = "driving";
+                for (var i = 1; i < propertyAddresses.length; i++) {
+                    if (i != propertyAddresses.length - 1)
+                        wayPoints += propertyAddresses[i]['address'] + "|"
+
+                    if (i == propertyAddresses.length - 1) {
+                        endAddress = propertyAddresses[i]['address']
                     }
-                    getLatLng.push(latLng);
-                    addrUrl += ele.property_info.formatedAddress + "/";
-                });
-                this.latLng = getLatLng;
-                let url = "https://www.google.co.in/maps/dir/"+addrUrl+"?hl=en";
-                // this.openMap = true;
-                window.open(url);
+                }
+                let url = 'https://www.google.com/maps/dir/?api=1&travelmode=' + travelMode + '&origin=' + startAddress + '&destination=' + endAddress + '&waypoints=' + wayPoints;
+
+                window.open(url, '_blank');
             },
             closeCurrentMap(event) {
                 this.openMap = false;
