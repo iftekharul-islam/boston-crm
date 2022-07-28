@@ -151,6 +151,7 @@ class PropertyTypeSeeder extends Seeder
             "Target Range",
             "Gun Club",
             "Other Fish/Game Club",
+            "Condominium"
         ];
         foreach ($types as $type) {
             PropertyType::create([

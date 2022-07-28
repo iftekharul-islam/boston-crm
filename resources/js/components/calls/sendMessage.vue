@@ -35,9 +35,6 @@
                                             class="text-danger require"></span></label>
                                     <text-editor v-model="sendMessageData.message"
                                         placeholder="Enter message here..."></text-editor>
-                                    <!-- <textarea style="white-space: pre;" v-model="sendMessageData.message" cols="30"
-                                        rows="3" class="dashboard-textarea w-100 br-8"
-                                        placeholder="Type here..."></textarea> -->
                                     <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                                 </div>
                             </validationProvider>
