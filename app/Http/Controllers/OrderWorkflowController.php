@@ -192,7 +192,7 @@ class OrderWorkflowController extends BaseController
         $report = OrderWReport::where('order_id', $id)->first();
         $creator = User::find($request->creator_id);
         $reviewer = User::find($request->reviewed_by);
-            
+
         if ($report) {
             $report->reviewed_by = $request->reviewed_by;
             $report->creator_id = $request->creator_id;
@@ -887,9 +887,10 @@ class OrderWorkflowController extends BaseController
         ];
     }
 
-    public function saveComRoute(Request $request, $order_id, $com_id, $assigned_to)
+    public function saveComRoute(Request $request)
     {
-        $this->repository->saveComRoute($request->all(), $com_id, $assigned_to);
+        $this->repository->saveComRoute($request->all());
+        $order_id = $request->order_id;
         $orderData = $this->orderDetails($order_id);
 
         $order = Order::find($order_id);
