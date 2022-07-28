@@ -9,7 +9,7 @@
                     <p class="mb-0 text-light-black fw-bold">{{ this.creator }}</p>
                 </div>
                 <div class="group">
-                    <p class="text-light-black mgb-12">Report reviewer</p>
+                    <p class="text-light-black mgb-12">Report Reviewer</p>
                     <p class="mb-0 text-light-black fw-bold">{{ this.viewer }}</p>
                 </div>
             </div>

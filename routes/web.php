@@ -300,6 +300,9 @@ Route::post('invite-user-update/{id}', [UserController::class, 'inviteUserUpdate
 Route::get('/public-order/{id}', [OrderController::class, 'publicOrder'])->name('public.order');
 Route::post('/upload-order-files/{id}', [OrderController::class, 'uploadOrderFiles'])->name('order.file.upload');
 
+Route::get('/public-com/{id}',[OrderWorkflowController::class, 'publicCom']);
+Route::post('/public-com-files/{id}',[OrderWorkflowController::class, 'publicComFiles'])->name('public.com.files');
+
 Route::post('/search/order/by/filter', [OrderController::class, 'searchOrderByFiltering'])->name('searchOrderByFiltering');
 
 

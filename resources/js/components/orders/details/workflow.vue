@@ -79,7 +79,7 @@
             <!-- Re-writing the report -->
             <RewritingReport :order="orderData" v-if="isActive === 'rewriting-report'"></RewritingReport>
             <!-- Quality Assurance (E&O) -->
-            <QualityAssurance :order="order" :users="users" v-if="isActive === 'quality-assurance'"></QualityAssurance>
+            <QualityAssurance :order="order" :users="users" :public-com="publicCom" v-if="isActive === 'quality-assurance'"></QualityAssurance>
             <!-- Submission -->
             <Submission :order="order" :users="users" v-if="isActive === 'submission'"></Submission>
             <!-- Revision -->
@@ -112,6 +112,7 @@ export default {
     role: String,
     order: [],
     appraisers: [],
+    publicCom: ''
   },
   components: {
     Revision,
