@@ -153,10 +153,10 @@ class OrderWorkflowRepository extends BaseRepository
         return $com;
     }
 
-    public function saveComRoute($data,$com_id,$assigned_to){
-        $order_w_com = OrderWComList::find($com_id);
-        $order_w_com->destination = json_encode($data);
-        $order_w_com->assigned_to = $assigned_to;
+    public function saveComRoute($data){
+        $order_w_com = OrderWComList::find($data["com_id"]);
+        $order_w_com->assigned_to = $data["assigned_to"];
+        $order_w_com->generated_link = $data["route"];
         $order_w_com->updated_by = auth()->user()->id;
         $order_w_com->save();
 
