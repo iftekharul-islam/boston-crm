@@ -330,7 +330,7 @@ class OrderController extends BaseController
 
         $company = auth()->user()->companies()->first();
         $userID = auth()->user()->id;
-        $property_types = PropertyType::all();
+        $property_types = PropertyType::orderBy('type','ASC')->get();
 
         $data = compact('system_order_no', 'userID', 'company', 'appraisal_users', 'appraisal_types', 'loan_types', 'amc_clients', 'lender_clients', 'property_types');
 

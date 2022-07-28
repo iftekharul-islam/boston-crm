@@ -68,7 +68,7 @@
     <div class="row">
         <workflow :order="{{ $order }}" :norewrite="{{ $noRewrite }}" :appraisers="{{ $appraisers }}"
             :permissions="{{ json_encode($user_permissions) }}" :role="'{{ $user_role }}'"
-            :users="{{ json_encode($all_users) }}"></workflow>
+            :users="{{ json_encode($all_users) }}" :public-com="'{{ url('/public-com/'. base64_encode($order_id) ) }}'"></workflow>
         <history :order="{{ $order }}"></history>
     </div>
     <div class="mgt-32">

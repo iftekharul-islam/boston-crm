@@ -247,6 +247,12 @@
                 class="button button-primary px-4 h-40 d-inline-flex align-items-center mt-4" @click="openSeeCom">Open
                 Map
             </button>
+            <span v-if="copied" class="alert alert-success py-2 mb-0 mgr-20 text-600">Copied</span>
+            <a :href="publicCom" @click.prevent="copyURL" ref="shareLink"
+                class="button button-primary h-40 d-inline-flex align-items-center"><span class="mgr-20">Share
+                    com url</span> <span class="icon-share"><span class="path1"></span><span class="path2"></span><span
+                        class="path3"></span><span class="path4"></span><span class="path5"></span><span
+                        class="path6"></span></span></a>
             <b-modal id="com-assign" size="md" title="Assign Route">
                 <div class="modal-body">
                     <div class="row">
@@ -289,7 +295,8 @@
         name: 'QualityAssurance',
         props: {
             order: [],
-            users: []
+            users: [],
+            publicCom: ''
         },
         data: () => ({
             qa: {
@@ -319,6 +326,7 @@
             comAddresses: [],
             comId: 0,
             canAddCom: false,
+            copied: false
         }),
         created() {
             let order = this.order;
@@ -336,6 +344,14 @@
             localStorage.removeItem('qaItem');
         },
         methods: {
+            copyURL(event) {
+                let container = this.$refs.shareLink
+                this.copy(container);
+                this.copied = true
+                setTimeout(() => {
+                    this.copied = false
+                }, 500)
+            },
             saveMapData() {
                 this.$refs.comAssignForm.validate().then((status) => {
                     if (status) {

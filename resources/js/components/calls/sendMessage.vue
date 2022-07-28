@@ -33,8 +33,8 @@
                                 <div :class="{ 'invalid-form' : errors[0] }">
                                     <label for="" class="d-block mb-1">Messages <span
                                             class="text-danger require"></span></label>
-                                    <textarea style="white-space: pre;" v-model="sendMessageData.message" cols="30" rows="3"
-                                        class="dashboard-textarea w-100 br-8" placeholder="Type here..."></textarea>
+                                    <text-editor v-model="sendMessageData.message"
+                                        placeholder="Enter message here..."></text-editor>
                                     <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                                 </div>
                             </validationProvider>
@@ -74,13 +74,13 @@
                     subject: '',
                     message: '',
                     emails: '',
-                    phones:'',
+                    phones: '',
                     send_email: 0,
                     send_sms: 0,
                     order_id: 0,
                 },
                 phones: [],
-                emails: []
+                emails: [],
             }
         },
         methods: {
@@ -106,28 +106,34 @@
                 let lenderName = lender.name
                 let propertyAddress = property.full_addr
 
-                let formattedMessage = "Hello, We have been assigned an appraisal through the " + lenderName + ". We need to schedule an appointment to complete an appraisal inspection of the subject property located at " + propertyAddress + ". Please call our offices or email us at your earliest convenience. You can reach us at 617-440-7700 or via email at orders@bostonappraisal.com. Thank you !";
+                let formattedMessage = "Hello,<br/><br/> We have been assigned an appraisal through the <b>" + lenderName + "</b>. We need to schedule an appointment to complete an appraisal inspection of the subject property located at <strong>" + propertyAddress + "</strong>. <br/><br/>Please call our offices or email us at your earliest convenience. You can reach us at <b>617-440-7700</b> or via email at <b>orders@bostonappraisal.com</b>.<br/><br/> Thank you !";
                 this.sendMessageData.message = formattedMessage;
             },
             sendMessage() {
                 this.$refs.sendMessageForm.validate().then((status) => {
                     if (status) {
+                        if (this.emails.length == 0 || this.phones.length == 0) {
+                            this.$toast.open({
+                                message: "No email or phone number found",
+                                type: 'error',
+                            });
+                            return false;
+                        }
                         if (this.sendMessageData.send_email == 0 && this.sendMessageData.send_sms == 0) {
                             this.$toast.open({
                                 message: "Please select atleast one method (Email or SMS)",
                                 type: 'error',
                             });
                             return false;
-                        } else {
-                            this.$boston.post('send-message', {'data': this.sendMessageData,'emails':this.emails,'phones': this.phones})
-                                .then(res => {
-                                    this.$bvModal.hide('send-message')
-                                    this.$root.$emit('wk_flow_toast', res)
-                                })
-                                .catch(err => {
-                                    console.error(err)
-                                })
                         }
+                        this.$boston.post('send-message', { 'data': this.sendMessageData, 'emails': this.emails, 'phones': this.phones })
+                            .then(res => {
+                                this.$bvModal.hide('send-message')
+                                this.$root.$emit('wk_flow_toast', res)
+                            })
+                            .catch(err => {
+                                console.error(err)
+                            })
                     }
                 })
             }
