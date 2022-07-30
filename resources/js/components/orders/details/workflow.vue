@@ -79,11 +79,11 @@
             <!-- Re-writing the report -->
             <RewritingReport :order="orderData" v-if="isActive === 'rewriting-report'"></RewritingReport>
             <!-- Quality Assurance (E&O) -->
-            <QualityAssurance :order="order" :users="users" v-if="isActive === 'quality-assurance'"></QualityAssurance>
+            <QualityAssurance :order="order" :users="users" :public-com="publicCom" v-if="isActive === 'quality-assurance'"></QualityAssurance>
             <!-- Submission -->
             <Submission :order="order" :users="users" v-if="isActive === 'submission'"></Submission>
             <!-- Revision -->
-            <Revision :order="orderData" v-if="isActive === 'revision'"></Revision>
+            <Revision :order="orderData" v-model="revissionBox"></Revision>
           </div>
         </div>
       </div>
@@ -112,6 +112,7 @@ export default {
     role: String,
     order: [],
     appraisers: [],
+    publicCom: ''
   },
   components: {
     Revision,
@@ -135,6 +136,7 @@ export default {
       isActive: 'order-create',
       status: '',
       myRole: '',
+      revissionBox: false,
       orderData: [],
   }),
   created(){
@@ -213,7 +215,8 @@ export default {
         this.addParam('wkf', type);
 
         if (type == "revision") {
-            this.$root.$emit('open_revision', true);
+            this.revissionBox = true;
+            // this.$root.$emit('open_revision', true);
             document.documentElement.style.overflow = 'hidden'
         }
     },
@@ -226,6 +229,15 @@ export default {
             }
         }
         return false;
+    }
+  },
+  watch: {
+    isActive: function(val){
+        if (val === 'revision') {
+            this.revissionBox = true;
+        } else {
+            this.revissionBox = false;
+        }
     }
   }
 }

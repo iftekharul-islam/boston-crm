@@ -90,7 +90,11 @@ Vue.mixin({
             let fullDate = `${year}-${month + 1}-${dates}`;
             return fullDate;
         },
-        selectText(event) {
+        selectText(phone) {
+            let url = "https://vcc-na1.8x8.com/AGUI/make_call.php?phone="+phone;
+            window.open(url);
+        },
+        textSelect(event) {
             let target = event.target;
             target.select();
         }

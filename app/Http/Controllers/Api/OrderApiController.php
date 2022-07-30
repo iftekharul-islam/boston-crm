@@ -99,6 +99,7 @@ class OrderApiController extends Controller
 
             if ($orderId == null) {
                 $this->addHistory($order, $user, "New order has been created by {$user->name}", 'order-create');
+                $this->addActivity( $user, "You've create a new order. Order Client No: <strong>$clientOrderNo</strong><br>System Order No: <strong>$systemOrder</strong>");
             }
 
             $fhaCaseNo = $step['fhaCaseNo'];

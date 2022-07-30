@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\TaskBasedReport;
 use Carbon\Carbon;
 use App\Models\Order;
 use App\Helpers\CrmHelper;
@@ -32,7 +33,7 @@ class CallController extends BaseController
         $data = $get->data;
         $paginate = $get->paginate && $get->paginate > 0 ? $get->paginate : 10;
         $dateRange = $get->dateRange;
-        $filterType = $get->filterType;
+        $filterType = $get->filterType ?: 'to_schedule';
         $order = $this->orderData($data, $companyId, $paginate, $dateRange, $filterType);
         $filterValue = $this->getFilterType();
         return view('call.index', compact('order','appraisers', 'filterValue'));

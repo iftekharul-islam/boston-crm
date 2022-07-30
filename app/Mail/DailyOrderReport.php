@@ -345,7 +345,7 @@ class DailyOrderReport extends Mailable
 
         logger($order);
         logger('hello from mail');
-        return $this->view('emails.daily-report', [
+        return $this->subject('Daily order report')->view('emails.daily-report', [
             'order' => $order,
             'name' => $this->name,
             'dataExists' =>  $dataExist,

@@ -205,7 +205,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/save-quality-assurance', [OrderWorkflowController::class, 'saveQualityAssurance']);
     Route::post('/update-quality-assurance', [OrderWorkflowController::class, 'updateQualityAssurance']);
     Route::post('/save-com/{id}', [OrderWorkflowController::class, 'saveCom']);
-    Route::post('/save-com-route/{order_id}/{com_id}/{assigned_to}', [OrderWorkflowController::class, 'saveComRoute']);
+    Route::post('/save-com-route', [OrderWorkflowController::class, 'saveComRoute']);
 
 
     //Appraisal Type
@@ -306,6 +306,9 @@ Route::get('accept-new-user/{code}', [UserController::class, 'acceptInviteUser']
 Route::post('invite-user-update/{id}', [UserController::class, 'inviteUserUpdate'])->name('update.invite.user.profile');
 Route::get('/public-order/{id}', [OrderController::class, 'publicOrder'])->name('public.order');
 Route::post('/upload-order-files/{id}', [OrderController::class, 'uploadOrderFiles'])->name('order.file.upload');
+
+Route::get('/public-com/{id}',[OrderWorkflowController::class, 'publicCom']);
+Route::post('/public-com-files/{id}',[OrderWorkflowController::class, 'publicComFiles'])->name('public.com.files');
 
 Route::post('/search/order/by/filter', [OrderController::class, 'searchOrderByFiltering'])->name('searchOrderByFiltering');
 

@@ -793,6 +793,7 @@ select {
         border-radius: 4px;
         max-height: 850px;
         overflow-y: auto;
+        left: 0;
     }
     .step-items {
         position: relative;
@@ -1405,6 +1406,17 @@ select {
 .fade-enter,
 .fade-leave-to {
     opacity: 0;
+}
+
+.fade-x-enter-active,
+.fade-x-leave-active {
+    transition: opacity 0.3s;
+    transform: translateX(0px);
+}
+.fade-x-enter,
+.fade-x-leave-to {
+    opacity: 0;
+    transform: translateX(200px);
 }
 
 

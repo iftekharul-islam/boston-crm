@@ -6,7 +6,7 @@
                     <div class="left chart-box-header-btn d-flex flex-wrap me-3">
                         <button @click="filterByTab('all')"
                             :class="{'active' : pages.filterType == 'all' || pages.filterType == null}"
-                            class="calls-btn h-40 d-flex align-items-center mb-2">All <span class="ms-2">
+                            class="calls-btn h-40 d-flex align-items-center mb-2 d-none">All <span class="ms-2">
                                 ({{ filterValue.all }})</span></button>
                         <button @click="filterByTab('to_schedule')"
                             :class="{'active' : pages.filterType == 'to_schedule'}"
@@ -228,7 +228,7 @@
                     <p class="mb-0 left-side">Borrower Phone Numbers</p>
                     <span>:</span>
                     <p class="right-side list-items mb-0 phone-number">
-                    <input @click="selectText($event)" readonly class="d-inline-block mb-2" v-for="item, ik in contact_number_s" :key="ik" :value="item"/>
+                    <input @click="selectText(item)" readonly class="d-inline-block mb-2" v-for="item, ik in contact_number_s" :key="ik" :value="item"/>
                     </p>
                 </div>
                 <hr>
@@ -241,7 +241,7 @@
                     <p class="mb-0 left-side">Contact Phone Numbers</p>
                     <span>:</span>
                     <p class="right-side list-items mb-0 phone-number">
-                    <input @click="selectText($event)" readonly class="d-inline-block mb-2" v-for="item, ik in contact_ex_number_s" :key="ik" :value="item"/>
+                    <input @click="selectText(item)" readonly class="d-inline-block mb-2" v-for="item, ik in contact_ex_number_s" :key="ik" :value="item"/>
                     </p>
                 </div>
             </div>
@@ -251,7 +251,7 @@
         <call-schedule ref="callScheduleComponent" :appraisers="appraisers"></call-schedule>
         <call-re-schedule ref="callReScheduleComponent" :appraisers="appraisers"></call-re-schedule>
         <send-message ref="sendMessageComponent"></send-message>
-        <Map v-if="openMap" :latLng="latLng" @closeMap="closeCurrentMap($event)" />
+        <!-- <Map v-if="openMap" :latLng="latLng" @closeMap="closeCurrentMap($event)" /> -->
 
         <div class="modal fade schedule-modal call-log-modal" id="callLogModal" tabindex="-1"
             aria-labelledby="callLogModalLabel" aria-hidden="true">
@@ -303,7 +303,7 @@
 
 <script>
     import Table from "../../src/Table.vue"
-    import Map from "./map.vue"
+    // import Map from "./map.vue"
     import Quickview from "./quickView.vue";
 
     import Calendar from 'v-calendar/lib/components/calendar.umd'
@@ -316,7 +316,7 @@
         name: "call-lists",
         props: ['order', 'appraisers', 'filter-value'],
         components: {
-            Map,
+            // Map,
             'quick-view': Quickview,
             Table,
         },
@@ -342,7 +342,7 @@
                 pageData: [],
                 acitvePage: 1,
                 searchModel: null,
-                filterType: null,
+                filterType: "to_schedule",
                 paginate: 10,
                 perPages: [10, 15, 20, 25, 30, 40, 50, 60, 100]
             },
@@ -496,23 +496,52 @@
                 }
             },
             goToMap() {
-                let getLatLng = [];
+                //let getLatLng = [];
+                //let addrUrl = "";
+                //if (this.selectedItems.length <= 0) {
+                //    return false;
+                //}
+                //this.selectedItems.map((ele) => {
+                //    let latLng = {
+                //        lat: parseFloat(ele.property_info.latitude),
+                //       lng: parseFloat(ele.property_info.longitude),
+                //        details: {
+                 //           orderNo: ele.client_order_no,
+                //            property: ele.property_info
+                //        }
+                //    }
+                //    getLatLng.push(latLng);
+                //    addrUrl += ele.property_info.formatedAddress + "/";
+                //});
+                //this.latLng = getLatLng;
+                //let url = "https://www.google.co.in/maps/dir/"+addrUrl+"?hl=en";
+                // this.openMap = true;
+                //window.open(url);
+                let propertyAddresses = []
                 if (this.selectedItems.length <= 0) {
                     return false;
                 }
+
                 this.selectedItems.map((ele) => {
-                    let latLng = {
-                        lat: parseFloat(ele.property_info.latitude),
-                        lng: parseFloat(ele.property_info.longitude),
-                        details: {
-                            orderNo: ele.client_order_no,
-                            property: ele.property_info
-                        }
+                    propertyAddresses.push({address: ele.property_info.search_address});
+                })
+
+                console.log(propertyAddresses)
+                let startAddress = propertyAddresses[0].address
+                let endAddress = ''
+                let wayPoints = '';
+                let travelMode = "driving";
+                for (var i = 1; i < propertyAddresses.length; i++) {
+                    if (i != propertyAddresses.length - 1)
+                        wayPoints += propertyAddresses[i]['address'] + "|"
+
+                    if (i == propertyAddresses.length - 1) {
+                        endAddress = propertyAddresses[i]['address']
                     }
-                    getLatLng.push(latLng);
-                });
-                this.latLng = getLatLng;
-                this.openMap = true;
+                }
+                let url = 'https://www.google.com/maps/dir/?api=1&travelmode=' + travelMode + '&origin=' + startAddress + '&destination=' + endAddress + '&waypoints=' + wayPoints;
+
+                window.open(url, '_blank');
             },
             closeCurrentMap(event) {
                 this.openMap = false;

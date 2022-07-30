@@ -14,7 +14,7 @@
         <p class="mb-0 left-side">Phone Numbers</p>
         <span>:</span>
         <p class="right-side list-items mb-0 phone-number">
-          <input @click="selectText($event)" readonly class="d-inline-block mb-2" v-for="item, ik in contact_number_s" :key="ik" :value="item"/>
+          <input @click="selectText(item)" readonly class="d-inline-block mb-2" v-for="item, ik in contact_number_s" :key="ik" :value="item"/>
         </p>
       </div>
       <div class="list__group">
