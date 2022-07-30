@@ -81,19 +81,21 @@
 
                             <div class="comment-box">
                                 <div class="comment-box-header mb-3" v-if="tagsAvailable">
-                                    <a href="#" class="tag">Notify {{ tags }}</a>
+                                    <a href="#" class="tag">Notify</a>
                                     <vue-tags-input
                                         v-model="tag"
                                         :tags="tags"
                                         :autocomplete-items="filteredItems"
                                         :add-only-from-autocomplete="true"
-                                        placeholder="Add/Remove User"
+                                        placeholder="Add User"
                                         @tags-changed="newTags => tags = newTags" />
                                 </div>
-                                <textarea name="" id="" rows="5" class="comment-box-textarea"
-                                    placeholder="Write here..."></textarea>
+                                <b-form-textarea v-model="currentClient.newComment" class="comment-box-textarea mb-2" placeholder="Enter issue..." rows="5"
+                                                 cols="5">
+                                </b-form-textarea>
+                                <p class="text-danger mb-2" v-if="currentClient.commentValidate">Please add a comment first !!!</p>
                                 <div class="text-end">
-                                    <button class="button button-primary py-2 px-3">Comment</button>
+                                    <button class="button button-primary py-2 px-3" @click="updateComment">Comment</button>
                                 </div>
                             </div>
                         </div>
@@ -150,6 +152,8 @@
                 phone: '',
                 status: '',
                 comments: '',
+                newComment: '',
+                commentValidate: false,
             },
         }),
         computed: {
@@ -187,6 +191,32 @@
             })
         },
         methods: {
+            updateComment() {
+                if (!this.currentClient.newComment.replace(/\s/g, "").length){
+                    this.currentClient.commentValidate = true;
+                    setTimeout( () => {
+                        this.currentClient.commentValidate = false;
+                    },1000)
+                    return
+                }
+                let data = {
+                    'client_id': this.currentClient.id,
+                    'description': this.currentClient.newComment,
+                    'notify': this.tags
+                }
+                this.$boston.post('create-client-comment', data)
+                    .then(res => {
+                        this.currentClient.newComment = ''
+                        this.tags = [];
+                        this.allClients = res.data
+                        this.initStatus(res.statuses)
+                        this.$root.$emit('toast_msg', res)
+                        this.changeActiveStatus(this.currentClient.status)
+                    })
+                    .catch(err => {
+                        console.error(err)
+                    })
+            },
             fetchUsers() {
                 this.$boston.get('user-list')
                     .then(res => {

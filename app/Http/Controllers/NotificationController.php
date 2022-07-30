@@ -9,6 +9,6 @@ class NotificationController extends Controller
 {
     public function index()
     {
-        return Notification::with('sender')->orderBy('created_at', 'desc')->get();
+        return Notification::with('sender')->where('user_id', auth()->user()->id)->orderBy('created_at', 'desc')->get();
     }
 }

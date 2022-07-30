@@ -6,13 +6,19 @@
                     <span class="icon-notification"></span>
                 </a>
             </template>
-            <b-dropdown-item href="#">
+            <b-dropdown-item href="#" v-for="(item, index) in notifications" :key="index">
                 <div class="call-summary-item mx-2">
                     <div class="top d-flex align-items-center">
-                        <img src="/img/user.png" alt=" profile photo boston" class="img-fluid">
+                        <div v-if="item.sender.media.length">
+                            <img :src="item.sender.media[0].original_url" alt=" profile photo boston"
+                                 class="img-fluid">
+                        </div>
+                        <div v-else>
+                            <img src="/img/user.png" alt="boston image" class="comment-img">
+                        </div>
                         <div class="ms-3">
-                            <p class="fw-bold mb-1">asdasdasdas</p>
-                            <p class="text-gray fs-12 mb-0">asdasdasdasd</p>
+                            <p class="fw-bold mb-1">{{ item.message }}</p>
+                            <p class="text-gray fs-12 mb-0">{{ item.created_at }}</p>
                         </div>
                     </div>
                 </div>
