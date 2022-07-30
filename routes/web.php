@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\Notify;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\IconController;
@@ -19,6 +20,8 @@ use App\Http\Controllers\OrderWorkflowController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\CallController;
 use App\Http\Controllers\CallLogController;
+use App\Http\Controllers\PusherNotificationController;
+use App\Http\Controllers\NotificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -282,6 +285,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('call', [CallController::class, 'index'])->middleware('role_permission:view.call')->name('call.index');
     Route::post('search/call/order', [CallController::class, 'searchCallOrder'])->middleware('role_permission:view.call')->name('call.search');
     Route::post('send-message', [CallController::class, 'sendMessage']);
+
+    //notifications
+    Route::get('notifications', [NotificationController::class, 'index']);
 });
 Auth::routes();
 
@@ -320,3 +326,20 @@ Route::post('revissin/solutions/delete', [OrderWorkflowController::class, 'revis
 Route::post('check/client/order/no', [OrderWorkflowController::class, 'checkClientOrderNo']);
 
 //Route::get( "{slug}", [ WebApiController::class, 'home' ] )->where( 'slug', ".*" );
+
+Route::get('/auth-user', [UserController::class, 'authUser']);
+Route::get('/user-list', [UserController::class, 'userList']);
+
+Route::get('/notification', function () {
+    return view('notification');
+});
+
+Route::get('send',[PusherNotificationController::class, 'notification']);
+
+Route::get('/event',function () {
+    event(new Notify('Hey how are you!', 2));
+});
+
+Route::get('/listen',function () {
+    return view('listen');
+});

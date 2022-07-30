@@ -21,6 +21,7 @@
         "laravel/ui": "^3.4",
         "maatwebsite/excel": "^3.1",
         "owen-it/laravel-auditing": "^13.0",
+        "pusher/pusher-php-server": "^7.0",
         "spatie/laravel-fractal": "^6.0",
         "spatie/laravel-google-calendar": "^3.5",
         "spatie/laravel-medialibrary": "^9.0.0",
