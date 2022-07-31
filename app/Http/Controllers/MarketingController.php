@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\Notify;
+use App\Models\MarketingClientComment;
+use App\Models\Notification;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\MarketingClient;
@@ -108,6 +111,38 @@ class MarketingController extends BaseController
             "data" => $clients,
             "statuses" => $statuses,
             "message" => "Client status changed successfully"
+        ];
+    }
+
+    /**
+     * @param Request $request
+     * @return array
+     */
+    public function createClientComment(Request $request){
+        $data = $request->only(['client_id', 'description', 'created_by']);
+        $data['created_by'] = auth()->user()->id;
+        MarketingClientComment::create($data);
+        logger('$request->notify');
+        logger($request->notify);
+        foreach ($request->notify ?? [] as  $item){
+            logger($item['id']);
+            $notification = new Notification();
+            $notification->user_id = $item['id'];
+            $notification->message = $data['description'];
+            $notification->created_by = $data['created_by'];
+            $notification->save();
+
+            event(new Notify($data['description'], $item['id']));
+
+        }
+
+
+        $clients = MarketingClient::with('comments.user')->orderBy('created_at', 'desc')->get();
+        $statuses = MarketingStatus::withCount('client')->get();
+        return [
+            "data" => $clients,
+            "statuses" => $statuses,
+            "message" => "Client comment updated successfully"
         ];
     }
 }
