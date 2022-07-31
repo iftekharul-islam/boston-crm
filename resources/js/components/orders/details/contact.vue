@@ -8,7 +8,7 @@
       <div class="list__group">
         <p class="mb-0 left-side">Contact name</p>
         <span>:</span>
-        <p class="right-side mb-0"><span v-html="contact_info"></span></p>
+        <p class="right-side mb-0" v-html="contact_info"></span></p>
       </div>
       <div class="list__group">
         <p class="mb-0 left-side">Phone Numbers</p>
