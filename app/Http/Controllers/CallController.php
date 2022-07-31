@@ -69,7 +69,7 @@ class CallController extends BaseController
         }
 
 
-        $order = Order::where(function($qry) use ($data, $orderId, $dataPropertyClient) {
+        $order = Order::where(function($qry) use ($data, $orderId, $filterType, $dataPropertyClient) {
             if ($data) {
                 return $qry->when($orderId, function($qrys) use ($orderId){
                                 return $qrys->whereIn('id', $orderId);
@@ -83,6 +83,9 @@ class CallController extends BaseController
             } else {
                 if ($orderId) {
                     $searchOrderId = $orderId;
+                    return $qry->whereIn('id', $searchOrderId);
+                } else if($filterType == "today_call") {
+                    $searchOrderId = $orderId ?? [];
                     return $qry->whereIn('id', $searchOrderId);
                 }
             }
