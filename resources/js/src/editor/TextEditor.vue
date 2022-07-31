@@ -76,9 +76,10 @@
 import colors from './color';
 export default {
     name: 'text-editr-urcv',
-    props: ['uc-key', 'click-type', 'disabled', 'header-bg', 'invalid', 'invalid-message', 'min-height', 'max-height', 'placeholder', 'return-on'],
+    props: ['uc-key', 'update', 'click-type', 'disabled', 'header-bg', 'invalid', 'invalid-message', 'min-height', 'max-height', 'placeholder', 'return-on'],
     data: () => ({
         edit: true,
+        firstTry: 0,
         showHtmlStatus: false,
         htmlcode: null,
         returnWhen: "click",
@@ -104,6 +105,10 @@ export default {
             }else{
                 this.getClickType = 2;
             }
+        }
+
+        if (this.$props.update !== undefined) {
+            this.firstTry = 1;
         }
 
         if(this.returnOn && this.returnOn == "text"){
@@ -132,7 +137,7 @@ export default {
                 cardItem.slideDown(100);
             }
         });
-        this.returnValueId();        
+        this.returnValueId();
     },
     methods: {
         setCommand(command, ui=true, value = null){
@@ -199,7 +204,7 @@ export default {
                 </ul>
             `;
             if(res.tag){
-                newValue = `<div class="${id} attr-sections" data-id="${res.id}"> 
+                newValue = `<div class="${id} attr-sections" data-id="${res.id}">
                     <span>${value}</span>
                 </div>`;
             }
@@ -274,16 +279,23 @@ export default {
     watch: {
         $props: {
             handler(val){
-                
+
             },
             deep: true,
         },
         $attrs: {
             handler(val){
-                // this.value = val.modelValue;
+                if (val.modelValue == null || val.modelValue == "") {
+                    this.value = null;
+                } else {
+                    if (this.firstTry == 1) {
+                        this.value = val.modelValue;
+                        this.firstTry = 0;
+                    }
+                }
             },
             deep: true,
-        }
+        },
     }
 }
 </script>
@@ -407,7 +419,7 @@ export default {
 }
 .attr-sections{
     cursor: pointer!important;
-    -webkit-user-select: none!important; /* Safari */        
+    -webkit-user-select: none!important; /* Safari */
     -moz-user-select: none!important; /* Firefox */
     -ms-user-select: none!important; /* IE10+/Edge */
     user-select: none!important; /* Standard */
@@ -455,6 +467,6 @@ export default {
         max-width: 100%;
         min-width: 100%;
         max-height: 200px;
-    }   
+    }
 }
 </style>

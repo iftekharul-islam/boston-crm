@@ -28,7 +28,7 @@
                                 </div>
                                 <div class="box-body">
                                     <div class="box-search">
-                                        <input type="text" v-model="searchFilterInput" @input="checkSearch($event.target.value, dCol)" placeholder="Search...">
+                                        <input type="text" @input="checkSearch($event.target.value, dCol)" placeholder="Search...">
                                     </div>
                                     <div class="box-lists">
                                         <div class="drop-box-list" :class="{'active' : filter_item.status == true }" v-for="filter_item, fi in filterTypeValue[dCol.key]" :key="fi" @click="chooseFilterItem(filter_item, dCol.key)">
@@ -55,6 +55,9 @@
                     </div>
                 </div>
                 <Table v-if="!gLoad" :items="orderData" :sl-start="pages.pageData.from" :header="order.header" @headClick="headerClick($event)">
+                    <template v-slot:amc_id="{item}">
+                        {{ item.amc ? item.amc.name : '-' }}
+                    </template>
                     <template v-slot:map_it="{item}">
                         <a target="_blank" :href="`https://www.google.com/maps/search/?api=1&query=${item.property_info ? item.property_info.search_address : ''}`" :data-key="item.id">
                             <img src="/img/marker.png" class="img-fluid" style="height: 24px">
@@ -63,20 +66,24 @@
                     <template v-slot:inspector="{item}">
                         {{ item.inspection ? item.inspection.user.name : '-' }}
                     </template>
-                    <template v-slot:amc_name="{item}">
-                        <strong>Amc:</strong> {{ item.extra_data.amc_name }} <br>
-                        <strong>Lender:</strong> {{ item.extra_data.lender }}
-                    </template>
-                    <template v-slot:full_address="{item}">
-                        <div class="full_addr">
-                            {{ item.extra_data.full_address }}
-                        </div>
-                    </template>
-                     <template v-slot:due_date="{item}">
+                    <template v-slot:due_date="{item}">
                         {{ item.due_date | onlyDate }}
                     </template>
                     <template v-slot:inspection_date="{item}">
                         {{ item.inspection ? item.inspection.inspection_date_time : '-' }}
+                    </template>
+                    <template v-slot:appraiser="{item}">
+                        <template v-if="item.appraisal_detail">
+                            {{ item.appraisal_detail.appraiser ? item.appraisal_detail.appraiser.name : '-' }}
+                        </template>
+                        <template v-else>
+                            -
+                        </template>
+                    </template>
+                    <template v-slot:property_address="{item}">
+                        <div class="td-text-overflow" :title="item.property_info.full_addr">
+                            {{ item.property_info.full_addr }}
+                        </div>
                     </template>
                     <template v-slot:view="{item}">
                         <template v-if="viewAvailable(item.status)">
@@ -108,7 +115,7 @@
                         </div>
                     </template>
                     <template v-slot:head_action="{item}">
-                        <img src="/icons/column.svg" :tag="item.item" class="cursor-pointer open-head-column">
+                        <img src="/icons/column.svg" :tag="item.item" class="cursor-pointer">
                     </template>
                     <template v-slot:popup>
                         <transition name="fade" appear v-if="visibleColumnDropDown">
@@ -176,7 +183,6 @@ export default {
         summaryData: [],
         orderData: [],
         filterDataBackup: [],
-        searchFilterInput: '',
         filterTypeValue: [],
         visibleColumnDropDown: false,
         filterTypeBack: [],
@@ -189,11 +195,38 @@ export default {
             perPages: [10,15,20,25,30,40,50,60,100]
         },
         order: {
+            // header2: [
+            //     client_order_no
+            //     system_order_no
+            //     loan_no
+            //     receive_date
+            //     due_date
+            //     loan_type
+            //     fha_case_no
+            //     appraiser_name
+            //     property_type
+            //     amc_name
+            //     technology_fee
+            //     lender
+            //     full_address
+            //     state_name
+            //     area
+            //     unit_no
+            //     street_name
+            //     zip_code
+            //     latitude
+            //     longitude
+            //     county
+            //     provided_note
+            //     borrower_name
+            //     co_borrower_name
+            //     contact_name
+            // ],
             header: [
                 'Order No@client_order_no@left@left',
-                'Client Name@amc_name@left@left',
-                'Property Address@full_address@left@left',
-                'Appraiser@appraiser_name|extra_data@left@left',
+                'Client Name@amc_id@left@left',
+                'Property Address@property_address@left@left',
+                'Appraiser@appraiser@left@left',
                 'Inspector@inspector@left@left',
                 'Inspection Date@inspection_date@left@left',
                 'Due date@due_date@left@left',
@@ -233,83 +266,7 @@ export default {
                 {
                     title: "Due Date",
                     key: "due_date"
-                },
-                {
-                    title: "Loan No",
-                    key: "loan_no|extra_data",
-                },
-                {
-                    title: "Receive date",
-                    key: "receive_date|extra_data",
-                },
-                {
-                    title: "Loan Type",
-                    key: "loan_type|extra_data",
-                },
-                {
-                    title: "FHA case no",
-                    key: "fha_case_no|extra_data",
-                },
-                {
-                    title: "Property Type",
-                    key: "property_type|extra_data"
-                },
-                {
-                    title: "Technology Fee",
-                    key: "technology_fee|extra_data"
-                },
-                {
-                    title: "State Name",
-                    key: "state_name|extra_data"
-                },
-                {
-                    title: "Lender",
-                    key: "lender|extra_data"
-                },
-                {
-                    title: "Area/City",
-                    key: "area|extra_data"
-                },
-                {
-                    title: "Unit no",
-                    key: "unit_no|extra_data"
-                },
-                {
-                    title: "Street Name",
-                    key: "street_name|extra_data"
-                },
-                {
-                    title: "Zip code",
-                    key: "zip_code|extra_data"
-                },
-                {
-                    title: "Latitude",
-                    key: "latitude|extra_data"
-                },
-                {
-                    title: "Longitude",
-                    key: "longitude|extra_data"
-                },
-                {
-                    title: "County",
-                    key: "county|extra_data"
-                },
-                {
-                    title: "Provided note",
-                    key: "provided_note|extra_data"
-                },
-                {
-                    title: "Borrower name",
-                    key: "borrower_name|extra_data"
-                },
-                {
-                    title: "Co borrower name",
-                    key: "co_borrower_name|extra_data"
-                },
-                {
-                    title: "Contact name",
-                    key: "contact_name|extra_data"
-                },
+                }
             ]
 
         }
@@ -322,16 +279,6 @@ export default {
     },
     destroyed() {
         localStorage.removeItem('orderSearchType');
-    },
-    mounted() {
-        $(document).on("click", function (e) {
-            let target = $(".open-head-column");
-            let eventTarget = $(e.target);
-            let secondTarget = $(".column-list");
-            if (!eventTarget.is(target) && target.has(eventTarget).length == 0 && !eventTarget.is(secondTarget) && secondTarget.has(eventTarget).length == 0) {
-                this.visibleColumnDropDown = false;
-            }
-        }.bind(this));
     },
     methods: {
         viewAvailable(status) {
@@ -538,8 +485,6 @@ export default {
             });
             this.filterTypeValue[key] = filterValueByKey;
 
-            this.searchFilterInput = '';
-
             this.gLoad = true;
             this.$boston.post('search/order/by/filter', { item: firstKey, key }).then( (res) => {
                 this.gLoad = false;
@@ -598,7 +543,6 @@ select.form-control {
     background: #fff;
     min-width: 220px;
     height: auto;
-    max-height: 500px;
     right: 0;
     top: 40px;
     border: 1px solid rgba(25, 183, 162, 0.5);
@@ -606,7 +550,6 @@ select.form-control {
     border-radius: 8px;
     overflow: hidden;
     bottom: auto;
-    overflow-y: auto;
     padding: 20px;
 }
 .column-list .col-item {
@@ -770,18 +713,5 @@ select.form-control {
 .drop-box .drop-box-list.active:after {
     background: #19b7a2;
     border-color: #19b7a2;
-}
-.full_addr {
-    height: 44px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    cursor: pointer;
-    transition: all 200ms ease-in-out;
-}
-.full_addr:hover {
-    display: table;
-    height: auto;
-    overflow: auto;
-    transition: all 200ms ease-in-out;
 }
 </style>

@@ -46,7 +46,7 @@
                         </div>
                     </div>
                 </div>
-                <Table :items="orderData" :sl-start="pages.pageData.from" :header="table.header"
+                <Table v-if="!gLoad" :items="orderData" :sl-start="pages.pageData.from" :header="table.header"
                     @headClick="headerClick($event)">
                     <template v-slot:status="{item}">
                         <p class="mb-0 status-scheduled td-text-overflow" :title="item.order_status">{{
@@ -68,8 +68,9 @@
                             </span>
                         </div>
                     </template>
-                    <template v-slot:client_name="{item}">
-                        {{ item.amc ? item.amc.name : '-' }}
+                    <template v-slot:amc_name="{item}">
+                        <strong>Amc:</strong> {{ item.extra_data.amc_name }} <br>
+                        <strong>Lender:</strong> {{ item.extra_data.lender }}
                     </template>
                     <template v-slot:last_call="{item}">
                         {{ item.last_call ? item.last_call : '-' }}
@@ -95,8 +96,8 @@
                         </template>
                     </template>
                     <template v-slot:property_address="{item}">
-                        <div class="td-text-overflow" :title="item.property_info.full_addr">
-                            {{ item.property_info.full_addr }}
+                        <div class="full_addr">
+                            {{ item.extra_data.full_address }}
                         </div>
                     </template>
                     <template v-slot:action="{item}">
@@ -152,6 +153,7 @@
                         </transition>
                     </template>
                 </Table>
+                <m-load v-else></m-load>
                 <div class="d-flex align-items-center justify-content-center">
                     <div class="text-center d-flex justify-content-center mgr-20">
                         <select @change="loadPage(pages.activePage)" name="paginate" class="form-control per-page"
@@ -360,11 +362,96 @@
                 message: null
             },
             table: {
-                disableHeader: [],
+                disableHeader: [
+                    {
+                        title: "Serial No",
+                        key: "system_order_no"
+                    },
+                    {
+                        title: "Due Date",
+                        key: "due_date"
+                    },
+                    {
+                        title: "Loan No",
+                        key: "loan_no|extra_data",
+                    },
+                    {
+                        title: "Receive date",
+                        key: "receive_date|extra_data",
+                    },
+                    {
+                        title: "Loan Type",
+                        key: "loan_type|extra_data",
+                    },
+                    {
+                        title: "FHA case no",
+                        key: "fha_case_no|extra_data",
+                    },
+                    {
+                        title: "Property Type",
+                        key: "property_type|extra_data"
+                    },
+                    {
+                        title: "Technology Fee",
+                        key: "technology_fee|extra_data"
+                    },
+                    {
+                        title: "State Name",
+                        key: "state_name|extra_data"
+                    },
+                    {
+                        title: "Lender",
+                        key: "lender|extra_data"
+                    },
+                    {
+                        title: "Area/City",
+                        key: "area|extra_data"
+                    },
+                    {
+                        title: "Unit no",
+                        key: "unit_no|extra_data"
+                    },
+                    {
+                        title: "Street Name",
+                        key: "street_name|extra_data"
+                    },
+                    {
+                        title: "Zip code",
+                        key: "zip_code|extra_data"
+                    },
+                    {
+                        title: "Latitude",
+                        key: "latitude|extra_data"
+                    },
+                    {
+                        title: "Longitude",
+                        key: "longitude|extra_data"
+                    },
+                    {
+                        title: "County",
+                        key: "county|extra_data"
+                    },
+                    {
+                        title: "Provided note",
+                        key: "provided_note|extra_data"
+                    },
+                    {
+                        title: "Borrower name",
+                        key: "borrower_name|extra_data"
+                    },
+                    {
+                        title: "Co borrower name",
+                        key: "co_borrower_name|extra_data"
+                    },
+                    {
+                        title: "Contact name",
+                        key: "contact_name|extra_data"
+                    },
+                ],
                 header: [
                     "SL@sl@left@left",
                     "Order no@order_no@left@left",
-                    "Client name@client_name@left@left",
+                    "Client name@amc_name@left@left",
                     "Property address@property_address@left@left",
                     "Inspector@inspector@left@left",
                     'Due date@due_date@left@left',
@@ -547,13 +634,16 @@
                 this.openMap = false;
             },
             searchData: _.debounce(function (event) {
+                this.pages.filterType = null;
                 this.loadPage(this.pages.acitvePage, event.target.value);
             }, 300),
 
             loadPage(acitvePage = null) {
                 this.pages.acitvePage = acitvePage;
+                this.gLoad = true;
                 this.$boston.post('search/call/order?page=' + this.pages.acitvePage, { 'filterType': this.pages.filterType, data: this.pages.searchModel, paginate: this.pages.paginate, dateRange: this.dateRange }).then((res) => {
                     this.selectedItems = [];
+                    this.gLoad = false;
                     if (this.pages.filterType != 'daterange') {
                         this.dateRange.search = false;
                         this.dateRange.start = null;
@@ -562,7 +652,7 @@
                     this.pages.pageData = res;
                     this.orderData = res.data;
                 }).catch((err) => {
-                    console.log(err);
+                    this.gLoad = false;
                 });
             },
             searchDateRange() {
@@ -666,6 +756,7 @@
         background: #fff;
         min-width: 220px;
         height: auto;
+        max-height: 500px;
         right: 0;
         top: 40px;
         border: 1px solid rgba(25, 183, 162, 0.5);
@@ -675,6 +766,7 @@
         bottom: auto;
         padding: 20px;
         z-index: 999;
+        overflow-y: auto;
     }
 
     .column-list .col-item {
@@ -715,4 +807,17 @@
         top: 4px;
         cursor: hover;
     }
+.full_addr {
+    height: 44px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    transition: all 200ms ease-in-out;
+}
+.full_addr:hover {
+    display: table;
+    height: auto;
+    overflow: auto;
+    transition: all 200ms ease-in-out;
+}
 </style>

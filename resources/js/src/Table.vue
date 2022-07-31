@@ -31,7 +31,7 @@
                             </td>
                             <td v-for="hItem, hk in headerItem" :key="hk" :class="`text-align-${hItem.aligntd}`">
                                 <slot :name="hItem.item" v-bind:item="tdItem">
-                                    <div v-html="tdItem[hItem.item] ? tdItem[hItem.item] : '-'"></div>
+                                    <div v-html="setItemDetail(tdItem, hItem.item)"></div>
                                 </slot>
                             </td>
                         </tr>
@@ -204,6 +204,16 @@ export default {
         },
         clickHeader(item) {
             this.$emit('headClick', item);
+        },
+        setItemDetail(mainItem, key) {
+            let findArray = key.split("|");
+            let newKey = findArray[0];
+            let item = mainItem[newKey];
+            if (findArray[1] !== undefined) {
+                item = mainItem[findArray[1]][newKey];
+            }
+            let itemValue = item ? item : '-';
+            return itemValue;
         }
     },
     filters: {
@@ -271,16 +281,18 @@ export default {
     .m-table table tr td, 
     .m-table table thead th {
         /* border-left: thin solid #ccc; */
-        padding: 16px 5px;
+        padding: 16px 10px;
         font-size: 14px;
         transition: all 200ms linear;
         vertical-align: middle;
+        max-width: 150px;
+        word-break: break-word;
     }
      .m-table table thead th {
         font-size: 15px;
         /* background: #eee; */
         border-bottom: thin solid #ccc;
-        padding: 5px;
+        padding: 5px 10px;
         /* text-align: center; */
         transition: all 200ms linear;
     }

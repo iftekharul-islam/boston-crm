@@ -4,33 +4,34 @@ namespace App\Http\Controllers;
 
 
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Log;
 use Psy\Util\Json;
-use App\Helpers\Helper;
-use App\Models\ActivityLog;
 use App\Models\User;
-use App\Models\OrderWInspection;
 use App\Models\Order;
+use App\Models\Client;
+use App\Helpers\Helper;
 use App\Helpers\CrmHelper;
 use Illuminate\Support\Js;
+use App\Models\ActivityLog;
 use App\Models\ContactInfo;
-use App\Models\PropertyType;
 use App\Models\BorrowerInfo;
 use App\Models\PropertyInfo;
+use App\Models\PropertyType;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Services\OrderService;
 use App\Models\AppraisalDetail;
 use App\Models\ProvidedService;
+use App\Models\OrderWInspection;
 use Illuminate\Http\JsonResponse;
 use Ramsey\Collection\Collection;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use App\Repositories\OrderRepository;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Support\Facades\Auth;
 
 
 class OrderController extends BaseController
@@ -279,16 +280,24 @@ class OrderController extends BaseController
             $companyId = $user->getCompanyProfile()->company_id;
         }
         $data = $get->data ?? '';
+        $orderIds = [];
+        if ($data) {
+            $orderIds = PropertyInfo::where('formatedAddress', 'LIKE', "%$data%")->get()->pluck('order_id')->toArray();
+            $clientIds = Client::where("name", "LIKE", "%$data%")->get()->pluck('id')->toArray();
+            $getAmcIds = Order::whereIn('amc_id', $clientIds)->pluck('id')->toArray();
+            $getLenderIds = Order::whereIn('lender_id', $clientIds)->pluck('id')->toArray();
+            $mergeOrder = array_merge($getAmcIds, $getLenderIds);
+            $orderIds = array_unique(array_merge($orderIds, $mergeOrder));
+        }
         $paginate = isset($get->paginate) && $get->paginate > 0 ? $get->paginate : 10;
-        $order = Order::where(function ($qry) use ($data) {
-            return $qry->where('system_order_no', "LIKE", "%$data%")
-                ->orWhere("client_order_no", "LIKE", "%$data%");
-                // ->orWhere("received_date", "LIKE", "%$data%")
-                // ->orWhere("amc_id", "LIKE", "%$data%")
-                // ->orWhere("lender_id", "LIKE", "%$data%")
-                // ->orWhere("company_id", "LIKE", "%$data%")
-                // ->orWhere("due_date", "LIKE", "%$data%")
-                // ->orWhere("created_at", "LIKE", "%$data%");
+
+        $order = Order::where(function ($qry) use ($data, $orderIds) {
+            if (count($orderIds) > 0) {
+                return $qry->whereIn("id", $orderIds);
+            } else {
+                return $qry->where('system_order_no', "LIKE", "%$data%")
+                    ->orWhere("client_order_no", "LIKE", "%$data%");
+            }    
         })->with($this->order_list_relation())
             ->where('company_id', $companyId)
             ->orderBy('id', 'desc')
@@ -769,12 +778,6 @@ class OrderController extends BaseController
         } else if ($get->key == 'client_users') {
             return Order::where(function ($qry) use ($item, $id) {
                 return $qry->whereIn('amc_id', $id)->orWhereIn('lender_id', $id);
-                // if ($item['client_type'] == 'both') {
-                // } else if ($item['client_type'] === 'amc') {
-                //     return $qry->whereIn('amc_id', $id);
-                // } else {
-                //     return $qry->whereIn('lender_id', $id);
-                // }
             })->with($this->order_list_relation())->orderBy('id', 'desc')->paginate(100);
         } else if ($get->key == "loan_types") {
             $orderId = AppraisalDetail::whereIn('loan_type', $id)->latest()->get()->pluck("order_id");

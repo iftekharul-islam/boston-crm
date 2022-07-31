@@ -127,8 +127,10 @@ const addStatus = () =>
     import ( /*webpackChunkName: "addStatus"*/ '../components/marketing/addStatus')
 const assignTo = () =>
     import ( /*webpackChunkName: "assignTo"*/ '../components/marketing/assignTo')
+const LoaderView = () => import ( /*webpackChunkName: "LoaderView"*/ '../src/loader')
 const notification = () =>
     import ( /*webpackChunkName: "assignTo"*/ '../components/notification')
+
 
 Vue.component('clients-list', ClientList);
 Vue.component('ticket-list', TicketList);
@@ -168,4 +170,5 @@ Vue.component('marketing-list', marketingList);
 Vue.component('add-client', addClient);
 Vue.component('add-status', addStatus);
 Vue.component('assign-to', assignTo);
+Vue.component('m-load', LoaderView);
 Vue.component('notification-icon', notification);

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Ticket;
+use App\Models\LoanType;
 use App\Models\ContactInfo;
 use App\Models\BorrowerInfo;
 use App\Models\PropertyInfo;
@@ -25,7 +26,7 @@ class Order extends Model implements HasMedia
 
     protected $table = 'orders';
 
-    protected $appends = ['order_file_types', 'order_status', 'selected'];
+    protected $appends = ['order_file_types', 'order_status', 'selected', 'extra_data'];
 
     protected $casts = [
       'due_date' => 'date:d M Y',
@@ -153,7 +154,9 @@ class Order extends Model implements HasMedia
 
     public function contactInfo()
     {
-        return $this->belongsTo(ContactInfo::class, 'id', 'order_id');
+        return $this->belongsTo(ContactInfo::class, 'id', 'order_id')->withDefault([
+            'contact' => '-'
+        ]);
     }
 
     public function activityLog()
@@ -221,5 +224,43 @@ class Order extends Model implements HasMedia
 
     public function pendingTickets() {
         return $this->hasMany(Ticket::class,'order_id', 'id')->where('status', 0);
+    }
+
+    protected function getLoanType($id) {
+        $lonType = LoanType::find($id);
+        return $lonType;
+    }
+
+    public function getExtraDataAttribute() {
+        $appraiserDatails = $this->appraisalDetail;
+        $propertyInfo = $this->propertyInfo;
+        $borrowerInfo = $this->borrowerInfo;
+        return [
+            "client_order_no" => $this->client_order_no,
+            "system_order_no" => $this->system_order_no,
+            "loan_no" => $appraiserDatails->loan_no ?? '-',
+            "receive_date" => date("d-m-Y", strtotime($this->received_date)),
+            "due_date" => date("d-m-Y", strtotime($this->due_date)),
+            "loan_type" => $appraiserDatails->getLoanType->name ?? '-',
+            "fha_case_no" => $appraiserDatails->fha_case_no,
+            "appraiser_name" => $appraiserDatails->appraiser->name,
+            "property_type" => $appraiserDatails->propertyType->type,
+            "amc_name" => $this->amc->name,
+            "technology_fee" => $appraiserDatails->technology_fee,
+            "lender" => $this->lender->name,
+            "full_address" => $propertyInfo->full_addr,
+            "state_name" => $propertyInfo->state_name,
+            "area" => $propertyInfo->city_name,
+            "unit_no" => $propertyInfo->unit_no,
+            "street_name" => $propertyInfo->street_name,
+            "zip_code" => $propertyInfo->zip,
+            "latitude" => $propertyInfo->latitude,
+            "longitude" => $propertyInfo->longitude,
+            "county" => $propertyInfo->county,
+            "provided_note" => $this->providerService->note,
+            "borrower_name" => $borrowerInfo->borrower_name,
+            "co_borrower_name" => $borrowerInfo->co_borrower_name,
+            "contact_name" => $this->contactInfo->contact,
+        ];
     }
 }

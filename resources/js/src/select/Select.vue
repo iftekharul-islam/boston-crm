@@ -261,19 +261,7 @@ export default {
                 this.multipleSelect.push(item);
             }
             
-            let returnMultiple = [];
-            if (this.$props.returnArray !== undefined) {
-                this.multipleSelect.map(ele => {
-                    if (this.returnObject) {
-                        returnMultiple.push(ele[this.itemValue]);
-                    } else {
-                        returnMultiple.push(ele);
-                    }
-                });
-                this.emitValue('change', returnMultiple.length ? returnMultiple : null);
-            } else {
-                this.emitValue('change', (this.multipleSelect && this.multipleSelect.length) ? this.multipleSelect : null);
-            }
+            this.returnEmit();
         },
         initList() {
             this.interSearch = "";
@@ -341,6 +329,22 @@ export default {
         },
         removeSelectedItem(item, index) {
             this.multipleSelect.splice(index, 1);
+            this.returnEmit();            
+        },
+        returnEmit() {
+            let returnMultiple = [];
+            if (this.$props.returnArray !== undefined) {
+                this.multipleSelect.map(ele => {
+                    if (this.returnObject) {
+                        returnMultiple.push(ele[this.itemValue]);
+                    } else {
+                        returnMultiple.push(ele);
+                    }
+                });
+                this.emitValue('change', returnMultiple.length ? returnMultiple : null);
+            } else {
+                this.emitValue('change', (this.multipleSelect && this.multipleSelect.length) ? this.multipleSelect : null);
+            }
         }
     },
     watch: {
@@ -391,6 +395,9 @@ export default {
 }
 .vue-select-label .select-icon {
     transition: all 200ms linear;
+    height: 24px;
+    width: 24px;
+    line-height: 24px;
 }
 .vue-select-label.active .select-icon {
     transform: rotate(180deg);
