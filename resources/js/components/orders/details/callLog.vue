@@ -22,7 +22,7 @@
               <td>{{ index + 1}}.</td>
               <td>{{ log.caller.name }}</td>
               <td>{{ log.created_at }}</td>
-              <td class="log-message">{{ log.message }}</td>
+              <td class="log-message" v-html="log.message"></td>
               <td>
                 <span class="icon-messages2"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span></span>
               </td>
