@@ -276,7 +276,7 @@
                                     <p class="text-gray fs-12 mb-0">{{ log.created_at }}</p>
                                 </div>
                             </div>
-                            <p class="message">{{ log.message }}</p>
+                            <p class="message"><span v-html="log.message"></span></p>
                         </div>
                     </div>
                     <!-- message box -->
