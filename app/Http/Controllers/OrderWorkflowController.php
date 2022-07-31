@@ -53,10 +53,10 @@ class OrderWorkflowController extends BaseController
         $user = auth()->user();
         if ($request->schedule_id > 0) {
             $message = 'Re Scheduled successfully';
-            $historyTitle = auth()->user()->name." Re scheduled the order. <br>Order Client No: <strong class='text-primary'>{$order->client_order_no}</strong><br>Schedule Time: <strong class='text-danger'>{$request->inspection_date_time_formatted}</strong><br>Note is: <strong class='text-primary'>{$request->note}</strong><br>Duration: <strong>{$request->duration}</strong>";
+            $historyTitle = auth()->user()->name . " Re scheduled the order. <br>Order Client No: <strong class='text-primary'>{$order->client_order_no}</strong><br>Schedule Time: <strong class='text-danger'>{$request->inspection_date_time_formatted}</strong><br>Note is: <strong class='text-primary'>{$request->note}</strong><br>Duration: <strong>{$request->duration}</strong>";
         } else {
             $message = 'Schedule createded successfully';
-            $historyTitle = auth()->user()->name." scheduled the order. <br>Order Client No: <strong class='text-primary'>{$order->client_order_no}</strong><br>Schedule Time: <strong class='text-danger'>{$request->inspection_date_time_formatted}</strong><br>Note is: <strong class='text-primary'>{$request->note}</strong><br>Duration: <strong>{$request->duration}</strong>";
+            $historyTitle = auth()->user()->name . " scheduled the order. <br>Order Client No: <strong class='text-primary'>{$order->client_order_no}</strong><br>Schedule Time: <strong class='text-danger'>{$request->inspection_date_time_formatted}</strong><br>Note is: <strong class='text-primary'>{$request->note}</strong><br>Duration: <strong>{$request->duration}</strong>";
         }
 
         $this->addHistory($order, $user, $historyTitle, 'scheduling');
@@ -130,7 +130,7 @@ class OrderWorkflowController extends BaseController
         $order = Order::find($order_w_inspection->order_id);
         $user = auth()->user();
 
-        $historyTitle = auth()->user()->name.' upload the inspection file';
+        $historyTitle = auth()->user()->name . ' upload the inspection file';
         $this->addHistory($order, $user, $historyTitle, 'inspection');
 
         $order->forceFill([
@@ -168,7 +168,7 @@ class OrderWorkflowController extends BaseController
         $inspection->find($inspection_id)->addMedia($fileName)->toMediaCollection('inspection');
         $inspection = OrderWInspection::with('attachments')->where('id', $inspection_id)->first();
 
-        $historyTitle = auth()->user()->name." has saved order Inspection File.<br>File is: ".$inspection->attachments;
+        $historyTitle = auth()->user()->name . " has saved order Inspection File.<br>File is: " . $inspection->attachments;
 
         return [
             'error' => false,
@@ -192,12 +192,12 @@ class OrderWorkflowController extends BaseController
         $report = OrderWReport::where('order_id', $id)->first();
         $creator = User::find($request->creator_id);
         $reviewer = User::find($request->reviewed_by);
-            
+
         if ($report) {
             $report->reviewed_by = $request->reviewed_by;
             $report->creator_id = $request->creator_id;
             $report->save();
-            $historyTitle = $user->name." update report creator and viewer on report preperation.<br>Creator: <strong>{$creator->name}</strong><br>Reviewer: <strong>{$reviewer->name}</strong>";
+            $historyTitle = $user->name . " update report creator and viewer on report preperation.<br>Creator: <strong>{$creator->name}</strong><br>Reviewer: <strong>{$reviewer->name}</strong>";
         } else {
             $newReport = new OrderWReport();
             $newReport->order_id = $id;
@@ -205,7 +205,7 @@ class OrderWorkflowController extends BaseController
             $newReport->creator_id = $request->creator_id;
             $newReport->created_by = $user->id;
             $newReport->save();
-            $historyTitle = $user->name." assign report creator and viewer on report preperation.<br>Creator: <strong>{$creator->name}</strong><br>Reviewer: <strong>{$reviewer->name}</strong>";
+            $historyTitle = $user->name . " assign report creator and viewer on report preperation.<br>Creator: <strong>{$creator->name}</strong><br>Reviewer: <strong>{$reviewer->name}</strong>";
         }
 
         $workStatus = json_decode($order->workflow_status, true);
@@ -252,7 +252,7 @@ class OrderWorkflowController extends BaseController
             if (isset($request['files']) && count($request['files'])) {
                 $this->savePreparationFiles($request->all(), $report->id);
             }
-            $historyTitle = $user->name." update assign and trainee selection on report preperation.<br>Assign To: <strong>{$assignee->name}</strong><br>Trainee: <strong>{$trainee->name}</strong><br>Note: <strong>{$request->note}</strong>";
+            $historyTitle = $user->name . " update assign and trainee selection on report preperation.<br>Assign To: <strong>{$assignee->name}</strong><br>Trainee: <strong>{$trainee->name}</strong><br>Note: <strong>{$request->note}</strong>";
         } else {
             $newReport = new OrderWReport();
             $newReport->order_id = $order->id;
@@ -263,7 +263,7 @@ class OrderWorkflowController extends BaseController
             $newReport->note = $request->note;
             $newReport->created_by = $user->id;
             $newReport->save();
-            $historyTitle = $user->name." set assign and trainee selection on report preperation.<br>Assign To: <strong>{$assignee->name}</strong><br>Trainee: <strong>{$trainee->name}</strong><br>Note: <strong>{$request->note}</strong>";
+            $historyTitle = $user->name . " set assign and trainee selection on report preperation.<br>Assign To: <strong>{$assignee->name}</strong><br>Trainee: <strong>{$trainee->name}</strong><br>Note: <strong>{$request->note}</strong>";
 
             if (isset($request['files']) && count($request['files'])) {
                 $this->savePreparationFiles($request->all(), $newReport->id);
@@ -335,7 +335,7 @@ class OrderWorkflowController extends BaseController
             if (isset($request['files']) && count($request['files'])) {
                 $this->saveAnalysisFiles($request->all(), $analysis->id);
             }
-            $historyTitle = $user->name." update report analysis. {$noteCheckOrNot}.<br>Note: <strong class='text-primary'>{$request->note}</strong>";
+            $historyTitle = $user->name . " update report analysis. {$noteCheckOrNot}.<br>Note: <strong class='text-primary'>{$request->note}</strong>";
         } else {
             $newAnalysis = new OrderWReportAnalysis();
             $newAnalysis->order_id = $id;
@@ -345,7 +345,7 @@ class OrderWorkflowController extends BaseController
             $newAnalysis->save();
 
             $assigne = User::find($request->assigned_to);
-            $historyTitle = $user->name." set assign to report analysis.<br>Assign To: <strong>{$assigne->name}</strong>";
+            $historyTitle = $user->name . " set assign to report analysis.<br>Assign To: <strong>{$assigne->name}</strong>";
         }
 
         $workStatus = json_decode($order->workflow_status, true);
@@ -398,10 +398,10 @@ class OrderWorkflowController extends BaseController
         $assignee = User::find($request->assigned_to);
         if ($request->initial_review_id > 0) {
             $message = 'Initial Review updated successfully';
-            $historyTitle = auth()->user()->name.' set assign and update notes on Initial review.<br>Note: <strong>'.$request->note.'</strong><br>Assign To: <strong>'.$assignee->name.'</strong>';
+            $historyTitle = auth()->user()->name . ' set assign and update notes on Initial review.<br>Note: <strong>' . $request->note . '</strong><br>Assign To: <strong>' . $assignee->name . '</strong>';
         } else {
             $message = 'Initial Review createded successfully';
-            $historyTitle = auth()->user()->name.' set assign and update notes on Initial review.<br>Note: <strong>'.$request->note.'</strong><br>Assign To: <strong>'.$assignee->name.'</strong>';
+            $historyTitle = auth()->user()->name . ' set assign and update notes on Initial review.<br>Note: <strong>' . $request->note . '</strong><br>Assign To: <strong>' . $assignee->name . '</strong>';
         }
 
         $this->addHistory($order, $user, $historyTitle, 'initial-review');
@@ -433,10 +433,10 @@ class OrderWorkflowController extends BaseController
 
         if ($request->qa_id > 0) {
             $message = 'Quality Assurance updated successfully';
-            $historyTitle = auth()->user()->name.' set assign on Quality Assurance.<br>Assign To: <strong>'.$assignee->name.'</strong><br>Effective Date: <strong>'.$effectiveDate.'</strong>';
+            $historyTitle = auth()->user()->name . ' set assign on Quality Assurance.<br>Assign To: <strong>' . $assignee->name . '</strong><br>Effective Date: <strong>' . $effectiveDate . '</strong>';
         } else {
             $message = 'Quality Assurance createded successfully';
-            $historyTitle = auth()->user()->name.' set assign on Quality Assurance.<br>Assign To: <strong>'.$assignee->name.'</strong><br>Effective Date: <strong>'.$effectiveDate.'</strong>';
+            $historyTitle = auth()->user()->name . ' set assign on Quality Assurance.<br>Assign To: <strong>' . $assignee->name . '</strong><br>Effective Date: <strong>' . $effectiveDate . '</strong>';
         }
 
         $this->addHistory($order, $user, $historyTitle, 'quality-assurance');
@@ -471,10 +471,10 @@ class OrderWorkflowController extends BaseController
         $user = auth()->user();
         if ($request->qa_id > 0) {
             $message = 'Quality Assurance updated successfully';
-            $historyTitle = auth()->user()->name.' changes on Quality Assurance.<br>Note: <strong>'.$request->note;
+            $historyTitle = auth()->user()->name . ' changes on Quality Assurance.<br>Note: <strong>' . $request->note;
         } else {
             $message = 'Quality Assurance createded successfully';
-            $historyTitle = auth()->user()->name.' changes on Quality Assurance.<br>Note: <strong>'.$request->note;
+            $historyTitle = auth()->user()->name . ' changes on Quality Assurance.<br>Note: <strong>' . $request->note;
         }
 
         $this->addHistory($order, $user, $historyTitle, 'quality-assurance');
@@ -519,7 +519,7 @@ class OrderWorkflowController extends BaseController
         $reWrite->note = $get->note;
         $reWrite->save();
 
-        $historyTitle = $user->name." has update Re-writing the report.<br>Current note is <strong>".$get->note."</strong>";
+        $historyTitle = $user->name . " has update Re-writing the report.<br>Current note is <strong>" . $get->note . "</strong>";
 
         if (isset($get['files']) && count($get['files'])) {
             $this->saveRewriteFiles($get->all(), $reWrite->id);
@@ -613,7 +613,7 @@ class OrderWorkflowController extends BaseController
         $reWrite->revision_details = $get->revission;
         $reWrite->solution_details = "-";
         $reWrite->save();
-        $historyTitle = $user->name." create a new revission.<br>Revission is: <strong>{$get->revission}</strong><br>Revission date: <strong>{$deliveredDate}</strong>";
+        $historyTitle = $user->name . " create a new revission.<br>Revission is: <strong>{$get->revission}</strong><br>Revission date: <strong>{$deliveredDate}</strong>";
 
         $workStatus = json_decode($order->workflow_status, true);
         $workStatus['revision'] = 1;
@@ -663,7 +663,7 @@ class OrderWorkflowController extends BaseController
         $reWrite->solution_details = "-";
         $reWrite->save();
 
-        $historyTitle = $user->name." update revission.<br>Prev Revission was: <strong class='text-danger'>{$previousRev}</strong><br>Current Revission: <strong class='text-primary'>{$get->revission}</strong>";
+        $historyTitle = $user->name . " update revission.<br>Prev Revission was: <strong class='text-danger'>{$previousRev}</strong><br>Current Revission: <strong class='text-primary'>{$get->revission}</strong>";
 
         $workStatus = json_decode($order->workflow_status, true);
         $workStatus['revision'] = 1;
@@ -708,7 +708,7 @@ class OrderWorkflowController extends BaseController
         $reWrite->save();
 
         $deliveryDate = date('d-m-Y', strtotime($reWrite->delivery_date));
-        $historyTitle = $user->name." add a solution.<br>Revission: <strong class='text-info'>{$reWrite->revision_details}</strong> <br>Solution: <strong class='text-success'>{$get->revission['solution_details_edited']}</strong>";
+        $historyTitle = $user->name . " add a solution.<br>Revission: <strong class='text-info'>{$reWrite->revision_details}</strong> <br>Solution: <strong class='text-success'>{$get->revission['solution_details_edited']}</strong>";
 
         $workStatus = json_decode($order->workflow_status, true);
         $workStatus['revision'] = 1;
@@ -759,7 +759,7 @@ class OrderWorkflowController extends BaseController
         $deliveryDate = date('d-m-Y', strtotime($reWrite->delivery_date));
         $completedUser = User::find($get->completed_by);
         $deliveredUser = User::find($get->delivered_by);
-        $historyTitle = $user->name." marked as delivery for revission.<br>Revission: <strong class='text-info'>{$reWrite->revision_details}</strong> <br>Solution: <strong class='text-success'>{$reWrite->solution_details}</strong><br>Completed By: <strong class='text-info'>{$completedUser->name}</strong><br>Delivered By: <strong class='text-primary'>{$deliveredUser->name}</strong><br>Delivery Date: <strong class='text-primary'>{$deliveryDate}</strong>";
+        $historyTitle = $user->name . " marked as delivery for revission.<br>Revission: <strong class='text-info'>{$reWrite->revision_details}</strong> <br>Solution: <strong class='text-success'>{$reWrite->solution_details}</strong><br>Completed By: <strong class='text-info'>{$completedUser->name}</strong><br>Delivered By: <strong class='text-primary'>{$deliveredUser->name}</strong><br>Delivery Date: <strong class='text-primary'>{$deliveryDate}</strong>";
 
 
         $workStatus = json_decode($order->workflow_status, true);
@@ -799,7 +799,7 @@ class OrderWorkflowController extends BaseController
                 'message' => 'Order Revision Information Not Found'
             ]);
         }
-        $historyTitle = "Revision has been deleted by " . $user->name."<br>Solution: <strong class='text-danger'>{$reWrite->solution_details}</strong>";
+        $historyTitle = "Revision has been deleted by " . $user->name . "<br>Solution: <strong class='text-danger'>{$reWrite->solution_details}</strong>";
         $reWrite->delete();
 
         $this->addHistory($order, $user, $historyTitle, 'revision');
@@ -887,9 +887,10 @@ class OrderWorkflowController extends BaseController
         ];
     }
 
-    public function saveComRoute(Request $request, $order_id, $com_id, $assigned_to)
+    public function saveComRoute(Request $request)
     {
-        $this->repository->saveComRoute($request->all(), $com_id, $assigned_to);
+        $this->repository->saveComRoute($request->all());
+        $order_id = $request->order_id;
         $orderData = $this->orderDetails($order_id);
 
         $order = Order::find($order_id);
@@ -902,14 +903,29 @@ class OrderWorkflowController extends BaseController
         ];
     }
 
-    public function addCom(Request $request)
+    public function publicCom($order_id)
     {
-        $this->repository->addCom($request->all());
-        $orderData = $this->orderDetails($request->order_id);
-        return [
-            "message" => 'Destination updated',
-            "data" => $orderData
-        ];
+        $order = Order::find(base64_decode($order_id));
+        if (!$order) {
+            abort(404);
+        }
+        $com_list = $this->repository->getCom($order->id);
+        return view('order.public-com', compact('com_list', 'order'));
+    }
+
+    public function publicComFiles(Request $request, $id)
+    {
+        $order_id = base64_decode($id);
+        if (count($request->all()) <= 1) {
+            return redirect()
+                ->to('public-com/' . base64_encode($order_id))
+                ->with(['error' => 'Atleast one file requires among following property types !']);
+        }
+        $this->repository->saveComFiles($request->all(), $order_id);
+
+        return redirect()
+            ->to('public-com/' . base64_encode($order_id))
+            ->with(['success' => 'Property files uploaded successfully']);
     }
 
     public function checkClientOrderNo(Request $get)

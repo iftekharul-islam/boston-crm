@@ -55,7 +55,7 @@
     <div class="main-top">
         <!-- Greetings -->
         <p class="name" style="font-size: 18px; line-height: 30px; color: #2C364A; padding-bottom: 20px">
-            {{ $description }},</p>
+            {!! $description !!},</p>
 
         <div style="padding-top: 25px">
             <p style="text-align: center; color: #2F415E;">

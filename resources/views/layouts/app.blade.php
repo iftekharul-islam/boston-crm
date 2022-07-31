@@ -48,8 +48,7 @@
 
                 <div class="dashboard-header__right d-flex align-items-center">
                     <div class="d-flex align-items-center">
-                        <a class="notification-icon fs-3 text-light-black d-flex align-items-center"><span
-                                class="icon-notification"></span></a>
+                        <notification-icon></notification-icon>
                         <a class="dashboard-icon text-light-black d-flex align-items-center"><span
                                 class="icon-dashboard fs-3"><span class="path1"></span><span class="path2"></span><span
                                     class="path3"></span><span class="path4"></span></span></a>

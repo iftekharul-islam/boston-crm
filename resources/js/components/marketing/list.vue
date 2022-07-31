@@ -78,38 +78,24 @@
                                     {{ comment.description }}
                                 </p>
                             </div>
-<!--                            <div class="comment-item">-->
-<!--                                <div class="d-flex align-items-center">-->
-<!--                                    <img src="https://deadline.com/wp-content/uploads/2020/07/shutterstock_671527774-e1594584322476.jpg"-->
-<!--                                        alt="boston image" class="comment-img">-->
-<!--                                    <div class="d-flex fw-bold mgl-12">Hussain M. Nasir <span-->
-<!--                                            class="ms-3 text-gray text-400">13 Jan-->
-<!--                                            2021 02:09</span></div>-->
-<!--                                </div>-->
-<!--                                <p class="comment-text mb-0">Scott Hurley-->
-<!--                                    VP/Director of Mortgage Lending.</p>-->
-<!--                            </div>-->
 
                             <div class="comment-box">
-                                <div class="comment-box-header mb-3">
+                                <div class="comment-box-header mb-3" v-if="tagsAvailable">
                                     <a href="#" class="tag">Notify</a>
-                                    <a href="#" class="tag-img">
-                                        <img src="https://deadline.com/wp-content/uploads/2020/07/shutterstock_671527774-e1594584322476.jpg"
-                                            alt="boston image" class="">
-                                        <span>Hussain M. Nasir</span>
-                                        <svg width="10" height="10" viewBox="0 0 10 10" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M1 9L9 1" stroke="#7E829B" stroke-linecap="round"
-                                                stroke-linejoin="round" />
-                                            <path d="M9 9L1 1" stroke="#7E829B" stroke-linecap="round"
-                                                stroke-linejoin="round" />
-                                        </svg>
-                                    </a>
+                                    <vue-tags-input
+                                        v-model="tag"
+                                        :tags="tags"
+                                        :autocomplete-items="filteredItems"
+                                        :add-only-from-autocomplete="true"
+                                        placeholder="Add User"
+                                        @tags-changed="newTags => tags = newTags" />
                                 </div>
-                                <textarea name="" id="" rows="5" class="comment-box-textarea"
-                                    placeholder="Write here..."></textarea>
+                                <b-form-textarea v-model="currentClient.newComment" class="comment-box-textarea mb-2" placeholder="Enter issue..." rows="5"
+                                                 cols="5">
+                                </b-form-textarea>
+                                <p class="text-danger mb-2" v-if="currentClient.commentValidate">Please add a comment first !!!</p>
                                 <div class="text-end">
-                                    <button class="button button-primary py-2 px-3">Comment</button>
+                                    <button class="button button-primary py-2 px-3" @click="updateComment">Comment</button>
                                 </div>
                             </div>
                         </div>
@@ -136,7 +122,11 @@
     </div>
 </template>
 <script>
+    import VueTagsInput from '@johmun/vue-tags-input';
     export default {
+        components: {
+            VueTagsInput,
+        },
         props: {
             users: [],
             clients: [],
@@ -144,6 +134,10 @@
             categories: []
         },
         data: () => ({
+            tag: '',
+            tags: [],
+            tagsAvailable: false,
+            autocompleteItems: [],
             allClients: [],
             allStatuses: [],
             status: '',
@@ -158,9 +152,19 @@
                 phone: '',
                 status: '',
                 comments: '',
+                newComment: '',
+                commentValidate: false,
             },
         }),
+        computed: {
+            filteredItems() {
+                return this.autocompleteItems.filter(i => {
+                    return i.text.toLowerCase().indexOf(this.tag.toLowerCase()) !== -1;
+                });
+            },
+        },
         created() {
+            this.fetchUsers()
             this.allClients = this.clients
             console.log('all Clients', this.allClients)
             this.initStatus(this.statuses)
@@ -187,6 +191,45 @@
             })
         },
         methods: {
+            updateComment() {
+                if (!this.currentClient.newComment.replace(/\s/g, "").length){
+                    this.currentClient.commentValidate = true;
+                    setTimeout( () => {
+                        this.currentClient.commentValidate = false;
+                    },1000)
+                    return
+                }
+                let data = {
+                    'client_id': this.currentClient.id,
+                    'description': this.currentClient.newComment,
+                    'notify': this.tags
+                }
+                this.$boston.post('create-client-comment', data)
+                    .then(res => {
+                        this.currentClient.newComment = ''
+                        this.tags = [];
+                        this.allClients = res.data
+                        this.initStatus(res.statuses)
+                        this.$root.$emit('toast_msg', res)
+                        this.changeActiveStatus(this.currentClient.status)
+                    })
+                    .catch(err => {
+                        console.error(err)
+                    })
+            },
+            fetchUsers() {
+                this.$boston.get('user-list')
+                    .then(res => {
+                        console.log('all users :', res)
+                        this.autocompleteItems = res.map(a => {
+                            return { text: a.name, id: a.id };
+                        });
+                        this.tagsAvailable = true
+                    })
+                    .catch(err => {
+                        console.error(err)
+                    })
+            },
             initClient(client) {
                 this.currentClients = client
             },

@@ -70,7 +70,6 @@
                 }
             },
             submitHandler: function (form) {
-                console.log(form)
                 $('.submit').attr('disabled','disabled')
                 form.submit()
             }

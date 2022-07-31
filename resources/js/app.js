@@ -48,4 +48,31 @@ axios.defaults.baseURL = window.origin
 const app = new Vue({
     el: '#app',
     store: storage,
+    data: () => ({
+        user: ''
+    }),
+    methods: {
+        listener() {
+            Echo.private('notification.' + this.user.id)
+                .listen('Notify', (e) => {
+                    console.log(e)
+                    this.$root.$emit('notification_update');
+                    this.$toast.open({
+                        message: e.message,
+                        type: 'success',
+                    });
+                    console.log('Hello , private notification is shows for you !!!');
+                });
+        }
+    },
+    created() {
+        axios.get('auth-user').then((res)=>{
+            console.log('res', res)
+            this.user = res.data
+            if(this.user){
+                this.listener()
+            }
+        })
+
+    }
 });

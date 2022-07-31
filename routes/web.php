@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\Notify;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\IconController;
@@ -19,6 +20,8 @@ use App\Http\Controllers\OrderWorkflowController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\CallController;
 use App\Http\Controllers\CallLogController;
+use App\Http\Controllers\PusherNotificationController;
+use App\Http\Controllers\NotificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -202,7 +205,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/save-quality-assurance', [OrderWorkflowController::class, 'saveQualityAssurance']);
     Route::post('/update-quality-assurance', [OrderWorkflowController::class, 'updateQualityAssurance']);
     Route::post('/save-com/{id}', [OrderWorkflowController::class, 'saveCom']);
-    Route::post('/save-com-route/{order_id}/{com_id}/{assigned_to}', [OrderWorkflowController::class, 'saveComRoute']);
+    Route::post('/save-com-route', [OrderWorkflowController::class, 'saveComRoute']);
 
 
     //Appraisal Type
@@ -276,12 +279,16 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('save-status',[MarketingController::class,'saveStatus']);
     Route::post('update-status',[MarketingController::class,'updateStatus']);
     Route::post('change-client-status',[MarketingController::class,'changeClientStatus']);
+    Route::post('create-client-comment',[MarketingController::class, 'createClientComment']);
 
 
     //call routes
     Route::get('call', [CallController::class, 'index'])->middleware('role_permission:view.call')->name('call.index');
     Route::post('search/call/order', [CallController::class, 'searchCallOrder'])->middleware('role_permission:view.call')->name('call.search');
     Route::post('send-message', [CallController::class, 'sendMessage']);
+
+    //notifications
+    Route::get('notifications', [NotificationController::class, 'index']);
 });
 Auth::routes();
 
@@ -299,6 +306,9 @@ Route::get('accept-new-user/{code}', [UserController::class, 'acceptInviteUser']
 Route::post('invite-user-update/{id}', [UserController::class, 'inviteUserUpdate'])->name('update.invite.user.profile');
 Route::get('/public-order/{id}', [OrderController::class, 'publicOrder'])->name('public.order');
 Route::post('/upload-order-files/{id}', [OrderController::class, 'uploadOrderFiles'])->name('order.file.upload');
+
+Route::get('/public-com/{id}',[OrderWorkflowController::class, 'publicCom']);
+Route::post('/public-com-files/{id}',[OrderWorkflowController::class, 'publicComFiles'])->name('public.com.files');
 
 Route::post('/search/order/by/filter', [OrderController::class, 'searchOrderByFiltering'])->name('searchOrderByFiltering');
 
@@ -320,3 +330,20 @@ Route::post('revissin/solutions/delete', [OrderWorkflowController::class, 'revis
 Route::post('check/client/order/no', [OrderWorkflowController::class, 'checkClientOrderNo']);
 
 //Route::get( "{slug}", [ WebApiController::class, 'home' ] )->where( 'slug', ".*" );
+
+Route::get('/auth-user', [UserController::class, 'authUser']);
+Route::get('/user-list', [UserController::class, 'userList']);
+
+Route::get('/notification', function () {
+    return view('notification');
+});
+
+Route::get('send',[PusherNotificationController::class, 'notification']);
+
+Route::get('/event',function () {
+    event(new Notify('Hey how are you!', 2));
+});
+
+Route::get('/listen',function () {
+    return view('listen');
+});

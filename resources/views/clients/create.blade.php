@@ -413,7 +413,7 @@
                     required: "Processing fee is required"
                 },
                 com_required: {
-                    required: "Is Com required ?"
+                    required: "Com is required"
                 },
                 fee_for_1004uad: {
                     required: "Technology fee for full appraisal(1004UAD) is required",

@@ -134,6 +134,31 @@ class OrderWorkflowRepository extends BaseRepository
         }
     }
 
+    public function getCom($order_id)
+    {
+        $order_w_com = OrderWComList::where('order_id', $order_id)->first();
+        return json_decode($order_w_com->destination, true);
+    }
+
+    public function saveComFiles($data, $order_id)
+    {
+        $order_w_com = OrderWComList::where('order_id', $order_id)->first();
+        $coms = json_decode($order_w_com->destination, true);
+        $user = auth()->user()->name ?? "Guest";
+        for ($i = 0; $i < count($coms); $i++) {
+            if (isset($data['files-' . $i])) {
+                foreach ($data['files-' . $i] as $file) {
+                    $order_w_com->addMedia($file)
+                        ->usingName($coms[$i]['address'])
+                        ->usingFilename($coms[$i]['address'] . '.' . $file->getClientOriginalExtension())
+                        ->withCustomProperties(['user'=> $user])
+                        ->toMediaCollection('com-files');
+                }
+            }
+        }
+        return true;
+    }
+
     public function saveCom($data, $id)
     {
         $order_w_com = OrderWComList::where('order_id', $id)->first();
@@ -142,7 +167,7 @@ class OrderWorkflowRepository extends BaseRepository
         } else {
             $com = new OrderWComList();
         }
-        if(isset($data['assigned_to'])){
+        if (isset($data['assigned_to'])) {
             $com->assigned_to = $data['assigned_to'];
         }
         $com->order_id = $id;
@@ -153,10 +178,11 @@ class OrderWorkflowRepository extends BaseRepository
         return $com;
     }
 
-    public function saveComRoute($data,$com_id,$assigned_to){
-        $order_w_com = OrderWComList::find($com_id);
-        $order_w_com->destination = json_encode($data);
-        $order_w_com->assigned_to = $assigned_to;
+    public function saveComRoute($data)
+    {
+        $order_w_com = OrderWComList::find($data["com_id"]);
+        $order_w_com->assigned_to = $data["assigned_to"];
+        $order_w_com->generated_link = $data["route"];
         $order_w_com->updated_by = auth()->user()->id;
         $order_w_com->save();
 
