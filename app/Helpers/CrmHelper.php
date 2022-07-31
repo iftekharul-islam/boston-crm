@@ -291,4 +291,14 @@ trait CrmHelper {
         $newActivity->save();
     }
 
+    public function array_union($x, $y)
+    { 
+       $aunion = array_merge(
+            array_intersect($x, $y),
+            array_diff($x, $y),     
+            array_diff($y, $x)      
+        );
+        return $aunion;
+    }
+
 }

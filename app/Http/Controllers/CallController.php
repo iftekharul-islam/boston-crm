@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Jobs\TaskBasedReport;
 use Carbon\Carbon;
 use App\Models\Order;
-use App\Helpers\CrmHelper;
+use App\Models\Client;
 use App\Models\CallLog;
-use App\Models\OrderWInspection;
+use App\Helpers\CrmHelper;
+use App\Models\PropertyInfo;
 use Illuminate\Http\Request;
+use App\Jobs\TaskBasedReport;
 use App\Services\CallService;
+use App\Models\OrderWInspection;
 use App\Repositories\OrderRepository;
 
 class CallController extends BaseController
@@ -41,26 +43,49 @@ class CallController extends BaseController
 
     public function orderData($data, $companyId, $paginate, $dateRange, $filterType) {
         $orderId = null;
+        $dataPropertyClient = false;
         if ($filterType == "completed") {
-            $orderId = CallLog::where('status', 1)->get()->pluck('order_id');
+            $orderId = CallLog::where('status', 1)->get()->pluck('order_id')->toArray();
         } else if($filterType == "today_call") {
-            $today = Carbon::today();
-            $orderId = OrderWInspection::whereDate('inspection_date_time', $today)->get()->pluck('order_id');
+            $orderId = OrderWInspection::whereDate('inspection_date_time', '=', date('Y-m-d'))->get()->pluck('order_id')->toArray();
         }
 
-        $order = Order::where(function($qry) use ($data) {
-            return $qry->where('system_order_no', "LIKE", "%$data%")
-                       ->orWhere("client_order_no", "LIKE", "%$data%");
-                    //    ->orWhere("received_date", "LIKE", "%$data%")
-                    //    ->orWhere("amc_id", "LIKE", "%$data%")
-                    //    ->orWhere("lender_id", "LIKE", "%$data%")
-                    //    ->orWhere("company_id", "LIKE", "%$data%")
-                    //    ->orWhere("due_date", "LIKE", "%$data%")
-                    //    ->orWhere("created_at", "LIKE", "%$data%");
-        })->with($this->order_call_list_relation())
-        ->where('company_id', $companyId)
-        ->when($orderId, function($qry) use ($orderId){
-            return $qry->whereIn('id', $orderId);
+        if ($data) {
+            $orderIds = PropertyInfo::where('formatedAddress', 'LIKE', "%$data%")->get()->pluck('order_id')->toArray();
+            $clientIds = Client::where("name", "LIKE", "%$data%")->get()->pluck('id')->toArray();
+            $getAmcIds = Order::whereIn('amc_id', $clientIds)->pluck('id')->toArray();
+            $getLenderIds = Order::whereIn('lender_id', $clientIds)->pluck('id')->toArray();
+            $mergeOrder = array_merge($getAmcIds, $getLenderIds);
+            $orderIds = array_unique(array_merge($orderIds, $mergeOrder));
+            $newOrders = $orderIds;
+            if (count($newOrders) > 0) {
+                $orderId = $newOrders;
+                $dataPropertyClient = true;
+            }
+        }
+
+        if ($dataPropertyClient == false && ($data == null || $data == "") && $filterType == null) {
+            $filterType = "to_schedule";
+        }
+
+
+        $order = Order::where(function($qry) use ($data, $orderId, $dataPropertyClient) {
+            if ($data) {
+                return $qry->when($orderId, function($qrys) use ($orderId){
+                                return $qrys->whereIn('id', $orderId);
+                            })
+                           ->orWhere(function($qry2) use ($data, $dataPropertyClient) {
+                                if ($dataPropertyClient == false) {
+                                    return $qry2->where('client_order_no', "LIKE", "%$data%")
+                                                ->orWhere("system_order_no", "LIKE", "%$data%");
+                                }
+                           });
+            } else {
+                if ($orderId) {
+                    $searchOrderId = $orderId;
+                    return $qry->whereIn('id', $searchOrderId);
+                }
+            }
         })
         ->when($dateRange, function($qry) use ($dateRange) {
             $start = $dateRange['start'];
@@ -80,6 +105,8 @@ class CallController extends BaseController
                 return $qry->where("status", "<", 3);
             }
         })
+        ->with($this->order_call_list_relation())
+        ->where('company_id', $companyId)
         ->orderBy('id', 'desc')
         ->paginate($paginate);
         return $order;
@@ -103,7 +130,7 @@ class CallController extends BaseController
         $toBeSchedule = $orders->where('status', 0)->count();
         $schedule = Order::where('status', 1)->count();
         $completed = CallLog::where('status', 1)->count();
-        $todaysCallId = OrderWInspection::whereDate('inspection_date_time', Carbon::today())->get()->pluck('order_id');
+        $todaysCallId = OrderWInspection::whereDate('inspection_date_time', '=', date('Y-m-d'))->get()->pluck('order_id');
         $today_call = Order::whereIn('id', $todaysCallId)->where('status', "<", 3)->count();
         return [
             "all" => $all,

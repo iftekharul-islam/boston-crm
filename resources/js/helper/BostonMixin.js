@@ -12,6 +12,9 @@ Vue.mixin({
     components: {
         "confirm-dialog": ConfirmDialogue
     },
+    data: () => ({
+        gLoad: false
+    }),
     methods: {
         formateDate(date) {
             if (date == null) {

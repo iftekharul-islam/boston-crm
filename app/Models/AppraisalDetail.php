@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\LoanType;
+use App\Models\PropertyType;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class AppraisalDetail extends Model
 {
@@ -25,5 +27,15 @@ class AppraisalDetail extends Model
 
     public function getLoanType(){
         return $this->belongsTo(LoanType::class,'loan_type','id');
+    }
+
+    public function loanType(){
+        return LoanType::where('id', $this->loan_type)->first();
+    }
+
+    public function propertyType(){
+        return $this->belongsTo(PropertyType::class,'property_type','id')->withDefault([
+            'name' => '-'
+        ]);
     }
 }

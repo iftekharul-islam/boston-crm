@@ -100,7 +100,8 @@
                 <div class="group" :class="{ 'invalid-form' : errors[0] }">
                   <label for="" class="d-block mb-2 dashboard-label">Contact <span
                       class="text-danger require"></span></label>
-                  <text-editor :disabled="step2.contactSame == true" :invalid-message="errors[0]" :invalid="step2.contactSame == false && (step2.contact_info == null || step2.contact_info == '')" v-model="step2.contact_info" placeholder="Enter contact details..."></text-editor>
+                  <text-editor :update="true" :disabled="step2.contactSame == true" v-model="step2.contact_info" placeholder="Enter contact details..."></text-editor>
+                  <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                 </div>
               </ValidationProvider>
             </div>
