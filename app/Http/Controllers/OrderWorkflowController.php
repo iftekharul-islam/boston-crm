@@ -53,10 +53,10 @@ class OrderWorkflowController extends BaseController
         $user = auth()->user();
         if ($request->schedule_id > 0) {
             $message = 'Re Scheduled successfully';
-            $historyTitle = auth()->user()->name . " Re scheduled the order. <br>Order Client No: <strong class='text-primary'>{$order->client_order_no}</strong><br>Schedule Time: <strong class='text-danger'>{$request->inspection_date_time_formatted}</strong><br>Note is: <strong class='text-primary'>{$request->note}</strong><br>Duration: <strong>{$request->duration}</strong>";
+            $historyTitle = auth()->user()->name . " Re scheduled the order. <br>Order Client No: <strong class='text-primary'>{$order->client_order_no}</strong><br>Schedule Time: <strong class='text-danger'>{$request->inspection_date_time}</strong><br>Note is: <strong class='text-primary'>{$request->note}</strong><br>Duration: <strong>{$request->duration}</strong>";
         } else {
             $message = 'Schedule createded successfully';
-            $historyTitle = auth()->user()->name . " scheduled the order. <br>Order Client No: <strong class='text-primary'>{$order->client_order_no}</strong><br>Schedule Time: <strong class='text-danger'>{$request->inspection_date_time_formatted}</strong><br>Note is: <strong class='text-primary'>{$request->note}</strong><br>Duration: <strong>{$request->duration}</strong>";
+            $historyTitle = auth()->user()->name . " scheduled the order. <br>Order Client No: <strong class='text-primary'>{$order->client_order_no}</strong><br>Schedule Time: <strong class='text-danger'>{$request->inspection_date_time}</strong><br>Note is: <strong class='text-primary'>{$request->note}</strong><br>Duration: <strong>{$request->duration}</strong>";
         }
 
         $this->addHistory($order, $user, $historyTitle, 'scheduling');
@@ -626,7 +626,7 @@ class OrderWorkflowController extends BaseController
         $orderData = $this->orderDetails($get->order_id);
         return [
             'error' => false,
-            'message' => $historyTitle,
+            'message' => "New revission has been added",
             'status' => 'success',
             'data' => $orderData
         ];
@@ -676,7 +676,7 @@ class OrderWorkflowController extends BaseController
         $orderData = $this->orderDetails($get->order_id);
         return [
             'error' => false,
-            'message' => $historyTitle,
+            'message' => "Revission has been edited",
             'status' => 'success',
             'data' => $orderData
         ];
@@ -722,7 +722,7 @@ class OrderWorkflowController extends BaseController
 
         return [
             'error' => false,
-            'message' => $historyTitle,
+            'message' => "Solution added successfully",
             'status' => 'success',
             'data' => $orderData
         ];
@@ -774,7 +774,7 @@ class OrderWorkflowController extends BaseController
 
         return [
             'error' => false,
-            'message' => $historyTitle,
+            'message' => "Revission has been marked as solution",
             'status' => 'success',
             'data' => $orderData
         ];
@@ -815,7 +815,7 @@ class OrderWorkflowController extends BaseController
 
         return [
             'error' => false,
-            'message' => $historyTitle,
+            'message' => "Revission has been deleted",
             'status' => 'success',
             'data' => $orderData
         ];
