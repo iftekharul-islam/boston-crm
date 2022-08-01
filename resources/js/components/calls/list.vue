@@ -7,21 +7,21 @@
                         <button @click="filterByTab('all')"
                             :class="{'active' : pages.filterType == 'all' || pages.filterType == null}"
                             class="calls-btn h-40 d-flex align-items-center mb-2 d-none">All <span class="ms-2">
-                                ({{ filterValue.all }})</span></button>
+                                ({{ filterValues.all }})</span></button>
                         <button @click="filterByTab('to_schedule')"
                             :class="{'active' : pages.filterType == 'to_schedule'}"
                             class="calls-btn h-40 d-flex align-items-center mb-2">To be Schedule <span class="ms-2">
-                                ({{ filterValue.to_schedule }})</span></button>
+                                ({{ filterValues.to_schedule }})</span></button>
                         <button @click="filterByTab('schedule')" :class="{'active' : pages.filterType == 'schedule'}"
                             class="calls-btn h-40 d-flex align-items-center mb-2">Schedule <span class="ms-2">
-                                ({{ filterValue.schedule }})</span></button>
+                                ({{ filterValues.schedule }})</span></button>
                         <button @click="filterByTab('today_call')"
                             :class="{'active' : pages.filterType == 'today_call'}"
                             class="calls-btn h-40 d-flex align-items-center mb-2">Todays Call <span class="ms-2">
-                                ({{ filterValue.today_call }})</span></button>
+                                ({{ filterValues.today_call }})</span></button>
                         <button @click="filterByTab('completed')" :class="{'active' : pages.filterType == 'completed'}"
                             class="calls-btn h-40 d-flex align-items-center mb-2">Completed <span class="ms-2">
-                                ({{ filterValue.completed }})</span></button>
+                                ({{ filterValues.completed }})</span></button>
                         <button @click="$bvModal.show('dateRange'); filterByTab('daterange')" :class="{'active' : pages.filterType == 'daterange'}"
                             class="calls-btn h-40 d-flex align-items-center mb-2">Date Rage</button>
                     </div>
@@ -262,8 +262,8 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     <div class="modal-body h-100 overflow-auto">
                         <h3>Call summary <span class="fs-15 badges solved-badges" v-if="!callLog.notCompleted">Completed</span></h3>
-                        <p class="text-gray fs-12 mb-0">{{ callLog.order_no }}</p>
-                        <p class="mb-3 text-gray fs-12 mb-0">{{ callLog.address }}</p>
+                        <p class="fs-14 mb-0">{{ callLog.order_no }}</p>
+                        <p class="mb-3 fs-14 mb-0">{{ callLog.address }}</p>
                         <div class="call-summary-item" v-for="(log, logIndex) in callLog.items" :key="logIndex">
                             <div class="top d-flex align-items-center">
                                 <div v-if="log.caller.media.length">
@@ -466,6 +466,7 @@
             openIssue: false,
         }),
         created() {
+            this.filterValues = this.filterValue
             this.initOrder(this.order);
             this.$root.$on('wk_flow_toast', (res) => {
                 if (res.error == false) {
@@ -476,6 +477,9 @@
                     message: res.message,
                     type: res.error == true ? 'error' : 'success',
                 });
+            });
+            this.$root.$on('filter_update', (res) => {
+                this.filterValues = res
             });
         },
         mounted() {
@@ -513,8 +517,10 @@
                         this.callLog.status = ''
                         this.toastMessage(res.data.message, res.data.error)
                         if(res.data.data){
-                            this.getCallSummary(res.data.data, this.callLog.orderId)
+                            this.getCallSummary(res.data.data, this.callLog.orderId, this.callLog.order_no, this.callLog.address)
                         }
+                        this.initOrder(res.data.order)
+                        this.filterValues = res.data.filterValue
                     }).catch(err => {
                         console.log(err)
                     })

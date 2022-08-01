@@ -186,6 +186,7 @@
                                 this.$root.$emit('wk_update', res.data)
                                 this.$root.$emit('wk_flow_menu', res.data)
                                 this.$root.$emit('wk_flow_toast', res)
+                                this.$root.$emit('filter_update', res.filterValue)
                                 this.$bvModal.hide('delete-schedule')
                                 this.$bvModal.hide('re-schedule')
                             })
