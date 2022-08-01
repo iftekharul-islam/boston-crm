@@ -633,15 +633,18 @@
             },
             getScheduleData(item) {
                 this.$refs.callScheduleComponent.setOrderId(item.id)
+                this.$refs.callScheduleComponent.setPropertyAddress(item.property_info.formatedAddress)
                 if (item.inspection) {
                     this.$refs.callReScheduleComponent.setScheduleData(item.inspection)
                     this.$refs.callReScheduleComponent.setOrderStatus(item.status)
+                    this.$refs.callReScheduleComponent.setPropertyAddress(item.property_info.formatedAddress)
                 }
                 item.status == 0 ? this.$bvModal.show('schedule') : this.$bvModal.show('re-schedule')
             },
             getSendMessage(item) {
                 this.$bvModal.show('send-message')
                 this.$refs.sendMessageComponent.setContactData(item.contact_info,item.property_info,item.lender)
+                this.$refs.sendMessageComponent.setPropertyAddress(item.property_info.formatedAddress)
             },
             filterByTab(item) {
                 this.pages.filterType = item;

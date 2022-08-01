@@ -81,7 +81,7 @@
                     </div>
                     <div class="mt-3">
                         <p class="text-700 mb-3">Notes</p>
-                        <p class="note-text mb-3 text-700">{{ note }}</p>
+                        <p class="note-text mb-3 text-700" v-html="note"></p>
                     </div>
                 </div>
             </div>
