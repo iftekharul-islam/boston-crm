@@ -7,21 +7,24 @@
                 </a>
             </template>
             <b-dropdown-item href="#" v-for="(item, index) in notifications" :key="index">
-                <div class="call-summary-item mx-2">
-                    <div class="top d-flex align-items-center">
-                        <div v-if="item.sender.media.length">
-                            <img :src="item.sender.media[0].original_url" alt=" profile photo boston"
-                                 class="img-fluid">
-                        </div>
-                        <div v-else>
-                            <img src="/img/user.png" alt="boston image" class="comment-img">
-                        </div>
-                        <div class="ms-3">
-                            <p class="fw-bold mb-1">{{ item.message }}</p>
-                            <p class="text-gray fs-12 mb-0">{{ item.created_at }}</p>
+                <b-dropdown-text>
+                    <div class="call-summary-item">
+                        <div class="top d-flex align-items-center">
+                            <div v-if="item.sender.media.length">
+                                <img :src="item.sender.media[0].original_url" alt=" profile photo boston"
+                                     class="img-fluid">
+                            </div>
+                            <div v-else>
+                                <img src="/img/user.png" alt="boston image" class="comment-img">
+                            </div>
+                            <div class="ms-3">
+                                <p class="fw-bold mb-1">{{ item.sender.name }}</p>
+                                <p class="text-gray fs-12 mb-0">{{ item.created_at }}</p>
+                            </div>
                         </div>
                     </div>
-                </div>
+                    <b>{{ item.message }}</b>
+                </b-dropdown-text>
             </b-dropdown-item>
         </b-dropdown>
     </div>
@@ -56,7 +59,10 @@ export default {
 </script>
 
 <style scoped>
-.call-summary-item {
-    margin-bottom: 0px!important;
-}
+    .call-summary-item {
+        margin-bottom: 0px!important;
+    }
+    .b-dropdown-text {
+        min-width: 287px!important;
+    }
 </style>

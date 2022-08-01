@@ -294,3 +294,8 @@
         }
     }
 </script>
+<style scoped>
+    .comment-box-header .tag {
+        height: 37px!important;
+    }
+</style>

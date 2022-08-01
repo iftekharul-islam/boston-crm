@@ -39,7 +39,7 @@
                 <ValidationProvider name="Revission details" rules="required" v-slot="{ errors }">
                   <div class="group" :class="{ 'invalid-form' : errors[0] }">
                     <label for="revissionData">Revision details</label>
-                    <textarea v-model="form.revission" id="revissionData" rows="5" class="dashboard-textarea w-100 gray-border"></textarea>
+                    <text-editor v-model="form.revission" placeholder="Enter Revision details here..."></text-editor>
                     <span class="error-message">{{ errors[0] }}</span>
                   </div>
                 </ValidationProvider>
@@ -113,7 +113,7 @@
                       <ValidationProvider name="Solutions" rules="required" v-slot="{ errors }">
                         <div class="group" :class="{ 'invalid-form' : errors[0] }">
                             <label class="mgb-8">Add solution</label>
-                            <textarea name="" v-model="item.solution_details_edited" rows="5" class="dashboard-textarea w-100 gray-border"></textarea>
+                            <text-editor v-model="item.solution_details_edited" placeholder="Enter solution here..."></text-editor>
                             <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                         </div>
                       </ValidationProvider>
@@ -184,7 +184,7 @@
                     <label for="" class="mb-2 text-light-black d-inline-block">Add solution <span
                         class="require"></span></label>
                     <div class="preparation-input w-100 position-relative">
-                      <textarea name="" v-model="marked.solution_details" id="" cols="30" rows="3" class="w-100 dashboard-textarea"></textarea>
+                        <text-editor v-model="marked.solution_details" placeholder="Enter solution here..."></text-editor>
                     </div>
                     <span class="error-message">{{ errors[0] }}</span>
                   </div>
@@ -219,7 +219,7 @@
                       <ValidationProvider name="Revission details" rules="required" v-slot="{ errors }">
                         <div class="group" :class="{ 'invalid-form' : errors[0] }">
                           <label for="revissionData">Revision details</label>
-                          <textarea v-model="form.revission" id="revissionData" rows="5" class="dashboard-textarea w-100 gray-border"></textarea>
+                            <text-editor v-model="form.revission" placeholder="Enter Revision here..."></text-editor>
                           <span class="error-message">{{ errors[0] }}</span>
                         </div>
                       </ValidationProvider>
@@ -490,7 +490,7 @@ export default {
       handler(val) {
           this.revissionModal = val.modelData;
           this.animControll(this.revissionModal);
-      }, 
+      },
       deep: true
     }
   }
