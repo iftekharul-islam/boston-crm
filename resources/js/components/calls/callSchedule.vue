@@ -121,6 +121,7 @@
                             .then(res => {
                                 this.orderData = res.data;
                                 this.$root.$emit('wk_flow_toast', res)
+                                this.$root.$emit('filter_update', res.filterValue)
                                 this.schedule = {}
                                 this.$bvModal.hide('schedule')
                             })
