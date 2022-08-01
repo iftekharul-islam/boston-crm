@@ -358,7 +358,7 @@ class OrderWorkflowController extends BaseController
         $orderData = $this->orderDetails($id);
         return [
             'error' => false,
-            'message' => $historyTitle,
+            'message' => "Update successfull report analysis & review",
             'data' => $orderData
         ];
     }
@@ -439,7 +439,7 @@ class OrderWorkflowController extends BaseController
             $historyTitle = auth()->user()->name . ' set assign on Quality Assurance.<br>Assign To: <strong>' . $assignee->name . '</strong><br>Effective Date: <strong>' . $effectiveDate . '</strong>';
         }
 
-        $this->addHistory($order, $user, $historyTitle, 'quality-assurance');
+        $this->addHistory($order, $user, $historyTitle, 'QA-section');
 
         $order->forceFill([
             'workflow_status->qualityAssurance' => 1,
@@ -477,7 +477,7 @@ class OrderWorkflowController extends BaseController
             $historyTitle = auth()->user()->name . ' changes on Quality Assurance.<br>Note: <strong>' . $request->note;
         }
 
-        $this->addHistory($order, $user, $historyTitle, 'quality-assurance');
+        $this->addHistory($order, $user, $historyTitle, 'QA-section');
 
         $order->forceFill([
             'workflow_status->qualityAssurance' => 1,
@@ -765,7 +765,18 @@ class OrderWorkflowController extends BaseController
         $workStatus = json_decode($order->workflow_status, true);
         $workStatus['revision'] = 1;
 
-        $order->status = 13;
+        $reWriteAll = OrderWRevision::where('order_id', $get->order_id)->get();
+        $allDone = true;
+        foreach($reWriteAll as $reItem) {
+            if ($reItem->status == 0) {
+                $allDone = false;
+                break;
+            }
+        }
+
+        if ($allDone) {
+            $order->status = 13;
+        }
         $order->workflow_status = json_encode($workStatus);
         $order->save();
 
@@ -842,7 +853,7 @@ class OrderWorkflowController extends BaseController
             $submission->updated_by = auth()->user()->id;
             $submission->save();
 
-            $historyTitle = "Workflow submission updated data by " . $user->name . ' on Workflow submission section.';
+            $historyTitle = "Workflow submission updated data by " . $user->name . ' on Workflow submission section..<br>Delivery date: '.$request->delivery_date;
         } else {
             $newSubmission = new OrderWSubmission();
             $newSubmission->order_id = $order->id;
@@ -853,7 +864,7 @@ class OrderWorkflowController extends BaseController
             $newSubmission->created_by = auth()->user()->id;
             $newSubmission->save();
 
-            $historyTitle = "Workflow submission created data by " . $user->name . ' on Workflow submission section.';
+            $historyTitle = "Workflow submission created data by " . $user->name . ' on Workflow submission section..<br>Delivery date: '.$request->delivery_date;
         }
 
         $workStatus = json_decode($order->workflow_status, true);
@@ -880,7 +891,7 @@ class OrderWorkflowController extends BaseController
         $order = Order::find($id);
         $user = auth()->user();
         $historyTitle = "Com list added by " . auth()->user()->name;
-        $this->addHistory($order, $user, $historyTitle, 'quality-assurance');
+        $this->addHistory($order, $user, $historyTitle, 'QA-section');
         return [
             "message" => "Com list added successfully",
             "data" => $orderData
@@ -896,7 +907,7 @@ class OrderWorkflowController extends BaseController
         $order = Order::find($order_id);
         $user = auth()->user();
         $historyTitle = "Com list route mapped by " . auth()->user()->name;
-        $this->addHistory($order, $user, $historyTitle, 'quality-assurance');
+        $this->addHistory($order, $user, $historyTitle, 'QA-section');
         return [
             "message" => "Com list route mapped successfully",
             "data" => $orderData

@@ -16,7 +16,7 @@
             </div>
           </div>
           <div class="d-inline-block message">
-            <p class="mb-0 ">{{ noteItem.note }}</p>
+            <p class="mb-0 " v-html="noteItem.note"></p>
           </div>
         </div>
 
