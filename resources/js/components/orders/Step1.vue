@@ -75,7 +75,8 @@
 
                                 <ValidationProvider class="group" name="Loan type" rules="required" v-slot="{ errors }">
                                     <div class="position-relative" :class="{ 'invalid-form' : errors[0] }">
-                                        <label for="" class="d-block mb-2 dashboard-label">Loan type </label>
+                                        <label for="" class="d-block mb-2 dashboard-label">Loan type <span
+                                                class="text-danger require"></span></label>
                                         <!-- <select name="" id="loanTypeSelect"
                                             class="dashboard-input w-100 loan-type-select" v-model="step1.loanType">
                                             <option value="">Please Select Loan Type</option>
@@ -722,21 +723,20 @@
         data() {
             return {
                 client: {
-                    'name': '',
-                    'email': [],
-                    'phone': [],
-                    'client_type': '',
-                    'address': '',
-                    'city': '',
-                    'state': '',
-                    'zip': '',
-                    'processing_fee': '',
-                    'com_required': 0,
-                    'fee_for_1004uad': '',
-                    'fee_for_1004d': '',
-                    'deducts_technology_fee': '',
-                    'can_sign': '',
-                    'can_inspect': '',
+                    name: '',
+                    email: '',
+                    phone: '',
+                    client_type: '',
+                    address: '',
+                    city: '',
+                    state: '',
+                    zip: '',
+                    country: '',
+                    fee_for_1004uad: '',
+                    fee_for_1004d: '',
+                    deducts_technology_fee: '',
+                    can_sign: '',
+                    can_inspect: '',
                 },
                 submitted: false,
                 oldOrderNo: {
@@ -968,7 +968,7 @@
             },
 
             nextStep() {
-                if (this.client.country == '') {
+                if (this.client.country == '' || this.client.country == null) {
                     this.$toast.open({
                         message: "Please provide a valid property information",
                         type: 'error',
