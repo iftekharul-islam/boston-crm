@@ -234,6 +234,13 @@ export function checkEmailFormat(emailText) {
     return false
 }
 
+export function checkPhoneFormat(phoneText) {
+    if (phoneText.match(/^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$/)) {
+        return true
+    }
+    return false
+}
+
 export {
     apiPost,
     apiGet,
