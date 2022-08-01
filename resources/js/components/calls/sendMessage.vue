@@ -13,8 +13,9 @@
                         <div class="group">
                             <label for="" class="d-block mb-1">Receipant email <span
                                     class="text-danger require"></span></label>
-                            <vue-tags-input @before-adding-tag="validateEmail" v-model="sendMessageData.emails" :tags="emails"
-                                placeholder="Add/Remove Emails" @tags-changed="newTags => emails = newTags" />
+                            <vue-tags-input @before-adding-tag="validateEmail" v-model="sendMessageData.emails"
+                                :tags="emails" placeholder="Add/Remove Emails"
+                                @tags-changed="newTags => emails = newTags" />
                         </div>
                         <div class="group">
                             <label for="" class="d-block mb-1">Mobile no <span
@@ -103,9 +104,17 @@
             },
             validatePhone(obj) {
                 let phoneNo = obj.tag.text
-                let formatedNumber = this.$boston.formatPhoneNo(phoneNo)
-                obj.tag.text = formatedNumber
-                obj.addTag()
+                let validatePhoneNo = this.$boston.checkPhoneFormat(phoneNo)
+                console.log(validatePhoneNo)
+                if (validatePhoneNo) {
+                    obj.tag.text = this.$boston.formatPhoneNo(phoneNo)
+                    obj.addTag()
+                } else {
+                    this.$toast.open({
+                        message: "Invalid phone number!",
+                        type: 'error',
+                    });
+                }
             },
             validateEmail(obj) {
                 let email = obj.tag.text
