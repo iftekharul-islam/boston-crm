@@ -145,15 +145,15 @@
                 }
             },
             getAppraisalDetails(order) {
-                this.details.appraiser_id = order.appraisal_detail.appraiser_id;
-                this.details.loan_type = order.appraisal_detail.loan_type;
-                this.details.appraiser_name =order.appraisal_detail.appraiser.name;
-                this.details.loan_type_name = order.appraisal_detail.get_loan_type.name;
-                this.details.loan_no = order.appraisal_detail.loan_no;
-                this.details.fha_case_no = order.appraisal_detail.fha_case_no;
-                this.details.property_type = order.appraisal_detail.property_type;
+                this.details.appraiser_id = order.appraisal_detail.appraiser_id
+                this.details.loan_type = order.appraisal_detail.loan_type
+                this.details.appraiser_name =order.appraisal_detail.appraiser.name
+                this.details.loan_type_name = order.appraisal_detail.get_loan_type.name
+                this.details.loan_no = order.appraisal_detail.loan_no
+                this.details.fha_case_no = order.appraisal_detail.fha_case_no
+                this.details.property_type = order.appraisal_detail.property_type
                 this.fhaExists = order.appraisal_detail.get_loan_type.is_fha
-                this.edited = Object.assign({}, this.details);
+                this.edited = Object.assign({}, this.details)
             },
             updateAppraisalDetails() {
                 this.$refs.appraisalForm.validate().then((status) => {
