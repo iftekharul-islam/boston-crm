@@ -1,6 +1,12 @@
 <template>
     <div>
         <b-modal id="re-schedule" size="md" title="Re Schedule">
+            <div class="card mb-4">
+                <div class="card-body bg-light text-dark">
+                    <h5 class="card-title">Property address: </h5>
+                    <h6 class="card-subtitle">{{ propertyAddress }}</h6>
+                </div>
+            </div>
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-12">
@@ -67,9 +73,11 @@
                 </div>
             </div>
             <div slot="modal-footer">
-                <b-button v-if="orderStatus == 1 || orderStatus == 2" class="button button-transparent p-0" @click="showDeleteSchedule">
+                <b-button v-if="orderStatus == 1 || orderStatus == 2" class="button button-transparent p-0"
+                    @click="showDeleteSchedule">
                     <span class="icon-trash"><span class="path1"></span><span class="path2"></span><span
-                            class="path3"></span><span class="path4"></span></span></b-button>
+                            class="path3"></span><span class="path4"></span></span>
+                </b-button>
                 <b-button variant="secondary" @click="$bvModal.hide('re-schedule')">Close</b-button>
                 <b-button variant="primary" @click="reSchedule">Reschedule</b-button>
             </div>
@@ -136,10 +144,14 @@
                 { 'duration': '60 minutes' },
             ],
             orderStatus: 0,
+            propertyAddress: ''
         }),
         methods: {
             setScheduleData(scheduleData) {
                 this.getScheduleData(scheduleData)
+            },
+            setPropertyAddress(propertyAddress) {
+                this.propertyAddress = propertyAddress
             },
             setOrderStatus(status) {
                 this.orderStatus = status
@@ -157,13 +169,13 @@
                 this.$refs.scheduleForm.validate().then((status) => {
                     if (status) {
                         let formData = new FormData();
-                        formData.append('order_id',this.schedule.order_id)
-                        formData.append('schedule_id',this.schedule.schedule_id)
-                        formData.append('inspection_date_time',this.schedule.inspection_date_time)
-                        formData.append('appraiser_id',this.schedule.appraiser_id)
-                        formData.append('duration',this.schedule.duration)
-                        formData.append('note',this.schedule.note)
-                        formData.append('reschedule_note',this.schedule.reschedule_note)
+                        formData.append('order_id', this.schedule.order_id)
+                        formData.append('schedule_id', this.schedule.schedule_id)
+                        formData.append('inspection_date_time', this.schedule.inspection_date_time)
+                        formData.append('appraiser_id', this.schedule.appraiser_id)
+                        formData.append('duration', this.schedule.duration)
+                        formData.append('note', this.schedule.note)
+                        formData.append('reschedule_note', this.schedule.reschedule_note)
                         this.$boston.post('update-order-schedule', formData)
                             .then(res => {
                                 this.orderData = res.data;

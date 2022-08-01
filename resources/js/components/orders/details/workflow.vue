@@ -223,7 +223,7 @@ export default {
     checkReportAnalysysCompletation(status) {
         if (status === 1) {
              if (this.orderData.analysis){
-                if (this.orderData.analysis.is_check_upload && this.orderData.analysis.is_check_upload == 1 && this.status.reWritingReport == 1) {
+                if (this.orderData.analysis.is_check_upload && this.orderData.analysis.is_check_upload == 1) {
                     return true;
                 }
             }

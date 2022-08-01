@@ -117,7 +117,7 @@
             </div>
             <ValidationObserver ref="qaUpdate">
                 <div class="mgb-20">
-                    <ValidationProvider class="group" name="Quality Assurance Note" rules="required"
+                    <ValidationProvider class="group" name="Quality Assurance Note"
                         v-slot="{ errors }">
                         <div :class="{ 'invalid-form' : errors[0] }">
                             <label for="" class="mb-2 text-light-black d-inline-block">Add note</label>
@@ -248,7 +248,7 @@
                 Map
             </button>
             <span v-if="copied" class="alert alert-success py-2 mb-0 mgr-20 text-600">Copied</span>
-            <a :href="publicCom" @click.prevent="copyURL" ref="shareLink"
+            <a v-if="showSeeCom" :href="publicCom" @click.prevent="copyURL" ref="shareLink"
                 class="button button-primary h-40 d-inline-flex align-items-center"><span class="mgr-20">Share
                     com url</span> <span class="icon-share"><span class="path1"></span><span class="path2"></span><span
                         class="path3"></span><span class="path4"></span><span class="path5"></span><span

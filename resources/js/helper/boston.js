@@ -197,7 +197,7 @@ export function removeCookie(name) {
     document.cookie = name + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 }
 
-export const getPostcodeByLatLng = async(lat, lng) => {
+export const getPostcodeByLatLng = async (lat, lng) => {
     if (!lat || !lng) return null
     const res = await fetch(`https://api.postcodes.io/postcodes?lon=${lng}&lat=${lat}`);
     return res;
@@ -221,11 +221,24 @@ export function formatPhoneNo(phone) {
 
 export function ValidateEmail(inputText) {
     var mailformat = /^w+([.-]?w+)*@w+([.-]?w+)*(.w{2,3})+$/;
-    if(inputText.value.match(mailformat)) {
+    if (inputText.value.match(mailformat)) {
         return true;
     } else {
         return false;
     }
+}
+export function checkEmailFormat(emailText) {
+    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(emailText)) {
+        return true
+    }
+    return false
+}
+
+export function checkPhoneFormat(phoneText) {
+    if (phoneText.match(/^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$/)) {
+        return true
+    }
+    return false
 }
 
 export {

@@ -74,7 +74,7 @@
                     </div>
                   </div>
                   <p class="mgb-12">Revision details</p>
-                  <p>{{ item.revision_details }}</p>
+                  <p v-html="item.revision_details"></p>
                 </div>
                 <!-- solution -->
                 <div class="solution" v-if="item.solution_details != '-' && item.open_solution == false">
@@ -89,7 +89,7 @@
                         </button>
                     </div>
                   </div>
-                  <p class="fw-bold mgb-20"> {{ item.solution_details }} </p>
+                  <p class="fw-bold mgb-20" v-html="item.solution_details"></p>
                   <div class="d-flex" v-if="item.users.delivered_by && item.users.completed_by">
                     <div class="col-6">
                       <p class="mgb-10">Delivered by</p>

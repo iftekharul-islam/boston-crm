@@ -54,7 +54,7 @@ class Order extends Model implements HasMedia
         8 => "Under Rewriting",
         9 => "Ready for Analysis and Review",
         10 => "Under Quality Assurance (E&O)",
-        11 => "Ready for Submission/Delivery",
+        11 => "Delivered",
         12 => "Under Correction/Revision",
         13 => "Delivered",
         14 => "Cancelled",
