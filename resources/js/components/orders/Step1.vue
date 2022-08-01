@@ -968,6 +968,13 @@
             },
 
             nextStep() {
+                if (this.client.country == '') {
+                    this.$toast.open({
+                        message: "Please provide a valid property information",
+                        type: 'error',
+                    });
+                    return false;
+                }
                 this.$refs.orderForm.validate().then((status) => {
                     if (status && this.providerTypes.extra.length && !this.dateIssue.status) {
                         this.stepActive = true;
@@ -1335,6 +1342,9 @@
             },
 
             changeStreetAddress(value) {
+                if (value == null || value == "") {
+                    return false;
+                }
                 this.$boston.authPost('get/same/orders/by/street', { 'street': value }).then((res) => {
                     let totalOrder = res.totalOrder;
                     let orders = res.orders;
