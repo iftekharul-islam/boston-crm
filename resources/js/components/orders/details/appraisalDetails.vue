@@ -30,7 +30,7 @@
                 <p class="mb-0 left-side">Property Type</p>
                 <span>:</span>
                 <div v-for="propertyType, index in propertyTypes" :key="index + ' appr_details '">
-                    <p v-if="propertyType.id == details.property_type" class="right-side mb-0 word-break">
+                    <p v-if="propertyType.id == edited.property_type" class="right-side mb-0 word-break">
                         {{ propertyType.type }}</p>
                 </div>
             </div>
