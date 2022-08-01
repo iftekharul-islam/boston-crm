@@ -105,7 +105,6 @@
             validatePhone(obj) {
                 let phoneNo = obj.tag.text
                 let validatePhoneNo = this.$boston.checkPhoneFormat(phoneNo)
-                console.log(validatePhoneNo)
                 if (validatePhoneNo) {
                     obj.tag.text = this.$boston.formatPhoneNo(phoneNo)
                     obj.addTag()
