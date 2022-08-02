@@ -22,3 +22,7 @@ yarn-error.log
 /public/js/app.js.LICENSE.txt
 /public/js/vendor.js
 /public/js/vendor.js.LICENSE.txt
+/app/.DS_Store
+/database/.DS_Store
+/storage/.DS_Store
+/tests/.DS_Store
