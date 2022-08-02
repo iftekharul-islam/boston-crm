@@ -394,7 +394,7 @@ class OrderApiController extends Controller
 
     public function getSameData(Request $get)
     {
-        if (!$get->street || $get->street == null || $get->street == "") {
+        if (!$get->street || $get->street == null || $get->street == "" || strlen($get->street) < 2) {
             return response()->json([
                 'totalOrder' => 0,
                 'orders' => []
