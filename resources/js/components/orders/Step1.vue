@@ -231,10 +231,10 @@
                             <div class="col-md-7">
                                 <h4 class="box-header mb-3">Client info</h4>
                             </div>
-                            <div class="col-md-5">
+                            <!-- <div class="col-md-5">
                                 <button type="button" class="button button-primary" @click.prevent="addClientModal">Add
                                     Client</button>
-                            </div>
+                            </div> -->
                         </div>
                         <ValidationProvider class="group" name="AMC name" rules="required" v-slot="{ errors }">
                             <div class="group" :class="{ 'invalid-form' : errors[0] }">
@@ -829,7 +829,7 @@
             this.geolocate();
             $('select').select2();
             this.select2Features();
-            
+
             $(document).on('click', '.phone-button', function () {
                 let button_id = $(this).attr("id");
                 $('#phone-' + button_id + '').remove();
