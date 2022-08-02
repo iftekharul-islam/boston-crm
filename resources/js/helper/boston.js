@@ -235,7 +235,7 @@ export function checkEmailFormat(emailText) {
 }
 
 export function checkPhoneFormat(phoneText) {
-    if (phoneText.match(/^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$/)) {
+    if (phoneText.match(/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im)) {
         return true
     }
     return false
