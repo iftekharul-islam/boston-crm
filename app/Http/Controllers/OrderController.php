@@ -291,13 +291,20 @@ class OrderController extends BaseController
         }
         $paginate = isset($get->paginate) && $get->paginate > 0 ? $get->paginate : 10;
 
-        $order = Order::where(function ($qry) use ($data, $orderIds) {
-            if (count($orderIds) > 0) {
-                return $qry->whereIn("id", $orderIds);
+        $ids = $get->pageData['ids'] ?? [];
+        $idSearch = $get->pageData['idSearch'] ?? false;
+//        dd($ids, $idSearch);
+        $order = Order::where(function ($qry) use ($data, $orderIds, $ids, $idSearch) {
+            if($idSearch == true){
+                return $qry->whereIn("id", $ids);
             } else {
-                return $qry->where('system_order_no', "LIKE", "%$data%")
-                    ->orWhere("client_order_no", "LIKE", "%$data%");
-            }    
+                if (count($orderIds) > 0) {
+                    return $qry->whereIn("id", $orderIds);
+                } else {
+                    return $qry->where('system_order_no', "LIKE", "%$data%")
+                        ->orWhere("client_order_no", "LIKE", "%$data%");
+                }
+            }
         })->with($this->order_list_relation())
             ->where('company_id', $companyId)
             ->orderBy('id', 'desc')
@@ -312,7 +319,7 @@ class OrderController extends BaseController
      */
     public function filterOrderData(Request $get)
     {
-        $ids = $get->item['ids'] ?? [];
+        $ids = $get->item ?? [];
         $paginate = $get->paginate && $get->paginate > 0 ? $get->paginate : 10;
         $order = Order::whereIn('id', $ids)->with($this->order_list_relation())
             ->orderBy('id', 'desc')
@@ -401,11 +408,9 @@ class OrderController extends BaseController
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
      * @param Order $order
-     *
-     * @return Response
+     * @param $id
+     * @return Application|Factory|View
      */
     public function edit(Order $order, $id)
     {
@@ -635,8 +640,6 @@ class OrderController extends BaseController
 
     public function updateOrderStatus(Request $request)
     {
-        logger('$request->all()');
-        logger($request->all());
         $order = Order::find($request->id);
         $user = Auth::user();
 

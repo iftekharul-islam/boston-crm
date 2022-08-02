@@ -5,13 +5,10 @@
             <div class="modal-body brrower-modal-body">
                 <div class="row">
                     <div class="col-12">
-                        <ValidationProvider class="d-block group" name="Assign to" rules="required" v-slot="{ errors }">
-                            <div class="group" :class="{ 'invalid-form' : errors[0] }">
-                                <label for="" class="d-block mb-2 dashboard-label">Assign To</label>
-                                <m-select :options="users" object item-text="name" item-value="id" v-model="assignTo"></m-select>
-                                <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
-                            </div>
-                        </ValidationProvider>
+                        <div class="group">
+                            <label for="" class="d-block mb-2 dashboard-label">Assign To</label>
+                            <m-select :options="users" object item-text="name" item-value="id" v-model="assignTo"></m-select>
+                        </div>
                     </div>
                     <div class="col-12 mt-2">
                         <ValidationProvider class="d-block group" name="Message" rules="required" v-slot="{ errors }">

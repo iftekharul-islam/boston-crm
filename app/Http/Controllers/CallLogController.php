@@ -4,8 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Helpers\CrmHelper;
 use App\Models\CallLog;
+use App\Models\Client;
 use App\Models\Order;
+use App\Models\OrderWInspection;
+use App\Models\PropertyInfo;
 use App\Repositories\OrderRepository;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -68,7 +72,7 @@ class CallLogController extends Controller
         ];
 
         $this->repository->addActivity($data);
-        $this->addHistory($order, $user, $historyTitle, 'quality-assurance');
+        $this->addHistory($order, $user, $historyTitle, 'call-log');
 
         $orderData = $this->orderDetails($id);
         return [
@@ -123,14 +127,116 @@ class CallLogController extends Controller
         ];
 
         $this->repository->addActivity($data);
-        $this->addHistory($order, $user, $historyTitle, 'quality-assurance');
+        $this->addHistory($order, $user, $historyTitle, 'call-log');
 
         $logData = CallLog::with('caller')->where('order_id', $id)->get();
+
+        $user = auth()->user();
+        $appraisers = $this->repository->getUserByRoleWise(role: 'appraiser');
+        $companyId = $user->getCompanyProfile()->company_id;
+        $data = '';
+        $paginate = 10;
+        $dateRange = '';
+        $filterType = 'to_schedule';
+        $order = $this->orderData($data, $companyId, $paginate, $dateRange, $filterType);
+        $filterValue = $this->getFilterType();
         return [
             'error' => false,
             'message' => 'Call log updated successfully',
             'status' => 'success',
-            'data' => $logData
+            'data' => $logData,
+            'order' => $order,
+            'filterValue' => $filterValue
+        ];
+    }
+
+    public function orderData($data, $companyId, $paginate, $dateRange, $filterType) {
+        $orderId = null;
+        $dataPropertyClient = false;
+        if ($filterType == "completed") {
+            $orderId = CallLog::where('status', 1)->get()->pluck('order_id')->toArray();
+        } else if($filterType == "today_call") {
+            $orderId = OrderWInspection::whereDate('inspection_date_time', '=', date('Y-m-d'))->get()->pluck('order_id')->toArray();
+        }
+
+        if ($data) {
+            $orderIds = PropertyInfo::where('formatedAddress', 'LIKE', "%$data%")->get()->pluck('order_id')->toArray();
+            $clientIds = Client::where("name", "LIKE", "%$data%")->get()->pluck('id')->toArray();
+            $getAmcIds = Order::whereIn('amc_id', $clientIds)->pluck('id')->toArray();
+            $getLenderIds = Order::whereIn('lender_id', $clientIds)->pluck('id')->toArray();
+            $mergeOrder = array_merge($getAmcIds, $getLenderIds);
+            $orderIds = array_unique(array_merge($orderIds, $mergeOrder));
+            $newOrders = $orderIds;
+            if (count($newOrders) > 0) {
+                $orderId = $newOrders;
+                $dataPropertyClient = true;
+            }
+        }
+
+        if ($dataPropertyClient == false && ($data == null || $data == "") && $filterType == null) {
+            $filterType = "to_schedule";
+        }
+
+
+        $order = Order::where(function($qry) use ($data, $orderId, $filterType, $dataPropertyClient) {
+            if ($data) {
+                return $qry->when($orderId, function($qrys) use ($orderId){
+                    return $qrys->whereIn('id', $orderId);
+                })
+                    ->orWhere(function($qry2) use ($data, $dataPropertyClient) {
+                        if ($dataPropertyClient == false) {
+                            return $qry2->where('client_order_no', "LIKE", "%$data%")
+                                ->orWhere("system_order_no", "LIKE", "%$data%");
+                        }
+                    });
+            } else {
+                if ($orderId) {
+                    $searchOrderId = $orderId;
+                    return $qry->whereIn('id', $searchOrderId);
+                } else if($filterType == "today_call") {
+                    $searchOrderId = $orderId ?? [];
+                    return $qry->whereIn('id', $searchOrderId);
+                }
+            }
+        })
+            ->when($dateRange, function($qry) use ($dateRange) {
+                $start = $dateRange['start'];
+                $end = $dateRange['end'];
+                if ($start && $end) {
+                    $startTime = Carbon::parse($start);
+                    $endTime = Carbon::parse($end);
+                    return $qry->whereDate('created_at', ">=", $startTime)->whereDate('created_at', "<=", $endTime);
+                }
+            })
+            ->when($filterType, function($qry) use ($filterType) {
+                if ($filterType == "to_schedule") {
+                    return $qry->where("status", 0);
+                } else if($filterType == "schedule") {
+                    return $qry->where("status", 1);
+                } else if($filterType == "today_call") {
+                    return $qry->where("status", "<", 3);
+                }
+            })
+            ->with($this->order_call_list_relation())
+            ->where('company_id', $companyId)
+            ->orderBy('id', 'desc')
+            ->paginate($paginate);
+        return $order;
+    }
+    protected function getFilterType() {
+        $orders = Order::query();
+        $all = $orders->count();
+        $toBeSchedule = $orders->where('status', 0)->count();
+        $schedule = Order::where('status', 1)->count();
+        $completed = CallLog::where('status', 1)->count();
+        $todaysCallId = OrderWInspection::whereDate('inspection_date_time', '=', date('Y-m-d'))->get()->pluck('order_id');
+        $today_call = Order::whereIn('id', $todaysCallId)->where('status', "<", 3)->count();
+        return [
+            "all" => $all,
+            "to_schedule" => $toBeSchedule,
+            "schedule" => $schedule,
+            "completed" => $completed,
+            "today_call" => $today_call
         ];
     }
 }

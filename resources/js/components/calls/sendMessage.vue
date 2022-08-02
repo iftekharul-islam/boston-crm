@@ -1,5 +1,11 @@
 <template>
     <b-modal id="send-message" size="md" title="Send messages">
+        <div class="card mb-4">
+            <div class="card-body bg-light text-dark">
+                <h5 class="card-title">Property address: </h5>
+                <h6 class="card-subtitle">{{ propertyAddress }}</h6>
+            </div>
+        </div>
         <div class="modal-body">
             <div class="row">
                 <div class="col-md-12">
@@ -7,14 +13,16 @@
                         <div class="group">
                             <label for="" class="d-block mb-1">Receipant email <span
                                     class="text-danger require"></span></label>
-                            <vue-tags-input v-model="sendMessageData.emails" :tags="emails"
-                                placeholder="Add/Remove Emails" @tags-changed="newTags => emails = newTags" />
+                            <vue-tags-input @before-adding-tag="validateEmail" v-model="sendMessageData.emails"
+                                :tags="emails" placeholder="Add/Remove Emails"
+                                @tags-changed="newTags => emails = newTags" />
                         </div>
                         <div class="group">
                             <label for="" class="d-block mb-1">Mobile no <span
                                     class="text-danger require"></span></label>
-                            <vue-tags-input v-model="sendMessageData.phones" :tags="phones"
-                                placeholder="Add/Remove Phones" @tags-changed="newTags => phones = newTags" />
+                            <vue-tags-input @before-adding-tag="validatePhone" v-model="sendMessageData.phones"
+                                :tags="phones" placeholder="Add/Remove Phones"
+                                @tags-changed="newTags => phones = newTags" />
                         </div>
                         <div class="group">
                             <ValidationProvider class="d-block mb-2 dashboard-label" name="Subject" rules="required"
@@ -33,8 +41,8 @@
                                 <div :class="{ 'invalid-form' : errors[0] }">
                                     <label for="" class="d-block mb-1">Messages <span
                                             class="text-danger require"></span></label>
-                                    <text-editor v-model="sendMessageData.message"
-                                        placeholder="Enter message here..."></text-editor>
+                                    <text-editor v-model="sendMessageData.message" placeholder="Enter message here...">
+                                    </text-editor>
                                     <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                                 </div>
                             </validationProvider>
@@ -81,14 +89,44 @@
                 },
                 phones: [],
                 emails: [],
+                propertyAddress: ''
             }
         },
         methods: {
             emailCheckbox(event) {
                 event.currentTarget.checked ? this.sendMessageData.send_email = 1 : this.sendMessageData.send_email = 0
             },
+            setPropertyAddress(propertyAddress) {
+                this.propertyAddress = propertyAddress
+            },
             smsCheckbox(event) {
                 event.currentTarget.checked ? this.sendMessageData.send_sms = 1 : this.sendMessageData.send_sms = 0
+            },
+            validatePhone(obj) {
+                let phoneNo = obj.tag.text
+                let validatePhoneNo = this.$boston.checkPhoneFormat(phoneNo)
+                if (validatePhoneNo) {
+                    obj.tag.text = this.$boston.formatPhoneNo(phoneNo)
+                    obj.addTag()
+                } else {
+                    this.$toast.open({
+                        message: "Invalid phone number!",
+                        type: 'error',
+                    });
+                }
+            },
+            validateEmail(obj) {
+                let email = obj.tag.text
+                let formatedEmail = this.$boston.checkEmailFormat(email)
+                if (formatedEmail) {
+                    obj.tag.text = email
+                    obj.addTag()
+                } else {
+                    this.$toast.open({
+                        message: "Email format is wrong !",
+                        type: 'error',
+                    });
+                }
             },
             setContactData(contactData, property, lender) {
                 let vm = this

@@ -168,6 +168,7 @@ export default {
         Table
     },
     data: () => ({
+        defaultLoad: true,
         updateStatus: {
             feeAmount: '',
             orderId: '',
@@ -185,8 +186,10 @@ export default {
             acitvePage: 1,
             pageData: [],
             searchModel: null,
+            ids: [],
+            idSearch: false,
             paginate: 10,
-            perPages: [10,15,20,25,30,40,50,60,100]
+            perPages: [3,10,15,20,25,30,40,50,60,100]
         },
         order: {
             header: [
@@ -370,9 +373,11 @@ export default {
                 console.log(err);
             });
         },
-        updateOrderList(item) {
-            this.pages.acitvePage = 1
-            this.$boston.post('filter-list/order?page='+this.pages.acitvePage, { item: item, paginate: this.pages.paginate }).then( (res) => {
+        updateOrderList(item, page = 1) {
+            this.pages.ids = item.ids
+            this.pages.idSearch = true
+            this.pages.acitvePage = page
+            this.$boston.post('filter-list/order?page='+this.pages.acitvePage, { item: this.pages.ids, paginate: this.pages.paginate }).then( (res) => {
                 this.pages.pageData = res;
                 this.orderData = res.data;
             }).catch( (err) => {
@@ -455,7 +460,7 @@ export default {
         loadPage(acitvePage = null){
             this.gLoad = true;
             this.pages.acitvePage = acitvePage;
-            this.$boston.post('search/order?page='+this.pages.acitvePage, { data: this.pages.searchModel, paginate: this.pages.paginate }).then( (res) => {
+            this.$boston.post('search/order?page='+this.pages.acitvePage, { pageData:this.pages, data: this.pages.searchModel, paginate: this.pages.paginate }).then( (res) => {
                 this.gLoad = false;
                 this.pages.pageData = res;
                 this.orderData = res.data;
@@ -465,6 +470,7 @@ export default {
         },
         // Search Table Data
         searchData: _.debounce( function (event) {
+            this.pages.idSearch = false
             this.loadPage(this.pages.acitvePage, event.target.value);
         }, 300),
 
@@ -481,6 +487,7 @@ export default {
             } else return 0;
         },
         checkSearch(value, dcol) {
+            this.pages.idSearch = false
             if (value.length == 0) {
                 let filterBackup = JSON.parse(localStorage.getItem('orderSearchType'));
                 this.filterTypeValue = filterBackup;
@@ -499,7 +506,7 @@ export default {
             }
         },
         findIndexFirstKey(firstKey, key, item) {
-            let oldCheck = firstKey.findIndex(ele => {      
+            let oldCheck = firstKey.findIndex(ele => {
                 if (key == 'appraisal_types') {
                     return (ele.form_type).toLowerCase().match(item.form_type.toLowerCase());
                 } else if (key == 'property_types'){
@@ -511,6 +518,7 @@ export default {
             return oldCheck;
         },
         chooseFilterItem(item, key) {
+            this.pages.idSearch = false
             let firstKey = this.selectedFilterItems[key];
             let oldCheck = this.findIndexFirstKey(firstKey, key, item);
             if (oldCheck != -1) {
@@ -547,7 +555,7 @@ export default {
             }).catch( (err) => {
                 this.gLoad = false;
             });
-        }, 
+        },
         refilterSelectedItem(firstKey, key) {
             let filterValueByKey = [];
             this.filterTypeValue[key].find(ele => {

@@ -34,7 +34,7 @@
                     <div class="mgb-32">
                         <ValidationProvider class="group" name="Report Viewer" rules="required" v-slot="{ errors }">
                             <div :class="{ 'invalid-form' : errors[0] }">
-                                <label for="" class="d-block mb-2 dashboard-label">Report Viewer </label>
+                                <label for="" class="d-block mb-2 dashboard-label">Report Reviewer </label>
                                 <!-- <select name="" class="dashboard-input w-100 loan-type-select viewerId" @change="changeSelect('viewerId', $event.target.value)" v-model="viewerId">
                             <option value="">Please Select a user</option>
                             <option v-for="user in users" :key="user.id" :value="user.id">

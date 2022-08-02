@@ -7,22 +7,23 @@
                         <button @click="filterByTab('all')"
                             :class="{'active' : pages.filterType == 'all' || pages.filterType == null}"
                             class="calls-btn h-40 d-flex align-items-center mb-2 d-none">All <span class="ms-2">
-                                ({{ filterValue.all }})</span></button>
+                                ({{ filterValues.all }})</span></button>
                         <button @click="filterByTab('to_schedule')"
                             :class="{'active' : pages.filterType == 'to_schedule'}"
                             class="calls-btn h-40 d-flex align-items-center mb-2">To be Schedule <span class="ms-2">
-                                ({{ filterValue.to_schedule }})</span></button>
+                                ({{ filterValues.to_schedule }})</span></button>
                         <button @click="filterByTab('schedule')" :class="{'active' : pages.filterType == 'schedule'}"
                             class="calls-btn h-40 d-flex align-items-center mb-2">Schedule <span class="ms-2">
-                                ({{ filterValue.schedule }})</span></button>
+                                ({{ filterValues.schedule }})</span></button>
                         <button @click="filterByTab('today_call')"
                             :class="{'active' : pages.filterType == 'today_call'}"
                             class="calls-btn h-40 d-flex align-items-center mb-2">Todays Call <span class="ms-2">
-                                ({{ filterValue.today_call }})</span></button>
+                                ({{ filterValues.today_call }})</span></button>
                         <button @click="filterByTab('completed')" :class="{'active' : pages.filterType == 'completed'}"
                             class="calls-btn h-40 d-flex align-items-center mb-2">Completed <span class="ms-2">
-                                ({{ filterValue.completed }})</span></button>
-                        <button @click="$bvModal.show('dateRange'); filterByTab('daterange')" :class="{'active' : pages.filterType == 'daterange'}"
+                                ({{ filterValues.completed }})</span></button>
+                        <button @click="$bvModal.show('dateRange'); filterByTab('daterange')"
+                            :class="{'active' : pages.filterType == 'daterange'}"
                             class="calls-btn h-40 d-flex align-items-center mb-2">Date Rage</button>
                     </div>
                     <div class="right d-flex">
@@ -31,7 +32,8 @@
                             selected orders <span class="ms-2">({{ selectedItems.length }})</span></a>
                         <div class=" d-flex calls-search">
                             <input type="text" v-model="pages.searchModel" @input="searchData($event)"
-                                class="mb-3 px-3 bdr-1 br-4 gray-border calls-search-input h-40" :placeholder="searchColumnType">
+                                class="mb-3 px-3 bdr-1 br-4 gray-border calls-search-input h-40"
+                                :placeholder="searchColumnType">
                             <button class="bg-gray inline-flex-center mb-2 calls-search-btn d-none">
                                 <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
@@ -113,11 +115,11 @@
                                         class="path4"></span></span>
                                 <span class="call-tooltip">Quick view</span>
                             </a>
-                            <a @click.prevent="getCallSummary(item.call_log, item.id, item.client_order_no, item.property_info.full_addr)" href="javascript:;"
-                                class="icon-list" data-bs-toggle="modal" data-bs-target="#callLogModal"><span
-                                    class="icon-messages2 primary-text fs-20"><span class="path1"></span><span
-                                        class="path2"></span><span class="path3"></span><span class="path4"></span><span
-                                        class="path5"></span></span>
+                            <a @click.prevent="getCallSummary(item.call_log, item.id, item.client_order_no, item.property_info.full_addr)"
+                                href="javascript:;" class="icon-list" data-bs-toggle="modal"
+                                data-bs-target="#callLogModal"><span class="icon-messages2 primary-text fs-20"><span
+                                        class="path1"></span><span class="path2"></span><span class="path3"></span><span
+                                        class="path4"></span><span class="path5"></span></span>
                                 <span class="call-tooltip">Call log</span>
                             </a>
                             <a @click="getScheduleData(item)" href="javascript:;" class="icon-list">
@@ -132,8 +134,9 @@
                                 <img src="/img/sms.svg" alt="Email and sms" class="img-fluid">
                                 <span class="call-tooltip">Email & SMS</span>
                             </a>
-                            <a @click="callNumberInit(item)" href="javascript:;" class="icon-list"><span class="icon-call text-light-red fs-20"><span
-                                        class="path1"></span><span class="path2"></span></span>
+                            <a @click="callNumberInit(item)" href="javascript:;" class="icon-list"><span
+                                    class="icon-call text-light-red fs-20"><span class="path1"></span><span
+                                        class="path2"></span></span>
                                 <span class="call-tooltip">Call</span>
                             </a>
                             <button @click="openIssues(item)" class="button button-transparent p-0"><span
@@ -200,13 +203,15 @@
         <m-modal v-model="openIssue" title="Pending Issues/Tickets Lists">
             <div class="issue-list">
                 <div class="row" v-if="activeIssue && activeIssue.length">
-                    <div class="call-list-modal col-md-6" v-for="item, lindex in activeIssue" :key="'pending-issue-'+lindex">
+                    <div class="call-list-modal col-md-6" v-for="item, lindex in activeIssue"
+                        :key="'pending-issue-'+lindex">
                         <div class="item pending">
                             <span class="call-badge">Pending</span>
                             <p class="text-gray text-end fs-12">{{ item.created_at | dateTime }}</p>
                             <p class="fs-14 mgt-12 mgb-12">{{ item.issue }}</p>
                             <div class="d-flex justify-content-between" v-if="item.assigned_to">
-                                <p class="mb-0 fs-14"><span class="text-gray">Assigned to :</span> <b>Technical team</b></p>
+                                <p class="mb-0 fs-14"><span class="text-gray">Assigned to :</span> <b>Technical team</b>
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -230,7 +235,8 @@
                     <p class="mb-0 left-side">Borrower Phone Numbers</p>
                     <span>:</span>
                     <p class="right-side list-items mb-0 phone-number">
-                    <input @click="selectText(item)" readonly class="d-inline-block mb-2" v-for="item, ik in contact_number_s" :key="ik" :value="item"/>
+                        <input @click="selectText(item)" readonly class="d-inline-block mb-2"
+                            v-for="item, ik in contact_number_s" :key="ik" :value="item" />
                     </p>
                 </div>
                 <hr>
@@ -243,7 +249,8 @@
                     <p class="mb-0 left-side">Contact Phone Numbers</p>
                     <span>:</span>
                     <p class="right-side list-items mb-0 phone-number">
-                    <input @click="selectText(item)" readonly class="d-inline-block mb-2" v-for="item, ik in contact_ex_number_s" :key="ik" :value="item"/>
+                        <input @click="selectText(item)" readonly class="d-inline-block mb-2"
+                            v-for="item, ik in contact_ex_number_s" :key="ik" :value="item" />
                     </p>
                 </div>
             </div>
@@ -261,9 +268,14 @@
                 <div class="modal-content ">
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     <div class="modal-body h-100 overflow-auto">
-                        <h3>Call summary <span class="fs-15 badges solved-badges" v-if="!callLog.notCompleted">Completed</span></h3>
-                        <p class="text-gray fs-12 mb-0">{{ callLog.order_no }}</p>
-                        <p class="mb-3 text-gray fs-12 mb-0">{{ callLog.address }}</p>
+                        <h3>Call summary <span class="btn btn-success p-0 mx-4"
+                                v-if="!callLog.notCompleted"><b>Completed</b></span></h3>
+                        <div class="card mb-4">
+                            <div class="card-body bg-light text-dark">
+                                <h5 class="card-title">Property address: </h5>
+                                <h6 class="card-subtitle">{{ callLog.address }}</h6>
+                            </div>
+                        </div>
                         <div class="call-summary-item" v-for="(log, logIndex) in callLog.items" :key="logIndex">
                             <div class="top d-flex align-items-center">
                                 <div v-if="log.caller.media.length">
@@ -289,7 +301,7 @@
                                 style="min-height: 100px"></textarea>
                             <span v-if="callLog.error" class="error-message">The Message field is required</span>
                         </div>
-                        <div class="checkbox-group mt-2"  v-if="callLog.notCompleted">
+                        <div class="checkbox-group mt-2" v-if="callLog.notCompleted">
                             <input type="checkbox" class="checkbox-input" v-model="callLog.status">
                             <label for="" class="checkbox-label">Call completed</label>
                         </div>
@@ -466,6 +478,7 @@
             openIssue: false,
         }),
         created() {
+            this.filterValues = this.filterValue
             this.initOrder(this.order);
             this.$root.$on('wk_flow_toast', (res) => {
                 if (res.error == false) {
@@ -476,6 +489,9 @@
                     message: res.message,
                     type: res.error == true ? 'error' : 'success',
                 });
+            });
+            this.$root.$on('filter_update', (res) => {
+                this.filterValues = res
             });
         },
         mounted() {
@@ -512,14 +528,16 @@
                         this.callLog.message = ''
                         this.callLog.status = ''
                         this.toastMessage(res.data.message, res.data.error)
-                        if(res.data.data){
-                            this.getCallSummary(res.data.data, this.callLog.orderId)
+                        if (res.data.data) {
+                            this.getCallSummary(res.data.data, this.callLog.orderId, this.callLog.order_no, this.callLog.address)
                         }
+                        this.initOrder(res.data.order)
+                        this.filterValues = res.data.filterValue
                     }).catch(err => {
                         console.log(err)
                     })
             },
-            toastMessage(msg, status){
+            toastMessage(msg, status) {
                 this.$toast.open({
                     message: msg,
                     type: status == true ? 'error' : 'success',
@@ -593,7 +611,7 @@
                 //        lat: parseFloat(ele.property_info.latitude),
                 //       lng: parseFloat(ele.property_info.longitude),
                 //        details: {
-                 //           orderNo: ele.client_order_no,
+                //           orderNo: ele.client_order_no,
                 //            property: ele.property_info
                 //        }
                 //    }
@@ -610,7 +628,7 @@
                 }
 
                 this.selectedItems.map((ele) => {
-                    propertyAddresses.push({address: ele.property_info.search_address});
+                    propertyAddresses.push({ address: ele.property_info.search_address });
                 })
 
                 console.log(propertyAddresses)
@@ -723,15 +741,18 @@
             },
             getScheduleData(item) {
                 this.$refs.callScheduleComponent.setOrderId(item.id)
+                this.$refs.callScheduleComponent.setPropertyAddress(item.property_info.formatedAddress)
                 if (item.inspection) {
                     this.$refs.callReScheduleComponent.setScheduleData(item.inspection)
                     this.$refs.callReScheduleComponent.setOrderStatus(item.status)
+                    this.$refs.callReScheduleComponent.setPropertyAddress(item.property_info.formatedAddress)
                 }
                 item.status == 0 ? this.$bvModal.show('schedule') : this.$bvModal.show('re-schedule')
             },
             getSendMessage(item) {
                 this.$bvModal.show('send-message')
-                this.$refs.sendMessageComponent.setContactData(item.contact_info,item.property_info,item.lender)
+                this.$refs.sendMessageComponent.setContactData(item.contact_info, item.property_info, item.lender)
+                this.$refs.sendMessageComponent.setPropertyAddress(item.property_info.formatedAddress)
             },
             filterByTab(item) {
                 this.pages.filterType = item;
@@ -807,17 +828,20 @@
         top: 4px;
         cursor: hover;
     }
-.full_addr {
-    height: 44px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    cursor: pointer;
-    transition: all 200ms ease-in-out;
-}
-.full_addr:hover {
-    display: table;
-    height: auto;
-    overflow: auto;
-    transition: all 200ms ease-in-out;
-}
+
+    .full_addr {
+        height: 44px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        cursor: pointer;
+        transition: all 200ms ease-in-out;
+    }
+
+    .full_addr:hover {
+        display: table;
+        height: auto;
+        overflow: auto;
+        transition: all 200ms ease-in-out;
+    }
+
 </style>

@@ -1,5 +1,11 @@
 <template>
     <b-modal id="schedule" size="md" title="Schedule">
+        <div class="card mb-4">
+            <div class="card-body bg-light text-dark">
+                <h5 class="card-title">Property address: </h5>
+                <h6 class="card-subtitle">{{ propertyAddress }}</h6>
+            </div>
+        </div>
         <div class="modal-body">
             <div class="row">
                 <div class="col-md-12">
@@ -91,26 +97,31 @@
                 { 'duration': '60 minutes' },
             ],
             orderData: [],
+            propertyAddress: ''
         }),
         methods: {
             setOrderId(orderId) {
                 this.schedule.order_id = orderId
             },
+            setPropertyAddress(propertyAddress) {
+                this.propertyAddress = propertyAddress
+            },
             saveSchedule() {
                 this.$refs.scheduleForm.validate().then((status) => {
                     if (status) {
                         let formData = new FormData();
-                        formData.append('schedule_id',this.schedule.schedule_id)
-                        formData.append('order_id',this.schedule.order_id)
-                        formData.append('appraiser_id',this.schedule.appraiser_id)
-                        formData.append('inspection_date_time',this.schedule.inspection_date_time)
-                        formData.append('duration',this.schedule.duration)
-                        formData.append('note',this.schedule.note)
+                        formData.append('schedule_id', this.schedule.schedule_id)
+                        formData.append('order_id', this.schedule.order_id)
+                        formData.append('appraiser_id', this.schedule.appraiser_id)
+                        formData.append('inspection_date_time', this.schedule.inspection_date_time)
+                        formData.append('duration', this.schedule.duration)
+                        formData.append('note', this.schedule.note)
 
                         this.$boston.post('update-order-schedule', formData)
                             .then(res => {
                                 this.orderData = res.data;
                                 this.$root.$emit('wk_flow_toast', res)
+                                this.$root.$emit('filter_update', res.filterValue)
                                 this.schedule = {}
                                 this.$bvModal.hide('schedule')
                             })

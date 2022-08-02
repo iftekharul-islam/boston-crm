@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CallLog;
 use Zip;
 use Carbon\Carbon;
 use App\Models\User;
@@ -53,26 +54,44 @@ class OrderWorkflowController extends BaseController
         $user = auth()->user();
         if ($request->schedule_id > 0) {
             $message = 'Re Scheduled successfully';
-            $historyTitle = auth()->user()->name . " Re scheduled the order. <br>Order Client No: <strong class='text-primary'>{$order->client_order_no}</strong><br>Schedule Time: <strong class='text-danger'>{$request->inspection_date_time}</strong><br>Note is: <strong class='text-primary'>{$request->note}</strong><br>Duration: <strong>{$request->duration}</strong>";
+            $historyTitle = auth()->user()->name . " Re scheduled the order. <br>Order Client No: <strong class='text-primary'>{$order->client_order_no}</strong><br>Schedule Time: <strong class='text-danger'>{$request->inspection_date_time}</strong><br>Note: <strong class='text-primary'>{$request->note}</strong><br>Reschedule Note: <strong class='text-primary'>{$request->reschedule_note}</strong><br>Duration: <strong>{$request->duration}</strong>";
         } else {
             $message = 'Schedule createded successfully';
-            $historyTitle = auth()->user()->name . " scheduled the order. <br>Order Client No: <strong class='text-primary'>{$order->client_order_no}</strong><br>Schedule Time: <strong class='text-danger'>{$request->inspection_date_time}</strong><br>Note is: <strong class='text-primary'>{$request->note}</strong><br>Duration: <strong>{$request->duration}</strong>";
+            $historyTitle = auth()->user()->name . " scheduled the order. <br>Order Client No: <strong class='text-primary'>{$order->client_order_no}</strong><br>Schedule Time: <strong class='text-danger'>{$request->inspection_date_time}</strong><br>Note: <strong class='text-primary'>{$request->note}</strong><br>Duration: <strong>{$request->duration}</strong>";
         }
 
         $this->addHistory($order, $user, $historyTitle, 'scheduling');
 
         $orderData = $this->orderDetails($request->order_id);
+        $filterValue = $this->getFilterType();
         return [
             'error' => false,
             'message' => $message,
-            'data' => $orderData
+            'data' => $orderData,
+            'filterValue' => $filterValue
+        ];
+    }
+
+    protected function getFilterType() {
+        $orders = Order::query();
+        $all = $orders->count();
+        $toBeSchedule = $orders->where('status', 0)->count();
+        $schedule = Order::where('status', 1)->count();
+        $completed = CallLog::where('status', 1)->count();
+        $todaysCallId = OrderWInspection::whereDate('inspection_date_time', '=', date('Y-m-d'))->get()->pluck('order_id');
+        $today_call = Order::whereIn('id', $todaysCallId)->where('status', "<", 3)->count();
+        return [
+            "all" => $all,
+            "to_schedule" => $toBeSchedule,
+            "schedule" => $schedule,
+            "completed" => $completed,
+            "today_call" => $today_call
         ];
     }
 
     public function deleteSchedule(Request $request, $id)
     {
         $order_w_schedule = OrderWInspection::find($id);
-        $orderData = $this->orderDetails($order_w_schedule->order_id);
         $order = Order::find($order_w_schedule->order_id);
         $order->forceFill([
             'workflow_status->scheduling' => 0,
@@ -89,10 +108,13 @@ class OrderWorkflowController extends BaseController
 
         $this->service->deleteOrderSchedule($id);
         $this->repository->deleteSchedule($id);
+        $orderData = $this->orderDetails($order_w_schedule->order_id);
+        $filterValue = $this->getFilterType();
         return [
             'error' => false,
             'message' => "Schedule deleted successfully",
-            'data' => $orderData
+            'data' => $orderData,
+            'filterValue' => $filterValue
         ];
     }
 

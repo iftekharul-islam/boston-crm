@@ -231,10 +231,10 @@
                             <div class="col-md-7">
                                 <h4 class="box-header mb-3">Client info</h4>
                             </div>
-                            <div class="col-md-5">
+                            <!-- <div class="col-md-5">
                                 <button type="button" class="button button-primary" @click.prevent="addClientModal">Add
                                     Client</button>
-                            </div>
+                            </div> -->
                         </div>
                         <ValidationProvider class="group" name="AMC name" rules="required" v-slot="{ errors }">
                             <div class="group" :class="{ 'invalid-form' : errors[0] }">
@@ -423,27 +423,17 @@
                 <span @click="showStreetAddress = false">X</span>
             </template>
         </street-address>
+
+        <!-- add client -->
         <template>
-            <b-modal id="add-client" size="xl" title="Add Client">
+            <b-modal id="add-client" size="xl" title="Add new Client">
                 <div class="modal-body">
                     <ValidationObserver ref="addClientForm">
                         <div class="add-client-form">
-                            <p class="text-light-black fs-20 mgb-16">Add new client</p>
                             <div class="row">
                                 <div class="col-lg-8 left mb-3">
                                     <div class="d-flex box justify-content-between left__wrap">
                                         <div class="left-side max-w-424 w-100 me-3">
-                                            <div class="group">
-                                                <ValidationProvider name="First Name" rules="required|alpha_spaces"
-                                                    v-slot="{ errors }">
-                                                    <label for="name" class="d-block mb-2 dashboard-label">Client name
-                                                        <span class="text-danger require"></span></label>
-                                                    <input v-model="client.name" type="text"
-                                                        class="dashboard-input w-100"
-                                                        :class="errors[0] ? 'border border-danger' : ''">
-                                                    <span class="text-danger">{{ errors[0] }}</span>
-                                                </ValidationProvider>
-                                            </div>
                                             <div class="group">
                                                 <ValidationProvider name="Client Type" vid="clientType" rules="required"
                                                     v-slot="{ errors }">
@@ -456,9 +446,21 @@
                                                             <option value="">Select a type</option>
                                                             <option value="amc">Amc</option>
                                                             <option value="lender">Lender</option>
+                                                            <option value="both">Both</option>
                                                         </select>
                                                         <span class="icon-arrow-down bottom-arrow-icon"></span>
                                                     </div>
+                                                    <span class="text-danger">{{ errors[0] }}</span>
+                                                </ValidationProvider>
+                                            </div>
+                                            <div class="group">
+                                                <ValidationProvider name="First Name" rules="required|alpha_spaces"
+                                                    v-slot="{ errors }">
+                                                    <label for="name" class="d-block mb-2 dashboard-label">Client name
+                                                        <span class="text-danger require"></span></label>
+                                                    <input v-model="client.name" type="text"
+                                                        class="dashboard-input w-100"
+                                                        :class="errors[0] ? 'border border-danger' : ''">
                                                     <span class="text-danger">{{ errors[0] }}</span>
                                                 </ValidationProvider>
                                             </div>
@@ -467,30 +469,41 @@
                                                     v-slot="{ errors }">
                                                     <label class="d-block mb-2 dashboard-label">Email
                                                         address<span class="text-danger require"></span></label>
-                                                    <input v-model="client.email" type="email"
-                                                        class="dashboard-input w-100"
+                                                    <input type="email" class="dashboard-input w-100"
                                                         :class="errors[0] ? 'border border-danger' : ''">
                                                     <span class="text-danger">{{ errors[0] }}</span>
+                                                    <div id="email-append" class="contact-append"></div>
+                                                    <div class="text-end">
+                                                        <button @click.prevent="addEmail"
+                                                            class="button button-transparent p-0 text-gray">+ Add
+                                                            More</button>
+                                                    </div>
                                                 </ValidationProvider>
                                             </div>
                                             <div class="group">
-                                                <ValidationProvider name="Phone" rules="required|numeric|integer"
-                                                    v-slot="{ errors }">
+                                                <ValidationProvider name="Phone" rules="required" v-slot="{ errors }">
                                                     <label class="d-block mb-2 dashboard-label">Phone<span
                                                             class="text-danger require"></span></label>
-                                                    <input v-model="client.phone" type="text"
-                                                        class="dashboard-input w-100"
+                                                    <input @keyup="formatPhoneNo" type="text"
+                                                        class="phone dashboard-input w-100"
                                                         :class="errors[0] ? 'border border-danger' : ''">
                                                     <span class="text-danger">{{ errors[0] }}</span>
+                                                    <div id="phone-append" class="contact-append"></div>
+                                                    <div class="text-end">
+                                                        <button @click.prevent="addPhone"
+                                                            class="button button-transparent p-0 text-gray">+ Add
+                                                            More</button>
+                                                    </div>
                                                 </ValidationProvider>
                                             </div>
                                         </div>
                                         <div class="right-side max-w-424 w-100">
                                             <div class="group">
-                                                <ValidationProvider name="Address" rules="required_if:clientType,lender"
-                                                    v-slot="{ errors }">
+                                                <ValidationProvider name="Address"
+                                                    rules="required_if:clientType,lender,both" v-slot="{ errors }">
                                                     <label class="d-block mb-2 dashboard-label">Address
-                                                        <span v-if="client.client_type == 'lender'"
+                                                        <span
+                                                            v-if="client.client_type == 'lender' || client.client_type == 'both'"
                                                             class="text-danger require"></span></label>
                                                     <textarea v-model="client.address" class="dashboard-textarea w-100"
                                                         :class="errors[0] ? 'border border-danger' : ''" id="address"
@@ -499,10 +512,10 @@
                                                 </ValidationProvider>
                                             </div>
                                             <div class="group">
-                                                <ValidationProvider name="City" rules="required_if:clientType,lender"
-                                                    v-slot="{ errors }">
+                                                <ValidationProvider name="City"
+                                                    rules="required_if:clientType,lender,both" v-slot="{ errors }">
                                                     <label class="d-block mb-2 dashboard-label">City <span
-                                                            v-if="client.client_type == 'lender'"
+                                                            v-if="client.client_type == 'lender' || client.client_type == 'both'"
                                                             class="text-danger require"></span></label>
                                                     <input v-model="client.city" type="text"
                                                         class="dashboard-input w-100"
@@ -511,10 +524,10 @@
                                                 </ValidationProvider>
                                             </div>
                                             <div class="group">
-                                                <ValidationProvider name="State" rules="required_if:clientType,lender"
-                                                    v-slot="{ errors }">
+                                                <ValidationProvider name="State"
+                                                    rules="required_if:clientType,lender,both" v-slot="{ errors }">
                                                     <label class="d-block mb-2 dashboard-label">State <span
-                                                            v-if="client.client_type == 'lender'"
+                                                            v-if="client.client_type == 'lender' || client.client_type == 'both'"
                                                             class="text-danger require"></span></label>
                                                     <input v-model="client.state" type="text"
                                                         class="dashboard-input w-100"
@@ -523,10 +536,10 @@
                                                 </ValidationProvider>
                                             </div>
                                             <div class="group">
-                                                <ValidationProvider name="Zip" rules="required_if:clientType,lender"
-                                                    v-slot="{ errors }">
+                                                <ValidationProvider name="Zip"
+                                                    rules="required_if:clientType,lender,both" v-slot="{ errors }">
                                                     <label class="d-block mb-2 dashboard-label">Zip <span
-                                                            v-if="client.client_type == 'lender'"
+                                                            v-if="client.client_type == 'lender' || client.client_type == 'both'"
                                                             class="text-danger require"></span></label>
                                                     <input v-model="client.zip" type="text"
                                                         class="dashboard-input w-100"
@@ -535,14 +548,35 @@
                                                 </ValidationProvider>
                                             </div>
                                             <div class="group">
-                                                <ValidationProvider name="Country" v-slot="{ errors }">
-                                                    <label class="d-block mb-2 dashboard-label">Country
-                                                        <span v-if="client.client_type == 'lender'"
+                                                <ValidationProvider name="Processing fee"
+                                                    rules="numeric|required_if:clientType,amc,both" v-slot="{ errors }">
+                                                    <label class="d-block mb-2 dashboard-label">Processing fee
+                                                        <span
+                                                            v-if="client.client_type == 'amc' || client.client_type == 'both'"
                                                             class="text-danger require"></span></label>
-                                                    <input v-model="client.country" type="text"
+                                                    <input v-model="client.processing_fee" type="number" min="0"
+                                                        v-on:paste="return false" v-on:keyup="numbersOnly($event)"
                                                         class="dashboard-input w-100"
                                                         :class="errors[0] ? 'border border-danger' : ''">
                                                     <span class="text-danger">{{ errors[0] }}</span>
+                                                </ValidationProvider>
+                                            </div>
+                                            <div class="group">
+                                                <ValidationProvider name="Com required"
+                                                    rules="required_if:clientType,amc,both" v-slot="{ errors }">
+                                                    <label class="d-block mb-2 dashboard-label">Com required<span
+                                                            v-if="client.client_type == 'amc' || client.client_type == 'both'"
+                                                            class="text-danger require"></span></label>
+                                                    <div class="position-relative">
+                                                        <select v-model="client.com_required"
+                                                            class="dashboard-input w-100"
+                                                            :class="errors[0] ? 'border border-danger' : ''">
+                                                            <option value="">Choose an option</option>
+                                                            <option value="1">Yes</option>
+                                                            <option value="0">No</option>
+                                                        </select>
+                                                        <span class="icon-arrow-down bottom-arrow-icon"></span>
+                                                    </div>
                                                 </ValidationProvider>
                                             </div>
                                         </div>
@@ -553,13 +587,15 @@
                                         <div class="max-w-424 w-100">
                                             <div class="group">
                                                 <ValidationProvider name="Technology fee for full
-                                            appraisal like 1004UAD" rules="required_if:clientType,amc"
+                                            appraisal like 1004UAD" rules="required_if:clientType,amc,both"
                                                     v-slot="{ errors }">
                                                     <label class="d-block mb-2 dashboard-label">Technology
-                                                        fee for full
-                                                        appraisal like 1004UAD <span v-if="client.client_type == 'amc'"
+                                                        fee for
+                                                        appraisal like 1004UAD <span
+                                                            v-if="client.client_type == 'amc' || client.client_type == 'both'"
                                                             class="text-danger require"></span></label>
-                                                    <input v-model="client.fee_for_1004uad" type="text"
+                                                    <input v-model="client.fee_for_1004uad" type="number" min="0"
+                                                        v-on:paste="return false" v-on:keyup="numbersOnly($event)"
                                                         class="dashboard-input w-100"
                                                         :class="errors[0] ? 'border border-danger' : ''">
                                                     <span class="text-danger">{{ errors[0] }}</span>
@@ -567,13 +603,15 @@
                                             </div>
                                             <div class="group">
                                                 <ValidationProvider name="Technology fee for full
-                                            appraisal like 1004D" rules="required_if:clientType,amc"
+                                            appraisal like 1004D" rules="required_if:clientType,amc,both"
                                                     v-slot="{ errors }">
                                                     <label class="d-block mb-2 dashboard-label">Technology
-                                                        fee for full
-                                                        appraisal like 1004D<span v-if="client.client_type == 'amc'"
+                                                        fee for
+                                                        appraisal like 1004D<span
+                                                            v-if="client.client_type == 'amc' || client.client_type == 'both'"
                                                             class="text-danger require"></span></label>
-                                                    <input v-model="client.fee_for_1004d" type="text"
+                                                    <input v-model="client.fee_for_1004d" type="number" min="0"
+                                                        v-on:paste="return false" v-on:keyup="numbersOnly($event)"
                                                         class="dashboard-input w-100"
                                                         :class="errors[0] ? 'border border-danger' : ''">
                                                     <span class="text-danger">{{ errors[0] }}</span>
@@ -581,10 +619,11 @@
                                             </div>
                                             <div class="group">
                                                 <ValidationProvider name="Deduction of tech fee during
-                                            payment " rules="required_if:clientType,amc" v-slot="{ errors }">
+                                            payment " rules="required_if:clientType,amc,both" v-slot="{ errors }">
                                                     <label class="d-block mb-2 dashboard-label">Deduction
                                                         of tech fee during
-                                                        payment <span v-if="client.client_type == 'amc'"
+                                                        payment <span
+                                                            v-if="client.client_type == 'amc' || client.client_type == 'both'"
                                                             class="text-danger require"></span></label>
                                                     <div class="position-relative">
                                                         <select v-model="client.deducts_technology_fee"
@@ -600,9 +639,10 @@
                                             </div>
                                             <div class="group">
                                                 <ValidationProvider name="Trainee can sign"
-                                                    rules="required_if:clientType,amc" v-slot="{ errors }">
+                                                    rules="required_if:clientType,amc,both" v-slot="{ errors }">
                                                     <label class="d-block mb-2 dashboard-label">Trainee can
-                                                        sign <span v-if="client.client_type == 'amc'"
+                                                        sign <span
+                                                            v-if="client.client_type == 'amc' || client.client_type == 'both'"
                                                             class="text-danger require"></span></label>
                                                     <div class="position-relative">
                                                         <select v-model="client.can_sign" id="can-sign"
@@ -618,9 +658,10 @@
                                             </div>
                                             <div class="group">
                                                 <ValidationProvider name="Trainee can inspect"
-                                                    rules="required_if:clientType,amc" v-slot="{ errors }">
+                                                    rules="required_if:clientType,amc,both" v-slot="{ errors }">
                                                     <label class="d-block mb-2 dashboard-label">Trainee can
-                                                        inspect <span v-if="client.client_type == 'amc'"
+                                                        inspect <span
+                                                            v-if="client.client_type == 'amc' || client.client_type == 'both'"
                                                             class="text-danger require"></span></label>
                                                     <div class="position-relative">
                                                         <select v-model="client.can_inspect"
@@ -636,7 +677,7 @@
                                             </div>
                                             <div class="group">
                                                 <label for="instruction"
-                                                    class="d-block mb-2 dashboard-label">Instruction</label>
+                                                    class="d-block mb-2 dashboard-label">Requirement File</label>
                                                 <div class="position-relative file-upload">
                                                     <input type="file" @change="getFile">
                                                     <label for="">Upload <img src="/img/upload.png"
@@ -767,7 +808,10 @@
                     markerIcon: "",
                     data: [],
                 },
-                processingFee: 0
+                processingFee: 0,
+                emailCount: 1,
+                phoneCount: 1,
+
             }
         },
         created() {
@@ -785,22 +829,55 @@
             this.geolocate();
             $('select').select2();
             this.select2Features();
+
+            $(document).on('click', '.phone-button', function () {
+                let button_id = $(this).attr("id");
+                $('#phone-' + button_id + '').remove();
+            });
+            $(document).on('click', '.email-button', function () {
+                let button_id = $(this).attr("id");
+                $('#email-' + button_id + '').remove();
+            });
         },
         methods: {
+            numbersOnly(e) {
+                return e.charCode >= 48 && e.charCode <= 57;
+            },
+            formatPhoneNo(e) {
+                let phoneNo = e.target.value;
+                e.target.value = this.$boston.formatPhoneNo(phoneNo)
+            },
             addClientModal() {
                 this.$bvModal.show('add-client');
             },
             getFile(event) {
                 this.instruction = event.target.files[0]
             },
+            addEmail() {
+                $('#email-append').append('<div class="append-div mt-2" id="email-' + this.emailCount + '"><input type="email" name="email[]" class="email dashboard-input"><button type="button" id="' + this.emailCount + '" class=" button button-transparent p-0 contact-del-btn email-button"><span class="icon-trash"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></span></button></div>');
+                this.emailCount++
+            },
+            addPhone() {
+                $('#phone-append').append('<div class="append-div mt-2" id="phone-' + this.phoneCount + '"><input type="text" maxlength="14" onkeypress="return formatPhone(event)" class="phone dashboard-input"><button type="button" id="' + this.phoneCount + '" class="button button-transparent p-0 contact-del-btn phone-button"><span class="icon-trash"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></span></button></div>');
+                this.phoneCount++;
+            },
             saveClient() {
-                let formData = new FormData();
+                let phone = document.getElementsByClassName('phone')
+                for (let i = 0; i < phone.length; i++) {
+                    console.log(phone[i].value)
+                }
 
-                Object.entries(this.client).forEach(([key, value]) => {
-                    formData.append(key, value)
+                return false
+                this.$refs.addClientForm.validate().then((status) => {
+                    if (status) {
+                        let formData = new FormData();
+                        Object.entries(this.client).forEach(([key, value]) => {
+                            formData.append(key, value)
+                        })
+                        console.log(this.client)
+                    }
                 })
-
-                console.log(this.client)
+                //console.log(this.client)
             },
             loanTypeChange() {
                 let fhaExistData = this.loanTypes.filter((item) => {
