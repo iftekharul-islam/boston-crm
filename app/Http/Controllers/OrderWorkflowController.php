@@ -97,9 +97,11 @@ class OrderWorkflowController extends BaseController
             'workflow_status->scheduling' => 0,
             'status' => 0
         ])->save();
+        $user = auth()->user();
+        $historyTitle = auth()->user()->name . " delete the schedule. <br>Order Client No: <strong class='text-primary'>{$order->client_order_no}</strong><br>Delete note: <strong class='text-danger'>{$request->delete_note}</strong>";
 
         $data = [
-            "activity_text" => "Schedule Deleted By " . auth()->user()->name . "REASON: " . $request->delete_note,
+            "activity_text" => "Schedule Deleted By " . $user->name . " REASON: " . $request->delete_note,
             "activity_by" => auth()->user()->id,
             "order_id" => $order_w_schedule->order_id
         ];
@@ -109,6 +111,8 @@ class OrderWorkflowController extends BaseController
         $this->service->deleteOrderSchedule($id);
         $this->repository->deleteSchedule($id);
         $orderData = $this->orderDetails($order_w_schedule->order_id);
+
+        $this->addHistory($order, $user, $historyTitle, 'scheduling');
         $filterValue = $this->getFilterType();
         return [
             'error' => false,
@@ -116,26 +120,6 @@ class OrderWorkflowController extends BaseController
             'data' => $orderData,
             'filterValue' => $filterValue
         ];
-    }
-
-    public function checkEvent()
-    {
-        //create a new event
-        //        $event = new Event;
-        //
-        //        $event->name = '580 E 2Nd St, Unit 3, Boston, Massachusetts, Suffolk, 02127 Safayet Hoque (Micelotta, Daniel 781-987-4946) ';
-        //        $event->description = 'Event description';
-        //        $event->startDateTime = Carbon::parse('2022-06-19 12:00');
-        //        $event->endDateTime = Carbon::parse('2022-06-19 13:00');
-        //        $event->location = '580 E 2Nd St, Unit 3, Boston, Massachusetts, Suffolk, 02127';
-        //        $event->colorId = 11;
-        //        $event->description = 'Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs. The passage is attributed to an unknown Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs. The passage is attributed to an unknown';
-        //        $event->addAttendee(['email' => 'safayet.hoque@gmail.com']);
-        //        $event->save();
-        //
-        //        return \response()->json(['message' => 'success']);
-
-        //Event::quickCreate('Appointment at Somewhere on July 1 10am-10:25am');
     }
 
 
@@ -789,7 +773,7 @@ class OrderWorkflowController extends BaseController
 
         $reWriteAll = OrderWRevision::where('order_id', $get->order_id)->get();
         $allDone = true;
-        
+
         foreach($reWriteAll as $reItem) {
             if ($reItem->status == 0) {
                 $allDone = false;
