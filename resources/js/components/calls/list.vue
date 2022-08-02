@@ -492,6 +492,9 @@
                     type: res.error == true ? 'error' : 'success',
                 });
             });
+            this.$root.$on('order_update', (res) => {
+                this.initOrder(res);
+            });
             this.$root.$on('filter_update', (res) => {
                 this.filterValues = res
             });
