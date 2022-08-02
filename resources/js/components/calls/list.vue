@@ -22,7 +22,8 @@
                         <button @click="filterByTab('completed')" :class="{'active' : pages.filterType == 'completed'}"
                             class="calls-btn h-40 d-flex align-items-center mb-2">Completed <span class="ms-2">
                                 ({{ filterValues.completed }})</span></button>
-                        <button @click="$bvModal.show('dateRange'); filterByTab('daterange')" :class="{'active' : pages.filterType == 'daterange'}"
+                        <button @click="$bvModal.show('dateRange'); filterByTab('daterange')"
+                            :class="{'active' : pages.filterType == 'daterange'}"
                             class="calls-btn h-40 d-flex align-items-center mb-2">Date Rage</button>
                     </div>
                     <div class="right d-flex">
@@ -267,10 +268,14 @@
                 <div class="modal-content ">
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     <div class="modal-body h-100 overflow-auto">
-                        <h3>Call summary <span class="fs-15 badges solved-badges" 
-                        v-if="!callLog.notCompleted">Completed</span></h3>
-                        <p class="fs-14 mb-0">{{ callLog.order_no }}</p>
-                        <p class="mb-3 fs-14 mb-0">{{ callLog.address }}</p>
+                        <h3>Call summary <span class="btn btn-success p-0 mx-4"
+                                v-if="!callLog.notCompleted"><b>Completed</b></span></h3>
+                        <div class="card mb-4">
+                            <div class="card-body bg-light text-dark">
+                                <h5 class="card-title">Property address: </h5>
+                                <h6 class="card-subtitle">{{ callLog.address }}</h6>
+                            </div>
+                        </div>
                         <div class="call-summary-item" v-for="(log, logIndex) in callLog.items" :key="logIndex">
                             <div class="top d-flex align-items-center">
                                 <div v-if="log.caller.media.length">
@@ -523,7 +528,7 @@
                         this.callLog.message = ''
                         this.callLog.status = ''
                         this.toastMessage(res.data.message, res.data.error)
-                        if(res.data.data){
+                        if (res.data.data) {
                             this.getCallSummary(res.data.data, this.callLog.orderId, this.callLog.order_no, this.callLog.address)
                         }
                         this.initOrder(res.data.order)
