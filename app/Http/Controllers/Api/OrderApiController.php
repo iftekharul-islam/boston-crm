@@ -394,6 +394,12 @@ class OrderApiController extends Controller
 
     public function getSameData(Request $get)
     {
+        if (!$get->street || $get->street == null || $get->street == "") {
+            return response()->json([
+                'totalOrder' => 0,
+                'orders' => []
+            ]);
+        }
         $propertyInfo = PropertyInfo::where('street_name', "LIKE", "%$get->street%")->get()->pluck('order_id');
         $order = Order::whereIn('id', $propertyInfo)->orderBy('id', 'desc')->with(
             'amc',
