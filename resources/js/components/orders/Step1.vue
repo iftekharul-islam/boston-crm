@@ -968,13 +968,6 @@
             },
 
             nextStep() {
-                if (this.client.country == '' || this.client.country == null) {
-                    this.$toast.open({
-                        message: "Please provide a valid property information",
-                        type: 'error',
-                    });
-                    return false;
-                }
                 this.$refs.orderForm.validate().then((status) => {
                     if (status && this.providerTypes.extra.length && !this.dateIssue.status) {
                         this.stepActive = true;

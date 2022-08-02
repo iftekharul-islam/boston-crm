@@ -188,7 +188,7 @@ class OrderApiController extends Controller
             $propertyInfo->city_name = $city;
             $propertyInfo->state_name = $state;
             $propertyInfo->zip = $zipcode;
-            $propertyInfo->country = $country;
+            $propertyInfo->country = $country ?? '-';
             $propertyInfo->county = $county;
             $propertyInfo->unit_no = $unitNo;
             $propertyInfo->latitude = $latitude;
@@ -326,7 +326,7 @@ class OrderApiController extends Controller
             "city",
             "street",
             "zipcode",
-            "country",
+            // "country",
             'county',
             "lat",
             "lng",
