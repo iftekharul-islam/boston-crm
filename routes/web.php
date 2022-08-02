@@ -200,7 +200,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     //order workflow
     Route::post('/update-order-schedule', [OrderWorkflowController::class, 'updateOrderSchedule']);
     Route::post('/delete-schedule/{id}', [OrderWorkflowController::class, 'deleteSchedule']);
-    Route::get('/check-event', [OrderWorkflowController::class, 'checkEvent']);
     Route::post('/save-initial-review', [OrderWorkflowController::class, 'saveInitialReview']);
     Route::post('/save-quality-assurance', [OrderWorkflowController::class, 'saveQualityAssurance']);
     Route::post('/update-quality-assurance', [OrderWorkflowController::class, 'updateQualityAssurance']);
