@@ -54,7 +54,7 @@ class OrderWorkflowController extends BaseController
         $user = auth()->user();
         if ($request->schedule_id > 0) {
             $message = 'Re Scheduled successfully';
-            $historyTitle = auth()->user()->name . " Re scheduled the order. <br>Order Client No: <strong class='text-primary'>{$order->client_order_no}</strong><br>Schedule Time: <strong class='text-danger'>{$request->inspection_date_time}</strong><br>Note: <strong class='text-primary'>{$request->note}</strong><br><br>Reschedule Note: <strong class='text-primary'>{$request->reschedule_note}</strong><br>Duration: <strong>{$request->duration}</strong>";
+            $historyTitle = auth()->user()->name . " Re scheduled the order. <br>Order Client No: <strong class='text-primary'>{$order->client_order_no}</strong><br>Schedule Time: <strong class='text-danger'>{$request->inspection_date_time}</strong><br>Note: <strong class='text-primary'>{$request->note}</strong><br>Reschedule Note: <strong class='text-primary'>{$request->reschedule_note}</strong><br>Duration: <strong>{$request->duration}</strong>";
         } else {
             $message = 'Schedule createded successfully';
             $historyTitle = auth()->user()->name . " scheduled the order. <br>Order Client No: <strong class='text-primary'>{$order->client_order_no}</strong><br>Schedule Time: <strong class='text-danger'>{$request->inspection_date_time}</strong><br>Note: <strong class='text-primary'>{$request->note}</strong><br>Duration: <strong>{$request->duration}</strong>";
