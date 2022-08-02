@@ -15,7 +15,7 @@
                 <p class="text-light-black mgb-12">Instruction or Note for Inspection</p>
                 <p class="mb-0 text-light-black fw-bold">{{ edited.note }}</p>
             </div>
-             <div class="group">
+            <div class="group">
                 <p class="text-light-black mgb-12">Appraiser</p>
                 <p class="mb-0 text-light-black fw-bold">{{ edited.inspector_name }}</p>
             </div>
@@ -29,7 +29,7 @@
             </div>
         </div>
         <div v-else class="scheduling-item step-items no-schedule">
-             <div class="text-end mgt-32">
+            <div class="text-end mgt-32">
                 <button v-if="alreadyScheduled == 0" type="button" v-b-modal.schedule
                     class="button button-primary px-4 h-40 d-inline-flex align-items-center">Schedule
                 </button>
@@ -58,7 +58,8 @@
                                         </select>
                                         <span class="icon-arrow-down bottom-arrow-icon"></span>
                                     </div> -->
-                                    <m-select :options="appraisers" object item-value="id" item-text="name" v-model="scheduleData.appraiser_id"></m-select>
+                                    <m-select :options="appraisers" object item-value="id" item-text="name"
+                                        v-model="scheduleData.appraiser_id"></m-select>
                                     <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                                 </div>
                             </ValidationProvider>
@@ -77,7 +78,8 @@
                                     <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                                 </div>
                             </ValidationProvider>
-                            <ValidationProvider class="group d-block" name="Duration" rules="required" v-slot="{ errors }">
+                            <ValidationProvider class="group d-block" name="Duration" rules="required"
+                                v-slot="{ errors }">
                                 <div :class="{ 'invalid-form' : errors[0] }">
                                     <label for="" class="d-block mb-2 dashboard-label">Duration <span
                                             class="text-danger require"></span></label>
@@ -91,7 +93,8 @@
                                         </select>
                                         <span class="icon-arrow-down bottom-arrow-icon"></span>
                                     </div> -->
-                                    <m-select :options="durations" object item-text="duration" item-value="duration" v-model="scheduleData.duration"></m-select>
+                                    <m-select :options="durations" object item-text="duration" item-value="duration"
+                                        v-model="scheduleData.duration"></m-select>
                                     <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                                 </div>
                             </ValidationProvider>
@@ -100,8 +103,8 @@
                                 <div class="group" :class="{ 'invalid-form' : errors[0] }">
                                     <label for="" class="d-block mb-2 dashboard-label">Notes <span
                                             class="text-danger require"></span></label>
-                                    <b-form-textarea class="dashboard-textarea" v-model="scheduleData.note" placeholder="Enter notes..." rows="2"
-                                        cols="5">
+                                    <b-form-textarea class="dashboard-textarea" v-model="scheduleData.note"
+                                        placeholder="Enter notes..." rows="2" cols="5">
                                     </b-form-textarea>
                                     <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                                 </div>
@@ -138,11 +141,11 @@
                 appraiser_id: '',
                 inspector_name: '',
                 inspection_date_time: '',
-                inspection_date_time_formatted:'',
+                inspection_date_time_formatted: '',
                 duration: '',
                 note: '',
-                created_by:'',
-                created_at:''
+                created_by: '',
+                created_at: ''
             },
             alreadyScheduled: 0,
             durations: [
@@ -198,12 +201,12 @@
                 this.$refs.scheduleForm.validate().then((status) => {
                     if (status) {
                         let formData = new FormData();
-                        formData.append('order_id',this.scheduleData.order_id)
-                        formData.append('schedule_id',this.scheduleData.schedule_id)
-                        formData.append('appraiser_id',this.scheduleData.appraiser_id)
-                        formData.append('inspection_date_time',this.scheduleData.inspection_date_time)
-                        formData.append('duration',this.scheduleData.duration)
-                        formData.append('note',this.scheduleData.note)
+                        formData.append('order_id', this.scheduleData.order_id)
+                        formData.append('schedule_id', this.scheduleData.schedule_id)
+                        formData.append('appraiser_id', this.scheduleData.appraiser_id)
+                        formData.append('inspection_date_time', this.scheduleData.inspection_date_time)
+                        formData.append('duration', this.scheduleData.duration)
+                        formData.append('note', this.scheduleData.note)
 
                         this.$boston.post('update-order-schedule', formData)
                             .then(res => {
