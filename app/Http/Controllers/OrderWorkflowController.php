@@ -789,7 +789,7 @@ class OrderWorkflowController extends BaseController
 
         $reWriteAll = OrderWRevision::where('order_id', $get->order_id)->get();
         $allDone = true;
-        
+
         foreach($reWriteAll as $reItem) {
             if ($reItem->status == 0) {
                 $allDone = false;

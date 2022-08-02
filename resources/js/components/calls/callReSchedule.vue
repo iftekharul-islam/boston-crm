@@ -181,6 +181,8 @@
                                 this.orderData = res.data;
                                 this.$root.$emit('wk_flow_toast', res)
                                 this.$bvModal.hide('re-schedule')
+                                this.$root.$emit('order_update', res.data)
+                                this.$root.$emit('filter_update', res.filterValue)
                             })
                     }
                 })
