@@ -735,7 +735,7 @@ class OrderWorkflowController extends BaseController
         $workStatus = json_decode($order->workflow_status, true);
         $workStatus['revision'] = 1;
 
-        $order->status = 13;
+        // $order->status = 13;
         $order->workflow_status = json_encode($workStatus);
         $order->save();
 
@@ -789,6 +789,7 @@ class OrderWorkflowController extends BaseController
 
         $reWriteAll = OrderWRevision::where('order_id', $get->order_id)->get();
         $allDone = true;
+        
         foreach($reWriteAll as $reItem) {
             if ($reItem->status == 0) {
                 $allDone = false;
