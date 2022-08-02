@@ -182,7 +182,7 @@
                     this.scheduleData.schedule_id = data.id
                     this.scheduleData.appraiser_id = data.inspector_id
                     this.scheduleData.inspector_name = data.user.name
-                    this.scheduleData.inspection_date_time = data.inspection_date_time
+                    this.scheduleData.inspection_date_time = new Date(data.inspection_date_time)
                     this.scheduleData.inspection_date_time_formatted = data.inspection_date_time_formatted
                     this.scheduleData.duration = data.duration
                     this.scheduleData.note = data.note

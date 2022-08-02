@@ -160,7 +160,7 @@
                 this.schedule.order_id = scheduleData.order_id
                 this.schedule.schedule_id = scheduleData.id
                 this.schedule.appraiser_id = scheduleData.inspector_id
-                this.schedule.inspection_date_time = scheduleData.inspection_date_time
+                this.schedule.inspection_date_time = new Date(scheduleData.inspection_date_time)
                 this.schedule.duration = scheduleData.duration
                 this.schedule.note = scheduleData.note
                 this.schedule.reschedule_note = scheduleData.reschedule_note

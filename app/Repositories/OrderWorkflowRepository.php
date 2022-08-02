@@ -64,7 +64,7 @@ class OrderWorkflowRepository extends BaseRepository
     public function deleteSchedule($schedule_id)
     {
         $order_workflow_schedule = OrderWInspection::find($schedule_id);
-        $order_workflow_schedule->delete();
+        $order_workflow_schedule->forceDelete();
         return $order_workflow_schedule ? true : false;
     }
 
