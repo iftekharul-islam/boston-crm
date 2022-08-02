@@ -277,20 +277,22 @@
                             </div>
                         </div>
                         <div class="call-summary-item" v-for="(log, logIndex) in callLog.items" :key="logIndex">
-                            <div class="top d-flex align-items-center">
-                                <div v-if="log.caller.media.length">
-                                    <img :src="log.caller.media[0].original_url" alt=" profile photo boston"
-                                        class="img-fluid">
+                            <div v-if="log.caller">
+                                <div class="top d-flex align-items-center">
+                                    <div v-if="log.caller.media.length">
+                                        <img :src="log.caller.media[0].original_url" alt=" profile photo boston"
+                                             class="img-fluid">
+                                    </div>
+                                    <div v-else>
+                                        <img src="/img/user.png" alt=" profile photo boston" class="img-fluid">
+                                    </div>
+                                    <div class="ms-3">
+                                        <p class="fw-bold mb-1">{{ log.caller.name }}</p>
+                                        <p class="text-gray fs-12 mb-0">{{ log.created_at }}</p>
+                                    </div>
                                 </div>
-                                <div v-else>
-                                    <img src="/img/user.png" alt=" profile photo boston" class="img-fluid">
-                                </div>
-                                <div class="ms-3">
-                                    <p class="fw-bold mb-1">{{ log.caller.name }}</p>
-                                    <p class="text-gray fs-12 mb-0">{{ log.created_at }}</p>
-                                </div>
+                                <p class="message" v-html="log.message"></p>
                             </div>
-                            <p class="message" v-html="log.message"></p>
                         </div>
                     </div>
                     <!-- message box -->
@@ -631,7 +633,6 @@
                     propertyAddresses.push({ address: ele.property_info.search_address });
                 })
 
-                console.log(propertyAddresses)
                 let startAddress = propertyAddresses[0].address
                 let endAddress = ''
                 let wayPoints = '';
