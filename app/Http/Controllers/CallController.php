@@ -147,8 +147,18 @@ class CallController extends BaseController
     public function sendMessage(Request $request)
     {
         $this->service->sendMessage($request->all());
+        $user = auth()->user();
+        $companyId = $user->getCompanyProfile()->company_id;
+        $data = '';
+        $paginate = 10;
+        $dateRange = '';
+        $filterType = 'to_schedule';
+        $order = $this->orderData($data, $companyId, $paginate, $dateRange, $filterType);
+        $filterValue = $this->getFilterType();
         return [
-            "message" => "Message sent successfully !"
+            "message" => "Message sent successfully !",
+            'order' => $order,
+            'filterValue' => $filterValue
         ];
     }
 

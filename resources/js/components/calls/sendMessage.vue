@@ -166,8 +166,11 @@
                         }
                         this.$boston.post('send-message', { 'data': this.sendMessageData, 'emails': this.emails, 'phones': this.phones })
                             .then(res => {
+                                console.log(res)
                                 this.$bvModal.hide('send-message')
                                 this.$root.$emit('wk_flow_toast', res)
+                                this.$root.$emit('order_update', res.order)
+                                this.$root.$emit('filter_update', res.filterValue)
                             })
                             .catch(err => {
                                 console.error(err)
