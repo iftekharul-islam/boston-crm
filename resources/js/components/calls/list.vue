@@ -207,7 +207,7 @@
                         :key="'pending-issue-'+lindex">
                         <div class="item pending">
                             <span class="call-badge">Pending</span>
-                            <p class="text-gray text-end fs-12">{{ item.created_at | dateTime }}</p>
+                            <p class="text-gray text-end fs-12">{{ item.created_at }}</p>
                             <p class="fs-14 mgt-12 mgb-12">{{ item.issue }}</p>
                             <div class="d-flex justify-content-between" v-if="item.assigned_to">
                                 <p class="mb-0 fs-14"><span class="text-gray">Assigned to :</span> <b>Technical team</b>
