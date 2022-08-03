@@ -166,7 +166,7 @@ class Order extends Model implements HasMedia
 
     public function inspection()
     {
-        return $this->hasOne(OrderWInspection::class,'order_id','id');
+        return $this->hasOne(OrderWInspection::class,'order_id', 'id')->orderBy('id', 'desc');
     }
 
     public function report()

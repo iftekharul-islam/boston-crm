@@ -343,6 +343,11 @@ Route::get('/event',function () {
     event(new Notify('Hey how are you!', 2));
 });
 
+Route::get('/get/timezone', function(){
+    $timezone = date_default_timezone_get();
+    return $timezone;
+});
+
 Route::get('/listen',function () {
     return view('listen');
 });

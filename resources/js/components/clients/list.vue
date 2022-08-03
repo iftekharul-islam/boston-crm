@@ -47,9 +47,9 @@
             <td>
               <div class="client-contact-limit">
                 <!-- <span class="d-flex" :key="pi" v-for="phone, pi in JSON.parse(client.phone)">{{ phone }}</span> -->
-                <p class="d-flex phone-number flat">
+                <span class="d-flex phone-number flat">
                   <input @click="selectText(item)" readonly v-for="item, ik in JSON.parse(client.phone)" :key="ik" :value="item"/>
-                </p>
+                </span>
               </div>
             </td>
             <td>{{ client.client_type }}</td>
@@ -203,4 +203,16 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.client-contact-limit {
+    .phone-number {
+      flex-direction: column;
+      input {
+        padding: 0;
+        margin: 0
+      }
+    }
+}
+</style>
 

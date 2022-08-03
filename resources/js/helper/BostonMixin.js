@@ -94,8 +94,9 @@ Vue.mixin({
             return fullDate;
         },
         selectText(phone) {
-            let url = "https://vcc-na1.8x8.com/AGUI/make_call.php?phone="+phone;
-            window.open(url);
+            // let url = "https://vcc-na1.8x8.com/AGUI/make_call.php?phone="+phone;
+            let url = "tel://"+phone;
+            window.location.href = url;
         },
         textSelect(event) {
             let target = event.target;
