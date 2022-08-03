@@ -69,16 +69,27 @@ class ClientController extends BaseController
      *
      * @return RedirectResponse
      */
-    public function store(ClientRequest $request): RedirectResponse
+    public function store(ClientRequest $request): RedirectResponse|Array
     {
-        $request_data = $request->validated();
+        if($request->ajax()){
+            
+        }else{
+            $request_data = $request->validated();
+        }
         // dd($request_data);
         $merged_data = array_merge($request_data, ["company_id" => $this->companyService->getAuthUserCompany()->id,"created_by" => auth()->user()->id]);
         $client = $this->clientService->saveClientData($merged_data);
 
-        return redirect()
-            ->to('/clients/' . $client->id)
-            ->with(["success" => 'Client added successfully']);
+        if($request->ajax()){
+            return [
+                "error" => false,
+                "message" => 'Client added successfully'
+            ];
+        }else{
+            return redirect()
+                ->to('/clients/' . $client->id)
+                ->with(["success" => 'Client added successfully']);
+        }
     }
 
     /**
