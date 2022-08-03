@@ -301,7 +301,7 @@ class OrderWorkflowController extends BaseController
         $orderData = $this->orderDetails($id);
         return [
             'error' => false,
-            'message' => $historyTitle,
+            'message' => "New assignee has been updated",
             'status' => 'success',
             'data' => $orderData
         ];
@@ -437,7 +437,6 @@ class OrderWorkflowController extends BaseController
         $orderData = $this->orderDetails($request->order_id);
         return [
             'error' => false,
-            'message' => $historyTitle,
             'message' => $message,
             'data' => $orderData
         ];
@@ -471,7 +470,6 @@ class OrderWorkflowController extends BaseController
         $orderData = $this->orderDetails($request->order_id);
         return [
             'error' => false,
-            'message' => $historyTitle,
             'message' => $message,
             'data' => $orderData
         ];
@@ -509,7 +507,6 @@ class OrderWorkflowController extends BaseController
         $orderData = $this->orderDetails($order->id);
         return [
             'error' => false,
-            'message' => $historyTitle,
             'message' => $message,
             'data' => $orderData
         ];
@@ -559,7 +556,7 @@ class OrderWorkflowController extends BaseController
 
         return [
             'error' => false,
-            'message' => $historyTitle,
+            'message' => "Re-writing the report updated successful",
             'status' => 'success',
             'data' => $orderData
         ];
