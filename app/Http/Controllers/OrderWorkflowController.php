@@ -10,6 +10,7 @@ use App\Models\Order;
 use App\Models\OrderWQa;
 use App\Models\OrderWcom;
 use App\Helpers\CrmHelper;
+use App\Models\OrderWInitialReview;
 use App\Models\OrderWReport;
 use Illuminate\Http\Request;
 use App\Models\OrderWRewrite;
@@ -216,6 +217,7 @@ class OrderWorkflowController extends BaseController
 
         $workStatus = json_decode($order->workflow_status, true);
         $workStatus['reportPreparation'] = 1;
+
         $order->status = 4;
         $order->workflow_status = json_encode($workStatus);
         $order->save();
@@ -277,7 +279,14 @@ class OrderWorkflowController extends BaseController
         }
         $workStatus = json_decode($order->workflow_status, true);
         $workStatus['reportPreparation'] = 1;
-        $order->status = 4;
+
+        $orderWreportAnalysis = OrderWInitialReview::where('order_id', $order->id)->first();
+        if ($orderWreportAnalysis && $orderWreportAnalysis->is_check_upload == "1") {
+            $order->status = 9;
+        } else {
+            $order->status = 4;
+        }
+
         $order->workflow_status = json_encode($workStatus);
         $order->save();
 
@@ -411,12 +420,14 @@ class OrderWorkflowController extends BaseController
         }
 
         $this->addHistory($order, $user, $historyTitle, 'initial-review');
-        if ($request->is_review_done == 1) {
-            $order->status = 5;
+        $chexbox = $request->checkbox;
+        $orderReportPreperation = OrderWReport::where("order_id", $request->order_id)->first();        
+        if ($chexbox == 1) {
+            $order->status = 4;
+        } else if ($chexbox == 2 && $orderReportPreperation) {
+            $order->status = 9;
         }
-        if ($request->is_check_upload == 1) {
-            $order->status = 6;
-        }
+        $order->save();
 
         $orderData = $this->orderDetails($request->order_id);
         return [
@@ -485,7 +496,7 @@ class OrderWorkflowController extends BaseController
 
         $order->forceFill([
             'workflow_status->qualityAssurance' => 1,
-            'status' => 10
+            'status' => 5
         ])->save();
 
         $orderData = $this->orderDetails($order->id);

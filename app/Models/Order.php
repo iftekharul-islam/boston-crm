@@ -48,7 +48,7 @@ class Order extends Model implements HasMedia
         2 => "Rescheduled",
         3 => "Inspected",
         4 => "Report Preparation & Initial Review",
-        5 => "Ready for Analysis and Review",
+        5 => "Ready for Submission/Delivery",
         6 => "Check and Upload",
         7 => "Rewrite",
         8 => "Under Rewriting",
