@@ -109,13 +109,54 @@
                                     <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                                 </div>
                             </ValidationProvider>
+                            <ValidationProvider v-if="alreadyScheduled == 1" class="d-block dashboard-label group"
+                                name="Reschedule note" rules="required" v-slot="{ errors }">
+                                <div class="group" :class="{ 'invalid-form' : errors[0] }">
+                                    <label for="" class="d-block mb-2 dashboard-label">Reschedule note <span
+                                            class="text-danger require"></span></label>
+                                    <b-form-textarea class="dashboard-textarea" v-model="scheduleData.reschedule_note"
+                                        placeholder="Enter re schedule notes..." rows="2" cols="5">
+                                    </b-form-textarea>
+                                    <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                                </div>
+                            </ValidationProvider>
                         </ValidationObserver>
                     </div>
                 </div>
             </div>
             <div slot="modal-footer">
+                <b-button v-if="orderStatus == 1 || orderStatus == 2" class="button button-transparent p-0"
+                    @click="showDeleteSchedule">
+                    <span class="icon-trash"><span class="path1"></span><span class="path2"></span><span
+                            class="path3"></span><span class="path4"></span></span>
+                </b-button>
                 <b-button variant="secondary" @click="$bvModal.hide('schedule')">Close</b-button>
                 <b-button variant="primary" @click="saveSchedule">Save</b-button>
+            </div>
+        </b-modal>
+        <b-modal id="delete-schedule" size="md" title="Delete Schedule">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <ValidationObserver ref="deleteScheduleForm">
+                            <ValidationProvider class="d-block dashboard-label group" name="Cause of deletion"
+                                rules="required" v-slot="{ errors }">
+                                <div class="group" :class="{ 'invalid-form' : errors[0] }">
+                                    <label for="" class="d-block mb-2 dashboard-label">Cause of Deletion <span
+                                            class="text-danger require"></span></label>
+                                    <b-form-textarea class="dashboard-textarea" v-model="scheduleData.delete_note"
+                                        placeholder="Enter notes..." rows="2" cols="5">
+                                    </b-form-textarea>
+                                    <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                                </div>
+                            </ValidationProvider>
+                        </ValidationObserver>
+                    </div>
+                </div>
+            </div>
+            <div slot="modal-footer">
+                <b-button variant="secondary" @click="$bvModal.hide('delete-schedule')">Close</b-button>
+                <b-button variant="primary" @click="deleteSchedule">Delete</b-button>
             </div>
         </b-modal>
     </div>
@@ -144,10 +185,13 @@
                 inspection_date_time_formatted: '',
                 duration: '',
                 note: '',
+                reschedule_note: '',
+                delete_note: '',
                 created_by: '',
                 created_at: ''
             },
             alreadyScheduled: 0,
+            orderStatus: 0,
             durations: [
                 { 'duration': '15 minutes' },
                 { 'duration': '20 minutes' },
@@ -175,6 +219,7 @@
             getScheduleData(order) {
                 this.alreadyScheduled = (JSON.parse(order.workflow_status)).scheduling
                 this.scheduleData.order_id = order.id
+                this.orderStatus = order.status
 
                 if (this.alreadyScheduled == 1) {
                     this.orderData = order
@@ -186,6 +231,7 @@
                     this.scheduleData.inspection_date_time_formatted = data.inspection_date_time_formatted
                     this.scheduleData.duration = data.duration
                     this.scheduleData.note = data.note
+                    this.scheduleData.reschedule_note = data.reschedule_note
                     this.scheduleData.created_at = data.created_at
                     this.scheduleData.created_by = data.create_by.name
                     this.edited = Object.assign({}, this.scheduleData)
@@ -210,8 +256,8 @@
 
                         this.$boston.post('update-order-schedule', formData)
                             .then(res => {
-                                this.message = res.message;
-                                this.orderData = res.data;
+                                this.message = res.message
+                                this.orderData = res.data
                                 this.alreadyScheduled = 1
                                 this.$root.$emit('wk_update', res.data)
                                 this.$root.$emit('wk_flow_menu', res.data)
@@ -225,8 +271,27 @@
             editSchedule() {
                 this.$bvModal.show('schedule')
                 this.getScheduleData(this.order)
-                console.log(this.order)
             },
+            showDeleteSchedule() {
+                this.$bvModal.show('delete-schedule')
+                this.scheduleData.delete_note = ''
+            },
+            deleteSchedule() {
+                this.$refs.deleteScheduleForm.validate().then((status) => {
+                    if (status) {
+                        this.$boston.post('delete-schedule/' + this.scheduleData.schedule_id, { delete_note: this.scheduleData.delete_note })
+                            .then(res => {
+                                this.orderData = res.data;
+                                this.$root.$emit('wk_update', res.data)
+                                this.$root.$emit('wk_flow_menu', res.data)
+                                this.$root.$emit('wk_flow_toast', res)
+                                this.getScheduleData(res.data)
+                                this.$bvModal.hide('delete-schedule')
+                                this.$bvModal.hide('schedule')
+                            })
+                    }
+                })
+            }
         }
     }
 </script>
