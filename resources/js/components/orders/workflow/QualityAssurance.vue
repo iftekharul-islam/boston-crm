@@ -240,7 +240,7 @@
             </div>
             <div class="group">
                 <p class="text-light-black mgb-12">Com route list</p>
-                <p class="mb-0 text-light-black fw-bold" v-for="address,index in comAddresses">{{ (index+1) + '. ' +
+                <p class="mb-0 text-light-black fw-bold" v-for="address,index in comAddresses" :key="index+'qa-01'">{{ (index+1) + '. ' +
                     address.address }}</p>
             </div>
             <button v-if="showSeeCom" type="button"
