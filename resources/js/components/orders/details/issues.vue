@@ -9,7 +9,7 @@
         <div v-for="(ticket, index) in tickets" class="queries-box position-relative" :class="{ 'solved':  ticket.status == 1 , 'pending': ticket.status == 0 }" :key="index">
               <span class="badges solved-badges" v-if="ticket.status == 1">Solved</span>
               <span class="badges pending-badges" v-else>Pending</span>
-              <p class="text-gray text-end mgb-12">{{ ticket.created_at | momentTime }}</p>
+              <p class="text-gray text-end mgb-12">{{ ticket.created_at }}</p>
               <div class="issue">
                   <p class="text-light-black">{{ ticket.issue }}</p>
               </div>
