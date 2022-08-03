@@ -28,6 +28,7 @@ class CallController extends BaseController
 
     public function index(Request $get)
     {
+        $timezone = $this->getTimeZone();
         $user = auth()->user();
         $appraisers = $this->repository->getUserByRoleWise(role: 'appraiser');
         $companyId = $user->getCompanyProfile()->company_id;
@@ -46,7 +47,7 @@ class CallController extends BaseController
         if ($filterType == "completed") {
             $orderId = CallLog::where('status', 1)->get()->pluck('order_id')->toArray();
         } else if($filterType == "today_call") {
-            $orderId = OrderWInspection::whereDate('inspection_date_time', '=', date('Y-m-d'))->get()->pluck('order_id')->toArray();
+            $orderId = OrderWInspection::whereDate('inspection_date_time', '=', Carbon::today())->get()->pluck('order_id')->toArray();
         }
 
         if ($data) {
@@ -132,7 +133,8 @@ class CallController extends BaseController
         $toBeSchedule = $orders->where('status', 0)->count();
         $schedule = Order::where('status', 1)->count();
         $completed = CallLog::where('status', 1)->count();
-        $todaysCallId = OrderWInspection::whereDate('inspection_date_time', '=', date('Y-m-d'))->get()->pluck('order_id');
+        $todaysCallId = OrderWInspection::whereDate('inspection_date_time', '=', Carbon::today())->orderBy('id', 'desc')->get()->pluck('order_id');
+        // dd($todaysCallId);
         $today_call = Order::whereIn('id', $todaysCallId)->where('status', "<", 3)->count();
         return [
             "all" => $all,

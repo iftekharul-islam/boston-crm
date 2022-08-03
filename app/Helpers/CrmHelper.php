@@ -301,4 +301,9 @@ trait CrmHelper {
         return $aunion;
     }
 
+    public function getTimeZone() {
+        $timezone = date_default_timezone_get();
+        return $timezone;
+    }
+
 }
