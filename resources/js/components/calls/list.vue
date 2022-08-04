@@ -257,9 +257,9 @@
         </m-modal>
 
         <quick-view ref="quickViewComponent"></quick-view>
-        <call-schedule ref="callScheduleComponent" :appraisers="appraisers"></call-schedule>
-        <call-re-schedule ref="callReScheduleComponent" :appraisers="appraisers"></call-re-schedule>
-        <send-message ref="sendMessageComponent"></send-message>
+        <call-schedule ref="callScheduleComponent" :appraisers="appraisers" :tab="pages.filterType"></call-schedule>
+        <call-re-schedule ref="callReScheduleComponent" :appraisers="appraisers" :tab="pages.filterType"></call-re-schedule>
+        <send-message ref="sendMessageComponent" :tab="pages.filterType"></send-message>
         <!-- <Map v-if="openMap" :latLng="latLng" @closeMap="closeCurrentMap($event)" /> -->
 
         <div class="modal fade schedule-modal call-log-modal" id="callLogModal" tabindex="-1"
@@ -330,7 +330,7 @@
 
     export default {
         name: "call-lists",
-        props: ['order', 'appraisers', 'filter-value'],
+        props: ['order', 'appraisers', 'filter-value', 'tab'],
         components: {
             // Map,
             'quick-view': Quickview,

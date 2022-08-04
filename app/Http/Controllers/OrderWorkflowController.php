@@ -65,11 +65,20 @@ class OrderWorkflowController extends BaseController
 
         $orderData = $this->orderDetails($request->order_id);
         $filterValue = $this->getFilterType();
+
+        $appraisers = $this->orderRepository->getUserByRoleWise(role: 'appraiser');
+        $companyId = $user->getCompanyProfile()->company_id;
+        $data = '';
+        $paginate = 10;
+        $dateRange = '';
+        $filterType = $request->filter ?? 'to_schedule';
+        $order = $this->orderDataDetails($data, $companyId, $paginate, $dateRange, $filterType);
         return [
             'error' => false,
             'message' => $message,
             'data' => $orderData,
-            'filterValue' => $filterValue
+            'filterValue' => $filterValue,
+            'orderDetails' => $order
         ];
     }
 
@@ -113,11 +122,20 @@ class OrderWorkflowController extends BaseController
         $this->service->deleteOrderSchedule($id);
         $this->repository->deleteSchedule($id);
         $filterValue = $this->getFilterType();
+
+        $appraisers = $this->orderRepository->getUserByRoleWise(role: 'appraiser');
+        $companyId = $user->getCompanyProfile()->company_id;
+        $data = '';
+        $paginate = 10;
+        $dateRange = '';
+        $filterType = $request->filter ?? 'to_schedule';
+        $order = $this->orderDataDetails($data, $companyId, $paginate, $dateRange, $filterType);
         return [
             'error' => false,
             'message' => "Schedule deleted successfully",
             'data' => $orderData,
-            'filterValue' => $filterValue
+            'filterValue' => $filterValue,
+            'orderDetails' => $order
         ];
     }
 
@@ -963,5 +981,79 @@ class OrderWorkflowController extends BaseController
         } else {
             return response()->json(['find' => false]);
         }
+    }
+
+    public function orderDataDetails($data, $companyId, $paginate, $dateRange, $filterType) {
+        $orderId = null;
+        $dataPropertyClient = false;
+        if ($filterType == "completed") {
+            $orderId = CallLog::where('status', 1)->get()->pluck('order_id')->toArray();
+        } else if($filterType == "today_call") {
+            $orderId = OrderWInspection::whereDate('inspection_date_time', '=', date('Y-m-d'))->get()->pluck('order_id')->toArray();
+        }
+
+        if ($data) {
+            $orderIds = PropertyInfo::where('formatedAddress', 'LIKE', "%$data%")->get()->pluck('order_id')->toArray();
+            $clientIds = Client::where("name", "LIKE", "%$data%")->get()->pluck('id')->toArray();
+            $getAmcIds = Order::whereIn('amc_id', $clientIds)->pluck('id')->toArray();
+            $getLenderIds = Order::whereIn('lender_id', $clientIds)->pluck('id')->toArray();
+            $mergeOrder = array_merge($getAmcIds, $getLenderIds);
+            $orderIds = array_unique(array_merge($orderIds, $mergeOrder));
+            $newOrders = $orderIds;
+            if (count($newOrders) > 0) {
+                $orderId = $newOrders;
+                $dataPropertyClient = true;
+            }
+        }
+
+        if ($dataPropertyClient == false && ($data == null || $data == "") && $filterType == null) {
+            $filterType = "to_schedule";
+        }
+
+
+        $order = Order::where(function($qry) use ($data, $orderId, $filterType, $dataPropertyClient) {
+            if ($data) {
+                return $qry->when($orderId, function($qrys) use ($orderId){
+                    return $qrys->whereIn('id', $orderId);
+                })
+                    ->orWhere(function($qry2) use ($data, $dataPropertyClient) {
+                        if ($dataPropertyClient == false) {
+                            return $qry2->where('client_order_no', "LIKE", "%$data%")
+                                ->orWhere("system_order_no", "LIKE", "%$data%");
+                        }
+                    });
+            } else {
+                if ($orderId) {
+                    $searchOrderId = $orderId;
+                    return $qry->whereIn('id', $searchOrderId);
+                } else if($filterType == "today_call") {
+                    $searchOrderId = $orderId ?? [];
+                    return $qry->whereIn('id', $searchOrderId);
+                }
+            }
+        })
+            ->when($dateRange, function($qry) use ($dateRange) {
+                $start = $dateRange['start'];
+                $end = $dateRange['end'];
+                if ($start && $end) {
+                    $startTime = Carbon::parse($start);
+                    $endTime = Carbon::parse($end);
+                    return $qry->whereDate('created_at', ">=", $startTime)->whereDate('created_at', "<=", $endTime);
+                }
+            })
+            ->when($filterType, function($qry) use ($filterType) {
+                if ($filterType == "to_schedule") {
+                    return $qry->where("status", 0);
+                } else if($filterType == "schedule") {
+                    return $qry->where("status", 1);
+                } else if($filterType == "today_call") {
+                    return $qry->where("status", "<", 3);
+                }
+            })
+            ->with($this->order_call_list_relation())
+            ->where('company_id', $companyId)
+            ->orderBy('id', 'desc')
+            ->paginate($paginate);
+        return $order;
     }
 }

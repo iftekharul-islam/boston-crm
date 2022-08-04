@@ -76,6 +76,9 @@
         components: {
             VueTagsInput,
         },
+        props: {
+            tab: String,
+        },
         data() {
             return {
                 sendMessageData: {
@@ -148,6 +151,7 @@
                 this.sendMessageData.message = formattedMessage;
             },
             sendMessage() {
+                console.log(this.tab);
                 this.$refs.sendMessageForm.validate().then((status) => {
                     if (status) {
                         if (this.emails.length == 0 || this.phones.length == 0) {
@@ -164,7 +168,7 @@
                             });
                             return false;
                         }
-                        this.$boston.post('send-message', { 'data': this.sendMessageData, 'emails': this.emails, 'phones': this.phones })
+                        this.$boston.post('send-message', { 'data': this.sendMessageData, 'emails': this.emails, 'phones': this.phones, 'filter': this.tab })
                             .then(res => {
                                 console.log(res)
                                 this.$bvModal.hide('send-message')

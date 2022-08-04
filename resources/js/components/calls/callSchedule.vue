@@ -73,6 +73,7 @@
         name: 'call-schedule',
         props: {
             appraisers: [],
+            tab: String
         },
         data: () => ({
             schedule: {
@@ -107,6 +108,7 @@
                 this.propertyAddress = propertyAddress
             },
             saveSchedule() {
+                console.log(this.tab);
                 this.$refs.scheduleForm.validate().then((status) => {
                     if (status) {
                         let formData = new FormData();
@@ -116,10 +118,11 @@
                         formData.append('inspection_date_time', this.schedule.inspection_date_time)
                         formData.append('duration', this.schedule.duration)
                         formData.append('note', this.schedule.note)
+                        formData.append('filter', this.tab)
 
                         this.$boston.post('update-order-schedule', formData)
                             .then(res => {
-                                this.orderData = res.data;
+                                this.orderData = res.orderDetails;
                                 this.$root.$emit('wk_flow_toast', res)
                                 this.$root.$emit('filter_update', res.filterValue)
                                 this.schedule = {}
