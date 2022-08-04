@@ -539,7 +539,6 @@
                         }
                         this.initOrder(res.data.order)
                         this.filterValues = res.data.filterValue
-                        console.log(this.pages.filterType);
                     }).catch(err => {
                         console.log(err)
                     })
