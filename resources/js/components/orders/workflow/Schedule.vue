@@ -27,6 +27,10 @@
                 <p class="text-light-black mgb-12">Duration</p>
                 <p class="mb-0 text-light-black fw-bold">{{ edited.duration }}</p>
             </div>
+            <div class="group" v-if="orderStatus == 2">
+                <p class="text-light-black mgb-12">Reschedule note</p>
+                <p class="mb-0 text-light-black fw-bold">{{ edited.reschedule_note }}</p>
+            </div>
         </div>
         <div v-else class="scheduling-item step-items no-schedule">
             <div class="text-end mgt-32">
@@ -237,6 +241,14 @@
                     this.edited = Object.assign({}, this.scheduleData)
                 }
             },
+            resetScheduleData(){
+                this.scheduleData.schedule_id = 0
+                this.scheduleData.appraiser_id = ''
+                this.scheduleData.reschedule_note = ''
+                this.scheduleData.inspection_date_time = ''
+                this.scheduleData.duration = ''
+                this.scheduleData.note = ''
+            },
             select2Features() {
                 $(document).on("change", "#apprClientSelect", function (e) {
                     let value = e.target.value
@@ -253,10 +265,12 @@
                         formData.append('inspection_date_time', this.scheduleData.inspection_date_time)
                         formData.append('duration', this.scheduleData.duration)
                         formData.append('note', this.scheduleData.note)
+                        if(this.scheduleData.reschedule_note != ''){
+                            formData.append('reschedule_note',this.scheduleData.reschedule_note)
+                        }
 
                         this.$boston.post('update-order-schedule', formData)
                             .then(res => {
-                                this.message = res.message
                                 this.orderData = res.data
                                 this.alreadyScheduled = 1
                                 this.$root.$emit('wk_update', res.data)
@@ -285,6 +299,7 @@
                                 this.$root.$emit('wk_update', res.data)
                                 this.$root.$emit('wk_flow_menu', res.data)
                                 this.$root.$emit('wk_flow_toast', res)
+                                this.resetScheduleData()
                                 this.getScheduleData(res.data)
                                 this.$bvModal.hide('delete-schedule')
                                 this.$bvModal.hide('schedule')

@@ -6,7 +6,7 @@
         <p class="fw-bold text-light-black fs-20 mb-0">History</p>
 
       </div>
-      <div class="box-body order-box-oveflow">        
+      <div class="box-body order-box-oveflow">
         <template v-for="item, ai in history">
           <div class="fs-14 logItem" :key="ai">
             <div class="logby">
@@ -43,7 +43,7 @@ export default {
               order = localOrderData;
           }
       }
-      
+
       this.history = order.work_hisotry;
       this.$root.$on('wk_update', (res) => {
           this.history = res.work_hisotry;
@@ -71,7 +71,7 @@ export default {
     position: relative;
     padding-left: 15px;
   }
-  
+
   .logItem .logby {
     font-weight: bold;
     color: rgb(43, 75, 216);
