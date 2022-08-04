@@ -71,7 +71,7 @@ class OrderWorkflowController extends BaseController
         $data = '';
         $paginate = 10;
         $dateRange = '';
-        $filterType = $request->filter ?? 'to_schedule';
+        $filterType = $request->filter ?? 'all';
         $order = $this->orderDataDetails($data, $companyId, $paginate, $dateRange, $filterType);
         return [
             'error' => false,
@@ -128,7 +128,7 @@ class OrderWorkflowController extends BaseController
         $data = '';
         $paginate = 10;
         $dateRange = '';
-        $filterType = $request->filter ?? 'to_schedule';
+        $filterType = $request->filter ?? 'all';
         $order = $this->orderDataDetails($data, $companyId, $paginate, $dateRange, $filterType);
         return [
             'error' => false,
