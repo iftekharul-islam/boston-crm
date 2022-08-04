@@ -657,8 +657,8 @@
                 this.openMap = false;
             },
             searchData: _.debounce(function (event) {
-                this.pages.filterType = null;
                 this.loadPage(this.pages.acitvePage, event.target.value);
+                this.pages.filterType = null;
             }, 300),
 
             loadPage(acitvePage = null) {
@@ -667,6 +667,7 @@
                 this.$boston.post('search/call/order?page=' + this.pages.acitvePage, { 'filterType': this.pages.filterType, data: this.pages.searchModel, paginate: this.pages.paginate, dateRange: this.dateRange }).then((res) => {
                     this.selectedItems = [];
                     this.gLoad = false;
+                    console.log(this.pages.filterType);
                     if (this.pages.filterType != 'daterange') {
                         this.dateRange.search = false;
                         this.dateRange.start = null;
