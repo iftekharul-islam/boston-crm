@@ -154,7 +154,7 @@ class CallController extends BaseController
         $data = '';
         $paginate = 10;
         $dateRange = '';
-        $filterType = 'to_schedule';
+        $filterType = $request->filter ?? 'to_schedule';
         $order = $this->orderData($data, $companyId, $paginate, $dateRange, $filterType);
         $filterValue = $this->getFilterType();
         return [

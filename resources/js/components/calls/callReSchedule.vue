@@ -118,7 +118,8 @@
     export default {
         name: 'call-re-schedule',
         props: {
-            appraisers: []
+            appraisers: [],
+            tab: String
         },
         data: () => ({
             schedule: {
@@ -181,7 +182,7 @@
                                 this.orderData = res.data;
                                 this.$root.$emit('wk_flow_toast', res)
                                 this.$bvModal.hide('re-schedule')
-                                this.$root.$emit('order_update', res.data)
+                                this.$root.$emit('order_update', res.orderDetails)
                                 this.$root.$emit('filter_update', res.filterValue)
                             })
                     }
@@ -196,7 +197,7 @@
                     if (status) {
                         this.$boston.post('delete-schedule/' + this.schedule.schedule_id, { delete_note: this.schedule.delete_note })
                             .then(res => {
-                                this.orderData = res.data;
+                                this.orderData = res.orderDetails;
                                 this.$root.$emit('wk_update', res.data)
                                 this.$root.$emit('wk_flow_menu', res.data)
                                 this.$root.$emit('wk_flow_toast', res)
