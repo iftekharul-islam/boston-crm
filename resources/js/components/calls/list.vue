@@ -525,7 +525,8 @@
                 }
                 let data = {
                     message: this.callLog.message,
-                    status: this.callLog.status
+                    status: this.callLog.status,
+                    filter: this.pages.filterType
                 }
                 axios.post('call-log-update/' + this.callLog.orderId, data)
                     .then(res => {
