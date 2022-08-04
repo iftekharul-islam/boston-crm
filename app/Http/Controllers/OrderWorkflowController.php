@@ -108,12 +108,10 @@ class OrderWorkflowController extends BaseController
         ];
 
         $this->orderRepository->addActivity($data);
-
+        $this->addHistory($order, $user, $historyTitle, 'scheduling');
+        $orderData = $this->orderDetails($order->id);
         $this->service->deleteOrderSchedule($id);
         $this->repository->deleteSchedule($id);
-        $orderData = $this->orderDetails($order_w_schedule->order_id);
-
-        $this->addHistory($order, $user, $historyTitle, 'scheduling');
         $filterValue = $this->getFilterType();
         return [
             'error' => false,
@@ -421,7 +419,7 @@ class OrderWorkflowController extends BaseController
 
         $this->addHistory($order, $user, $historyTitle, 'initial-review');
         $chexbox = $request->checkbox;
-        $orderReportPreperation = OrderWReport::where("order_id", $request->order_id)->first();        
+        $orderReportPreperation = OrderWReport::where("order_id", $request->order_id)->first();
         if ($chexbox == 1) {
             $order->status = 4;
         } else if ($chexbox == 2 && $orderReportPreperation) {
