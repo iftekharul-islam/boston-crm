@@ -205,6 +205,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/update-quality-assurance', [OrderWorkflowController::class, 'updateQualityAssurance']);
     Route::post('/save-com/{id}', [OrderWorkflowController::class, 'saveCom']);
     Route::post('/save-com-route', [OrderWorkflowController::class, 'saveComRoute']);
+    Route::get('/log-template-list', [CallLogController::class, 'template']);
 
 
     //Appraisal Type

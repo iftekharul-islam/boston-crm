@@ -297,6 +297,10 @@
                     </div>
                     <!-- message box -->
                     <div class="update-log">
+                        <div class="group">
+                            <label class="d-block mb-2 dashboard-label">Template</label>
+                            <m-select :options="templates" object item-text="title" item-value="message" v-model="callLog.message"></m-select>
+                        </div>
                         <div class="group" :class="{ 'invalid-form' : callLog.error == true }">
                             <label for="" class="d-block mb-2 dashboard-label">Message</label>
                             <textarea @keyup="dataExist()" v-model.trim="callLog.message" class="dashboard-input w-100"
@@ -337,6 +341,7 @@
             Table,
         },
         data: () => ({
+            templates: [],
             filterValues: [],
             openCallNumber: false,
             contact_number_s: [],
@@ -480,6 +485,7 @@
             openIssue: false,
         }),
         created() {
+            this.updateTemplate();
             this.filterValues = this.filterValue
             this.initOrder(this.order);
             this.$root.$on('wk_flow_toast', (res) => {
@@ -510,6 +516,14 @@
             }.bind(this));
         },
         methods: {
+            updateTemplate(){
+                axios.get('log-template-list')
+                    .then(res => {
+                        this.templates = res.data
+                    }).catch(err => {
+                    console.log(err)
+                })
+            },
             dataExist() {
                 if (this.callLog.message !== "") {
                     this.callLog.error = false

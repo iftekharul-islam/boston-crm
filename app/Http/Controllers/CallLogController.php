@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Helpers\CrmHelper;
 use App\Models\CallLog;
 use App\Models\Client;
+use App\Models\LogTemplate;
 use App\Models\Order;
 use App\Models\OrderWInspection;
 use App\Models\PropertyInfo;
@@ -238,5 +239,10 @@ class CallLogController extends Controller
             "completed" => $completed,
             "today_call" => $today_call
         ];
+    }
+
+    public function template()
+    {
+        return LogTemplate::all();
     }
 }

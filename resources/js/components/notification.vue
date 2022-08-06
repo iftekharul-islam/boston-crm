@@ -39,7 +39,6 @@ export default {
     created() {
         this.fetchData()
         this.$root.$on('notification_update', () => {
-            console.log('this is for emitting log')
             this.fetchData()
         })
     },
@@ -47,7 +46,6 @@ export default {
         fetchData() {
             this.$boston.get('notifications')
                 .then(res => {
-                    console.log('all notifications :', res)
                     this.notifications = res
                 })
                 .catch(err => {
