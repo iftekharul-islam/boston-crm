@@ -10,6 +10,12 @@
                             <m-select :options="users" object item-text="name" item-value="id" v-model="assignTo"></m-select>
                         </div>
                     </div>
+                    <div class="col-12">
+                        <div class="group">
+                            <label for="" class="d-block mb-2 dashboard-label">Template</label>
+                            <m-select :options="templates" object item-text="title" item-value="message" v-model="message"></m-select>
+                        </div>
+                    </div>
                     <div class="col-12 mt-2">
                         <ValidationProvider class="d-block group" name="Message" rules="required" v-slot="{ errors }">
                             <div class="group" :class="{ 'invalid-form' : errors[0] }">
@@ -47,7 +53,8 @@ export default {
         message: '',
         assignTo: '',
         notCompleted: true,
-        complete: null
+        complete: null,
+        templates: []
     }),
     watch: {
         showModal(newValue, oldValue) {
@@ -65,9 +72,17 @@ export default {
     created() {
         this.id = this.orderId;
         this.notCompleted = this.isCompleted
-        console.log('this.notCompleted', this.notCompleted)
+        this.updateTemplate()
     },
     methods: {
+        updateTemplate(){
+            axios.get('log-template-list')
+                .then(res => {
+                    this.templates = res.data
+                }).catch(err => {
+                console.log(err)
+            })
+        },
         hideModel() {
             this.$bvModal.hide('add-call-log')
             this.$root.$emit('update_modal')
