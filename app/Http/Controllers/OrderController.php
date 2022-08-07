@@ -58,7 +58,7 @@ class OrderController extends BaseController
         $company = $user->getCompanyProfile();
         $companyId = $company->company_id;
 
-        $appraisal_users = $this->repository->getUserByRoleWise(role: 'appraiser');
+        $appraisal_users = $this->repository->getUserExpectRole(role: 'admin');
         $appraisal_types = $this->repository->getAppraisalTypes();
         $property_types = PropertyType::all();
         $loan_types = $this->repository->getLoanTypes();
@@ -336,7 +336,7 @@ class OrderController extends BaseController
     public function create(Request $get) //: View|Factory|Application
     {
         $system_order_no = $this->generateSystemOrderNo();
-        $appraisal_users = $this->repository->getUserByRoleWise(role: 'appraiser');
+        $appraisal_users = $this->repository->getUserExpectRole(role: 'admin');
         $appraisal_types = $this->repository->getAppraisalTypes();
         $loan_types = $this->repository->getLoanTypes();
 
@@ -377,7 +377,7 @@ class OrderController extends BaseController
      */
     public function show($id, Request $get)
     {
-        $appraisers = $this->repository->getUserByRoleWise(role: 'appraiser');
+        $appraisers = $this->repository->getUserExpectRole(role: 'admin');
         $appraisal_types = $this->repository->getAppraisalTypes();
         $loan_types = $this->repository->getLoanTypes();
         $all_amc = $this->repository->getAllClientByType('amc');
@@ -416,7 +416,7 @@ class OrderController extends BaseController
     {
         $company = auth()->user()->companies()->first();
         $userID = auth()->user()->id;
-        $appraisal_users = $this->repository->getUserByRoleWise(role: 'appraiser');
+        $appraisal_users = $this->repository->getUserExpectRole(role: 'admin');
         $appraisal_types = $this->repository->getAppraisalTypes();
         $loan_types = $this->repository->getLoanTypes();
         $client_users = Helper::getClientsGroupBy($this->repository->getClients());
@@ -653,12 +653,15 @@ class OrderController extends BaseController
         if($request->fee_amount){
             $order->fee_amount= $request->fee_amount;
         }
+        if($request->hold_reason){
+            $order->hold_reason = $request->hold_reason;
+        }
         $order->save();
 
         $company = $user->getCompanyProfile();
         $companyId = $company->company_id;
 
-        $appraisal_users = $this->repository->getUserByRoleWise(role: 'appraiser');
+        $appraisal_users = $this->repository->getUserExpectRole(role: 'admin');
         $property_types = $this->repository->getAppraisalTypes();
         $loan_types = $this->repository->getLoanTypes();
         $client_users = $this->repository->getClients();

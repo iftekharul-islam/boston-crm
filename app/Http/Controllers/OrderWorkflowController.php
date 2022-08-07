@@ -66,7 +66,7 @@ class OrderWorkflowController extends BaseController
         $orderData = $this->orderDetails($request->order_id);
         $filterValue = $this->getFilterType();
 
-        $appraisers = $this->orderRepository->getUserByRoleWise(role: 'appraiser');
+        $appraisers = $this->orderRepository->getUserExpectRole(role: 'admin');
         $companyId = $user->getCompanyProfile()->company_id;
         $data = '';
         $paginate = 10;
@@ -123,7 +123,7 @@ class OrderWorkflowController extends BaseController
         $this->repository->deleteSchedule($id);
         $filterValue = $this->getFilterType();
 
-        $appraisers = $this->orderRepository->getUserByRoleWise(role: 'appraiser');
+        $appraisers = $this->orderRepository->getUserExpectRole(role: 'admin');
         $companyId = $user->getCompanyProfile()->company_id;
         $data = '';
         $paginate = 10;

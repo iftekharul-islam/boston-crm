@@ -7,12 +7,19 @@
                 ', ' +diffInHour + ' hours' : ''}}</span>
             <span class="due" v-else>Already Overdue</span>
         </div>
+        <div class="card mx-auto" v-if="holdReason">
+            <div class="card-body bg-light text-dark">
+                <span class="card-title"><strong>Hold Reason:</strong>
+                    <span v-html="holdReason" class="card-subtitle text-danger"></span>
+                </span>
+            </div>
+        </div>
         <div class="right d-flex align-items-center ms-auto">
             <div class="current-status-group d-flex align-items-center mgr-20">
                 <label for="role" class="d-block text-light-black me-3">{{ currentStatus }}</label>
                 <div class="position-relative">
-                    <a href="javascript:;"
-                        class="button button-white h-40 d-inline-flex align-items-center"><span>{{ $store.state.app.orderDetails.order_status }}</span></a>
+                    <a href="javascript:;" class="button button-white h-40 d-inline-flex align-items-center"><span>{{
+                            $store.state.app.orderDetails.order_status }}</span></a>
                     <!-- <select name="role" id="role" class="login-input role-error fw-bold" @change="changeOrderStatus($event)" v-model="order.status">
                         <option value="">Select</option>
                         <option value="0">Active</option>
@@ -50,16 +57,20 @@
             diffInHour: '',
             savingStatus: false,
             currentStatus: "Current Status",
-            copied: false
+            copied: false,
+            holdReason: "",
         }),
         created() {
+            if (this.order.hold_reason) {
+                this.holdReason = this.order.hold_reason
+            }
             this.updateNewTime(this.diff_in_days, this.diff_in_hours)
-            this.$root.$on('update_order_time',  (res) => {
+            this.$root.$on('update_order_time', (res) => {
                 this.updateNewTime(res.data.diff_in_days, res.data.diff_in_hours)
             });
         },
         methods: {
-            updateNewTime(inDay, inHour){
+            updateNewTime(inDay, inHour) {
                 this.diffInDay = inDay
                 this.diffInHour = inHour
             },
