@@ -1,10 +1,19 @@
 @extends('layouts.app')
 @section('content')
 <div class="user-registration bg-login-box">
+    @if(session()->has('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+    @endif
+    @foreach ($errors->all() as $error)
+    <div class="alert alert-danger">
+        {{ $error }}
+    </div>
+    @endforeach
     <div class=" max-w-1576 mx-auto">
-        <form action="" method="POST" enctype="multipart/form-data">
+        <form action="{{ url('create-direct-user') }}" method="POST" enctype="multipart/form-data">
             @csrf
-
             <div class="user-registration__box bg-white br-8 pdt-32">
                 <div class="pdl-32">
                     <p class="fs-20 text-600 text-light-black mb-3">Add new user </p>
@@ -14,79 +23,50 @@
                         <div class="group">
                             <label for="" class="d-block mb-2 dashboard-label">Full name <span
                                     class="text-danger">*</span></label>
-                            <input type="text" class="dashboard-input w-100 @error('name') is-invalid @enderror"
-                                name="name" value="{{ old('name') }}">
-                            @error('name')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                            @enderror
+                            <input type="text" class="dashboard-input w-100"
+                                name="name" value="{{ old('name') }}" required>
                         </div>
                         <div class="group">
-                            <label for="" class="d-block mb-2 dashboard-label">Address</label>
-                            <textarea name="address" id="" cols="30" rows="2"
-                                class="dashboard-textarea w-100 @error('address') is-invalid @enderror">
-                                    {{ old('address') }}
-                                </textarea>
-                            @error('address')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                            @enderror
-                        </div>
-                        <div class="group">
-                            <label for="" class="d-block mb-2 dashboard-label">City</label>
-                            <input type="text" class="dashboard-input w-100 @error('city') is-invalid @enderror"
-                                name="city" value="{{ old('city') }}">
-                            @error('city')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                            @enderror
-                        </div>
-                        <div class="group">
-                            <label for="" class="d-block mb-2 dashboard-label">State</label>
-                            <input type="text" class="dashboard-input w-100 @error('state') is-invalid @enderror"
-                                name="state" value="{{ old('state') }}">
-                            @error('state')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                            @enderror
-                        </div>
-                    </div>
-                    <div class="bg-platinum h-100 pd-32 br-8">
-                        <div class="group">
-                            <label for="" class="d-block mb-2 dashboard-label">Zip code</label>
-                            <input type="text" class="dashboard-input w-100 @error('zip_code') is-invalid @enderror"
-                                name="zip_code" value="{{ old('zip_code') }}">
-                            @error('state')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                            @enderror
-                        </div>
-                        <div class="group">
-                            <label for="" class="d-block mb-2 dashboard-label">Phone <span
+                            <label for="" class="d-block mb-2 dashboard-label">Role <span
                                     class="text-danger">*</span></label>
-                            <input type="text" class="dashboard-input w-100 @error('phone') is-invalid @enderror"
-                                name="phone" value="{{ old('phone') }}">
-                            @error('phone')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                            @enderror
+                            <select class="form-control" name="role" id="role" required>
+                                <option value="">Please select a role</option>
+                                @foreach($roles as $role)
+                                <option value="{{ $role->id }}" @if(old('role')==$role->id) selected @endif>{{
+                                    $role->name }}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="group">
                             <label for="" class="d-block mb-2 dashboard-label">Email <span
                                     class="text-danger">*</span></label>
-                            <input type="email" class="dashboard-input w-100">
+                            <input type="email" name="email" value="{{ old('email') }}" class="dashboard-input w-100">
+                        </div>
+                        <div class="group">
+                            <label for="" class="d-block mb-2 dashboard-label">Phone <span
+                                    class="text-danger">*</span></label>
+                            <input type="text" maxlength="14" onkeyup="return formatPhoneNo(event)"
+                                class="dashboard-input w-100" name="phone" id="phone"
+                                value="{{ old('phone') }}">
+                        </div>
+                    </div>
+                    <div class="bg-platinum h-100 pd-32 br-8">
+                        <div class="group">
+                            <label for="" class="d-block mb-2 dashboard-label">Password <span
+                                    class="text-danger">*</span></label>
+                            <input type="password" minlength="6" class="dashboard-input w-100 @error('password') is-invalid @enderror"
+                                name="password">
+                        </div>
+                        <div class="group">
+                            <label for="" class="d-block mb-2 dashboard-label">Confirm Password <span
+                                    class="text-danger">*</span></label>
+                            <input type="password" minlength="6" class="dashboard-input w-100" name="password_confirmation">
                         </div>
                         <div class="group ">
-                            <label for="img_preview" class="d-block mb-3 dashboard-label fw-bold">User photo</label>
+                            <label for="img_preview" class="d-block mb-3 dashboard-label fw-bold">User photo (optional)</label>
                             <div id='img_preview' class="img__preview">
-                                <img id="blah" src="{{ asset('img/user.png') }}" alt="your image"
-                                    class="img-fluid" title='' />
+                                <img id="blah" src="{{ asset('img/user.png') }}" alt="your image" class="img-fluid"
+                                    title='' />
                                 <div class="upload-img">
                                     <input type="file" id="inputGroupFile01" class="imgInp custom-file-input"
                                         name="image" accept="image/png, image/jpeg"
@@ -104,25 +84,26 @@
                     </div>
                     <div class="bg-platinum h-100 pd-32 br-8">
                         <div class="group">
-                            <label for="" class="d-block mb-2 dashboard-label">Role <span
-                                    class="text-danger">*</span></label>
-                            <select class="form-control" required>
-                                <option value="">Please select a role</option>
-                                @foreach($roles as $role)
-                                    <option value="{{ $role->id }}">{{ $role->name }}</option>
-                                @endforeach
-                            </select>
+                            <label for="" class="d-block mb-2 dashboard-label">Address</label>
+                            <textarea name="address" id="" cols="30" rows="2"
+                                class="dashboard-textarea w-100 @error('address') is-invalid @enderror">
+                                    {{ old('address') }}
+                                </textarea>
                         </div>
                         <div class="group">
-                            <label for="" class="d-block mb-2 dashboard-label">Password <span
-                                    class="text-danger">*</span></label>
-                            <input type="password" class="dashboard-input w-100 @error('password') is-invalid @enderror"
-                                name="password">
+                            <label for="" class="d-block mb-2 dashboard-label">City</label>
+                            <input type="text" class="dashboard-input w-100 @error('city') is-invalid @enderror"
+                                name="city" value="{{ old('city') }}">
                         </div>
                         <div class="group">
-                            <label for="" class="d-block mb-2 dashboard-label">Confirm Password <span
-                                    class="text-danger">*</span></label>
-                            <input type="password" class="dashboard-input w-100" name="password_confirmation">
+                            <label for="" class="d-block mb-2 dashboard-label">State</label>
+                            <input type="text" class="dashboard-input w-100 @error('state') is-invalid @enderror"
+                                name="state" value="{{ old('state') }}">
+                        </div>
+                        <div class="group">
+                            <label for="" class="d-block mb-2 dashboard-label">Zip code</label>
+                            <input type="text" class="dashboard-input w-100 @error('zip_code') is-invalid @enderror"
+                                name="zip_code" value="{{ old('zip_code') }}">
                         </div>
                     </div>
                 </div>
@@ -162,6 +143,21 @@
             reader.readAsDataURL(input.files[0]);
         }
         $(".alert").removeClass("loading").hide();
+    }
+
+    function filterPhoneNumber(val) {
+        let check1 = val.replace("(", "");
+        let check2 = check1.replace(")", "");
+        let check3 = check2.replace("-", "");
+        let check4 = check3.replace(" ", "");
+        let check5 = check4.replace("+", "");
+        return check5;
+    }
+
+    function formatPhoneNo(e) {
+        let phoneNo = e.target.value;
+        phoneNo = filterPhoneNumber(phoneNo);
+        e.target.value = phoneNo.replace(/(\d{3})\-?(\d{3})\-?(\d{4}).*/, '$1-$2-$3')
     }
 </script>
 @endsection
