@@ -61,7 +61,7 @@
             holdReason: "",
         }),
         created() {
-            if (this.order.hold_reason) {
+            if (this.order.status == 19 && this.order.hold_reason) {
                 this.holdReason = this.order.hold_reason
             }
             this.updateNewTime(this.diff_in_days, this.diff_in_hours)
