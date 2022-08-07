@@ -621,27 +621,6 @@
                 }
             },
             goToMap() {
-                //let getLatLng = [];
-                //let addrUrl = "";
-                //if (this.selectedItems.length <= 0) {
-                //    return false;
-                //}
-                //this.selectedItems.map((ele) => {
-                //    let latLng = {
-                //        lat: parseFloat(ele.property_info.latitude),
-                //       lng: parseFloat(ele.property_info.longitude),
-                //        details: {
-                //           orderNo: ele.client_order_no,
-                //            property: ele.property_info
-                //        }
-                //    }
-                //    getLatLng.push(latLng);
-                //    addrUrl += ele.property_info.formatedAddress + "/";
-                //});
-                //this.latLng = getLatLng;
-                //let url = "https://www.google.co.in/maps/dir/"+addrUrl+"?hl=en";
-                // this.openMap = true;
-                //window.open(url);
                 let propertyAddresses = []
                 if (this.selectedItems.length <= 0) {
                     return false;
