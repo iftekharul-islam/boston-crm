@@ -2,11 +2,13 @@
 
 namespace App\Repositories;
 
-use App\Interfaces\UserRepositoryInterface;
+
 use App\Models\User;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use App\Interfaces\UserRepositoryInterface;
 
 class UserRepository extends BaseRepository implements UserRepositoryInterface
 {
@@ -19,7 +21,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
 	 {
 			parent::__construct( $model );
 	 }
-	 
+
 	 /**
 		* Get user by email
 		*

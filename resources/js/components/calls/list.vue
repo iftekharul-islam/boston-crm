@@ -297,6 +297,10 @@
                     </div>
                     <!-- message box -->
                     <div class="update-log">
+                        <div class="group">
+                            <label class="d-block mb-2 dashboard-label">Template</label>
+                            <m-select :options="templates" object item-text="title" item-value="message" v-model="callLog.message"></m-select>
+                        </div>
                         <div class="group" :class="{ 'invalid-form' : callLog.error == true }">
                             <label for="" class="d-block mb-2 dashboard-label">Message</label>
                             <textarea @keyup="dataExist()" v-model.trim="callLog.message" class="dashboard-input w-100"
@@ -337,6 +341,7 @@
             Table,
         },
         data: () => ({
+            templates: [],
             filterValues: [],
             openCallNumber: false,
             contact_number_s: [],
@@ -480,6 +485,7 @@
             openIssue: false,
         }),
         created() {
+            this.updateTemplate();
             this.filterValues = this.filterValue
             this.initOrder(this.order);
 	    console.log(this.order)
@@ -511,6 +517,14 @@
             }.bind(this));
         },
         methods: {
+            updateTemplate(){
+                axios.get('log-template-list')
+                    .then(res => {
+                        this.templates = res.data
+                    }).catch(err => {
+                    console.log(err)
+                })
+            },
             dataExist() {
                 if (this.callLog.message !== "") {
                     this.callLog.error = false
@@ -608,27 +622,6 @@
                 }
             },
             goToMap() {
-                //let getLatLng = [];
-                //let addrUrl = "";
-                //if (this.selectedItems.length <= 0) {
-                //    return false;
-                //}
-                //this.selectedItems.map((ele) => {
-                //    let latLng = {
-                //        lat: parseFloat(ele.property_info.latitude),
-                //       lng: parseFloat(ele.property_info.longitude),
-                //        details: {
-                //           orderNo: ele.client_order_no,
-                //            property: ele.property_info
-                //        }
-                //    }
-                //    getLatLng.push(latLng);
-                //    addrUrl += ele.property_info.formatedAddress + "/";
-                //});
-                //this.latLng = getLatLng;
-                //let url = "https://www.google.co.in/maps/dir/"+addrUrl+"?hl=en";
-                // this.openMap = true;
-                //window.open(url);
                 let propertyAddresses = []
                 if (this.selectedItems.length <= 0) {
                     return false;

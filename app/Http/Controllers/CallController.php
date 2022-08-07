@@ -30,7 +30,7 @@ class CallController extends BaseController
     {
         $timezone = $this->getTimeZone();
         $user = auth()->user();
-        $appraisers = $this->repository->getUserByRoleWise(role: 'appraiser');
+        $appraisers = $this->repository->getUserExpectRole(role: 'admin');
         $companyId = $user->getCompanyProfile()->company_id;
         $data = $get->data;
         $paginate = $get->paginate && $get->paginate > 0 ? $get->paginate : 10;

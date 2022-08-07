@@ -55,6 +55,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         'users',
         [UserController::class, 'store']
     )->middleware('role_permission:create.user')->name('users.store');
+    Route::post(
+        'create-direct-user',
+        [UserController::class, 'createDirectUser']
+    )->middleware('role_permission:create.user')->name('users.direct');
     Route::post('user-status-change/{id}', [
         UserController::class,
         'statusChange',
@@ -205,6 +209,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/update-quality-assurance', [OrderWorkflowController::class, 'updateQualityAssurance']);
     Route::post('/save-com/{id}', [OrderWorkflowController::class, 'saveCom']);
     Route::post('/save-com-route', [OrderWorkflowController::class, 'saveComRoute']);
+    Route::get('/log-template-list', [CallLogController::class, 'template']);
 
 
     //Appraisal Type

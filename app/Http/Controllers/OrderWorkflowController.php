@@ -66,7 +66,7 @@ class OrderWorkflowController extends BaseController
         $orderData = $this->orderDetails($request->order_id);
         $filterValue = $this->getFilterType();
 
-        $appraisers = $this->orderRepository->getUserByRoleWise(role: 'appraiser');
+        $appraisers = $this->orderRepository->getUserExpectRole(role: 'admin');
         $companyId = $user->getCompanyProfile()->company_id;
         $data = '';
         $paginate = 10;
@@ -123,7 +123,7 @@ class OrderWorkflowController extends BaseController
         $this->repository->deleteSchedule($id);
         $filterValue = $this->getFilterType();
 
-        $appraisers = $this->orderRepository->getUserByRoleWise(role: 'appraiser');
+        $appraisers = $this->orderRepository->getUserExpectRole(role: 'admin');
         $companyId = $user->getCompanyProfile()->company_id;
         $data = '';
         $paginate = 10;
@@ -205,6 +205,7 @@ class OrderWorkflowController extends BaseController
     {
         $order = Order::find($id);
         $user = auth()->user();
+        $reviewer_name = '';
 
         if (!$order) {
             return response()->json([
@@ -214,21 +215,28 @@ class OrderWorkflowController extends BaseController
         }
         $report = OrderWReport::where('order_id', $id)->first();
         $creator = User::find($request->creator_id);
-        $reviewer = User::find($request->reviewed_by);
+        if($request->has('reviewed_by') && $request->reviewed_by != ''){
+            $reviewer = User::find($request->reviewed_by);
+            $reviewer_name = $reviewer->name;
+        }
 
         if ($report) {
-            $report->reviewed_by = $request->reviewed_by;
+            if($request->has('reviewed_by') && $request->reviewed_by != ''){
+                $report->reviewed_by = $request->reviewed_by;
+            }
             $report->creator_id = $request->creator_id;
             $report->save();
-            $historyTitle = $user->name . " update report creator and viewer on report preperation.<br>Creator: <strong>{$creator->name}</strong><br>Reviewer: <strong>{$reviewer->name}</strong>";
+            $historyTitle = $user->name . " update report creator and viewer on report preperation.<br>Creator: <strong>{$creator->name}</strong><br>Reviewer: <strong>{$reviewer_name}</strong>";
         } else {
             $newReport = new OrderWReport();
             $newReport->order_id = $id;
-            $newReport->reviewed_by = $request->reviewed_by;
+            if($request->has('reviewed_by') && $request->reviewed_by != ''){
+                $newReport->reviewed_by = $request->reviewed_by;
+            }
             $newReport->creator_id = $request->creator_id;
             $newReport->created_by = $user->id;
             $newReport->save();
-            $historyTitle = $user->name . " assign report creator and viewer on report preperation.<br>Creator: <strong>{$creator->name}</strong><br>Reviewer: <strong>{$reviewer->name}</strong>";
+            $historyTitle = $user->name . " assign report creator and viewer on report preperation.<br>Creator: <strong>{$creator->name}</strong><br>Reviewer: <strong>{$reviewer_name}</strong>";
         }
 
         $workStatus = json_decode($order->workflow_status, true);
