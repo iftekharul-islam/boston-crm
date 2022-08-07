@@ -482,6 +482,7 @@
         created() {
             this.filterValues = this.filterValue
             this.initOrder(this.order);
+	    console.log(this.order)
             this.$root.$on('wk_flow_toast', (res) => {
                 if (res.error == false) {
                     this.$store.commit('app/storeOrder', res.data)
