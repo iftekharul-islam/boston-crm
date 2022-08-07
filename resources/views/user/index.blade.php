@@ -6,8 +6,11 @@
         <div class="clients-top d-flex flex-wrap justify-content-between">
             <p class="mb-0 text-light-black fs-20 text-600">User management</p>
             @if(in_array('create.user', $user_permissions))
-            <button data-bs-toggle="modal" data-bs-target="#userInviteModal" class="button button-primary"
-                role="button">{{ __('messages.user_view.user_create') }}</button>
+            <div>
+                <a href="{{ url('users/create') }}"><button class="button button-primary">Add user (direct)</button></a>
+                <button data-bs-toggle="modal" data-bs-target="#userInviteModal" class="button button-primary"
+                    role="button">Add user (invite)</button>
+            </div>
             @endif
         </div>
         <div class="clients-table user-table mt-4">
@@ -236,7 +239,7 @@
 
     function colorUpdate(id) {
         let color_id = $('#userColor' + id + ' option:selected').val();
-        let url = '{{ url("/update-color") }}' +'/'+ id;
+        let url = '{{ url("/update-color") }}' + '/' + id;
 
         $.ajax({
             url: url,
@@ -285,7 +288,7 @@
             },
             success: function (response) {
                 $('#userInviteModal').modal('hide');
-                swal('Invitation has been sent to '+ response.email , '' , "success").then(function () {
+                swal('Invitation has been sent to ' + response.email, '', "success").then(function () {
                     location.reload();
                 })
             },

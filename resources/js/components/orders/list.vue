@@ -102,7 +102,7 @@
                                 <b-dropdown-item href="#" @click.prevent="addFeeAmount(item.id, 17)" :disabled="item.status == 17">Cancel with payment</b-dropdown-item>
                                 <b-dropdown-item href="#" @click.prevent="submitAction(item.id, 18)" :disabled="item.status == 18">Cancel with out payment </b-dropdown-item>
                                 <b-dropdown-item href="#" @click.prevent="submitAction(item.id, 15)" :disabled="item.status == 15">Delete</b-dropdown-item>
-                                <b-dropdown-item href="#" @click.prevent="submitAction(item.id, 19)" :disabled="item.status == 19">On Hold</b-dropdown-item>
+                                <b-dropdown-item href="#" @click.prevent="getHoldReason(item.id, 19)" :disabled="item.status == 19">On Hold</b-dropdown-item>
                                 <b-dropdown-item href="#" @click.prevent="submitAction(item.id, 20)" :disabled="item.status == 20">Re-Active</b-dropdown-item>
                             </b-dropdown>
                         </div>
@@ -153,6 +153,29 @@
                 </div>
             </b-modal>
         </ValidationObserver>
+        <ValidationObserver ref="holdReasonFrom">
+            <!-- modal -->
+            <b-modal id="hold-reason-modal" class="brrower-modal" size="md" title="Hold Reason" no-close-on-backdrop>
+                <div class="modal-body brrower-modal-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <ValidationProvider class="d-block group" name="Hold reason" rules="required" v-slot="{ errors }">
+                                <div class="group" :class="{ 'invalid-form' : errors[0] }">
+                                    <label for="" class="d-block mb-2 dashboard-label">Reason</label>
+                                    <text-editor v-model="updateStatus.holdReason" placeholder="Enter reason here...">
+                                    </text-editor>
+                                    <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                                </div>
+                            </ValidationProvider>
+                        </div>
+                    </div>
+                </div>
+                <div slot="modal-footer" class="mgt-44">
+                    <button class="button button-transparent" @click="$bvModal.hide('hold-reason-modal')">Close</button>
+                    <button class="button button-primary" @click="saveHoldReason">Save</button>
+                </div>
+            </b-modal>
+        </ValidationObserver>
     </div>
 </template>
 
@@ -173,6 +196,7 @@ export default {
             feeAmount: '',
             orderId: '',
             status: '',
+            holdReason: '',
         },
         summaryData: [],
         orderData: [],
@@ -338,7 +362,7 @@ export default {
     },
     methods: {
         viewAvailable(status) {
-            if(jQuery.inArray(status, [15, 17, 18, 19]) !== -1){
+            if(jQuery.inArray(status, [15, 17, 18]) !== -1){
                 return false
             }
             return true
@@ -347,6 +371,18 @@ export default {
             this.updateStatus.orderId = orderId
             this.updateStatus.status = status
             this.$bvModal.show('add-fee-amount-modal')
+        },
+        getHoldReason(orderId, status) {
+            this.updateStatus.orderId = orderId
+            this.updateStatus.status = status
+            this.$bvModal.show('hold-reason-modal')
+        },
+        saveHoldReason(){
+            this.$bvModal.hide('hold-reason-modal')
+            this.submitAction(this.updateStatus.orderId, this.updateStatus.status)
+            this.updateStatus.orderId = ''
+            this.updateStatus.status = ''
+            this.updateStatus.holdReason = ''
         },
         submitFeeAmount() {
             this.$bvModal.hide('add-fee-amount-modal')
@@ -358,7 +394,8 @@ export default {
             let data = {
                 'id': orderId,
                 'status': status,
-                'fee_amount': this.updateStatus.feeAmount
+                'fee_amount': this.updateStatus.feeAmount,
+                'hold_reason': this.updateStatus.holdReason
             }
             this.$boston.post('update-order-status', data).then( (res) => {
                 let data = res.data

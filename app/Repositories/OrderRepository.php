@@ -93,7 +93,7 @@ class OrderRepository extends BaseRepository
      *
      * @return Builder[]|Collection
      */
-    #[NoReturn] public function getCompanyUsers(object $role): Collection|array
+    public function getCompanyUsers(object $role): Collection|array
     {
         $array = ['role_id', '=', $role->id];
         if ($role->name == 'appraiser') {
@@ -108,7 +108,7 @@ class OrderRepository extends BaseRepository
         return User::query()->whereIn('id', $company_user_ids)->get(['id', 'name', 'email']);
     }
 
-    #[NoReturn] public function getCompanyUsersWithoutAdmin(object $role): Collection|array
+    public function getCompanyUsersWithoutAdmin(object $role): Collection|array
     {
         if ($role->name == 'appraiser') {
             $array = ['role_name', 'appraiser'];
