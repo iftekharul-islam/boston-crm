@@ -55,6 +55,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         'users',
         [UserController::class, 'store']
     )->middleware('role_permission:create.user')->name('users.store');
+    Route::post(
+        'create-direct-user',
+        [UserController::class, 'createDirectUser']
+    )->middleware('role_permission:create.user')->name('users.direct');
     Route::post('user-status-change/{id}', [
         UserController::class,
         'statusChange',
