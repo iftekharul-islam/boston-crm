@@ -244,6 +244,7 @@
         overflow: auto;
     }
 }
+
 .call-log-box {
     .box-body {
         max-height: 800px;
@@ -671,6 +672,7 @@ select {
         padding: 16px 20px;
         margin-right: 20px;
         .item {
+            border: thin solid transparent;
             display: flex;
             align-items: center;
             margin-bottom: 40px;
@@ -716,11 +718,12 @@ select {
                 display: none;
             }
             &.complete {
+                background: $white;
                 .ball {
-                    background: $success;
-                    border-color: $success;
+                    background: #34a851;
+                    border-color: $white;
                     &::after {
-                        background: $success;
+                        background: #34a851;
                         width: 2px;
                     }
                     &::before {
@@ -736,7 +739,7 @@ select {
                     }
                 }
                 p {
-                    color: $light-black;
+                    color: #34a851;
                 }
             }
             &.current {
@@ -753,8 +756,28 @@ select {
                     color: #942020;
                 }
             }
+            &.unCompleted {
+                background: $white;
+                .ball {
+                    background: $warning;
+                    border-color: $warning;
+                    &::after {
+                        background: $warning;
+                        width: 2px;
+                    }
+                    img.uncomplete {
+                        display: block;
+                        height: 14px;
+                        filter: invert(1);
+                    }
+                }
+                p {
+                    color: $warning;
+                }
+            }
         }
         .item.disable {
+            border: thin solid #dddddd!important;
             p {
                 color: #bbb;
             }
@@ -764,12 +787,13 @@ select {
             }
         }
         .item.activeStep {
-            background: #19b7a2;
+            background: #fff;
+            border: thin solid #4284e0;
             p {
-                color: #fff;
+                color: #4284e0;
             }
             span.ball {
-                background: #19b7a2;
+                background: #4284e0;
                 border-color: #f6fdfc;
             }
         }
@@ -783,6 +807,16 @@ select {
             background: rgb(189 189 189);
             p {
                 color: #fff;
+            }
+        }
+        .item.activeStep.unCompleted {
+            background: $white;
+            border: thin solid $warning;
+            span.ball {
+                background: $warning;
+            }
+            p {
+                color: $warning;
             }
         }
     }
@@ -938,7 +972,6 @@ select {
         @include for-max-1399 {
             max-width: 140px;
         }
-
     }
     img {
         width: 40px;
@@ -1079,7 +1112,7 @@ select {
     font-weight: 500;
 }
 
-.invalid-form label{
+.invalid-form label {
     color: #af2a2a!important;
 }
 
@@ -1147,6 +1180,7 @@ select {
         margin-top: 12px;
     }
 }
+
 #borrower-info,
 #contact-info {
     .new-array-items {
@@ -1390,7 +1424,7 @@ select {
     left: 0;
     right: 0;
     margin: auto;
-    box-shadow: 0 30px 50px 0px rgba(0,0,0,0.60);
+    box-shadow: 0 30px 50px 0px rgba(0, 0, 0, 0.60);
     top: 50px;
     z-index: 999;
     background: $white;
@@ -1403,6 +1437,7 @@ select {
 .fade-leave-active {
     transition: opacity 0.3s;
 }
+
 .fade-enter,
 .fade-leave-to {
     opacity: 0;
@@ -1413,24 +1448,24 @@ select {
     transition: opacity 0.3s;
     transform: translateX(0px);
 }
+
 .fade-x-enter,
 .fade-x-leave-to {
     opacity: 0;
     transform: translateX(200px);
 }
 
-
 .slide-y-enter-active,
 .slide-y-leave-active {
     transition: opacity 0.3s;
     transform: translateY(0deg);
 }
+
 .slide-y-enter,
 .slide-y-leave-to {
     opacity: 0;
     transform: translateY(-50deg);
 }
-
 
 .order-views {
     .search-box {
@@ -1452,9 +1487,11 @@ select {
         }
     }
 }
+
 .per-page {
     width: min-content !important;
 }
+
 .m-table-content {
     table {
         thead {
@@ -1474,7 +1511,6 @@ select {
                         }
                     }
                 }
-
             }
         }
     }

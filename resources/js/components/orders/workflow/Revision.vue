@@ -73,14 +73,14 @@
                             class="path1"></span><span class="path2"></span></span></button>
                     </div>
                   </div>
-                  <p class="mgb-12">Revision details</p>
+                  <p class="mgb-12 rev-details">Revision details</p>
                   <p v-html="item.revision_details"></p>
                 </div>
                 <!-- solution -->
                 <div class="solution" v-if="item.solution_details != '-' && item.open_solution == false">
                   <div class="solution-header d-flex align-items-start mb-2">
                     <div>
-                      <p class="mgb-12">Solution</p>
+                      <p class="mgb-12 rev-details">Solution</p>
                       <p class="mb-0">{{ item.delivery_date | dateTime }}</p>
                     </div>
                     <div :class="`button-box ms-auto`">
@@ -532,5 +532,9 @@ input.dashboard-input.w-100 {
 .anim {
       margin-right: -100%;
       transition: all 300ms ease-in-out;
+}
+p.mgb-12.rev-details {
+    font-weight: bold;
+    color: #3497cf;
 }
 </style>

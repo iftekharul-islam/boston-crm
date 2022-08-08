@@ -18,8 +18,8 @@
                 <template v-else>{{ currentValue }}</template>
             </div>
             <div class="select-icon">
-                <!-- <img :src="require('./asset/down-chevron.png')" class="img-fluid"> -->
-                <span>&#x276E;</span>
+                <img :src="require('./asset/down-chevron.png').default" class="img-fluid">
+                <!-- <span>&#x276E;</span> -->
             </div>
         </div>
         <transition name="fade-xt" appear v-if="activeClick">
@@ -32,8 +32,8 @@
                         <div class="vue-option" :class="{ 'active' : checkActiveLink(item) }" @click="chooseItem(item)" v-for="item, ik in items" :key="ik">
                             <div class="option-item-box">
                                 <div class="options-checkbox">
-                                    <!-- <img :src="require('./asset/checkbox.png')" class="img-fluid"> -->
-                                    <span>&#x2713;</span>
+                                    <img :src="require('./asset/checkbox.png').default" class="img-fluid">
+                                    <!-- <span>&#x2713;</span> -->
                                 </div>
                                 <slot :name="item[itemValue]" :item="item">
                                     <span v-html="item[itemText]"></span>
@@ -45,8 +45,8 @@
                         <div class="vue-option" :class="{ 'active' : checkActiveLink(item) }" @click="chooseItem(item)" v-for="item, ik in items" :key="ik">
                             <div class="option-item-box">
                                 <div class="options-checkbox">
-                                    <!-- <img :src="require('./asset/checkbox.png')" class="img-fluid"> -->
-                                    <span>&#x2713;</span>
+                                    <img :src="require('./asset/checkbox.png').default" class="img-fluid">
+                                    <!-- <span>&#x2713;</span> -->
                                 </div>
                                 <slot :name="item" :item="{item}">
                                     <span v-html="item"></span>
@@ -84,7 +84,7 @@ export default {
     model: {
         prop: 'modelData',
         event: 'change'
-    },  
+    },
     created() {
         if (this.multiple !== undefined) {
             this.currentValue = "Choose options";
@@ -122,7 +122,7 @@ export default {
             }
             if (props.multiSelect !== undefined) {
                 this.multiple = true;
-            }        
+            }
             let findItem = null;
             if (this.returnObject == true) {
                 let modelDataFilter = attr.modelData;
@@ -260,7 +260,7 @@ export default {
                 this.multipleSelect = [];
                 this.multipleSelect.push(item);
             }
-            
+
             this.returnEmit();
         },
         initList() {
@@ -276,7 +276,7 @@ export default {
         closeBox(defVal = false) {
             this.closeBoxOptions(defVal);
             this.initList();
-        }, 
+        },
         closeBoxOptions(defVal = false) {
             if (defVal == false) {
                 if (this.multiple == false) {
@@ -329,7 +329,7 @@ export default {
         },
         removeSelectedItem(item, index) {
             this.multipleSelect.splice(index, 1);
-            this.returnEmit();            
+            this.returnEmit();
         },
         returnEmit() {
             let returnMultiple = [];
@@ -351,13 +351,13 @@ export default {
         $attrs : {
             handler(val) {
                 this.initCurrentData(this.$props, val);
-            }, 
+            },
             deep: true
         },
         $props : {
             handler(val) {
                 this.initCurrentData(val, this.$attrs);
-            }, 
+            },
             deep: true
         }
     }

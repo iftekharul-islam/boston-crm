@@ -47,8 +47,9 @@ class OrderWorkflowController extends BaseController
     {
         $this->repository->updateOrderScheduleData($request->all());
         //code for set event on google calender
-        $this->service->setOrderSchedule($request->order_id);
-
+        if (config('app.env') == "production") {
+            $this->service->setOrderSchedule($request->order_id);
+        }
         // inspection_date_time_formatted
 
         $order = Order::find($request->order_id);
@@ -250,7 +251,7 @@ class OrderWorkflowController extends BaseController
         $orderData = $this->orderDetails($id);
         return [
             'error' => false,
-            'message' => $historyTitle,
+            'message' => "Report preperation has been updated",
             'status' => 'success',
             'data' => $orderData
         ];
@@ -916,7 +917,7 @@ class OrderWorkflowController extends BaseController
         $orderData = $this->orderDetails($id);
         return [
             'error' => false,
-            'message' => $historyTitle,
+            'message' => "Submission has been done",
             'status' => 'success',
             'data' => $orderData
         ];

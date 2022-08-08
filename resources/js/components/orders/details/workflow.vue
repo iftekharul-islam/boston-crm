@@ -25,15 +25,17 @@
                 <span class="ball"><img src="/img/current-white.png" alt="current step boston"></span>
               <p class="mb-0">Report Preparation</p>
             </div>
-            <div class="item" :class="{'complete' : status.initialReview === 1, 'current' : currentStep('initial-review'), 'activeStep' : isActive == 'initial-review'}" @click="changeTab('initial-review')">
+            <div class="item" :class="{'unCompleted': isUnCompleteReview(status.initialReview), 'complete' : isUnCompleteReview(status.initialReview, true), 'current' : currentStep('initial-review'), 'activeStep' : isActive == 'initial-review'}" @click="changeTab('initial-review')">
               <span class="ball">
-                  <img src="/img/current-white.png" alt="current step boston">
+                    <img src="/icons/info.png" class="uncomplete">
+                    <img src="/img/current-white.png" alt="current step boston">
               </span>
               <p class="mb-0">Initial Review</p>
             </div>
-            <div class="item" :class="{'complete' : checkReportAnalysysCompletation(status.reportAnalysisReview), 'current' : currentStep('report-analysis-review'), 'activeStep' : isActive == 'report-analysis-review'}" @click="changeTab('report-analysis-review')">
+            <div class="item" :class="{ 'unCompleted': isUnComplete(status.reportAnalysisReview), 'complete' : checkReportAnalysysCompletation(status.reportAnalysisReview), 'current' : currentStep('report-analysis-review'), 'activeStep' : isActive == 'report-analysis-review'}" @click="changeTab('report-analysis-review')">
               <span class="ball">
-                  <img src="/img/current-white.png" alt="current step boston">
+                    <img src="/icons/info.png" class="uncomplete">
+                    <img src="/img/current-white.png" alt="current step boston">
               </span>
               <p class="mb-0">Report Analysis and Review</p>
             </div>
@@ -201,6 +203,9 @@ export default {
         }
         this.currentStep(this.orderData.currentStep);
         this.checkReportAnalysysCompletation(this.status.reportAnalysisReview);
+        this.isUnComplete(this.status.initialReview);
+        this.isUnComplete(this.status.reportAnalysisReview);
+        this.isUnCompleteReview(this.status.initialReview);
     },
     updateRole() {
         if (this.role.length) {
@@ -224,6 +229,30 @@ export default {
         if (status === 1) {
              if (this.orderData.analysis){
                 if (this.orderData.analysis.is_check_upload && this.orderData.analysis.is_check_upload == 1) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    },
+    isUnComplete(status) {
+        if (status === 1) {
+             if (this.orderData.analysis && this.orderData.report_rewrite){
+                if (this.orderData.analysis.is_review_send_back && this.orderData.analysis.is_review_send_back == 1) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    },
+    isUnCompleteReview(status, type) {
+        if (status === 1) {
+            if (type == true) {
+                 if (this.orderData.initial_review && this.orderData.initial_review.is_check_upload == true){
+                    return true;
+                }
+            } else {
+                if (this.orderData.initial_review && this.orderData.initial_review.is_check_upload == false){
                     return true;
                 }
             }

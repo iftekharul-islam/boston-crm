@@ -16,6 +16,10 @@
             </div>
           </div>
           <div class="d-inline-block message">
+            <!-- <pre>
+                {{ noteItem }}
+            </pre> -->
+            <span class="date-sm">{{ noteItem }}</span>
             <p class="mb-0 " v-html="noteItem.note"></p>
           </div>
         </div>
@@ -89,7 +93,7 @@
                     });
                   }
               }
-            
+
             if (order.report_rewrite) {
                 this.notes.push({
                       key: 'report_rewrite',
