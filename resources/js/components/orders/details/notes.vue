@@ -19,6 +19,7 @@
             <!-- <pre>
                 {{ noteItem }}
             </pre> -->
+
             <span class="date-sm">{{ noteItem }}</span>
             <p class="mb-0 " v-html="noteItem.note"></p>
           </div>
