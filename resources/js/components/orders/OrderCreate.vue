@@ -83,7 +83,7 @@ export default {
     }
   },
   created() {
-      // this.changeStepTest();
+    //   this.changeStepTest();
       this.$root.$on("updateStepData", (res) => {
           if (res.step == 1) {
             this.step1Data = res.data;

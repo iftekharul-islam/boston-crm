@@ -146,11 +146,13 @@
                     this.alreadyInitialReview = (JSON.parse(this.orderData.workflow_status)).initialReview
                     this.alreadyInitialReview == 1 ? this.currentStep = 'view' : 'create'
 
-                    this.initialReview.report_creator_name = this.orderData.report.creator.name
-                    this.initialReview.report_reviewer_name = this.orderData.report.reviewer.name
-                    this.initialReview.report_trainee_name = this.orderData.report.trainee.name
-                    this.initialReview.report_note = this.orderData.report.note
-                    this.initialReview.assigned_to = this.orderData.report.creator.id
+                    if (this.orderData.report) {
+                        this.initialReview.report_creator_name = this.orderData.report.creator.name ?? null
+                        this.initialReview.report_reviewer_name = this.orderData.report.reviewer.name ?? null
+                        this.initialReview.report_trainee_name = this.orderData.report.trainee?.name;
+                        this.initialReview.report_note = this.orderData.report.note
+                        this.initialReview.assigned_to = this.orderData.report.creator.id
+                    }
                     if (this.orderData.initial_review) {
                         this.initialReview.initial_review_id = this.orderData.initial_review.id
                         this.initialReview.note = this.orderData.initial_review.note

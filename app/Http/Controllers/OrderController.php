@@ -769,7 +769,7 @@ class OrderController extends BaseController
         $order = $this->orderDetails($order->id);
         return response()->json([
             "error" => false,
-            "message" => $returnMessage,
+            "message" => "Order Provided Service Has Been Updated",
             'order' => $order,
         ]);
     }

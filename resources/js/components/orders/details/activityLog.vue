@@ -51,10 +51,10 @@
     position: relative;
     padding-left: 15px;
   }
-  
+
   .logItem .logby {
     font-weight: bold;
-    color: rgb(43, 75, 216);
+    color: #2bd89b;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -67,7 +67,7 @@
     position: absolute;
     width: 1px;
     height: 100%;
-    top: 50%;
+    top: 15px;
     left: 0;
     background: #999;
   }
@@ -77,7 +77,7 @@
     width: 10px;
     height: 10px;
     left: -4px;
-    top: 50%;
+    top: 15px;
     background: #5de1b5;
     border-radius: 0.5rem;
   }
