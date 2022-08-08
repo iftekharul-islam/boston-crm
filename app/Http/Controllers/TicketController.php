@@ -40,6 +40,7 @@ class TicketController extends Controller
 
         $newTicket = new Ticket();
         $newTicket->order_id = $id;
+        $newTicket->assigned_to = $request->assignTo ?? null;
         $newTicket->subject = $request->subject;
         $newTicket->issue = $request->issue;
         $newTicket->created_by = $user->id;

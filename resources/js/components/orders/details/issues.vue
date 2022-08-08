@@ -13,12 +13,15 @@
               <div class="issue">
                   <p class="text-light-black">{{ ticket.issue }}</p>
               </div>
-              <div class="d-flex justify-content-between mgb-12">
-                  <p class="text-gray mb-0" v-if="ticket.assignee">Assigned to : <span class="text-light-black text-600">{{ ticket.assignee.name }}</span></p>
-                  <a href="#" class="share-box" @click.prevent="showUpdateModal(ticket)">
-                      <span class="icon-eye"><span class="path1"></span><span class="path2"></span></span>
-                  </a>
-              </div>
+                  <div class="d-flex justify-content-between mgb-12">
+                      <p class="text-gray mb-0" v-if="ticket.creator">Created by : <span class="text-light-black text-600">{{ ticket.creator.name }}</span></p>
+                  </div>
+                <div class="d-flex justify-content-between mgb-12">
+                    <p class="text-gray mb-0" v-if="ticket.assignee">Mention to : <span class="text-light-black text-600">{{ ticket.assignee.name }}</span></p>
+                    <a href="#" class="share-box" @click.prevent="showUpdateModal(ticket)">
+                        <span class="icon-eye"><span class="path1"></span><span class="path2"></span></span>
+                    </a>
+                </div>
               <div class="solution" v-if="ticket.solution">
                   <p class="mb-1 fs-14 ">Solution:</p>
                   <p class="mb-0 fs-14">{{ ticket.solution }}</p>
@@ -30,7 +33,7 @@
           No Issues/ Queries added yet !
       </div>
      <!-- modal -->
-    <add-issue :showIssueModal="isIssueModal" :orderId="this.id"></add-issue>
+    <add-issue :showIssueModal="isIssueModal" :orderId="this.id" :users="this.users"></add-issue>
     <ValidationObserver ref="addIssueSolutionForm">
           <!-- modal -->
           <b-modal id="add-issue-solution-modal" class="brrower-modal" size="md" title="Add Issue" no-close-on-backdrop>
@@ -77,7 +80,7 @@
 export default {
     name: 'issues',
     props: [
-        'order',
+        'order', 'users'
     ],
     data: () => ({
         orderData: {},

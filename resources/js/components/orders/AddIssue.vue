@@ -5,13 +5,17 @@
             <div class="modal-body brrower-modal-body">
                 <div class="row">
                     <div class="col-12">
-                        <ValidationProvider class="d-block group" name="Subject name" rules="required" v-slot="{ errors }">
+                        <ValidationProvider name="Subject name" rules="required" v-slot="{ errors }">
                             <div class="group" :class="{ 'invalid-form' : errors[0] }">
                                 <label for="" class="d-block mb-2 dashboard-label">Subject name</label>
                                 <input type="text" v-model="subject" class="dashboard-input w-100">
                                 <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                             </div>
                         </ValidationProvider>
+                        <div class="group">
+                            <label for="" class="d-block mb-2 dashboard-label">Assign To</label>
+                            <m-select :options="users" object item-text="name" item-value="id" v-model="assignTo"></m-select>
+                        </div>
                         <ValidationProvider class="d-block group" name="Queries or Issues" rules="required" v-slot="{ errors }">
                             <div class="group" :class="{ 'invalid-form' : errors[0] }">
                                 <label for="" class="d-block mb-2 dashboard-label">Queries or Issues</label>
@@ -33,20 +37,22 @@
 </template>
 
 <script>
-export default {
+ export default {
     props: [
-        'orderId', 'showIssueModal'
+        'orderId', 'showIssueModal', 'users'
     ],
     data: () => ({
         id: '',
         subject: '',
-        issue: ''
+        issue: '',
+        assignTo: ''
     }),
     watch: {
         showIssueModal(newValue, oldValue) {
             if (newValue === true) {
                 this.subject = ''
                 this.issue = ''
+                this.assignTo = ''
                 this.$bvModal.show('add-issue-modal')
             } else {
                 this.$bvModal.hide('add-issue-modal')
@@ -66,7 +72,8 @@ export default {
                 if (status) {
                     let data = {
                         subject: this.subject,
-                        issue: this.issue
+                        issue: this.issue,
+                        assignTo: this.assignTo
                     }
                     axios.post('issue/' + this.id, data)
                         .then(res => {
@@ -87,5 +94,4 @@ export default {
         },
     }
 }
-
 </script>
