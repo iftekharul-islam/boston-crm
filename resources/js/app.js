@@ -67,7 +67,6 @@ const app = new Vue({
     },
     created() {
         axios.get('auth-user').then((res)=>{
-            console.log('res', res)
             this.user = res.data
             if(this.user){
                 this.listener()

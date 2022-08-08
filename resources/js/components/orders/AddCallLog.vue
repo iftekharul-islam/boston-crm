@@ -16,6 +16,15 @@
                             <m-select :options="templates" object item-text="title" item-value="message" v-model="message"></m-select>
                         </div>
                     </div>
+                    <div class="col-12 mt-2" v-if="template.save">
+                        <ValidationProvider class="d-block group" name="Title" :rules="{'required': template.save}" v-slot="{ errors }">
+                            <div class="group" :class="{ 'invalid-form' : errors[0] }">
+                                <label for="" class="d-block mb-2 dashboard-label">Title</label>
+                                <input type="text" v-model="template.title" placeholder="Enter title..." class="dashboard-input w-100">
+                                <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                            </div>
+                        </ValidationProvider>
+                    </div>
                     <div class="col-12 mt-2">
                         <ValidationProvider class="d-block group" name="Message" rules="required" v-slot="{ errors }">
                             <div class="group" :class="{ 'invalid-form' : errors[0] }">
@@ -26,6 +35,12 @@
                                 <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                             </div>
                         </ValidationProvider>
+                    </div>
+                    <div class="col-12">
+                        <div class="checkbox-group review-check mgt-20">
+                            <input type="checkbox" class="checkbox-input check-data" v-model="template.save">
+                            <label for="" class="checkbox-label text-capitalize">Save as Template </label>
+                        </div>
                     </div>
                     <div class="col-12" v-if="!notCompleted">
                         <div class="checkbox-group review-check mgt-20">
@@ -43,6 +58,7 @@
     </ValidationObserver>
 </template>
 
+
 <script>
 export default {
     props: [
@@ -54,7 +70,11 @@ export default {
         assignTo: '',
         notCompleted: true,
         complete: null,
-        templates: []
+        templates: [],
+        template: {
+            save: false,
+            title: ''
+        }
     }),
     watch: {
         showModal(newValue, oldValue) {
@@ -62,6 +82,9 @@ export default {
                 this.message = ''
                 this.assignTo = ''
                 this.complete = null
+                this.template.save = false
+                this.template.title = ''
+                this.updateTemplate()
                 this.notCompleted = this.isCompleted
                 this.$bvModal.show('add-call-log')
             } else {
@@ -93,7 +116,9 @@ export default {
                     let data = {
                         message: this.message,
                         caller_id: this.assignTo,
-                        status: this.complete
+                        status: this.complete,
+                        template: this.template.save,
+                        title: this.template.title
                     }
                     axios.post('call-log/' + this.id, data)
                         .then(res => {

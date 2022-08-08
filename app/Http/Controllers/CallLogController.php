@@ -13,6 +13,7 @@ use App\Repositories\OrderRepository;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use SebastianBergmann\Template\Template;
 
 class CallLogController extends Controller
 {
@@ -59,13 +60,19 @@ class CallLogController extends Controller
         $log->status = $request->status;
         $log->save();
 
+        if($request->template) {
+            $template = new LogTemplate();
+            $template->title = $request->title;
+            $template->message = $request->message;
+            $template->save();
+        }
+
         $msg = 'Call log created successfully';
         $historyTitle = 'Call log created with text : '. $log->message;
         if($log->status){
             $msg = 'Call log completed successfully';
             $historyTitle = 'Call log completed with text : '. $log->message;
         }
-
         $data = [
             "activity_text" => $msg,
             "activity_by" => Auth::id(),
@@ -75,12 +82,14 @@ class CallLogController extends Controller
         $this->repository->addActivity($data);
         $this->addHistory($order, $user, $historyTitle, 'call-log');
 
+        $templates = LogTemplate::all();
         $orderData = $this->orderDetails($id);
         return [
             'error' => false,
             'message' => 'Call log created successfully',
             'status' => 'success',
-            'data' => $orderData
+            'data' => $orderData,
+            "templates" => $templates
         ];
     }
 
@@ -113,6 +122,15 @@ class CallLogController extends Controller
         $log->message = $request->message;
         $log->status = $request->status;
         $log->save();
+
+        if($request->template) {
+            $template = new LogTemplate();
+            $template->title = $request->title;
+            $template->message = $request->message;
+            $template->save();
+        }
+
+        $templates = LogTemplate::all();
 
         $msg = 'Call log updated successfully';
         $historyTitle = 'Call log updated with text : '. $log->message;
@@ -147,7 +165,9 @@ class CallLogController extends Controller
             'status' => 'success',
             'data' => $logData,
             'order' => $order,
-            'filterValue' => $filterValue
+            'filterValue' => $filterValue,
+            "templates" => $templates
+
         ];
     }
 

@@ -296,25 +296,43 @@
                         </div>
                     </div>
                     <!-- message box -->
-                    <div class="update-log">
-                        <div class="group">
-                            <label class="d-block mb-2 dashboard-label">Template</label>
-                            <m-select :options="templates" object item-text="title" item-value="message" v-model="callLog.message"></m-select>
+                    <ValidationObserver ref="addCallLogForm">
+                        <div class="update-log">
+                            <div class="group">
+                                <label class="d-block mb-2 dashboard-label">Template</label>
+                                <m-select :options="templates" object item-text="title" item-value="message" v-model="callLog.message"></m-select>
+                            </div>
+                            <div v-if="template.save">
+                                <ValidationProvider class="d-block group" name="title" :rules="{'required': template.save}" v-slot="{ errors }">
+                                    <div class="group" :class="{ 'invalid-form' : errors[0] }">
+                                        <label for="" class="d-block mb-2 dashboard-label">Title</label>
+                                        <input type="text" v-model="template.title" placeholder="Enter title..." class="dashboard-input w-100">
+                                        <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                                    </div>
+                                </ValidationProvider>
+                            </div>
+                            <ValidationProvider class="d-block group" name="Message" rules="required" v-slot="{ errors }">
+                                <div class="group" :class="{ 'invalid-form' : errors[0] }">
+                                    <label for="" class="d-block mb-2 dashboard-label">Message</label>
+                                    <b-form-textarea v-model="callLog.message" placeholder="Enter Message..." rows="2"
+                                                     cols="5">
+                                    </b-form-textarea>
+                                    <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                                </div>
+                            </ValidationProvider>
+                            <div class="checkbox-group mt-2">
+                                <input type="checkbox" class="checkbox-input" v-model="template.save" >
+                                <label for="" class="checkbox-label">Save as Template </label>
+                            </div>
+                            <div class="checkbox-group mt-2" v-if="callLog.notCompleted">
+                                <input type="checkbox" class="checkbox-input" v-model="callLog.status">
+                                <label for="" class="checkbox-label">Call completed</label>
+                            </div>
                         </div>
-                        <div class="group" :class="{ 'invalid-form' : callLog.error == true }">
-                            <label for="" class="d-block mb-2 dashboard-label">Message</label>
-                            <textarea @keyup="dataExist()" v-model.trim="callLog.message" class="dashboard-input w-100"
-                                style="min-height: 100px"></textarea>
-                            <span v-if="callLog.error" class="error-message">The Message field is required</span>
+                        <div class="modal-footer">
+                            <button type="button" class="button button-primary px-5" @click="addCallLog()">Post</button>
                         </div>
-                        <div class="checkbox-group mt-2" v-if="callLog.notCompleted">
-                            <input type="checkbox" class="checkbox-input" v-model="callLog.status">
-                            <label for="" class="checkbox-label">Call completed</label>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="button button-primary px-5" @click="addCallLog()">Post</button>
-                    </div>
+                    </ValidationObserver>
                 </div>
             </div>
         </div>
@@ -342,6 +360,11 @@
         },
         data: () => ({
             templates: [],
+            template: {
+                save: false,
+                title: '',
+                titleValidate: false
+            },
             filterValues: [],
             openCallNumber: false,
             contact_number_s: [],
@@ -533,30 +556,35 @@
                 }
             },
             addCallLog() {
-                this.callLog.error = false
-                if (this.callLog.message == '') {
-                    this.callLog.error = true
-                    return
-                }
-                let data = {
-                    message: this.callLog.message,
-                    status: this.callLog.status,
-                    filter: this.pages.filterType
-                }
-                axios.post('call-log-update/' + this.callLog.orderId, data)
-                    .then(res => {
-                        this.callLog.error = false
-                        this.callLog.message = ''
-                        this.callLog.status = ''
-                        this.toastMessage(res.data.message, res.data.error)
-                        if (res.data.data) {
-                            this.getCallSummary(res.data.data, this.callLog.orderId, this.callLog.order_no, this.callLog.address)
+                this.$refs.addCallLogForm.validate().then((status) => {
+                    if (status) {
+                        let data = {
+                            message: this.callLog.message,
+                            status: this.callLog.status,
+                            filter: this.pages.filterType,
+                            template: this.template.save,
+                            title: this.template.title
                         }
-                        this.initOrder(res.data.order)
-                        this.filterValues = res.data.filterValue
-                    }).catch(err => {
-                        console.log(err)
-                    })
+                        axios.post('call-log-update/' + this.callLog.orderId, data)
+                            .then(res => {
+                                console.log(res)
+                                this.callLog.message = ''
+                                this.callLog.status = ''
+                                this.template.save = false
+                                this.template.title = ''
+                                this.$refs.addCallLogForm.reset()
+                                this.templates = res.data.templates
+                                this.toastMessage(res.data.message, res.data.error)
+                                if (res.data.data) {
+                                    this.getCallSummary(res.data.data, this.callLog.orderId, this.callLog.order_no, this.callLog.address)
+                                }
+                                this.initOrder(res.data.order)
+                                this.filterValues = res.data.filterValue
+                            }).catch(err => {
+                            console.log(err)
+                        })
+                    }
+                })
             },
             toastMessage(msg, status) {
                 this.$toast.open({
