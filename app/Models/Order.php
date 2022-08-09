@@ -12,6 +12,7 @@ use App\Models\OrderWRewrite;
 use App\Models\OrderWRevision;
 use App\Models\AppraisalDetail;
 use App\Models\ProvidedService;
+use Carbon\Carbon;
 use Spatie\MediaLibrary\HasMedia;
 use App\Models\OrderWInitialReview;
 use App\Models\OrderWReportAnalysis;
@@ -26,7 +27,7 @@ class Order extends Model implements HasMedia
 
     protected $table = 'orders';
 
-    protected $appends = ['order_file_types', 'order_status', 'selected', 'extra_data'];
+    protected $appends = ['order_file_types', 'order_status', 'selected', 'extra_data', 'call_date_formatted'];
 
     protected $casts = [
       'due_date' => 'date:d M Y',
@@ -96,6 +97,10 @@ class Order extends Model implements HasMedia
 
     public function getSelectedAttribute(){
         return false;
+    }
+
+    public function getCallDateFormattedAttribute(){
+        return Carbon::parse($this->call_date)->format('d M Y h:i A');
     }
 
     /**

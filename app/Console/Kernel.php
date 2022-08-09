@@ -16,6 +16,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
          $schedule->command('dailyReport:run')->daily();
+         $schedule->command('callReminder:run')->daily();
         // $schedule->command('inspire')->hourly();
     }
 

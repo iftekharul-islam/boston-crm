@@ -338,12 +338,6 @@ Route::post('check/client/order/no', [OrderWorkflowController::class, 'checkClie
 Route::get('/auth-user', [UserController::class, 'authUser']);
 Route::get('/user-list', [UserController::class, 'userList']);
 
-Route::get('/notification', function () {
-    return view('notification');
-});
-
-Route::get('send',[PusherNotificationController::class, 'notification']);
-
 Route::get('/event',function () {
     event(new Notify('Hey how are you!', 2));
 });
