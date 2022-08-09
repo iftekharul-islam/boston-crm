@@ -44,7 +44,7 @@
                                         </div>
                                         <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                                         <span v-if="dateIssue.status" class="error-message">{{ dateIssue.message
-                                        }}</span>
+                                            }}</span>
                                     </div>
                                 </ValidationProvider>
 
@@ -185,7 +185,7 @@
                                                         <option value="">Choose Type</option>
                                                         <option :value="item.id" :data-full="item.is_full_appraisal"
                                                             :key="ki" v-for="item, ki in appraisalTypes">{{
-                                                                    item.form_type
+                                                            item.form_type
                                                             }}</option>
                                                     </select>
                                                     <span class="icon-arrow-down bottom-arrow-icon"></span>
@@ -220,7 +220,7 @@
                             </div>
                             <h3 class="text-light-black fw-bold mgt-40">Total fee : <span> $ {{
                                     providerTypes.totalAmount
-                            }} </span></h3>
+                                    }} </span></h3>
                         </div>
                     </div>
                 </div>
@@ -229,13 +229,14 @@
                 <div class="col-md-4">
                     <div class="form-box h-100 box-flex">
                         <div class="row">
-                            <div class="col-md-7">
+                            <div class="col-md-8">
                                 <h4 class="box-header mb-3">Client info</h4>
                             </div>
-                            <!-- <div class="col-md-5">
-                                <button type="button" class="button button-primary" @click.prevent="addClientModal">Add
-                                    Client</button>
-                            </div> -->
+                            <div class="col-md-4">
+                                <button type="button" class="ml-2 p-2 button button-primary"
+                                    @click.prevent="addClientModal">Add
+                                    client</button>
+                            </div>
                         </div>
                         <ValidationProvider class="group" name="AMC name" rules="required" v-slot="{ errors }">
                             <div class="group" :class="{ 'invalid-form': errors[0] }">
@@ -277,7 +278,7 @@
                                         <option :value="item.id" :key="ik" v-for="item, ik in lenderClients"
                                             :data-uad="item.fee_for_1004uad" :data-d="item.fee_for_1004d"
                                             :data-processing="item.processing_fee">{{
-                                                    item.name
+                                            item.name
                                             }}</option>
                                     </select>
                                     <span class="icon-arrow-down bottom-arrow-icon"></span>
@@ -672,7 +673,7 @@
                                                             :class="errors[0] ? 'border border-danger' : ''">
                                                             <option value="">Select an option</option>
                                                             <option value="1">Yes</option>
-                                                            <option value="0">N/A</option>
+                                                            <option value="0">No</option>
                                                         </select>
                                                         <span class="icon-arrow-down bottom-arrow-icon"></span>
                                                     </div>
@@ -691,7 +692,7 @@
                                                             :class="errors[0] ? 'border border-danger' : ''">
                                                             <option value="">Select an option</option>
                                                             <option value="1">Yes</option>
-                                                            <option value="0">N/A</option>
+                                                            <option value="0">No</option>
                                                         </select>
                                                         <span class="icon-arrow-down bottom-arrow-icon"></span>
                                                     </div>
@@ -724,752 +725,753 @@
 </template>
 
 <script>
-import StreetAddress from "./StreetAddress";
-export default {
-    name: "Step1",
-    components: {
-        StreetAddress
-    },
-    props: {
-        order: [],
-        systemOrderNo: String,
-        orderListUrl: String,
-        appraisalUsers: [],
-        appraisalTypes: [],
-        loanTypes: [],
-        type: null,
-        amcClients: [],
-        lenderClients: [],
-        propertyTypes: []
-    },
-    data() {
-        return {
-            client: {
-                name: '',
-                email: [],
-                phone: [],
-                client_type: '',
-                address: '',
-                city: '',
-                state: '',
-                zip: '',
-                country: '',
-                fee_for_1004uad: '',
-                fee_for_1004d: '',
-                deducts_technology_fee: '',
-                can_sign: '',
-                can_inspect: '',
-            },
-            submitted: false,
-            oldOrderNo: {
-                find: false,
-                message: null
-            },
-            fhaExists: 0,
-            showStreetAddress: false,
-            streetAddress: [],
-            dateIssue: {
-                status: false,
-                message: "Received Date Must Be Smaller Than Due Date"
-            },
-            invalidPhone1: null,
-            invalidPhone2: null,
-            submitAction: false,
-            stepActive: false,
-            proviedServicePass: false,
-            step1: {
-                county: '',
-                unitNo: '',
-                clientOrderNo: '',
-                systemOrder: '',
-                loanNo: '',
-                loanType: '',
-                receiveDate: '',
-                technologyFee: 0,
-                fhaCaseNo: '',
-                propertyType: '',
-                appraiserName: null,
-                dueDate: '',
-                appraiserType: '',
-                amcClient: '',
-                lender: '',
-                fee: [],
-                note: '',
-                searchAddress: '',
-                formatedAddress: '',
-                state: '',
-                city: '',
-                street: null,
-                zipcode: null,
-                country: null,
-                lat: null,
-                lng: null,
-            },
-            searchIngAddress: null,
-            //All Msg Property
-            clientOrderErrorMsg: '',
-            fahCaseNoErrorMsg: '',
-            condoType: false,
-            providerTypes: {
-                default: {
-                    type: "",
-                    fee: null,
+    import StreetAddress from "./StreetAddress";
+    export default {
+        name: "Step1",
+        components: {
+            StreetAddress
+        },
+        props: {
+            order: [],
+            systemOrderNo: String,
+            orderListUrl: String,
+            appraisalUsers: [],
+            appraisalTypes: [],
+            loanTypes: [],
+            type: null,
+            amcClients: [],
+            lenderClients: [],
+            propertyTypes: []
+        },
+        data() {
+            return {
+                client: {
+                    name: '',
+                    email: [],
+                    phone: [],
+                    client_type: '',
+                    address: '',
+                    city: '',
+                    state: '',
+                    zip: '',
+                    country: '',
+                    fee_for_1004uad: '',
+                    fee_for_1004d: '',
+                    deducts_technology_fee: '',
+                    can_sign: '',
+                    can_inspect: '',
                 },
-                error: {
-                    type: false,
-                    fee: false
+                submitted: false,
+                oldOrderNo: {
+                    find: false,
+                    message: null
                 },
-                extra: [],
-                totalAmount: 0
-            },
-            mapData: {
-                address: null,
-                map: null,
-                center: { lat: -25.308, lng: 133.036 },
-                currentPlace: null,
-                markerIcon: "",
-                data: [],
-            },
-            processingFee: 0,
-            emailCount: 1,
-            phoneCount: 1,
-            phones: [{
-                value: ''
-            }],
-            emails: [{
-                value: ''
-            }]
+                fhaExists: 0,
+                showStreetAddress: false,
+                streetAddress: [],
+                dateIssue: {
+                    status: false,
+                    message: "Received Date Must Be Smaller Than Due Date"
+                },
+                invalidPhone1: null,
+                invalidPhone2: null,
+                submitAction: false,
+                stepActive: false,
+                proviedServicePass: false,
+                step1: {
+                    county: '',
+                    unitNo: '',
+                    clientOrderNo: '',
+                    systemOrder: '',
+                    loanNo: '',
+                    loanType: '',
+                    receiveDate: '',
+                    technologyFee: 0,
+                    fhaCaseNo: '',
+                    propertyType: '',
+                    appraiserName: null,
+                    dueDate: '',
+                    appraiserType: '',
+                    amcClient: '',
+                    lender: '',
+                    fee: [],
+                    note: '',
+                    searchAddress: '',
+                    formatedAddress: '',
+                    state: '',
+                    city: '',
+                    street: null,
+                    zipcode: null,
+                    country: null,
+                    lat: null,
+                    lng: null,
+                },
+                searchIngAddress: null,
+                //All Msg Property
+                clientOrderErrorMsg: '',
+                fahCaseNoErrorMsg: '',
+                condoType: false,
+                providerTypes: {
+                    default: {
+                        type: "",
+                        fee: null,
+                    },
+                    error: {
+                        type: false,
+                        fee: false
+                    },
+                    extra: [],
+                    totalAmount: 0
+                },
+                mapData: {
+                    address: null,
+                    map: null,
+                    center: { lat: -25.308, lng: 133.036 },
+                    currentPlace: null,
+                    markerIcon: "",
+                    data: [],
+                },
+                processingFee: 0,
+                emailCount: 1,
+                phoneCount: 1,
+                phones: [{
+                    value: ''
+                }],
+                emails: [{
+                    value: ''
+                }]
 
-        }
-    },
-    created() {
-        this.step1.systemOrder = this.systemOrderNo;
-
-        if (this.type == 2) {
-            this.setOrderValue();
-        }
-
-        this.$root.$on('orderSubmitConfirm', (status) => {
-            this.removeDataValue();
-        });
-    },
-    mounted() {
-        this.geolocate();
-        $('select').select2();
-        this.select2Features();
-
-        $(document).on('click', '.phone-button', function () {
-            let button_id = $(this).attr("id");
-            $('#phone-' + button_id + '').remove();
-        });
-        $(document).on('click', '.email-button', function () {
-            let button_id = $(this).attr("id");
-            $('#email-' + button_id + '').remove();
-        });
-    },
-    methods: {
-        numbersOnly(e) {
-            return e.charCode >= 48 && e.charCode <= 57;
-        },
-        formatPhoneNo(e, index) {
-            let phoneNo = e.target.value
-            e.target.value = this.$boston.formatPhoneNo(phoneNo)
-        },
-        addClientModal() {
-            this.$bvModal.show('add-client');
-        },
-        getFile(event) {
-            this.instruction = event.target.files[0]
-        },
-        addEmail() {
-            this.emails.push({
-                value: ''
-            })
-        },
-        addPhone() {
-            this.phones.push({
-                value: ''
-            })
-        },
-        removeItem(index, type) {
-            if (type == 'email') {
-                this.emails.splice(index, 1)
-            } else {
-                this.phones.splice(index, 1)
             }
         },
-        saveClient() {
-            if (this.client.email.length == 0 || this.client.email[0] == '') {
-                this.$toast.open({
-                    message: "Minimum 1 email address is required",
-                    type: 'error',
-                });
+        created() {
+            this.step1.systemOrder = this.systemOrderNo;
+
+            if (this.type == 2) {
+                this.setOrderValue();
             }
-            if (this.client.phone.length == 0 || this.client.phone[0] == '') {
-                this.$toast.open({
-                    message: "Minimum 1 phone number is required",
-                    type: 'error',
-                });
-            }
-            this.$refs.addClientForm.validate().then((status) => {
-                if (status) {
-                    this.$boston.post('clients', this.client)
-                        .then(res => {
-                            console.log(res)
-                            this.$toast.open({
-                                message: res.message,
-                                type: res.error == true ? 'error' : 'success',
-                            })
-                            // this.client = {}
-                            //this.$bvModal.hide('add-client')
-                        })
-                        .catch(err => {
-                            console.error(err)
-                        })
-                }
-            })
-        },
-        loanTypeChange() {
-            let fhaExistData = this.loanTypes.filter((item) => {
-                if (item.id == this.step1.loanType) {
-                    return item;
-                }
+
+            this.$root.$on('orderSubmitConfirm', (status) => {
+                this.removeDataValue();
             });
-            if (fhaExistData.length > 0) {
-                this.fhaExists = fhaExistData[0].is_fha
-            }
         },
-        updateLoanType(event) {
-            this.step1.loanType = null
+        mounted() {
+            this.geolocate();
+            $('select').select2();
+            this.select2Features();
         },
-        select2Features() {
-            $(document).on("change", "#providerTypeFee", function (e) {
-                let value = e.target.value;
-                this.providerTypes.default.type = value;
-                this.checkProviderValidation(e, 1);
-                this.calculateTechnologyFeeOnProviderChange()
-            }.bind(this));
-            $("#propertyTypeSelect").on("select2:select", function (e) {
-                let value = e.target.value;
-                this.step1.propertyType = value;
-            }.bind(this));
-
-            $("#loanTypeSelect").on("select2:select", function (e) {
-                let value = e.target.value;
-                this.step1.loanType = value;
-                this.fhaExists = e.target.selectedOptions[0].dataset.fha;
-            }.bind(this));
-
-            $(document).on("change", "#amcClientSelect", function (e) {
-                let changeLender = false;
-                let id = e.target.value;
-                this.step1.amcClient = id;
-                let findObject = this.amcClients.find(ele => ele.id == id);
-                if (findObject && findObject.client_type == "both") {
-                    this.step1.lender = id;
-                    changeLender = true;
+        methods: {
+            numbersOnly(e) {
+                return e.charCode >= 48 && e.charCode <= 57;
+            },
+            formatPhoneNo(e, index) {
+                let phoneNo = e.target.value
+                e.target.value = this.$boston.formatPhoneNo(phoneNo)
+            },
+            addClientModal() {
+                this.$bvModal.show('add-client');
+            },
+            getFile(event) {
+                this.instruction = event.target.files[0]
+            },
+            addEmail() {
+                this.emails.push({
+                    value: ''
+                })
+            },
+            addPhone() {
+                this.phones.push({
+                    value: ''
+                })
+            },
+            removeItem(index, type) {
+                if (type == 'email') {
+                    this.emails.splice(index, 1)
                 } else {
-                    let checkAmcId = this.lenderClients.find(ele => ele.id == this.step1.lender);
-                    if (checkAmcId && checkAmcId.client_type == "both") {
-                        this.step1.lender = null;
-                        changeLender = true;
+                    this.phones.splice(index, 1)
+                }
+            },
+            saveClient() {
+                if (this.client.email.length == 0 || this.client.email[0] == '') {
+                    this.showErrorMessage('required', 'Email')
+                }
+                if (this.client.phone.length == 0 || this.client.phone[0] == '') {
+                    this.showErrorMessage('required', 'Phone')
+                }
+                this.$refs.addClientForm.validate().then((status) => {
+                    if (status) {
+                        this.$boston.post('clients', this.client)
+                            .then(res => {
+                                console.log(res)
+                                this.$toast.open({
+                                    message: res.message,
+                                    type: res.error == true ? 'error' : 'success',
+                                })
+                                if(res.error == false) {
+                                    this.$bvModal.hide('add-client')
+                                }
+                            })
+                            .catch(err => {
+                                console.error(err)
+                            })
                     }
+                })
+            },
+            showErrorMessage(type, field) {
+                if (type == 'required') {
+                    this.$toast.open({
+                        message: "Minimum 1 " + field + " is required",
+                        type: 'error',
+                    })
                 }
-                if (changeLender) {
-                    $("#lenderClientSelect").val(this.step1.lender).trigger('change');
+                if (type == 'invalid') {
+                    this.$toast.open({
+                        message: field + " cannot be empty !",
+                        type: 'error',
+                    })
                 }
-                this.calculateTechnologyFee(e)
+            },
+            loanTypeChange() {
+                let fhaExistData = this.loanTypes.filter((item) => {
+                    if (item.id == this.step1.loanType) {
+                        return item;
+                    }
+                });
+                if (fhaExistData.length > 0) {
+                    this.fhaExists = fhaExistData[0].is_fha
+                }
+            },
+            updateLoanType(event) {
+                this.step1.loanType = null
+            },
+            select2Features() {
+                $(document).on("change", "#providerTypeFee", function (e) {
+                    let value = e.target.value;
+                    this.providerTypes.default.type = value;
+                    this.checkProviderValidation(e, 1);
+                    this.calculateTechnologyFeeOnProviderChange()
+                }.bind(this));
+                $("#propertyTypeSelect").on("select2:select", function (e) {
+                    let value = e.target.value;
+                    this.step1.propertyType = value;
+                }.bind(this));
 
-            }.bind(this));
+                $("#loanTypeSelect").on("select2:select", function (e) {
+                    let value = e.target.value;
+                    this.step1.loanType = value;
+                    this.fhaExists = e.target.selectedOptions[0].dataset.fha;
+                }.bind(this));
 
-            $("#lenderClientSelect").on("select2:select", function (e) {
-                var data = e.params.data;
-                let id = data.id;
-                this.step1.lender = id;
-                let changeLender = false;
-                let findObject = this.lenderClients.find(ele => ele.id == id);
-                if (findObject && findObject.client_type == "both") {
+                $(document).on("change", "#amcClientSelect", function (e) {
+                    let changeLender = false;
+                    let id = e.target.value;
                     this.step1.amcClient = id;
-                    changeLender = true;
+                    let findObject = this.amcClients.find(ele => ele.id == id);
+                    if (findObject && findObject.client_type == "both") {
+                        this.step1.lender = id;
+                        changeLender = true;
+                    } else {
+                        let checkAmcId = this.lenderClients.find(ele => ele.id == this.step1.lender);
+                        if (checkAmcId && checkAmcId.client_type == "both") {
+                            this.step1.lender = null;
+                            changeLender = true;
+                        }
+                    }
+                    if (changeLender) {
+                        $("#lenderClientSelect").val(this.step1.lender).trigger('change');
+                    }
                     this.calculateTechnologyFee(e)
-                } else {
-                    let checkAmcId = this.amcClients.find(ele => ele.id == this.step1.amcClient);
-                    if (checkAmcId && checkAmcId.client_type == "both") {
-                        this.step1.amcClient = null;
+
+                }.bind(this));
+
+                $("#lenderClientSelect").on("select2:select", function (e) {
+                    var data = e.params.data;
+                    let id = data.id;
+                    this.step1.lender = id;
+                    let changeLender = false;
+                    let findObject = this.lenderClients.find(ele => ele.id == id);
+                    if (findObject && findObject.client_type == "both") {
+                        this.step1.amcClient = id;
                         changeLender = true;
                         this.calculateTechnologyFee(e)
-                    }
-                }
-                if (changeLender) {
-                    $("#amcClientSelect").val(this.step1.amcClient).trigger('change');
-                }
-            }.bind(this));
-
-            $(document).on("change", "#apprClientSelect", function (e) {
-                let value = e.target.value;
-                this.step1.appraiserName = value;
-            }.bind(this));
-        },
-        stepChangeActive() {
-            this.$emit('step-change-active', {
-                status: this.stepActive,
-                data: this.step1
-            });
-        },
-
-        nextStep() {
-            this.$refs.orderForm.validate().then((status) => {
-                if (status && this.providerTypes.extra.length && !this.dateIssue.status) {
-                    this.stepActive = true;
-                    this.stepChangeActive();
-                } else {
-                    if (!this.providerTypes.extra.length) {
-                        let newType = this.providerTypes.default.type;
-                        let newFee = this.providerTypes.default.fee;
-                        this.providerTypes.error.type = false;
-                        this.providerTypes.error.fee = false;
-                        if (newType == null || newType == "") {
-                            this.providerTypes.error.type = true;
-                        }
-                        if (newFee == null) {
-                            this.providerTypes.error.fee = true;
+                    } else {
+                        let checkAmcId = this.amcClients.find(ele => ele.id == this.step1.amcClient);
+                        if (checkAmcId && checkAmcId.client_type == "both") {
+                            this.step1.amcClient = null;
+                            changeLender = true;
+                            this.calculateTechnologyFee(e)
                         }
                     }
-                    $("html, body").animate({ scrollTop: 0 }, 300);
-                }
-            });
-        },
-
-        validateData() {
-            let errorCount = 0;
-            if (this.clientOrderNo.length === 0) {
-                errorCount++;
-                this.clientOrderErrorMsg = 'Client Order No Required';
-            }
-            return !errorCount >= 0;
-        },
-        resetAllErrorMsg() {
-            this.clientOrderErrorMsg = '';
-            this.fahCaseNoErrorMsg = '';
-        },
-        addFee() {
-            let newType = this.providerTypes.default.type;
-            let newFee = this.providerTypes.default.fee;
-            this.providerTypes.error.type = false;
-            this.providerTypes.error.fee = false;
-            if (newType == null || newType == "") {
-                this.providerTypes.error.type = true;
-            }
-            if (newFee == null) {
-                this.providerTypes.error.fee = true;
-            }
-
-            if (newType && newFee) {
-                this.setNewFee(newType, newFee);
-            }
-        },
-
-        setNewFee(newType, newFee) {
-            let appType = newType;
-            if (newType.id) {
-                appType = newType;
-            } else {
-                for (let i in this.appraisalTypes) {
-                    let appritem = this.appraisalTypes[i];
-                    if (appritem.id == newType) {
-                        appType = appritem;
+                    if (changeLender) {
+                        $("#amcClientSelect").val(this.step1.amcClient).trigger('change');
                     }
-                }
-            }
+                }.bind(this));
 
-            if (appType.condo_type == 1) {
-                this.condoType = true;
-            }
-            let checkOld = (this.providerTypes.extra).find((ele) => ele.typeId == appType.id);
-            if (!checkOld && appType.id) {
-                this.providerTypes.extra.push({
-                    typeId: appType.id,
-                    type: appType.form_type,
-                    fee: newFee,
-                    full: appType.is_full_appraisal
+                $(document).on("change", "#apprClientSelect", function (e) {
+                    let value = e.target.value;
+                    this.step1.appraiserName = value;
+                }.bind(this));
+            },
+            stepChangeActive() {
+                this.$emit('step-change-active', {
+                    status: this.stepActive,
+                    data: this.step1
                 });
-            }
+            },
 
-            this.providerTypes.default.type = null;
-            this.providerTypes.default.fee = null;
-            this.providerTypes.error.type = false;
-            this.providerTypes.error.fee = false;
+            nextStep() {
+                this.$refs.orderForm.validate().then((status) => {
+                    if (status && this.providerTypes.extra.length && !this.dateIssue.status) {
+                        this.stepActive = true;
+                        this.stepChangeActive();
+                    } else {
+                        if (!this.providerTypes.extra.length) {
+                            let newType = this.providerTypes.default.type;
+                            let newFee = this.providerTypes.default.fee;
+                            this.providerTypes.error.type = false;
+                            this.providerTypes.error.fee = false;
+                            if (newType == null || newType == "") {
+                                this.providerTypes.error.type = true;
+                            }
+                            if (newFee == null) {
+                                this.providerTypes.error.fee = true;
+                            }
+                        }
+                        $("html, body").animate({ scrollTop: 0 }, 300);
+                    }
+                });
+            },
 
-            $("#providerTypeFee").val(this.providerTypes.default.type).trigger('change');
-            this.checkProviderBalance();
-            this.calculateTechnologyFeeOnProviderChange()
-            this.$root.$emit("updateProviderData", this.providerTypes);
-        },
-
-        checkProviderBalance() {
-            let totalfee = 0;
-            let checkCondoType = false;
-            this.providerTypes.extra.map((ele) => {
-                totalfee += parseFloat(ele.fee);
-                let checkCondo = Object.values(this.appraisalTypes).find(eles => eles.id == ele.typeId);
-                if (checkCondo && checkCondo.condo_type == 1) {
-                    checkCondoType = true;
+            validateData() {
+                let errorCount = 0;
+                if (this.clientOrderNo.length === 0) {
+                    errorCount++;
+                    this.clientOrderErrorMsg = 'Client Order No Required';
                 }
-            });
-            this.providerTypes.totalAmount = totalfee;
-            this.condoType = checkCondoType;
-
-            if (this.providerTypes.extra.length <= 0) {
-                this.providerTypes.error.type = true;
-                this.providerTypes.error.fee = true;
-            }
-        },
-
-        checkProviderValidation(event, type) {
-            if (type == 2 && this.providerTypes.default.type != null) {
+                return !errorCount >= 0;
+            },
+            resetAllErrorMsg() {
+                this.clientOrderErrorMsg = '';
+                this.fahCaseNoErrorMsg = '';
+            },
+            addFee() {
+                let newType = this.providerTypes.default.type;
+                let newFee = this.providerTypes.default.fee;
                 this.providerTypes.error.type = false;
-            }
-            if (type == 1 && this.providerTypes.default.fee != null) {
                 this.providerTypes.error.fee = false;
-            }
-        },
-        //technologyFee caculation
-        calculateTechnologyFee(e) {
-            let uad = e.target.selectedOptions[0].dataset.uad
-            let d = e.target.selectedOptions[0].dataset.d
-            this.processingFee = e.target.selectedOptions[0].dataset.processing
-            if (this.providerTypes.extra.length > 0) {
-                this.providerTypes.extra[0].full == 1 ? this.step1.technologyFee = uad : this.step1.technologyFee = d
-            }
-            if (this.processingFee > 0) {
-                let technologyFee = parseFloat(parseFloat(this.step1.technologyFee) + parseFloat(this.providerTypes.totalAmount * (this.processingFee / 100)))
-                this.step1.technologyFee = parseFloat(technologyFee).toFixed(2)
-            }
-        },
-        calculateTechnologyFeeOnProviderChange() {
-            if (this.step1.amcClient != '') {
-                this.processingFee = $('#amcClientSelect').find(':selected').data('processing')
-            }
-            if (this.providerTypes.extra.length > 0 && this.providerTypes.extra[0].full == 1) {
-                this.step1.technologyFee = $('#amcClientSelect').find(':selected').data('uad')
-            } else {
-                this.step1.technologyFee = $('#amcClientSelect').find(':selected').data('d')
-            }
-            if (this.processingFee > 0) {
-                let technologyFee = parseFloat(parseFloat(this.step1.technologyFee) + parseFloat(this.providerTypes.totalAmount * (this.processingFee / 100)))
-                this.step1.technologyFee = parseFloat(technologyFee).toFixed(2)
-            }
-        },
-        remoteProviderType(item, index) {
-            this.providerTypes.extra.splice(index, 1);
-            if (this.providerTypes.extra.length == 0) {
-                this.providerTypes.totalAmount = 0;
-                this.condoType = false;
-                this.step1.technologyFee = 0
-            } else {
-                this.checkProviderBalance();
-            }
-        },
-        removeDataValue() {
-            let newData = [];
-            for (let i in this.step1) {
-                if (i == "technologyFee") {
-                    newData[i] = 10;
-                } else if (i == "fee") {
-                    newData[i] = [];
+                if (newType == null || newType == "") {
+                    this.providerTypes.error.type = true;
+                }
+                if (newFee == null) {
+                    this.providerTypes.error.fee = true;
+                }
+
+                if (newType && newFee) {
+                    this.setNewFee(newType, newFee);
+                }
+            },
+
+            setNewFee(newType, newFee) {
+                let appType = newType;
+                if (newType.id) {
+                    appType = newType;
                 } else {
-                    newData[i] = null;
-                }
-            }
-            this.step1 = newData;
-            this.providerTypes.extra = [];
-            this.providerTypes.totalAmount = 0;
-            this.$refs.orderForm.reset();
-        },
-        setOrderValue() {
-            let receivedDate = this.formateDate(this.order.received_date);
-            let dueDate = this.formateDate(this.order.due_date);
-            let step1 = {
-                clientOrderNo: this.order.client_order_no,
-                unitNo: this.order.property_info.unit_no,
-                systemOrder: this.order.system_order_no,
-                loanNo: this.order.appraisal_detail.loan_no,
-                loanType: this.order.appraisal_detail.loan_type,
-                receiveDate: receivedDate,
-                dueDate: dueDate,
-                technologyFee: this.order.appraisal_detail.technology_fee,
-                fhaCaseNo: this.order.appraisal_detail.fha_case_no,
-                propertyType: this.order.appraisal_detail.property_type,
-                appraiserName: this.order.appraisal_detail.appraiser_id,
-                appraiserType: '',
-                amcClient: this.order.amc.id,
-                lender: this.order.lender.id,
-                note: this.order.provider_service.note,
-                searchAddress: this.order.property_info.search_address,
-                state: this.order.property_info.state_name,
-                city: this.order.property_info.city_name,
-                street: this.order.property_info.street_name,
-                formatedAddress: this.order.property_info.formatedAddress,
-                zipcode: this.order.property_info.zip,
-                country: this.order.property_info.country,
-                county: this.order.property_info.county,
-                lat: this.order.property_info.latitude,
-                lng: this.order.property_info.longitude,
-            };
-
-            this.step1 = step1;
-            let setFee = JSON.parse(this.order.provider_service.appraiser_type_fee);
-            for (let i in setFee) {
-                let ele = setFee[i];
-                this.setNewFee(ele.typeId, ele.fee);
-            }
-            // this.searchIngAddress = this.order.property_info.formatedAddress;
-            let receivedDateFormated = new Date(receivedDate);
-            let dueDateFormated = new Date(dueDate);
-            if (receivedDateFormated > dueDateFormated) {
-                this.dateIssue.status = true;
-            }
-
-
-            // recalculate technology fee when edit second time
-            let getStepAmc = this.step1.amcClient;
-            let amcClients = this.amcClients.find(ele => ele.id == getStepAmc);
-            let dataUad = amcClients.fee_for_1004uad;
-            let dataD = amcClients.fee_for_1004d;
-            let dataProcessing = amcClients.processing_fee;
-
-            if (this.step1.amcClient != '') {
-                this.processingFee = dataProcessing;
-            }
-            if (this.providerTypes.extra.length > 0 && this.providerTypes.extra[0].full == 1) {
-                this.step1.technologyFee = dataUad;
-            } else {
-                this.step1.technologyFee = dataD;
-            }
-            if (this.processingFee > 0) {
-                let technologyFee = parseFloat(parseFloat(this.step1.technologyFee) + parseFloat(this.providerTypes.totalAmount * (this.processingFee / 100)))
-                this.step1.technologyFee = parseFloat(technologyFee).toFixed(2)
-            }
-        },
-
-        geolocate() {
-            this.mapData.markerIcon = this.$boston.host('img/marker.png');
-            this.mapData.map = new window.google.maps.Map(this.$refs['map'], {
-                center: this.center,
-                zoom: 7,
-                gestureHandling: 'greedy'
-            });
-            new window.google.maps.Marker({
-                position: this.center,
-                map: this.map,
-                icon: this.markerIcon
-            });
-
-            const input = this.$refs.searchMapLocation;
-            const searchBox = new window.google.maps.places.SearchBox(input);
-            this.mapData.map.controls[window.google.maps.ControlPosition.TOP_LEFT].push(input);
-            this.mapData.map.addListener("bounds_changed", () => {
-                searchBox.setBounds(this.mapData.map.getBounds());
-            });
-
-            searchBox.addListener("places_changed", () => {
-                const places = searchBox.getPlaces();
-                if (places.length == 0) {
-                    return;
+                    for (let i in this.appraisalTypes) {
+                        let appritem = this.appraisalTypes[i];
+                        if (appritem.id == newType) {
+                            appType = appritem;
+                        }
+                    }
                 }
 
+                if (appType.condo_type == 1) {
+                    this.condoType = true;
+                }
+                let checkOld = (this.providerTypes.extra).find((ele) => ele.typeId == appType.id);
+                if (!checkOld && appType.id) {
+                    this.providerTypes.extra.push({
+                        typeId: appType.id,
+                        type: appType.form_type,
+                        fee: newFee,
+                        full: appType.is_full_appraisal
+                    });
+                }
 
-                // For each place, get the icon, name and location.
-                const bounds = new window.google.maps.LatLngBounds();
-                let markers = [];
+                this.providerTypes.default.type = null;
+                this.providerTypes.default.fee = null;
+                this.providerTypes.error.type = false;
+                this.providerTypes.error.fee = false;
 
-                places.forEach((place) => {
-                    if (!place.geometry || !place.geometry.location) {
-                        console.error("Returned place contains no geometry");
+                $("#providerTypeFee").val(this.providerTypes.default.type).trigger('change');
+                this.checkProviderBalance();
+                this.calculateTechnologyFeeOnProviderChange()
+                this.$root.$emit("updateProviderData", this.providerTypes);
+            },
+
+            checkProviderBalance() {
+                let totalfee = 0;
+                let checkCondoType = false;
+                this.providerTypes.extra.map((ele) => {
+                    totalfee += parseFloat(ele.fee);
+                    let checkCondo = Object.values(this.appraisalTypes).find(eles => eles.id == ele.typeId);
+                    if (checkCondo && checkCondo.condo_type == 1) {
+                        checkCondoType = true;
+                    }
+                });
+                this.providerTypes.totalAmount = totalfee;
+                this.condoType = checkCondoType;
+
+                if (this.providerTypes.extra.length <= 0) {
+                    this.providerTypes.error.type = true;
+                    this.providerTypes.error.fee = true;
+                }
+            },
+
+            checkProviderValidation(event, type) {
+                if (type == 2 && this.providerTypes.default.type != null) {
+                    this.providerTypes.error.type = false;
+                }
+                if (type == 1 && this.providerTypes.default.fee != null) {
+                    this.providerTypes.error.fee = false;
+                }
+            },
+            //technologyFee caculation
+            calculateTechnologyFee(e) {
+                let uad = e.target.selectedOptions[0].dataset.uad
+                let d = e.target.selectedOptions[0].dataset.d
+                this.processingFee = e.target.selectedOptions[0].dataset.processing
+                if (this.providerTypes.extra.length > 0) {
+                    this.providerTypes.extra[0].full == 1 ? this.step1.technologyFee = uad : this.step1.technologyFee = d
+                }
+                if (this.processingFee > 0) {
+                    let technologyFee = parseFloat(parseFloat(this.step1.technologyFee) + parseFloat(this.providerTypes.totalAmount * (this.processingFee / 100)))
+                    this.step1.technologyFee = parseFloat(technologyFee).toFixed(2)
+                }
+            },
+            calculateTechnologyFeeOnProviderChange() {
+                if (this.step1.amcClient != '') {
+                    this.processingFee = $('#amcClientSelect').find(':selected').data('processing')
+                }
+                if (this.providerTypes.extra.length > 0 && this.providerTypes.extra[0].full == 1) {
+                    this.step1.technologyFee = $('#amcClientSelect').find(':selected').data('uad')
+                } else {
+                    this.step1.technologyFee = $('#amcClientSelect').find(':selected').data('d')
+                }
+                if (this.processingFee > 0) {
+                    let technologyFee = parseFloat(parseFloat(this.step1.technologyFee) + parseFloat(this.providerTypes.totalAmount * (this.processingFee / 100)))
+                    this.step1.technologyFee = parseFloat(technologyFee).toFixed(2)
+                }
+            },
+            remoteProviderType(item, index) {
+                this.providerTypes.extra.splice(index, 1);
+                if (this.providerTypes.extra.length == 0) {
+                    this.providerTypes.totalAmount = 0;
+                    this.condoType = false;
+                    this.step1.technologyFee = 0
+                } else {
+                    this.checkProviderBalance();
+                }
+            },
+            removeDataValue() {
+                let newData = [];
+                for (let i in this.step1) {
+                    if (i == "technologyFee") {
+                        newData[i] = 10;
+                    } else if (i == "fee") {
+                        newData[i] = [];
+                    } else {
+                        newData[i] = null;
+                    }
+                }
+                this.step1 = newData;
+                this.providerTypes.extra = [];
+                this.providerTypes.totalAmount = 0;
+                this.$refs.orderForm.reset();
+            },
+            setOrderValue() {
+                let receivedDate = this.formateDate(this.order.received_date);
+                let dueDate = this.formateDate(this.order.due_date);
+                let step1 = {
+                    clientOrderNo: this.order.client_order_no,
+                    unitNo: this.order.property_info.unit_no,
+                    systemOrder: this.order.system_order_no,
+                    loanNo: this.order.appraisal_detail.loan_no,
+                    loanType: this.order.appraisal_detail.loan_type,
+                    receiveDate: receivedDate,
+                    dueDate: dueDate,
+                    technologyFee: this.order.appraisal_detail.technology_fee,
+                    fhaCaseNo: this.order.appraisal_detail.fha_case_no,
+                    propertyType: this.order.appraisal_detail.property_type,
+                    appraiserName: this.order.appraisal_detail.appraiser_id,
+                    appraiserType: '',
+                    amcClient: this.order.amc.id,
+                    lender: this.order.lender.id,
+                    note: this.order.provider_service.note,
+                    searchAddress: this.order.property_info.search_address,
+                    state: this.order.property_info.state_name,
+                    city: this.order.property_info.city_name,
+                    street: this.order.property_info.street_name,
+                    formatedAddress: this.order.property_info.formatedAddress,
+                    zipcode: this.order.property_info.zip,
+                    country: this.order.property_info.country,
+                    county: this.order.property_info.county,
+                    lat: this.order.property_info.latitude,
+                    lng: this.order.property_info.longitude,
+                };
+
+                this.step1 = step1;
+                let setFee = JSON.parse(this.order.provider_service.appraiser_type_fee);
+                for (let i in setFee) {
+                    let ele = setFee[i];
+                    this.setNewFee(ele.typeId, ele.fee);
+                }
+                // this.searchIngAddress = this.order.property_info.formatedAddress;
+                let receivedDateFormated = new Date(receivedDate);
+                let dueDateFormated = new Date(dueDate);
+                if (receivedDateFormated > dueDateFormated) {
+                    this.dateIssue.status = true;
+                }
+
+
+                // recalculate technology fee when edit second time
+                let getStepAmc = this.step1.amcClient;
+                let amcClients = this.amcClients.find(ele => ele.id == getStepAmc);
+                let dataUad = amcClients.fee_for_1004uad;
+                let dataD = amcClients.fee_for_1004d;
+                let dataProcessing = amcClients.processing_fee;
+
+                if (this.step1.amcClient != '') {
+                    this.processingFee = dataProcessing;
+                }
+                if (this.providerTypes.extra.length > 0 && this.providerTypes.extra[0].full == 1) {
+                    this.step1.technologyFee = dataUad;
+                } else {
+                    this.step1.technologyFee = dataD;
+                }
+                if (this.processingFee > 0) {
+                    let technologyFee = parseFloat(parseFloat(this.step1.technologyFee) + parseFloat(this.providerTypes.totalAmount * (this.processingFee / 100)))
+                    this.step1.technologyFee = parseFloat(technologyFee).toFixed(2)
+                }
+            },
+
+            geolocate() {
+                this.mapData.markerIcon = this.$boston.host('img/marker.png');
+                this.mapData.map = new window.google.maps.Map(this.$refs['map'], {
+                    center: this.center,
+                    zoom: 7,
+                    gestureHandling: 'greedy'
+                });
+                new window.google.maps.Marker({
+                    position: this.center,
+                    map: this.map,
+                    icon: this.markerIcon
+                });
+
+                const input = this.$refs.searchMapLocation;
+                const searchBox = new window.google.maps.places.SearchBox(input);
+                this.mapData.map.controls[window.google.maps.ControlPosition.TOP_LEFT].push(input);
+                this.mapData.map.addListener("bounds_changed", () => {
+                    searchBox.setBounds(this.mapData.map.getBounds());
+                });
+
+                searchBox.addListener("places_changed", () => {
+                    const places = searchBox.getPlaces();
+                    if (places.length == 0) {
                         return;
                     }
 
-                    const icon = {
-                        url: place.icon,
-                        size: new window.google.maps.Size(71, 71),
-                        origin: new window.google.maps.Point(0, 0),
-                        anchor: new window.google.maps.Point(17, 34),
-                        scaledSize: new window.google.maps.Size(25, 25),
-                    };
 
-                    // Create a marker for each place.
-                    markers.push(
-                        new window.google.maps.Marker({
-                            map: this.mapData.map,
-                            icon: this.mapData.markerIcon,
-                            title: place.name,
-                            position: place.geometry.location,
-                        })
-                    );
+                    // For each place, get the icon, name and location.
+                    const bounds = new window.google.maps.LatLngBounds();
+                    let markers = [];
 
-                    if (place.geometry.viewport) {
-                        bounds.union(place.geometry.viewport);
-                    } else {
-                        bounds.extend(place.geometry.location);
-                    }
-                    let addressData = {
-                        postal_code: null,
-                        country: null,
-                        name: null,
-                        street: null,
-                        city: null,
-                        location: null,
-                        lat: null,
-                        lon: null,
-                        state: null,
-                        place_id: null,
-                        county: null,
-                    };
-                    addressData.place_id = place.place_id;
-
-
-                    for (var i = 0; i < place.address_components.length; i++) {
-                        if (place.address_components[i].types[0] == 'postal_code') {
-                            addressData.postal_code = place.address_components[i].long_name;
+                    places.forEach((place) => {
+                        if (!place.geometry || !place.geometry.location) {
+                            console.error("Returned place contains no geometry");
+                            return;
                         }
-                        if (place.address_components[i].types[0] == "administrative_area_level_2") {
-                            addressData.county = place.address_components[i].long_name;
+
+                        const icon = {
+                            url: place.icon,
+                            size: new window.google.maps.Size(71, 71),
+                            origin: new window.google.maps.Point(0, 0),
+                            anchor: new window.google.maps.Point(17, 34),
+                            scaledSize: new window.google.maps.Size(25, 25),
+                        };
+
+                        // Create a marker for each place.
+                        markers.push(
+                            new window.google.maps.Marker({
+                                map: this.mapData.map,
+                                icon: this.mapData.markerIcon,
+                                title: place.name,
+                                position: place.geometry.location,
+                            })
+                        );
+
+                        if (place.geometry.viewport) {
+                            bounds.union(place.geometry.viewport);
+                        } else {
+                            bounds.extend(place.geometry.location);
                         }
-                        if (place.address_components[i].types[0] == 'locality') {
-                            addressData.city = place.address_components[i].long_name;
+                        let addressData = {
+                            postal_code: null,
+                            country: null,
+                            name: null,
+                            street: null,
+                            city: null,
+                            location: null,
+                            lat: null,
+                            lon: null,
+                            state: null,
+                            place_id: null,
+                            county: null,
+                        };
+                        addressData.place_id = place.place_id;
+
+
+                        for (var i = 0; i < place.address_components.length; i++) {
+                            if (place.address_components[i].types[0] == 'postal_code') {
+                                addressData.postal_code = place.address_components[i].long_name;
+                            }
+                            if (place.address_components[i].types[0] == "administrative_area_level_2") {
+                                addressData.county = place.address_components[i].long_name;
+                            }
+                            if (place.address_components[i].types[0] == 'locality') {
+                                addressData.city = place.address_components[i].long_name;
+                            }
+                            if (place.address_components[i].types[0] == 'administrative_area_level_1') {
+                                addressData.state = place.address_components[i].short_name;
+                            }
+                            if (place.address_components[i].types[0] == 'country') {
+                                addressData.country = place.address_components[i].long_name;
+                            }
                         }
-                        if (place.address_components[i].types[0] == 'administrative_area_level_1') {
-                            addressData.state = place.address_components[i].short_name;
-                        }
-                        if (place.address_components[i].types[0] == 'country') {
-                            addressData.country = place.address_components[i].long_name;
-                        }
-                    }
-                    let streetRd = place.formatted_address.split(",");
-                    addressData.street = streetRd[0];
-                    addressData.name = place.name;
-                    addressData.location = place.formatted_address;
-                    addressData.lat = place.geometry.location.lat();
-                    addressData.lon = place.geometry.location.lng();
-                    this.mapData.data = addressData;
-                    this.step1.formatedAddress = $(input).val();
-                    this.setMapDataToMode();
-                });
-                this.mapData.map.fitBounds(bounds);
-            });
-        },
-
-        setMapDataToMode() {
-            this.step1.searchAddress = this.mapData.data.location;
-            this.step1.formatedAddress = this.mapData.data.location;
-            this.step1.state = this.mapData.data.state;
-            this.step1.city = this.mapData.data.city;
-            this.step1.street = this.mapData.data.street;
-            this.step1.zipcode = this.mapData.data.postal_code;
-            this.step1.country = this.mapData.data.country;
-            this.step1.county = this.mapData.data.county;
-            this.step1.lat = this.mapData.data.lat;
-            this.step1.lng = this.mapData.data.lon;
-            console.log(this.mapData.data);
-            this.changeStreetAddress(this.step1.street);
-        },
-        getAmcClient(id) {
-
-        },
-        getLenderClient(id) {
-
-        },
-
-        findTechnologyFee() {
-
-        },
-
-        changeStreetAddress(value) {
-            if (value == null || value == "") {
-                return false;
-            }
-            this.$boston.authPost('get/same/orders/by/street', { 'street': value }).then((res) => {
-                let totalOrder = res.totalOrder;
-                let orders = res.orders;
-                if (totalOrder > 0) {
-                    this.showStreetAddress = true;
-                    this.streetAddress = orders;
-                }
-            }).catch(err => {
-
-            });
-        },
-
-        checkDateInput(value, type) {
-            this.dateIssue.status = false;
-            var date = new Date(value);
-            if (type == 1) {
-                if (this.step1.dueDate) {
-                    let dueDate = new Date(this.step1.dueDate);
-                    if (dueDate < date) {
-                        this.dateIssue.status = true;
-                    }
-                }
-            } else {
-                if (this.step1.receiveDate) {
-                    let receiveDate = new Date(this.step1.receiveDate);
-                    if (receiveDate > date) {
-                        this.dateIssue.status = true;
-                    }
-                }
-            }
-        },
-
-        checkclientOrderNo: _.debounce(function (event) {
-            let value = event.target.value;
-            this.oldOrderNo.find = false;
-            this.$boston.post('/check/client/order/no', { 'client_no': value }).then((res) => {
-                this.oldOrderNo.find = res.find;
-                this.oldOrderNo.message = res.message;
-            }).catch(err => {
-                console.log(err);
-            });
-        }, 300),
-
-    },
-    watch: {
-        providerTypes: {
-            handler(val) {
-
-            },
-            deep: true
-        },
-        step1: {
-            handler(val) {
-                this.$root.$emit("updateStepData", {
-                    step: 1,
-                    data: { providerType: this.providerTypes, ...val }
+                        let streetRd = place.formatted_address.split(",");
+                        addressData.street = streetRd[0];
+                        addressData.name = place.name;
+                        addressData.location = place.formatted_address;
+                        addressData.lat = place.geometry.location.lat();
+                        addressData.lon = place.geometry.location.lng();
+                        this.mapData.data = addressData;
+                        this.step1.formatedAddress = $(input).val();
+                        this.setMapDataToMode();
+                    });
+                    this.mapData.map.fitBounds(bounds);
                 });
             },
-            deep: true
+
+            setMapDataToMode() {
+                this.step1.searchAddress = this.mapData.data.location;
+                this.step1.formatedAddress = this.mapData.data.location;
+                this.step1.state = this.mapData.data.state;
+                this.step1.city = this.mapData.data.city;
+                this.step1.street = this.mapData.data.street;
+                this.step1.zipcode = this.mapData.data.postal_code;
+                this.step1.country = this.mapData.data.country;
+                this.step1.county = this.mapData.data.county;
+                this.step1.lat = this.mapData.data.lat;
+                this.step1.lng = this.mapData.data.lon;
+                console.log(this.mapData.data);
+                this.changeStreetAddress(this.step1.street);
+            },
+            getAmcClient(id) {
+
+            },
+            getLenderClient(id) {
+
+            },
+
+            findTechnologyFee() {
+
+            },
+
+            changeStreetAddress(value) {
+                if (value == null || value == "") {
+                    return false;
+                }
+                this.$boston.authPost('get/same/orders/by/street', { 'street': value }).then((res) => {
+                    let totalOrder = res.totalOrder;
+                    let orders = res.orders;
+                    if (totalOrder > 0) {
+                        this.showStreetAddress = true;
+                        this.streetAddress = orders;
+                    }
+                }).catch(err => {
+
+                });
+            },
+
+            checkDateInput(value, type) {
+                this.dateIssue.status = false;
+                var date = new Date(value);
+                if (type == 1) {
+                    if (this.step1.dueDate) {
+                        let dueDate = new Date(this.step1.dueDate);
+                        if (dueDate < date) {
+                            this.dateIssue.status = true;
+                        }
+                    }
+                } else {
+                    if (this.step1.receiveDate) {
+                        let receiveDate = new Date(this.step1.receiveDate);
+                        if (receiveDate > date) {
+                            this.dateIssue.status = true;
+                        }
+                    }
+                }
+            },
+
+            checkclientOrderNo: _.debounce(function (event) {
+                let value = event.target.value;
+                this.oldOrderNo.find = false;
+                this.$boston.post('/check/client/order/no', { 'client_no': value }).then((res) => {
+                    this.oldOrderNo.find = res.find;
+                    this.oldOrderNo.message = res.message;
+                }).catch(err => {
+                    console.log(err);
+                });
+            }, 300),
+
         },
+        watch: {
+            providerTypes: {
+                handler(val) {
+
+                },
+                deep: true
+            },
+            step1: {
+                handler(val) {
+                    this.$root.$emit("updateStepData", {
+                        step: 1,
+                        data: { providerType: this.providerTypes, ...val }
+                    });
+                },
+                deep: true
+            },
+        }
     }
-}
 </script>
 
 <style scoped>
-.provider-items {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 15px;
-    text-align: left;
-    font-size: 13px;
-    vertical-align: middle;
-    align-items: center;
-    border-bottom: thin solid #999;
-    padding-bottom: 15px;
-}
+    .provider-items {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 15px;
+        text-align: left;
+        font-size: 13px;
+        vertical-align: middle;
+        align-items: center;
+        border-bottom: thin solid #999;
+        padding-bottom: 15px;
+    }
 
-.provider-items span strong {
-    display: block;
-}
+    .provider-items span strong {
+        display: block;
+    }
 
-.provider-items:nth-last-child(1) {
-    border-bottom: none;
-}
+    .provider-items:nth-last-child(1) {
+        border-bottom: none;
+    }
+
 </style>
