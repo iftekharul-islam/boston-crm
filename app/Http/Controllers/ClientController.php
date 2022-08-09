@@ -3,19 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\Models\Client;
+use App\Rules\UniqueEmail;
+use App\Rules\UniquePhone;
+use App\Imports\ImportAmc;
 use Illuminate\Http\Request;
-use App\Http\Requests\ClientRequest;
+use App\Imports\ImportLender;
 use App\Services\ClientService;
 use App\Services\CompanyService;
-use Illuminate\Contracts\Foundation\Application;
+use App\Http\Requests\ClientRequest;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Session;
-use App\Imports\ImportAmc;
-use App\Imports\ImportLender;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Contracts\Foundation\Application;
 
 class ClientController extends BaseController
 {
@@ -48,7 +51,7 @@ class ClientController extends BaseController
         $search_key = request()->query('searchKey') ?? '';
         $company_id = $this->companyService->getAuthUserCompany()->id;
 
-        $clients = $this->clientService->getClients($type, $page_number,$search_key,$company_id);
+        $clients = $this->clientService->getClients($type, $page_number, $search_key, $company_id);
 
 
         return response()->json([
@@ -65,30 +68,59 @@ class ClientController extends BaseController
     }
 
     /**
-     * @param ClientRequest $request
+     * @param Request $request
      *
      * @return RedirectResponse
      */
-    public function store(ClientRequest $request): RedirectResponse|Array
+    public function store(Request $request): RedirectResponse|array|JsonResponse
     {
-        // if($request->ajax()){
+        $validator = Validator::make($request->all(), [
+            "name"                   => "required|unique:clients,name",
+            "email"                  => ["required", "array", new UniqueEmail(0)],
+            "phone"                  => ["required", "array", new UniquePhone(0)],
+            "client_type"            => "required",
+            "address"                => "required_if:client_type,lender,both",
+            "city"                   => "required_if:client_type,lender,both",
+            "state"                  => "required_if:client_type,lender,both",
+            "zip"                    => "required_if:client_type,lender,both",
+            "processing_fee"         => "required_if:client_type,amc,both",
+            "deducts_technology_fee" => "required_if:client_type,amc,both",
+            "fee_for_1004uad"        => "required_if:client_type,amc,both",
+            "fee_for_1004d"          => "required_if:client_type,amc,both",
+            "can_sign"               => "required_if:client_type,amc,both",
+            "can_inspect"            => "required_if:client_type,amc,both",
+            "com_required"           => "required_if:client_type,amc,both",
+            "instruction"            => "nullable",
+        ]);
 
-        // }else{
-            $request_data = $request->validated();
-        //}
-        // dd($request_data);
-        $merged_data = array_merge($request_data, ["company_id" => $this->companyService->getAuthUserCompany()->id,"created_by" => auth()->user()->id]);
+        if ($validator->fails()) {
+            if ($request->ajax()) {
+                return [
+                    "error" => true,
+                    "message" => $validator->errors()->first()
+                ];
+            } else {
+                return redirect()
+                    ->back()
+                    ->withErrors($validator->errors())
+                    ->withInput();
+            }
+        }
+        $request_data = $request->all();
+        $merged_data = array_merge($request_data, ["company_id" => $this->companyService->getAuthUserCompany()->id, "created_by" => auth()->user()->id]);
         $client = $this->clientService->saveClientData($merged_data);
 
-        if($request->ajax()){
-            return [
-                "error" => false,
-                "message" => 'Client added successfully'
-            ];
-        }else{
-            return redirect()
-                ->to('/clients/' . $client->id)
-                ->with(["success" => 'Client added successfully']);
+        if ($client) {
+            if ($request->ajax()) {
+                return [
+                    "error" => false,
+                    "message" => 'Client added successfully'
+                ];
+            } else {
+                return redirect()
+                    ->to('/clients/' . $client->id)
+                    ->with(["success" => 'Client added successfully']);
+            }
         }
     }
 
@@ -148,10 +180,10 @@ class ClientController extends BaseController
      */
     public function importClient(Request $request): View|Factory|Application
     {
-        if($request->isMethod('post')){
+        if ($request->isMethod('post')) {
             $file = $request->file('file');
             $file_name = $file->getClientOriginalName();
-            str_contains($file_name,'amc') ? $this->importFile(new ImportAmc,$file) : $this->importFile(new ImportLender,$file);
+            str_contains($file_name, 'amc') ? $this->importFile(new ImportAmc, $file) : $this->importFile(new ImportLender, $file);
         }
         return view('clients.import-client');
     }
@@ -161,9 +193,8 @@ class ClientController extends BaseController
      * @param $file
      * @return void
      */
-    public function importFile($dependency,$file): void
+    public function importFile($dependency, $file): void
     {
         Excel::import($dependency, $file);
     }
-
 }
