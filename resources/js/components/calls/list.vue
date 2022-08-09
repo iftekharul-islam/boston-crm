@@ -325,10 +325,10 @@
                                 <ValidationProvider class="d-block group" name="Schedule date" :rules="{'required': schedule.save}" v-slot="{ errors }">
                                     <div class="group" :class="{ 'invalid-form' : errors[0] }">
                                         <label for="" class="d-block mb-2 dashboard-label">Schedule date</label>
-                                        <v-date-picker mode="date" v-model="schedule.date">
+                                        <v-date-picker mode="datetime" v-model="schedule.date" utc="6">
                                             <template class="position-relative" v-slot="{ inputValue, inputEvents }">
                                                 <input class="dashboard-input w-100" :value="inputValue" v-on="inputEvents"
-                                                       @change="schedule.error = false" />
+                                                       @change="schedule.error = false"/>
                                             </template>
                                         </v-date-picker>
                                         <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
@@ -583,16 +583,16 @@
             addCallLog() {
                 this.$refs.addCallLogForm.validate().then((status) => {
                     if (status) {
-                        let data = {
-                            message: this.callLog.message,
-                            status: this.callLog.status,
-                            filter: this.pages.filterType,
-                            template: this.template.save,
-                            title: this.template.title,
-                            schedule: this.schedule.save,
-                            date: this.schedule.date,
-                        }
-                        axios.post('call-log-update/' + this.callLog.orderId, data)
+                        let formData = new FormData();
+                        formData.append('message', this.callLog.message)
+                        formData.append('status', this.callLog.status)
+                        formData.append('filter', this.pages.filterType)
+                        formData.append('template', this.template.save)
+                        formData.append('title', this.template.title)
+                        formData.append('schedule', this.schedule.save)
+                        formData.append('date', this.schedule.date)
+
+                        axios.post('call-log-update/' + this.callLog.orderId, formData)
                             .then(res => {
                                 this.callLog.message = ''
                                 this.callLog.status = ''

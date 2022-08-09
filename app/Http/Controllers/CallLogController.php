@@ -113,14 +113,19 @@ class CallLogController extends Controller
         $log->status = $request->status;
         $log->save();
 
-        if($request->template) {
+        logger(gettype($request->template));
+        if($request->template  == 'true') {
             $template = new LogTemplate();
             $template->title = $request->title;
             $template->message = $request->message;
             $template->save();
         }
-        if($request->schedule){
-            $order->call_date = Carbon::parse($request->date);;
+        if($request->schedule == 'true'){
+            $formated_date_time = \DateTime::createFromFormat('D M d Y H:i:s e+', $request->date);
+            $deliveredDate = Carbon::parse($formated_date_time)->format('Y-m-d H:i:s');
+
+            $order->call_date = Carbon::parse($deliveredDate);
+            $order->call_by = $user->id;
             $order->save();
         }
 

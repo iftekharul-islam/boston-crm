@@ -15,6 +15,7 @@ class AddCallDateColumnToOrdersTable extends Migration
     {
         Schema::table('orders', function (Blueprint $table) {
             $table->timestamp('call_date')->nullable();
+            $table->unsignedBigInteger('call_by')->nullable();
         });
     }
 
@@ -27,6 +28,7 @@ class AddCallDateColumnToOrdersTable extends Migration
     {
         Schema::table('orders', function (Blueprint $table) {
             $table->dropColumn('call_date');
+            $table->dropColumn('call_by');
         });
     }
 }
