@@ -71,7 +71,7 @@
                                 <td>Order no</td>
                                 <td>Client name</td>
                                 <td>Address</td>
-        {{--                        <td></td>--}}
+                                <td></td>
                             </tr>
                             </thead>
                             <tbody>
@@ -80,14 +80,14 @@
                                     <td>{{ $item['order_no'] }}</td>
                                     <td style="font-weight: bold;">{{ $item['name'] }}</td>
                                     <td>{{ $item['address'] }}</td>
-        {{--                            <td>--}}
-        {{--                                <a href="" style="text-decoration:none ;display:inline-block;">--}}
-        {{--                                    <svg width="18" height="16" viewBox="0 0 18 16" fill="none" xmlns="http://www.w3.org/2000/svg">--}}
-        {{--                                        <path opacity="0.5" d="M16.7083 5.625C14.7833 2.6 11.9666 0.858337 8.99996 0.858337C7.51663 0.858337 6.07496 1.29167 4.75829 2.1C3.44163 2.91667 2.25829 4.10834 1.29163 5.625C0.458293 6.93334 0.458293 9.05834 1.29163 10.3667C3.21663 13.4 6.03329 15.1333 8.99996 15.1333C10.4833 15.1333 11.925 14.7 13.2416 13.8917C14.5583 13.075 15.7416 11.8833 16.7083 10.3667C17.5416 9.06667 17.5416 6.93334 16.7083 5.625ZM8.99996 11.3667C7.13329 11.3667 5.63329 9.85834 5.63329 8C5.63329 6.14167 7.13329 4.63334 8.99996 4.63334C10.8666 4.63334 12.3666 6.14167 12.3666 8C12.3666 9.85834 10.8666 11.3667 8.99996 11.3667Z" fill="#2F415E"/>--}}
-        {{--                                        <path d="M9 5.61667C7.69167 5.61667 6.625 6.68334 6.625 8C6.625 9.30834 7.69167 10.375 9 10.375C10.3083 10.375 11.3833 9.30834 11.3833 8C11.3833 6.69167 10.3083 5.61667 9 5.61667Z" fill="#2F415E"/>--}}
-        {{--                                    </svg>--}}
-        {{--                                </a>--}}
-        {{--                            </td>--}}
+                                    <td>
+                                        <a href="" style="text-decoration:none ;display:inline-block;">
+                                            <svg width="18" height="16" viewBox="0 0 18 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path opacity="0.5" d="M16.7083 5.625C14.7833 2.6 11.9666 0.858337 8.99996 0.858337C7.51663 0.858337 6.07496 1.29167 4.75829 2.1C3.44163 2.91667 2.25829 4.10834 1.29163 5.625C0.458293 6.93334 0.458293 9.05834 1.29163 10.3667C3.21663 13.4 6.03329 15.1333 8.99996 15.1333C10.4833 15.1333 11.925 14.7 13.2416 13.8917C14.5583 13.075 15.7416 11.8833 16.7083 10.3667C17.5416 9.06667 17.5416 6.93334 16.7083 5.625ZM8.99996 11.3667C7.13329 11.3667 5.63329 9.85834 5.63329 8C5.63329 6.14167 7.13329 4.63334 8.99996 4.63334C10.8666 4.63334 12.3666 6.14167 12.3666 8C12.3666 9.85834 10.8666 11.3667 8.99996 11.3667Z" fill="#2F415E"/>
+                                                <path d="M9 5.61667C7.69167 5.61667 6.625 6.68334 6.625 8C6.625 9.30834 7.69167 10.375 9 10.375C10.3083 10.375 11.3833 9.30834 11.3833 8C11.3833 6.69167 10.3083 5.61667 9 5.61667Z" fill="#2F415E"/>
+                                            </svg>
+                                        </a>
+                                    </td>
                                 </tr>
                             @endforeach
                             </tbody>
@@ -640,13 +640,16 @@
                     <p style="color: #2F415E; text-align: center;margin-top: 10px; margin-bottom: 10px;"> No data Available for Today</p>
                 </div>
             @endif
-            <div style="text-align: center;">
-                <p style="padding:0 90px; margin-top:40px; margin-bottom:0;">Netsoft Holdings, LLC - 11650 Olio Rd. Suite #1000 -
-                    193 Fishers, IN 46037, United States</p>
-                <a href="#" style="display: inline-block;font-weight:600; color: #19B7A2; margin-top: 32px;text-decoration: none;">Visit site</a>
-            </div>
+{{--            <div style="text-align: center;">--}}
+{{--                <p style="padding:0 90px; margin-top:40px; margin-bottom:0;">Netsoft Holdings, LLC - 11650 Olio Rd. Suite #1000 ---}}
+{{--                    193 Fishers, IN 46037, United States</p>--}}
+{{--                <a href="#" style="display: inline-block;font-weight:600; color: #19B7A2; margin-top: 32px;text-decoration: none;">Visit site</a>--}}
+{{--            </div>--}}
         </div>
     </div>
+    <a href="{{ config('app.url') }}">
+        <img src="{{ asset('img/boston-signature.png') }}" style="width: 100%" alt="logo">
+    </a>
 </div>
 </body>
 </html>

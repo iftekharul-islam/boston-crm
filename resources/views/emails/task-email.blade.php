@@ -60,21 +60,11 @@
         <p class="name" style="font-size: 18px; line-height: 20px; color: #2C364A;">
             {{ $message }}
         </p>
-        <div style="justify-content: center; padding-top: 25px; align-items: center;">
-            <p style="text-align: center; color: #2F415E;">
-                Netsoft Holdings, LLC - 11650 Olio Rd. Suite #1000 -
-                193 Fishers, IN 46037, United States
-            </p>
-        </div>
-
-        <div style="padding-top: 25px">
-            <p style="text-align: center; color: #2F415E;">
-                <a style="align-items: center; color: #19B7A2; text-decoration: none" href="{{ config('app.url') }}">Visit Site</a>
-            </p>
-
-        </div>
 
     </div>
+    <a href="{{ config('app.url') }}">
+        <img src="{{ asset('img/boston-signature.png') }}" style="width: 100%" alt="logo">
+    </a>
 
 </div>
 </body>

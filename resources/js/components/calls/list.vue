@@ -115,7 +115,7 @@
                                         class="path4"></span></span>
                                 <span class="call-tooltip">Quick view</span>
                             </a>
-                            <a @click.prevent="getCallSummary(item.call_log, item.id, item.client_order_no, item.property_info.full_addr)"
+                            <a @click.prevent="getCallSummary(item.call_log, item)"
                                 href="javascript:;" class="icon-list" data-bs-toggle="modal"
                                 data-bs-target="#callLogModal"><span class="icon-messages2 primary-text fs-20"><span
                                         class="path1"></span><span class="path2"></span><span class="path3"></span><span
@@ -272,6 +272,7 @@
                                 v-if="!callLog.notCompleted"><b>Completed</b></span></h3>
                         <div class="card mb-4">
                             <div class="card-body bg-light text-dark">
+                                <h6 class="card-title" v-if="callLog.call_date">Call reminder: {{ callLog.call_date }}</h6>
                                 <h5 class="card-title">Property address: </h5>
                                 <h6 class="card-subtitle">{{ callLog.address }}</h6>
                             </div>
@@ -298,7 +299,7 @@
                     <!-- message box -->
                     <ValidationObserver ref="addCallLogForm">
                         <div class="update-log">
-                            <div class="group">
+                            <div class="">
                                 <label class="d-block mb-2 dashboard-label">Template</label>
                                 <m-select :options="templates" object item-text="title" item-value="message" v-model="callLog.message"></m-select>
                             </div>
@@ -320,6 +321,24 @@
                                     <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                                 </div>
                             </ValidationProvider>
+                            <div v-if="schedule.save">
+                                <ValidationProvider class="d-block group" name="Schedule date" :rules="{'required': schedule.save}" v-slot="{ errors }">
+                                    <div class="group" :class="{ 'invalid-form' : errors[0] }">
+                                        <label for="" class="d-block mb-2 dashboard-label">Schedule date</label>
+                                        <v-date-picker mode="date" v-model="schedule.date">
+                                            <template class="position-relative" v-slot="{ inputValue, inputEvents }">
+                                                <input class="dashboard-input w-100" :value="inputValue" v-on="inputEvents"
+                                                       @change="schedule.error = false" />
+                                            </template>
+                                        </v-date-picker>
+                                        <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                                    </div>
+                                </ValidationProvider>
+                            </div>
+                            <div class="checkbox-group mt-2" v-if="!callLog.call_date">
+                                <input type="checkbox" class="checkbox-input" v-model="schedule.save" >
+                                <label for="" class="checkbox-label">Create schedule </label>
+                            </div>
                             <div class="checkbox-group mt-2">
                                 <input type="checkbox" class="checkbox-input" v-model="template.save" >
                                 <label for="" class="checkbox-label">Save as Template </label>
@@ -359,6 +378,11 @@
             Table,
         },
         data: () => ({
+            schedule: {
+                save: false,
+                date: '',
+                error: false
+            },
             templates: [],
             template: {
                 save: false,
@@ -373,6 +397,7 @@
             contact_ex_number_e: null,
             contact_is_borrower: 0,
             callLog: {
+                call_date: '',
                 error: false,
                 notCompleted: true,
                 items: [],
@@ -563,20 +588,23 @@
                             status: this.callLog.status,
                             filter: this.pages.filterType,
                             template: this.template.save,
-                            title: this.template.title
+                            title: this.template.title,
+                            schedule: this.schedule.save,
+                            date: this.schedule.date,
                         }
                         axios.post('call-log-update/' + this.callLog.orderId, data)
                             .then(res => {
-                                console.log(res)
                                 this.callLog.message = ''
                                 this.callLog.status = ''
                                 this.template.save = false
                                 this.template.title = ''
+                                this.schedule.save = false
+                                this.schedule.date = ''
                                 this.$refs.addCallLogForm.reset()
                                 this.templates = res.data.templates
                                 this.toastMessage(res.data.message, res.data.error)
                                 if (res.data.data) {
-                                    this.getCallSummary(res.data.data, this.callLog.orderId, this.callLog.order_no, this.callLog.address)
+                                    this.getCallSummary(res.data.data, res.data.myOrder)
                                 }
                                 this.initOrder(res.data.order)
                                 this.filterValues = res.data.filterValue
@@ -592,12 +620,13 @@
                     type: status == true ? 'error' : 'success',
                 });
             },
-            getCallSummary(value, id, order_no, address) {
+            getCallSummary(value, order) {
                 this.callLog.notCompleted = true
                 this.callLog.items = []
-                this.callLog.orderId = id
-                this.callLog.order_no = order_no
-                this.callLog.address = address
+                this.callLog.orderId = order.id
+                this.callLog.order_no = order.client_order_no
+                this.callLog.address = order.property_info.full_addr
+                this.callLog.call_date = order.call_date
                 if (value.length) {
                     this.callLog.items = value
                     this.callLog.items.forEach((log, index) => {

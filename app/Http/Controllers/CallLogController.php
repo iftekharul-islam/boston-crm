@@ -106,16 +106,6 @@ class CallLogController extends Controller
             ]);
         }
 
-//        $logCompleted = CallLog::where('order_id', $id)->where('status', 1)->count();
-//        $logData = CallLog::with('caller')->where('order_id', $id)->get();
-//        if($logCompleted){
-//            return response()->json([
-//                'error' => true,
-//                'message' => 'Call log already completed',
-//                'data' => $logData
-//            ]);
-//        }
-
         $log = new CallLog();
         $log->order_id = $order->id;
         $log->caller_id = $user->id;
@@ -128,6 +118,10 @@ class CallLogController extends Controller
             $template->title = $request->title;
             $template->message = $request->message;
             $template->save();
+        }
+        if($request->schedule){
+            $order->call_date = Carbon::parse($request->date);;
+            $order->save();
         }
 
         $templates = LogTemplate::all();
@@ -159,6 +153,7 @@ class CallLogController extends Controller
         $filterType = $request->filter ?? 'all';
         $order = $this->orderData($data, $companyId, $paginate, $dateRange, $filterType);
         $filterValue = $this->getFilterType();
+        $myOrder = Order::with($this->order_list_relation())->where('id', $id)->first();
         return [
             'error' => false,
             'message' => 'Call log updated successfully',
@@ -166,8 +161,8 @@ class CallLogController extends Controller
             'data' => $logData,
             'order' => $order,
             'filterValue' => $filterValue,
-            "templates" => $templates
-
+            "templates" => $templates,
+            'myOrder' => $myOrder
         ];
     }
 
