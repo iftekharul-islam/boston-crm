@@ -65,6 +65,9 @@
         </div>
 
     </div>
+    <a href="{{ config('app.url') }}">
+        <img src="{{ asset('img/boston-signature.png') }}" style="width: 100%" alt="logo">
+    </a>
 
 </div>
 </body>

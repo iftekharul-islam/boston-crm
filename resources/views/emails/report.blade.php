@@ -142,29 +142,19 @@
                         @endforeach
                     </table>
                 </div>
-            @endif
-            @else
+        @endif
+        @else
             <div style="justify-content: center; padding-top: 12px; align-items: center;" class="headerclass">
                 <h1 class="name" style="text-align: center; font-weight: bold; font-size: 18px; color: #000000; padding-bottom: 10px; padding-top: 10px">
                     No data Available for Today
                 </h1>
             </div>
-            @endif
-        <div style="justify-content: center; padding-top: 25px; align-items: center;">
-            <p style="text-align: center; color: #2F415E;">
-                Netsoft Holdings, LLC - 11650 Olio Rd. Suite #1000 -
-                193 Fishers, IN 46037, United States
-            </p>
-        </div>
-
-        <div style="padding-top: 25px">
-            <p style="text-align: center; color: #2F415E;">
-                <a style="align-items: center; color: #19B7A2; text-decoration: none" href="{{ config('app.url') }}">Visit Site</a>
-            </p>
-
-        </div>
+        @endif
 
     </div>
+    <a href="{{ config('app.url') }}">
+        <img src="{{ asset('img/boston-signature.png') }}" style="width: 100%" alt="logo">
+    </a>
 
 </div>
 </body>

@@ -9,6 +9,8 @@
 <div>Welcome to {{ env('APP_NAME') }}</div>
 <div>Email: {{ $email }}</div>
 <a href="{{ config()->get('app.url')  }}/accept-new-user/{{ $code }}">{{ __('messages.mail_template.invite_accept') }}</a>
-
+<a href="{{ config('app.url') }}">
+    <img src="{{ asset('img/boston-signature.png') }}" style="width: 100%" alt="logo">
+</a>
 </body>
 </html>
