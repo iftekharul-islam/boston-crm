@@ -12,12 +12,12 @@
             </div>
             <div class="group">
                 <p class="text-light-black mgb-12">Instruction or Note for Inspection</p>
-                <p class="mb-0 text-light-black fw-bold">{{ note }}</p>
+                <p class="mb-0 text-light-black fw-bold" v-html="note"></p>
             </div>
             <div class="group" v-if="orderData.inspection.attachments.length">
                 <p class="text-light-black mgb-12">Inspection file upload</p>
                 <div class="document">
-                    <div class="row">
+                    <div class="row inspection">
                         <div class="d-flex align-items-center mb-3"
                             v-for="(file, key) in orderData.inspection.attachments" :key="key">
                             <img src="/img/zip.svg" alt="boston profile" class="img-fluid">
@@ -47,8 +47,8 @@
                     </div>
                 </div>
                 <div class="text-end mgt-32">
-                    <button class="button button-primary px-4 h-40 d-inline-flex align-items-center" @click="saveInsFiles"
-                            :disabled="isUploading">Save</button>
+                    <button class="button button-primary px-4 h-40 d-inline-flex align-items-center" @click="saveInsFiles" :disabled="isUploading">Save</button>
+                    <button class="button button-close px-4 h-40 d-inline-flex align-items-center" @click="editable =  false">Close</button>
                 </div>
             </div>
         </div>
@@ -102,6 +102,9 @@
                 this.fileData.files = event.target.files
             },
             saveInsFiles() {
+                if (!this.fileCheck(this.fileData.files)) {
+                    return false;
+                }
                 this.isUploading = true
                 this.editable = false
                 let that = this

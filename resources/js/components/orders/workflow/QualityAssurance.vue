@@ -5,27 +5,30 @@
             <div class="group">
                 <p class="text-light-black mgb-12">Instruction from previous step</p>
                 <p class="text-success">(Rewrite & send back)</p>
-                <p class="mb-0 text-light-black fw-bold">{{ rewrite_note }}</p>
+                <p class="mb-0 text-light-black fw-bold" v-html="rewrite_note"></p>
             </div>
             <div class="group">
+                <p class="text-light-black mgb-12">Note from this step</p>
                 <p class="text-success">(Check & Upload)</p>
-                <p class="mb-0 text-light-black fw-bold">{{ analysisnote }}</p>
+                <p class="mb-0 text-light-black fw-bold notes-prev" v-html="analysisnote"></p>
             </div>
             <div class="group" v-if="orderData.analysis">
                 <p class="text-light-black mgb-12">Files</p>
-                <div class="d-flex align-items-center" v-for="file, indexKey in analysis.attachments" :key="indexKey">
-                    <div class="file-img">
-                        <img v-if="file.mime_type == 'image/jpeg'" src="/img/image.svg" alt="boston files"
-                            class="img-fluid">
-                        <img v-else-if="file.mime_type == 'application/pdf'" src="/img/pdf.svg" alt="boston files"
-                            class="img-fluid">
-                        <img v-else src="/img/common.svg" alt="boston files" class="img-fluid">
-                    </div>
-                    <div class="mgl-12 document">
-                        <a :href="file.original_url" target="_blank" download class="text-light-black mb-0 file-name">{{
-                            file.name }}</a>
-                        <p class="text-gray mb-0 fs-12 ">Uploaded: {{ analysis.updated_by.name + ', ' +
-                            analysis.updated_at }}</p>
+                <div class="document">
+                    <div class="row">
+                        <div class="d-flex align-items-center mb-3" v-for="file, indexKey in analysis.attachments" :key="indexKey">
+                            <img v-if="file.mime_type == 'image/jpeg'" src="/img/image.svg" alt="boston files"
+                                    class="img-fluid">
+                            <img v-else-if="file.mime_type == 'application/pdf'" src="/img/pdf.svg" alt="boston files"
+                                class="img-fluid">
+                            <img v-else src="/img/common.svg" alt="boston files" class="img-fluid">
+                            <span class="text-light-black d-inline-block mgl-12 file-name">
+                                <a :href="file.original_url" target="_blank" download class="text-light-black mb-0 file-name">{{
+                                    file.name }}</a>
+                                <p class="text-gray mb-0 fs-12 ">Uploaded: {{ analysis.updated_by.name + ', ' +
+                                    analysis.updated_at }}</p>
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -70,27 +73,30 @@
             <div class="group">
                 <p class="text-light-black mgb-12">Instruction from previous step</p>
                 <p class="text-success">(Rewrite & send back)</p>
-                <p class="mb-0 text-light-black fw-bold">{{ rewrite_note }}</p>
+                <p class="mb-0 text-light-black fw-bold" v-html="rewrite_note"></p>
             </div>
             <div class="group">
+                <p class="text-light-black mgb-12">Note from this step</p>
                 <p class="text-success">(Check & Upload)</p>
-                <p class="mb-0 text-light-black fw-bold">{{ analysisnote }}</p>
+                <p class="mb-0 text-light-black fw-bold notes-prev" v-html="analysisnote"></p>
             </div>
             <div class="group" v-if="analysis">
                 <p class="text-light-black mgb-12">Files</p>
-                <div class="d-flex align-items-center" v-for="file, indexKey in analysis.attachments" :key="indexKey">
-                    <div class="file-img">
-                        <img v-if="file.mime_type == 'image/jpeg'" src="/img/image.svg" alt="boston files"
-                            class="img-fluid">
-                        <img v-else-if="file.mime_type == 'application/pdf'" src="/img/pdf.svg" alt="boston files"
-                            class="img-fluid">
-                        <img v-else src="/img/common.svg" alt="boston files" class="img-fluid">
-                    </div>
-                    <div class="mgl-12 document">
-                        <a :href="file.original_url" target="_blank" download class="text-light-black mb-0 file-name">{{
-                            file.name }}</a>
-                        <p class="text-gray mb-0 fs-12">Uploaded: {{ analysis.updated_by.name + ', ' +
-                            analysis.updated_at }}</p>
+                <div class="document">
+                    <div class="row">
+                        <div class="d-flex align-items-center mb-3" v-for="file, indexKey in analysis.attachments" :key="indexKey">
+                            <img v-if="file.mime_type == 'image/jpeg'" src="/img/image.svg" alt="boston files"
+                                class="img-fluid">
+                            <img v-else-if="file.mime_type == 'application/pdf'" src="/img/pdf.svg" alt="boston files"
+                                class="img-fluid">
+                            <img v-else src="/img/common.svg" alt="boston files" class="img-fluid">
+                            <span class="text-light-black d-inline-block mgl-12 file-name">
+                                <a :href="file.original_url" target="_blank" download class="text-light-black mb-0 file-name">{{
+                                    file.name }}</a>
+                                <p class="text-gray mb-0 fs-12">Uploaded: {{ analysis.updated_by.name + ', ' +
+                                    analysis.updated_at }}</p>
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -122,8 +128,7 @@
                         <div :class="{ 'invalid-form' : errors[0] }">
                             <label for="" class="mb-2 text-light-black d-inline-block">Add note</label>
                             <div class="preparation-input w-100 position-relative">
-                                <textarea v-model="qa.note" cols="30" rows="3"
-                                    class="w-100 dashboard-textarea"></textarea>
+                                <text-editor v-model="qa.note" placeholder="Add note..."></text-editor>
                             </div>
                             <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                         </div>
@@ -184,25 +189,28 @@
                 <p class="mb-0 text-light-black fw-bold">{{ rewrite_note }}</p>
             </div>
             <div class="group">
+                <p class="text-light-black mgb-12">Note from this step</p>
                 <p class="text-success">(Check & Upload)</p>
-                <p class="mb-0 text-light-black fw-bold">{{ analysisnote }}</p>
+                <p class="mb-0 text-light-black fw-bold notes-prev">{{ analysisnote }}</p>
             </div>
             <div class="group" v-if="orderData.analysis">
                 <p class="text-light-black mgb-12">Files</p>
-                <div class="d-flex align-items-center" v-for="file, indexKey in orderData.analysis.attachments"
-                    :key="indexKey">
-                    <div class="file-img">
-                        <img v-if="file.mime_type == 'image/jpeg'" src="/img/image.svg" alt="boston files"
-                            class="img-fluid">
-                        <img v-else-if="file.mime_type == 'application/pdf'" src="/img/pdf.svg" alt="boston files"
-                            class="img-fluid">
-                        <img v-else src="/img/common.svg" alt="boston files" class="img-fluid">
-                    </div>
-                    <div class="mgl-12 document">
-                        <a :href="file.original_url" target="_blank" download class="text-light-black mb-0 file-name">{{
-                            file.name }}</a>
-                        <p class="text-gray mb-0 fs-12">Uploaded: {{ orderData.analysis.updated_by.name + ', ' +
-                            orderData.analysis.updated_at }}</p>
+                <div class="document">
+                    <div class="row">
+                        <div class="d-flex align-items-center mb-3" v-for="file, indexKey in orderData.analysis.attachments"
+                            :key="indexKey">
+                            <img v-if="file.mime_type == 'image/jpeg'" src="/img/image.svg" alt="boston files"
+                                    class="img-fluid">
+                            <img v-else-if="file.mime_type == 'application/pdf'" src="/img/pdf.svg" alt="boston files"
+                                class="img-fluid">
+                            <img v-else src="/img/common.svg" alt="boston files" class="img-fluid">
+                            <span class="text-light-black d-inline-block mgl-12 file-name">
+                                <a :href="file.original_url" target="_blank" download class="text-light-black mb-0 file-name">{{
+                                    file.name }}</a>
+                                <p class="text-gray mb-0 fs-12">Uploaded: {{ orderData.analysis.updated_by.name + ', ' +
+                                    orderData.analysis.updated_at }}</p>
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -220,21 +228,23 @@
             </div>
             <div class="group" v-if="orderData.quality_assurance">
                 <p class="text-light-black mgb-12">Quality assurance files</p>
-                <div class="d-flex align-items-center" v-for="file, indexKey in orderData.quality_assurance.attachments"
-                    :key="indexKey">
-                    <div class="file-img">
-                        <img v-if="file.mime_type == 'image/jpeg'" src="/img/image.svg" alt="boston files"
-                            class="img-fluid">
-                        <img v-else-if="file.mime_type == 'application/pdf'" src="/img/pdf.svg" alt="boston files"
-                            class="img-fluid">
-                        <img v-else src="/img/common.svg" alt="boston files" class="img-fluid">
-                    </div>
-                    <div class="mgl-12 document">
-                        <a :href="file.original_url" target="_blank" download class="text-light-black mb-0 file-name">{{
-                            file.name }}</a>
-                        <p class="text-gray mb-0 fs-12">Uploaded: {{ orderData.quality_assurance.updated_by.name + ', '
-                            +
-                            orderData.quality_assurance.updated_at }}</p>
+                <div class="document">
+                    <div class="row">
+                        <div class="d-flex align-items-center mb-3" v-for="file, indexKey in orderData.quality_assurance.attachments"
+                            :key="indexKey">
+                            <img v-if="file.mime_type == 'image/jpeg'" src="/img/image.svg" alt="boston files"
+                                class="img-fluid">
+                            <img v-else-if="file.mime_type == 'application/pdf'" src="/img/pdf.svg" alt="boston files"
+                                class="img-fluid">
+                            <img v-else src="/img/common.svg" alt="boston files" class="img-fluid">
+                            <span class="text-light-black d-inline-block mgl-12 file-name">
+                                <a :href="file.original_url" target="_blank" download class="text-light-black mb-0 file-name">{{
+                                    file.name }}</a>
+                                <p class="text-gray mb-0 fs-12">Uploaded: {{ orderData.quality_assurance.updated_by.name + ', '
+                                    +
+                                    orderData.quality_assurance.updated_at }}</p>
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -522,6 +532,9 @@
                 this.currentStep = 'step2'
             },
             updateQualityAssurance() {
+                if (this.orderData.quality_assurance?.attachments.length == 0 && !this.fileCheck(this.qa.files)) {
+                    return false;
+                }
                 this.$refs.qaUpdate.validate().then((status) => {
                     if (status) {
                         let formData = new FormData();
@@ -537,6 +550,7 @@
                             }
                         }).then(res => {
                             this.orderData = res.data
+                            this.qa.files = []
                             this.$root.$emit('wk_update', this.orderData)
                             this.$root.$emit('wk_flow_menu', this.orderData)
                             this.$root.$emit('wk_flow_toast', res);
