@@ -13,7 +13,7 @@
             </div>
             <div class="group">
                 <p class="text-light-black mgb-12">Instruction or Note for Inspection</p>
-                <p class="mb-0 text-light-black fw-bold">{{ edited.note }}</p>
+                <p class="mb-0 text-light-black fw-bold" v-html="edited.note"></p>
             </div>
             <div class="group">
                 <p class="text-light-black mgb-12">Appraiser</p>
@@ -29,7 +29,7 @@
             </div>
             <div class="group" v-if="orderStatus == 2">
                 <p class="text-light-black mgb-12">Reschedule note</p>
-                <p class="mb-0 text-light-black fw-bold">{{ edited.reschedule_note }}</p>
+                <p class="mb-0 text-light-black fw-bold" v-html="edited.reschedule_note"></p>
             </div>
         </div>
         <div v-else class="scheduling-item step-items no-schedule">
@@ -102,28 +102,18 @@
                                     <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                                 </div>
                             </ValidationProvider>
-                            <ValidationProvider class="d-block dashboard-label group" name="Notes" rules="required"
-                                v-slot="{ errors }">
-                                <div class="group" :class="{ 'invalid-form' : errors[0] }">
-                                    <label for="" class="d-block mb-2 dashboard-label">Notes <span
-                                            class="text-danger require"></span></label>
-                                    <b-form-textarea class="dashboard-textarea" v-model="scheduleData.note"
-                                        placeholder="Enter notes..." rows="2" cols="5">
-                                    </b-form-textarea>
-                                    <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
-                                </div>
-                            </ValidationProvider>
-                            <ValidationProvider v-if="alreadyScheduled == 1" class="d-block dashboard-label group"
-                                name="Reschedule note" rules="required" v-slot="{ errors }">
-                                <div class="group" :class="{ 'invalid-form' : errors[0] }">
-                                    <label for="" class="d-block mb-2 dashboard-label">Reschedule note <span
-                                            class="text-danger require"></span></label>
-                                    <b-form-textarea class="dashboard-textarea" v-model="scheduleData.reschedule_note"
-                                        placeholder="Enter re schedule notes..." rows="2" cols="5">
-                                    </b-form-textarea>
-                                    <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
-                                </div>
-                            </ValidationProvider>
+                            <div class="group" v-mg:t="20">
+                                <label for="" class="d-block mb-2 dashboard-label">Notes</label>
+                                <text-editor v-model="scheduleData.note"
+                                    placeholder="Enter notes..." rows="2" cols="5">
+                                </text-editor>
+                            </div>
+                            <div class="group">
+                                <label for="" class="d-block mb-2 dashboard-label">Reschedule note</label>
+                                <text-editor v-model="scheduleData.reschedule_note"
+                                    placeholder="Enter re schedule notes..." rows="2" cols="5">
+                                </text-editor>
+                            </div>
                         </ValidationObserver>
                     </div>
                 </div>

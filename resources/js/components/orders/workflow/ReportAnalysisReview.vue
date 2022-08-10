@@ -5,18 +5,18 @@
                         class="path1"></span><span class="path2"></span></span></a>
             <div class="group">
                 <p class="text-light-black mgb-12">Note from previous steps</p>
-                <p class="mb-0 text-light-black fw-bold" v-if="this.preNote.length">{{ this.preNote }}</p>
+                <p class="mb-0 text-light-black fw-bold" v-if="this.preNote.length" v-html="this.preNote"></p>
                 <p class="mb-0 text-light-black fw-bold" v-else>Note not updated yet</p>
             </div>
             <div class="group" v-if="noteCheck == 1">
                 <p class="text-light-black mgb-12">Note from this step</p>
                 <p href="#" class="primary-text mb-2">(Rewrite & send back)</p>
-                <p class="mb-0 text-light-black fw-bold">{{ note }}</p>
+                <p class="mb-0 text-light-black fw-bold notes-prev" v-html="note"></p>
             </div>
             <div class="group" v-if="noteCheck == 2">
                 <p class="text-light-black mgb-12">Note from this step</p>
                 <p href="#" class="primary-text mb-2">(Check & Upload)</p>
-                <p class="mb-0 text-light-black fw-bold">{{ note }}</p>
+                <p class="mb-0 text-light-black fw-bold notes-prev" v-html="note"></p>
             </div>
             <div class="group">
                 <p class="text-light-black mgb-12">Assign to</p>
@@ -26,8 +26,7 @@
                 <p class="text-light-black mgb-12">Report analysis file</p>
                 <div class="document">
                     <div class="row">
-                        <div class="d-flex align-items-center mb-3"
-                            v-for="(file, key) in orderData.analysis.attachments" :key="key">
+                        <div class="d-flex align-items-center mb-3" v-for="(file, key) in orderData.analysis.attachments" :key="key">
                             <img v-if="file.mime_type == 'image/jpeg'" src="/img/image.svg" alt="boston files"
                                 class="img-fluid">
                             <img v-else-if="file.mime_type == 'application/pdf'" src="/img/pdf.svg" alt="boston files"
@@ -59,16 +58,12 @@
                         </div>
                     </div>
                     <div class="mgb-32">
-                        <ValidationProvider class="group" name="Note" rules="required" v-slot="{ errors }">
-                            <div :class="{ 'invalid-form' : errors[0] }">
-                                <label for="" class="mb-2 text-light-black d-inline-block">Add note</label>
-                                <div class="preparation-input w-100 position-relative">
-                                    <textarea name="" id="" cols="30" rows="3" class="w-100 dashboard-textarea"
-                                        v-model="note"></textarea>
-                                </div>
-                                <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                        <div class="group">
+                            <label for="" class="mb-2 text-light-black d-inline-block">Add note</label>
+                            <div class="preparation-input w-100 position-relative">
+                                <text-editor placeholder="Add note..." v-model="note"></text-editor>
                             </div>
-                        </ValidationProvider>
+                        </div>
                     </div>
                     <div class="mgb-32 d-flex align-items-center">
                         <div class="checkbox-group review-check mgr-20">
@@ -93,8 +88,8 @@
                             Files</p>
                     </div>
                     <div class="text-end mgt-32">
-                        <button class="button button-primary px-4 h-40 d-inline-flex align-items-center"
-                            @click="saveFinalData" :disabled="isUploading">Done</button>
+                        <button class="button button-primary px-4 h-40 d-inline-flex align-items-center" @click="saveFinalData" :disabled="isUploading">Done</button>
+                        <button class="button button-close px-4 h-40 d-inline-flex align-items-center" @click="isDataExists = true">Close</button>
                     </div>
                 </div>
                 <div v-else>
@@ -178,7 +173,7 @@
                         this.note = analysis.note
                     }
                 }
-                if (this.assignToName && this.note) {
+                if (this.assignToName) {
                     this.isDataExists = true
                 }
             },
@@ -212,7 +207,10 @@
                 })
             },
             saveFinalData() {
-                this.isUploading = true
+                if (this.orderData.analysis.attachments?.length == 0 && !this.fileCheck(this.fileData.files)) {
+                    return false;
+                }
+                this.isUploading = true;
                 this.$refs.assigneeForm.validate().then((status) => {
                     if (status) {
                         let formData = new FormData();

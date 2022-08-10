@@ -11,7 +11,7 @@
             </div>
             <div class="group">
                 <p class="text-light-black mgb-12">Report Preparation Notes</p>
-                <p class="mb-0 text-light-black fw-bold">{{ initialReview.report_note }}</p>
+                <p class="mb-0 text-light-black fw-bold" v-html="initialReview.report_note"></p>
             </div>
             <br /><br />
         </div>
@@ -32,7 +32,7 @@
             </div>
             <div class="group">
                 <p class="text-light-black mgb-12">Notes</p>
-                <p class="mb-0 text-light-black fw-bold">{{ initialReview.note }}</p>
+                <p class="mb-0 text-light-black fw-bold" v-html="initialReview.note"></p>
             </div>
             <div class="mgb-32 d-flex align-items-center">
                 <div class="checkbox-group review-check mgr-20" v-if="initialReview.is_review_done == 1">
@@ -65,17 +65,10 @@
                     </ValidationProvider>
                 </div>
                 <div class="mgb-32">
-                    <ValidationProvider class="d-block mb-2 dashboard-label" name="Notes" rules="required"
-                        v-slot="{ errors }">
-                        <div class="group" :class="{ 'invalid-form' : errors[0] }">
-                            <label for="" class="d-block mb-2 dashboard-label">Add note <span
-                                    class="text-danger require"></span></label>
-                            <b-form-textarea v-model="initialReview.note" placeholder="Enter notes..." rows="2"
-                                cols="5">
-                            </b-form-textarea>
-                            <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
-                        </div>
-                    </ValidationProvider>
+                    <div class="group mb-2">
+                        <label for="" class="d-block mb-2 dashboard-label">Add note</label>
+                        <text-editor v-model="initialReview.note" placeholder="Enter notes..."></text-editor>
+                    </div>
                     <div class="mgb-32 d-flex align-items-center">
                         <div class="checkbox-group review-check mgr-20">
                             <input type="radio" class="checkbox-input check-data" v-model="initialReview.checkbox"
@@ -91,15 +84,21 @@
                 </div>
             </ValidationObserver>
             <div class="text-end mgt-32">
-                <button class="button button-primary px-4 h-40 d-inline-flex align-items-center"
-                    @click="saveInitialReview">Done
+                <button class="button button-primary px-4 h-40 d-inline-flex align-items-center" @click="saveInitialReview">
+                    Done
+                </button>
+                <button class="button button-close px-4 h-40 d-inline-flex align-items-center" @click="currentStep = 'view'">
+                    Close
                 </button>
             </div>
         </div>
     </div>
 </template>
 <script>
-    export default {
+import TextEditor from "../../../src/editor/TextEditor.vue"
+
+export default{
+  components: { TextEditor },
         name: 'InitialReview',
         props: {
             order: [],

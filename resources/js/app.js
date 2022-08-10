@@ -25,7 +25,7 @@ import VueToast from 'vue-toast-notification';
 import draggable from 'vuedraggable'
 import 'vue-toast-notification/dist/theme-sugar.css';
 Vue.use(VueToast, {
-    position: 'top-left',
+    position: 'bottom',
     duration: 8000
 });
 
@@ -66,9 +66,9 @@ const app = new Vue({
         }
     },
     created() {
-        axios.get('auth-user').then((res)=>{
+        axios.get('auth-user').then((res) => {
             this.user = res.data
-            if(this.user){
+            if (this.user) {
                 this.listener()
             }
         })

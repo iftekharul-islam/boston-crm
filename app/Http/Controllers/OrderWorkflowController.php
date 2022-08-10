@@ -120,7 +120,11 @@ class OrderWorkflowController extends BaseController
         $this->orderRepository->addActivity($data);
         $this->addHistory($order, $user, $historyTitle, 'scheduling');
         $orderData = $this->orderDetails($order->id);
-        $this->service->deleteOrderSchedule($id);
+
+        if (config('app.env') == "production") {
+            $this->service->deleteOrderSchedule($id);
+        }
+
         $this->repository->deleteSchedule($id);
         $filterValue = $this->getFilterType();
 
@@ -278,6 +282,9 @@ class OrderWorkflowController extends BaseController
             $report->creator_id = $request->creator_id;
             $report->assigned_to = $request->assigned_to;
             $report->trainee_id = $request->trainee_id;
+            if ($report->note != $request->note) {
+                $report->note_time = now()->toDateTimeString();
+            }
             $report->note = $request->note;
             $report->updated_by = auth()->user()->id;
             $report->save();
@@ -294,6 +301,7 @@ class OrderWorkflowController extends BaseController
             $newReport->assigned_to = $request->assigned_to;
             $newReport->trainee_id = $request->trainee_id;
             $newReport->note = $request->note;
+            $newReport->note_time = now()->toDateTimeString();
             $newReport->created_by = $user->id;
             $newReport->save();
             $historyTitle = $user->name . " set assign and trainee selection on report preperation.<br>Assign To: <strong>{$assignee->name}</strong><br>Trainee: <strong>{$trainee->name}</strong><br>Note: <strong>{$request->note}</strong>";
@@ -354,19 +362,25 @@ class OrderWorkflowController extends BaseController
 
         $analysis = OrderWReportAnalysis::where('order_id', $id)->first();
         $this->workFlowStatus = 9;
-
         if ($analysis) {
             $noteCheckOrNot = "Checked as check and upload";
+
             if ($request->noteCheck == '1') {
                 $analysis->is_review_send_back = 1;
                 $analysis->is_check_upload = 0;
-                $analysis->rewrite_note = $request->note;
+                if ($analysis->rewrite_note != $request->note) {
+                    $analysis->note_time = now()->toDateTimeString();
+                }
+                $analysis->rewrite_note = $request->note ?? "";
                 $noteCheckOrNot = "Checked as rewrite and send back";
                 $this->workFlowStatus = 7;
             } else {
                 $analysis->is_review_send_back = 0;
                 $analysis->is_check_upload = 1;
-                $analysis->note = $request->note;
+                if ($analysis->note != $request->note) {
+                    $analysis->note_time = now()->toDateTimeString();
+                }
+                $analysis->note = $request->note ?? "";
                 $this->workFlowStatus = 6;
             }
             $analysis->updated_by = $user->id;
@@ -548,6 +562,7 @@ class OrderWorkflowController extends BaseController
         if (!$reWrite) {
             $reWrite = new OrderWRewrite();
             $reWrite->order_id = $order->id;
+            $reWrite->note = $get->note ?? "";
             $reWrite->created_at = Carbon::now();
             $reWrite->created_by = $user->id;
             $reWrite->save();
@@ -555,7 +570,10 @@ class OrderWorkflowController extends BaseController
             $reWrite->updated_by = $user->id;
             $reWrite->updated_at = Carbon::now();
         }
-        $reWrite->note = $get->note;
+        if ($reWrite->note != $get->note) {
+            $reWrite->note_time = now()->toDateTimeString();
+        }
+        $reWrite->note = $get->note ?? "";
         $reWrite->save();
 
         $historyTitle = $user->name . " has update Re-writing the report.<br>Current note is <strong>" . $get->note . "</strong>";

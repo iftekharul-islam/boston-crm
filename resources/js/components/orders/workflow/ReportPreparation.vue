@@ -2,7 +2,7 @@
     <div class="report-preparation-item step-items">
         <div v-if="isAdmin">
             <div v-if="adminDataExist">
-                <a class="edit-btn" @click="adminDataExist = false"><span class="icon-edit"><span
+                <a class="edit-btn" @click="openEditBox"><span class="icon-edit"><span
                             class="path1"></span><span class="path2"></span></span></a>
                 <div class="group">
                     <p class="text-light-black mgb-12">Report creator</p>
@@ -39,7 +39,7 @@
         </div>
         <div v-else>
             <div v-if="dataExist">
-                <a class="edit-btn" @click="dataExist = false; initSelect2();"><span class="icon-edit"><span
+                <a class="edit-btn" @click="dataExist = false;"><span class="icon-edit"><span
                             class="path1"></span><span class="path2"></span></span></a>
                 <div class="group">
                     <p class="text-light-black mgb-12">Report creator</p>
@@ -59,12 +59,12 @@
                 </div>
                 <div class="group">
                     <p class="text-light-black mgb-12">Note</p>
-                    <p class="mb-0 text-light-black fw-bold">{{ this.note }}</p>
+                    <p class="mb-0 text-light-black fw-bold" v-html="this.note"></p>
                 </div>
                 <div class="group" v-if="orderData.report">
                     <p class="text-light-black mgb-12">Report preparation file</p>
                     <div class="document">
-                        <div class="row">
+                        <div class="row r-prep">
                             <div class="d-flex align-items-center mb-3"
                                 v-for="(file, key) in orderData.report.attachments" :key="key">
                                 <img v-if="file.mime_type == 'image/jpeg'" src="/img/image.svg" alt="boston files"
@@ -88,13 +88,13 @@
                     <div class="mgb-32">
                         <div class="group">
                             <p class="text-light-black mgb-12">Report creator</p>
-                            <p class="mb-0 text-light-black fw-bold">{{ this.creator }}</p>
+                            <p class="mb-0 text-light-black fw-bold">{{ this.creator ? this.creator : "No creator found" }}</p>
                         </div>
                     </div>
                     <div class="mgb-32">
                         <div class="group">
                             <p class="text-light-black mgb-12">Report reviewer</p>
-                            <p class="mb-0 text-light-black fw-bold">{{ this.viewer }}</p>
+                            <p class="mb-0 text-light-black fw-bold">{{ this.viewer ? this.viewer : "No report reviewer found" }}</p>
                         </div>
                     </div>
                     <div class="mgb-32">
@@ -118,18 +118,14 @@
                         </ValidationProvider>
                     </div>
                     <div class="mgb-32">
-                        <ValidationProvider class="group" name="Note" rules="required" v-slot="{ errors }">
-                            <div :class="{ 'invalid-form' : errors[0] }">
-                                <label for="" class="mb-2 text-light-black d-inline-block">Add note</label>
-                                <div class="preparation-input w-100 position-relative">
-                                    <textarea name="" id="" cols="30" rows="3" class="w-100 dashboard-textarea"
-                                        v-model="note"></textarea>
-                                </div>
-                                <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                        <div class="group">
+                            <label for="" class="mb-2 text-light-black d-inline-block">Add note</label>
+                            <div class="preparation-input w-100 position-relative">
+                                <text-editor placeholder="Add notes" v-model="note"></text-editor>
                             </div>
-                        </ValidationProvider>
+                        </div>
                     </div>
-                    <div>
+                    <div class="group">
                         <p class="text-light-black mgb-12">Files</p>
                         <div class="position-relative file-upload">
                             <input type="file" multiple v-on:change="addFiles">
@@ -137,13 +133,12 @@
                                         class="path1"></span><span class="path2"></span><span
                                         class="path3"></span></span></label>
                         </div>
-                        <p class="text-light-black mgb-12" v-if="fileData.files.length">{{ fileData.files.length }}
-                            Files</p>
+                        <p class="text-light-black mgb-12" v-if="fileData.files.length">{{ fileData.files.length }} Files</p>
+                        <span v-if="fileNotFound" class="error-message">Please choose file first</span>
                     </div>
                     <div class="text-end mgt-32">
-                        <button class="button button-transparent" @click.prevent="cancelButton">Cancel</button>
-                        <button class="button button-primary px-4 h-40 d-inline-flex align-items-center"
-                            @click="saveAssigneeData" :disabled="isUploading">Done</button>
+                        <button class="button button-primary px-4 h-40 d-inline-flex align-items-center" @click="saveAssigneeData" :disabled="isUploading">Done</button>
+                        <button class="button button-close px-4 h-40 d-inline-flex align-items-center" @click.prevent="cancelButton">Close</button>
                     </div>
                 </ValidationObserver>
             </div>
@@ -163,6 +158,7 @@
             orderData: [],
             adminDataExist: true,
             dataExist: true,
+            fileNotFound: false,
             creator: '',
             viewer: '',
             trainee: '',
@@ -180,6 +176,10 @@
             message: '',
         }),
         methods: {
+            openEditBox() {
+                this.adminDataExist = false;
+                this.fileNotFound = false;
+            },
             addFiles(event) {
                 this.fileData.files = event.target.files
             },
@@ -246,6 +246,10 @@
                 })
             },
             saveAssigneeData() {
+                if (this.orderData.report?.attachments.length == 0 && this.fileData.files.length == 0) {
+                    this.fileNotFound = true;
+                    return false;
+                }
                 this.isUploading = true
                 this.$refs.assigneeForm.validate().then((status) => {
                     if (status) {
@@ -269,11 +273,13 @@
                             this.fileData.files = []
                             this.fileData.file_type = ''
                             this.orderData = res.data;
+                            this.fileNotFound = false;
                             this.updateAdmin();
                             this.$root.$emit('wk_update', this.orderData);
                             this.$root.$emit('wk_flow_menu', this.orderData);
                             this.$root.$emit('wk_flow_toast', res);
                         }).catch(err => {
+                            this.isUploading = false;
                         });
                     } else {
                         this.isUploading = false
@@ -286,7 +292,8 @@
                 }
             },
             cancelButton(){
-                //this.updateAdmin()
+                this.updateAdmin();
+                this.dataExist = true;
             }
         },
         created() {
@@ -298,5 +305,17 @@
             this.orderData = order;
             this.updateAdmin()
         },
+        watch: {
+            fileData: {
+                handler(val) {
+                    if (val.files.length > 0) {
+                        this.fileNotFound = false;
+                    } else {
+                        this.fileNotFound = true;
+                    }
+                },
+                deep: true
+            }
+        }
     }
 </script>

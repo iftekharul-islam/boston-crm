@@ -16,6 +16,10 @@
       <p class="text-light-black mgb-12">Due date</p>
       <p class="mb-0 text-light-black fw-bold">{{ order.due_date }}</p>
     </div>
+    <div class="group" v-if="order.rush == 1">
+      <p class="text-light-black mgb-12">Rush</p>
+      <p class="mb-0 text-light-black fw-bold">This is the Rush Order</p>
+    </div>
   </div>
 </template>
 <script>

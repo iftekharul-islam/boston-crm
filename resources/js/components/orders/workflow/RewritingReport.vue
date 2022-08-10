@@ -5,7 +5,10 @@
                 <div class="re-writing-report-item step-items">
                     <div class="group">
                         <p class="text-light-black mgb-12">Note from previous stpes</p>
-                        <p class="mb-0 text-light-black fw-bold" v-html="prev.rewrite_note"></p>
+                        <p class="mb-0 text-light-black fw-bold">
+                            <span v-if="prev.rewrite_note" v-html="prev.rewrite_note"></span>
+                            <span v-else class="no-notes">No notes here</span>
+                        </p>
                     </div>
                     <div class="assign_rewrite" :class="{ 'invalid-form' : chooseAssign.type }">
                         <div class="rewrite_step_1">
@@ -22,20 +25,21 @@
 
                     <div class="group" v-if="orderData.analysis">
                         <p class="text-light-black mgb-12">Files From Previous Step</p>
-                        <div class="row">
-                            <div class="d-flex align-items-center mb-3 document"
-                                v-for="file, fileIndex in orderData.analysis.attachments" :key="fileIndex">
-                                <img v-if="file.mime_type == 'image/jpeg'" src="/img/image.svg" alt="boston files"
-                                    class="img-fluid">
-                                <img v-else-if="file.mime_type == 'application/pdf'" src="/img/pdf.svg"
-                                    alt="boston files" class="img-fluid">
-                                <img v-else src="/img/common.svg" alt="boston files" class="img-fluid">
-                                <span class="text-light-black d-inline-block mgl-12 file-name">
-                                    <a :href="file.original_url" download>{{ file.name }}</a>
-                                    <p class="text-gray mb-0 fs-12">Uploaded: {{ orderData.analysis.updated_by.name
-                                        + ', ' +
-                                        orderData.analysis.updated_at }}</p>
-                                </span>
+                        <div class="document">
+                            <div class="row">
+                                <div class="d-flex align-items-center mb-3" v-for="file, fileIndex in orderData.analysis.attachments" :key="fileIndex">
+                                    <img v-if="file.mime_type == 'image/jpeg'" src="/img/image.svg" alt="boston files"
+                                        class="img-fluid">
+                                    <img v-else-if="file.mime_type == 'application/pdf'" src="/img/pdf.svg"
+                                        alt="boston files" class="img-fluid">
+                                    <img v-else src="/img/common.svg" alt="boston files" class="img-fluid">
+                                    <span class="text-light-black d-inline-block mgl-12 file-name">
+                                        <a :href="file.original_url" download>{{ file.name }}</a>
+                                        <p class="text-gray mb-0 fs-12">Uploaded: {{ orderData.analysis.updated_by.name
+                                            + ', ' +
+                                            orderData.analysis.updated_at }}</p>
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -63,33 +67,31 @@
                     </div>
                     <div class="group" v-if="orderData.analysis">
                         <p class="text-light-black mgb-12">Files From Previous Step</p>
-                        <div class="row">
-                            <div class="d-flex align-items-center mb-3 document"
-                                v-for="file, fileIndex in orderData.analysis.attachments" :key="fileIndex">
-                                <img v-if="file.mime_type == 'image/jpeg'" src="/img/image.svg" alt="boston files"
-                                    class="img-fluid">
-                                <img v-else-if="file.mime_type == 'application/pdf'" src="/img/pdf.svg"
-                                    alt="boston files" class="img-fluid">
-                                <img v-else src="/img/common.svg" alt="boston files" class="img-fluid">
-                                <span class="text-light-black d-inline-block mgl-12 file-name">
-                                    <a :href="file.original_url" download>{{ file.name }}</a>
-                                    <p class="text-gray mb-0 fs-12">Uploaded: {{ orderData.analysis.updated_by.name
-                                        + ', ' +
-                                        orderData.analysis.updated_at }}</p>
-                                </span>
+                        <div class="document">
+                            <div class="row">
+                                <div class="d-flex align-items-center mb-3" v-for="file, fileIndex in orderData.analysis.attachments" :key="fileIndex">
+                                    <img v-if="file.mime_type == 'image/jpeg'" src="/img/image.svg" alt="boston files"
+                                        class="img-fluid">
+                                    <img v-else-if="file.mime_type == 'application/pdf'" src="/img/pdf.svg"
+                                        alt="boston files" class="img-fluid">
+                                    <img v-else src="/img/common.svg" alt="boston files" class="img-fluid">
+                                    <span class="text-light-black d-inline-block mgl-12 file-name">
+                                        <a :href="file.original_url" download>{{ file.name }}</a>
+                                        <p class="text-gray mb-0 fs-12">Uploaded: {{ orderData.analysis.updated_by.name
+                                            + ', ' +
+                                            orderData.analysis.updated_at }}</p>
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="mgb-20">
-                        <ValidationProvider class="group" name="Choose Notes" rules="required" v-slot="{ errors }">
-                            <div :class="{ 'invalid-form' : errors[0] }">
-                                <label for="" class="mb-2 text-light-black d-inline-block">Add note</label>
-                                <div class="preparation-input w-100 position-relative">
-                                    <textarea v-model="note" cols="30" rows="3"
-                                        class="w-100 dashboard-textarea"></textarea>
-                                </div>
+                        <div class="group">
+                            <label for="" class="mb-2 text-light-black d-inline-block">Add note</label>
+                            <div class="preparation-input w-100 position-relative">
+                                <text-editor v-model="note" placeholder="Enter notes..."></text-editor>
                             </div>
-                        </ValidationProvider>
+                        </div>
                     </div>
                     <div>
                         <p class="text-light-black mgb-12">Files</p>
@@ -103,11 +105,9 @@
                             Files</p>
                     </div>
                     <div class="text-end mgt-32">
-                        <button v-if="current.note"
-                            class="button button-danger px-4 h-40 d-inline-flex align-items-center"
-                            @click="viewable">Close</button>
                         <button class="button button-primary px-4 h-40 d-inline-flex align-items-center"
                             @click="saveAssigneeData">Done</button>
+                        <button  class="button button-close px-4 h-40 d-inline-flex align-items-center" @click="viewable">Close</button>
                     </div>
                 </div>
             </ValidationObserver>
@@ -123,8 +123,8 @@
                     </div>
                     <div class="group" v-if="current.note">
                         <p class="text-light-black mgb-12">Note from this step</p>
-                        <a href="#" class="primary-text mb-2">(Rewrite & send back)</a>
-                        <p class="mb-0 text-light-black fw-bold" v-html="current.note"></p>
+                        <a href="#" class="primary-text mb-2 notes-prev">(Rewrite & send back)</a>
+                        <p class="mb-0 text-light-black fw-bold notes-prev" v-html="current.note"></p>
                     </div>
                     <div class="group" v-if="current.assignee">
                         <p class="text-light-black mgb-12">Assign to</p>
@@ -132,40 +132,43 @@
                     </div>
                     <div class="group" v-if="orderData.analysis">
                         <p class="text-light-black mgb-12">Files From Previous Step</p>
-                        <div class="row">
-                            <div class="d-flex align-items-center mb-3 document"
-                                v-for="file, fileIndex in orderData.analysis.attachments" :key="fileIndex">
-                                <img v-if="file.mime_type == 'image/jpeg'" src="/img/image.svg" alt="boston files"
-                                    class="img-fluid">
-                                <img v-else-if="file.mime_type == 'application/pdf'" src="/img/pdf.svg"
-                                    alt="boston files" class="img-fluid">
-                                <img v-else src="/img/common.svg" alt="boston files" class="img-fluid">
-                                <a :href="file.original_url" download>{{ file.name }}</a>
-                                <span class="text-light-black d-inline-block mgl-12 file-name">
-                                    <p class="text-gray mb-0 fs-12">Uploaded: {{ orderData.analysis.updated_by.name
-                                        + ', ' +
-                                        orderData.analysis.updated_at }}</p>
-                                </span>
+                        <div class="document">
+                            <div class="row">
+                                <div class="d-flex align-items-center mb-3" v-for="file, fileIndex in orderData.analysis.attachments" :key="fileIndex">
+                                    <img v-if="file.mime_type == 'image/jpeg'" src="/img/image.svg" alt="boston files"
+                                        class="img-fluid">
+                                    <img v-else-if="file.mime_type == 'application/pdf'" src="/img/pdf.svg"
+                                        alt="boston files" class="img-fluid">
+                                    <img v-else src="/img/common.svg" alt="boston files" class="img-fluid">
+                                    <span class="text-light-black d-inline-block mgl-12 file-name">
+                                        <a :href="file.original_url" download>{{ file.name }}</a>
+                                        <p class="text-gray mb-0 fs-12">Uploaded: {{ orderData.analysis.updated_by.name
+                                            + ', ' +
+                                            orderData.analysis.updated_at }}</p>
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="group" v-if="orderData.report_rewrite">
                         <p class="text-light-black mgb-12">Files From Current Step</p>
-                        <div class="row">
-                            <div class="d-flex align-items-center mb-3 document"
-                                v-for="file, fileIndex in orderData.report_rewrite.attachments" :key="fileIndex">
-                                <img v-if="file.mime_type == 'image/jpeg'" src="/img/image.svg" alt="boston files"
-                                    class="img-fluid">
-                                <img v-else-if="file.mime_type == 'application/pdf'" src="/img/pdf.svg"
-                                    alt="boston files" class="img-fluid">
-                                <img v-else src="/img/common.svg" alt="boston files" class="img-fluid">
-                                <span class="text-light-black d-inline-block mgl-12 file-name">
-                                    <a :href="file.original_url" download>{{ file.name }}</a>
-                                    <p v-if="orderData.report_rewrite.update_by" class="text-gray mb-0 fs-12">Uploaded:
-                                        {{ orderData.report_rewrite.update_by.name
-                                        + ', ' +
-                                        orderData.report_rewrite.updated_at }}</p>
-                                </span>
+                        <div class="document">
+                            <div class="row">
+                                <div class="d-flex align-items-center mb-3"
+                                    v-for="file, fileIndex in orderData.report_rewrite.attachments" :key="fileIndex">
+                                    <img v-if="file.mime_type == 'image/jpeg'" src="/img/image.svg" alt="boston files"
+                                        class="img-fluid">
+                                    <img v-else-if="file.mime_type == 'application/pdf'" src="/img/pdf.svg"
+                                        alt="boston files" class="img-fluid">
+                                    <img v-else src="/img/common.svg" alt="boston files" class="img-fluid">
+                                    <span class="text-light-black d-inline-block mgl-12 file-name">
+                                        <a :href="file.original_url" download>{{ file.name }}</a>
+                                        <p v-if="orderData.report_rewrite.update_by" class="text-gray mb-0 fs-12">Uploaded:
+                                            {{ orderData.report_rewrite.update_by.name
+                                            + ', ' +
+                                            orderData.report_rewrite.updated_at }}</p>
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -214,11 +217,9 @@
                 this.orderData = order;
                 this.prev = order.analysis ?? [];
                 this.current = order.report_rewrite ?? [];
-                if (this.current.assigned_to) {
-                    this.currentStep = 'step2'
-                }
-                if (this.current.note) {
-                    this.currentStep = 'step3'
+                this.currentStep = 'step3'
+                if (!this.current.assigned_to) {
+                    this.currentStep = 'step1'
                 }
 
                 if (this.current) {
@@ -227,6 +228,9 @@
                 }
             },
             saveAssigneeData() {
+                if (this.orderData.report_rewrite?.attachments.length == 0 && !this.fileCheck(this.fileData.files)) {
+                    return false;
+                }
                 this.$refs.rewritingReport.validate().then((status) => {
                     if (status) {
                         let formData = new FormData();
