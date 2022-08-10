@@ -325,7 +325,8 @@
                                 <ValidationProvider class="d-block group" name="Schedule date" :rules="{'required': schedule.save}" v-slot="{ errors }">
                                     <div class="group" :class="{ 'invalid-form' : errors[0] }">
                                         <label for="" class="d-block mb-2 dashboard-label">Schedule date</label>
-                                        <v-date-picker mode="datetime" v-model="schedule.date" utc="6">
+                                        <v-date-picker mode="datetime" v-model="schedule.date"
+                                                       :available-dates='{ start: new Date(), end: null }'>
                                             <template class="position-relative" v-slot="{ inputValue, inputEvents }">
                                                 <input class="dashboard-input w-100" :value="inputValue" v-on="inputEvents"
                                                        @change="schedule.error = false"/>
@@ -335,7 +336,7 @@
                                     </div>
                                 </ValidationProvider>
                             </div>
-                            <div class="checkbox-group mt-2" v-if="!callLog.call_date">
+                            <div class="checkbox-group mt-2">
                                 <input type="checkbox" class="checkbox-input" v-model="schedule.save" >
                                 <label for="" class="checkbox-label">Create schedule </label>
                             </div>
@@ -621,12 +622,21 @@
                 });
             },
             getCallSummary(value, order) {
+                this.callLog.message = ''
+                this.callLog.status = ''
+                this.template.save = false
+                this.template.title = ''
+                this.schedule.save = false
+                this.schedule.date = ''
+                this.$refs.addCallLogForm.reset()
+
                 this.callLog.notCompleted = true
                 this.callLog.items = []
                 this.callLog.orderId = order.id
                 this.callLog.order_no = order.client_order_no
                 this.callLog.address = order.property_info.full_addr
                 this.callLog.call_date = order.call_date
+                this.schedule.date = this.callLog.call_date
                 if (value.length) {
                     this.callLog.items = value
                     this.callLog.items.forEach((log, index) => {
