@@ -2,30 +2,35 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\User;
 use App\Events\Notify;
-use App\Jobs\TaskBasedReport;
-use App\Models\MarketingClientComment;
+use App\Helpers\CrmHelper;
 use App\Models\Notification;
 use Illuminate\Http\Request;
 use App\Models\MarketingTask;
+use App\Jobs\TaskBasedReport;
 use App\Models\MarketingClient;
 use App\Models\MarketingStatus;
 use App\Services\CompanyService;
+use App\Services\MarketingService;
 use App\Models\MarketingClientComment;
 use App\Models\MarketingClientCategory;
 use App\Repositories\MarketingRepository;
+use Illuminate\Support\Facades\Auth;
 
 class MarketingController extends BaseController
 {
     protected MarketingRepository $repository;
     protected CompanyService $service;
+    protected MarketingService $marketing_service;
 
-    public function __construct(MarketingRepository $marketing_repository, CompanyService $company_service,)
+    public function __construct(MarketingRepository $marketing_repository, CompanyService $company_service,MarketingService $marketing_service)
     {
         parent::__construct();
         $this->repository = $marketing_repository;
         $this->service = $company_service;
+        $this->marketing_service = $marketing_service;
     }
 
     public function index()
@@ -55,6 +60,14 @@ class MarketingController extends BaseController
         $client = MarketingClient::find($request->id);
         $client->assigned_to = json_encode($request->users);
         $client->save();
+
+        foreach($request->users as $user){
+            $user_id = $user;
+            $message = "You have assigned to client : " . $client->name;
+            $created_by = Auth::user()->id;
+            $this->marketing_service->sendNotification($user_id,$message,$created_by);
+        }
+
         $clients = MarketingClient::with(['comments.user','tasks'])->orderBy('created_at', 'desc')->get();
         return [
             'data' => $clients
@@ -126,14 +139,11 @@ class MarketingController extends BaseController
         $data['created_by'] = auth()->user()->id;
         MarketingClientComment::create($data);
         foreach ($request->notify ?? [] as  $item){
-            $notification = new Notification();
-            $notification->user_id = $item['id'];
-            $notification->message = $data['description'];
-            $notification->created_by = $data['created_by'];
-            $notification->save();
+            $user_id = $item['id'];
+            $created_by = $data['created_by'];
+            $message = $data['description'];
 
-            event(new Notify($data['description'], $item['id']));
-
+            $this->marketing_service->sendNotification($user_id,$message,$created_by);
         }
 
         $clients = MarketingClient::with(['comments.user','tasks'])->orderBy('created_at', 'desc')->get();
@@ -150,6 +160,15 @@ class MarketingController extends BaseController
         $this->repository->saveTask($request->all());
         $clients = MarketingClient::with(['comments.user','tasks'])->orderBy('created_at', 'desc')->get();
         $statuses = MarketingStatus::withCount('client')->get();
+        $client = MarketingClient::find($request->client_id);
+
+        $user_id = $created_by = Auth::user()->id;
+        $formated_date = $this->formatJsDateObject($request->due_date);
+        $due_date = Carbon::parse($formated_date)->format('d M,Y H:i A');
+        $message = "You have schedule a call at: " . $due_date . " for client: " . $client->name;
+
+        $this->marketing_service->sendNotification($user_id,$message,$created_by);
+
         return [
             "error" => false,
             "data" => $clients,
@@ -158,8 +177,8 @@ class MarketingController extends BaseController
             "message" => "Task created successfully",
         ];
     }
-    
-    
+
+
     public function emailToClient(Request $request)
     {
         if(isset($request->clients) && count($request->clients)){

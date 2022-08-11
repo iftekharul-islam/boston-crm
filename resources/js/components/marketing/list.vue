@@ -3,19 +3,18 @@
         <div class="d-flex marketing-menu-list">
             <p class="fs-20 text-600 text-light-black mgb-20">Client acquisition</p>
             <div class="ms-auto">
-                <button type="button" @click="sentGroupMail" class="button button-primary h-40 d-inline-flex align-items-center py-2">Group Email</button>
-                <button type="button" @click="addClient" class="button button-primary h-40 d-inline-flex align-items-center py-2">Add client</button>
+                <button type="button" @click="sentGroupMail"
+                    class="button button-primary h-40 d-inline-flex align-items-center py-2">Group Email</button>
+                <button type="button" @click="addClient"
+                    class="button button-primary h-40 d-inline-flex align-items-center py-2">Add client</button>
             </div>
         </div>
         <div class="d-flex marketing-menu-list">
             <div class="menu">
-                <a v-for="status, index in allStatuses" :key="index" href="javascript:;" @click="changeActiveStatus(status.id)"
-                    class="text-light-black" :class="status.id == activeStatus ? 'active' : ''">{{ status.status }}
+                <a v-for="status, index in allStatuses" :key="index" href="javascript:;"
+                    @click="changeActiveStatus(status.id)" class="text-light-black"
+                    :class="status.id == activeStatus ? 'active' : ''">{{ status.status }}
                     <span class="text-gray mgl-12">{{ status.client_count }}</span></a>
-            </div>
-            <div class="ms-auto">
-                <button type="button" @click.prevent="addStatus" class="m-0 p-2 button button-primary">Add
-                    Status</button>
             </div>
         </div>
 
@@ -43,21 +42,33 @@
                     <div class="content-left me-3">
                         <p class="fs-20 text-light-black fw-bold mgb-24">{{ currentClient.name }}</p>
                         <div class="d-flex flwx-wrap corporation">
-                            <a href="javascript:;" class="corporation-btn" @click.prevent="openTasks">Tasks <div
-                                    class="mgl-12"><span class="icon-clock"><span class="path1"></span><span
+                            <a href="javascript:;" class="corporation-btn" @click.prevent="openTasks">Tasks
+                                <div class="mgl-12"><span class="icon-clock"><span class="path1"></span><span
                                             class="path2"></span></span>
-                                </div></a>
-                            <a href="javascript:;" @click="sentMail" class="corporation-btn">Email now <div class="mgl-12"><span
-                                        class="icon-sms"><span class="path1"></span><span class="path2"></span></span>
-                                </div></a>
-                            <a href="javascript:;" class="corporation-btn">Call <div class="mgl-12"><span
-                                        class="icon-call"><span class="path1"></span><span class="path2"></span></span>
-                                </div></a>
+                                </div>
+                            </a>
+                            <a href="javascript:;" class="corporation-btn" @click.prevent="openAssignedTo">Assign to
+                                <div class="mgl-12"><span class="icon-user"><span class="path1"></span><span
+                                            class="path2"></span></span>
+                                </div>
+                            </a>
+                            <a href="javascript:;" @click="sentMail" class="corporation-btn">Email now
+                                <div class="mgl-12"><span class="icon-sms"><span class="path1"></span><span
+                                            class="path2"></span></span>
+                                </div>
+                            </a>
+                            <a href="javascript:;" class="corporation-btn">Call
+                                <div class="mgl-12"><span class="icon-call"><span class="path1"></span><span
+                                            class="path2"></span></span>
+                                </div>
+                            </a>
                         </div>
 
                         <div class="comment">
                             <div>
-                                <button type="button" class="comment__header p-2 border-1" :class="currentTab == 'comments' ? 'button button-primary' : 'button button-transparent'" @click.prevent="changeTab('comments')">
+                                <button type="button" class="comment__header p-2 border-1"
+                                    :class="currentTab == 'comments' ? 'button button-primary' : 'button button-transparent'"
+                                    @click.prevent="changeTab('comments')">
                                     <p class="mb-0 fw-bold">Comments</p>
                                     <span class="comment-count">{{ currentClient.comments.length }}</span>
                                 </button>
@@ -102,7 +113,8 @@
                                         class="comment-box-textarea mb-2" placeholder="Enter issue..." rows="5"
                                         cols="5">
                                     </b-form-textarea>
-                                    <p class="text-danger mb-2" v-if="currentClient.commentValidate">Please add a
+                                    <p class="text-danger mb-2" v-if="currentClient.commentValidate">Please add
+                                        a
                                         comment
                                         first !!!</p>
                                     <div class="text-end">
@@ -122,7 +134,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr v-for="task,index in currentClient.tasks" :key="'task-'+index">
+                                        <tr v-for="task, index in currentClient.tasks" :key="'task-' + index">
                                             <td style="width: 15%">{{ task.subject }}</td>
                                             <td style="width: 50%" v-html="task.description"></td>
                                             <td style="width: 15%">{{ task.due_date }}</td>
@@ -138,7 +150,10 @@
                     </div>
                     <div class="content-right">
                         <div class="group status-group">
-                            <label for="role" class="d-block text-light-black mb-2">Status</label>
+                            <div class="position-relative">
+                                <button type="button" @click.prevent="addStatus"
+                                class="button button-primary p-2 mb-2 mx-auto text-gray"> Add / Edit status</button>
+                            </div>
                             <div class="position-relative">
                                 <m-select :options="allStatuses" object item-text="status" item-value="id"
                                     v-model="currentClient.status" @change="changeClientStatus">
@@ -162,29 +177,31 @@
                     <div class="col-md-12">
                         <ValidationObserver ref="emailClientForm">
                             <ValidationProvider class="group d-block" name="Email address" rules="required"
-                                                v-slot="{ errors }">
-                                <div :class="{ 'invalid-form' : errors[0] }">
+                                v-slot="{ errors }">
+                                <div :class="{ 'invalid-form': errors[0] }">
                                     <label for="" class="d-block mb-2 dashboard-label">Email address <span
-                                        class="text-danger require"></span></label>
+                                            class="text-danger require"></span></label>
                                     <input type="text" class="dashboard-input w-100" v-model="email.address">
                                     <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                                 </div>
                             </ValidationProvider>
                             <ValidationProvider class="group d-block" name="Subject" rules="required"
-                                                v-slot="{ errors }">
-                                <div :class="{ 'invalid-form' : errors[0] }">
+                                v-slot="{ errors }">
+                                <div :class="{ 'invalid-form': errors[0] }">
                                     <label for="" class="d-block mb-2 dashboard-label">Subject <span
-                                        class="text-danger require"></span></label>
-                                    <input type="text" id="address-input" class="dashboard-input w-100" v-model="email.subject">
+                                            class="text-danger require"></span></label>
+                                    <input type="text" id="address-input" class="dashboard-input w-100"
+                                        v-model="email.subject">
                                     <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                                 </div>
                             </ValidationProvider>
-                            <ValidationProvider class="group d-block" name="Client phone" rules="required" v-slot="{ errors }">
-                                <div :class="{ 'invalid-form' : errors[0] }">
+                            <ValidationProvider class="group d-block" name="Client phone" rules="required"
+                                v-slot="{ errors }">
+                                <div :class="{ 'invalid-form': errors[0] }">
                                     <label for="" class="d-block mb-2 dashboard-label">Message<span
-                                        class="text-danger require"></span></label>
+                                            class="text-danger require"></span></label>
                                     <b-form-textarea v-model="email.message" placeholder="Enter Message..." rows="2"
-                                                     cols="5">
+                                        cols="5">
                                     </b-form-textarea>
                                     <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                                 </div>
@@ -204,34 +221,34 @@
                     <div class="col-md-12">
                         <ValidationObserver ref="emailGroupClientForm">
                             <div class="group d-block mb-4">
-                                <div :class="{ 'invalid-form' : groupEmail.tagsNotAvailable }">
+                                <div :class="{ 'invalid-form': groupEmail.tagsNotAvailable }">
                                     <label for="" class="d-block mb-2 dashboard-label">Email Users <span
-                                        class="text-danger require"></span></label>
-                                    <vue-tags-input
-                                        v-model="groupEmail.tag"
-                                        :tags="groupEmail.tags"
-                                        :autocomplete-items="emailFilteredItems"
-                                        :add-only-from-autocomplete="true"
+                                            class="text-danger require"></span></label>
+                                    <vue-tags-input v-model="groupEmail.tag" :tags="groupEmail.tags"
+                                        :autocomplete-items="emailFilteredItems" :add-only-from-autocomplete="true"
                                         placeholder="Add clients"
                                         @tags-changed="newTags => groupEmail.tags = newTags" />
-                                    <span v-if="groupEmail.tagsNotAvailable" class="error-message">Please add clients</span>
+                                    <span v-if="groupEmail.tagsNotAvailable" class="error-message">Please add
+                                        clients</span>
                                 </div>
                             </div>
                             <ValidationProvider class="group d-block" name="Subject" rules="required"
-                                                v-slot="{ errors }">
-                                <div :class="{ 'invalid-form' : errors[0] }">
+                                v-slot="{ errors }">
+                                <div :class="{ 'invalid-form': errors[0] }">
                                     <label for="" class="d-block mb-2 dashboard-label">Subject <span
-                                        class="text-danger require"></span></label>
-                                    <input type="text" id="address-input" class="dashboard-input w-100" v-model="groupEmail.subject">
+                                            class="text-danger require"></span></label>
+                                    <input type="text" id="address-input" class="dashboard-input w-100"
+                                        v-model="groupEmail.subject">
                                     <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                                 </div>
                             </ValidationProvider>
-                            <ValidationProvider class="group d-block" name="Message" rules="required" v-slot="{ errors }">
-                                <div :class="{ 'invalid-form' : errors[0] }">
+                            <ValidationProvider class="group d-block" name="Message" rules="required"
+                                v-slot="{ errors }">
+                                <div :class="{ 'invalid-form': errors[0] }">
                                     <label for="" class="d-block mb-2 dashboard-label">Message<span
-                                        class="text-danger require"></span></label>
-                                    <b-form-textarea v-model="groupEmail.message" placeholder="Enter Message..." rows="2"
-                                                     cols="5">
+                                            class="text-danger require"></span></label>
+                                    <b-form-textarea v-model="groupEmail.message" placeholder="Enter Message..."
+                                        rows="2" cols="5">
                                     </b-form-textarea>
                                     <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                                 </div>
@@ -241,7 +258,8 @@
                 </div>
             </div>
             <div slot="modal-footer">
-                <b-button type="button" variant="secondary" @click="$bvModal.hide('send-group-email')">Close</b-button>
+                <b-button type="button" variant="secondary" @click="$bvModal.hide('send-group-email')">Close
+                </b-button>
                 <b-button type="button" variant="primary" @click="sendGroupEmail">Send</b-button>
             </div>
         </b-modal>
@@ -292,9 +310,9 @@ export default {
             message: '',
         },
         email: {
-          address: '',
-          subject: '',
-          message: '',
+            address: '',
+            subject: '',
+            message: '',
         },
         currentTab: 'comments'
     }),
@@ -327,9 +345,9 @@ export default {
             this.allClients = res.data
             this.initStatus(res.statuses)
             this.filterAllClients(1, 'status', this.allClients)
-            if(res.active_client_id){
+            if (res.active_client_id) {
                 this.makeActiveClient(res.active_client_id)
-            }else{
+            } else {
                 this.activeClient = res.data.length - 1
             }
         })
@@ -343,11 +361,11 @@ export default {
     },
     methods: {
         updateComment() {
-            if (!this.currentClient.newComment.replace(/\s/g, "").length){
+            if (!this.currentClient.newComment.replace(/\s/g, "").length) {
                 this.currentClient.commentValidate = true;
-                setTimeout( () => {
+                setTimeout(() => {
                     this.currentClient.commentValidate = false;
-                },1000)
+                }, 1000)
                 return
             }
             let data = {
@@ -402,9 +420,16 @@ export default {
         openTasks() {
             this.$bvModal.show('tasks')
         },
+        sentGroupMail() {
+            this.$bvModal.show('send-group-email')
+        },
+        sentMail() {
+            this.email.address = this.currentClient.email
+            this.$bvModal.show('send-email')
+        },
         mapClient(clients) {
             this.groupEmail.autocompleteItems = clients.map(cilent => {
-                return { text: cilent.name, id: cilent.id, email: cilent.email};
+                return { text: cilent.name, id: cilent.id, email: cilent.email };
             });
         },
         sendClientEmail() {
@@ -430,11 +455,11 @@ export default {
             })
         },
         sendGroupEmail() {
-            if (!this.groupEmail.tags.length){
+            if (!this.groupEmail.tags.length) {
                 this.groupEmail.tagsNotAvailable = true;
-                setTimeout( () => {
+                setTimeout(() => {
                     this.groupEmail.tagsNotAvailable = false;
-                },1000)
+                }, 1000)
                 return
             }
             this.$refs.emailGroupClientForm.validate().then((status) => {
@@ -510,12 +535,13 @@ export default {
 }
 </script>
 <style scoped>
-    .comment-box-header .tag {
-        height: 37px!important;
-    }
-    .vue-tags-input {
-        max-width: 100%;
-        position: relative;
-        background-color: #fff;
-    }
+.comment-box-header .tag {
+    height: 37px !important;
+}
+
+.vue-tags-input {
+    max-width: 100%;
+    position: relative;
+    background-color: #fff;
+}
 </style>
