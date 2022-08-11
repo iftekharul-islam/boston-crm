@@ -15,6 +15,7 @@ class TaskBasedReport implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
     protected $user;
+    protected $subject;
     protected $message;
 
     /**
@@ -22,9 +23,10 @@ class TaskBasedReport implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($user, $message)
+    public function __construct($user, $subject, $message)
     {
         $this->user = $user;
+        $this->subject = $subject;
         $this->message = $message;
     }
 
@@ -35,6 +37,6 @@ class TaskBasedReport implements ShouldQueue
      */
     public function handle()
     {
-        Mail::to($this->user->email)->send(new TaskEmail($this->user->name, $this->message));
+        Mail::to($this->user['email'])->send(new TaskEmail($this->user['name'], $this->subject, $this->message));
     }
 }

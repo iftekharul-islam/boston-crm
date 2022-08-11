@@ -58,7 +58,7 @@
         <p class="name" style="font-size: 18px; line-height: 30px; color: #2C364A; padding-bottom: 20px">
             Hi {{ $name }},</p>
         <p class="name" style="font-size: 18px; line-height: 20px; color: #2C364A;">
-            {{ $message }}
+            {!! $text !!}
         </p>
 
     </div>

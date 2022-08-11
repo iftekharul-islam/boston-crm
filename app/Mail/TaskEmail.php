@@ -12,15 +12,17 @@ class TaskEmail extends Mailable
     use Queueable, SerializesModels;
 
     protected $name;
+    public $subject;
     protected $message;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($name, $message)
+    public function __construct($name, $subject, $message)
     {
         $this->name = $name;
+        $this->subject = $subject;
         $this->message = $message;
     }
 
@@ -31,9 +33,9 @@ class TaskEmail extends Mailable
      */
     public function build()
     {
-        return $this->subject('New task mail')->view('emails.task-email', [
+        return $this->subject($this->subject)->view('emails.task-email', [
             'name' => $this->name,
-            'message' => $this->message,
+            'text' => $this->message,
         ]);
     }
 }
