@@ -4,12 +4,12 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-4">
-                        <button @click="addStatus = true" class="btn btn-primary p-2 m-2" type="button">+ Add
+                        <button @click="addStatus = true" class="button button-primary p-2 m-2" type="button">+ Add
                             Status</button>
                     </div>
                     <div class="col-md-12" v-if="addStatus">
                         <ValidationObserver ref="addStatusForm">
-                            <ValidationProvider class="group d-block" name="Status" rules="required"
+                            <ValidationProvider class="group d-block" name="Status" rules="required|max:100"
                                 v-slot="{ errors }">
                                 <div :class="{ 'invalid-form' : errors[0] }">
                                     <label for="" class="d-block mb-2 dashboard-label">Status<span
@@ -21,6 +21,8 @@
                             </ValidationProvider>
                         </ValidationObserver>
                     </div>
+                    <span class="border-bottom border-2 border-info mt-4 mb-4"></span>
+                    <h5>Edit status</h5>
                     <div class="row mt-4">
                         <div class="col-md-12" v-for="status,index in statuses">
                             <div class="row m-2">
@@ -28,8 +30,9 @@
                                     <p class="text-bold text-xl">{{ status.status }}</p>
                                 </div>
                                 <div class="col-md-2">
-                                    <a class="edit-btn"><span @click="editStatus(status)" class="icon-edit"><span
-                                                class="path1"></span><span class="path2"></span></span></a>
+                                    <a class="edit-btn" style="cursor: pointer"><span @click="editStatus(status)"
+                                            class="icon-edit"><span class="path1"></span><span
+                                                class="path2"></span></span></a>
                                 </div>
                             </div>
                         </div>
@@ -104,7 +107,7 @@
             updateStatus() {
                 this.$refs.editStatusForm.validate().then((status) => {
                     if (status) {
-                        this.$boston.post('update-status', { 'status': this.editStatusName,'id': this.editStatusId })
+                        this.$boston.post('update-status', { 'status': this.editStatusName, 'id': this.editStatusId })
                             .then(res => {
                                 this.$root.$emit('status_res', res.data)
                                 this.$root.$emit('toast_msg', res)

@@ -111,7 +111,7 @@ trait CrmHelper {
         $wkHistory->type = $type;
         $wkHistory->created_at = Carbon::now();
         $wkHistory->save();
-        
+
         if ($type != "order-create") {
             $this->addActivity( $user, $title );
         }
@@ -292,11 +292,11 @@ trait CrmHelper {
     }
 
     public function array_union($x, $y)
-    { 
+    {
        $aunion = array_merge(
             array_intersect($x, $y),
-            array_diff($x, $y),     
-            array_diff($y, $x)      
+            array_diff($x, $y),
+            array_diff($y, $x)
         );
         return $aunion;
     }
@@ -304,6 +304,11 @@ trait CrmHelper {
     public function getTimeZone() {
         $timezone = date_default_timezone_get();
         return $timezone;
+    }
+
+    //formated from js date object
+    public function formatJsDateObject($object){
+        return \DateTime::createFromFormat('D M d Y H:i:s e+', $object);
     }
 
 }
