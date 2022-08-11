@@ -4,11 +4,11 @@ Vue.directive('pd', {
     bind: function (el, binding, vnode) {
         if (binding.arg) {
             if (binding.arg == "t") {
-                el.style.paddingTop = binding.value + 'px';  
+                el.style.paddingTop = binding.value + 'px';
             } else if (binding.arg == "b") {
-                el.style.paddingBottom = binding.value + 'px';  
+                el.style.paddingBottom = binding.value + 'px';
             } else if (binding.arg == "l") {
-                el.style.paddingLeft = binding.value + 'px';  
+                el.style.paddingLeft = binding.value + 'px';
             } else if (binding.arg == "r") {
                 el.style.paddingRight = binding.value + 'px';
             } else if (binding.arg == "x") {
@@ -28,11 +28,11 @@ Vue.directive('mg', {
     bind: function (el, binding, vnode) {
         if (binding.arg) {
             if (binding.arg == "t") {
-                el.style.marginTop = binding.value + 'px';  
+                el.style.marginTop = binding.value + 'px';
             } else if (binding.arg == "b") {
-                el.style.marginBottom = binding.value + 'px';  
+                el.style.marginBottom = binding.value + 'px';
             } else if (binding.arg == "l") {
-                el.style.marginLeft = binding.value + 'px';  
+                el.style.marginLeft = binding.value + 'px';
             } else if (binding.arg == "r") {
                 el.style.marginRight = binding.value + 'px';
             } else if (binding.arg == "x") {
@@ -130,6 +130,8 @@ const assignTo = () =>
 const LoaderView = () => import ( /*webpackChunkName: "LoaderView"*/ '../src/loader')
 const notification = () =>
     import ( /*webpackChunkName: "assignTo"*/ '../components/notification')
+const tasks = () =>
+    import ( /*webpackChunkName: "tasks"*/ '../components/marketing/tasks')
 
 
 Vue.component('clients-list', ClientList);
@@ -172,3 +174,4 @@ Vue.component('add-status', addStatus);
 Vue.component('assign-to', assignTo);
 Vue.component('m-load', LoaderView);
 Vue.component('notification-icon', notification);
+Vue.component('tasks', tasks);

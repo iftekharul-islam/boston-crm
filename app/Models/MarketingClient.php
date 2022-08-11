@@ -17,4 +17,8 @@ class MarketingClient extends Model
     {
         return $this->hasMany(MarketingClientComment::class,'client_id','id');
     }
+
+    public function tasks(){
+        return $this->hasMany(MarketingTask::class,'client_id','id');
+    }
 }
