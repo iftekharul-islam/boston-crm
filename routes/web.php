@@ -284,6 +284,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('update-status',[MarketingController::class,'updateStatus']);
     Route::post('change-client-status',[MarketingController::class,'changeClientStatus']);
     Route::post('create-client-comment',[MarketingController::class, 'createClientComment']);
+    Route::post('save-task',[MarketingController::class, 'saveTask']);
     Route::post('email-to-client',[MarketingController::class, 'emailToClient']);
 
 

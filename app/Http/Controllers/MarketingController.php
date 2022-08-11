@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Events\Notify;
 use App\Jobs\TaskBasedReport;
 use App\Models\MarketingClientComment;
 use App\Models\Notification;
-use App\Models\User;
 use Illuminate\Http\Request;
+use App\Models\MarketingTask;
 use App\Models\MarketingClient;
 use App\Models\MarketingStatus;
 use App\Services\CompanyService;
+use App\Models\MarketingClientComment;
 use App\Models\MarketingClientCategory;
 use App\Repositories\MarketingRepository;
 
@@ -28,7 +30,7 @@ class MarketingController extends BaseController
 
     public function index()
     {
-        $clients = MarketingClient::with('comments.user')->orderBy('created_at', 'desc')->get();
+        $clients = MarketingClient::with(['comments.user','tasks'])->orderBy('created_at', 'desc')->get();
         $statuses = MarketingStatus::withCount('client')->get();
         $categories = MarketingClientCategory::all();
         $company_users = $this->service->getAuthUserCompany();
@@ -53,7 +55,7 @@ class MarketingController extends BaseController
         $client = MarketingClient::find($request->id);
         $client->assigned_to = json_encode($request->users);
         $client->save();
-        $clients = MarketingClient::all();
+        $clients = MarketingClient::with(['comments.user','tasks'])->orderBy('created_at', 'desc')->get();
         return [
             'data' => $clients
         ];
@@ -63,7 +65,7 @@ class MarketingController extends BaseController
     public function saveMarketingClient(Request $request)
     {
         $this->repository->saveMarketingClient($request->all());
-        $clients = MarketingClient::all();
+        $clients = MarketingClient::with(['comments.user','tasks'])->orderBy('created_at', 'desc')->get();
         $statuses = MarketingStatus::withCount('client')->get();
         return [
             "data" => $clients,
@@ -106,7 +108,7 @@ class MarketingController extends BaseController
 
     public function changeClientStatus(Request $request){
         $this->repository->changeClientStatus($request->all());
-        $clients = MarketingClient::all();
+        $clients = MarketingClient::with(['comments.user','tasks'])->orderBy('created_at', 'desc')->get();
         $statuses = MarketingStatus::withCount('client')->get();
         return [
             "data" => $clients,
@@ -134,7 +136,7 @@ class MarketingController extends BaseController
 
         }
 
-        $clients = MarketingClient::with('comments.user')->orderBy('created_at', 'desc')->get();
+        $clients = MarketingClient::with(['comments.user','tasks'])->orderBy('created_at', 'desc')->get();
         $status = MarketingStatus::withCount('client')->get();
         return [
             "data" => $clients,
@@ -143,6 +145,21 @@ class MarketingController extends BaseController
         ];
     }
 
+    public function saveTask(Request $request)
+    {
+        $this->repository->saveTask($request->all());
+        $clients = MarketingClient::with(['comments.user','tasks'])->orderBy('created_at', 'desc')->get();
+        $statuses = MarketingStatus::withCount('client')->get();
+        return [
+            "error" => false,
+            "data" => $clients,
+            "active_client_id" => $request->client_id,
+            "statuses" => $statuses,
+            "message" => "Task created successfully",
+        ];
+    }
+    
+    
     public function emailToClient(Request $request)
     {
         if(isset($request->clients) && count($request->clients)){
