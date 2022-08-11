@@ -178,12 +178,12 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     //call log
     Route::get('call-log/{order_id}', [CallLogController::class, 'index'])->middleware('role_permission:view.order')->name('call.log');
     Route::post('call-log/{order_id}', [CallLogController::class, 'store'])->middleware('role_permission:view.order')->name('call.log.store');
-    Route::post('call-log-update/{order_id}', [CallLogController::class, 'update'])->middleware('role_permission:view.order')->name('call.log.store');
+    Route::post('call-log-update/{order_id}', [CallLogController::class, 'update'])->middleware('role_permission:view.order')->name('call.log.update');
 
     //tickets
-    Route::get('issues/{order_id}', [TicketController::class, 'index'])->middleware('role_permission:view.order')->name('call.log');
-    Route::post('issue/{order_id}', [TicketController::class, 'store'])->middleware('role_permission:view.order')->name('call.log.store');
-    Route::post('update-issue/{id}', [TicketController::class, 'update'])->middleware('role_permission:view.order')->name('call.log.store');
+    Route::get('issues/{order_id}', [TicketController::class, 'index'])->middleware('role_permission:view.order')->name('issue');
+    Route::post('issue/{order_id}', [TicketController::class, 'store'])->middleware('role_permission:view.order')->name('issue.store');
+    Route::post('update-issue/{id}', [TicketController::class, 'update'])->middleware('role_permission:view.order')->name('issue.update');
     Route::get('get-tickets/{type}', [TicketController::class, 'getTicketByType']);
 
     //    Route::get('/get-basic-info/{id}',[OrderController::class,'getBasicInfo'])->middleware('role_permission:view.order');
@@ -284,6 +284,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('update-status',[MarketingController::class,'updateStatus']);
     Route::post('change-client-status',[MarketingController::class,'changeClientStatus']);
     Route::post('create-client-comment',[MarketingController::class, 'createClientComment']);
+    Route::post('email-to-client',[MarketingController::class, 'emailToClient']);
 
 
     //call routes

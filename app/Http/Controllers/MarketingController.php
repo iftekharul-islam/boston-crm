@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\Notify;
+use App\Jobs\TaskBasedReport;
 use App\Models\MarketingClientComment;
 use App\Models\Notification;
 use App\Models\User;
@@ -122,10 +123,7 @@ class MarketingController extends BaseController
         $data = $request->only(['client_id', 'description', 'created_by']);
         $data['created_by'] = auth()->user()->id;
         MarketingClientComment::create($data);
-        logger('$request->notify');
-        logger($request->notify);
         foreach ($request->notify ?? [] as  $item){
-            logger($item['id']);
             $notification = new Notification();
             $notification->user_id = $item['id'];
             $notification->message = $data['description'];
@@ -136,13 +134,47 @@ class MarketingController extends BaseController
 
         }
 
-
         $clients = MarketingClient::with('comments.user')->orderBy('created_at', 'desc')->get();
-        $statuses = MarketingStatus::withCount('client')->get();
+        $status = MarketingStatus::withCount('client')->get();
         return [
             "data" => $clients,
-            "statuses" => $statuses,
+            "status" => $status,
             "message" => "Client comment updated successfully"
+        ];
+    }
+
+    public function emailToClient(Request $request)
+    {
+        if(isset($request->clients) && count($request->clients)){
+            foreach($request->clients ?? [] as $client){
+                logger($client);
+                $user = [
+                    'name' => $client['text'],
+                    'email' => $client['email'],
+                ];
+                $this->dispatch(new TaskBasedReport($user, $request->subject, $request->message));
+            }
+
+            return [
+                "message" => "Group email sent successfully",
+                "error" => false
+            ];
+        }
+        if(isset($request->email)){
+            $client = MarketingClient::where('email', $request->email)->first();
+            if($client){
+                $this->dispatch(new TaskBasedReport($client, $request->subject, $request->message));
+
+                return [
+                    "message" => "Email sent successfully",
+                    "error" => false
+                ];
+            }
+        }
+
+        return [
+            "message" => "Unable to send email",
+            "error" => true
         ];
     }
 }
