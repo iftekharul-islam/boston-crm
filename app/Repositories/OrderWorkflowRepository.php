@@ -27,15 +27,17 @@ class OrderWorkflowRepository extends BaseRepository
     public function updateOrderScheduleData($data): bool
     {
         $order = Order::find($data['order_id']);
+        $newEntry = true;
         if ($data['schedule_id'] > 0) {
             $order_workflow_schedule = OrderWInspection::find($data['schedule_id']);
             $order_workflow_schedule->updated_by = Auth::user()->id;
-
-            if (isset($data['reschedule_note'])) {
-                $order_workflow_schedule->reschedule_note = $data['reschedule_note'];
-                $order->status = 2;
-                $order->save();
+            if ($order_workflow_schedule->note == $data["note"]) {
+                $newEntry = false;
             }
+
+            $order_workflow_schedule->reschedule_note = $data['reschedule_note'] ?? "";
+            $order->status = 2;
+            $order->save();
         } else {
             $order_workflow_schedule = new OrderWInspection();
             $order_workflow_schedule->created_by = Auth::user()->id;
@@ -54,7 +56,10 @@ class OrderWorkflowRepository extends BaseRepository
         $order_workflow_schedule->inspection_date_time = Carbon::parse($formated_date_time)->format('Y-m-d H:i:s');
 
         $order_workflow_schedule->duration = $data["duration"];
-        $order_workflow_schedule->note = $data["note"];
+        $order_workflow_schedule->note = $data["note"] ?? "";
+        if ($newEntry) {
+            $order_workflow_schedule->note_time = now()->toDateTimeString();
+        }
         $order_workflow_schedule->save();
 
         return $order_workflow_schedule ? true : false;
@@ -74,20 +79,26 @@ class OrderWorkflowRepository extends BaseRepository
      */
     public function updateInitialReviewData($data): bool
     {
+        $newEntry = true;
         if ($data['initial_review_id'] > 0) {
             $order_initial_review = OrderWInitialReview::find($data['initial_review_id']);
             $order_initial_review->updated_by = Auth::user()->id;
+            if ($order_initial_review->note == $data["note"]) {
+                $newEntry = false;
+            }
         } else {
             $order_initial_review = new OrderWInitialReview();
             $order_initial_review->created_by = Auth::user()->id;
         }
         $order_initial_review->order_id = $data["order_id"];
         $order_initial_review->assigned_to = $data["assigned_to"];
-        $order_initial_review->note = $data["note"];
+        $order_initial_review->note = $data["note"] ??  "";
         $order_initial_review->is_review_done = $data["checkbox"] == "1" ? 1 : 0;
         $order_initial_review->is_check_upload = $data["checkbox"] == "2" ? 1 : 0;
+        if ($newEntry) {
+            $order_initial_review->note_time = now()->toDateTimeString();
+        }
         $order_initial_review->save();
-
         $order = Order::find($data['order_id'])->forceFill([
             'workflow_status->initialReview' => 1
         ])->save();
@@ -102,6 +113,9 @@ class OrderWorkflowRepository extends BaseRepository
         } else {
             $order_quality_assurance = new OrderWQa();
             $order_quality_assurance->created_by = Auth::user()->id;
+        }
+        if ($order_quality_assurance->note != $data['note']) {
+            $order_quality_assurance->note_time = now()->toDateTimeString();
         }
         $order_quality_assurance->order_id = $data['order_id'];
         $order_quality_assurance->assigned_to = $data['assigned_to'];
@@ -120,7 +134,10 @@ class OrderWorkflowRepository extends BaseRepository
         if ($data['qa_id'] > 0) {
             $order_quality_assurance = OrderWQa::find($data['qa_id']);
             $order_quality_assurance->updated_by = Auth::user()->id;
-            $order_quality_assurance->note = $data['note'];
+            if ($order_quality_assurance->note != $data['note']) {
+                $order_quality_assurance->note_time = now()->toDateTimeString();
+            }
+            $order_quality_assurance->note = $data['note'] ?? "";
             if (isset($data['files'])) {
                 foreach ($data['files'] as $file) {
                     $order_quality_assurance->addMedia($file)
@@ -174,7 +191,6 @@ class OrderWorkflowRepository extends BaseRepository
         $com->destination = json_encode($data);
         $com->created_by = auth()->user()->id;
         $com->save();
-
         return $com;
     }
 
@@ -185,7 +201,6 @@ class OrderWorkflowRepository extends BaseRepository
         $order_w_com->generated_link = $data["route"];
         $order_w_com->updated_by = auth()->user()->id;
         $order_w_com->save();
-
         return $order_w_com;
     }
 }

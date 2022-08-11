@@ -16,6 +16,16 @@ Vue.mixin({
         gLoad: false
     }),
     methods: {
+        fileCheck(file) {
+            if (file.length == 0) {
+                this.$toast.open({
+                    message: "Please choose file first",
+                    type: 'warning',
+                })
+                return false;
+            }
+            return true;
+        },
         formateDate(date) {
             if (date == null) {
                 return '-';
@@ -59,26 +69,26 @@ Vue.mixin({
         params() {
             let paramsArray = window.location.search.substr(1).split('&');
             let params = [];
-            for (let i = 0; i < paramsArray.length; ++i)
-            {
+            for (let i = 0; i < paramsArray.length; ++i) {
                 let param = paramsArray[i]
                     .split('=', 2);
-                
+
                 if (param.length !== 2)
                     continue;
-                
+
                 params[param[0]] = decodeURIComponent(param[1].replace(/\+/g, " "));
-            }                    
+            }
             return params;
         },
-        addParam(key, value){
-            key = encodeURIComponent(key); value = encodeURIComponent(value);
+        addParam(key, value) {
+            key = encodeURIComponent(key);
+            value = encodeURIComponent(value);
             var s = document.location.search;
-            var kvp = key+"="+value;
-            var r = new RegExp("(&|\\?)"+key+"=[^\&]*");
-            s = s.replace(r,"$1"+kvp);
-            if(!RegExp.$1) {s += (s.length>0 ? '&' : '?') + kvp;};            
-            let path = window.location.href.split('?')[0] + s;            
+            var kvp = key + "=" + value;
+            var r = new RegExp("(&|\\?)" + key + "=[^\&]*");
+            s = s.replace(r, "$1" + kvp);
+            if (!RegExp.$1) { s += (s.length > 0 ? '&' : '?') + kvp; };
+            let path = window.location.href.split('?')[0] + s;
             history.pushState(null, null, path);
         },
         onlyDateFormate(date) {
@@ -89,13 +99,13 @@ Vue.mixin({
             let month = d.getMonth();
             let year = d.getFullYear();
             let dates = d.getDate();
-        
+
             let fullDate = `${year}-${month + 1}-${dates}`;
             return fullDate;
         },
         selectText(phone) {
             // let url = "https://vcc-na1.8x8.com/AGUI/make_call.php?phone="+phone;
-            let url = "tel://"+phone;
+            let url = "tel://" + phone;
             window.location.href = url;
         },
         textSelect(event) {

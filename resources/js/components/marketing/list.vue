@@ -3,7 +3,8 @@
         <div class="d-flex marketing-menu-list">
             <p class="fs-20 text-600 text-light-black mgb-20">Client acquisition</p>
             <div class="ms-auto">
-                <button type="button" @click="addClient" class="m-0 p-2 button button-primary">Add client</button>
+                <button type="button" @click="sentGroupMail" class="button button-primary h-40 d-inline-flex align-items-center py-2">Group Email</button>
+                <button type="button" @click="addClient" class="button button-primary h-40 d-inline-flex align-items-center py-2">Add client</button>
             </div>
         </div>
         <div class="d-flex marketing-menu-list">
@@ -46,12 +47,7 @@
                                     class="mgl-12"><span class="icon-clock"><span class="path1"></span><span
                                             class="path2"></span></span>
                                 </div></a>
-                            <a href="javascript:;" class="corporation-btn" @click.prevent="openAssignedTo">Assign to
-                                <div class="mgl-12"><span class="icon-user"><span class="path1"></span><span
-                                            class="path2"></span></span>
-                                </div>
-                            </a>
-                            <a href="javascript:;" class="corporation-btn">Email now <div class="mgl-12"><span
+                            <a href="javascript:;" @click="sentMail" class="corporation-btn">Email now <div class="mgl-12"><span
                                         class="icon-sms"><span class="path1"></span><span class="path2"></span></span>
                                 </div></a>
                             <a href="javascript:;" class="corporation-btn">Call <div class="mgl-12"><span
@@ -160,6 +156,95 @@
         <tasks :client="currentClient"></tasks>
         <add-client :categories="categories"></add-client>
         <add-status :statuses="allStatuses"></add-status>
+        <b-modal id="send-email" size="md" title="Send email to">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <ValidationObserver ref="emailClientForm">
+                            <ValidationProvider class="group d-block" name="Email address" rules="required"
+                                                v-slot="{ errors }">
+                                <div :class="{ 'invalid-form' : errors[0] }">
+                                    <label for="" class="d-block mb-2 dashboard-label">Email address <span
+                                        class="text-danger require"></span></label>
+                                    <input type="text" class="dashboard-input w-100" v-model="email.address">
+                                    <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                                </div>
+                            </ValidationProvider>
+                            <ValidationProvider class="group d-block" name="Subject" rules="required"
+                                                v-slot="{ errors }">
+                                <div :class="{ 'invalid-form' : errors[0] }">
+                                    <label for="" class="d-block mb-2 dashboard-label">Subject <span
+                                        class="text-danger require"></span></label>
+                                    <input type="text" id="address-input" class="dashboard-input w-100" v-model="email.subject">
+                                    <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                                </div>
+                            </ValidationProvider>
+                            <ValidationProvider class="group d-block" name="Client phone" rules="required" v-slot="{ errors }">
+                                <div :class="{ 'invalid-form' : errors[0] }">
+                                    <label for="" class="d-block mb-2 dashboard-label">Message<span
+                                        class="text-danger require"></span></label>
+                                    <b-form-textarea v-model="email.message" placeholder="Enter Message..." rows="2"
+                                                     cols="5">
+                                    </b-form-textarea>
+                                    <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                                </div>
+                            </ValidationProvider>
+                        </ValidationObserver>
+                    </div>
+                </div>
+            </div>
+            <div slot="modal-footer">
+                <b-button type="button" variant="secondary" @click="$bvModal.hide('send-email')">Close</b-button>
+                <b-button type="button" variant="primary" @click="sendClientEmail">Save</b-button>
+            </div>
+        </b-modal>
+        <b-modal id="send-group-email" size="md" title="Send group email to">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <ValidationObserver ref="emailGroupClientForm">
+                            <div class="group d-block mb-4">
+                                <div :class="{ 'invalid-form' : groupEmail.tagsNotAvailable }">
+                                    <label for="" class="d-block mb-2 dashboard-label">Email Users <span
+                                        class="text-danger require"></span></label>
+                                    <vue-tags-input
+                                        v-model="groupEmail.tag"
+                                        :tags="groupEmail.tags"
+                                        :autocomplete-items="emailFilteredItems"
+                                        :add-only-from-autocomplete="true"
+                                        placeholder="Add clients"
+                                        @tags-changed="newTags => groupEmail.tags = newTags" />
+                                    <span v-if="groupEmail.tagsNotAvailable" class="error-message">Please add clients</span>
+                                </div>
+                            </div>
+                            <ValidationProvider class="group d-block" name="Subject" rules="required"
+                                                v-slot="{ errors }">
+                                <div :class="{ 'invalid-form' : errors[0] }">
+                                    <label for="" class="d-block mb-2 dashboard-label">Subject <span
+                                        class="text-danger require"></span></label>
+                                    <input type="text" id="address-input" class="dashboard-input w-100" v-model="groupEmail.subject">
+                                    <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                                </div>
+                            </ValidationProvider>
+                            <ValidationProvider class="group d-block" name="Message" rules="required" v-slot="{ errors }">
+                                <div :class="{ 'invalid-form' : errors[0] }">
+                                    <label for="" class="d-block mb-2 dashboard-label">Message<span
+                                        class="text-danger require"></span></label>
+                                    <b-form-textarea v-model="groupEmail.message" placeholder="Enter Message..." rows="2"
+                                                     cols="5">
+                                    </b-form-textarea>
+                                    <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                                </div>
+                            </ValidationProvider>
+                        </ValidationObserver>
+                    </div>
+                </div>
+            </div>
+            <div slot="modal-footer">
+                <b-button type="button" variant="secondary" @click="$bvModal.hide('send-group-email')">Close</b-button>
+                <b-button type="button" variant="primary" @click="sendGroupEmail">Send</b-button>
+            </div>
+        </b-modal>
     </div>
 </template>
 <script>
@@ -197,9 +282,28 @@ export default {
             commentValidate: false,
             tasks: []
         },
+        groupEmail: {
+            tag: '',
+            tags: [],
+            tagsNotAvailable: false,
+            autocompleteItems: [],
+            address: [],
+            subject: '',
+            message: '',
+        },
+        email: {
+          address: '',
+          subject: '',
+          message: '',
+        },
         currentTab: 'comments'
     }),
     computed: {
+        emailFilteredItems() {
+            return this.groupEmail.autocompleteItems.filter(i => {
+                return i.text.toLowerCase().indexOf(this.tag.toLowerCase()) !== -1;
+            });
+        },
         filteredItems() {
             return this.autocompleteItems.filter(i => {
                 return i.text.toLowerCase().indexOf(this.tag.toLowerCase()) !== -1;
@@ -209,6 +313,7 @@ export default {
     created() {
         this.fetchUsers()
         this.allClients = this.clients
+        this.mapClient(this.allClients)
         this.initStatus(this.statuses)
         this.filterAllClients(1, 'status', this.allClients)
         this.changeActiveStatus(1)
@@ -238,11 +343,11 @@ export default {
     },
     methods: {
         updateComment() {
-            if (!this.currentClient.newComment.replace(/\s/g, "").length) {
+            if (!this.currentClient.newComment.replace(/\s/g, "").length){
                 this.currentClient.commentValidate = true;
-                setTimeout(() => {
+                setTimeout( () => {
                     this.currentClient.commentValidate = false;
-                }, 1000)
+                },1000)
                 return
             }
             let data = {
@@ -255,7 +360,7 @@ export default {
                     this.currentClient.newComment = ''
                     this.tags = [];
                     this.allClients = res.data
-                    this.initStatus(res.statuses)
+                    this.initStatus(res.status)
                     this.$root.$emit('toast_msg', res)
                     this.changeActiveStatus(this.currentClient.status)
                 })
@@ -296,6 +401,63 @@ export default {
         },
         openTasks() {
             this.$bvModal.show('tasks')
+        },
+        mapClient(clients) {
+            this.groupEmail.autocompleteItems = clients.map(cilent => {
+                return { text: cilent.name, id: cilent.id, email: cilent.email};
+            });
+        },
+        sendClientEmail() {
+            this.$refs.emailClientForm.validate().then((status) => {
+                if (status) {
+                    let data = {
+                        'subject': this.email.subject,
+                        'message': this.email.message,
+                        'email': this.email.address
+                    }
+                    this.$boston.post('email-to-client', data)
+                        .then(res => {
+                            this.$bvModal.hide('send-email')
+                            this.email.subject = ''
+                            this.email.message = ''
+                            this.$root.$emit('toast_msg', res)
+                            this.$refs.emailClientForm.reset()
+                        })
+                        .catch(err => {
+                            console.error(err)
+                        })
+                }
+            })
+        },
+        sendGroupEmail() {
+            if (!this.groupEmail.tags.length){
+                this.groupEmail.tagsNotAvailable = true;
+                setTimeout( () => {
+                    this.groupEmail.tagsNotAvailable = false;
+                },1000)
+                return
+            }
+            this.$refs.emailGroupClientForm.validate().then((status) => {
+                if (status) {
+                    let data = {
+                        'subject': this.groupEmail.subject,
+                        'message': this.groupEmail.message,
+                        'clients': this.groupEmail.tags
+                    }
+                    this.$boston.post('email-to-client', data)
+                        .then(res => {
+                            this.$bvModal.hide('send-group-email')
+                            this.groupEmail.subject = ''
+                            this.groupEmail.message = ''
+                            this.groupEmail.tags = [];
+                            this.$root.$emit('toast_msg', res)
+                            this.$refs.emailGroupClientForm.reset()
+                        })
+                        .catch(err => {
+                            console.error(err)
+                        })
+                }
+            })
         },
         makeActiveClient(clientId) {
             this.activeClient = clientId
@@ -348,7 +510,12 @@ export default {
 }
 </script>
 <style scoped>
-.comment-box-header .tag {
-    height: 37px !important;
-}
+    .comment-box-header .tag {
+        height: 37px!important;
+    }
+    .vue-tags-input {
+        max-width: 100%;
+        position: relative;
+        background-color: #fff;
+    }
 </style>
