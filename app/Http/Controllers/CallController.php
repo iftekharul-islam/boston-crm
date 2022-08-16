@@ -38,6 +38,7 @@ class CallController extends BaseController
         $filterType = $get->filterType ?: 'to_schedule';
         $order = $this->orderData($data, $companyId, $paginate, $dateRange, $filterType);
         $filterValue = $this->getFilterType();
+//        return $order;
         return view('call.index', compact('order','appraisers', 'filterValue'));
     }
 

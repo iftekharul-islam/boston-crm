@@ -312,7 +312,7 @@
                                     </div>
                                 </ValidationProvider>
                             </div>
-                            <ValidationProvider class="d-block group" name="Message" rules="required" v-slot="{ errors }">
+                            <ValidationProvider class="d-block group" name="Message" :rules="{'required': schedule.save == false}" v-slot="{ errors }">
                                 <div class="group" :class="{ 'invalid-form' : errors[0] }">
                                     <label for="" class="d-block mb-2 dashboard-label">Message</label>
                                     <b-form-textarea v-model="callLog.message" placeholder="Enter Message..." rows="2"

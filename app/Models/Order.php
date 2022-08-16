@@ -27,7 +27,7 @@ class Order extends Model implements HasMedia
 
     protected $table = 'orders';
 
-    protected $appends = ['order_file_types', 'order_status', 'selected', 'extra_data', 'call_date_formatted'];
+    protected $appends = ['order_file_types', 'order_status', 'selected', 'extra_data', 'call_date_formatted', 'last_call'];
 
     protected $casts = [
       'due_date' => 'date:d M Y',
@@ -97,6 +97,11 @@ class Order extends Model implements HasMedia
 
     public function getSelectedAttribute(){
         return false;
+    }
+
+    public function getLastCallAttribute(){
+        $log = CallLog::where('order_id', $this->id)->first();
+        return $log ? $log->created_at->format('d M Y h:i A') : null;
     }
 
     public function getCallDateFormattedAttribute(){
