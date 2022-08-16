@@ -15,6 +15,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use App\Repositories\OrderRepository;
 use Illuminate\Support\Facades\Session;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Validator;
@@ -24,12 +25,14 @@ class ClientController extends BaseController
 {
     protected ClientService $clientService;
     protected CompanyService $companyService;
+    protected OrderRepository $repository;
 
-    public function __construct(ClientService $client_service, CompanyService $company_service)
+    public function __construct(ClientService $client_service, CompanyService $company_service,OrderRepository $order_repository)
     {
         parent::__construct();
         $this->clientService = $client_service;
         $this->companyService = $company_service;
+        $this->repository = $order_repository;
     }
 
     /**
@@ -110,10 +113,15 @@ class ClientController extends BaseController
         $merged_data = array_merge($request_data, ["company_id" => $this->companyService->getAuthUserCompany()->id, "created_by" => auth()->user()->id]);
         $client = $this->clientService->saveClientData($merged_data);
 
+        $amcs = $this->repository->getAllClientByType('amc');
+        $lenders = $this->repository->getAllClientByType('lender');
+
         if ($client) {
             if ($request->ajax()) {
                 return [
                     "error" => false,
+                    "amcs" => $amcs,
+                    "lenders" => $lenders,
                     "message" => 'Client added successfully'
                 ];
             } else {
