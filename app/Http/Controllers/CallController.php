@@ -56,6 +56,9 @@ class CallController extends BaseController
                     array_push($orderId, $item->order_id);
                 }
             }
+            if (count($orderId) == 0) {
+                $orderId = null;
+            }
         } else if($filterType == "today_call") {
             $orderId = OrderWInspection::whereDate('inspection_date_time', '=', Carbon::today())->get()->pluck('order_id')->toArray();
         }
