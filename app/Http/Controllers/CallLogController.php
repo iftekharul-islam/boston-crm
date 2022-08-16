@@ -110,7 +110,7 @@ class CallLogController extends Controller
         $log->order_id = $order->id;
         $log->caller_id = $user->id;
         $log->message = $request->message;
-        $log->status = $request->status;
+        $log->status = $request->status == true ? 1 : 0;
         $log->save();
 
         logger(gettype($request->template));

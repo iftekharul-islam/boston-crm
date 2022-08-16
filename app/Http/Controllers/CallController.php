@@ -45,7 +45,14 @@ class CallController extends BaseController
         $orderId = null;
         $dataPropertyClient = false;
         if ($filterType == "completed") {
-            $orderId = CallLog::where('status', 1)->get()->pluck('order_id')->toArray();
+            $todaysOrder = OrderWInspection::whereDate('inspection_date_time', '=', Carbon::today())->get();
+            $orderId = [];
+            foreach ($todaysOrder as $item) {
+                $t_logs = CallLog::where('order_id', $item->order_id)->where('status', 1)->first();
+                if ($t_logs) {
+                    array_push($orderId, $item->order_id);
+                }
+            }
         } else if($filterType == "today_call") {
             $orderId = OrderWInspection::whereDate('inspection_date_time', '=', Carbon::today())->get()->pluck('order_id')->toArray();
         }
@@ -106,6 +113,8 @@ class CallController extends BaseController
                 return $qry->where("status", 1);
             } else if($filterType == "today_call") {
                 return $qry->where("status", "<", 3);
+            } else if($filterType == "completed") {
+                return $qry->where("status", "<", 3);
             }
         })
         ->with($this->order_call_list_relation())
@@ -128,14 +137,28 @@ class CallController extends BaseController
     }
 
     protected function getFilterType() {
+        $user = auth()->user();
+        $companyId = $user->getCompanyProfile()->company_id;
+
         $orders = Order::query();
         $all = $orders->count();
-        $toBeSchedule = $orders->where('status', 0)->count();
-        $schedule = Order::where('status', 1)->count();
-        $completed = CallLog::where('status', 1)->count();
+        $toBeSchedule = $orders->where('status', 0)->where('company_id', $companyId)->count();
+        $schedule = Order::where('status', 1)->where('company_id', $companyId)->count();
+
         $todaysCallId = OrderWInspection::whereDate('inspection_date_time', '=', Carbon::today())->orderBy('id', 'desc')->get()->pluck('order_id');
         // dd($todaysCallId);
-        $today_call = Order::whereIn('id', $todaysCallId)->where('status', "<", 3)->count();
+        $today_call = Order::whereIn('id', $todaysCallId)->where('company_id', $companyId)->where('status', "<", 3)->count();
+
+        $today_call = Order::whereIn('id', $todaysCallId)->where('company_id', $companyId)->where('status', "<", 3)->count();
+        $completed_today = Order::whereIn('id', $todaysCallId)->where('company_id', $companyId)->where('status', "<", 3)->get();
+        $completed = 0;
+        foreach($completed_today as $item) {
+            $logInfo = CallLog::where('order_id', $item->id)->where('status', 1)->first();
+            if ($logInfo) {
+                $completed++;
+            }
+        }
+
         return [
             "all" => $all,
             "to_schedule" => $toBeSchedule,
