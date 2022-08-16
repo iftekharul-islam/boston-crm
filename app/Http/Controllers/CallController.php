@@ -95,6 +95,7 @@ class CallController extends BaseController
                            });
             } else {
                 if ($orderId) {
+                    dd('its here');
                     $searchOrderId = $orderId;
                     return $qry->whereIn('id', $searchOrderId);
                 } else if($filterType == "today_call") {
@@ -112,14 +113,14 @@ class CallController extends BaseController
                 return $qry->whereDate('created_at', ">=", $startTime)->whereDate('created_at', "<=", $endTime);
             }
         })
-        ->when($filterType, function($qry) use ($filterType) {
+        ->when($filterType, function($qry) use ($filterType, $orderId) {
             if ($filterType == "to_schedule") {
                 return $qry->where("status", 0);
             } else if($filterType == "schedule") {
                 return $qry->where("status", 1);
             } else if($filterType == "today_call") {
                 return $qry->where("status", "<", 3);
-            } else if($filterType == "completed") {
+            } else if($filterType == "completed" && $orderId != null && count($orderId) > 0) {
                 return $qry->where("status", "<", 3);
             }
         })
