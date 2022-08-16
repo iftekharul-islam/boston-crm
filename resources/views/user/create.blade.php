@@ -11,7 +11,7 @@
         {{ $error }}
     </div>
     @endforeach
-    <div class=" max-w-1576 mx-auto">
+    <div class="max-w-1576 mx-auto">
         <form action="{{ url('create-direct-user') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="user-registration__box bg-white br-8 pdt-32">
@@ -85,24 +85,22 @@
                     <div class="bg-platinum h-100 pd-32 br-8">
                         <div class="group">
                             <label for="" class="d-block mb-2 dashboard-label">Address</label>
-                            <textarea name="address" id="" cols="30" rows="2"
-                                class="dashboard-textarea w-100 @error('address') is-invalid @enderror">
-                                    {{ old('address') }}
-                                </textarea>
+                            <input type="text" class="dashboard-input w-100"
+                                name="address" value="{{ old('address') }}">
                         </div>
                         <div class="group">
                             <label for="" class="d-block mb-2 dashboard-label">City</label>
-                            <input type="text" class="dashboard-input w-100 @error('city') is-invalid @enderror"
+                            <input type="text" class="dashboard-input w-100"
                                 name="city" value="{{ old('city') }}">
                         </div>
                         <div class="group">
                             <label for="" class="d-block mb-2 dashboard-label">State</label>
-                            <input type="text" class="dashboard-input w-100 @error('state') is-invalid @enderror"
+                            <input type="text" class="dashboard-input w-100"
                                 name="state" value="{{ old('state') }}">
                         </div>
                         <div class="group">
                             <label for="" class="d-block mb-2 dashboard-label">Zip code</label>
-                            <input type="text" class="dashboard-input w-100 @error('zip_code') is-invalid @enderror"
+                            <input type="text" class="dashboard-input w-100"
                                 name="zip_code" value="{{ old('zip_code') }}">
                         </div>
                     </div>

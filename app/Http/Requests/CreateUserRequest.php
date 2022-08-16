@@ -27,7 +27,7 @@ class CreateUserRequest extends FormRequest
             'city'      => 'nullable|string',
             'state'     => 'nullable|string',
             'zip_code'  => 'nullable|string',
-            'email'     => 'required|email',
+            'email'     => 'unique:users|required|email',
             'phone'     => 'required',
             'role'      =>  'required',
             'image'     => 'nullable|mimes:jpeg,jpg,png|max:' . config()->get('constants.image_file_size.max'),

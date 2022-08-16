@@ -133,7 +133,7 @@ class UserController extends BaseController
             );
 
         return redirect()
-            ->route('users.create')
+            ->route('users.index')
             ->withSuccess('User created successfully');
     }
 
