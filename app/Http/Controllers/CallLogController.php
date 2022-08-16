@@ -113,7 +113,7 @@ class CallLogController extends Controller
             $log->order_id = $order->id;
             $log->caller_id = $user->id;
             $log->message = $request->message;
-            $log->status = $request->status;
+            $log->status = $request->status ? 1 : 0;
             $log->save();
 
             $historyTitle = 'Call log updated with text : '.$log->message;
@@ -126,7 +126,6 @@ class CallLogController extends Controller
             $this->addHistory($order, $user, $historyTitle, 'call-log');
         }
 
-        logger(gettype($request->template));
         if($request->template  == 'true') {
             $template = new LogTemplate();
             $template->title = $request->title;
