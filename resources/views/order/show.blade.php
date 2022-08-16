@@ -45,6 +45,8 @@
             <!-- <inspection :order="{{ $order }}" :appraisers="{{ $appraisers }}"></inspection> -->
             {{-- Issues --}}
             <issues :order="{{ $order }}" :users="{{ json_encode($all_users) }}"></issues>
+            {{-- Map --}}
+            <map-view :order="{{ $order }}"></map-view>
         </div>
         <div class="order-details__right col-md-6">
             {{-- Appraisal Details --}}
@@ -61,8 +63,6 @@
             <call-log :order="{{ $order }}" :users="{{ json_encode($all_users) }}"></call-log>
             {{-- Note --}}
             <notes :order="{{ $order }}"></notes>
-            {{-- Map --}}
-            <map-view :order="{{ $order }}"></map-view>
         </div>
     </div>
     <div class="row">
