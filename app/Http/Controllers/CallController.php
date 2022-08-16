@@ -48,17 +48,7 @@ class CallController extends BaseController
         $orderId = null;
         $dataPropertyClient = false;
         if ($filterType == "completed") {
-            $todaysOrder = OrderWInspection::whereDate('inspection_date_time', '=', Carbon::today())->get();
-            $orderId = [];
-            foreach ($todaysOrder as $item) {
-                $t_logs = CallLog::where('order_id', $item->order_id)->where('status', 1)->first();
-                if ($t_logs) {
-                    array_push($orderId, $item->order_id);
-                }
-            }
-            if (count($orderId) == 0) {
-                $orderId = null;
-            }
+            return $this->completedOrders($data, $companyId, $paginate, $dateRange, $filterType);
         } else if($filterType == "today_call") {
             $orderId = OrderWInspection::whereDate('inspection_date_time', '=', Carbon::today())->get()->pluck('order_id')->toArray();
         }
@@ -120,10 +110,80 @@ class CallController extends BaseController
                 return $qry->where("status", 1);
             } else if($filterType == "today_call") {
                 return $qry->where("status", "<", 3);
-            } else if($filterType == "completed" && $orderId != null && count($orderId) > 0) {
-                return $qry->where("status", "<", 3);
             }
         })
+        ->with($this->order_call_list_relation())
+        ->where('company_id', $companyId)
+        ->orderBy('id', 'desc')
+        ->paginate($paginate);
+        return $order;
+    }
+
+    public function completedOrders($data, $companyId, $paginate, $dateRange, $filterType){
+        $orderId = null;
+        $dataPropertyClient = false;
+
+        $todaysOrder = OrderWInspection::whereDate('inspection_date_time', '=', Carbon::today())->get();
+        $orderId = [];
+        foreach ($todaysOrder as $item) {
+            $t_logs = CallLog::where('order_id', $item->order_id)->where('status', 1)->first();
+            if ($t_logs) {
+                array_push($orderId, $item->order_id);
+            }
+        }
+        if (count($orderId) == 0) {
+            $orderId = null;
+        }
+
+        if ($data) {
+            $orderIds = PropertyInfo::where('formatedAddress', 'LIKE', "%$data%")->get()->pluck('order_id')->toArray();
+            $clientIds = Client::where("name", "LIKE", "%$data%")->get()->pluck('id')->toArray();
+            $getAmcIds = Order::whereIn('amc_id', $clientIds)->pluck('id')->toArray();
+            $getLenderIds = Order::whereIn('lender_id', $clientIds)->pluck('id')->toArray();
+            $mergeOrder = array_merge($getAmcIds, $getLenderIds);
+            $orderIds = array_unique(array_merge($orderIds, $mergeOrder));
+            $newOrders = $orderIds;
+            if (count($newOrders) > 0) {
+                $orderId = $newOrders;
+                $dataPropertyClient = true;
+            }
+        }
+
+        if ($orderId == null) {
+            return [];
+        }
+
+        $order = Order::where(function($qry) use ($data, $orderId, $filterType, $dataPropertyClient) {
+            if ($data) {
+                return $qry->when($orderId, function($qrys) use ($orderId){
+                                return $qrys->whereIn('id', $orderId);
+                            })
+                           ->orWhere(function($qry2) use ($data, $dataPropertyClient) {
+                                if ($dataPropertyClient == false) {
+                                    return $qry2->where('client_order_no', "LIKE", "%$data%")
+                                                ->orWhere("system_order_no", "LIKE", "%$data%");
+                                }
+                           });
+            } else {
+                if ($orderId) {
+                    $searchOrderId = $orderId;
+                    return $qry->whereIn('id', $searchOrderId);
+                } else if($filterType == "today_call") {
+                    $searchOrderId = $orderId ?? [];
+                    return $qry->whereIn('id', $searchOrderId);
+                }
+            }
+        })
+        ->when($dateRange, function($qry) use ($dateRange) {
+            $start = $dateRange['start'];
+            $end = $dateRange['end'];
+            if ($start && $end) {
+                $startTime = Carbon::parse($start);
+                $endTime = Carbon::parse($end);
+                return $qry->whereDate('created_at', ">=", $startTime)->whereDate('created_at', "<=", $endTime);
+            }
+        })
+        ->where("status", "<", 3)
         ->with($this->order_call_list_relation())
         ->where('company_id', $companyId)
         ->orderBy('id', 'desc')
@@ -140,7 +200,11 @@ class CallController extends BaseController
         $dateRange = $get->dateRange;
         $filterType = $get->filterType;
         $order = $this->orderData($data, $companyId, $paginate, $dateRange, $filterType);
-        return $order;
+        $filterValue = $this->getFilterType();
+        return response()->json([
+            'order' => $order,
+            'filterValue' => $filterValue
+        ]);
     }
 
     protected function getFilterType() {
