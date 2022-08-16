@@ -85,6 +85,7 @@ class CallController extends BaseController
                            });
             } else {
                 if ($orderId) {
+                    dd('its here');
                     $searchOrderId = $orderId;
                     return $qry->whereIn('id', $searchOrderId);
                 } else if($filterType == "today_call") {
