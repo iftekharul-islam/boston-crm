@@ -107,6 +107,7 @@ class CallLogController extends Controller
         }
         $msg = 'Call log updated successfully';
 
+
         if($request->message){
             $log = new CallLog();
             $log->order_id = $order->id;

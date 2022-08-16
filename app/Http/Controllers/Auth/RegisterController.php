@@ -85,7 +85,11 @@ class RegisterController extends Controller {
                 $this->repository->setAndGetCompanyDetails( $user, $data['company_name'] );
                 event( new UserCreatedEvent ( $user ) );
                 event( new UserMailVerificationEvent( $user ) );
-                Notification::route( 'mail', $data['email'] )->notify( new NewUserCreateNotification($data['name']) );
+                try {
+                    Notification::route( 'mail', $data['email'] )->notify( new NewUserCreateNotification($data['name']) );
+                } catch (\Exception $e) {
+
+                }
                 $user->companies()->where( 'active_company', 1 )->first();
                 $this->addActivity($user, "Your account's registration has been successful along with others information.");
                 return $user;
