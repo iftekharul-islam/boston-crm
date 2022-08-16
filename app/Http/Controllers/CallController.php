@@ -85,7 +85,6 @@ class CallController extends BaseController
                            });
             } else {
                 if ($orderId) {
-                    dd('its here');
                     $searchOrderId = $orderId;
                     return $qry->whereIn('id', $searchOrderId);
                 } else if($filterType == "today_call") {
@@ -108,8 +107,6 @@ class CallController extends BaseController
                 return $qry->where("status", 0);
             } else if($filterType == "schedule") {
                 return $qry->where("status", 1);
-            } else if($filterType == "today_call") {
-                return $qry->where("status", "<", 3);
             }
         })
         ->with($this->order_call_list_relation())
@@ -217,11 +214,8 @@ class CallController extends BaseController
         $schedule = Order::where('status', 1)->where('company_id', $companyId)->count();
 
         $todaysCallId = OrderWInspection::whereDate('inspection_date_time', '=', Carbon::today())->orderBy('id', 'desc')->get()->pluck('order_id');
-        // dd($todaysCallId);
-        $today_call = Order::whereIn('id', $todaysCallId)->where('company_id', $companyId)->where('status', "<", 3)->count();
-
-        $today_call = Order::whereIn('id', $todaysCallId)->where('company_id', $companyId)->where('status', "<", 3)->count();
-        $completed_today = Order::whereIn('id', $todaysCallId)->where('company_id', $companyId)->where('status', "<", 3)->get();
+        $today_call = Order::whereIn('id', $todaysCallId)->where('company_id', $companyId)->count();
+        $completed_today = Order::whereIn('id', $todaysCallId)->where('company_id', $companyId)->get();
         $completed = 0;
         foreach($completed_today as $item) {
             $logInfo = CallLog::where('order_id', $item->id)->where('status', 1)->first();
