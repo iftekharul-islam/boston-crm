@@ -547,7 +547,7 @@
             this.updateTemplate();
             this.filterValues = this.filterValue
             this.initOrder(this.order);
-	    console.log(this.order)
+
             this.$root.$on('wk_flow_toast', (res) => {
                 if (res.error == false) {
                     this.$store.commit('app/storeOrder', res.data)
@@ -744,8 +744,9 @@
                         this.dateRange.start = null;
                         this.dateRange.end = null;
                     }
-                    this.pages.pageData = res;
-                    this.orderData = res.data;
+                    this.pages.pageData = res.order;
+                    this.orderData = res.order.data;
+                    this.filterValues = res.filterValue;
                 }).catch((err) => {
                     this.gLoad = false;
                 });
