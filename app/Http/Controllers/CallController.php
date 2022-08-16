@@ -180,7 +180,6 @@ class CallController extends BaseController
                 return $qry->whereDate('created_at', ">=", $startTime)->whereDate('created_at', "<=", $endTime);
             }
         })
-        ->where("status", "<", 3)
         ->with($this->order_call_list_relation())
         ->where('company_id', $companyId)
         ->orderBy('id', 'desc')
@@ -223,7 +222,6 @@ class CallController extends BaseController
                 $completed++;
             }
         }
-
         return [
             "all" => $all,
             "to_schedule" => $toBeSchedule,

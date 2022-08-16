@@ -113,7 +113,7 @@ class CallLogController extends Controller
             $log->order_id = $order->id;
             $log->caller_id = $user->id;
             $log->message = $request->message;
-            $log->status = $request->status;
+            $log->status = $request->status ? 1 : 0;
             $log->save();
 
             $historyTitle = 'Call log updated with text : '.$log->message;
@@ -126,7 +126,6 @@ class CallLogController extends Controller
             $this->addHistory($order, $user, $historyTitle, 'call-log');
         }
 
-        logger(gettype($request->template));
         if($request->template  == 'true') {
             $template = new LogTemplate();
             $template->title = $request->title;
@@ -177,6 +176,34 @@ class CallLogController extends Controller
             'filterValue' => $filterValue,
             "templates" => $templates,
             'myOrder' => $myOrder
+        ];
+    }
+
+    protected function getFilterType() {
+        $user = auth()->user();
+        $companyId = $user->getCompanyProfile()->company_id;
+
+        $orders = Order::query();
+        $all = $orders->count();
+        $toBeSchedule = $orders->where('status', 0)->where('company_id', $companyId)->count();
+        $schedule = Order::where('status', 1)->where('company_id', $companyId)->count();
+
+        $todaysCallId = OrderWInspection::whereDate('inspection_date_time', '=', Carbon::today())->orderBy('id', 'desc')->get()->pluck('order_id');
+        $today_call = Order::whereIn('id', $todaysCallId)->where('company_id', $companyId)->count();
+        $completed_today = Order::whereIn('id', $todaysCallId)->where('company_id', $companyId)->get();
+        $completed = 0;
+        foreach($completed_today as $item) {
+            $logInfo = CallLog::where('order_id', $item->id)->where('status', 1)->first();
+            if ($logInfo) {
+                $completed++;
+            }
+        }
+        return [
+            "all" => $all,
+            "to_schedule" => $toBeSchedule,
+            "schedule" => $schedule,
+            "completed" => $completed,
+            "today_call" => $today_call
         ];
     }
 
@@ -243,8 +270,6 @@ class CallLogController extends Controller
                     return $qry->where("status", 0);
                 } else if($filterType == "schedule") {
                     return $qry->where("status", 1);
-                } else if($filterType == "today_call") {
-                    return $qry->where("status", "<", 3);
                 }
             })
             ->with($this->order_call_list_relation())
@@ -253,25 +278,8 @@ class CallLogController extends Controller
             ->paginate($paginate);
         return $order;
     }
-    protected function getFilterType() {
-        $orders = Order::query();
-        $all = $orders->count();
-        $toBeSchedule = $orders->where('status', 0)->count();
-        $schedule = Order::where('status', 1)->count();
-        $completed = CallLog::where('status', 1)->count();
-        $todaysCallId = OrderWInspection::whereDate('inspection_date_time', '=', date('Y-m-d'))->get()->pluck('order_id');
-        $today_call = Order::whereIn('id', $todaysCallId)->where('status', "<", 3)->count();
-        return [
-            "all" => $all,
-            "to_schedule" => $toBeSchedule,
-            "schedule" => $schedule,
-            "completed" => $completed,
-            "today_call" => $today_call
-        ];
-    }
 
-    public function template()
-    {
+    public function template(){
         return LogTemplate::all();
     }
 }
