@@ -1,7 +1,7 @@
 <template>
   <div class="order-details-box bg-white call-log-box">
         <div class="box-header">
-          <p class="fw-bold text-light-black fs-20 mb-0">Call log</p>
+          <p class="fw-bold text-light-black fs-20 mb-0">Call log <span class="fs-15" v-if="isCompleted">(Completed)</span></p>
             <a @click="isModal = true" class="d-inline-flex edit add-call align-items-center fw-bold">Add call log</a>
         </div>
       <div class="box-body" v-if="logs.length">
