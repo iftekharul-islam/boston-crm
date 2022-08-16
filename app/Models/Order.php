@@ -32,7 +32,7 @@ class Order extends Model implements HasMedia
     protected $casts = [
       'due_date' => 'date:d M Y',
       'received_date' => 'date:d M Y',
-      'created_at' => 'date:d M Y H:i A'
+      'created_at' => 'date:d M Y h:i A'
     ];
 
     protected $status_code = [
@@ -101,7 +101,8 @@ class Order extends Model implements HasMedia
 
     public function getLastCallAttribute(){
         $log = CallLog::where('order_id', $this->id)->first();
-        return $log ? $log->created_at->format('d M Y h:i A') : null;
+
+        return $log ? $log->format_date : null;
     }
 
     public function getCallDateFormattedAttribute(){

@@ -12,6 +12,7 @@ use App\Jobs\TaskBasedReport;
 use App\Services\CallService;
 use App\Models\OrderWInspection;
 use App\Repositories\OrderRepository;
+use Prophecy\Call\Call;
 
 class CallController extends BaseController
 {
@@ -28,6 +29,7 @@ class CallController extends BaseController
 
     public function index(Request $get)
     {
+//        return CallLog::where('order_id', 21)->get();
         $timezone = $this->getTimeZone();
         $user = auth()->user();
         $appraisers = $this->repository->getUserExpectRole(role: 'admin');

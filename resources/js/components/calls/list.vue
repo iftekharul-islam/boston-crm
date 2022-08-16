@@ -289,7 +289,17 @@
                                     </div>
                                     <div class="ms-3">
                                         <p class="fw-bold mb-1">{{ log.caller.name }}</p>
-                                        <p class="text-gray fs-12 mb-0">{{ log.created_at }}</p>
+                                        <p class="text-gray fs-12 mb-0">{{ log.format_date }}</p>
+                                    </div>
+                                </div>
+                                <p class="message" v-html="log.message"></p>
+                            </div>
+                            <div v-else>
+                                <div class="top d-flex align-items-center">
+                                    <img src="/img/user.png" alt=" profile photo boston" class="img-fluid">
+                                    <div class="ms-3">
+                                        <p class="fw-bold mb-1">Unknown</p>
+                                        <p class="text-gray fs-12 mb-0">{{ log.format_date }}</p>
                                     </div>
                                 </div>
                                 <p class="message" v-html="log.message"></p>
