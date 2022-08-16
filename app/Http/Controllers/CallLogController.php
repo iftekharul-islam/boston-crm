@@ -105,13 +105,26 @@ class CallLogController extends Controller
                 'data' => ''
             ]);
         }
+        $msg = 'Call log updated successfully';
 
-        $log = new CallLog();
-        $log->order_id = $order->id;
-        $log->caller_id = $user->id;
-        $log->message = $request->message;
-        $log->status = $request->status == true ? 1 : 0;
-        $log->save();
+
+        if($request->message){
+            $log = new CallLog();
+            $log->order_id = $order->id;
+            $log->caller_id = $user->id;
+            $log->message = $request->message;
+            $log->status = $request->status;
+            $log->save();
+
+            $historyTitle = 'Call log updated with text : '.$log->message;
+
+            if($log->status){
+                $msg = 'Call log completed successfully';
+                $historyTitle = 'Call log completed with text : '. $log->message;
+            }
+
+            $this->addHistory($order, $user, $historyTitle, 'call-log');
+        }
 
         logger(gettype($request->template));
         if($request->template  == 'true') {
@@ -127,16 +140,13 @@ class CallLogController extends Controller
             $order->call_date = Carbon::parse($deliveredDate);
             $order->call_by = $user->id;
             $order->save();
+
+            $historyTitle = 'Call log updated with reminder : '. $deliveredDate;
+
+            $this->addHistory($order, $user, $historyTitle, 'call-log');
         }
 
         $templates = LogTemplate::all();
-
-        $msg = 'Call log updated successfully';
-        $historyTitle = 'Call log updated with text : '. $log->message;
-        if($log->status){
-            $msg = 'Call log completed successfully';
-            $historyTitle = 'Call log completed with text : '. $log->message;
-        }
 
         $data = [
             "activity_text" => $msg,
@@ -145,7 +155,6 @@ class CallLogController extends Controller
         ];
 
         $this->repository->addActivity($data);
-        $this->addHistory($order, $user, $historyTitle, 'call-log');
 
         $logData = CallLog::with('caller')->where('order_id', $id)->get();
 
