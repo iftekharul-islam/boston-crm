@@ -4,10 +4,10 @@
             <div class="bg-white pd-32">
                 <div class="calls__menu d-flex flex-wrap">
                     <div class="left chart-box-header-btn d-flex flex-wrap me-3">
-                        <button @click="filterByTab('all')"
+                        <!-- <button @click="filterByTab('all')"
                             :class="{'active' : pages.filterType == 'all' || pages.filterType == null}"
                             class="calls-btn h-40 d-flex align-items-center mb-2 d-none">All <span class="ms-2">
-                                ({{ filterValues.all }})</span></button>
+                                ({{ filterValues.all }})</span></button> -->
                         <button @click="filterByTab('to_schedule')"
                             :class="{'active' : pages.filterType == 'to_schedule'}"
                             class="calls-btn h-40 d-flex align-items-center mb-2">Todays Call <span class="ms-2">
@@ -733,7 +733,6 @@
                 this.$boston.post('search/call/order?page=' + this.pages.acitvePage, { 'filterType': this.pages.filterType, data: this.pages.searchModel, paginate: this.pages.paginate, dateRange: this.dateRange }).then((res) => {
                     this.selectedItems = [];
                     this.gLoad = false;
-                    console.log(this.pages.filterType);
                     if (this.pages.filterType != 'daterange') {
                         this.dateRange.search = false;
                         this.dateRange.start = null;

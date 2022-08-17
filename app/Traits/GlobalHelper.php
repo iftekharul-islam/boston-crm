@@ -14,18 +14,19 @@ trait GlobalHelper {
         $companyId = $user->getCompanyProfile()->company_id;
 
         $all = Order::count();
-        $toBeSchedule = Order::where('status', 0)->where('completed_status', 0)->where('company_id', $companyId)->count();
+        $toBeSchedule = Order::where('status', 0)->where('completed_status', null)->where('company_id', $companyId)->count();
         $schedule = Order::where('status', 1)->where('company_id', $companyId)->count();
-        $completed_today = Order::where('completed_date', "=", Carbon::today())->where('completed_status', 1)->where('company_id', $companyId)->count();
+        $completed_today = Order::whereDate('completed_date', "=", Carbon::today())->where('completed_status', 1)->where('company_id', $companyId)->count();
         $today_call = 0;
 
-        return [
+        $data = [
             "all" => $all,
             "to_schedule" => $toBeSchedule,
             "schedule" => $schedule,
             "completed" => $completed_today,
             "today_call" => $today_call
         ];
+        return $data;
     }
 
 }

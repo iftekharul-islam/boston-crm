@@ -100,7 +100,7 @@ class CallController extends BaseController
         })
         ->when($filterType, function($qry) use ($filterType, $orderId) {
             if ($filterType == "to_schedule") {
-                return $qry->where("status", 0)->where("completed_status", 0);
+                return $qry->where("status", 0)->where("completed_status", null);
             } else if($filterType == "schedule") {
                 return $qry->where("status", 1);
             } else if($filterType == "completed") {
