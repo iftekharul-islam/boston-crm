@@ -1,7 +1,7 @@
 <template>
   <div class="order-details-box bg-white call-log-box">
         <div class="box-header">
-          <p class="fw-bold text-light-black fs-20 mb-0">Call log</p>
+          <p class="fw-bold text-light-black fs-20 mb-0">Call log <span class="fs-15" v-if="isCompleted">(Completed)</span></p>
             <a @click="isModal = true" class="d-inline-flex edit add-call align-items-center fw-bold">Add call log</a>
         </div>
       <div class="box-body" v-if="logs.length">
@@ -35,7 +35,7 @@
       <div class="text-center mt-3 mb-3" v-else>
           No call added yet !
       </div>
-    <add-call-log :showModal="isModal" :orderId="this.id" :users="this.users" :isCompleted="isCompleted"></add-call-log>
+    <add-call-log :showModal="isModal" :order="this.order" :users="this.users" :isCompleted="isCompleted"></add-call-log>
   </div>
 </template>
 <script>

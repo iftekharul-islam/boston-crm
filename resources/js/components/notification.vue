@@ -75,26 +75,29 @@
             <template #button-content>
                 <a class="notification-icon fs-3 text-light-black d-flex align-items-center">
                     <span class="icon-notification"></span>
+                    <span class="icon-button__badge" v-if="totalUnread">{{ totalUnread }}</span>
                 </a>
             </template>
-            <b-dropdown-text style="width: 400px;" v-for="(item, index) in notifications" :key="index">
-                    <div class="call-summary-item">
-                        <div class="top d-flex align-items-center">
-                            <div v-if="item.sender.media.length">
-                                <img :src="item.sender.media[0].original_url" alt=" profile photo boston"
-                                     class="img-fluid">
-                            </div>
-                            <div v-else>
-                                <img src="/img/user.png" alt="boston image" class="comment-img">
-                            </div>
-                            <div class="ms-3">
-                                <p class="fw-bold mb-1">{{ item.sender.name }}</p>
-                                <p class="text-gray fs-12 mb-0">{{ item.created_at }}</p>
+            <b-dropdown-text style="width: 400px;" variant="link" v-for="(item, index) in notifications" class="mb-1" :class="{'bg-light-grey': item.is_read == false}" :key="index">
+                    <b-link href="/marketing" class="text-black">
+                        <div class="call-summary-item">
+                            <div class="top d-flex align-items-center">
+                                <div v-if="item.sender.media.length">
+                                    <img :src="item.sender.media[0].original_url" alt=" profile photo boston"
+                                         class="img-fluid">
+                                </div>
+                                <div v-else>
+                                    <img src="/img/user.png" alt="boston image" class="comment-img">
+                                </div>
+                                <div class="ms-3">
+                                    <p class="fw-bold mb-1">{{ item.sender.name }}</p>
+                                    <p class="text-gray fs-12 mb-0">{{ item.created_at }}</p>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <b>{{ item.message }}</b>
-                    <b-dropdown-divider></b-dropdown-divider>
+                        <b>{{ item.message }}</b>
+                    </b-link>
+<!--                    <b-dropdown-divider></b-dropdown-divider>-->
             </b-dropdown-text>
         </b-dropdown>
     </div>
@@ -105,6 +108,7 @@ export default {
     name: "notification",
     data: () => ({
         notifications: [],
+        totalUnread: 0
     }),
     created() {
         this.fetchData()
@@ -117,11 +121,21 @@ export default {
             this.$boston.get('notifications')
                 .then(res => {
                     this.notifications = res
+                    this.fetchTotalUnread(this.notifications)
                 })
                 .catch(err => {
                     console.error(err)
                 })
         },
+        fetchTotalUnread(notifications){
+            let count = 0
+            notifications.forEach((value, index) => {
+                if(value.is_read == 0){
+                    count ++
+                }
+            });
+            this.totalUnread = count
+        }
     }
 }
 </script>
@@ -197,6 +211,23 @@ export default {
         100% {
             transform: rotate(360deg);
         }
+    }
+    .icon-button__badge {
+        position: absolute;
+        top: -4px;
+        right: 37px;
+        width: 20px;
+        height: 20px;
+        background: red;
+        color: #ffffff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+        font-size: 14px;
+    }
+    .bg-light-grey {
+        background: #c3efe5;
     }
 
 </style>

@@ -246,7 +246,7 @@
                                     <select id="amcClientSelect" class="dashboard-input w-100 select2"
                                         v-model="step1.amcClient">
                                         <option value="">Choose Amc Client</option>
-                                        <option :value="item.id" :key="ik" v-for="item, ik in amcClients"
+                                        <option :value="item.id" :key="ik" v-for="item, ik in allAmcClients"
                                             :data-uad="item.fee_for_1004uad" :data-d="item.fee_for_1004d"
                                             :data-processing="item.processing_fee">{{ item.name
                                             }}</option>
@@ -275,7 +275,7 @@
                                     <select id="lenderClientSelect" class="dashboard-input w-100"
                                         v-model="step1.lender">
                                         <option value="">Choose Lender</option>
-                                        <option :value="item.id" :key="ik" v-for="item, ik in lenderClients"
+                                        <option :value="item.id" :key="ik" v-for="item, ik in allLenderClients"
                                             :data-uad="item.fee_for_1004uad" :data-d="item.fee_for_1004d"
                                             :data-processing="item.processing_fee">{{
                                             item.name
@@ -839,7 +839,9 @@
                 }],
                 emails: [{
                     value: ''
-                }]
+                }],
+                allAmcClients: [],
+                allLenderClients: [],
 
             }
         },
@@ -853,6 +855,8 @@
             this.$root.$on('orderSubmitConfirm', (status) => {
                 this.removeDataValue();
             });
+
+            this.initiateClients(this.amcClients,this.lenderClients)
         },
         mounted() {
             this.geolocate();
@@ -860,6 +864,10 @@
             this.select2Features();
         },
         methods: {
+            initiateClients(amcs,lenders){
+                this.allAmcClients = amcs
+                this.allLenderClients = lenders
+            },
             numbersOnly(e) {
                 return e.charCode >= 48 && e.charCode <= 57;
             },
@@ -901,12 +909,12 @@
                     if (status) {
                         this.$boston.post('clients', this.client)
                             .then(res => {
-                                console.log(res)
                                 this.$toast.open({
                                     message: res.message,
                                     type: res.error == true ? 'error' : 'success',
                                 })
                                 if(res.error == false) {
+                                    this.initiateClients(res.amcs,res.lenders)
                                     this.$bvModal.hide('add-client')
                                 }
                             })
@@ -965,12 +973,12 @@
                     let changeLender = false;
                     let id = e.target.value;
                     this.step1.amcClient = id;
-                    let findObject = this.amcClients.find(ele => ele.id == id);
+                    let findObject = this.allAmcClients.find(ele => ele.id == id);
                     if (findObject && findObject.client_type == "both") {
                         this.step1.lender = id;
                         changeLender = true;
                     } else {
-                        let checkAmcId = this.lenderClients.find(ele => ele.id == this.step1.lender);
+                        let checkAmcId = this.allLenderClients.find(ele => ele.id == this.step1.lender);
                         if (checkAmcId && checkAmcId.client_type == "both") {
                             this.step1.lender = null;
                             changeLender = true;
@@ -988,13 +996,13 @@
                     let id = data.id;
                     this.step1.lender = id;
                     let changeLender = false;
-                    let findObject = this.lenderClients.find(ele => ele.id == id);
+                    let findObject = this.allLenderClients.find(ele => ele.id == id);
                     if (findObject && findObject.client_type == "both") {
                         this.step1.amcClient = id;
                         changeLender = true;
                         this.calculateTechnologyFee(e)
                     } else {
-                        let checkAmcId = this.amcClients.find(ele => ele.id == this.step1.amcClient);
+                        let checkAmcId = this.allAmcClients.find(ele => ele.id == this.step1.amcClient);
                         if (checkAmcId && checkAmcId.client_type == "both") {
                             this.step1.amcClient = null;
                             changeLender = true;
@@ -1234,10 +1242,10 @@
 
                 // recalculate technology fee when edit second time
                 let getStepAmc = this.step1.amcClient;
-                let amcClients = this.amcClients.find(ele => ele.id == getStepAmc);
-                let dataUad = amcClients.fee_for_1004uad;
-                let dataD = amcClients.fee_for_1004d;
-                let dataProcessing = amcClients.processing_fee;
+                let amcClients = this.allAmcClients.find(ele => ele.id == getStepAmc);
+                let dataUad = allAmcClients.fee_for_1004uad;
+                let dataD = allAmcClients.fee_for_1004d;
+                let dataProcessing = allAmcClients.processing_fee;
 
                 if (this.step1.amcClient != '') {
                     this.processingFee = dataProcessing;
