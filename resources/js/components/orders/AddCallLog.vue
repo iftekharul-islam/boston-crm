@@ -83,7 +83,7 @@
 <script>
 export default {
     props: [
-        'orderId', 'showModal', 'users', 'isCompleted'
+        'order', 'showModal', 'users', 'isCompleted'
     ],
     data: () => ({
         schedule: {
@@ -105,14 +105,7 @@ export default {
     watch: {
         showModal(newValue, oldValue) {
             if (newValue === true) {
-                this.message = ''
-                this.assignTo = ''
-                this.complete = null
-                this.template.save = false
-                this.schedule.save = false
-                this.template.title = ''
-                this.schedule.date = ''
-                this.updateTemplate()
+                this.fetchData(this.order)
                 this.notCompleted = this.isCompleted
                 this.$bvModal.show('add-call-log')
             } else {
@@ -121,11 +114,23 @@ export default {
         }
     },
     created() {
-        this.id = this.orderId;
+        this.id = this.order.id;
         this.notCompleted = this.isCompleted
         this.updateTemplate()
     },
     methods: {
+        fetchData(order) {
+            console.log(order)
+            this.message = ''
+            this.assignTo = ''
+            this.complete = null
+            this.template.save = false
+            this.schedule.save = false
+            this.template.title = ''
+            this.schedule.date = order.call_date
+            this.updateTemplate()
+            this.id = order.id
+        },
         updateTemplate(){
             axios.get('log-template-list')
                 .then(res => {
