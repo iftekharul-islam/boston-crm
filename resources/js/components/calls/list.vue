@@ -354,10 +354,6 @@
                                 <input type="checkbox" class="checkbox-input" v-model="template.save" >
                                 <label for="" class="checkbox-label">Save as Template </label>
                             </div>
-                            <div class="checkbox-group mt-2" v-if="callLog.notCompleted">
-                                <input type="checkbox" class="checkbox-input" v-model="callLog.status">
-                                <label for="" class="checkbox-label">Call completed</label>
-                            </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="button button-primary px-5" @click="addCallLog()">Post</button>
@@ -596,7 +592,6 @@
                     if (status) {
                         let formData = new FormData();
                         formData.append('message', this.callLog.message)
-                        formData.append('status', this.callLog.status)
                         formData.append('filter', this.pages.filterType)
                         formData.append('template', this.template.save)
                         formData.append('title', this.template.title)

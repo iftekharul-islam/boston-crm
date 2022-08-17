@@ -100,7 +100,7 @@ class Order extends Model implements HasMedia
     }
 
     public function getLastCallAttribute(){
-        $log = CallLog::where('order_id', $this->id)->first();
+        $log = CallLog::where('order_id', $this->id)->orderBy('created_at', 'desc')->first();
 
         return $log ? $log->format_date : null;
     }
