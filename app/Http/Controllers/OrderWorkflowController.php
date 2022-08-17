@@ -278,7 +278,9 @@ class OrderWorkflowController extends BaseController
         $trainee = User::find($request->trainee_id);
 
         if ($report) {
-            $report->reviewed_by = $request->reviewed_by;
+            if($request->has('reviewed_by') && $request->reviewed_by != ''){
+                $report->reviewed_by = $request->reviewed_by;
+            }
             $report->creator_id = $request->creator_id;
             $report->assigned_to = $request->assigned_to;
             $report->trainee_id = $request->trainee_id;
@@ -296,7 +298,9 @@ class OrderWorkflowController extends BaseController
         } else {
             $newReport = new OrderWReport();
             $newReport->order_id = $order->id;
-            $newReport->reviewed_by = $request->reviewed_by;
+            if($request->has('reviewed_by') && $request->reviewed_by != ''){
+                $newReport->reviewed_by = $request->reviewed_by;
+            }
             $newReport->creator_id = $request->creator_id;
             $newReport->assigned_to = $request->assigned_to;
             $newReport->trainee_id = $request->trainee_id;

@@ -256,14 +256,14 @@
                         let formData = new FormData();
                         for (let i = 0; i < this.fileData.files.length; i++) {
                             let file = this.fileData.files[i];
-                            formData.append('files[' + i + ']', file);
+                            formData.append('files[' + i + ']', file)
                         }
                         formData.append('file_type', this.fileData.file_type)
                         formData.append('assigned_to', this.assignTo)
                         formData.append('note', this.note)
                         formData.append('trainee_id', this.traineeId)
                         formData.append('creator_id', this.creatorId)
-                        formData.append('reviewed_by', this.viewerId)
+                        formData.append('reviewed_by', this.viewerId ?? '')
                         this.$boston.post('assignee-report-preparation-create/' + this.orderData.id, formData, {
                             headers: {
                                 'Content-Type': 'multipart/form-data'
