@@ -43,6 +43,12 @@ class CallLogController extends Controller
             ]);
         }
 
+        if(!$order->completed_status){
+            $order->completed_status = 1;
+            $order->completed_date = Carbon::now();
+            $order->save();
+        }
+
         $msg = 'Call log updated successfully';
 
         if($request->message){
@@ -50,7 +56,7 @@ class CallLogController extends Controller
             $log->order_id = $order->id;
             $log->caller_id = $request->caller_id ?? $user->id;
             $log->message = $request->message;
-            $log->status = $request->status ? 1 : 0;
+            $log->status = 1;
             $log->save();
 
             $historyTitle = 'Call log updated with text : '.$log->message;
@@ -118,13 +124,19 @@ class CallLogController extends Controller
         }
         $msg = 'Call log updated successfully';
 
+        if(!$order->completed_status){
+            $order->completed_status = 1;
+            $order->completed_date = Carbon::now();
+            $order->save();
+        }
+
 
         if($request->message){
             $log = new CallLog();
             $log->order_id = $order->id;
             $log->caller_id = $user->id;
             $log->message = $request->message;
-            $log->status = $request->status ? 1 : 0;
+            $log->status = 1;
             $log->save();
 
             $historyTitle = 'Call log updated with text : '.$log->message;

@@ -63,12 +63,6 @@
                             <label for="" class="checkbox-label text-capitalize">Save as Template </label>
                         </div>
                     </div>
-                    <div class="col-12" v-if="!notCompleted">
-                        <div class="checkbox-group review-check mgt-20">
-                            <input type="checkbox" class="checkbox-input check-data" v-model="complete">
-                            <label for="" class="checkbox-label text-capitalize">Completed </label>
-                        </div>
-                    </div>
                 </div>
             </div>
             <div slot="modal-footer" class="mgt-44">
@@ -153,7 +147,6 @@ export default {
                     let formData = new FormData();
                     formData.append('message', this.message)
                     formData.append('caller_id', this.assignTo)
-                    formData.append('status', this.complete)
                     formData.append('template', this.template.save)
                     formData.append('title', this.template.title)
                     formData.append('schedule', this.schedule.save)
