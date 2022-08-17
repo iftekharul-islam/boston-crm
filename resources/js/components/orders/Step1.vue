@@ -453,7 +453,7 @@
                                                 </ValidationProvider>
                                             </div>
                                             <div class="group">
-                                                <ValidationProvider name="First Name" rules="required|alpha_spaces"
+                                                <ValidationProvider name="First Name" rules="required"
                                                     v-slot="{ errors }">
                                                     <label for="name" class="d-block mb-2 dashboard-label">Client name
                                                         <span class="text-danger require"></span></label>
