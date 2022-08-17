@@ -125,9 +125,12 @@ export default {
             this.assignTo = ''
             this.complete = null
             this.template.save = false
-            this.schedule.save = false
+
             this.template.title = ''
             this.schedule.date = order.call_date
+            if(this.schedule.date){
+                this.schedule.save = true
+            }
             this.updateTemplate()
             this.id = order.id
         },
