@@ -25,8 +25,8 @@ class OrderWorkflowService
         } else {
             $event = new Event;
         }
-        $event->name = $property_info->search_address . ' ' . $inspector->name  . ' (' . $contact_info->contact . ',' . $phone_numbers . ') ' . $schedule->note;
-        $event->description = $schedule->note;
+        $event->name = $property_info->search_address . ' ' . $inspector->name  . ' (' . $contact_info->contact . ',' . $phone_numbers . ') ' . $schedule->note ?? ' ';
+        $event->description = $schedule->note ?? ' ';
         $event->startDateTime = Carbon::parse($schedule->inspection_date_time);
         $event->endDateTime = Carbon::parse($schedule->inspection_date_time)->addMinute((int) $schedule->duration);
         $event->location = $property_info->search_address;

@@ -108,7 +108,7 @@
                                     placeholder="Enter notes..." rows="2" cols="5">
                                 </text-editor>
                             </div>
-                            <div class="group">
+                            <div class="group" v-if="orderStatus == 1 || orderStatus == 2">
                                 <label for="" class="d-block mb-2 dashboard-label">Reschedule note</label>
                                 <text-editor v-model="scheduleData.reschedule_note"
                                     placeholder="Enter re schedule notes..." rows="2" cols="5">
@@ -207,6 +207,7 @@
             //    order = localOrderData;
             //}
             this.getScheduleData(order)
+            console.log(this.orderStatus)
             //console.log(order)
         },
         methods: {
