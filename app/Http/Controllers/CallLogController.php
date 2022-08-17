@@ -45,7 +45,7 @@ class CallLogController extends Controller
 
         if(!$order->completed_status){
             $order->completed_status = 1;
-            $order->completed_date == Carbon::now();
+            $order->completed_date = Carbon::now();
             $order->save();
         }
 
@@ -126,7 +126,7 @@ class CallLogController extends Controller
 
         if(!$order->completed_status){
             $order->completed_status = 1;
-            $order->completed_date == Carbon::now();
+            $order->completed_date = Carbon::now();
             $order->save();
         }
 
