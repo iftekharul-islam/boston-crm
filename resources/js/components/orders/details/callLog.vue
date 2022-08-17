@@ -35,7 +35,7 @@
       <div class="text-center mt-3 mb-3" v-else>
           No call added yet !
       </div>
-    <add-call-log :showModal="isModal" :orderId="this.id" :users="this.users" :isCompleted="isCompleted"></add-call-log>
+    <add-call-log :showModal="isModal" :order="this.order" :users="this.users" :isCompleted="isCompleted"></add-call-log>
   </div>
 </template>
 <script>
