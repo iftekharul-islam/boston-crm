@@ -10,17 +10,17 @@
                                 ({{ filterValues.all }})</span></button>
                         <button @click="filterByTab('to_schedule')"
                             :class="{'active' : pages.filterType == 'to_schedule'}"
-                            class="calls-btn h-40 d-flex align-items-center mb-2">To be Schedule <span class="ms-2">
+                            class="calls-btn h-40 d-flex align-items-center mb-2">Todays Call <span class="ms-2">
                                 ({{ filterValues.to_schedule }})</span></button>
                         <button @click="filterByTab('schedule')" :class="{'active' : pages.filterType == 'schedule'}"
-                            class="calls-btn h-40 d-flex align-items-center mb-2">Schedule <span class="ms-2">
+                            class="calls-btn h-40 d-flex align-items-center mb-2">Scheduled <span class="ms-2">
                                 ({{ filterValues.schedule }})</span></button>
-                        <button @click="filterByTab('today_call')"
+                        <!-- <button @click="filterByTab('today_call')"
                             :class="{'active' : pages.filterType == 'today_call'}"
                             class="calls-btn h-40 d-flex align-items-center mb-2">Todays Call <span class="ms-2">
-                                ({{ filterValues.today_call }})</span></button>
+                                ({{ filterValues.today_call }})</span></button> -->
                         <button @click="filterByTab('completed')" :class="{'active' : pages.filterType == 'completed'}"
-                            class="calls-btn h-40 d-flex align-items-center mb-2">Completed <span class="ms-2">
+                            class="calls-btn h-40 d-flex align-items-center mb-2">Completed Call<span class="ms-2">
                                 ({{ filterValues.completed }})</span></button>
                         <button @click="$bvModal.show('dateRange'); filterByTab('daterange')"
                             :class="{'active' : pages.filterType == 'daterange'}"

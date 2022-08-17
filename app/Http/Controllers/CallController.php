@@ -5,20 +5,21 @@ use Carbon\Carbon;
 use App\Models\Order;
 use App\Models\Client;
 use App\Models\CallLog;
+use Prophecy\Call\Call;
 use App\Helpers\CrmHelper;
 use App\Models\PropertyInfo;
+use App\Traits\GlobalHelper;
 use Illuminate\Http\Request;
 use App\Jobs\TaskBasedReport;
 use App\Services\CallService;
 use App\Models\OrderWInspection;
 use App\Repositories\OrderRepository;
-use Prophecy\Call\Call;
 
 class CallController extends BaseController
 {
     protected OrderRepository $repository;
     protected CallService $callService;
-    use CrmHelper;
+    use CrmHelper, GlobalHelper;
 
     public function __construct(OrderRepository $order_repository,CallService $callService)
     {
@@ -39,7 +40,7 @@ class CallController extends BaseController
         $dateRange = $get->dateRange;
         $filterType = $get->filterType ?: 'to_schedule';
         $order = $this->orderData($data, $companyId, $paginate, $dateRange, $filterType);
-        $filterValue = $this->getFilterType();
+        $filterValue = $this->orderCounter();
 //        return $order;
         return view('call.index', compact('order','appraisers', 'filterValue'));
     }
@@ -48,9 +49,7 @@ class CallController extends BaseController
         $orderId = null;
         $dataPropertyClient = false;
         if ($filterType == "completed") {
-            return $this->completedOrders($data, $companyId, $paginate, $dateRange, $filterType);
-        } else if($filterType == "today_call") {
-            $orderId = OrderWInspection::whereDate('inspection_date_time', '=', Carbon::today())->get()->pluck('order_id')->toArray();
+            // return $this->completedOrders($data, $companyId, $paginate, $dateRange, $filterType);
         }
 
         if ($data) {
@@ -87,9 +86,6 @@ class CallController extends BaseController
                 if ($orderId) {
                     $searchOrderId = $orderId;
                     return $qry->whereIn('id', $searchOrderId);
-                } else if($filterType == "today_call") {
-                    $searchOrderId = $orderId ?? [];
-                    return $qry->whereIn('id', $searchOrderId);
                 }
             }
         })
@@ -104,9 +100,11 @@ class CallController extends BaseController
         })
         ->when($filterType, function($qry) use ($filterType, $orderId) {
             if ($filterType == "to_schedule") {
-                return $qry->where("status", 0);
+                return $qry->where("status", 0)->where("completed_status", 0);
             } else if($filterType == "schedule") {
                 return $qry->where("status", 1);
+            } else if($filterType == "completed") {
+                return $qry->where("completed_status", 1)->whereDate("completed_date", "=", Carbon::today());
             }
         })
         ->with($this->order_call_list_relation())
@@ -196,39 +194,11 @@ class CallController extends BaseController
         $dateRange = $get->dateRange;
         $filterType = $get->filterType;
         $order = $this->orderData($data, $companyId, $paginate, $dateRange, $filterType);
-        $filterValue = $this->getFilterType();
+        $filterValue = $this->orderCounter();
         return response()->json([
             'order' => $order,
             'filterValue' => $filterValue
         ]);
-    }
-
-    protected function getFilterType() {
-        $user = auth()->user();
-        $companyId = $user->getCompanyProfile()->company_id;
-
-        $orders = Order::query();
-        $all = $orders->count();
-        $toBeSchedule = $orders->where('status', 0)->where('company_id', $companyId)->count();
-        $schedule = Order::where('status', 1)->where('company_id', $companyId)->count();
-
-        $todaysCallId = OrderWInspection::whereDate('inspection_date_time', '=', Carbon::today())->orderBy('id', 'desc')->get()->pluck('order_id');
-        $today_call = Order::whereIn('id', $todaysCallId)->where('company_id', $companyId)->count();
-        $completed_today = Order::whereIn('id', $todaysCallId)->where('company_id', $companyId)->get();
-        $completed = 0;
-        foreach($completed_today as $item) {
-            $logInfo = CallLog::where('order_id', $item->id)->where('status', 1)->first();
-            if ($logInfo) {
-                $completed++;
-            }
-        }
-        return [
-            "all" => $all,
-            "to_schedule" => $toBeSchedule,
-            "schedule" => $schedule,
-            "completed" => $completed,
-            "today_call" => $today_call
-        ];
     }
 
 
@@ -242,7 +212,7 @@ class CallController extends BaseController
         $dateRange = '';
         $filterType = $request->filter ?? 'all';
         $order = $this->orderData($data, $companyId, $paginate, $dateRange, $filterType);
-        $filterValue = $this->getFilterType();
+        $filterValue = $this->orderCounter();
         return [
             "message" => "Message sent successfully !",
             'order' => $order,

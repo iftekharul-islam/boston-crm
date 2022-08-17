@@ -2,22 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\CrmHelper;
-use App\Models\CallLog;
-use App\Models\Client;
-use App\Models\LogTemplate;
-use App\Models\Order;
-use App\Models\OrderWInspection;
-use App\Models\PropertyInfo;
-use App\Repositories\OrderRepository;
 use Carbon\Carbon;
+use App\Models\Order;
+use App\Models\Client;
+use App\Models\CallLog;
+use App\Helpers\CrmHelper;
+use App\Models\LogTemplate;
+use App\Models\PropertyInfo;
+use App\Traits\GlobalHelper;
 use Illuminate\Http\Request;
+use App\Models\OrderWInspection;
 use Illuminate\Support\Facades\Auth;
+use App\Repositories\OrderRepository;
 use SebastianBergmann\Template\Template;
 
 class CallLogController extends Controller
 {
-    use CrmHelper;
+    use CrmHelper, GlobalHelper;
     protected OrderRepository $repository;
 
     public function __construct(OrderRepository $order_repository)
@@ -165,7 +166,7 @@ class CallLogController extends Controller
         $dateRange = '';
         $filterType = $request->filter ?? 'all';
         $order = $this->orderData($data, $companyId, $paginate, $dateRange, $filterType);
-        $filterValue = $this->getFilterType();
+        $filterValue = $this->orderCounter();
         $myOrder = Order::with($this->order_list_relation())->where('id', $id)->first();
         return [
             'error' => false,
@@ -176,34 +177,6 @@ class CallLogController extends Controller
             'filterValue' => $filterValue,
             "templates" => $templates,
             'myOrder' => $myOrder
-        ];
-    }
-
-    protected function getFilterType() {
-        $user = auth()->user();
-        $companyId = $user->getCompanyProfile()->company_id;
-
-        $orders = Order::query();
-        $all = $orders->count();
-        $toBeSchedule = $orders->where('status', 0)->where('company_id', $companyId)->count();
-        $schedule = Order::where('status', 1)->where('company_id', $companyId)->count();
-
-        $todaysCallId = OrderWInspection::whereDate('inspection_date_time', '=', Carbon::today())->orderBy('id', 'desc')->get()->pluck('order_id');
-        $today_call = Order::whereIn('id', $todaysCallId)->where('company_id', $companyId)->count();
-        $completed_today = Order::whereIn('id', $todaysCallId)->where('company_id', $companyId)->get();
-        $completed = 0;
-        foreach($completed_today as $item) {
-            $logInfo = CallLog::where('order_id', $item->id)->where('status', 1)->first();
-            if ($logInfo) {
-                $completed++;
-            }
-        }
-        return [
-            "all" => $all,
-            "to_schedule" => $toBeSchedule,
-            "schedule" => $schedule,
-            "completed" => $completed,
-            "today_call" => $today_call
         ];
     }
 
