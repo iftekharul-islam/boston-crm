@@ -10,6 +10,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class AppraisalTypeController extends BaseController
 {
@@ -50,8 +51,27 @@ class AppraisalTypeController extends BaseController
      *
      * @return RedirectResponse
      */
-    public function store(AppraisalTypeCreateRequest $request): RedirectResponse
+    public function store(Request $request): RedirectResponse|array|JsonResponse
     {
+        $validator = Validator::make($request->all(), [
+            'form_type'     => 'required|string|unique:appraisal_types,form_type',
+            'modified_form' => 'required|string'
+        ]);
+
+        if ($validator->fails()) {
+            if ($request->ajax()) {
+                return [
+                    "error" => true,
+                    "message" => $validator->errors()->first()
+                ];
+            } else {
+                return redirect()
+                    ->back()
+                    ->withErrors($validator->errors())
+                    ->withInput();
+            }
+        }
+
         $appraisal_type_data = [
             'company_id' => auth()->user()->companies()->first()->id,
             'form_type' => $request->form_type,
@@ -61,8 +81,18 @@ class AppraisalTypeController extends BaseController
         ];
 
         $this->repository->create($appraisal_type_data);
+        $company_id = auth()->user()->companies()->first()->id;
+        $appraisal_types = $this->repository->allAppraisalTypesRaw($company_id);
 
-        return redirect()->route('appraisal-types.index');
+        if($request->ajax()){
+            return [
+                "error" => false,
+                "appraisal_types" => $appraisal_types,
+                "message" => "Appraisal type created successfully"
+            ];
+        }else{
+            return redirect()->route('appraisal-types.index');
+        }
     }
 
     /**
@@ -90,7 +120,7 @@ class AppraisalTypeController extends BaseController
     public function update(Request $request, int $id): RedirectResponse
     {
         $request->validate([
-            'form_type'     => 'required|string|unique:appraisal_types,form_type,'. $id,
+            'form_type'     => 'required|string|unique:appraisal_types,form_type,' . $id,
             'modified_form' => 'required|string',
         ]);
 

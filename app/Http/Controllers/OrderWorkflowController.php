@@ -47,9 +47,9 @@ class OrderWorkflowController extends BaseController
     {
         $this->repository->updateOrderScheduleData($request->all());
         //code for set event on google calender
-        if (config('app.env') == "production") {
+        // if (config('app.env') == "production") {
             $this->service->setOrderSchedule($request->order_id);
-        }
+        // }
         // inspection_date_time_formatted
 
         $order = Order::find($request->order_id);

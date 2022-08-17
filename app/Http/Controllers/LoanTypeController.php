@@ -10,6 +10,7 @@ use App\Repositories\LoanTypeRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class LoanTypeController extends BaseController
 {
@@ -51,16 +52,44 @@ class LoanTypeController extends BaseController
      *
      * @return RedirectResponse
      */
-    public function store(LoanTypeCreateRequest $request): RedirectResponse
+    public function store(Request $request): RedirectResponse|array|JsonResponse
     {
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|unique:loan_types,name',
+        ]);
+
+        if ($validator->fails()) {
+            if ($request->ajax()) {
+                return [
+                    "error" => true,
+                    "message" => $validator->errors()->first()
+                ];
+            } else {
+                return redirect()
+                    ->back()
+                    ->withErrors($validator->errors())
+                    ->withInput();
+            }
+        }
         $loan_type_data = [
             'company_id' => auth()->user()->companies()->first()->id,
             'name' => $request->name,
             'is_fha' => $request->is_fha
         ];
         $this->repository->create($loan_type_data);
+        $company_id = auth()->user()->companies()->first()->id;
+        $loan_types = $this->repository->allLoanTypesRaw($company_id);
 
-        return redirect()->route('loan-types.index');
+        if($request->ajax()){
+            return [
+                "error" => false,
+                "loan_types" => $loan_types,
+                "message" => "Loan type created successfully"
+            ];
+        }else{
+            return redirect()->route('loan-types.index');
+        }
     }
 
     /**

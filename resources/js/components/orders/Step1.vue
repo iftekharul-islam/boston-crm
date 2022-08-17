@@ -75,18 +75,17 @@
 
                                 <ValidationProvider class="group" name="Loan type" rules="required" v-slot="{ errors }">
                                     <div class="position-relative" :class="{ 'invalid-form': errors[0] }">
-                                        <label for="" class="d-block mb-2 dashboard-label">Loan type <span
-                                                class="text-danger require"></span></label>
-                                        <!-- <select name="" id="loanTypeSelect"
-                                            class="dashboard-input w-100 loan-type-select" v-model="step1.loanType">
-                                            <option value="">Please Select Loan Type</option>
-                                            <option v-for="loan_type in loanTypes" :key="loan_type.id"
-                                                :value="loan_type.id" :data-fha="loan_type.is_fha">
-                                                {{ loan_type.name }}
-                                            </option>
-                                        </select> -->
+                                        <div class="row mb-2">
+                                            <div class="col-md-8">
+                                                <label for="" class="dashboard-label">Loan type
+                                                    <span class="text-danger require"></span></label>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <button type="button" class="button button-primary p-2 ml-auto" @click.prevent="openLoanType">Add loan type</button>
+                                            </div>
+                                        </div>
                                         <m-select @change="loanTypeChange" no-border v-model="step1.loanType" object
-                                            item-text="name" item-value="id" hover :options="loanTypes"></m-select>
+                                            item-text="name" item-value="id" hover :options="allLoanTypes"></m-select>
                                         <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                                     </div>
                                 </ValidationProvider>
@@ -106,14 +105,6 @@
                                     <div class="position-relative" :class="{ 'invalid-form': errors[0] }">
                                         <label for="" class="d-block mb-2 dashboard-label">Appraiser name <span
                                                 class="text-danger require"></span></label>
-                                        <!-- <select id="apprClientSelect" class="dashboard-input w-100"
-                                            v-model="step1.appraiserName">
-                                            <option value="">Please select appraisal user name</option>
-                                            <option v-for="appraisal_user in appraisalUsers" :key="appraisal_user.id"
-                                                :value="appraisal_user.id">
-                                                {{ appraisal_user.name }}
-                                            </option>
-                                        </select> -->
                                         <m-select no-border v-model="step1.appraiserName" object item-text="name"
                                             item-value="id" hover :options="appraisalUsers"></m-select>
                                         <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
@@ -124,14 +115,6 @@
                                     <div class="position-relative" :class="{ 'invalid-form': errors[0] }">
                                         <label for="" class="d-block mb-2 dashboard-label">Property Type <span
                                                 class="text-danger require"></span></label>
-                                        <!-- <select id="propertyTypeSelect" class="dashboard-input w-100"
-                                            v-model="step1.propertyType">
-                                            <option value="">Please select property type</option>
-                                            <option v-for="propertyType in propertyTypes" :key="propertyType.id"
-                                                :value="propertyType.id">
-                                                {{ propertyType.type }}
-                                            </option>
-                                        </select> -->
                                         <m-select no-border v-model="step1.propertyType" object item-text="type"
                                             item-value="id" hover :options="propertyTypes"></m-select>
                                         <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
@@ -144,7 +127,15 @@
                 <div class="col-md-4">
                     <div class="form-box h-100 d-flex flex-column">
                         <div>
-                            <h4 class="box-header mb-3">Provided services</h4>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <h4 class="box-header">Provided services</h4>
+                                </div>
+                                <div class="col-md-6 align-items-right">
+                                    <button type="button" @click.prevent="openAppraisalType"
+                                        class="button button-primary p-2">Add appraisal type</button>
+                                </div>
+                            </div>
                             <div class="row">
                                 <div class="provided-service-data row mgb-20" v-if="providerTypes.extra.length > 0">
                                     <!-- label -->
@@ -177,247 +168,252 @@
                                         <div class="col-7">
                                             <div class="group"
                                                 :class="{ 'invalid-form': providerTypes.error.type == true }">
-                                                <label for="" class="d-block mb-2 dashboard-label">Appraisal
+                                                <label for="" class="d-block dashboard-label">Appraisal
                                                     type <span class="require"></span> </label>
                                                 <div class="position-relative borderless-select">
                                                     <select id="providerTypeFee" class="dashboard-input w-100"
                                                         v-model="providerTypes.default.type">
                                                         <option value="">Choose Type</option>
                                                         <option :value="item.id" :data-full="item.is_full_appraisal"
-                                                            :key="ki" v-for="item, ki in appraisalTypes">{{
+                                                            :key="ki" v-for="item, ki in allAppraisalTypes">{{
                                                             item.form_type
                                                             }}</option>
                                                     </select>
                                                     <span class="icon-arrow-down bottom-arrow-icon"></span>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="col-5">
-                                            <div class="group"
-                                                :class="{ 'invalid-form': providerTypes.error.fee == true }">
-                                                <label for="" class="d-block mb-2 dashboard-label">Fee <span
-                                                        class="require"></span></label>
-                                                <input @input="checkProviderValidation($event, 2)" type="number"
-                                                    step="any" class="dashboard-input w-100"
-                                                    v-model="providerTypes.default.fee" @blur="addFee">
+                                            <div class="col-5">
+                                                <div class="group"
+                                                    :class="{ 'invalid-form': providerTypes.error.fee == true }">
+                                                    <label for="" class="d-block mb-2 dashboard-label">Fee <span
+                                                            class="require"></span></label>
+                                                    <input @input="checkProviderValidation($event, 2)" type="number"
+                                                        step="any" class="dashboard-input w-100"
+                                                        v-model="providerTypes.default.fee" @blur="addFee">
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div class="col-12 text-end mt-3">
-                                    <button class="add-more" @click="addFee">
-                                        <span class="icon-plus"></span> Add
-                                    </button>
+                                    <div class="col-12 text-end mt-3">
+                                        <button class="add-more" @click="addFee">
+                                            <span class="icon-plus"></span> Add
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
-
-                        </div>
-                        <div class="mt-auto">
-                            <div class="group">
-                                <label for="" class="d-block mb-2 dashboard-label">Note</label>
-                                <text-editor v-model="step1.note" placeholder="Enter note here..."></text-editor>
+                            <div class="mt-auto">
+                                <div class="group">
+                                    <label for="" class="d-block mb-2 dashboard-label">Note</label>
+                                    <text-editor v-model="step1.note" placeholder="Enter note here..."></text-editor>
+                                </div>
+                                <h3 class="text-light-black fw-bold mgt-40">Total fee : <span> $ {{
+                                        providerTypes.totalAmount
+                                        }} </span></h3>
                             </div>
-                            <h3 class="text-light-black fw-bold mgt-40">Total fee : <span> $ {{
-                                    providerTypes.totalAmount
-                                    }} </span></h3>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="form-box h-100 box-flex">
-                        <div class="row">
-                            <div class="col-md-8">
-                                <h4 class="box-header mb-3">Client info</h4>
-                            </div>
-                            <div class="col-md-4">
-                                <button type="button" class="ml-2 p-2 button button-primary"
-                                    @click.prevent="addClientModal">Add
-                                    client</button>
-                            </div>
-                        </div>
-                        <ValidationProvider class="group" name="AMC name" rules="required" v-slot="{ errors }">
-                            <div class="group" :class="{ 'invalid-form': errors[0] }">
-                                <label for="" class="d-block mb-2 dashboard-label">AMC name <span
-                                        class="text-danger require"></span></label>
-                                <div class="position-relative">
-                                    <select id="amcClientSelect" class="dashboard-input w-100 select2"
-                                        v-model="step1.amcClient">
-                                        <option value="">Choose Amc Client</option>
-                                        <option :value="item.id" :key="ik" v-for="item, ik in allAmcClients"
-                                            :data-uad="item.fee_for_1004uad" :data-d="item.fee_for_1004d"
-                                            :data-processing="item.processing_fee">{{ item.name
-                                            }}</option>
-                                    </select>
-                                    <span class="icon-arrow-down bottom-arrow-icon"></span>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-box h-100 box-flex">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <h4 class="box-header mb-3">Client info</h4>
                                 </div>
-                                <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
-                            </div>
-                        </ValidationProvider>
-
-                        <ValidationProvider class="group" name="Technology fee"
-                            :rules="{ required: (step1.amcClient == '') ? false : true }" v-slot="{ errors }">
-                            <div class="group" :class="{ 'invalid-form': errors[0] }">
-                                <label for="" class="d-block mb-2 dashboard-label">Technology fee <span
-                                        class="text-danger require"></span></label>
-                                <input readonly type="text" class="dashboard-input w-100" v-model="step1.technologyFee">
-                                <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
-                            </div>
-                        </ValidationProvider>
-
-                        <ValidationProvider class="group" name="Lender" rules="required" v-slot="{ errors }">
-                            <div class="group" :class="{ 'invalid-form': errors[0] }">
-                                <label for="" class="d-block mb-2 dashboard-label">Lender <span
-                                        class="text-danger require"></span></label>
-                                <div class="position-relative">
-                                    <select id="lenderClientSelect" class="dashboard-input w-100"
-                                        v-model="step1.lender">
-                                        <option value="">Choose Lender</option>
-                                        <option :value="item.id" :key="ik" v-for="item, ik in allLenderClients"
-                                            :data-uad="item.fee_for_1004uad" :data-d="item.fee_for_1004d"
-                                            :data-processing="item.processing_fee">{{
-                                            item.name
-                                            }}</option>
-                                    </select>
-                                    <span class="icon-arrow-down bottom-arrow-icon"></span>
+                                <div class="col-md-4">
+                                    <button type="button" class="ml-2 p-2 button button-primary"
+                                        @click.prevent="addClientModal">Add
+                                        client</button>
                                 </div>
-                                <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                             </div>
-                        </ValidationProvider>
-                    </div>
-                </div>
-                <div class="col-md-8 ">
-                    <div class="form-box">
-                        <h4 class="box-header mb-3">Property info</h4>
-                        <div class="d-flex justify-content-between w-100 box-flex">
-                            <div class="left max-w-424 w-100 mb-3">
-
-                                <div class="group mb-3">
-                                    <label for="" class="d-block mb-2 dashboard-label">Search address <span
+                            <ValidationProvider class="group" name="AMC name" rules="required" v-slot="{ errors }">
+                                <div class="group" :class="{ 'invalid-form': errors[0] }">
+                                    <label for="" class="d-block mb-2 dashboard-label">AMC name <span
                                             class="text-danger require"></span></label>
-                                    <input type="text" v-model="searchIngAddress" ref="searchMapLocation"
-                                        class="dashboard-input w-100">
+                                    <div class="position-relative">
+                                        <select id="amcClientSelect" class="dashboard-input w-100 select2"
+                                            v-model="step1.amcClient">
+                                            <option value="">Choose Amc Client</option>
+                                            <option :value="item.id" :key="ik" v-for="item, ik in allAmcClients"
+                                                :data-uad="item.fee_for_1004uad" :data-d="item.fee_for_1004d"
+                                                :data-processing="item.processing_fee">{{ item.name
+                                                }}</option>
+                                        </select>
+                                        <span class="icon-arrow-down bottom-arrow-icon"></span>
+                                    </div>
+                                    <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                                </div>
+                            </ValidationProvider>
+
+                            <ValidationProvider class="group" name="Technology fee"
+                                :rules="{ required: (step1.amcClient == '') ? false : true }" v-slot="{ errors }">
+                                <div class="group" :class="{ 'invalid-form': errors[0] }">
+                                    <label for="" class="d-block mb-2 dashboard-label">Technology fee <span
+                                            class="text-danger require"></span></label>
+                                    <input readonly type="text" class="dashboard-input w-100"
+                                        v-model="step1.technologyFee">
+                                    <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                                </div>
+                            </ValidationProvider>
+
+                            <ValidationProvider class="group" name="Lender" rules="required" v-slot="{ errors }">
+                                <div class="group" :class="{ 'invalid-form': errors[0] }">
+                                    <label for="" class="d-block mb-2 dashboard-label">Lender <span
+                                            class="text-danger require"></span></label>
+                                    <div class="position-relative">
+                                        <select id="lenderClientSelect" class="dashboard-input w-100"
+                                            v-model="step1.lender">
+                                            <option value="">Choose Lender</option>
+                                            <option :value="item.id" :key="ik" v-for="item, ik in allLenderClients"
+                                                :data-uad="item.fee_for_1004uad" :data-d="item.fee_for_1004d"
+                                                :data-processing="item.processing_fee">{{
+                                                item.name
+                                                }}</option>
+                                        </select>
+                                        <span class="icon-arrow-down bottom-arrow-icon"></span>
+                                    </div>
+                                    <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                                </div>
+                            </ValidationProvider>
+                        </div>
+                    </div>
+                    <div class="col-md-8 ">
+                        <div class="form-box">
+                            <h4 class="box-header mb-3">Property info</h4>
+                            <div class="d-flex justify-content-between w-100 box-flex">
+                                <div class="left max-w-424 w-100 mb-3">
+
+                                    <div class="group mb-3">
+                                        <label for="" class="d-block mb-2 dashboard-label">Search address <span
+                                                class="text-danger require"></span></label>
+                                        <input type="text" v-model="searchIngAddress" ref="searchMapLocation"
+                                            class="dashboard-input w-100">
+                                    </div>
+
+                                    <ValidationProvider class="group" name="Full address name" rules="required"
+                                        v-slot="{ errors }">
+                                        <div class="group" :class="{ 'invalid-form': errors[0] }">
+                                            <label for="" class="d-block mb-2 dashboard-label">Full address Name <span
+                                                    class="text-danger require"></span></label>
+                                            <input type="text" class="dashboard-input w-100"
+                                                v-model="step1.searchAddress">
+                                            <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                                        </div>
+                                    </ValidationProvider>
+
+                                    <ValidationProvider class="group" name="State name" rules="required"
+                                        v-slot="{ errors }">
+                                        <div class="group" :class="{ 'invalid-form': errors[0] }">
+                                            <label for="" class="d-block mb-2 dashboard-label">State name <span
+                                                    class="text-danger require"></span>
+                                            </label>
+                                            <input type="text" class="dashboard-input w-100" v-model="step1.state">
+                                            <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                                        </div>
+                                    </ValidationProvider>
+
+
+
+                                    <ValidationProvider class="group" name="City name" rules="required"
+                                        v-slot="{ errors }">
+                                        <div class="group" :class="{ 'invalid-form': errors[0] }">
+                                            <label label for="" class="d-block mb-2 dashboard-label">Area/City name
+                                                <span class="text-danger require"></span></label>
+                                            <input type="text" class="dashboard-input w-100" v-model="step1.city">
+                                            <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                                        </div>
+                                    </ValidationProvider>
+
+                                    <ValidationProvider class="group" name="Unit No"
+                                        :rules="{ 'required': condoType == true }" v-slot="{ errors }">
+                                        <div class="group" :class="{ 'invalid-form': errors[0] }">
+                                            <label for="" class="d-block mb-2 dashboard-label">Unit No <span
+                                                    v-if="condoType" class="text-danger require"></span>
+                                            </label>
+                                            <input type="text" class="dashboard-input w-100" v-model="step1.unitNo">
+                                            <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                                        </div>
+                                    </ValidationProvider>
                                 </div>
 
-                                <ValidationProvider class="group" name="Full address name" rules="required"
-                                    v-slot="{ errors }">
-                                    <div class="group" :class="{ 'invalid-form': errors[0] }">
-                                        <label for="" class="d-block mb-2 dashboard-label">Full address Name <span
-                                                class="text-danger require"></span></label>
-                                        <input type="text" class="dashboard-input w-100" v-model="step1.searchAddress">
-                                        <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
-                                    </div>
-                                </ValidationProvider>
-
-                                <ValidationProvider class="group" name="State name" rules="required"
-                                    v-slot="{ errors }">
-                                    <div class="group" :class="{ 'invalid-form': errors[0] }">
-                                        <label for="" class="d-block mb-2 dashboard-label">State name <span
-                                                class="text-danger require"></span>
-                                        </label>
-                                        <input type="text" class="dashboard-input w-100" v-model="step1.state">
-                                        <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
-                                    </div>
-                                </ValidationProvider>
 
 
+                                <div class="right max-w-424 w-100">
+                                    <ValidationProvider class="group" name="Street name" rules="required"
+                                        v-slot="{ errors }">
+                                        <div class="group" :class="{ 'invalid-form': errors[0] }">
+                                            <label for="" class="d-block mb-2 dashboard-label">Street name <span
+                                                    class="text-danger require"></span>
+                                            </label>
+                                            <input type="text" @input="changeStreetAddress($event.target.value)"
+                                                class="dashboard-input w-100" v-model="step1.street">
+                                            <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                                        </div>
+                                    </ValidationProvider>
 
-                                <ValidationProvider class="group" name="City name" rules="required" v-slot="{ errors }">
-                                    <div class="group" :class="{ 'invalid-form': errors[0] }">
-                                        <label label for="" class="d-block mb-2 dashboard-label">Area/City name <span
-                                                class="text-danger require"></span></label>
-                                        <input type="text" class="dashboard-input w-100" v-model="step1.city">
-                                        <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
-                                    </div>
-                                </ValidationProvider>
+                                    <ValidationProvider class="group" name="Zip code" rules="required|integer"
+                                        v-slot="{ errors }">
+                                        <div class="group" :class="{ 'invalid-form': errors[0] }">
+                                            <label for="" class="d-block mb-2 dashboard-label">Zipcode <span
+                                                    class="text-danger require"></span>
+                                            </label>
+                                            <input type="number" class="dashboard-input w-100" v-model="step1.zipcode">
+                                            <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                                        </div>
+                                    </ValidationProvider>
 
-                                <ValidationProvider class="group" name="Unit No"
-                                    :rules="{ 'required': condoType == true }" v-slot="{ errors }">
-                                    <div class="group" :class="{ 'invalid-form': errors[0] }">
-                                        <label for="" class="d-block mb-2 dashboard-label">Unit No <span
-                                                v-if="condoType" class="text-danger require"></span>
-                                        </label>
-                                        <input type="text" class="dashboard-input w-100" v-model="step1.unitNo">
-                                        <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
-                                    </div>
-                                </ValidationProvider>
-                            </div>
+                                    <ValidationProvider class="group" name="Latitude" rules="required"
+                                        v-slot="{ errors }">
+                                        <div class="group" :class="{ 'invalid-form': errors[0] }">
+                                            <label for="" class="d-block mb-2 dashboard-label">Latitude <span
+                                                    class="text-danger require"></span>
+                                            </label>
+                                            <input type="text" class="dashboard-input w-100" v-model="step1.lat">
+                                            <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                                        </div>
+                                    </ValidationProvider>
 
+                                    <ValidationProvider class="group" name="Longitude" rules="required"
+                                        v-slot="{ errors }">
+                                        <div class="group" :class="{ 'invalid-form': errors[0] }">
+                                            <label for="" class="d-block mb-2 dashboard-label">Longitude <span
+                                                    class="text-danger require"></span>
+                                            </label>
+                                            <input type="text" class="dashboard-input w-100" v-model="step1.lng">
+                                            <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                                        </div>
+                                    </ValidationProvider>
 
-
-                            <div class="right max-w-424 w-100">
-                                <ValidationProvider class="group" name="Street name" rules="required"
-                                    v-slot="{ errors }">
-                                    <div class="group" :class="{ 'invalid-form': errors[0] }">
-                                        <label for="" class="d-block mb-2 dashboard-label">Street name <span
-                                                class="text-danger require"></span>
-                                        </label>
-                                        <input type="text" @input="changeStreetAddress($event.target.value)"
-                                            class="dashboard-input w-100" v-model="step1.street">
-                                        <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
-                                    </div>
-                                </ValidationProvider>
-
-                                <ValidationProvider class="group" name="Zip code" rules="required|integer"
-                                    v-slot="{ errors }">
-                                    <div class="group" :class="{ 'invalid-form': errors[0] }">
-                                        <label for="" class="d-block mb-2 dashboard-label">Zipcode <span
-                                                class="text-danger require"></span>
-                                        </label>
-                                        <input type="number" class="dashboard-input w-100" v-model="step1.zipcode">
-                                        <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
-                                    </div>
-                                </ValidationProvider>
-
-                                <ValidationProvider class="group" name="Latitude" rules="required" v-slot="{ errors }">
-                                    <div class="group" :class="{ 'invalid-form': errors[0] }">
-                                        <label for="" class="d-block mb-2 dashboard-label">Latitude <span
-                                                class="text-danger require"></span>
-                                        </label>
-                                        <input type="text" class="dashboard-input w-100" v-model="step1.lat">
-                                        <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
-                                    </div>
-                                </ValidationProvider>
-
-                                <ValidationProvider class="group" name="Longitude" rules="required" v-slot="{ errors }">
-                                    <div class="group" :class="{ 'invalid-form': errors[0] }">
-                                        <label for="" class="d-block mb-2 dashboard-label">Longitude <span
-                                                class="text-danger require"></span>
-                                        </label>
-                                        <input type="text" class="dashboard-input w-100" v-model="step1.lng">
-                                        <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
-                                    </div>
-                                </ValidationProvider>
-
-                                <ValidationProvider class="group" name="County" rules="required" v-slot="{ errors }">
-                                    <div class="group" :class="{ 'invalid-form': errors[0] }">
-                                        <label for="" class="d-block mb-2 dashboard-label">County <span
-                                                class="text-danger require"></span>
-                                        </label>
-                                        <input type="text" class="dashboard-input w-100" v-model="step1.county">
-                                        <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
-                                    </div>
-                                </ValidationProvider>
+                                    <ValidationProvider class="group" name="County" rules="required"
+                                        v-slot="{ errors }">
+                                        <div class="group" :class="{ 'invalid-form': errors[0] }">
+                                            <label for="" class="d-block mb-2 dashboard-label">County <span
+                                                    class="text-danger require"></span>
+                                            </label>
+                                            <input type="text" class="dashboard-input w-100" v-model="step1.county">
+                                            <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                                        </div>
+                                    </ValidationProvider>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="add-client__bottom d-flex justify-content-end p-3 mgt-32">
-                <button class="button button-primary" @click="nextStep">
-                    Next
-                    <svg class="ms-4" width="20" height="14" viewBox="0 0 20 14" fill="none"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M12.4291 13.82C12.2391 13.82 12.0491 13.75 11.8991 13.6C11.6091 13.31 11.6091 12.83 11.8991 12.54L17.4391 7L11.8991 1.46C11.6091 1.17 11.6091 0.689995 11.8991 0.399995C12.1891 0.109995 12.6691 0.109995 12.9591 0.399995L19.0291 6.47C19.3191 6.76 19.3191 7.24 19.0291 7.52999L12.9591 13.6C12.8091 13.75 12.6191 13.82 12.4291 13.82Z"
-                            fill="white" />
-                        <path
-                            d="M18.33 7.75H1.5C1.09 7.75 0.75 7.41 0.75 7C0.75 6.59 1.09 6.25 1.5 6.25H18.33C18.74 6.25 19.08 6.59 19.08 7C19.08 7.41 18.74 7.75 18.33 7.75Z"
-                            fill="white" />
-                    </svg>
-                </button>
+                <div class="add-client__bottom d-flex justify-content-end p-3 mgt-32">
+                    <button class="button button-primary" @click="nextStep">
+                        Next
+                        <svg class="ms-4" width="20" height="14" viewBox="0 0 20 14" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M12.4291 13.82C12.2391 13.82 12.0491 13.75 11.8991 13.6C11.6091 13.31 11.6091 12.83 11.8991 12.54L17.4391 7L11.8991 1.46C11.6091 1.17 11.6091 0.689995 11.8991 0.399995C12.1891 0.109995 12.6691 0.109995 12.9591 0.399995L19.0291 6.47C19.3191 6.76 19.3191 7.24 19.0291 7.52999L12.9591 13.6C12.8091 13.75 12.6191 13.82 12.4291 13.82Z"
+                                fill="white" />
+                            <path
+                                d="M18.33 7.75H1.5C1.09 7.75 0.75 7.41 0.75 7C0.75 6.59 1.09 6.25 1.5 6.25H18.33C18.74 6.25 19.08 6.59 19.08 7C19.08 7.41 18.74 7.75 18.33 7.75Z"
+                                fill="white" />
+                        </svg>
+                    </button>
+                </div>
             </div>
         </ValidationObserver>
 
@@ -719,8 +715,106 @@
                     <b-button type="button" variant="primary" @click="saveClient">Save</b-button>
                 </div>
             </b-modal>
+            <b-modal id="add-appraisal-type" size="md" title="Add appraisal type">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <ValidationObserver ref="appraisalTypeForm">
+                                <ValidationProvider class="group d-block" name="Form type" rules="required"
+                                    v-slot="{ errors }">
+                                    <div :class="{ 'invalid-form' : errors[0] }">
+                                        <label for="" class="d-block mb-2 dashboard-label">Form type<span
+                                                class="text-danger require"></span></label>
+                                        <input type="text" class="dashboard-input w-100" placeholder="Enter form type"
+                                            v-model="appraisal.form_type">
+                                        <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                                    </div>
+                                </ValidationProvider>
+                                <ValidationProvider class="group d-block" name="Modified Form" rules="required"
+                                    v-slot="{ errors }">
+                                    <div :class="{ 'invalid-form' : errors[0] }">
+                                        <label for="" class="d-block mb-2 dashboard-label">Modified Form<span
+                                                class="text-danger require"></span></label>
+                                        <input type="text" class="dashboard-input w-100"
+                                            placeholder="Enter modified form" v-model="appraisal.modified_form">
+                                        <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                                    </div>
+                                </ValidationProvider>
+                                <div class="mgb-32 mt-4 d-flex align-items-center">
+                                    <label for="" class="d-block mb-2 dashboard-label">Condo Type</label>
+                                    <div class="mx-5 checkbox-group review-check mgr-20">
+                                        <input type="radio" class="checkbox-input check-data" v-model="appraisal.condo_type"
+                                            value="0">
+                                        <label for="" class="checkbox-label text-capitalize">No</label>
+                                    </div>
+                                    <div class="checkbox-group review-check">
+                                        <input type="radio" class="checkbox-input check-data" v-model="appraisal.condo_type"
+                                            value="1">
+                                        <label for="" class="checkbox-label text-capitalize">Yes</label>
+                                    </div>
+                                </div>
+                                <div class="mgb-32 mt-4 d-flex align-items-center">
+                                    <label for="" class="d-block mb-2 mr-4 dashboard-label">Is full appraisal</label>
+                                    <div class="mx-4 checkbox-group review-check mgr-20">
+                                        <input type="radio" class="checkbox-input check-data" v-model="appraisal.is_full_appraisal"
+                                            value="0">
+                                        <label for="" class="checkbox-label text-capitalize">No</label>
+                                    </div>
+                                    <div class="checkbox-group review-check">
+                                        <input type="radio" class="checkbox-input check-data" v-model="appraisal.is_full_appraisal"
+                                            value="1">
+                                        <label for="" class="checkbox-label text-capitalize">Yes</label>
+                                    </div>
+                                </div>
+                            </ValidationObserver>
+                        </div>
+                    </div>
+                </div>
+                <div slot="modal-footer">
+                    <b-button type="button" variant="secondary" @click="$bvModal.hide('add-appraisal-type')">Close
+                    </b-button>
+                    <b-button type="button" variant="primary" @click="saveAppraisalType">Save</b-button>
+                </div>
+            </b-modal>
+            <b-modal id="add-loan-type" size="md" title="Add loan type">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <ValidationObserver ref="loanTypeForm">
+                                <ValidationProvider class="group d-block" name="Loan type" rules="required"
+                                    v-slot="{ errors }">
+                                    <div :class="{ 'invalid-form' : errors[0] }">
+                                        <label for="" class="d-block mb-2 dashboard-label">Loan type<span
+                                                class="text-danger require"></span></label>
+                                        <input type="text" class="dashboard-input w-100" placeholder="Enter loan type"
+                                            v-model="loan.name">
+                                        <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                                    </div>
+                                </ValidationProvider>
+                                <div class="mgb-32 mt-4 d-flex align-items-center">
+                                    <label for="" class="d-block mb-2 mr-4 dashboard-label">Is fha</label>
+                                    <div class="mx-4 checkbox-group review-check mgr-20">
+                                        <input type="radio" class="checkbox-input check-data" v-model="loan.is_fha"
+                                            value="0">
+                                        <label for="" class="checkbox-label text-capitalize">No</label>
+                                    </div>
+                                    <div class="checkbox-group review-check">
+                                        <input type="radio" class="checkbox-input check-data" v-model="loan.is_fha"
+                                            value="1">
+                                        <label for="" class="checkbox-label text-capitalize">Yes</label>
+                                    </div>
+                                </div>
+                            </ValidationObserver>
+                        </div>
+                    </div>
+                </div>
+                <div slot="modal-footer">
+                    <b-button type="button" variant="secondary" @click="$bvModal.hide('add-loan-type')">Close
+                    </b-button>
+                    <b-button type="button" variant="primary" @click="saveLoanType">Save</b-button>
+                </div>
+            </b-modal>
         </template>
-
     </div>
 </template>
 
@@ -842,7 +936,18 @@
                 }],
                 allAmcClients: [],
                 allLenderClients: [],
-
+                allAppraisalTypes: [],
+                allLoanTypes: [],
+                appraisal: {
+                    form_type: '',
+                    modified_form: '',
+                    condo_type: 0,
+                    is_full_appraisal: 0
+                },
+                loan:{
+                    name: '',
+                    is_fha: 0
+                },
             }
         },
         created() {
@@ -856,7 +961,9 @@
                 this.removeDataValue();
             });
 
-            this.initiateClients(this.amcClients,this.lenderClients)
+            this.initiateClients(this.amcClients, this.lenderClients)
+            this.initAppraisalTypes(this.appraisalTypes)
+            this.initLoanTypes(this.loanTypes)
         },
         mounted() {
             this.geolocate();
@@ -864,7 +971,61 @@
             this.select2Features();
         },
         methods: {
-            initiateClients(amcs,lenders){
+            openLoanType() {
+                this.$bvModal.show('add-loan-type');
+            },
+            saveLoanType() {
+                this.$refs.loanTypeForm.validate().then((status) => {
+                    if (status) {
+                        this.$boston.post('loan-types', this.loan)
+                            .then(res => {
+                                this.$toast.open({
+                                    message: res.message,
+                                    type: res.error == true ? 'error' : 'success',
+                                })
+                                if (res.error == false) {
+                                    this.initLoanTypes(res.loan_types)
+                                    this.$bvModal.hide('add-loan-type')
+                                }
+                            })
+                            .catch(err => {
+                                console.error(err)
+                            })
+                    }
+                })
+            },
+            openAppraisalType() {
+                this.$bvModal.show('add-appraisal-type');
+            },
+            saveAppraisalType() {
+                this.$refs.appraisalTypeForm.validate().then((status) => {
+                    console.log("prev"+this.appraisalTypes);
+                    if (status) {
+                        this.$boston.post('appraisal-types', this.appraisal)
+                            .then(res => {
+                                this.$toast.open({
+                                    message: res.message,
+                                    type: res.error == true ? 'error' : 'success',
+                                })
+                                if (res.error == false) {
+                                    this.initAppraisalTypes(res.appraisal_types)
+                                    this.$bvModal.hide('add-appraisal-type')
+                                    console.log("new"+res.appraisal_types);
+                                }
+                            })
+                            .catch(err => {
+                                console.error(err)
+                            })
+                    }
+                })
+            },
+            initAppraisalTypes(types){
+                this.allAppraisalTypes = types
+            },
+            initLoanTypes(types){
+                this.allLoanTypes = types
+            },
+            initiateClients(amcs, lenders) {
                 this.allAmcClients = amcs
                 this.allLenderClients = lenders
             },
@@ -913,8 +1074,8 @@
                                     message: res.message,
                                     type: res.error == true ? 'error' : 'success',
                                 })
-                                if(res.error == false) {
-                                    this.initiateClients(res.amcs,res.lenders)
+                                if (res.error == false) {
+                                    this.initiateClients(res.amcs, res.lenders)
                                     this.$bvModal.hide('add-client')
                                 }
                             })
@@ -939,7 +1100,7 @@
                 }
             },
             loanTypeChange() {
-                let fhaExistData = this.loanTypes.filter((item) => {
+                let fhaExistData = this.allLoanTypes.filter((item) => {
                     if (item.id == this.step1.loanType) {
                         return item;
                     }
@@ -1083,8 +1244,8 @@
                 if (newType.id) {
                     appType = newType;
                 } else {
-                    for (let i in this.appraisalTypes) {
-                        let appritem = this.appraisalTypes[i];
+                    for (let i in this.allAppraisalTypes) {
+                        let appritem = this.allAppraisalTypes[i];
                         if (appritem.id == newType) {
                             appType = appritem;
                         }
@@ -1120,7 +1281,7 @@
                 let checkCondoType = false;
                 this.providerTypes.extra.map((ele) => {
                     totalfee += parseFloat(ele.fee);
-                    let checkCondo = Object.values(this.appraisalTypes).find(eles => eles.id == ele.typeId);
+                    let checkCondo = Object.values(this.allAppraisalTypes).find(eles => eles.id == ele.typeId);
                     if (checkCondo && checkCondo.condo_type == 1) {
                         checkCondoType = true;
                     }
