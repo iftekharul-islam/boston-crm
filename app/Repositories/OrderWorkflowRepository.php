@@ -28,13 +28,12 @@ class OrderWorkflowRepository extends BaseRepository
     {
         $order = Order::find($data['order_id']);
         $newEntry = true;
-        if ($data['schedule_id'] > 0) {
-            $order_workflow_schedule = OrderWInspection::find($data['schedule_id']);
+        $order_workflow_schedule = OrderWInspection::find($data['schedule_id']);
+        if ($data['schedule_id'] > 0 && $order_workflow_schedule) {
             $order_workflow_schedule->updated_by = Auth::user()->id;
             if ($order_workflow_schedule->note == $data["note"]) {
                 $newEntry = false;
             }
-
             $order_workflow_schedule->reschedule_note = $data['reschedule_note'] ?? "";
             $order->status = 2;
             $order->save();

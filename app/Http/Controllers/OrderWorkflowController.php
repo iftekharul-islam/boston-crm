@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\CallLog;
 use Zip;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Order;
+use App\Models\CallLog;
 use App\Models\OrderWQa;
 use App\Models\OrderWcom;
 use App\Helpers\CrmHelper;
-use App\Models\OrderWInitialReview;
 use App\Models\OrderWReport;
+use App\Traits\GlobalHelper;
 use Illuminate\Http\Request;
 use App\Models\OrderWRewrite;
 use Illuminate\Http\Response;
@@ -20,9 +20,10 @@ use App\Models\OrderWInspection;
 use App\Models\OrderWSubmission;
 use Spatie\GoogleCalendar\Event;
 use Illuminate\Http\JsonResponse;
+use App\Models\OrderWInitialReview;
 use App\Models\OrderWReportAnalysis;
-use App\Services\OrderWorkflowService;
 use App\Repositories\OrderRepository;
+use App\Services\OrderWorkflowService;
 use App\Repositories\OrderWorkflowRepository;
 
 
@@ -31,7 +32,7 @@ class OrderWorkflowController extends BaseController
     protected OrderWorkflowService $service;
     protected OrderWorkflowRepository $repository;
     protected OrderRepository $orderRepository;
-    use CrmHelper;
+    use CrmHelper, GlobalHelper;
 
     protected $workFlowStatus = 0;
 
@@ -65,7 +66,7 @@ class OrderWorkflowController extends BaseController
         $this->addHistory($order, $user, $historyTitle, 'scheduling');
 
         $orderData = $this->orderDetails($request->order_id);
-        $filterValue = $this->getFilterType();
+        $filterValue = $this->orderCounter();
 
         $appraisers = $this->orderRepository->getUserExpectRole(role: 'admin');
         $companyId = $user->getCompanyProfile()->company_id;
@@ -83,22 +84,6 @@ class OrderWorkflowController extends BaseController
         ];
     }
 
-    protected function getFilterType() {
-        $orders = Order::query();
-        $all = $orders->count();
-        $toBeSchedule = $orders->where('status', 0)->count();
-        $schedule = Order::where('status', 1)->count();
-        $completed = CallLog::where('status', 1)->count();
-        $todaysCallId = OrderWInspection::whereDate('inspection_date_time', '=', date('Y-m-d'))->get()->pluck('order_id');
-        $today_call = Order::whereIn('id', $todaysCallId)->where('status', "<", 3)->count();
-        return [
-            "all" => $all,
-            "to_schedule" => $toBeSchedule,
-            "schedule" => $schedule,
-            "completed" => $completed,
-            "today_call" => $today_call
-        ];
-    }
 
     public function deleteSchedule(Request $request, $id)
     {
@@ -126,7 +111,7 @@ class OrderWorkflowController extends BaseController
         }
 
         $this->repository->deleteSchedule($id);
-        $filterValue = $this->getFilterType();
+        $filterValue = $this->orderCounter();
 
         $appraisers = $this->orderRepository->getUserExpectRole(role: 'admin');
         $companyId = $user->getCompanyProfile()->company_id;

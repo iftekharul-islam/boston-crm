@@ -619,6 +619,7 @@
                                 if (res.data.data) {
                                     this.getCallSummary(res.data.data, res.data.myOrder)
                                 }
+                                $('#callLogModal').modal('hide');
                             }).catch(err => {
                             console.log(err)
                         })

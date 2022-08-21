@@ -187,8 +187,8 @@ class CallLogController extends Controller
 
         $paginate = $request->paginate && $request->paginate > 0 ? $request->paginate : 10;
         $dateRange = null;
-        $filterType = $request->filter ?? null;
-        $data = $request->filtedarData ??  null;
+        $filterType = $request->filter ?: null;
+        $data = $request->filtedarData ?:  null;
         $order = $this->orderDataGlobal($data, $companyId, $paginate, $dateRange, $filterType);
         $myOrder = Order::with($this->order_list_relation())->where('id', $id)->first();
         $filterValue = $this->orderCounter();
