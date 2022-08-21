@@ -593,6 +593,8 @@
                         let formData = new FormData();
                         formData.append('message', this.callLog.message)
                         formData.append('filter', this.pages.filterType)
+                        formData.append('filtedarData', this.pages.searchModel)
+                        formData.append('paginate', this.pages.paginate)
                         formData.append('template', this.template.save)
                         formData.append('title', this.template.title)
                         formData.append('schedule', this.schedule.save)
@@ -606,14 +608,17 @@
                                 this.template.title = ''
                                 this.schedule.save = false
                                 this.schedule.date = ''
+                                if(res.data.error == false) {
+                                    this.filterValues = res.data.filterValue;
+                                    this.initOrder(res.data.order)
+                                    console.log(this.filterValues);
+                                }
                                 this.$refs.addCallLogForm.reset()
                                 this.templates = res.data.templates
                                 this.toastMessage(res.data.message, res.data.error)
                                 if (res.data.data) {
                                     this.getCallSummary(res.data.data, res.data.myOrder)
                                 }
-                                this.initOrder(res.data.order)
-                                this.filterValues = res.data.filterValue
                             }).catch(err => {
                             console.log(err)
                         })
@@ -723,8 +728,8 @@
                 this.openMap = false;
             },
             searchData: _.debounce(function (event) {
-                this.loadPage(this.pages.acitvePage, event.target.value);
                 this.pages.filterType = null;
+                this.loadPage(this.pages.acitvePage);
             }, 300),
 
             loadPage(acitvePage = null) {
@@ -832,7 +837,7 @@
                     this.dateRange.search = false;
                     this.dateRange.start = null;
                     this.dateRange.end = null;
-                    this.loadPage();
+                    this.loadPage(this.pages.acitvePage);
                 }
             },
         },
