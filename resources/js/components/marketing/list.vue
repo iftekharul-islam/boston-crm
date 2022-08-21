@@ -389,7 +389,6 @@ export default {
         fetchUsers() {
             this.$boston.get('user-list')
                 .then(res => {
-                    // console.log('all users :', res)
                     this.autocompleteItems = res.map(a => {
                         return { text: a.name, id: a.id };
                     });
