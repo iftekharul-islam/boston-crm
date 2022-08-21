@@ -88,6 +88,7 @@ class OrderApiController extends Controller
             $order->lender_id = $lender;
             $order->company_id = $company['id'];
             $order->rush = $step2['rush'] ? 1 : 0;
+            $order->coordinate = $step2['coordinate'];
             $order->created_by = $user->id;
             $order->received_date = $receiveDate;
             $order->due_date = $dueDate;
