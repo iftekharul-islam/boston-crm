@@ -329,6 +329,7 @@
                                                      cols="5">
                                     </b-form-textarea>
                                     <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
+                                    <span v-if="template.exists" class="error-message">Template is exists</span>
                                 </div>
                             </ValidationProvider>
                             <div v-if="schedule.save">
@@ -393,6 +394,7 @@
             templates: [],
             template: {
                 save: false,
+                exists: false,
                 title: '',
                 titleValidate: false
             },
@@ -588,8 +590,15 @@
                 }
             },
             addCallLog() {
+                this.template.exists = false
                 this.$refs.addCallLogForm.validate().then((status) => {
                     if (status) {
+                        if(this.template.save){
+                            if (this.templates.some((el) => el.title === this.template.title || el.message === this.message)) {
+                                this.template.exists = true
+                                return
+                            }
+                        }
                         let formData = new FormData();
                         formData.append('message', this.callLog.message)
                         formData.append('filter', this.pages.filterType)

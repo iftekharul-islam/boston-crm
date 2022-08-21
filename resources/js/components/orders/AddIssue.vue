@@ -12,10 +12,22 @@
                                 <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                             </div>
                         </ValidationProvider>
-                        <div class="group">
-                            <label for="" class="d-block mb-2 dashboard-label">Assign To</label>
-                            <m-select :options="users" object item-text="name" item-value="id" v-model="assignTo"></m-select>
+                        <div class="group my-4">
+                            <div :class="{ 'invalid-form': groupEmail.tagsNotAvailable }">
+                                <label for="" class="d-block mb-2 dashboard-label">Mention<span
+                                    class="text-danger require"></span></label>
+                                <vue-tags-input v-model="groupEmail.tag" :tags="groupEmail.tags"
+                                                :autocomplete-items="emailFilteredItems" :add-only-from-autocomplete="true"
+                                                placeholder="Add clients"
+                                                @tags-changed="newTags => groupEmail.tags = newTags" />
+                                <span v-if="groupEmail.tagsNotAvailable" class="error-message">Please add
+                                        clients</span>
+                            </div>
                         </div>
+<!--                        <div class="group">-->
+<!--                            <label for="" class="d-block mb-2 dashboard-label">Assign To</label>-->
+<!--                            <m-select :options="users" object item-text="name" item-value="id" v-model="assignTo"></m-select>-->
+<!--                        </div>-->
                         <ValidationProvider class="d-block group" name="Queries or Issues" rules="required" v-slot="{ errors }">
                             <div class="group" :class="{ 'invalid-form' : errors[0] }">
                                 <label for="" class="d-block mb-2 dashboard-label">Queries or Issues</label>
@@ -37,16 +49,33 @@
 </template>
 
 <script>
+import VueTagsInput from '@johmun/vue-tags-input';
  export default {
     props: [
         'orderId', 'showIssueModal', 'users'
     ],
     data: () => ({
+        groupEmail: {
+            tag: '',
+            tags: [],
+            tagsNotAvailable: false,
+            autocompleteItems: [],
+            address: [],
+            subject: '',
+            message: '',
+        },
         id: '',
         subject: '',
         issue: '',
         assignTo: ''
     }),
+     computed: {
+         emailFilteredItems() {
+             return this.groupEmail.autocompleteItems.filter(i => {
+                 return i.text.toLowerCase().indexOf(this.groupEmail.tag.toLowerCase()) !== -1;
+             });
+         },
+     },
     watch: {
         showIssueModal(newValue, oldValue) {
             if (newValue === true) {
@@ -61,8 +90,16 @@
     },
     created() {
         this.id = this.orderId;
+        this.mapClient(this.users)
     },
     methods: {
+        mapClient(clients) {
+            this.groupEmail.autocompleteItems = clients.map(cilent => {
+                return { text: cilent.name, id: cilent.id, email: cilent.email };
+            });
+
+            console.log(this.groupEmail.autocompleteItems)
+        },
         hideModel() {
             this.$bvModal.hide('add-issue-modal')
             this.$root.$emit('update_add_issue_modal')
