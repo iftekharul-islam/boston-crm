@@ -819,7 +819,12 @@
                     this.$refs.callReScheduleComponent.setOrderStatus(item.status)
                     this.$refs.callReScheduleComponent.setPropertyAddress(item.property_info.formatedAddress)
                 }
-                item.status == 0 ? this.$bvModal.show('schedule') : this.$bvModal.show('re-schedule')
+                if(item.status == 0){
+                    this.$bvModal.show('schedule')
+                }
+                if(item.status == 1){
+                    this.$bvModal.show('re-schedule')
+                }
             },
             getSendMessage(item) {
                 this.$bvModal.show('send-message')
