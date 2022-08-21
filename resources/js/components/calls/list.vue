@@ -128,7 +128,7 @@
                                         class="path5"></span><span class="path6"></span><span class="path7"></span><span
                                         class="path8"></span></span>
                                 <span class="call-tooltip" v-if="item.status == 0">Schedule</span>
-                                <span class="call-tooltip" v-if="item.status == 1">Re-schedule</span>
+                                <span class="call-tooltip" v-if="item.status == 1 || item.status == 2">Re-schedule</span>
                             </a>
                             <a href="javascript:;" @click="getSendMessage(item)" class="icon-list">
                                 <img src="/img/sms.svg" alt="Email and sms" class="img-fluid">
@@ -822,7 +822,7 @@
                 if(item.status == 0){
                     this.$bvModal.show('schedule')
                 }
-                if(item.status == 1){
+                if(item.status == 1 || item.status == 2){
                     this.$bvModal.show('re-schedule')
                 }
             },
