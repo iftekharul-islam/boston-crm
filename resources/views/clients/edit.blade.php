@@ -24,12 +24,6 @@
                         <div class="d-flex box justify-content-between left__wrap">
                             <div class="left-side max-w-424 w-100 me-3">
                                 <div class="group">
-                                    <label for="name" class="d-block mb-2 dashboard-label">Client name <span
-                                            class="text-danger require"></span></label>
-                                    <input type="text" id="name" name="name" value="{{ $client->name }}"
-                                        class="dashboard-input w-100" required>
-                                </div>
-                                <div class="group">
                                     <label for="client-type" class="d-block mb-2 dashboard-label">Client type <span
                                             class="text-danger require"></span></label>
                                     <div class="position-relative">
@@ -44,6 +38,12 @@
                                         </select>
                                         <span class="icon-arrow-down bottom-arrow-icon"></span>
                                     </div>
+                                </div>
+                                <div class="group">
+                                    <label for="name" class="d-block mb-2 dashboard-label">Client name <span
+                                            class="text-danger require"></span></label>
+                                    <input type="text" id="name" name="name" value="{{ $client->name }}"
+                                        class="dashboard-input w-100" required>
                                 </div>
                                 <div class="group">
                                     <label for="email" class="d-block mb-2 dashboard-label">Email address <span

@@ -205,15 +205,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="form-box box-flex">
-                        <h4 class="box-header mb-3">Property maping with boston</h4>
-                        
-                    </div>
-                </div>
-            </div>
-            <div class="row">
+            <div class="row mgb-32">
                 <div class="col-md-12">
                     <div class="form-box box-flex">
                         <h4 class="box-header mb-3">Property coordinate info</h4>
@@ -231,6 +223,14 @@
                             </ValidationProvider>
                         </div>
                     </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-box box-flex">
+                        <h4 class="box-header mb-3">Property maping with boston</h4>
+                    </div>
+                    <div id="map"></div>
                 </div>
             </div>
             <div class="d-flex">
@@ -275,7 +275,7 @@
 <script>
     export default {
         name: "Step2",
-        props: ['type', 'order'],
+        props: ['type', 'order','stepData'],
         data: () => ({
             invalidPhone1: true,
             invalidPhone2: true,
@@ -318,13 +318,57 @@
         }),
         created() {
             this.$root.$on('orderSubmitConfirm', (status) => {
-                this.removeDataValue();
-            });
+                this.removeDataValue()
+            })
             if (this.type == 2) {
-                this.setStep2Data();
+                this.setStep2Data()
             }
+
+            this.$root.$on("property-data", (res) => {
+                this.initMap(res.lat,res.lng)
+            })
         },
         methods: {
+            initMap(lat,lng) {
+                const map = new google.maps.Map(document.getElementById("map"), {
+                    zoom: 14,
+                    center: { lat: 42.361145, lng: -71.057083 },
+                });
+                let marker1 = new google.maps.Marker({
+                    map,
+                    draggable: false,
+                    position: { lat: 42.361145, lng: -71.057083 },
+                });
+
+                let marker2 = new google.maps.Marker({
+                    map,
+                    draggable: false,
+                    position: { lat: lat, lng: lng },
+                });
+                let poly = new google.maps.Polyline({
+                    strokeColor: "#4A89F3",
+                    strokeOpacity: 1.0,
+                    strokeWeight: 5,
+                    map: map,
+                })
+
+                const bounds = new google.maps.LatLngBounds(
+                    marker1.getPosition(),
+                    marker2.getPosition()
+                );
+                map.fitBounds(bounds)
+                google.maps.event.addListenerOnce(map, 'bounds_changed', function () {
+                    map.setZoom(14)
+                    map.setCenter({ lat: 42.361145, lng: -71.057083 });
+                });
+                google.maps.event.addListener(marker1, "position_changed", this.update(marker1, marker2, poly))
+                google.maps.event.addListener(marker2, "position_changed", this.update(marker1, marker2, poly))
+                this.update(marker1, marker2, poly)
+            },
+            update(marker1, marker2, poly) {
+                const path = [marker1.getPosition(), marker2.getPosition()]
+                poly.setPath(path)
+            },
             addFile(event) {
                 let that = this
                 let fileData = event.target.files[0]
@@ -514,7 +558,11 @@
         }
     }
 </script>
-
 <style scoped>
+    #map {
+        height: 300px;
+        width: 98%;
+        margin: 1%;
+    }
 
 </style>
