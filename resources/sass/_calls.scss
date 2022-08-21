@@ -100,6 +100,7 @@
         position: relative;
         display: inline-block;
         .call-tooltip {
+            z-index: 999999;
             position: absolute;
             background: #FFFFFF;
             box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.15);
@@ -188,7 +189,7 @@
     }
 }
 .call-list {
-    
+
     &-header {
         display: flex;
         align-items: flex-start;

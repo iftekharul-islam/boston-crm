@@ -63,8 +63,10 @@ trait GlobalHelper {
                             })
                            ->orWhere(function($qry2) use ($data, $dataPropertyClient) {
                                 if ($dataPropertyClient == false) {
-                                    return $qry2->where('client_order_no', "LIKE", "%$data%")
-                                                ->orWhere("system_order_no", "LIKE", "%$data%");
+                                    if ($data && $data !== null && $data != "null" && $data != "") {
+                                        return $qry2->where('client_order_no', "LIKE", "%$data%")
+                                                    ->orWhere("system_order_no", "LIKE", "%$data%");
+                                    }
                                 }
                            });
             } else {
