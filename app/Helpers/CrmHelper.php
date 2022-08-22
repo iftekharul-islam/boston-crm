@@ -8,6 +8,7 @@ use App\Models\UserActivity;
 use App\Models\OrderWHistory;
 use App\Models\OrderWInspection;
 use App\Models\OrderWReportAnalysis;
+use Illuminate\Support\Facades\Http;
 
 trait CrmHelper {
 

@@ -168,7 +168,7 @@
                                         <div class="col-7">
                                             <div class="group"
                                                 :class="{ 'invalid-form': providerTypes.error.type == true }">
-                                                <label for="" class="d-block dashboard-label">Appraisal
+                                                <label for="" class="d-block mb-2 dashboard-label">Appraisal
                                                     type <span class="require"></span> </label>
                                                 <div class="position-relative borderless-select">
                                                     <select id="providerTypeFee" class="dashboard-input w-100"
@@ -182,15 +182,15 @@
                                                     <span class="icon-arrow-down bottom-arrow-icon"></span>
                                                 </div>
                                             </div>
-                                            <div class="col-5">
-                                                <div class="group"
-                                                    :class="{ 'invalid-form': providerTypes.error.fee == true }">
-                                                    <label for="" class="d-block mb-2 dashboard-label">Fee <span
-                                                            class="require"></span></label>
-                                                    <input @input="checkProviderValidation($event, 2)" type="number"
-                                                        step="any" class="dashboard-input w-100"
-                                                        v-model="providerTypes.default.fee" @blur="addFee">
-                                                </div>
+                                        </div>
+                                        <div class="col-5">
+                                            <div class="group"
+                                                :class="{ 'invalid-form': providerTypes.error.fee == true }">
+                                                <label for="" class="d-block mb-2 dashboard-label">Fee <span
+                                                        class="require"></span></label>
+                                                <input @input="checkProviderValidation($event, 2)" type="number"
+                                                    step="any" class="dashboard-input w-100"
+                                                    v-model="providerTypes.default.fee" @blur="addFee">
                                             </div>
                                         </div>
                                     </div>
@@ -214,7 +214,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row mt-3 mb-3 pr-0">
                     <div class="col-md-4">
                         <div class="form-box h-100 box-flex">
                             <div class="row">
@@ -278,7 +278,7 @@
                             </ValidationProvider>
                         </div>
                     </div>
-                    <div class="col-md-8 ">
+                    <div class="col-md-8">
                         <div class="form-box">
                             <h4 class="box-header mb-3">Property info</h4>
                             <div class="d-flex justify-content-between w-100 box-flex">

@@ -47,7 +47,7 @@
             "Tests\\": "tests/"
         },
         "files": [
-            "app/Helpers/CrmHelper.php"
+            "app/Helpers/AutoLoadHelper.php"
         ]
     },
     "scripts": {
