@@ -14,14 +14,13 @@
                         </ValidationProvider>
                         <div class="group my-4">
                             <div :class="{ 'invalid-form': groupEmail.tagsNotAvailable }">
-                                <label for="" class="d-block mb-2 dashboard-label">Mention<span
-                                    class="text-danger require"></span></label>
+                                <label for="" class="d-block mb-2 dashboard-label">Mention</label>
                                 <vue-tags-input v-model="groupEmail.tag" :tags="groupEmail.tags"
                                                 :autocomplete-items="emailFilteredItems" :add-only-from-autocomplete="true"
-                                                placeholder="Add clients"
+                                                placeholder="Add Users"
                                                 @tags-changed="newTags => groupEmail.tags = newTags" />
                                 <span v-if="groupEmail.tagsNotAvailable" class="error-message">Please add
-                                        clients</span>
+                                        users</span>
                             </div>
                         </div>
 <!--                        <div class="group">-->
@@ -58,6 +57,7 @@ import VueTagsInput from '@johmun/vue-tags-input';
         groupEmail: {
             tag: '',
             tags: [],
+            mentionTo: [],
             tagsNotAvailable: false,
             autocompleteItems: [],
             address: [],
@@ -105,13 +105,22 @@ import VueTagsInput from '@johmun/vue-tags-input';
             this.$root.$emit('update_add_issue_modal')
         },
         addIssue(){
+            if (!this.groupEmail.tags.length) {
+                this.groupEmail.tagsNotAvailable = true;
+                setTimeout(() => {
+                    this.groupEmail.tagsNotAvailable = false;
+                }, 1000)
+                return
+            }
             this.$refs.addIssueForm.validate().then((status) => {
                 if (status) {
                     let data = {
                         subject: this.subject,
                         issue: this.issue,
-                        assignTo: this.assignTo
+                        assignTo: this.assignTo,
+                        mentionTo: this.groupEmail.tags
                     }
+                    console.log(data);
                     axios.post('issue/' + this.id, data)
                         .then(res => {
                             if (this.error) {
@@ -132,3 +141,8 @@ import VueTagsInput from '@johmun/vue-tags-input';
     }
 }
 </script>
+<style scoped>
+.vue-tags-input {
+    max-width: 100% !important;
+}
+</style>
