@@ -4,13 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\AsArrayObject;
 
 class Ticket extends Model
 {
     use HasFactory;
 
     protected $casts = [
-        'created_at' => 'date:d M Y H:i A'
+        'created_at' => 'date:d M Y H:i A',
+        'mention_to' => 'array',
     ];
 
 

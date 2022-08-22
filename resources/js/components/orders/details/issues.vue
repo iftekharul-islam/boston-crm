@@ -17,7 +17,8 @@
                       <p class="text-gray mb-0" v-if="ticket.creator">Created by : <span class="text-light-black text-600">{{ ticket.creator.name }}</span></p>
                   </div>
                 <div class="d-flex justify-content-between mgb-12">
-                    <p class="text-gray mb-0" v-if="ticket.assignee">Mention to : <span class="text-light-black text-600">{{ ticket.assignee.name }}</span></p>
+<!--                    <p class="text-gray mb-0" v-if="ticket.assignee">Mention to : <span class="text-light-black text-600">{{ ticket.assignee.name }}</span></p>-->
+                    <p class="text-gray mb-0" v-if="ticket.mention_to">Mention to : <span class="text-light-black text-600" v-for="mention in ticket.mention_to">{{ mention.text }} </span></p>
                     <a href="#" class="share-box" @click.prevent="showUpdateModal(ticket)">
                         <span class="icon-eye"><span class="path1"></span><span class="path2"></span></span>
                     </a>
@@ -56,10 +57,22 @@
                                   <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                               </div>
                           </ValidationProvider>
+                          <div class="group my-4">
+                              <div :class="{ 'invalid-form': ticket.tagsNotAvailable }">
+                                  <label for="" class="d-block mb-2 dashboard-label">Mention<span
+                                      class="text-danger require"></span></label>
+                                  <vue-tags-input v-model="ticket.tag" :tags="ticket.tags"
+                                                  :autocomplete-items="emailFilteredItems" :add-only-from-autocomplete="true"
+                                                  placeholder="Add Users"
+                                                  @tags-changed="newTags => ticket.tags = newTags" />
+                                  <span v-if="ticket.tagsNotAvailable" class="error-message">Please add
+                                        users</span>
+                              </div>
+                          </div>
                           <ValidationProvider class="d-block group" name="Solution" rules="required" v-slot="{ errors }">
                               <div class="group" :class="{ 'invalid-form' : errors[0] }">
-                                  <label for="" class="d-block mb-2 dashboard-label">Solution</label>
-                                  <b-form-textarea v-model="ticket.solution" placeholder="Enter Solution..." rows="2"
+                                  <label for="" class="d-block mb-2 dashboard-label">Solution / Comment</label>
+                                  <b-form-textarea v-model="ticket.solution" placeholder="Enter Solution/Comment..." rows="2"
                                                    cols="5">
                                   </b-form-textarea>
                                   <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
@@ -77,6 +90,7 @@
   </div>
 </template>
 <script>
+import VueTagsInput from '@johmun/vue-tags-input';
 export default {
     name: 'issues',
     props: [
@@ -92,9 +106,21 @@ export default {
             id: '',
             subject: '',
             issue: '',
-            solution: ''
-        }
+            solution: '',
+            tag: '',
+            tags: [],
+            mentionTo: [],
+            tagsNotAvailable: false,
+            autocompleteItems: [],
+        },
     }),
+    computed: {
+        emailFilteredItems() {
+            return this.ticket.autocompleteItems.filter(i => {
+                return i.text.toLowerCase().indexOf(this.ticket.tag.toLowerCase()) !== -1;
+            });
+        },
+    },
     created() {
         let order = this.order;
         this.fetchData(order);
@@ -105,22 +131,37 @@ export default {
             this.isIssueModal = false
             this.fetchData(res);
         });
+        this.mapClient(this.users)
     },
     methods: {
+        mapClient(clients) {
+            this.ticket.autocompleteItems = clients.map(cilent => {
+                return { text: cilent.name, id: cilent.id, email: cilent.email };
+            });
+        },
         showUpdateModal(object) {
             this.ticket.id = object.id
             this.ticket.subject = object.subject
             this.ticket.issue = object.issue
+            this.ticket.tags = object.mention_to ? object.mention_to : []
             this.ticket.solution = object.solution
             this.$bvModal.show('add-issue-solution-modal')
         },
         updateIssue() {
+            if (!this.ticket.tags.length) {
+                this.ticket.tagsNotAvailable = true;
+                setTimeout(() => {
+                    this.ticket.tagsNotAvailable = false;
+                }, 1000)
+                return
+            }
             this.$refs.addIssueSolutionForm.validate().then((status) => {
                 if (status) {
                     let data = {
                         subject: this.ticket.subject,
                         issue: this.ticket.issue,
-                        solution: this.ticket.solution
+                        solution: this.ticket.solution,
+                        mentionTo: this.ticket.tags,
                     }
                     axios.post('update-issue/' + this.ticket.id, data)
                         .then(res => {
@@ -148,3 +189,8 @@ export default {
     }
 }
 </script>
+<style scoped>
+.vue-tags-input{
+    max-width: 100% !important;
+}
+</style>
