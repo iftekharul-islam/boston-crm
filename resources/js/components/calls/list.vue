@@ -98,50 +98,59 @@
                         </template>
                     </template>
                     <template v-slot:property_address="{item}">
-                        <div class="full_addr">
-                            {{ item.extra_data.full_address }}
+                        <div class="positive-full-addr">
+                            <div class="full_addr">
+                                {{ item.extra_data.full_address }}
+                            </div>
                         </div>
                     </template>
                     <template v-slot:action="{item}">
-                        <span class="call-list-item">
-                            <a :href="`/orders/${item.id}`" class="icon-list">
-                                <span class="icon-eye text-blue-eye fs-20"><span class="path1"></span><span
-                                        class="path2"></span></span>
-                                <span class="call-tooltip">Details</span>
+                        <div class="dropdown-item-show" @mouseleave="closeDropDown">
+                            <a href="javascript:;" class="quick-view-icon" @mouseover="openDropDown($event, item)">
+                                <img src="/icons/info-circle.png" class="icon-img"/>
                             </a>
-                            <a href="javascript:;" @click.prevent="getQuickView(item)"
-                                class="icon-list quick-view-icon"><span class="icon-note text-purple fs-20"><span
-                                        class="path1"></span><span class="path2"></span><span class="path3"></span><span
-                                        class="path4"></span></span>
-                                <span class="call-tooltip">Quick view</span>
-                            </a>
-                            <a @click.prevent="getCallSummary(item.call_log, item)"
-                                href="javascript:;" class="icon-list" data-bs-toggle="modal"
-                                data-bs-target="#callLogModal"><span class="icon-messages2 primary-text fs-20"><span
-                                        class="path1"></span><span class="path2"></span><span class="path3"></span><span
-                                        class="path4"></span><span class="path5"></span></span>
-                                <span class="call-tooltip">Call log</span>
-                            </a>
-                            <a @click="getScheduleData(item)" href="javascript:;" class="icon-list">
-                                <span class="icon-calendar text-brown fs-20"><span class="path1"></span><span
-                                        class="path2"></span><span class="path3"></span><span class="path4"></span><span
-                                        class="path5"></span><span class="path6"></span><span class="path7"></span><span
-                                        class="path8"></span></span>
-                                <span class="call-tooltip" v-if="item.status == 0">Schedule</span>
-                                <span class="call-tooltip" v-else>Re-schedule</span>
-                            </a>
-                            <a href="javascript:;" @click="getSendMessage(item)" class="icon-list">
-                                <img src="/img/sms.svg" alt="Email and sms" class="img-fluid">
-                                <span class="call-tooltip">Email & SMS</span>
-                            </a>
-                            <a @click="callNumberInit(item)" href="javascript:;" class="icon-list"><span
-                                    class="icon-call text-light-red fs-20"><span class="path1"></span><span
-                                        class="path2"></span></span>
-                                <span class="call-tooltip">Call</span>
-                            </a>
-                            <button @click="openIssues(item)" class="button button-transparent p-0"><span
-                                    class="icon-arrow-bottom"></span></button>
-                        </span>
+                            <div :class="`call-list-item dropdown-set dropdown-item-${item.id}`">
+                                <a :href="`/orders/${item.id}`" class="icon-list">
+                                    <span class="icon-eye text-blue-eye fs-20"><span class="path1"></span><span
+                                            class="path2"></span></span>
+                                    <span class="call-tooltip">Details</span>
+                                </a>
+                                <a href="javascript:;" @click.prevent="getQuickView(item)"
+                                    class="icon-list quick-view-icon"><span class="icon-note text-purple fs-20"><span
+                                            class="path1"></span><span class="path2"></span><span class="path3"></span><span
+                                            class="path4"></span></span>
+                                    <span class="call-tooltip">Quick view</span>
+                                </a>
+                                <a @click.prevent="getCallSummary(item.call_log, item)"
+                                    href="javascript:;" class="icon-list" data-bs-toggle="modal"
+                                    data-bs-target="#callLogModal"><span class="icon-messages2 primary-text fs-20"><span
+                                            class="path1"></span><span class="path2"></span><span class="path3"></span><span
+                                            class="path4"></span><span class="path5"></span></span>
+                                    <span class="call-tooltip">Call log</span>
+                                </a>
+                                <a @click="getScheduleData(item)" href="javascript:;" class="icon-list">
+                                    <span class="icon-calendar text-brown fs-20"><span class="path1"></span><span
+                                            class="path2"></span><span class="path3"></span><span class="path4"></span><span
+                                            class="path5"></span><span class="path6"></span><span class="path7"></span><span
+                                            class="path8"></span></span>
+                                    <span class="call-tooltip" v-if="item.status == 0">Schedule</span>
+                                    <span class="call-tooltip" v-else>Re-schedule</span>
+                                </a>
+                                <a href="javascript:;" @click="getSendMessage(item)" class="icon-list">
+                                    <img src="/img/sms.svg" alt="Email and sms" class="img-fluid">
+                                    <span class="call-tooltip">Email & SMS</span>
+                                </a>
+                                <a @click="callNumberInit(item)" href="javascript:;" class="icon-list"><span
+                                        class="icon-call text-light-red fs-20"><span class="path1"></span><span
+                                            class="path2"></span></span>
+                                    <span class="call-tooltip">Call</span>
+                                </a>
+                                <a @click="openIssues(item)" href="javascript:;" class="icon-list">
+                                    <span class="icon-arrow-bottom"></span>
+                                    <span class="call-tooltip">Issues</span>
+                                </a>
+                            </div>
+                        </div>
                     </template>
                     <template v-slot:head_action="{item}">
                         <img src="/icons/column.svg" :tag="item.item" class="cursor-pointer open-head-column">
@@ -569,6 +578,13 @@
                 if (!eventTarget.is(target) && target.has(eventTarget).length == 0 && !eventTarget.is(secondTarget) && secondTarget.has(eventTarget).length == 0) {
                     this.visibleColumnDropDown = false;
                 }
+
+                // Close Menu
+                let targetM1 = $(".call-list-item.dropdown-set");
+                let secondTargetM1 = $(".dropdown-item-show");
+                if (!eventTarget.is(targetM1) && targetM1.has(eventTarget).length == 0 && !eventTarget.is(secondTargetM1) && secondTargetM1.has(eventTarget).length == 0) {
+                    $(".call-list-item.dropdown-set").removeClass('active');
+                }
             }.bind(this));
         },
         methods: {
@@ -841,11 +857,24 @@
                     this.loadPage(this.pages.acitvePage);
                 }
             },
+            openDropDown(event, item) {
+                $(".call-list-item.dropdown-set").removeClass('active');
+                $(".call-list-item.dropdown-set").removeClass('removeBottomSize');
+                let height = event.screenY + 200;
+                if (height > window.innerHeight) {
+                    $(".dropdown-item-"+item.id).addClass('removeBottomSize');
+                }
+                $(".dropdown-item-"+item.id).addClass('active');
+            },
+            closeDropDown() {
+                $(".call-list-item.dropdown-set").removeClass('active');
+                $(".call-list-item.dropdown-set").removeClass('removeBottomSize');
+            }
         },
     }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
     .cursor-hover {
         cursor: pointer;
     }
@@ -907,19 +936,93 @@
         cursor: hover;
     }
 
-    .full_addr {
-        height: 44px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        cursor: pointer;
-        transition: all 200ms ease-in-out;
+    .positive-full-addr {
+        position: relative;
+        .full_addr {
+            margin-top: -5px;
+            height: 44px;
+            cursor: pointer;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            transition: all 100ms ease-in-out;
+            &:hover {
+                border-radius: 10px;
+                padding: 10px;
+                z-index: 99999;
+                background: #fff;
+                height: auto;
+                top: -20px;
+                position: absolute;
+                box-shadow: 0 5px 10px rgb(0 0 0 / 35%);
+                transition: all 100ms ease-in-out;
+            }
+        }
     }
 
-    .full_addr:hover {
-        display: table;
-        height: auto;
-        overflow: auto;
-        transition: all 200ms ease-in-out;
+    /* Menu items */
+    td.text-align-right.item-action {
+        position: relative;
+    }
+    .call-list-item.dropdown-set {
+        display: block;
+        background: #fff;
+        box-shadow: 0 8px 30px rgb(0 0 0 / 35%);
+        border-radius: 0.35rem;
+        overflow: hidden;
+        position: absolute;
+        right: 0;
+        top: 50px;
+        min-width: 180px;
+        visibility: hidden;
+        opacity: 0;
+        z-index: -20;
+        transition: all 200ms linear;
+
+        a.icon-list {
+            display: block;
+            text-align: left;
+            padding: 8px 10px;
+            span.call-tooltip {
+                display: inline-block;
+                position: relative;
+                box-shadow: none;
+                text-align: left;
+                padding: 0;
+                top: -5px;
+                margin-left: 5px;
+            }
+            span.icon-arrow-bottom {
+                display: inline-block;
+                margin-top: 0;
+                padding: 0px 3px 5px;
+            }
+            &:hover span.call-tooltip{
+                color: #19B7A2;
+            }
+        }
+        &.active {
+            transition: all 200ms linear;
+            visibility: visible;
+            opacity: 1;
+            z-index: 99;
+            top: -10px;
+        }
+        &.removeBottomSize {
+            top: auto;
+            bottom: 0;
+        }
+    }
+
+    .dropdown-item-show {
+        position: relative;
+        img.icon-img {
+            height: 20px;
+            margin-right: 10px;
+        }
+    }
+
+    .m-table table thead th {
+        white-space: nowrap;
     }
 
 </style>

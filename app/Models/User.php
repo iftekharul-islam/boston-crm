@@ -138,6 +138,11 @@ class User extends Authenticatable implements HasMedia
         return CompanyUser::where('user_id', $this->id)->first();
     }
 
+    public function companyProfile()
+    {
+        return CompanyUser::where('user_id', $this->id)->with('company')->first();
+    }
+
     public function getThumbAttribute() {
         $profile = $this->getMedia('profiles');
         if ($profile->count() > 0) {

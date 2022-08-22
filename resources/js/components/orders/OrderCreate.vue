@@ -116,7 +116,7 @@ export default {
                 this.submitResult.message = res.message;
                 this.submitResult.submitStatus = true;
                 setTimeout(() => {
-                  window.location.href = "/orders/"+res.orderId + "?r=create"
+                //   window.location.href = "/orders/"+res.orderId + "?r=create"
                 },500);
               }
           });

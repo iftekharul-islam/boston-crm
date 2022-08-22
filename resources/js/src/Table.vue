@@ -29,7 +29,7 @@
                             <td width="5%" v-if="showSlOpt" class="text-center">
                                 {{ ti+slStart }}
                             </td>
-                            <td v-for="hItem, hk in headerItem" :key="hk" :class="`text-align-${hItem.aligntd}`">
+                            <td v-for="hItem, hk in headerItem" :key="hk" :class="`text-align-${hItem.aligntd} item-${hItem.item}`">
                                 <slot :name="hItem.item" v-bind:item="tdItem">
                                     <div v-html="setItemDetail(tdItem, hItem.item)"></div>
                                 </slot>
@@ -158,7 +158,7 @@ export default {
                         item: spl[1],
                         align: alignStr,
                         aligntd: alignStr2,
-                        imageHead: imageHead, 
+                        imageHead: imageHead,
                         imageHeadSrc: imageHeadSrc
                     }
                     this.headerItem.push(newSpl);
@@ -226,7 +226,7 @@ export default {
         $props: {
             handler(val){
                 this.loadManage();
-            },  
+            },
             deep: true,
         },
         $attrs: {
@@ -261,7 +261,7 @@ export default {
         align-items: center;
         line-height: 1;
         overflow: hidden;
-    }    
+    }
     .m-table-mobile-select{
         margin-right: 5px;
     }
@@ -278,7 +278,7 @@ export default {
     .m-table table tr {
         border-top: thin solid #ccc;
     }
-    .m-table table tr td, 
+    .m-table table tr td,
     .m-table table thead th {
         /* border-left: thin solid #ccc; */
         padding: 16px 10px;
