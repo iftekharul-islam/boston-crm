@@ -68,15 +68,8 @@ class Order extends Model implements HasMedia
     ];
 
     protected $fillable = [
-      "amc_id","lender_id","status","client_order_no","system_order_no","received_date","due_date"
+      "amc_id","lender_id","status","client_order_no","system_order_no","received_date","due_date","coordinate"
     ];
-
-    protected static function booted()
-    {
-
-    }
-
-
     /**
      * @return string[]
      */

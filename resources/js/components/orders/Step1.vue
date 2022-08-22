@@ -999,7 +999,6 @@
             },
             saveAppraisalType() {
                 this.$refs.appraisalTypeForm.validate().then((status) => {
-                    console.log("prev"+this.appraisalTypes);
                     if (status) {
                         this.$boston.post('appraisal-types', this.appraisal)
                             .then(res => {
@@ -1010,7 +1009,6 @@
                                 if (res.error == false) {
                                     this.initAppraisalTypes(res.appraisal_types)
                                     this.$bvModal.hide('add-appraisal-type')
-                                    console.log("new"+res.appraisal_types);
                                 }
                             })
                             .catch(err => {
@@ -1188,6 +1186,7 @@
             },
 
             nextStep() {
+                this.$root.$emit('property-data',this.step1)
                 this.$refs.orderForm.validate().then((status) => {
                     if (status && this.providerTypes.extra.length && !this.dateIssue.status) {
                         this.stepActive = true;
@@ -1540,20 +1539,8 @@
                 this.step1.county = this.mapData.data.county;
                 this.step1.lat = this.mapData.data.lat;
                 this.step1.lng = this.mapData.data.lon;
-                console.log(this.mapData.data);
                 this.changeStreetAddress(this.step1.street);
             },
-            getAmcClient(id) {
-
-            },
-            getLenderClient(id) {
-
-            },
-
-            findTechnologyFee() {
-
-            },
-
             changeStreetAddress(value) {
                 if (value == null || value == "") {
                     return false;
@@ -1597,7 +1584,7 @@
                     this.oldOrderNo.find = res.find;
                     this.oldOrderNo.message = res.message;
                 }).catch(err => {
-                    console.log(err);
+                    console.error(err);
                 });
             }, 300),
 

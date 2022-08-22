@@ -12,10 +12,21 @@
                                 <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                             </div>
                         </ValidationProvider>
-                        <div class="group">
-                            <label for="" class="d-block mb-2 dashboard-label">Assign To</label>
-                            <m-select :options="users" object item-text="name" item-value="id" v-model="assignTo"></m-select>
+                        <div class="group my-4">
+                            <div :class="{ 'invalid-form': groupEmail.tagsNotAvailable }">
+                                <label for="" class="d-block mb-2 dashboard-label">Mention</label>
+                                <vue-tags-input v-model="groupEmail.tag" :tags="groupEmail.tags"
+                                                :autocomplete-items="emailFilteredItems" :add-only-from-autocomplete="true"
+                                                placeholder="Add Users"
+                                                @tags-changed="newTags => groupEmail.tags = newTags" />
+                                <span v-if="groupEmail.tagsNotAvailable" class="error-message">Please add
+                                        users</span>
+                            </div>
                         </div>
+<!--                        <div class="group">-->
+<!--                            <label for="" class="d-block mb-2 dashboard-label">Assign To</label>-->
+<!--                            <m-select :options="users" object item-text="name" item-value="id" v-model="assignTo"></m-select>-->
+<!--                        </div>-->
                         <ValidationProvider class="d-block group" name="Queries or Issues" rules="required" v-slot="{ errors }">
                             <div class="group" :class="{ 'invalid-form' : errors[0] }">
                                 <label for="" class="d-block mb-2 dashboard-label">Queries or Issues</label>
@@ -37,16 +48,34 @@
 </template>
 
 <script>
+import VueTagsInput from '@johmun/vue-tags-input';
  export default {
     props: [
         'orderId', 'showIssueModal', 'users'
     ],
     data: () => ({
+        groupEmail: {
+            tag: '',
+            tags: [],
+            mentionTo: [],
+            tagsNotAvailable: false,
+            autocompleteItems: [],
+            address: [],
+            subject: '',
+            message: '',
+        },
         id: '',
         subject: '',
         issue: '',
         assignTo: ''
     }),
+     computed: {
+         emailFilteredItems() {
+             return this.groupEmail.autocompleteItems.filter(i => {
+                 return i.text.toLowerCase().indexOf(this.groupEmail.tag.toLowerCase()) !== -1;
+             });
+         },
+     },
     watch: {
         showIssueModal(newValue, oldValue) {
             if (newValue === true) {
@@ -61,20 +90,37 @@
     },
     created() {
         this.id = this.orderId;
+        this.mapClient(this.users)
     },
     methods: {
+        mapClient(clients) {
+            this.groupEmail.autocompleteItems = clients.map(cilent => {
+                return { text: cilent.name, id: cilent.id, email: cilent.email };
+            });
+
+            console.log(this.groupEmail.autocompleteItems)
+        },
         hideModel() {
             this.$bvModal.hide('add-issue-modal')
             this.$root.$emit('update_add_issue_modal')
         },
         addIssue(){
+            if (!this.groupEmail.tags.length) {
+                this.groupEmail.tagsNotAvailable = true;
+                setTimeout(() => {
+                    this.groupEmail.tagsNotAvailable = false;
+                }, 1000)
+                return
+            }
             this.$refs.addIssueForm.validate().then((status) => {
                 if (status) {
                     let data = {
                         subject: this.subject,
                         issue: this.issue,
-                        assignTo: this.assignTo
+                        assignTo: this.assignTo,
+                        mentionTo: this.groupEmail.tags
                     }
+                    console.log(data);
                     axios.post('issue/' + this.id, data)
                         .then(res => {
                             if (this.error) {
@@ -95,3 +141,8 @@
     }
 }
 </script>
+<style scoped>
+.vue-tags-input {
+    max-width: 100% !important;
+}
+</style>

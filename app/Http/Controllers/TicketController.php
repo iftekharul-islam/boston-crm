@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\Notify;
 use App\Helpers\CrmHelper;
 use App\Models\CallLog;
+use App\Models\Notification;
 use App\Models\Order;
 use App\Models\Ticket;
 use App\Repositories\OrderRepository;
@@ -41,10 +43,21 @@ class TicketController extends Controller
         $newTicket = new Ticket();
         $newTicket->order_id = $id;
         $newTicket->assigned_to = $request->assignTo ?? null;
+        $newTicket->mention_to = $request->mentionTo;
         $newTicket->subject = $request->subject;
         $newTicket->issue = $request->issue;
         $newTicket->created_by = $user->id;
         $newTicket->save();
+
+        foreach ($newTicket->mention_to ?? [] as $mention){
+            $notification = new Notification();
+            $notification->user_id = $mention['id'];
+            $notification->message = 'Mention on issue to order no: '. $order['client_order_no'] ;
+            $notification->created_by = $user->id;
+            $notification->save();
+
+            event(new Notify($notification->message, $notification->user_id));
+        }
 
         $historyTitle = "Issue/Query created successfully";
 
@@ -66,7 +79,7 @@ class TicketController extends Controller
 
     public function update(Request $request, $id)
     {
-        $ticket = Ticket::where('id', $id)->first();
+        $ticket = Ticket::with('order')->where('id', $id)->first();
         $user = auth()->user();
 
         if (!$ticket) {
@@ -82,8 +95,18 @@ class TicketController extends Controller
             $ticket->assigned_to = $user->id;
             $ticket->solution = $request->solution;
             $ticket->solution_by = $user->id;
+            $ticket->mention_to = $request->mentionTo;
             $ticket->solution_at = Carbon::now();
             $ticket->status = 1;
+        }
+        foreach ($ticket->mention_to ?? [] as $mention){
+            $notification = new Notification();
+            $notification->user_id = $mention['id'];
+            $notification->message = 'Mention on issue to order no: '.$ticket['order']['client_order_no'] ;
+            $notification->created_by = $user->id;
+            $notification->save();
+
+            event(new Notify($notification->message, $notification->user_id));
         }
         $ticket->updated_by = $user->id;
         $ticket->save();
