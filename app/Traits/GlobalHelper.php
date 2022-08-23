@@ -19,7 +19,7 @@ trait GlobalHelper {
         $companyId = $user->getCompanyProfile()->company_id;
 
         $all = Order::count();
-        $toBeSchedule = Order::where('status', 0)->where('completed_status', null)->where('company_id', $companyId)->count();
+        $toBeSchedule = Order::where('status', 0)->where('completed_date', null)->where('company_id', $companyId)->count();
         $schedule = Order::where('status', 1)->where('company_id', $companyId)->count();
         $completed_today = Order::whereDate('completed_date', "=", Carbon::today())->where('completed_status', 1)->where('company_id', $companyId)->count();
         $today_call = 0;
@@ -87,7 +87,7 @@ trait GlobalHelper {
         })
         ->when($filterType, function($qry) use ($filterType, $orderId) {
             if ($filterType == "to_schedule") {
-                return $qry->where("status", 0)->where("completed_status", null);
+                return $qry->where("status", 0)->where('completed_date', null);
             } else if($filterType == "schedule") {
                 return $qry->where("status", 1);
             } else if($filterType == "completed") {

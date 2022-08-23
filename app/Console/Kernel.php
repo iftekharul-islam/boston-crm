@@ -17,7 +17,9 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('dailyReport:run')->daily();
         $schedule->command('callReminder:run')->daily();
-        $schedule->command('boston:orderRefresh')->dailyAt('23:59');
+        // $schedule->command('boston:orderRefresh')->dailyAt('23:59');
+        $schedule->command('boston:orderRefresh')->everyTenMinutes();
+
     }
 
     /**
