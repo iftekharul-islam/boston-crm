@@ -614,10 +614,9 @@
                 }
             },
             updateTemplate(){
-                axios.get('log-template-list')
-                    .then(res => {
-                        this.templates = res.data
-                    }).catch(err => {
+                axios.get('log-template-list').then(res => {
+                    this.templates = res.data
+                }).catch(err => {
                     console.log(err)
                 })
             },
@@ -664,7 +663,6 @@
                                 if(res.data.error == false) {
                                     this.filterValues = res.data.filterValue;
                                     this.initOrder(res.data.order)
-                                    console.log(this.filterValues);
                                 }
                                 this.$refs.addCallLogForm.reset()
                                 this.templates = res.data.templates

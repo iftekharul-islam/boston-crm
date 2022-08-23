@@ -1,6 +1,7 @@
 <?php
 
 use App\Events\Notify;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
@@ -42,6 +43,7 @@ Route::get('/locale/{locale}', LocalizationController::class)->name('locale.chan
 Route::group(['middleware' => ['auth:sanctum']], function () {
     //Dashboard
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('refresh/orders', [DashboardController::class, 'refreshOrder'])->name('refreshOrder');
     Route::get('user-dashboard', [DashboardController::class, 'userIndex'])->name('user.dashboard');
     //User Controller
     Route::get(
@@ -350,8 +352,9 @@ Route::get('/get/timezone', function(){
     return $timezone;
 });
 
-Route::get('create/random/order', function() {
-    return createRandomOrder();
+Route::get('create/random/order', function(Request $get) {
+    $order = createRandomOrder();
+    return view("randomorder", ['message' => $order]);
 })->middleware('auth');
 
 
