@@ -132,7 +132,7 @@ class CallLogController extends Controller
         }
         $msg = 'Call log updated successfully';
 
-        if(!$order->completed_status){
+        if(!$order->completed_date){
             $order->completed_status = 1;
             $order->completed_date = Carbon::now();
             $order->save();
