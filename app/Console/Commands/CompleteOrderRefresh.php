@@ -45,5 +45,6 @@ class CompleteOrderRefresh extends Command
             $item->save();
             $this->info("Order no ".$item->client_order_no." has been freshed");
         }
+        $this->info("Order refresh has done");
     }
 }
