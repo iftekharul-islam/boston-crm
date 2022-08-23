@@ -664,8 +664,8 @@
                 this.schedule.date = ''
                 this.$refs.addCallLogForm.reset()
 
-                this.callLog.notCompleted = true
                 this.callLog.items = []
+                this.callLog.notCompleted = order.completed_date ? false : true;
                 this.callLog.orderId = order.id
                 this.callLog.order_no = order.client_order_no
                 this.callLog.address = order.property_info.full_addr
@@ -673,11 +673,11 @@
                 this.schedule.date = this.callLog.call_date
                 if (value.length) {
                     this.callLog.items = value
-                    this.callLog.items.forEach((log, index) => {
-                        if (log.status) {
-                            this.callLog.notCompleted = false
-                        }
-                    })
+                    // this.callLog.items.forEach((log, index) => {
+                    //     if (log.status) {
+                    //         this.callLog.notCompleted = false
+                    //     }
+                    // })
                 }
             },
             callNumberInit(item) {
