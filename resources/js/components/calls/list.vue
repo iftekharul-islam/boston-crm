@@ -320,9 +320,9 @@
                         <div class="update-log">
                             <div class="">
                                 <label class="d-block mb-2 dashboard-label">Template</label>
-                                <m-select :options="templates" object item-text="title" item-value="message" v-model="callLog.message"></m-select>
+                                <m-select :options="templates" object item-text="title" @change="selectedTemplate($event)" item-value="message" v-model="callLog.message"></m-select>
                             </div>
-                            <div v-if="template.save">
+                            <div v-if="template.save || editTemplate.save">
                                 <ValidationProvider class="d-block group" name="title" :rules="{'required': template.save}" v-slot="{ errors }">
                                     <div class="group" :class="{ 'invalid-form' : errors[0] }">
                                         <label for="" class="d-block mb-2 dashboard-label">Title</label>
@@ -358,11 +358,15 @@
                             </div>
                             <div class="checkbox-group mt-2">
                                 <input type="checkbox" class="checkbox-input" v-model="schedule.save" >
-                                <label for="" class="checkbox-label">Create schedule </label>
+                                <label class="checkbox-label">Create schedule </label>
                             </div>
-                            <div class="checkbox-group mt-2">
+                            <div class="checkbox-group mt-2" v-if="!editTemplate.save">
                                 <input type="checkbox" class="checkbox-input" v-model="template.save" >
-                                <label for="" class="checkbox-label">Save as Template </label>
+                                <label class="checkbox-label">Save as Template </label>
+                            </div>
+                            <div class="checkbox-group mt-2" v-if="editTemplate.show">
+                                <input type="checkbox" class="checkbox-input" v-model="editTemplate.save" >
+                                <label class="checkbox-label">Update Template </label>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -406,6 +410,11 @@
                 exists: false,
                 title: '',
                 titleValidate: false
+            },
+            editTemplate: {
+                save: false,
+                show: false,
+                id: '',
             },
             filterValues: [],
             openCallNumber: false,
@@ -590,6 +599,20 @@
             }.bind(this));
         },
         methods: {
+            selectedTemplate(event){
+                let valObj = this.templates.filter(function(elem){
+                    if(elem.message === event) {
+                        return elem;
+                    }
+                });
+
+                if(valObj.length > 0){
+                    this.editTemplate.show = true
+                    let template = valObj[0]
+                    this.editTemplate.id = template.id
+                    this.template.title = template.title
+                }
+            },
             updateTemplate(){
                 axios.get('log-template-list')
                     .then(res => {
@@ -624,6 +647,8 @@
                         formData.append('title', this.template.title)
                         formData.append('schedule', this.schedule.save)
                         formData.append('date', this.schedule.date)
+                        formData.append('editTemplate', this.editTemplate.save)
+                        formData.append('templateId', this.editTemplate.id)
 
                         axios.post('call-log-update/' + this.callLog.orderId, formData)
                             .then(res => {
@@ -633,6 +658,9 @@
                                 this.template.title = ''
                                 this.schedule.save = false
                                 this.schedule.date = ''
+                                this.editTemplate.save = false
+                                this.editTemplate.id = ''
+                                this.$refs.addCallLogForm.reset()
                                 if(res.data.error == false) {
                                     this.filterValues = res.data.filterValue;
                                     this.initOrder(res.data.order)
