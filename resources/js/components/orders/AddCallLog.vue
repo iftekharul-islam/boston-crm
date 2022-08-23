@@ -13,10 +13,10 @@
                     <div class="col-12">
                         <div class="group">
                             <label for="" class="d-block mb-2 dashboard-label">Template</label>
-                            <m-select :options="templates" object item-text="title" item-value="message" v-model="message"></m-select>
+                            <m-select :options="templates" object item-text="title" item-value="message" @change="selectedTemplate($event)" v-model="message"></m-select>
                         </div>
                     </div>
-                    <div class="col-12 mt-2" v-if="template.save">
+                    <div class="col-12 mt-2" v-if="template.save || editTemplate.save">
                         <ValidationProvider class="d-block group" name="Title" :rules="{'required': template.save}" v-slot="{ errors }">
                             <div class="group" :class="{ 'invalid-form' : errors[0] }">
                                 <label for="" class="d-block mb-2 dashboard-label">Title</label>
@@ -58,10 +58,16 @@
                             <label for="" class="checkbox-label text-capitalize">Create schedule </label>
                         </div>
                     </div>
-                    <div class="col-12">
+                    <div class="col-12" v-if="!editTemplate.save">
                         <div class="checkbox-group review-check mgt-20">
                             <input type="checkbox" class="checkbox-input check-data" v-model="template.save">
                             <label for="" class="checkbox-label text-capitalize">Save as Template </label>
+                        </div>
+                    </div>
+                    <div class="col-12" v-if="editTemplate.show">
+                        <div class="checkbox-group review-check mgt-20">
+                            <input type="checkbox" class="checkbox-input check-data" v-model="editTemplate.save">
+                            <label for="" class="checkbox-label text-capitalize">Update Template </label>
                         </div>
                     </div>
                 </div>
@@ -96,7 +102,12 @@ export default {
             save: false,
             exists: false,
             title: ''
-        }
+        },
+        editTemplate: {
+            save: false,
+            show: false,
+            id: '',
+        },
     }),
     watch: {
         showModal(newValue, oldValue) {
@@ -115,12 +126,29 @@ export default {
         this.updateTemplate()
     },
     methods: {
+        selectedTemplate(event){
+            let valObj = this.templates.filter(function(elem){
+                if(elem.message === event) {
+                    return elem;
+                }
+            });
+
+            if(valObj.length > 0){
+                this.editTemplate.show = true
+                let template = valObj[0]
+                this.editTemplate.id = template.id
+                this.template.title = template.title
+            }
+        },
         fetchData(order) {
             console.log(order)
             this.message = ''
             this.assignTo = ''
             this.complete = null
             this.template.save = false
+            this.editTemplate.save = false
+            this.editTemplate.show = false
+            this.editTemplate.id = ''
 
             this.template.title = ''
             this.schedule.date = order.call_date
@@ -159,6 +187,8 @@ export default {
                     formData.append('title', this.template.title)
                     formData.append('schedule', this.schedule.save)
                     formData.append('date', this.schedule.date)
+                    formData.append('editTemplate', this.editTemplate.save)
+                    formData.append('templateId', this.editTemplate.id)
 
                     axios.post('call-log/' + this.id, formData)
                         .then(res => {
