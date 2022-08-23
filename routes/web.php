@@ -352,10 +352,7 @@ Route::get('/get/timezone', function(){
     return $timezone;
 });
 
-Route::get('create/random/order', function(Request $get) {
-    $order = createRandomOrder();
-    return view("randomorder", ['message' => $order]);
-})->middleware('auth');
+Route::get('create/random/order', [ WebApiController::class, 'createNewOrder' ])->middleware('auth');
 
 
 Route::get('/listen',function () {

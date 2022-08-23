@@ -107,7 +107,7 @@
                     <template v-slot:action="{item}">
                         <div class="dropdown-item-show" @mouseleave="closeDropDown">
                             <a href="javascript:;" class="quick-view-icon" @mouseover="openDropDown($event, item)">
-                                <img src="/icons/info-circle.png" class="icon-img"/>
+                                <span class="icon-arrow-bottom"></span>
                             </a>
                             <div :class="`call-list-item dropdown-set dropdown-item-${item.id}`">
                                 <a :href="`/orders/${item.id}`" class="icon-list">
@@ -1030,6 +1030,13 @@
         img.icon-img {
             height: 20px;
             margin-right: 10px;
+        }
+        a.quick-view-icon {
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-left: 15px;
         }
     }
 

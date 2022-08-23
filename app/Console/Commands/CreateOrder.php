@@ -2,10 +2,12 @@
 
 namespace App\Console\Commands;
 
+use App\Helpers\CrmHelper;
 use Illuminate\Console\Command;
 
 class CreateOrder extends Command
 {
+    use CrmHelper;
     /**
      * The name and signature of the console command.
      *
@@ -37,7 +39,7 @@ class CreateOrder extends Command
      */
     public function handle()
     {
-        $orderInfor = createRandomOrder(false);
+        $orderInfor = $this->createRandomOrder(false);
         $this->info($orderInfor);
     }
 }
