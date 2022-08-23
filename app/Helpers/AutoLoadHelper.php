@@ -19,8 +19,7 @@ function createRandomOrder($userType = true) {
     $json->step1->receiveDate = Carbon\Carbon::now()->subDays($randomDate)->format("Y-m-d");
     $json->step1->dueDate = Carbon\Carbon::now()->addDays(rand(3,5))->format("Y-m-d");
     $json->step2->contactSame = (rand(1,2) % 2) == 0 ? true : false;
-
-    return $json;
+    $json->step2->coordinate = (rand(1,2) % 2) == 0 ? "South" : "North";
 
     $url = url("api/store/order");
     $post = Http::post($url, json_decode(json_encode($json), true));
