@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ticket;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Contracts\Foundation\Application;
 
 class DashboardController extends BaseController
 {
@@ -43,4 +44,9 @@ class DashboardController extends BaseController
 
 			return $user->getUserRole( $user->id, $company->id );
 	 }
+
+     public function refreshOrder() {
+        Artisan::call("boston:orderRefresh");
+        return "Order has been refreshed";
+     }
 }

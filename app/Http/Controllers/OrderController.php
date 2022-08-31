@@ -385,6 +385,8 @@ class OrderController extends BaseController
         $all_lender = $this->repository->getAllClientByType('lender');
 
         $order = $this->orderDetails($id);
+
+//        return $order['tickets'];
         $noRewrite = 1;
         if (isset($order->analysis->is_review_send_back) && $order->analysis->is_review_send_back == 1) {
             $noRewrite = 0;
@@ -472,6 +474,7 @@ class OrderController extends BaseController
         $orderClient = Order::where('id', '!=', $request->id)
             ->where('client_order_no', $request->client_order_no)
             ->first();
+
         if ($orderClient) {
             return response()->json([
                 'error' => true,

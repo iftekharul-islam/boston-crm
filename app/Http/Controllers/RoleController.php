@@ -23,7 +23,7 @@ class RoleController extends BaseController
 {
 	 protected CompanyService $service;
 	 use CrmHelper;
-	 
+
 	 /**
 		* Company Services.
 		*
@@ -34,7 +34,7 @@ class RoleController extends BaseController
 			parent::__construct();
 			$this->service = $company_service;
 	 }
-	 
+
 	 /**
 		* Display a listing of the resource.
 		*
@@ -44,10 +44,10 @@ class RoleController extends BaseController
 	 {
 			$roles       = $this->service->getCompanyAllRoles();
 			$permissions = $this->getModels();
-			
+
 			return view( 'role.index', compact( 'roles', 'permissions' ) );
 	 }
-	 
+
 	 /**
 		* Show the form for creating a new resource.
 		*
@@ -56,10 +56,10 @@ class RoleController extends BaseController
 	 public function create(): View|Factory|Application
 	 {
 			$permissions = $this->getModels();
-			
+
 			return view( 'role.create', compact( 'permissions' ) );
 	 }
-	 
+
 	 /**
 		* Store a newly created resource in storage.
 		*
@@ -74,10 +74,10 @@ class RoleController extends BaseController
 			DB::transaction( function () use ($request, $company, $user) {
 				 $this->service->createRole( $request->get( 'name' ), $company, $request->get( 'description' ), $user )->getPermissions( $request->get( 'permissions', [] ) )->attachSelectedPermissions()->setCompany( $company )->attachRole();
 			} );
-			
+
 			return response()->json( [ 'success' => true, 'message' => 'Successfully create role' ] );
 	 }
-	 
+
 	 /**
 		* Show the form for editing the specified resource.
 		*
@@ -90,10 +90,10 @@ class RoleController extends BaseController
 			$role                   = $this->service->getRoleById( $id );
 			$permissions            = $this->getModels();
 			$role_permissions_names = $role->permissions()->pluck( 'name' )->toArray();
-			
+
 			return view( 'role.edit', compact( 'role', 'permissions', 'role_permissions_names' ) );
 	 }
-	 
+
 	 /**
 		* Update the specified resource in storage.
 		*
@@ -109,10 +109,10 @@ class RoleController extends BaseController
 				 $this->service->setRole( $role )->updateRole( name: $request->get( 'name' ),
 					 description: $request->get( 'description' ) )->getPermissions( $request->get( 'permissions', [] ) )->attachSelectedPermissions();
 			} );
-			
+
 			return response()->json( [ 'success' => true, 'message' => 'Successfully create role' ] );
 	 }
-	 
+
 	 /**
 		* Remove the specified resource from storage.
 		*
@@ -123,15 +123,15 @@ class RoleController extends BaseController
 	 public function destroy(int $id): JsonResponse
 	 {
 			$role = Role::query()->findOrFail( $id );
-			
+
 			$role_user_exists = CompanyUser::query()->where('role_id', $role->id)->exists();
 			if ($role_user_exists) {
 				 return response()->json( [ 'success' => false, 'message' => 'Role has active users. You have to remove role from those users first.' ] );
 			}
-			
+
 			return response()->json( [ 'success' => $role->delete() ] );
 	 }
-	 
+
 	 /**
 		* Get All Model Name.
 		*
@@ -141,7 +141,7 @@ class RoleController extends BaseController
 	 {
 			$models       = collect( File::allFiles( app_path() ) )->map( function ($item) {
 				 $path = $item->getRelativePathName();
-				 
+
 				 return sprintf( '\%s%s', Container::getInstance()->getNamespace(),
 					 strtr( substr( $path, 0, strrpos( $path, '.' ) ), '/', '\\' ) );
 			} )->filter( function ($class) {
@@ -150,7 +150,7 @@ class RoleController extends BaseController
 						$reflection = new \ReflectionClass( $class );
 						$valid      = $reflection->isSubclassOf( Model::class ) && ! $reflection->isAbstract();
 				 }
-				 
+
 				 return $valid;
 			} );
 			$ignore_model = [ '', 'companyuser', 'company', 'userprofile', 'userinvite' ];
@@ -161,7 +161,7 @@ class RoleController extends BaseController
 				 }
 			} )->toArray();
 			$all_models[] = 'role';
-			
+
 			return array_filter( $all_models );
 	 }
 }

@@ -68,9 +68,11 @@
                         <strong>Lender:</strong> {{ item.extra_data.lender }}
                     </template>
                     <template v-slot:full_address="{item}">
-                        <div class="full_addr">
-                            {{ item.extra_data.full_address }}
-                        </div>   
+                        <div class="positive-full-addr">
+                            <div class="full_addr">
+                                {{ item.extra_data.full_address }}
+                            </div>
+                        </div>
                     </template>
                      <template v-slot:due_date="{item}">
                         {{ item.due_date | onlyDate }}
@@ -634,7 +636,7 @@ export default {
 
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 select.form-control {
     height: 38px;
 }
@@ -816,17 +818,26 @@ select.form-control {
     background: #19b7a2;
     border-color: #19b7a2;
 }
-.full_addr {
-    height: 44px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    cursor: pointer;
-    transition: all 200ms ease-in-out;
-}
-.full_addr:hover {
-    display: table;
-    height: auto;
-    overflow: auto;
-    transition: all 200ms ease-in-out;
+.positive-full-addr {
+    position: relative;
+    .full_addr {
+        margin-top: -5px;
+        height: 44px;
+        cursor: pointer;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        transition: all 100ms ease-in-out;
+        &:hover {
+            border-radius: 10px;
+            padding: 10px;
+            z-index: 99999;
+            background: #fff;
+            height: auto;
+            top: -20px;
+            position: absolute;
+            box-shadow: 0 5px 10px rgb(0 0 0 / 35%);
+            transition: all 100ms ease-in-out;
+        }
+    }
 }
 </style>

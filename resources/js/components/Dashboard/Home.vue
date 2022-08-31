@@ -92,7 +92,7 @@
                 </div>
                  <div class="dashboard-header__right d-flex align-items-center">
                      <div class="d-flex align-items-center">
-                         <router-link to="#" class="notification-icon fs-3 text-light-black d-flex align-items-center"><span class="icon-notification"></span></router-link>
+                        <router-link to="#" class="notification-icon fs-3 text-light-black d-flex align-items-center"><span class="icon-notification"></span></router-link>
                         <router-link to="#" class="dashboard-icon text-light-black d-flex align-items-center"> <span class="icon-dashboard fs-3"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></span></router-link>
                      </div>
                      <div class="profile d-flex align-items-center">
@@ -116,7 +116,7 @@
 
 export default {
     data: () => ({
-       activeMenu: false, 
+       activeMenu: false,
     }),
     created() {
         let route = this.$route.path;

@@ -1,27 +1,29 @@
 <?php
 
 use App\Events\Notify;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CallController;
 use App\Http\Controllers\IconController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\TicketController;
+use App\Http\Controllers\CallLogController;
 use App\Http\Controllers\LoanTypeController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MarketingController;
 use App\Http\Controllers\Api\WebApiController;
 use App\Http\Controllers\Api\OrderApiController;
 use App\Http\Controllers\LocalizationController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\VerificationController;
 use App\Http\Controllers\AppraisalTypeController;
 use App\Http\Controllers\OrderWorkflowController;
-use App\Http\Controllers\TicketController;
-use App\Http\Controllers\CallController;
-use App\Http\Controllers\CallLogController;
 use App\Http\Controllers\PusherNotificationController;
-use App\Http\Controllers\NotificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,6 +43,7 @@ Route::get('/locale/{locale}', LocalizationController::class)->name('locale.chan
 Route::group(['middleware' => ['auth:sanctum']], function () {
     //Dashboard
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('refresh/orders', [DashboardController::class, 'refreshOrder'])->name('refreshOrder');
     Route::get('user-dashboard', [DashboardController::class, 'userIndex'])->name('user.dashboard');
     //User Controller
     Route::get(
@@ -353,6 +356,9 @@ Route::get('/get/timezone', function () {
     return $timezone;
 });
 
-Route::get('/listen', function () {
+Route::get('create/random/order', [ WebApiController::class, 'createNewOrder' ])->middleware('auth');
+
+
+Route::get('/listen',function () {
     return view('listen');
 });

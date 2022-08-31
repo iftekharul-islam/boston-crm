@@ -44,7 +44,7 @@ class CallLogController extends Controller
             ]);
         }
 
-        if(!$order->completed_status){
+        if(!$order->completed_date){
             $order->completed_status = 1;
             $order->completed_date = Carbon::now();
             $order->save();
@@ -70,7 +70,14 @@ class CallLogController extends Controller
             $this->addHistory($order, $user, $historyTitle, 'call-log');
         }
 
-        if($request->template == 'true') {
+        if ($request->editTemplate  == 'true') {
+            $existTemplate = LogTemplate::find($request->templateId);
+            if($existTemplate){
+                $existTemplate->title = $request->title;
+                $existTemplate->message = $request->message;
+                $existTemplate->save();
+            }
+        }elseif($request->template == 'true') {
             $template = new LogTemplate();
             $template->title = $request->title;
             $template->message = $request->message;
@@ -125,7 +132,7 @@ class CallLogController extends Controller
         }
         $msg = 'Call log updated successfully';
 
-        if(!$order->completed_status){
+        if(!$order->completed_date){
             $order->completed_status = 1;
             $order->completed_date = Carbon::now();
             $order->save();
@@ -149,8 +156,14 @@ class CallLogController extends Controller
 
             $this->addHistory($order, $user, $historyTitle, 'call-log');
         }
-
-        if($request->template  == 'true') {
+        if ($request->editTemplate  == 'true') {
+            $existTemplate = LogTemplate::find($request->templateId);
+            if($existTemplate){
+                $existTemplate->title = $request->title;
+                $existTemplate->message = $request->message;
+                $existTemplate->save();
+            }
+        }elseif($request->template  == 'true') {
             $template = new LogTemplate();
             $template->title = $request->title;
             $template->message = $request->message;

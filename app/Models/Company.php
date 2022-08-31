@@ -14,7 +14,7 @@ class Company extends Model implements Auditable
 	 use SoftDeletes;
 	 use \OwenIt\Auditing\Auditable;
 	 use HasRoles;
-	 
+
 	 protected $fillable = [
 		 'name',
 		 'address',
@@ -24,7 +24,7 @@ class Company extends Model implements Auditable
 		 'description',
 	 ];
 	 protected string $guard_name = 'web';
-	 
+
 	 /**
 		* @return BelongsToMany
 		*/
@@ -33,7 +33,7 @@ class Company extends Model implements Auditable
 			return $this->belongsToMany( User::class, 'company_users', 'company_id',
 				'user_id' )->using( CompanyUser::class )->withPivot( 'id', 'role_id', 'status', 'active_company', 'join_date' );
 	 }
-	 
+
 	 /**
 		* @return HasMany
 		*/
@@ -41,7 +41,7 @@ class Company extends Model implements Auditable
 	 {
 			return $this->hasMany( AppraisalType::class );
 	 }
-	 
+
 	 /**
 		* @return HasMany
 		*/
