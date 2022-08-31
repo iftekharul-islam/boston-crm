@@ -70,7 +70,7 @@
                     <template v-slot:full_address="{item}">
                         <div class="full_addr">
                             {{ item.extra_data.full_address }}
-                        </div>
+                        </div>   
                     </template>
                      <template v-slot:due_date="{item}">
                         {{ item.due_date | onlyDate }}

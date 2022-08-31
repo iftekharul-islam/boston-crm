@@ -81,7 +81,8 @@
                                                     <span class="text-danger require"></span></label>
                                             </div>
                                             <div class="col-md-4">
-                                                <button type="button" class="button button-primary p-2 ml-auto" @click.prevent="openLoanType">Add loan type</button>
+                                                <button type="button" class="button button-primary p-2 ml-auto"
+                                                    @click.prevent="openLoanType">Add loan type</button>
                                             </div>
                                         </div>
                                         <m-select @change="loanTypeChange" no-border v-model="step1.loanType" object
@@ -467,8 +468,7 @@
                                                 <ValidationProvider name="Email" rules="required|email"
                                                     v-slot="{ errors }">
                                                     <label class="d-block mb-2 dashboard-label">Email
-                                                        address<span class="text-danger require"></span></label><span
-                                                        class="text-danger">{{ errors[0] }}</span>
+                                                        address <span class="text-danger require"></span></label>
                                                     <div class="contact-append">
                                                         <div class="append-div mt-2" v-for="email, index in emails"
                                                             :key="index + 'email'">
@@ -482,6 +482,7 @@
                                                                         class="path4"></span></span></button>
                                                         </div>
                                                     </div>
+                                                    <span class="text-danger">{{ errors[0] }}</span>
                                                     <div class="text-end">
                                                         <button @click.prevent="addEmail"
                                                             class="button button-transparent p-0 text-gray">+ Add
@@ -491,14 +492,13 @@
                                             </div>
                                             <div class="group">
                                                 <ValidationProvider name="Phone" rules="required" v-slot="{ errors }">
-                                                    <label class="d-block mb-2 dashboard-label">Phone<span
+                                                    <label class="d-block mb-2 dashboard-label">Phone <span
                                                             class="text-danger require"></span></label>
-                                                    <span class="text-danger">{{ errors[0] }}</span>
                                                     <div class="contact-append">
                                                         <div class="append-div mt-2" v-for="phone, index in phones"
                                                             :key="index + 'phone'">
                                                             <input type="text" v-model="client.phone[index]"
-                                                                maxlength="14" @keyup="formatPhoneNo($event, index)"
+                                                                maxlength="14" @keyup="formatPhoneNo"
                                                                 class="phone dashboard-input"><button type="button"
                                                                 class="button button-transparent p-0 contact-del-btn phone-button"
                                                                 @click="removeItem(index, 'phone')"><span
@@ -508,6 +508,7 @@
                                                                         class="path4"></span></span></button>
                                                         </div>
                                                     </div>
+                                                    <span class="text-danger">{{ errors[0] }}</span>
                                                     <div class="text-end">
                                                         <button @click.prevent="addPhone"
                                                             class="button button-transparent p-0 text-gray">+ Add
@@ -583,7 +584,7 @@
                                             <div class="group">
                                                 <ValidationProvider name="Com required"
                                                     rules="required_if:clientType,amc,both" v-slot="{ errors }">
-                                                    <label class="d-block mb-2 dashboard-label">Com required<span
+                                                    <label class="d-block mb-2 dashboard-label">Com required <span
                                                             v-if="client.client_type == 'amc' || client.client_type == 'both'"
                                                             class="text-danger require"></span></label>
                                                     <div class="position-relative">
@@ -596,6 +597,7 @@
                                                         </select>
                                                         <span class="icon-arrow-down bottom-arrow-icon"></span>
                                                     </div>
+                                                    <span class="text-danger">{{ errors[0] }}</span>
                                                 </ValidationProvider>
                                             </div>
                                         </div>
@@ -605,7 +607,7 @@
                                     <div class="box">
                                         <div class="max-w-424 w-100">
                                             <div class="group">
-                                                <ValidationProvider name="Technology fee for full
+                                                <ValidationProvider name="Technology fee for
                                             appraisal like 1004UAD" rules="required_if:clientType,amc,both"
                                                     v-slot="{ errors }">
                                                     <label class="d-block mb-2 dashboard-label">Technology
@@ -621,12 +623,12 @@
                                                 </ValidationProvider>
                                             </div>
                                             <div class="group">
-                                                <ValidationProvider name="Technology fee for full
+                                                <ValidationProvider name="Technology fee for
                                             appraisal like 1004D" rules="required_if:clientType,amc,both"
                                                     v-slot="{ errors }">
                                                     <label class="d-block mb-2 dashboard-label">Technology
                                                         fee for
-                                                        appraisal like 1004D<span
+                                                        appraisal like 1004D <span
                                                             v-if="client.client_type == 'amc' || client.client_type == 'both'"
                                                             class="text-danger require"></span></label>
                                                     <input v-model="client.fee_for_1004d" type="number" min="0"
@@ -654,6 +656,7 @@
                                                         </select>
                                                         <span class="icon-arrow-down bottom-arrow-icon"></span>
                                                     </div>
+                                                    <span class="text-danger">{{ errors[0] }}</span>
                                                 </ValidationProvider>
                                             </div>
                                             <div class="group">
@@ -673,6 +676,7 @@
                                                         </select>
                                                         <span class="icon-arrow-down bottom-arrow-icon"></span>
                                                     </div>
+                                                    <span class="text-danger">{{ errors[0] }}</span>
                                                 </ValidationProvider>
                                             </div>
                                             <div class="group">
@@ -692,6 +696,7 @@
                                                         </select>
                                                         <span class="icon-arrow-down bottom-arrow-icon"></span>
                                                     </div>
+                                                    <span class="text-danger">{{ errors[0] }}</span>
                                                 </ValidationProvider>
                                             </div>
                                             <div class="group">
@@ -701,6 +706,7 @@
                                                     <input type="file" @change="getFile">
                                                     <label for="">Upload <img src="/img/upload.png"
                                                             alt="boston profile"></label>
+                                                    <span class="text-success text-wrap">{{ client.file_name }}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -740,30 +746,34 @@
                                         <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                                     </div>
                                 </ValidationProvider>
-                                <div class="mgb-32 mt-4 d-flex align-items-center">
+                                <div class="mgb-32 mt-4">
                                     <label for="" class="d-block mb-2 dashboard-label">Condo Type</label>
-                                    <div class="mx-5 checkbox-group review-check mgr-20">
-                                        <input type="radio" class="checkbox-input check-data" v-model="appraisal.condo_type"
-                                            value="0">
-                                        <label for="" class="checkbox-label text-capitalize">No</label>
-                                    </div>
-                                    <div class="checkbox-group review-check">
-                                        <input type="radio" class="checkbox-input check-data" v-model="appraisal.condo_type"
-                                            value="1">
-                                        <label for="" class="checkbox-label text-capitalize">Yes</label>
+                                    <div class="d-flex align-items-center">
+                                        <div class="checkbox-group review-check mgr-20">
+                                            <input type="radio" class="checkbox-input check-data"
+                                                v-model="appraisal.condo_type" value="0">
+                                            <label for="" class="checkbox-label text-capitalize">No</label>
+                                        </div>
+                                        <div class="checkbox-group review-check">
+                                            <input type="radio" class="checkbox-input check-data"
+                                                v-model="appraisal.condo_type" value="1">
+                                            <label for="" class="checkbox-label text-capitalize">Yes</label>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="mgb-32 mt-4 d-flex align-items-center">
-                                    <label for="" class="d-block mb-2 mr-4 dashboard-label">Is full appraisal</label>
-                                    <div class="mx-4 checkbox-group review-check mgr-20">
-                                        <input type="radio" class="checkbox-input check-data" v-model="appraisal.is_full_appraisal"
-                                            value="0">
-                                        <label for="" class="checkbox-label text-capitalize">No</label>
-                                    </div>
-                                    <div class="checkbox-group review-check">
-                                        <input type="radio" class="checkbox-input check-data" v-model="appraisal.is_full_appraisal"
-                                            value="1">
-                                        <label for="" class="checkbox-label text-capitalize">Yes</label>
+                                <div class="mgb-32 mt-4">
+                                    <label for="" class="d-block mb-2 dashboard-label">Is full appraisal</label>
+                                    <div class="d-flex align-items-center">
+                                        <div class="checkbox-group review-check mgr-20">
+                                            <input type="radio" class="checkbox-input check-data"
+                                                v-model="appraisal.is_full_appraisal" value="0">
+                                            <label for="" class="checkbox-label text-capitalize">No</label>
+                                        </div>
+                                        <div class="checkbox-group review-check">
+                                            <input type="radio" class="checkbox-input check-data"
+                                                v-model="appraisal.is_full_appraisal" value="1">
+                                            <label for="" class="checkbox-label text-capitalize">Yes</label>
+                                        </div>
                                     </div>
                                 </div>
                             </ValidationObserver>
@@ -791,17 +801,19 @@
                                         <span v-if="errors[0]" class="error-message">{{ errors[0] }}</span>
                                     </div>
                                 </ValidationProvider>
-                                <div class="mgb-32 mt-4 d-flex align-items-center">
-                                    <label for="" class="d-block mb-2 mr-4 dashboard-label">Is fha</label>
-                                    <div class="mx-4 checkbox-group review-check mgr-20">
-                                        <input type="radio" class="checkbox-input check-data" v-model="loan.is_fha"
-                                            value="0">
-                                        <label for="" class="checkbox-label text-capitalize">No</label>
-                                    </div>
-                                    <div class="checkbox-group review-check">
-                                        <input type="radio" class="checkbox-input check-data" v-model="loan.is_fha"
-                                            value="1">
-                                        <label for="" class="checkbox-label text-capitalize">Yes</label>
+                                <div class="mgb-32 mt-4">
+                                    <label for="" class="mb-2 dashboard-label">Is FHA</label>
+                                    <div class="d-flex align-items-center">
+                                        <div class="checkbox-group review-check mgr-20">
+                                            <input type="radio" class="checkbox-input check-data" v-model="loan.is_fha"
+                                                value="0">
+                                            <label for="" class="checkbox-label text-capitalize">No</label>
+                                        </div>
+                                        <div class="checkbox-group review-check">
+                                            <input type="radio" class="checkbox-input check-data" v-model="loan.is_fha"
+                                                value="1">
+                                            <label for="" class="checkbox-label text-capitalize">Yes</label>
+                                        </div>
                                     </div>
                                 </div>
                             </ValidationObserver>
@@ -854,6 +866,7 @@
                     deducts_technology_fee: '',
                     can_sign: '',
                     can_inspect: '',
+                    file_name: ''
                 },
                 submitted: false,
                 oldOrderNo: {
@@ -944,7 +957,7 @@
                     condo_type: 0,
                     is_full_appraisal: 0
                 },
-                loan:{
+                loan: {
                     name: '',
                     is_fha: 0
                 },
@@ -985,6 +998,7 @@
                                 })
                                 if (res.error == false) {
                                     this.initLoanTypes(res.loan_types)
+                                    this.loan = {}
                                     this.$bvModal.hide('add-loan-type')
                                 }
                             })
@@ -1008,6 +1022,7 @@
                                 })
                                 if (res.error == false) {
                                     this.initAppraisalTypes(res.appraisal_types)
+                                    this.appraisal = {}
                                     this.$bvModal.hide('add-appraisal-type')
                                 }
                             })
@@ -1017,10 +1032,10 @@
                     }
                 })
             },
-            initAppraisalTypes(types){
+            initAppraisalTypes(types) {
                 this.allAppraisalTypes = types
             },
-            initLoanTypes(types){
+            initLoanTypes(types) {
                 this.allLoanTypes = types
             },
             initiateClients(amcs, lenders) {
@@ -1030,7 +1045,7 @@
             numbersOnly(e) {
                 return e.charCode >= 48 && e.charCode <= 57;
             },
-            formatPhoneNo(e, index) {
+            formatPhoneNo(e) {
                 let phoneNo = e.target.value
                 e.target.value = this.$boston.formatPhoneNo(phoneNo)
             },
@@ -1039,6 +1054,7 @@
             },
             getFile(event) {
                 this.instruction = event.target.files[0]
+                this.client.file_name = event.target.files[0].name
             },
             addEmail() {
                 this.emails.push({
@@ -1074,6 +1090,7 @@
                                 })
                                 if (res.error == false) {
                                     this.initiateClients(res.amcs, res.lenders)
+                                    this.client = {}
                                     this.$bvModal.hide('add-client')
                                 }
                             })
@@ -1186,7 +1203,7 @@
             },
 
             nextStep() {
-                this.$root.$emit('property-data',this.step1)
+                this.$root.$emit('property-data', this.step1)
                 this.$refs.orderForm.validate().then((status) => {
                     if (status && this.providerTypes.extra.length && !this.dateIssue.status) {
                         this.stepActive = true;

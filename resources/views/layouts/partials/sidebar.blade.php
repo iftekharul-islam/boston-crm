@@ -66,10 +66,9 @@
         @endif
         @if(in_array('view.order', $user_permissions ?? []) || $is_owner || $user_role == 'admin')
         <!-- submenu -->
-        <div class="sidebar-dropdown {{ (request()->is(['loan-types*', 'appraisal-types*'])) ? 'submenu-active' : '' }}">
+        <div class="sidebar-dropdown {{ (request()->is(['loan-types*', 'appraisal-types*','effective-date*'])) ? 'submenu-active' : '' }}">
             <a href="{{ route('orders.index') }}"
-{{--               class="list-item d-flex align-items-center  text-white {{ (request()->is(['orders*', 'loan-types', 'appraisal-types'])) ? 'active' : '' }}">--}}
-               class="list-item d-flex align-items-center  text-white {{ (request()->is(['orders*'])) ? 'active' : '' }}">
+               class="list-item d-flex align-items-center text-white {{ (request()->is(['orders*'])) ? 'active' : '' }}">
                 <div class="d-inline-flex align-items-center">
                 <span class="icon-order me-3 fs-3"><span class="path1"></span><span class="path2"></span><span
                             class="path3"></span></span>
@@ -87,6 +86,11 @@
                 @if(in_array('view.appraisaltype', $user_permissions ?? []) || $is_owner || $user_role == 'admin')
                     <li class="submenu-item {{ (request()->is(['appraisal-types*'])) ? 'active' : '' }}">
                         <a href="{{ route('appraisal-types.index') }}" class="submenu-link text-light">Appraisal Types</a>
+                    </li>
+                @endif
+                @if(in_array('view.appraisaltype', $user_permissions ?? []) || $is_owner || $user_role == 'admin')
+                    <li class="submenu-item {{ (request()->is(['effective-date*'])) ? 'active' : '' }}">
+                        <a href="{{ route('effective-date.index') }}" class="submenu-link text-light">Effective Date</a>
                     </li>
                 @endif
             </ul>
