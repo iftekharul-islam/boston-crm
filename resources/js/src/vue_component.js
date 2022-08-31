@@ -132,6 +132,8 @@ const notification = () =>
     import ( /*webpackChunkName: "assignTo"*/ '../components/notification')
 const tasks = () =>
     import ( /*webpackChunkName: "tasks"*/ '../components/marketing/tasks')
+const effectiveDate = () =>
+    import ( /*webpackChunkName: "effectiveDate"*/ '../components/orders/EffectiveDate')
 
 
 Vue.component('clients-list', ClientList);
@@ -175,3 +177,4 @@ Vue.component('assign-to', assignTo);
 Vue.component('m-load', LoaderView);
 Vue.component('notification-icon', notification);
 Vue.component('tasks', tasks);
+Vue.component('effective-date', effectiveDate);

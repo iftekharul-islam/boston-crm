@@ -17,24 +17,28 @@ class AppraisalDetail extends Model
     ];
 
     protected $fillable = [
-        'order_id','appraiser_id','system_order_no','client_order_no','loan_no','loan_type','received_date','due_date',
-        'technology_fee','fha_case_no','property_type'
+        'order_id', 'appraiser_id', 'system_order_no', 'client_order_no', 'loan_no', 'loan_type', 'received_date', 'due_date',
+        'technology_fee', 'fha_case_no', 'property_type'
     ];
 
-    public function appraiser(){
-        return $this->belongsTo(User::class,'appraiser_id','id');
+    public function appraiser()
+    {
+        return $this->belongsTo(User::class, 'appraiser_id', 'id');
     }
 
-    public function getLoanType(){
-        return $this->belongsTo(LoanType::class,'loan_type','id');
+    public function getLoanType()
+    {
+        return $this->belongsTo(LoanType::class, 'loan_type', 'id');
     }
 
-    public function loanType(){
+    public function loanType()
+    {
         return LoanType::where('id', $this->loan_type)->first();
     }
 
-    public function propertyType(){
-        return $this->belongsTo(PropertyType::class,'property_type','id')->withDefault([
+    public function propertyType()
+    {
+        return $this->belongsTo(PropertyType::class, 'property_type', 'id')->withDefault([
             'name' => '-'
         ]);
     }

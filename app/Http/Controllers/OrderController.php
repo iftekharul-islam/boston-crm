@@ -26,6 +26,7 @@ use Illuminate\Http\JsonResponse;
 use Ramsey\Collection\Collection;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\OrderRepository;
 use Illuminate\Contracts\View\Factory;
@@ -293,9 +294,9 @@ class OrderController extends BaseController
 
         $ids = $get->pageData['ids'] ?? [];
         $idSearch = $get->pageData['idSearch'] ?? false;
-//        dd($ids, $idSearch);
+        //        dd($ids, $idSearch);
         $order = Order::where(function ($qry) use ($data, $orderIds, $ids, $idSearch) {
-            if($idSearch == true){
+            if ($idSearch == true) {
                 return $qry->whereIn("id", $ids);
             } else {
                 if (count($orderIds) > 0) {
@@ -346,7 +347,7 @@ class OrderController extends BaseController
 
         $company = auth()->user()->companies()->first();
         $userID = auth()->user()->id;
-        $property_types = PropertyType::orderBy('type','ASC')->get();
+        $property_types = PropertyType::orderBy('type', 'ASC')->get();
 
         $data = compact('system_order_no', 'userID', 'company', 'appraisal_users', 'appraisal_types', 'loan_types', 'amc_clients', 'lender_clients', 'property_types');
 
@@ -399,8 +400,8 @@ class OrderController extends BaseController
         $order_files = $this->repository->getOrderFiles($id);
         $order_file_types = $this->repository->getOrderFileTypes($id);
         $order_due_date = $this->repository->getOrderDueDate($id);
-        $diff_in_days = Carbon::now()->diffInDays($order_due_date->due_date,false);
-        $diff_in_hours = Carbon::now()->diffInHours($order_due_date->due_date,false);
+        $diff_in_days = Carbon::now()->diffInDays($order_due_date->due_date, false);
+        $diff_in_hours = Carbon::now()->diffInHours($order_due_date->due_date, false);
         $all_users = $this->repository->getUserExpectRole(role: 'admin');
         $property_types = PropertyType::all();
 
@@ -651,10 +652,10 @@ class OrderController extends BaseController
             ]);
         }
         $order->status = $request->status;
-        if($request->fee_amount){
-            $order->fee_amount= $request->fee_amount;
+        if ($request->fee_amount) {
+            $order->fee_amount = $request->fee_amount;
         }
-        if($request->hold_reason){
+        if ($request->hold_reason) {
             $order->hold_reason = $request->hold_reason;
         }
         $order->save();
@@ -689,7 +690,6 @@ class OrderController extends BaseController
             'status' => 'success',
             'data' => $orderData
         ];
-
     }
 
     public function orderUpdate($type, Request $get)
@@ -799,5 +799,33 @@ class OrderController extends BaseController
     protected function orderInformation($id)
     {
         return Order::whereIn('id', $id)->with($this->order_list_relation())->orderBy('id', 'desc')->paginate(100);
+    }
+
+    public function effectiveDate()
+    {
+        $sorted_orders = Order::all()->sortBy('due_date');
+        $orders = $sorted_orders->groupBy(function ($result, $key) {
+            return Carbon::parse($result->due_date)->format('d/m/Y');
+        });
+
+        // $result = [];
+        // foreach (array_count_values($values) as $value => $occurrence) {
+        //     $result[] = array_fill(0, $occurrence, $value);
+        // }
+
+        $appraisers = $this->repository->getUserByRoleWise('appraiser');
+        // foreach($orders as $order){
+        //     $order->appraisalOrders = Order::where('id',$order->appraisalDetail->order_id)->get();
+        // }
+        // ->with(['amc','propertyInfo','appraisalDetail.appraiser'])
+        // $orders = DB::table('orders as o')
+        //     ->select('o.id','o.client_order_no','o.status','o.coordinate','c.name','pi.formatedAddress',DB::raw('DATE(o.due_date) as date'))
+        //     ->leftJoin('clients as c','o.amc_id','=','c.id')
+        //     ->leftJoin('property_infos as pi','o.id','=','pi.order_id')
+        //     ->groupBy('date')
+        //     ->orderBy('date','desc')
+        //     ->get();
+
+        return view('order.effective-date', compact('orders', 'appraisers'));
     }
 }

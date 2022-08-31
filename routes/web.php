@@ -174,6 +174,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('search/order', [OrderController::class, 'searchOrderData'])->middleware('role_permission:orders.index');
     Route::post('filter-list/order', [OrderController::class, 'filterOrderData'])->middleware('role_permission:orders.index');
     Route::post('api/get/same/orders/by/street', [OrderApiController::class, 'getSameData']);
+    Route::get(
+        'effective-date',
+        [OrderController::class, 'effectiveDate']
+    )->middleware('role_permission:create.order')->name('effective-date.index');
 
     //order details
     Route::post('update-order-status', [OrderController::class, 'updateOrderStatus']);
@@ -279,16 +283,16 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         'marketing',
         [MarketingController::class, 'index']
     )->middleware('role_permission:view.marketing')->name('marketing.index');
-    Route::post('save-marketing-client',[MarketingController::class,'saveMarketingClient']);
-    Route::post('save-marketing-client-category',[MarketingController::class,'saveMarketingClientCategory']);
-    Route::post('filter-users',[MarketingController::class,'filterUsers']);
-    Route::post('save-assigned-users',[MarketingController::class,'saveAssignedUsers']);
-    Route::post('save-status',[MarketingController::class,'saveStatus']);
-    Route::post('update-status',[MarketingController::class,'updateStatus']);
-    Route::post('change-client-status',[MarketingController::class,'changeClientStatus']);
-    Route::post('create-client-comment',[MarketingController::class, 'createClientComment']);
-    Route::post('save-task',[MarketingController::class, 'saveTask']);
-    Route::post('email-to-client',[MarketingController::class, 'emailToClient']);
+    Route::post('save-marketing-client', [MarketingController::class, 'saveMarketingClient']);
+    Route::post('save-marketing-client-category', [MarketingController::class, 'saveMarketingClientCategory']);
+    Route::post('filter-users', [MarketingController::class, 'filterUsers']);
+    Route::post('save-assigned-users', [MarketingController::class, 'saveAssignedUsers']);
+    Route::post('save-status', [MarketingController::class, 'saveStatus']);
+    Route::post('update-status', [MarketingController::class, 'updateStatus']);
+    Route::post('change-client-status', [MarketingController::class, 'changeClientStatus']);
+    Route::post('create-client-comment', [MarketingController::class, 'createClientComment']);
+    Route::post('save-task', [MarketingController::class, 'saveTask']);
+    Route::post('email-to-client', [MarketingController::class, 'emailToClient']);
 
 
     //call routes
@@ -316,8 +320,8 @@ Route::post('invite-user-update/{id}', [UserController::class, 'inviteUserUpdate
 Route::get('/public-order/{id}', [OrderController::class, 'publicOrder'])->name('public.order');
 Route::post('/upload-order-files/{id}', [OrderController::class, 'uploadOrderFiles'])->name('order.file.upload');
 
-Route::get('/public-com/{id}',[OrderWorkflowController::class, 'publicCom']);
-Route::post('/public-com-files/{id}',[OrderWorkflowController::class, 'publicComFiles'])->name('public.com.files');
+Route::get('/public-com/{id}', [OrderWorkflowController::class, 'publicCom']);
+Route::post('/public-com-files/{id}', [OrderWorkflowController::class, 'publicComFiles'])->name('public.com.files');
 
 Route::post('/search/order/by/filter', [OrderController::class, 'searchOrderByFiltering'])->name('searchOrderByFiltering');
 
@@ -343,11 +347,11 @@ Route::post('check/client/order/no', [OrderWorkflowController::class, 'checkClie
 Route::get('/auth-user', [UserController::class, 'authUser']);
 Route::get('/user-list', [UserController::class, 'userList']);
 
-Route::get('/event',function () {
+Route::get('/event', function () {
     event(new Notify('Hey how are you!', 2));
 });
 
-Route::get('/get/timezone', function(){
+Route::get('/get/timezone', function () {
     $timezone = date_default_timezone_get();
     return $timezone;
 });
